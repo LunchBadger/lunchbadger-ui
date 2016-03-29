@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "lunchBadgerProto",
+    "style": "scss",
+    "postcss": true
+  }
+}

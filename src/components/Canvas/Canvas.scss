@@ -1,0 +1,6 @@
+@import '../../config';
+
+.canvas {
+  width: 100%;
+  min-height: calc(100vh - #{$header-height});
+}

@@ -1,0 +1,23 @@
+@import '../../config';
+
+.breadcrumbs {
+  vertical-align: middle;
+  color: $font-base;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: table-cell;
+}
+
+.breadcrumbs__element {
+  display: inline-block;
+  font-size: 22px;
+
+  & + & {
+    &:before {
+      margin-left: 10px;
+      margin-right: 10px;
+      content: '-';
+    }
+  }
+}

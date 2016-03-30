@@ -1,0 +1,12 @@
+@import '../../config';
+
+.header {
+  background: $ui-base;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: $header-height;
+  border-bottom: 2px solid $ui-base-border;
+  display: table;
+}

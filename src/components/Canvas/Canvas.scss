@@ -3,6 +3,9 @@
 .canvas {
   width: 100%;
   min-height: calc(100vh - #{$header-height});
+  background: $ui-dark-background;
+  position: relative;
+  overflow: hidden;
 }
 
 .canvas__container {
@@ -10,5 +13,30 @@
   width: 100%;
   border-collapse: collapse;
   min-height: calc(100vh - #{$header-height});
-  background: $ui-dark-background;
+}
+
+.canvas__label {
+  position: absolute;
+  top: 50%;
+  color: $font-light;
+  text-align: center;
+  font-size: 16px;
+  width: 350px;
+  background: $ui-dark;
+  height: 100px;
+  border-radius: 50%;
+  transform-origin: bottom;
+  margin-top: -100px;
+}
+
+.canvas__label--left {
+  left: -125px;
+  padding-top: 65px;
+  transform: rotate(-90deg);
+}
+
+.canvas__label--right {
+  right: -125px;
+  padding-top: 65px;
+  transform: rotate(90deg);
 }

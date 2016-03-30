@@ -1,0 +1,41 @@
+@import '../../config';
+
+.canvas-element {
+  max-width: 80%;
+  min-width: 200px;
+  color: $font-base;
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  background: $font-light;
+  border-radius: 4px;
+  border: 2px solid $ui-base-border;
+  padding: 15px 20px;
+
+  & + & {
+    margin-top: 15px;
+  }
+}
+
+.canvas-element__inside {
+  display: table;
+  width: 100%;
+}
+
+.canvas-element__icon {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding-right: 10px;
+}
+
+.canvas-element__title {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 17px;
+}
+
+.canvas-element__icon {
+  font-size: 26px;
+}

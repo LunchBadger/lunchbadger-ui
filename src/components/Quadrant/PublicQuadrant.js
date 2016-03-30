@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
+import PublicEndpoint from '../CanvasElements/PublicEndpoint';
 
 class PublicQuadrant extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class PublicQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <div>{entity.name}</div>;
+      return <PublicEndpoint icon="fa-user" entity={entity}/>;
     })
   }
 

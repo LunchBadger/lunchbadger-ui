@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
+import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
 
 class PrivateQuadrant extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <div>{entity.name}</div>;
+      return <PrivateEndpoint icon="fa-user-secret" entity={entity}/>;
     })
   }
 

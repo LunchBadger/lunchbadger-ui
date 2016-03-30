@@ -7,7 +7,7 @@ export default (ComposedComponent) => {
     static propTypes = {
       title: PropTypes.string.isRequired,
       resizable: PropTypes.bool,
-      data: PropTypes.object.isRequired,
+      data: PropTypes.object.isRequired
     };
 
     constructor(props) {

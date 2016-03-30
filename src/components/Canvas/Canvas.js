@@ -14,9 +14,11 @@ export default class Canvas extends Component {
     /*
      TODO: data storage needs to be changed
      */
-    
+
     return (
       <section className="canvas">
+        <div className="canvas__label canvas__label--left">The Data</div>
+        <div className="canvas__label canvas__label--right">The World</div>
         <div className="canvas__container">
           <BackendQuadrant data={Backend} resizable title="Backend"/>
           <PrivateQuadrant data={Private} resizable title="Private"/>

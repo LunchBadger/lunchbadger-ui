@@ -3,6 +3,7 @@ import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
 import './App.scss';
+import 'font-awesome/css/font-awesome.css';
 
 export default class App extends Component {
   render() {

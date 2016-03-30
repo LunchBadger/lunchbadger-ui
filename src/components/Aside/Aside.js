@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './Aside.scss';
-import PrivateEndpoint from '../tools/PrivateEndpoint';
-import PublicEndpoint from '../tools/PublicEndpoint';
+import Endpoint from '../tools/Endpoint';
 import Gateway from '../tools/Gateway';
 import DataSource from '../tools/DataSource';
 
@@ -9,8 +8,7 @@ export default class Aside extends Component {
   render() {
     return (
       <aside className="aside">
-      	<PrivateEndpoint />
-      	<PublicEndpoint />
+      	<Endpoint />
       	<Gateway />
       	<DataSource />
       </aside>

@@ -1,13 +1,34 @@
 import React, {Component} from 'react';
-import './Tool.scss';
-import AddDataSource from 'actions/AddDataSource';
+import './tool.scss';
+import Memory from './Memory';
+import Mongo from './Mongo';
+import Oracle from './Oracle';
+import SQL from './SQL';
+import Salesforce from './Salesforce';
 
-export default class Gateway extends Component {
+export default class DataSource extends Component {
   render() {
     return (
-      <div className="dataSource tool" onClick={() => AddDataSource()}>
-      	<i className="tool__icon fa fa-data"></i>
-      	<span className="tool__tooltip">Data source</span>
+      <div className="dataSource tool context">
+      	<i className="tool__extend fa fa-caret-down"></i>
+      	<i className="tool__icon fa fa-database"></i>
+      	<ul className="tool__context">
+      		<li>
+      			<Memory />
+      		</li>
+      		<li>
+      			<Oracle />
+      		</li>
+      		<li>
+      			<Mongo />
+      		</li>
+      		<li>
+      			<SQL />
+      		</li>
+      		<li>
+      			<Salesforce />
+      		</li>
+      	</ul>
       </div>
     );
   }

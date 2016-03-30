@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
+import Gateway from '../CanvasElements/Gateway';
 
 class GatewaysQuadrant extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class GatewaysQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <div>{entity.name}</div>;
+      return <Gateway icon="fa-exchange" entity={entity}/>;
     })
   }
 

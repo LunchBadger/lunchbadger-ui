@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
+import DataSource from '../CanvasElements/DataSource';
 
 class BackendQuadrant extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class BackendQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <div>{entity.name}</div>;
+      return <DataSource icon="fa-database" entity={entity}/>;
     })
   }
 

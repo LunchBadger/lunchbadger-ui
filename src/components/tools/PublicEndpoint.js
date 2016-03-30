@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './tool.scss';
+import './Tool.scss';
 import AddPublicEndpoint from 'actions/AddPublicEndpoint';
 
 export default class PrivateEndpoint extends Component {

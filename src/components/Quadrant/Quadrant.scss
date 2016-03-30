@@ -4,16 +4,18 @@
   display: table-cell;
   vertical-align: top;
   width: 25%;
-  border: 1px solid $ui-base-border;
   position: relative;
+  border-right: 1px dashed $ui-dark-border;
 }
 
 .quadrant__title {
-  color: $font-base;
+  color: $font-light;
+  background: $ui-dark;
   padding: 15px 20px;
   font-weight: 700;
   text-align: center;
-  border-bottom: 1px solid $ui-base-border;
+  border-bottom: 1px solid $ui-dark-border;
+  border-right: 1px solid $ui-dark-border;
 }
 
 .quadrant__body {

@@ -13,28 +13,6 @@
 	transition: all .5s ease-in-out;
 	overflow: hidden;
 	text-align: center;
-	> .privateendpoint__icon {
-		font-size: 40px;
-		line-height: 50px;
-	}
-	> .privateendpoint__tooltip {
-		position: absolute;
-		display: block;
-		line-height: 20px;
-		background: rgba(0, 0, 0, .75);
-		color: #fff;
-		font-size: .8em;
-		padding: .2em .8em;
-		white-space: nowrap;
-		opacity: 0;
-		left: 0;
-		border-radius: .5em;
-		transform: translateX($aside-width - 10);
-		transition: all .2s ease-in-out;
-		top: 50%;
-		margin-top: -10px;
-		box-sizing: border-box;
-	}
 	&:hover {
 		overflow: visible;
 		background: lighten($ui-base, 5%);
@@ -43,4 +21,26 @@
 			transform: translateX($aside-width);
 		}
 	}
+}
+i.privateendpoint__icon {
+	font-size: 40px;
+	line-height: 50px;
+}
+.privateendpoint__tooltip {
+	position: absolute;
+	display: block;
+	line-height: 20px;
+	background: rgba(0, 0, 0, .75);
+	color: #fff;
+	font-size: .8em;
+	padding: .2em .8em;
+	white-space: nowrap;
+	opacity: 0;
+	left: 0;
+	border-radius: .5em;
+	transform: translateX($aside-width - 10);
+	transition: all .2s ease-in-out;
+	top: 50%;
+	margin-top: -10px;
+	box-sizing: border-box;
 }

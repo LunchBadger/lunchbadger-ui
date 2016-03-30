@@ -1,7 +1,7 @@
 import { dispatch } from '../dispatcher/AppDispatcher';
 
 export default () => {
-  dispatch('AddPrivateEndpoint', {
+  dispatch('AddPublicEndpoint', {
   	endpoint: {
   		name: 'Endpoint'
   	}

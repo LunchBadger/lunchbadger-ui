@@ -1,15 +1,16 @@
 import BaseStore from 'stores/BaseStore';
 import { register } from '../dispatcher/AppDispatcher';
 
-const PrivateEndpoints = [];
+const Backends = [];
 
-class PrivateEndpoint extends BaseStore {
+class Backend extends BaseStore {
 	constructor() {
 		super();
 		register((action) => {
 			switch (action.type) {
-				case 'AddPrivateEndpoint':
-					PrivateEndpoints.push(action.endpoint);
+				case 'AddDataSource':
+					action.dataSource.name += ' ' + (Backends.length + 1);
+					Backends.push(action.dataSource);
 					this.emitChange();
 					break;
 			}
@@ -17,8 +18,8 @@ class PrivateEndpoint extends BaseStore {
 	}
 
 	getData() {
-		return PrivateEndpoints;
+		return Backends;
 	}
 }
 
-export default new PrivateEndpoint;
+export default new Backend;

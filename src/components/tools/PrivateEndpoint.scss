@@ -1,0 +1,46 @@
+@import '../../config';
+
+.privateendpoint {
+	display: block;
+	position: relative;
+	width: $aside-width - 10;
+	height: $aside-width - 10;
+	margin: 5px;
+	border: 1px solid $ui-base-border;
+	border-radius: 5px;
+	background: darken($ui-base, 5%);
+	cursor: pointer;
+	transition: all .5s ease-in-out;
+	overflow: hidden;
+	text-align: center;
+	&:hover {
+		overflow: visible;
+		background: lighten($ui-base, 5%);
+		> .privateendpoint__tooltip {
+			opacity: 1;
+			transform: translateX($aside-width);
+		}
+	}
+}
+i.privateendpoint__icon {
+	font-size: 40px;
+	line-height: 50px;
+}
+.privateendpoint__tooltip {
+	position: absolute;
+	display: block;
+	line-height: 20px;
+	background: rgba(0, 0, 0, .75);
+	color: #fff;
+	font-size: .8em;
+	padding: .2em .8em;
+	white-space: nowrap;
+	opacity: 0;
+	left: 0;
+	border-radius: .5em;
+	transform: translateX($aside-width - 10);
+	transition: all .2s ease-in-out;
+	top: 50%;
+	margin-top: -10px;
+	box-sizing: border-box;
+}

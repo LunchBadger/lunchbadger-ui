@@ -1,9 +1,9 @@
 import { dispatch } from '../dispatcher/AppDispatcher';
 
 export default () => {
-  dispatch('AddPrivateEndpoint', {
-  	endpoint: {
-  		name: 'Endpoint'
+  dispatch('AddGateway', {
+  	gateway: {
+  		name: 'Gateway'
   	}
   });
 };

@@ -10,4 +10,5 @@
   width: 100%;
   border-collapse: collapse;
   min-height: calc(100vh - #{$header-height});
+  background: $ui-dark-background;
 }

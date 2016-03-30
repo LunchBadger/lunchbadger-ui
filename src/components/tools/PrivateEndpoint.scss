@@ -12,8 +12,10 @@
 	cursor: pointer;
 	transition: all .5s ease-in-out;
 	overflow: hidden;
+	text-align: center;
 	> .privateendpoint__icon {
-
+		font-size: 40px;
+		line-height: 50px;
 	}
 	> .privateendpoint__tooltip {
 		position: absolute;

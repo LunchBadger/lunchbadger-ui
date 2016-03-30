@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "core-js": "^2.0.0",
+    "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
     "normalize.css": "^4.0.0",
     "react": "^0.14.0",

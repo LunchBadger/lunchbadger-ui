@@ -7,7 +7,7 @@ export default (ComposedComponent) => {
     static propTypes = {
       title: PropTypes.string.isRequired,
       resizable: PropTypes.bool,
-      data: PropTypes.object
+      data: PropTypes.object.isRequired,
     };
 
     constructor(props) {
@@ -42,7 +42,7 @@ export default (ComposedComponent) => {
         <div className="quadrant" style={{width: `${this.state.quadrantWidth}%`}}>
           <div className="quadrant__title">{this.props.title}</div>
           <div className="quadrant__body">
-            <ComposedComponent {...this.props} entities={this.state.entities} />
+            <ComposedComponent {...this.props} entities={this.state.entities}/>
           </div>
           {(() => {
             if (this.props.resizable) {

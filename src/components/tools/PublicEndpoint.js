@@ -5,9 +5,9 @@ import AddPublicEndpoint from 'actions/AddPublicEndpoint';
 export default class PrivateEndpoint extends Component {
   render() {
     return (
-      <div className="publicendpoint tool" onClick={() => AddPublicEndpoint()}>
-      	<i className="tool__icon fa fa-github"></i>
-      	<span className="tool__tooltip">Public Endpoint</span>
+      <div className="publicendpoint tool__context__item" onClick={() => AddPublicEndpoint()}>
+      	<i className="tool__icon fa fa-globe"></i>
+      	<span className="tool__name">Public Endpoint</span>
       </div>
     );
   }

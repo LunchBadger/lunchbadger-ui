@@ -8,6 +8,10 @@
   overflow: hidden;
 }
 
+.canvas__wrapper {
+  overflow: hidden;
+}
+
 .canvas__container {
   min-width: 100%;
   min-height: calc(100vh - #{$header-height});
@@ -23,6 +27,8 @@
   right: 0;
   overflow: visible;
   height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .canvas__label {

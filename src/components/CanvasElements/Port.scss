@@ -1,0 +1,21 @@
+@import '../../config';
+
+.port {
+  display: inline-block;
+  border-radius: 50%;
+  border: 2px solid $ui-base-border;
+  width: 22px;
+  height: 22px;
+  background: $ui-light;
+}
+
+.port__inside {
+  color: $font-base;
+  text-align: center;
+  line-height: 16px;
+  vertical-align: middle;
+}
+
+.port__icon {
+  font-size: 14px;
+}

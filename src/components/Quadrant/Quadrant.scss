@@ -1,12 +1,11 @@
 @import '../../config';
 
 .quadrant {
-  display: table-cell;
   vertical-align: top;
-  width: 25%;
+  min-width: 25%;
   position: relative;
   border-right: 1px dashed $ui-dark-border;
-  min-width: 230px;
+  flex: 0 0 auto;
 }
 
 .quadrant__title {

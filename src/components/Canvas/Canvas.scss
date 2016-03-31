@@ -6,16 +6,23 @@
   background: $ui-dark-background;
   position: relative;
   overflow: hidden;
-  overflow-x: auto;
 }
 
 .canvas__container {
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
+  min-width: 100%;
   min-height: calc(100vh - #{$header-height});
   position: relative;
-  overflow: hidden;
+  overflow: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.canvas__legend {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: visible;
+  height: 100%;
 }
 
 .canvas__label {

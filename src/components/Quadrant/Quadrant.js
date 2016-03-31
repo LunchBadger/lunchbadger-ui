@@ -14,7 +14,7 @@ export default (ComposedComponent) => {
       super(props);
 
       this.state = {
-        quadrantWidth: '25',
+        quadrantWidth: '25%',
         entities: []
       };
 
@@ -37,16 +37,23 @@ export default (ComposedComponent) => {
       }
     }
 
+    recalculateQuadrantWidth(event) {
+      const quadrantBounds = this.refs.quadrant.getBoundingClientRect();
+      const newWidth = event.clientX - quadrantBounds.left;
+
+      this.setState({quadrantWidth: `${newWidth}px`});
+    }
+
     render() {
       return (
-        <div className="quadrant" style={{width: `${this.state.quadrantWidth}%`}}>
+        <div className="quadrant" ref="quadrant" style={{width: this.state.quadrantWidth}}>
           <div className="quadrant__title">{this.props.title}</div>
           <div className="quadrant__body">
             <ComposedComponent {...this.props} entities={this.state.entities}/>
           </div>
           {(() => {
             if (this.props.resizable) {
-              return <QuadrantResizeHandle />;
+              return <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth.bind(this)}/>;
             }
           })()}
         </div>

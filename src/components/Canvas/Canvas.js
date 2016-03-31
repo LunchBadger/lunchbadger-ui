@@ -17,9 +17,10 @@ export default class Canvas extends Component {
 
     return (
       <section className="canvas">
-        <div className="canvas__label canvas__label--left">The Data</div>
-        <div className="canvas__label canvas__label--right">The World</div>
         <div className="canvas__container">
+          <div className="canvas__label canvas__label--left">The Data</div>
+          <div className="canvas__label canvas__label--right">The World</div>
+          
           <BackendQuadrant data={Backend} resizable title="Backend"/>
           <PrivateQuadrant data={Private} resizable title="Private"/>
           <GatewaysQuadrant data={Gateway} resizable title="Gateways"/>

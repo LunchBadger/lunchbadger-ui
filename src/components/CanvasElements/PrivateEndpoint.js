@@ -5,7 +5,7 @@ import './CanvasElement.scss';
 
 class PrivateEndpoint extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired,
+    entity: PropTypes.object.isRequired
   };
 
   render() {

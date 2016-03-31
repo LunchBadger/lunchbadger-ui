@@ -1,11 +1,12 @@
 @import '../../config';
 
 .canvas {
-  width: 100%;
+  min-width: 100%;
   min-height: calc(100vh - #{$header-height});
   background: $ui-dark-background;
   position: relative;
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .canvas__container {
@@ -13,6 +14,8 @@
   width: 100%;
   border-collapse: collapse;
   min-height: calc(100vh - #{$header-height});
+  position: relative;
+  overflow: hidden;
 }
 
 .canvas__label {

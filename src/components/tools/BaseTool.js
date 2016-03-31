@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './PrivateEndpoint.scss';
+import './Tool.scss';
 import AddPrivateEndpoint from 'actions/AddPrivateEndpoint';
 
 export default class BaseTool extends Component {

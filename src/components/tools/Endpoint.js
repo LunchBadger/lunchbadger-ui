@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './tool.scss';
+import './Tool.scss';
 import PrivateEndpoint from './PrivateEndpoint';
 import PublicEndpoint from './PublicEndpoint';
 

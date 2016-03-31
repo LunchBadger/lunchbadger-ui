@@ -1,18 +1,34 @@
 @import '../../config';
 
 .canvas {
-  width: 100%;
+  min-width: 100%;
   min-height: calc(100vh - #{$header-height});
   background: $ui-dark-background;
   position: relative;
   overflow: hidden;
 }
 
+.canvas__wrapper {
+  overflow: hidden;
+}
+
 .canvas__container {
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
+  min-width: 100%;
   min-height: calc(100vh - #{$header-height});
+  position: relative;
+  overflow: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.canvas__legend {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: visible;
+  height: 100%;
+  pointer-events: none;
+  z-index: $z-index-low;
 }
 
 .canvas__label {

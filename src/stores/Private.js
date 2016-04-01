@@ -13,6 +13,11 @@ class Private extends BaseStore {
 					Privates.push(action.endpoint);
 					this.emitChange();
 					break;
+				case 'AddModel':
+					action.model.name += ' ' + (Privates.length + 1);
+					Privates.push(action.model);
+					this.emitChange();
+					break;
 			}
 		});
 	}

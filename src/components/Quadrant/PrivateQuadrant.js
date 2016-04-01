@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
+import Model from '../CanvasElements/Model';
 
 class PrivateQuadrant extends Component {
   static propTypes = {
@@ -14,7 +15,15 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <PrivateEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
+      switch (entity.type) {
+        case 'Model':
+          return <Model key={entity.id} icon="fa-car" entity={entity}/>;
+          break;
+        case 'PrivateEndpoint':
+          return <PrivateEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
+          break;
+      }
+      
     })
   }
 

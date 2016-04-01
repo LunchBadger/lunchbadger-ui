@@ -1,4 +1,9 @@
 import BaseModel from './BaseModel';
+import Pipeline from './Pipeline';
+
+const pipeline = Pipeline.create({
+  name: 'Pipeline 1'
+});
 
 export default class Gateway extends BaseModel {
   type = 'Gateway';
@@ -13,6 +18,7 @@ export default class Gateway extends BaseModel {
     super(id);
 
     this.name = name;
+    this.addPipeline(pipeline);
   }
 
   /**
@@ -22,7 +28,7 @@ export default class Gateway extends BaseModel {
     this._pipelines = pipelines;
   }
 
-	/**
+  /**
    * @returns {Pipeline[]}
    */
   get pipelines() {

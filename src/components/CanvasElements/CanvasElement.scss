@@ -20,24 +20,22 @@
 .canvas-element__inside {
   overflow: hidden;
   width: 100%;
+  display: table;
 }
 
 .canvas-element__icon {
   text-align: center;
   padding-right: 10px;
-  float: left;
   width: 50px;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .canvas-element__title {
   text-align: left;
   font-size: 17px;
-  overflow: hidden;
-  transform: translateY(-50.01%);
-  top: 50%;
-  position: absolute;
-  left: 70px;
-  right: 20px;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .canvas-element__icon {
@@ -56,4 +54,23 @@
 
 .canvas-element__port--out {
   right: -12px;
+}
+
+.canvas-element__extra {
+  margin: 0 -20px;
+}
+
+.canvas-element__sub-element {
+  padding-top: 10px;
+}
+
+.canvas-element__sub-elements {
+  padding-top: 8px;
+}
+
+.canvas-element__sub-elements__title {
+  font-weight: 700;
+  font-size: 14px;
+  padding-left: 30px;
+  color: $ui-dark-background;
 }

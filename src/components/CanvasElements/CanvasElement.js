@@ -15,6 +15,11 @@ export default (ComposedComponent) => {
             <div className="canvas-element__icon">
               <i className={`fa ${this.props.icon}`}/>
             </div>
+            <div className="canvas-element__title">
+              {this.props.entity.name}
+            </div>
+          </div>
+          <div className="canvas-element__extra">
             <ComposedComponent {...this.props} />
           </div>
         </div>

@@ -25,8 +25,6 @@ export default class BaseModel {
 
   set id(id) {
     this._id = id;
-
-    return this;
   }
 
   get id() {

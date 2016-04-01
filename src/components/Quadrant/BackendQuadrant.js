@@ -14,7 +14,7 @@ class BackendQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <DataSource icon="fa-database" entity={entity}/>;
+      return <DataSource key={entity.id} icon="fa-database" entity={entity}/>;
     })
   }
 

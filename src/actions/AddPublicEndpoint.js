@@ -1,9 +1,10 @@
 import { dispatch } from '../dispatcher/AppDispatcher';
+import PublicEndpoint from '../models/PublicEndpoint';
 
 export default () => {
   dispatch('AddPublicEndpoint', {
-  	endpoint: {
+  	endpoint: PublicEndpoint.create({
   		name: 'Endpoint'
-  	}
+  	})
   });
 };

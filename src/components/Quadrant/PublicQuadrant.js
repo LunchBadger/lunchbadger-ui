@@ -14,7 +14,7 @@ class PublicQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <PublicEndpoint icon="fa-user" entity={entity}/>;
+      return <PublicEndpoint key={entity.id} icon="fa-user" entity={entity}/>;
     })
   }
 

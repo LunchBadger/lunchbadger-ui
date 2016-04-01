@@ -1,9 +1,10 @@
 import { dispatch } from '../dispatcher/AppDispatcher';
+import PrivateEndpoint from '../models/PrivateEndpoint';
 
 export default () => {
   dispatch('AddPrivateEndpoint', {
-  	endpoint: {
+  	endpoint: PrivateEndpoint.create({
   		name: 'Endpoint'
-  	}
+  	})
   });
 };

@@ -1,9 +1,10 @@
-import { dispatch } from '../dispatcher/AppDispatcher';
+import {dispatch} from '../dispatcher/AppDispatcher';
+import DataSource from '../models/DataSource';
 
 export default () => {
   dispatch('AddDataSource', {
-  	dataSource: {
-  		name: 'DataSource'
-  	}
+    dataSource: DataSource.create({
+      name: 'DataSource'
+    })
   });
 };

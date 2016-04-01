@@ -39,7 +39,11 @@
 }
 
 .pipeline__details {
+  display: none;
 
+  .pipeline--opened & {
+    display: block;
+  }
 }
 
 .pipeline__details__title {

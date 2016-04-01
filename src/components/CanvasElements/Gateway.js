@@ -7,7 +7,7 @@ class Gateway extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
-
+  
   renderPipelines() {
     return this.props.entity.pipelines.map((pipeline) => {
       return (

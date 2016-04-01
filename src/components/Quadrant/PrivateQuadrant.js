@@ -14,7 +14,7 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <PrivateEndpoint icon="fa-user-secret" entity={entity}/>;
+      return <PrivateEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
     })
   }
 

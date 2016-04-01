@@ -2,12 +2,13 @@
 
 .pipeline {
   position: relative;
-  padding-left: 18px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
-.pipeline__details {
+.pipeline__info {
   cursor: pointer;
+  padding-left: 18px;
+  position: relative;
 
   &:before {
     content: '';
@@ -35,4 +36,16 @@
 .pipeline__icon {
   display: inline-block;
   margin-right: 7px;
+}
+
+.pipeline__details {
+
+}
+
+.pipeline__details__title {
+  font-weight: 700;
+  font-size: 14px;
+  padding-left: 45px;
+  padding-top: 15px;
+  color: $ui-dark-background;
 }

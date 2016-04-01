@@ -76,6 +76,7 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-sortablejs": "^0.7.0",
+    "sortablejs": "^1.4.2",
     "uuid": "^2.0.1"
   }
 }

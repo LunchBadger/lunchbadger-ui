@@ -33,7 +33,6 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
-      const { sortableInstance } = this.props;
       if (this.props.data) {
         this.props.data.addChangeListener(this.onStoreChange);
       }

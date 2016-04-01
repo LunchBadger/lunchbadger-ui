@@ -18,7 +18,6 @@ class Backend extends BaseStore {
 	}
 
 	getData() {
-    console.log(Backends);
 		return Backends;
 	}
 }

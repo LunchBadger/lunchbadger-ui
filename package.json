@@ -75,6 +75,7 @@
     "normalize.css": "^4.0.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
+    "react-sortablejs": "^0.7.0",
     "uuid": "^2.0.1"
   }
 }

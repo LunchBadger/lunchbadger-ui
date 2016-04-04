@@ -13,6 +13,11 @@ class Public extends BaseStore {
 					Publics.push(action.endpoint);
 					this.emitChange();
 					break;
+        case 'AddProduct':
+          action.product.name += ' ' + (Publics.length + 1);
+          Publics.push(action.product);
+          this.emitChange();
+          break;
 			}
 		});
 	}

@@ -18,12 +18,10 @@ class PrivateQuadrant extends Component {
       switch (entity.type) {
         case 'Model':
           return <Model key={entity.id} icon="fa-car" entity={entity}/>;
-          break;
         case 'PrivateEndpoint':
           return <PrivateEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
-          break;
       }
-      
+
     })
   }
 

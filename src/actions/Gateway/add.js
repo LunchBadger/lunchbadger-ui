@@ -1,5 +1,5 @@
-import { dispatch } from '../dispatcher/AppDispatcher';
-import Gateway from '../models/Gateway';
+import { dispatch } from '../../dispatcher/AppDispatcher';
+import Gateway from '../../models/Gateway';
 
 export default () => {
   dispatch('AddGateway', {

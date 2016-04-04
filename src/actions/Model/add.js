@@ -1,5 +1,5 @@
-import {dispatch} from '../dispatcher/AppDispatcher';
-import Model from '../models/Model';
+import {dispatch} from '../../dispatcher/AppDispatcher';
+import Model from '../../models/Model';
 
 export default () => {
   dispatch('AddModel', {

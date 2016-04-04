@@ -26,7 +26,7 @@ export default class BaseStore extends EventEmitter {
     this.removeListener('CHANGE', callback);
   }
 
-  findEntity(id) {
+  findEntity() {
     return null;
   }
 

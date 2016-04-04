@@ -18,10 +18,8 @@ class PublicQuadrant extends Component {
       switch (entity.type) {
         case 'Product':
           return <Product key={entity.id} icon="fa-archive" entity={entity}/>;
-          break;
         case 'PublicEndpoint':
-          return <PublicEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
-          break;
+          return <PublicEndpoint key={entity.id} icon="fa-user" entity={entity}/>;
       }
     })
   }

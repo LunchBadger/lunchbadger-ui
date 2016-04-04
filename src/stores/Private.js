@@ -13,11 +13,22 @@ class Private extends BaseStore {
 					Privates.push(action.endpoint);
 					this.emitChange();
 					break;
+        
 				case 'AddModel':
 					action.model.name += ' ' + (Privates.length + 1);
 					Privates.push(action.model);
 					this.emitChange();
 					break;
+
+        case 'UpdatePrivateEndpoint':
+          this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
+
+        case 'UpdateModel':
+          this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
 			}
 		});
 	}
@@ -25,6 +36,10 @@ class Private extends BaseStore {
 	getData() {
 		return Privates;
 	}
+
+  findEntity(id) {
+    return _.find(Privates, {id: id});
+  }
 }
 
 export default new Private;

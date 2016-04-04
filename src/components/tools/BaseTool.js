@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddPrivateEndpoint from 'actions/AddPrivateEndpoint';
+import AddPrivateEndpoint from '../../actions/PrivateEndpoint/add';
 
 export default class BaseTool extends Component {
   render() {
     return (
       <div className="privateendpoint" onClick={() => AddPrivateEndpoint()}>
-      	<i className="privateendpoint__icon fa fa-github"></i>
-      	<span className="privateendpoint__tooltip">Private Endpoint</span>
+        <i className="privateendpoint__icon fa fa-github"/>
+        <span className="privateendpoint__tooltip">Private Endpoint</span>
       </div>
     );
   }

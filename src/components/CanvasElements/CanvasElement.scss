@@ -36,6 +36,11 @@
   font-size: 17px;
   display: table-cell;
   vertical-align: middle;
+
+  .editing {
+    font-size: 17px;
+    margin-left: -2px;
+  }
 }
 
 .canvas-element__icon {

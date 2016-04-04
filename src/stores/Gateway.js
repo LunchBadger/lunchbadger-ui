@@ -13,12 +13,21 @@ class Gateway extends BaseStore {
           Gateways.push(action.gateway);
           this.emitChange();
           break;
+
+        case 'UpdateGateway':
+          this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
       }
     });
   }
 
   getData() {
     return Gateways;
+  }
+
+  findEntity(id) {
+    return _.find(Gateways, {id: id});
   }
 }
 

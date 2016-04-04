@@ -13,6 +13,11 @@ class Public extends BaseStore {
 					Publics.push(action.endpoint);
 					this.emitChange();
 					break;
+
+        case 'UpdatePublicEndpoint':
+          this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
 			}
 		});
 	}
@@ -20,6 +25,10 @@ class Public extends BaseStore {
 	getData() {
 		return Publics;
 	}
+
+  findEntity(id) {
+    return _.find(Publics, {id: id});
+  }
 }
 
 export default new Public;

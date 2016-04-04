@@ -73,9 +73,11 @@
     "core-js": "^2.0.0",
     "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
+    "lodash": "^4.7.0",
     "normalize.css": "^4.0.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
+    "react-edit-inline": "^1.0.6",
     "react-sortablejs": "^0.7.0",
     "sortablejs": "^1.4.2",
     "uuid": "^2.0.1"

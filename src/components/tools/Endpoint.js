@@ -7,8 +7,8 @@ export default class Endpoint extends Component {
   render() {
     return (
       <div className="endpoint tool context">
-      	<i className="tool__extend fa fa-caret-down"></i>
-      	<i className="tool__icon fa fa-github"></i>
+      	<i className="tool__extend fa fa-caret-down"/>
+      	<i className="tool__icon fa fa-github"/>
       	<ul className="tool__context">
       		<li>
       			<PrivateEndpoint />

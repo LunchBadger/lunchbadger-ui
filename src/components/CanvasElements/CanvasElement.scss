@@ -71,6 +71,20 @@
 
 .canvas-element__sub-elements {
   padding-top: 8px;
+  .canvas-element {
+    padding: 0 20px;
+    border: none;
+    width: 100%;
+    min-width: 100%;
+    .canvas-element__icon {
+      width: 20px;
+      padding-left: 10px;
+      font-size: 16px;
+    }
+    .canvas-element__title {
+      font-style: 16px;
+    }
+  }
 }
 
 .canvas-element__sub-elements__title {

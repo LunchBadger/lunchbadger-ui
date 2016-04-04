@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddProduct from 'actions/AddProduct';
+import AddProduct from 'actions/Product/add';
 
 export default class Product extends Component {
   render() {

@@ -1,5 +1,5 @@
-import { dispatch } from '../dispatcher/AppDispatcher';
-import Product from '../models/Product';
+import { dispatch } from '../../dispatcher/AppDispatcher';
+import Product from '../../models/Product';
 
 export default () => {
   dispatch('AddProduct', {

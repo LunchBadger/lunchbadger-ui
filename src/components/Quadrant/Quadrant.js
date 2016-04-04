@@ -28,7 +28,7 @@ export default (ComposedComponent) => {
       this.onStoreChange = () => {
         this.setState({
           entities: this.props.data.getData()
-        })
+        });
       }
     }
 

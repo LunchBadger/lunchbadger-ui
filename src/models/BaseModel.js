@@ -23,6 +23,14 @@ export default class BaseModel {
     return object;
   }
 
+  update(data) {
+    Object.keys(data).forEach((propertyName) => {
+      if (data.hasOwnProperty(propertyName)) {
+        this[propertyName] = data[propertyName];
+      }
+    });
+  }
+
   set id(id) {
     this._id = id;
   }

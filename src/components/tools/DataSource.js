@@ -10,25 +10,25 @@ export default class DataSource extends Component {
   render() {
     return (
       <div className="dataSource tool context">
-      	<i className="tool__extend fa fa-caret-down"></i>
-      	<i className="tool__icon fa fa-database"></i>
-      	<ul className="tool__context">
-      		<li>
-      			<Memory />
-      		</li>
-      		<li>
-      			<Oracle />
-      		</li>
-      		<li>
-      			<Mongo />
-      		</li>
-      		<li>
-      			<SQL />
-      		</li>
-      		<li>
-      			<Salesforce />
-      		</li>
-      	</ul>
+        <i className="tool__extend fa fa-caret-down"/>
+        <i className="tool__icon fa fa-database"/>
+        <ul className="tool__context">
+          <li>
+            <Memory />
+          </li>
+          <li>
+            <Oracle />
+          </li>
+          <li>
+            <Mongo />
+          </li>
+          <li>
+            <SQL />
+          </li>
+          <li>
+            <Salesforce />
+          </li>
+        </ul>
       </div>
     );
   }

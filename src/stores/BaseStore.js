@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import { register } from '../dispatcher/AppDispatcher';
+import {EventEmitter} from 'events';
+import {register} from '../dispatcher/AppDispatcher';
 
 export default class BaseStore extends EventEmitter {
   constructor() {
@@ -24,5 +24,17 @@ export default class BaseStore extends EventEmitter {
 
   removeChangeListener(callback) {
     this.removeListener('CHANGE', callback);
+  }
+
+  findEntity(id) {
+    return null;
+  }
+
+  updateEntity(id, data) {
+    const entity = this.findEntity(id);
+
+    if (entity) {
+      entity.update(data);
+    }
   }
 }

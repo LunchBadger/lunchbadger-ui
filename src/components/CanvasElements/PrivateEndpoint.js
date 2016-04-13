@@ -3,6 +3,7 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updatePrivateEndpoint from '../../actions/PrivateEndpoint/update';
+import classNames from 'classnames';
 
 class PrivateEndpoint extends Component {
   static propTypes = {
@@ -13,10 +14,27 @@ class PrivateEndpoint extends Component {
     updatePrivateEndpoint(this.props.entity.id, {name});
   }
 
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      const portClass = classNames({
+        'canvas-element__port--out': port.portType === 'out',
+        'canvas-element__port--in': port.portType === 'in',
+        'canvas-element__port': true
+      });
+
+      return (
+        <Port key={`port-${port.portType}-${port.id}`}
+              ref={(ref) => {port.DOMReference = ref}}
+              way={port.portType}
+              className={portClass}/>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
-        <Port way="out" className="canvas-element__port canvas-element__port--out"/>
+        {this.renderPorts()}
       </div>
     );
   }

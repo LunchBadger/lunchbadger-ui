@@ -5,10 +5,10 @@ const dfltPort = 8000;
 function getDefaultModules() {
   return {
     preLoaders: [{
-        test: /\.(js|jsx)$/,
-        include: srcPath,
-        loader: 'eslint-loader'
-      }],
+      test: /\.(js|jsx)$/,
+      include: srcPath,
+      loader: 'eslint-loader'
+    }],
     loaders: [
       {
         test: /\.css$/,
@@ -49,6 +49,12 @@ function getDefaultModules() {
       }, {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url-loader?limit=10000&mimetype=image/svg+xml"
+      }, {
+        test: require.resolve('jsplumb'),
+        loaders: [
+          'imports?this=>window',
+          'script'
+        ]
       }
     ]
   };

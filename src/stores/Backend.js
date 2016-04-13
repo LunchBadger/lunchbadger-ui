@@ -1,4 +1,4 @@
-import BaseStore from 'stores/BaseStore';
+import BaseStore from './BaseStore';
 import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 

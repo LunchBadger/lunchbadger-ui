@@ -14,7 +14,8 @@ export default (ComposedComponent) => {
       title: PropTypes.string.isRequired,
       sortableInstance: React.PropTypes.object,
       resizable: PropTypes.bool,
-      data: PropTypes.object.isRequired
+      data: PropTypes.object.isRequired,
+      paper: PropTypes.object
     };
 
     constructor(props) {
@@ -22,26 +23,12 @@ export default (ComposedComponent) => {
 
       this.state = {
         quadrantWidth: '25%',
-        entities: []
+        entities: this.props.data.getData()
       };
-
-      this.onStoreChange = () => {
-        this.setState({
-          entities: this.props.data.getData()
-        });
-      }
     }
 
-    componentDidMount() {
-      if (this.props.data) {
-        this.props.data.addChangeListener(this.onStoreChange);
-      }
-    }
-
-    componentWillUnmount() {
-      if (this.props.data) {
-        this.props.data.removeChangeListener(this.onStoreChange);
-      }
+    componentDidUpdate() {
+      this.props.paper.repaintEverything();
     }
 
     recalculateQuadrantWidth(event) {
@@ -49,6 +36,7 @@ export default (ComposedComponent) => {
       const newWidth = event.clientX - quadrantBounds.left;
 
       this.setState({quadrantWidth: `${newWidth}px`});
+      this.props.paper.repaintEverything();
     }
 
     render() {

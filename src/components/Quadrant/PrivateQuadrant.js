@@ -6,7 +6,8 @@ import Model from '../CanvasElements/Model';
 class PrivateQuadrant extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    entities: PropTypes.array
+    entities: PropTypes.array,
+    paper: PropTypes.object
   };
 
   constructor(props) {
@@ -17,9 +18,20 @@ class PrivateQuadrant extends Component {
     return this.props.entities.map((entity) => {
       switch (entity.type) {
         case 'Model':
-          return <Model key={entity.id} icon="fa-car" entity={entity}/>;
+          return (
+            <Model paper={this.props.paper}
+                   key={entity.id}
+                   icon="fa-car"
+                   entity={entity}/>
+          );
         case 'PrivateEndpoint':
-          return <PrivateEndpoint key={entity.id} icon="fa-user-secret" entity={entity}/>;
+          return (
+            <PrivateEndpoint
+              paper={this.props.paper}
+              key={entity.id}
+              icon="fa-user-secret"
+              entity={entity}/>
+          );
       }
 
     })

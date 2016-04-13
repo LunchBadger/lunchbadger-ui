@@ -5,7 +5,8 @@ import DataSource from '../CanvasElements/DataSource';
 class BackendQuadrant extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    entities: PropTypes.array
+    entities: PropTypes.array,
+    paper: PropTypes.object
   };
 
   constructor(props) {
@@ -14,7 +15,10 @@ class BackendQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return <DataSource key={entity.id} icon="fa-database" entity={entity}/>;
+      return <DataSource paper={this.props.paper}
+                         key={entity.id}
+                         icon="fa-database"
+                         entity={entity}/>;
     })
   }
 

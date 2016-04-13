@@ -1,4 +1,5 @@
 import 'core-js/fn/object/assign';
+import 'jsplumb';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App/App';

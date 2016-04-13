@@ -3,20 +3,39 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updateDataSource from '../../actions/DataSource/update';
+import classNames from 'classnames';
 
 class DataSource extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
 
   onNameUpdate(name) {
     updateDataSource(this.props.entity.id, {name});
   }
 
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      const portClass = classNames({
+        'canvas-element__port--out': port.portType === 'out',
+        'canvas-element__port--in': port.portType === 'in',
+        'canvas-element__port': true
+      });
+
+      return (
+        <Port key={`port-${port.portType}-${port.id}`}
+              ref={(ref) => {port.DOMReference = ref}}
+              way={port.portType}
+              className={portClass}/>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
-        <Port way="out" className="canvas-element__port canvas-element__port--out"/>
+        {this.renderPorts()}
       </div>
     );
   }

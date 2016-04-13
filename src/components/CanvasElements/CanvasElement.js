@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import InlineEdit from 'react-edit-inline';
+import {findDOMNode} from 'react-dom';
 
 export default (ComposedComponent) => {
   return class CanvasElement extends Component {
@@ -15,6 +16,35 @@ export default (ComposedComponent) => {
       this.state = {
         name: this.props.entity.name
       };
+    }
+
+    componentDidMount() {
+      if (!this.props.entity.ports) {
+        return;
+      }
+
+      this.props.entity.ports.forEach((port) => {
+        const portDOM = findDOMNode(port.DOMReference);
+
+        if (port.portType === 'in') {
+          this.props.paper.makeTarget(portDOM, {
+            maxConnections: -1,
+            endpoint: ['Dot', {
+              radius: 7,
+              paintStyle: {
+                strokeStyle: '#ffffff'
+              }
+            }],
+            anchor: ['Center']
+          });
+        } else {
+          this.props.paper.makeSource(portDOM, {
+            maxConnections: -1,
+            endpoint: ['Dot', {radius: 7}],
+            anchor: ['Center']
+          });
+        }
+      });
     }
 
     validateName(text) {

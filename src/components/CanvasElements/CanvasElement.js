@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import InlineEdit from 'react-edit-inline';
-import {findDOMNode} from 'react-dom';
 
 export default (ComposedComponent) => {
   return class CanvasElement extends Component {
@@ -16,52 +15,6 @@ export default (ComposedComponent) => {
       this.state = {
         name: this.props.entity.name
       };
-    }
-
-    componentDidMount() {
-      if (!this.props.entity.ports) {
-        return;
-      }
-
-      this.props.entity.ports.forEach((port) => {
-        const portDOM = findDOMNode(port.DOMReference);
-
-        if (port.portType === 'in') {
-          this.props.paper.makeTarget(portDOM, {
-            maxConnections: -1,
-            endpoint: 'Blank',
-            paintStyle: {
-              fillStyle: '#ffffff'
-            },
-            dropOptions: {
-              hoverClass: 'hover',
-              activeClass: 'active'
-            },
-            anchor: [0.6, 0.1, 0, 0],
-            scope: port.portGroup
-          });
-        } else {
-          this.props.paper.makeSource(portDOM, {
-            maxConnections: -1,
-            endpoint: 'Blank',
-            paintStyle: {
-              fillStyle: '#ffffff'
-            },
-            connectorStyle: {
-              lineWidth: 6,
-              strokeStyle: '#ffffff',
-              joinstyle: 'round',
-              outlineColor: '#c1c1c1',
-              outlineWidth: 2
-            },
-            connectorHoverStyle: {
-              outlineColor: '#919191'
-            },
-            anchor: [0.5, 0, 0.5, 0.5],
-            scope: port.portGroup
-          });
-        }
-      });
     }
 
     validateName(text) {

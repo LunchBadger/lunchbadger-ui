@@ -6,7 +6,8 @@ import updatePublicEndpoint from '../../actions/PublicEndpoint/update';
 
 class PublicEndpoint extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
 
   onNameUpdate(name) {
@@ -16,7 +17,9 @@ class PublicEndpoint extends Component {
   render() {
     return (
       <div>
-        <Port way="in" className="canvas-element__port canvas-element__port--in"/>
+        <Port way="in"
+              paper={this.props.paper}
+              className="canvas-element__port canvas-element__port--in"/>
       </div>
     );
   }

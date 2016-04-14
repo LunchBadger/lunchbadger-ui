@@ -25,8 +25,9 @@ class DataSource extends Component {
 
       return (
         <Port key={`port-${port.portType}-${port.id}`}
-              ref={(ref) => {port.DOMReference = ref}}
+              paper={this.props.paper}
               way={port.portType}
+              scope={port.portGroup}
               className={portClass}/>
       );
     });

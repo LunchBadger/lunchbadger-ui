@@ -38,7 +38,7 @@ export default class Canvas extends Component {
       },
       Connector: ['Bezier', {curviness: 40}],
       Container: 'canvas',
-      Anchor: [0.5, 0, 0.5, 0.5]
+      Anchors: [0.5, 0, 0.5, 0.5]
     });
 
     this.paper.bind('connection', function (i) {

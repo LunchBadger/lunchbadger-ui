@@ -10,8 +10,7 @@
   z-index: $z-index-medium;
 
   &.active {
-    border-style: dashed;
-    border-color: $ui-dark-border;
+    border-color: #7ed241;
   }
 
   &.hover {

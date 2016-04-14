@@ -7,11 +7,14 @@ import updateDataSource from '../../actions/DataSource/update';
 class DataSource extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    name: PropTypes.string.isRequired
   };
 
-  onNameUpdate(name) {
-    updateDataSource(this.props.entity.id, {name});
+  update() {
+    updateDataSource(this.props.entity.id, {
+      name: this.props.name
+    });
   }
 
   renderPorts() {

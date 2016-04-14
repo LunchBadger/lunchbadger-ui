@@ -13,7 +13,7 @@ export default class PrivateEndpoint extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'private',
+        portGroup: 'gateways',
         portType: 'out'
       })
     ];

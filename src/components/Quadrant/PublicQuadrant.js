@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
 import PublicEndpoint from '../CanvasElements/PublicEndpoint';
-import Product from '../CanvasElements/Product';
+import Product from '../CanvasElements/API';
 
 class PublicQuadrant extends Component {
   static propTypes = {

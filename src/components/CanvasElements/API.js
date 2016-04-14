@@ -3,6 +3,8 @@ import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import './CanvasElement.scss';
 import Sortable from 'react-sortablejs';
+import updateAPI from '../../actions/API/update';
+import addEndpoint from '../../actions/API/addEndpoint';
 
 const sortableOptions = {
   ref: 'endpoints',
@@ -22,6 +24,16 @@ class Product extends Component {
     console.log('handleAdd:', evt, this.props.entity);
   }
 
+  update() {
+    updateAPI(this.props.entity.id, {
+      name: this.props.name,
+    });
+  }
+
+  onAddEndpoint(name) {
+    addEndpoint(this.props.entity, name);
+  }
+
   renderEndpoints() {
     return this.props.entity.endpoints.map((endpoint) => {
       return (
@@ -36,7 +48,7 @@ class Product extends Component {
     return (
       <div>
         <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">Endpoints</div>
+          <div className="canvas-element__sub-elements__title">Endpoints<i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus"></i></div>
           <div ref="endpoints">{this.renderEndpoints()}</div>
         </div>
       </div>

@@ -25,8 +25,10 @@ class Gateway extends Component {
     });
   }
 
-  onNameUpdate(name) {
-    updateGateway(this.props.entity.id, {name});
+  update() {
+    updateGateway(this.props.entity.id, {
+      name: this.props.name
+    });
   }
 
   onAddPipeline(name) {
@@ -37,7 +39,7 @@ class Gateway extends Component {
     return (
       <div>
         <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title" onClick={() => this.onAddPipeline('dupa')}>Pipelines</div>
+          <div className="canvas-element__sub-elements__title">Pipelines<i onClick={() => this.onAddPipeline('Pipeline')} className="canvas-element__add fa fa-plus"></i></div>
             <div>{this.renderPipelines()}</div>
         </div>
       </div>

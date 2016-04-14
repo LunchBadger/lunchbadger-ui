@@ -1,10 +1,10 @@
 import { dispatch } from '../../dispatcher/AppDispatcher';
-import Product from '../../models/Product';
+import Product from '../../models/API';
 
 export default () => {
-  dispatch('AddProduct', {
+  dispatch('AddAPI', {
     product: Product.create({
-      name: 'Product'
+      name: 'API'
     })
   });
 };

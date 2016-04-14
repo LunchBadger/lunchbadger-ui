@@ -1,5 +1,6 @@
 import BaseStore from 'stores/BaseStore';
 import {register} from '../dispatcher/AppDispatcher';
+import PublicEndpoint from '../models/PublicEndpoint';
 import _ from 'lodash';
 
 const Publics = [];
@@ -18,13 +19,17 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
-        case 'AddProduct':
+        case 'AddAPI':
           action.product.name += ' ' + (Publics.length + 1);
           Publics.push(action.product);
           this.emitChange();
           break;
-        case 'UpdateProduct':
+        case 'UpdateAPI':
           this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
+        case 'AddEndpoint':
+          action.api.addEndpoint(PublicEndpoint.create({name: action.name}));
           this.emitChange();
           break;
       }

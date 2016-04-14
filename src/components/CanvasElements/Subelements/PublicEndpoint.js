@@ -18,6 +18,7 @@ export default class PublicEndpoint extends Component {
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
+              middle={true}
               scope={port.portGroup}/>
       );
     });

@@ -1,10 +1,10 @@
 import { dispatch } from '../../dispatcher/AppDispatcher';
 import Gateway from '../../models/Gateway';
 
-export default () => {
+export default (name) => {
   dispatch('AddGateway', {
   	gateway: Gateway.create({
-  		name: 'Gateway'
+  		name: name || 'Gateway'
   	})
   });
 };

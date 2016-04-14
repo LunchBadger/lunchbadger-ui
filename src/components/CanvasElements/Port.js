@@ -7,7 +7,8 @@ export default class Port extends Component {
   static propTypes = {
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
-    paper: PropTypes.object.isRequired
+    paper: PropTypes.object.isRequired,
+    middle: PropTypes.bool
   };
 
   constructor(props) {
@@ -59,7 +60,8 @@ export default class Port extends Component {
       'canvas-element__port--out': this.props.way === 'out',
       'canvas-element__port--in': this.props.way === 'in',
       'canvas-element__port': true,
-      'port': true
+      'port': true,
+      'port__middle': this.props.middle
     });
 
     return (

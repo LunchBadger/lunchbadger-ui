@@ -19,6 +19,11 @@
   }
 }
 
+.port__middle {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .port__inside {
   color: $font-base;
   text-align: center;

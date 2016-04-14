@@ -10,13 +10,11 @@ class Private extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'AddPrivateEndpoint':
-          action.endpoint.name += ' ' + (Privates.length + 1);
           Privates.push(action.endpoint);
           this.emitChange();
           break;
 
         case 'AddModel':
-          action.model.name += ' ' + (Privates.length + 1);
           Privates.push(action.model);
           this.emitChange();
           break;

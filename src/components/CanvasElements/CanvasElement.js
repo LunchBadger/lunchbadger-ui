@@ -19,6 +19,10 @@ export default (ComposedComponent) => {
       };
     }
 
+    componentDidMount() {
+      this.triggerElementAutofocus();
+    }
+
     update() {
       if (typeof this.element.update === 'function') {
         this.element.update();
@@ -36,6 +40,17 @@ export default (ComposedComponent) => {
       }
     }
 
+    triggerElementAutofocus() {
+      const nameInput = findDOMNode(this.refs.nameInput);
+      const selectAllOnce = () => {
+        nameInput.select();
+        nameInput.removeEventListener('focus', selectAllOnce);
+      };
+
+      nameInput.addEventListener('focus', selectAllOnce);
+      nameInput.focus();
+    }
+
     render() {
       const elementClass = classNames({
         'canvas-element': true,
@@ -48,8 +63,12 @@ export default (ComposedComponent) => {
               <i className={`fa ${this.props.icon}`}/>
             </div>
             <div className="canvas-element__title">
-              <span className="canvas-element__name" onDoubleClick={() => this.setState({editable: true})}>{this.props.entity.name}</span>
-              <input className="canvas-element__nam-edit" value={this.state.name} onChange={this.updateName.bind(this)}/>
+              <span className="canvas-element__name"
+                    onDoubleClick={() => this.setState({editable: true})}>{this.props.entity.name}</span>
+              <input className="canvas-element__nam-edit"
+                     ref="nameInput"
+                     value={this.state.name}
+                     onChange={this.updateName.bind(this)}/>
             </div>
           </div>
           <div className="canvas-element__extra">

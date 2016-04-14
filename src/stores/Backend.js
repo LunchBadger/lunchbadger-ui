@@ -10,7 +10,6 @@ class Backend extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'AddDataSource':
-          action.dataSource.name += ' ' + (Backends.length + 1);
           Backends.push(action.dataSource);
           this.emitChange();
           break;

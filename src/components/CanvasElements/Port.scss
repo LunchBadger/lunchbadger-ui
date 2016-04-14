@@ -8,6 +8,16 @@
   height: 22px;
   background: $ui-light;
   z-index: $z-index-medium;
+
+  &.active {
+    border-style: dashed;
+    border-color: $ui-dark-border;
+  }
+
+  &.hover {
+    border-style: solid;
+    border-color: $ui-dark-border;
+  }
 }
 
 .port__inside {

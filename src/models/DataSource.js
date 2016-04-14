@@ -13,7 +13,7 @@ export default class DataSource extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'backend',
+        portGroup: 'private',
         portType: 'out'
       })
     ];

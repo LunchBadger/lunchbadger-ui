@@ -14,12 +14,21 @@ class PublicEndpoint extends Component {
     updatePublicEndpoint(this.props.entity.id, {name});
   }
 
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      return (
+        <Port key={`port-${port.portType}-${port.id}`}
+              paper={this.props.paper}
+              way={port.portType}
+              scope={port.portGroup}/>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
-        <Port way="in"
-              paper={this.props.paper}
-              className="canvas-element__port canvas-element__port--in"/>
+        {this.renderPorts()}
       </div>
     );
   }

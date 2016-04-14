@@ -3,11 +3,11 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updateModel from '../../actions/Model/update';
-import classNames from 'classnames';
 
 class Model extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
 
   onNameUpdate(name) {
@@ -16,18 +16,11 @@ class Model extends Component {
 
   renderPorts() {
     return this.props.entity.ports.map((port) => {
-      const portClass = classNames({
-        'canvas-element__port--out': port.portType === 'out',
-        'canvas-element__port--in': port.portType === 'in',
-        'canvas-element__port': true
-      });
-
       return (
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
-              scope={port.portGroup}
-              className={portClass}/>
+              scope={port.portGroup}/>
       );
     });
   }

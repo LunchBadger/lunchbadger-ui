@@ -22,7 +22,7 @@ export default class Product extends BaseModel {
   }
 
   /**
-   * @param endpoints {Enpoint[]}
+   * @param endpoints {Endpoint[]}
    */
   set endpoints(endpoints) {
     this._endpoints = endpoints;

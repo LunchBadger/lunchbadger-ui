@@ -6,7 +6,8 @@ import './Pipeline.scss';
 
 export default class Pipeline extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
 
   constructor(props) {
@@ -20,6 +21,17 @@ export default class Pipeline extends Component {
   renderPolicies() {
     return this.props.entity.policies.map((policy) => {
       return <Policy key={policy.id} policy={policy}/>;
+    });
+  }
+
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      return (
+        <Port key={`port-${port.portType}-${port.id}`}
+              paper={this.props.paper}
+              way={port.portType}
+              scope={port.portGroup}/>
+      );
     });
   }
 
@@ -43,8 +55,7 @@ export default class Pipeline extends Component {
             {this.props.entity.name}
           </div>
 
-          <Port way="in" className="canvas-element__port canvas-element__port--in"/>
-          <Port way="out" className="canvas-element__port canvas-element__port--out"/>
+          {this.renderPorts()}
         </div>
 
         <div className="pipeline__details">

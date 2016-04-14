@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
+import classNames from 'classnames';
 
 export default class Port extends Component {
   static propTypes = {
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
-    paper: PropTypes.object.isRequired,
-    className: PropTypes.string
+    paper: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -55,8 +55,15 @@ export default class Port extends Component {
   }
 
   render() {
+    const portClass = classNames({
+      'canvas-element__port--out': this.props.way === 'out',
+      'canvas-element__port--in': this.props.way === 'in',
+      'canvas-element__port': true,
+      'port': true
+    });
+
     return (
-      <div ref="port" className={`port ${this.props.className}`}>
+      <div ref="port" className={portClass}>
         <div className="port__inside">
           <i className="port__icon fa fa-arrow-right"/>
         </div>

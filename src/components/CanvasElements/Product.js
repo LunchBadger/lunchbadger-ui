@@ -9,8 +9,7 @@ const sortableOptions = {
   model: 'endpoints',
   group: {name: 'all', put: true, pull: false},
   onAdd: 'handleAdd',
-  sort: false,
-
+  sort: false
 };
 
 class Product extends Component {

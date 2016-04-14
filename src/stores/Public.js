@@ -10,7 +10,6 @@ class Public extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'AddPublicEndpoint':
-          action.endpoint.name += ' ' + (Publics.length + 1);
           Publics.push(action.endpoint);
           this.emitChange();
           break;
@@ -19,7 +18,6 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddProduct':
-          action.product.name += ' ' + (Publics.length + 1);
           Publics.push(action.product);
           this.emitChange();
           break;

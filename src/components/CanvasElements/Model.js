@@ -7,11 +7,14 @@ import updateModel from '../../actions/Model/update';
 class Model extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    name: PropTypes.string.isRequired
   };
 
-  onNameUpdate(name) {
-    updateModel(this.props.entity.id, {name});
+  update() {
+    updateModel(this.props.entity.id, {
+      name: this.props.name
+    });
   }
 
   renderPorts() {

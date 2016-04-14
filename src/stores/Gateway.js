@@ -11,7 +11,6 @@ class Gateway extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'AddGateway':
-          action.gateway.name += ' ' + (Gateways.length + 1);
           Gateways.push(action.gateway);
           this.emitChange();
           break;

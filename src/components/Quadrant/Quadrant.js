@@ -25,8 +25,8 @@ export default (ComposedComponent) => {
       console.log('handleStart:', evt);
     }
 
-    handleEnd(evt, dupa, cycki) {
-      console.log('handleEnd:', evt, dupa, cycki);
+    handleEnd(evt) {
+      console.log('handleEnd:', evt);
     }
 
     constructor(props) {
@@ -39,7 +39,9 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate() {
-      //this.props.paper.repaintEverything();
+      if (this.props.paper) {
+        this.props.paper.repaintEverything();
+      }
     }
 
     recalculateQuadrantWidth(event) {

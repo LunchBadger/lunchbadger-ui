@@ -6,17 +6,29 @@ import updatePublicEndpoint from '../../actions/PublicEndpoint/update';
 
 class PublicEndpoint extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
 
   onNameUpdate(name) {
     updatePublicEndpoint(this.props.entity.id, {name});
   }
 
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      return (
+        <Port key={`port-${port.portType}-${port.id}`}
+              paper={this.props.paper}
+              way={port.portType}
+              scope={port.portGroup}/>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
-        <Port way="in" className="canvas-element__port canvas-element__port--in"/>
+        {this.renderPorts()}
       </div>
     );
   }

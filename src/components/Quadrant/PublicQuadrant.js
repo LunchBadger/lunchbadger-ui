@@ -17,9 +17,19 @@ class PublicQuadrant extends Component {
     return this.props.entities.map((entity) => {
       switch (entity.type) {
         case 'Product':
-          return <Product key={entity.id} icon="fa-archive" entity={entity}/>;
+          return (
+            <Product key={entity.id}
+                     paper={this.props.paper}
+                     icon="fa-archive"
+                     entity={entity}/>
+          );
         case 'PublicEndpoint':
-          return <PublicEndpoint key={entity.id} icon="fa-user" entity={entity}/>;
+          return (
+            <PublicEndpoint key={entity.id}
+                            paper={this.props.paper}
+                            icon="fa-user"
+                            entity={entity}/>
+          );
       }
     })
   }

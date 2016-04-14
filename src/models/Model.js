@@ -18,7 +18,7 @@ export default class Model extends BaseModel {
       }),
       Port.create({
         id: this.id,
-        portGroup: 'private',
+        portGroup: 'gateways',
         portType: 'out'
       })
     ];

@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
-import InlineEdit from 'react-edit-inline';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 
@@ -18,35 +17,6 @@ export default (ComposedComponent) => {
         name: props.entity.name,
         editable: true
       };
-    }
-
-    componentDidMount() {
-      if (!this.props.entity.ports) {
-        return;
-      }
-
-      this.props.entity.ports.forEach((port) => {
-        const portDOM = findDOMNode(port.DOMReference);
-
-        if (port.portType === 'in') {
-          this.props.paper.makeTarget(portDOM, {
-            maxConnections: -1,
-            endpoint: ['Dot', {
-              radius: 7,
-              paintStyle: {
-                strokeStyle: '#ffffff'
-              }
-            }],
-            anchor: ['Center']
-          });
-        } else {
-          this.props.paper.makeSource(portDOM, {
-            maxConnections: -1,
-            endpoint: ['Dot', {radius: 7}],
-            anchor: ['Center']
-          });
-        }
-      });
     }
 
     update() {

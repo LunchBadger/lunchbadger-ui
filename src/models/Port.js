@@ -7,14 +7,11 @@ export default class Port extends BaseModel {
 
   _portType = null;
 
-  _DOMReference = null;
-
-  constructor(id, portGroup, portType, DOMReference) {
+  constructor(id, portGroup, portType) {
     super(id);
 
     this._portGroup = portGroup;
     this._portType = portType;
-    this._DOMReference = DOMReference;
   }
 
   set portGroup(portGroup) {
@@ -31,13 +28,5 @@ export default class Port extends BaseModel {
 
   get portType() {
     return this._portType;
-  }
-
-  set DOMReference(DOMReference) {
-    this._DOMReference = DOMReference;
-  }
-
-  get DOMReference() {
-    return this._DOMReference;
   }
 }

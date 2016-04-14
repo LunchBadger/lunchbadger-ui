@@ -7,14 +7,19 @@ import addPipeline from '../../actions/Gateway/addPipeline';
 
 class Gateway extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
+    paper: PropTypes.object
   };
+
+  constructor(props) {
+    super(props);
+  }
 
   renderPipelines() {
     return this.props.entity.pipelines.map((pipeline) => {
       return (
         <div key={pipeline.id} className="canvas-element__sub-element">
-          <Pipeline entity={pipeline}/>
+          <Pipeline paper={this.props.paper} entity={pipeline}/>
         </div>
       );
     });

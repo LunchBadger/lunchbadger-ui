@@ -36,15 +36,16 @@ export default class Canvas extends Component {
         strokeStyle: '#ffffff',
         lineWidth: 6
       },
+      Connector: ['Bezier', {curviness: 40}],
       Container: 'canvas',
-      Anchors: ['Center', 'Center']
+      Anchors: [0.5, 0, 0.5, 0.5]
     });
 
     this.paper.bind('connection', function (i) {
       console.log('connection', i.connection);
     });
 
-    jsPlumb.fire('jsPlumbDemoLoaded', this.paper);
+    jsPlumb.fire('canvasLoaded', this.paper);
   }
 
   componentWillUnmount() {

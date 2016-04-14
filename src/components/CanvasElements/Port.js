@@ -49,7 +49,7 @@ export default class Port extends Component {
         connectorHoverStyle: {
           outlineColor: '#919191'
         },
-        anchor: [0.5, 0.5, 1, 1],
+        anchor: [0.7, 0.5, 1, 1],
         scope: this.props.scope
       });
     }

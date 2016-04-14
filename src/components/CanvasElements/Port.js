@@ -29,7 +29,7 @@ export default class Port extends Component {
           hoverClass: 'hover',
           activeClass: 'active'
         },
-        anchor: [0.6, 0.1, 0, 0],
+        anchor: [0.5, 0.5, 0, 0],
         scope: this.props.scope
       });
     } else {
@@ -49,7 +49,7 @@ export default class Port extends Component {
         connectorHoverStyle: {
           outlineColor: '#919191'
         },
-        anchor: [0.5, 0, 0.5, 0.5],
+        anchor: [0.7, 0.5, 1, 1],
         scope: this.props.scope
       });
     }

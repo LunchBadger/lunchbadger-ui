@@ -5,7 +5,10 @@ import './Quadrant.scss';
 
 const sortableOptions = {
   ref: 'list',
-  model: 'entities'
+  model: 'entities',
+  group: 'all',
+  onStar: 'handleStart',
+  onEnd: 'handleEnd'
 };
 
 export default (ComposedComponent) => {
@@ -18,6 +21,14 @@ export default (ComposedComponent) => {
       paper: PropTypes.object
     };
 
+    handleStart(evt) {
+      console.log('handleStart:', evt);
+    }
+
+    handleEnd(evt, dupa, cycki) {
+      console.log('handleEnd:', evt, dupa, cycki);
+    }
+
     constructor(props) {
       super(props);
 
@@ -28,7 +39,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate() {
-      this.props.paper.repaintEverything();
+      //this.props.paper.repaintEverything();
     }
 
     recalculateQuadrantWidth(event) {

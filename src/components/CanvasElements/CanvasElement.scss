@@ -8,15 +8,57 @@
   display: block;
   margin: 0 auto;
   background: $ui-light;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 2px solid $ui-base-border;
   padding: 15px 20px;
+  &.editable {
+    border-radius: 0;
+    button {
+      display: initial;
+    }
+    input {
+      display: initial;
+    }
+    span {
+      display: none;
+    }
+    .extras {
+      display: block;
+    }
+    span.canvas-element__property-title {
+      display: block;
+    }
+  }
+  button {
+    display: none;
+    font-size: 17px;
+    margin: 1em .5em 0 .5em;
+    padding: .2em .5em;
+    border-radius: 5px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    &:hover {
+      background: #ccc;
+    }
+  }
+  .extras {
+    display: none;
+    margin-left: 30px;
+    margin-top: 1em;
+  }
+  input {
+    display: none;
+    font-size: inherit;
+  }
 
   & + & {
     margin-top: 15px;
   }
 }
-
+.canvas-element__actions {
+  text-align: right;
+}
 .canvas-element__inside {
   overflow: hidden;
   width: 100%;

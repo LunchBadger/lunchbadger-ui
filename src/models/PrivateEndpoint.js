@@ -4,6 +4,7 @@ import Port from './Port';
 export default class PrivateEndpoint extends BaseModel {
   type = 'PrivateEndpoint';
   _ports = [];
+  url = 'http://url.com';
 
   constructor(id, name) {
     super(id);

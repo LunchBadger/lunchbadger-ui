@@ -7,15 +7,24 @@ import updatePrivateEndpoint from '../../actions/PrivateEndpoint/update';
 class PrivateEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    name: PropTypes.string
   };
 
+  
   constructor(props) {
     super(props);
+
+    this.state = {
+      url: this.props.entity.url
+    };
   }
 
-  onNameUpdate(name) {
-    updatePrivateEndpoint(this.props.entity.id, {name});
+  update() {
+    updatePrivateEndpoint(this.props.entity.id, {
+      name: this.props.name,
+      url: this.state.url
+    });
   }
 
   renderPorts() {
@@ -29,10 +38,21 @@ class PrivateEndpoint extends Component {
     });
   }
 
+  updateURL(evt) {
+    this.setState({url: evt.target.value});
+  }
+
   render() {
     return (
       <div>
-        {this.renderPorts()}
+        <div>
+          {this.renderPorts()}
+        </div>
+        <div className="canvas-element__url extras">
+          <span className="canvas-element__property-title">URL</span>
+          <span className="canvas-element__property-value">{this.props.entity.url}</span>
+          <input value={this.state.url} onChange={this.updateURL.bind(this)}/>
+        </div>
       </div>
     );
   }

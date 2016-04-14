@@ -1,5 +1,6 @@
 import BaseStore from 'stores/BaseStore';
 import {register} from '../dispatcher/AppDispatcher';
+import Pipeline from '../models/Pipeline';
 import _ from 'lodash';
 
 const Gateways = [];
@@ -14,9 +15,12 @@ class Gateway extends BaseStore {
           Gateways.push(action.gateway);
           this.emitChange();
           break;
-
         case 'UpdateGateway':
           this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
+        case 'AddPipeline':
+          action.gateway.addPipeline(Pipeline.create({name: action.name}));
           this.emitChange();
           break;
       }

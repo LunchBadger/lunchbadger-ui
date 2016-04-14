@@ -5,7 +5,10 @@ import './Quadrant.scss';
 
 const sortableOptions = {
   ref: 'list',
-  model: 'entities'
+  model: 'entities',
+  group: 'all',
+  onStar: 'handleStart',
+  onEnd: 'handleEnd'
 };
 
 export default (ComposedComponent) => {
@@ -17,6 +20,14 @@ export default (ComposedComponent) => {
       data: PropTypes.object.isRequired,
       paper: PropTypes.object
     };
+
+    handleStart(evt) {
+      console.log('handleStart:', evt);
+    }
+
+    handleEnd(evt) {
+      console.log('handleEnd:', evt);
+    }
 
     constructor(props) {
       super(props);

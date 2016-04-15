@@ -11,7 +11,7 @@ class PrivateEndpoint extends Component {
     name: PropTypes.string
   };
 
-  
+
   constructor(props) {
     super(props);
 

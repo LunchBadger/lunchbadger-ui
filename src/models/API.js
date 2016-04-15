@@ -5,8 +5,8 @@ const endpoint = PublicEndpoint.create({
   name: 'Endpoint 1'
 });
 
-export default class Product extends BaseModel {
-  type = 'Product';
+export default class API extends BaseModel {
+  type = 'API';
 
   /**
    * @type {Endpoint[]}

@@ -4,7 +4,7 @@ import Endpoint from '../tools/Endpoint';
 import Gateway from '../tools/Gateway';
 import DataSource from '../tools/DataSource';
 import Model from '../tools/Model';
-import Product from '../tools/Product';
+import Product from '../tools/API';
 
 export default class Aside extends Component {
   render() {

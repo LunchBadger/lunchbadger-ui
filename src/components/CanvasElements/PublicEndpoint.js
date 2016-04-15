@@ -7,11 +7,23 @@ import updatePublicEndpoint from '../../actions/PublicEndpoint/update';
 class PublicEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    name: PropTypes.string
   };
 
-  onNameUpdate(name) {
-    updatePublicEndpoint(this.props.entity.id, {name});
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      url: this.props.entity.url
+    };
+  }
+
+  update() {
+    updatePublicEndpoint(this.props.entity.id, {
+      name: this.props.name,
+      url: this.state.url
+    });
   }
 
   renderPorts() {
@@ -25,10 +37,21 @@ class PublicEndpoint extends Component {
     });
   }
 
+  updateURL(evt) {
+    this.setState({url: evt.target.value});
+  }
+
   render() {
     return (
       <div>
-        {this.renderPorts()}
+        <div>
+          {this.renderPorts()}
+        </div>
+        <div className="canvas-element__url extras">
+          <span className="canvas-element__property-title">URL</span>
+          <span className="canvas-element__property-value">{this.props.entity.url}</span>
+          <input value={this.state.url} onChange={this.updateURL.bind(this)}/>
+        </div>
       </div>
     );
   }

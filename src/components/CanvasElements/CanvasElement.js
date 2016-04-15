@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
+import addElement from 'actions/addElement';
 
 export default (ComposedComponent) => {
   return class CanvasElement extends Component {
@@ -21,6 +22,8 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       this.triggerElementAutofocus();
+
+      setTimeout(() => addElement(this.refs.element));
     }
 
     update() {
@@ -66,7 +69,7 @@ export default (ComposedComponent) => {
         'editable': this.state.editable
       });
       return (
-        <div className={elementClass}>
+        <div ref="element" className={elementClass}>
           <div className="canvas-element__inside">
             <div className="canvas-element__icon">
               <i className={`fa ${this.props.icon}`}/>

@@ -66,7 +66,7 @@ export default class Port extends Component {
     });
 
     return (
-      <div ref="port" className={`${portClass} ${this.props.className}`}>
+      <div ref="port" className={`${portClass} ${this.props.className || ''}`}>
         <div className="port__inside">
           <i className="port__icon fa fa-arrow-right"/>
         </div>

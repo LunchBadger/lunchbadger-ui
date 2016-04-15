@@ -8,6 +8,8 @@ import {findDOMNode} from 'react-dom';
 import addPublicEndpoint from 'actions/PublicEndpoint/add';
 import Model from 'models/Model';
 import PrivateEndpoint from 'models/PrivateEndpoint';
+import PublicEndpoint from 'models/PublicEndpoint';
+import AppState from 'stores/AppState';
 
 export default class Pipeline extends Component {
   static propTypes = {
@@ -32,16 +34,32 @@ export default class Pipeline extends Component {
       this.props.paper.unbind('connection', this.newConnectionListener);
       this.removeNewConnectionListener = null;
     };
+
+    this.appStateUpdate = () => {
+    }
   }
 
   componentDidMount() {
     this.props.paper.bind('connection', this.newConnectionListener);
   }
 
+  componentWillUpdate() {
+    AppState.addChangeListener(this.appStateUpdate);
+  }
+
   componentDidUpdate() {
     if (this.state.proxiedByEndpoint && this.state.proxiedByModel && this.removeNewConnectionListener) {
       this.removeNewConnectionListener();
+      AppState.removeChangeListener(this.appStateUpdate);
     }
+  }
+
+  componentWillUnmount() {
+    if (typeof this.removeNewConnectionListener === 'function') {
+      this.removeNewConnectionListener();
+    }
+
+    AppState.removeChangeListener(this.appStateUpdate);
   }
 
   _handleReverseProxyConnection(info) {
@@ -70,12 +88,40 @@ export default class Pipeline extends Component {
     const sourceClassList = source.classList;
 
     if (sourceClassList.contains(`port-${Model.type}`) && !this.state.proxiedByModel) {
-      addPublicEndpoint('Public Model Endpoint');
-      this.setState({proxiedByModel: true});
+      this._handleActionIfTargetIsModel();
     } else if (sourceClassList.contains(`port-${PrivateEndpoint.type}`) && !this.state.proxiedByEndpoint) {
-      addPublicEndpoint('Public Endpoint');
-      this.setState({proxiedByEndpoint: true});
+      this._handleActionIfTargetIsPrivateEndpoint();
     }
+  }
+
+  _handleActionIfTargetIsModel() {
+    addPublicEndpoint('Public Model Endpoint');
+    this.setState({proxiedByModel: true});
+    this._createConnectionWithNewlyCreatedElement();
+  }
+
+  _handleActionIfTargetIsPrivateEndpoint() {
+    addPublicEndpoint('Public Endpoint');
+    this.setState({proxiedByEndpoint: true});
+    this._createConnectionWithNewlyCreatedElement();
+  }
+
+  _createConnectionWithNewlyCreatedElement() {
+    setTimeout(() => {
+      const element = findDOMNode(AppState.getStateKey('recentElement'));
+
+      if (element) {
+        const targetPort = element.querySelector(`.port-in.port-${PublicEndpoint.type}`);
+        const sourcePort = findDOMNode(this.refs['port-out']);
+
+        if (targetPort && sourcePort) {
+          this.props.paper.connect({
+            source: sourcePort,
+            target: targetPort
+          });
+        }
+      }
+    });
   }
 
   _handleActionIfSourceTaken() {
@@ -83,8 +129,6 @@ export default class Pipeline extends Component {
       proxiedByModel: true,
       proxiedByEndpoint: true
     });
-
-    this.removeNewConnectionListener();
   }
 
   renderPolicies() {

@@ -3,7 +3,7 @@ import Port from './Port';
 import portGroups from '../constants/portGroups';
 
 export default class PrivateEndpoint extends BaseModel {
-  type = 'PrivateEndpoint';
+  static type = 'PrivateEndpoint';
   _ports = [];
   url = 'http://url.com';
 

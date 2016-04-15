@@ -16,7 +16,7 @@ const defaultPolicies = [
 ];
 
 export default class Pipeline extends BaseModel {
-  type = 'Pipeline';
+  static type = 'Pipeline';
   _ports = [];
 
   /**

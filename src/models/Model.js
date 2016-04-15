@@ -3,7 +3,7 @@ import Port from './Port';
 import portGroups from '../constants/portGroups';
 
 export default class Model extends BaseModel {
-  type = 'Model';
+  static type = 'Model';
   _ports = [];
 
   constructor(id, name) {

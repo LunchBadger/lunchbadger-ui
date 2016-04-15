@@ -1,5 +1,6 @@
 import BaseModel from './BaseModel';
 import Port from './Port';
+import portGroups from '../constants/portGroups';
 
 export default class Model extends BaseModel {
   type = 'Model';
@@ -13,12 +14,12 @@ export default class Model extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'private',
+        portGroup: portGroups.PRIVATE,
         portType: 'in'
       }),
       Port.create({
         id: this.id,
-        portGroup: 'gateways',
+        portGroup: portGroups.GATEWAYS,
         portType: 'out'
       })
     ];

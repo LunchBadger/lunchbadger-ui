@@ -1,5 +1,6 @@
 import BaseModel from './BaseModel';
 import Port from './Port';
+import portGroups from '../constants/portGroups';
 
 export default class PrivateEndpoint extends BaseModel {
   type = 'PrivateEndpoint';
@@ -14,7 +15,7 @@ export default class PrivateEndpoint extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'gateways',
+        portGroup: portGroups.GATEWAYS,
         portType: 'out'
       })
     ];

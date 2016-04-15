@@ -1,6 +1,7 @@
 import BaseModel from './BaseModel';
 import Policy from './Policy';
 import Port from './Port';
+import portGroups from '../constants/portGroups';
 
 const defaultPolicies = [
   Policy.create({
@@ -33,12 +34,12 @@ export default class Pipeline extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'gateways',
+        portGroup: portGroups.GATEWAYS,
         portType: 'in'
       }),
       Port.create({
         id: this.id,
-        portGroup: 'public',
+        portGroup: portGroups.PUBLIC,
         portType: 'out'
       })
     ];

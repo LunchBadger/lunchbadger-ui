@@ -51,6 +51,15 @@ export default (ComposedComponent) => {
       nameInput.focus();
     }
 
+    handleEnterPress(event) {
+      const keyCode = event.which || event.keyCode;
+
+      // ENTER
+      if (keyCode === 13) {
+        this.update();
+      }
+    }
+
     render() {
       const elementClass = classNames({
         'canvas-element': true,
@@ -68,6 +77,7 @@ export default (ComposedComponent) => {
               <input className="canvas-element__nam-edit"
                      ref="nameInput"
                      value={this.state.name}
+                     onKeyPress={this.handleEnterPress.bind(this)}
                      onChange={this.updateName.bind(this)}/>
             </div>
           </div>

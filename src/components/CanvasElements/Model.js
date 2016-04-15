@@ -23,6 +23,7 @@ class Model extends Component {
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
+              className={`port-${port.portType} port-${this.props.entity.constructor.type} port-${port.portGroup}`}
               scope={port.portGroup}/>
       );
     });

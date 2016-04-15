@@ -8,7 +8,8 @@ export default class Port extends Component {
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
     paper: PropTypes.object.isRequired,
-    middle: PropTypes.bool
+    middle: PropTypes.bool,
+    className: PropTypes.string
   };
 
   constructor(props) {
@@ -65,7 +66,7 @@ export default class Port extends Component {
     });
 
     return (
-      <div ref="port" className={portClass}>
+      <div ref="port" className={`${portClass} ${this.props.className}`}>
         <div className="port__inside">
           <i className="port__icon fa fa-arrow-right"/>
         </div>

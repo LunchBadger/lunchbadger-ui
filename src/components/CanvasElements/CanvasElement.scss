@@ -177,17 +177,26 @@
   color: $ui-dark-background;
 }
 
-.canvas-element__properties__property {
+.canvas-element__properties__table {
   display: table;
   width: 100%;
-  padding-top: 10px;
+}
+
+.canvas-element__properties__property {
+  display: table-row;
+  width: 100%;
 }
 
 .canvas-element__properties__property-title {
   display: table-cell;
   font-size: 13px;
+  vertical-align: middle;
+  padding-top: 10px;
 }
 
 .canvas-element__properties__property-value {
-
+  display: table-cell;
+  vertical-align: middle;
+  padding-top: 10px;
+  padding-left: 15px;
 }

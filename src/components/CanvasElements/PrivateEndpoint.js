@@ -51,16 +51,18 @@ class PrivateEndpoint extends Component {
         <div className="canvas-element__properties expanded-only">
           <div className="canvas-element__properties__title">Properties</div>
 
-          <div className="canvas-element__properties__property">
-            <div className="canvas-element__properties__property-title">URL</div>
-            <div className="canvas-element__properties__property-value">
+          <div className="canvas-element__properties__table">
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">URL</div>
+              <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">
                 {this.props.entity.url}
               </span>
 
-              <input className="canvas-element__input canvas-element__input--property editable-only"
-                     value={this.state.url}
-                     onChange={this.updateURL.bind(this)}/>
+                <input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.state.url}
+                       onChange={this.updateURL.bind(this)}/>
+              </div>
             </div>
           </div>
         </div>

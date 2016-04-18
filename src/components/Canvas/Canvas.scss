@@ -6,10 +6,18 @@
   background: $ui-dark-background;
   position: relative;
   overflow: hidden;
+  transition: all .3s ease;
+}
+
+.canvas--disabled {
+  user-select: none;
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 .canvas__wrapper {
-  overflow: hidden;
+  overflow: auto;
+  height: calc(100vh - #{$header-height});
 }
 
 .canvas__container {

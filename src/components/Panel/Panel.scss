@@ -1,0 +1,50 @@
+@import '../../config';
+
+.panel {
+  width: 100%;
+}
+
+.panel__container {
+  background: $font-light;
+  position: relative;
+  transition: all .5s ease;
+  height: 0;
+}
+
+.panel__container--dragging {
+  transition: none;
+}
+
+.panel__body {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 15px;
+  bottom: 15px;
+  overflow: auto;
+}
+
+.panel__handle {
+  width: 100%;
+  height: 4px;
+  background: $ui-base-border;
+  position: relative;
+  pointer-events: none;
+
+  &:after {
+    content: '...';
+    font-size: 12px;
+    font-weight: 700;
+    color: $font-base;
+    position: absolute;
+    right: 5px;
+    top: -8px;
+    vertical-align: middle;
+    line-height: 1;
+  }
+}
+
+.panel__handle--resizable {
+  pointer-events: all;
+  cursor: ns-resize;
+}

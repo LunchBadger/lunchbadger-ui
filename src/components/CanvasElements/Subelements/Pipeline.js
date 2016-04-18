@@ -42,7 +42,7 @@ export default class Pipeline extends Component {
     this.props.paper.bind('connection', this.newConnectionListener);
   }
 
-  componentWillUpdate() {
+  componentWillMount() {
     AppState.addChangeListener(this.appStateUpdate);
   }
 

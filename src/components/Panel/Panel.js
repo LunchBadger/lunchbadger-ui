@@ -1,11 +1,17 @@
 import React, {Component, PropTypes} from 'react';
 import './Panel.scss';
 import PanelResizeHandle from './PanelResizeHandle';
+import classNames from 'classnames';
+import lockr from 'lockr';
+import togglePanel from 'actions/togglePanel';
+
+const storageKey = 'PANEL_HEIGHT';
 
 export default class Panel extends Component {
   static propTypes = {
     canvas: PropTypes.func.isRequired,
-    opened: PropTypes.bool.isRequired
+    opened: PropTypes.bool.isRequired,
+    container: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -14,6 +20,20 @@ export default class Panel extends Component {
     this.state = {
       height: '50vh'
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      const container = this.props.container();
+      const containerBBox = container.getBoundingClientRect();
+      let panelDefaultHeight = '50vh';
+
+      if (lockr.get(storageKey)) {
+        panelDefaultHeight = `${parseInt(lockr.get(storageKey) / 100 * containerBBox.height)}px`;
+      }
+
+      this.setState({height: panelDefaultHeight});
+    });
   }
 
   componentDidUpdate() {
@@ -27,7 +47,31 @@ export default class Panel extends Component {
   }
 
   handlePanelResize(event) {
-    console.log(event);
+    const container = this.props.container();
+    const containerBBox = container.getBoundingClientRect();
+
+    // we need to store percentage value
+    let newPixelHeight = event.clientY - containerBBox.top;
+
+    if (newPixelHeight > containerBBox.height - 100) {
+      newPixelHeight = containerBBox.height - 100;
+    } else if (newPixelHeight < 50) {
+      newPixelHeight = 80;
+      togglePanel();
+    }
+
+    const newHeight = parseInt(newPixelHeight / containerBBox.height * 100, 10);
+
+    lockr.set(storageKey, newHeight);
+
+    this.setState({
+      dragging: true,
+      height: `${newPixelHeight}px`
+    });
+  }
+
+  handlePanelResizeEnd() {
+    this.setState({dragging: false});
   }
 
   render() {
@@ -37,14 +81,19 @@ export default class Panel extends Component {
       panelHeight = this.state.height;
     }
 
-    console.log(this.props);
+    const containerClass = classNames({
+      'panel__container': true,
+      'panel__container--dragging': this.state.dragging
+    });
 
     return (
       <div className="panel">
-        <div className="panel__container" style={{height: panelHeight}}>
+        <div className={containerClass} style={{height: panelHeight}}>
           <div className="panel__body"></div>
         </div>
-        <PanelResizeHandle resizable={this.props.opened} onDrag={this.handlePanelResize.bind(this)}/>
+        <PanelResizeHandle resizable={this.props.opened}
+                           onDragEnd={this.handlePanelResizeEnd.bind(this)}
+                           onDrag={this.handlePanelResize.bind(this)}/>
       </div>
     );
   }

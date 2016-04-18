@@ -11,6 +11,10 @@
   height: 0;
 }
 
+.panel__container--dragging {
+  transition: none;
+}
+
 .panel__body {
   position: absolute;
   left: 15px;

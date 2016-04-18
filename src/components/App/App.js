@@ -33,8 +33,10 @@ export default class App extends Component {
       <div className="app">
         <Header />
         <Aside />
-        <div className="app__container">
-          <Panel opened={this.state.panelOpened} canvas={() => this.refs.canvas}/>
+        <div ref="container" className="app__container">
+          <Panel opened={this.state.panelOpened}
+                 canvas={() => this.refs.canvas}
+                 container={() => this.refs.container}/>
           <Canvas ref="canvas"/>
         </div>
       </div>

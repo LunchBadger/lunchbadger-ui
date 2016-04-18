@@ -7,7 +7,7 @@ const endpoint = PublicEndpoint.create({
 });
 
 export default class API extends BaseModel {
-  type = 'API';
+  static type = 'API';
 
   /**
    * @type {Endpoint[]}

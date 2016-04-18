@@ -1,8 +1,9 @@
 import BaseModel from './BaseModel';
 import Port from './Port';
+import portGroups from '../constants/portGroups';
 
 export default class PublicEndpoint extends BaseModel {
-  type = 'PublicEndpoint';
+  static type = 'PublicEndpoint';
   _ports = [];
   url = 'http://url.com';
 
@@ -14,7 +15,7 @@ export default class PublicEndpoint extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'public',
+        portGroup: portGroups.PUBLIC,
         portType: 'in'
       })
     ];

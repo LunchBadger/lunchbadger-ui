@@ -12,6 +12,7 @@ class Public extends BaseStore {
       switch (action.type) {
         case 'AddPublicEndpoint':
           Publics.push(action.endpoint);
+          action.endpoint.top = this.getNewElementPosition(Publics);
           this.emitChange();
           break;
         case 'RemovePublicEndpoint':
@@ -25,6 +26,7 @@ class Public extends BaseStore {
           break;
         case 'AddAPI':
           Publics.push(action.API);
+          action.API.top = this.getNewElementPosition(Publics);
           this.emitChange();
           break;
         case 'UpdateAPI':

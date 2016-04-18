@@ -41,11 +41,20 @@ export default class Canvas extends Component {
       Anchors: [0.5, 0, 0.5, 0.5]
     });
 
-    this.paper.bind('connection', function (i) {
-      console.log('connection', i.connection);
+    this.paper.bind('connection', (info) => {
+      this._handleExistingConnectionDetach(info);
     });
 
     jsPlumb.fire('canvasLoaded', this.paper);
+  }
+
+  _handleExistingConnectionDetach(info) {
+    const {connection} = info;
+    const existingConnections = this.paper.select({source: connection.sourceId, target: connection.targetId});
+
+    if (existingConnections.length > 1) {
+      this.paper.detach(connection);
+    }
   }
 
   componentWillUnmount() {
@@ -69,7 +78,6 @@ export default class Canvas extends Component {
             <PrivateQuadrant paper={this.paper} ref="privateQuadrant" data={Private} resizable title="Private"/>
             <GatewaysQuadrant paper={this.paper} ref="gatewaysQuadrant" data={Gateway} resizable title="Gateways"/>
             <PublicQuadrant paper={this.paper} ref="publicQuadrant" data={Public} title="Public"/>
-            <QuadrantDragLayer snapToGrid={true} />
           </div>
         </div>
       </section>

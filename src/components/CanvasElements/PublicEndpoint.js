@@ -32,6 +32,7 @@ class PublicEndpoint extends Component {
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
+              className={`port-${port.portType} port-${this.props.entity.constructor.type} port-${port.portGroup}`}
               scope={port.portGroup}/>
       );
     });
@@ -47,10 +48,23 @@ class PublicEndpoint extends Component {
         <div>
           {this.renderPorts()}
         </div>
-        <div className="canvas-element__url extras">
-          <span className="canvas-element__property-title">URL</span>
-          <span className="canvas-element__property-value">{this.props.entity.url}</span>
-          <input value={this.state.url} onChange={this.updateURL.bind(this)}/>
+        <div className="canvas-element__properties expanded-only">
+          <div className="canvas-element__properties__title">Properties</div>
+
+          <div className="canvas-element__properties__table">
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">URL</div>
+              <div className="canvas-element__properties__property-value">
+              <span className="hide-while-edit">
+                {this.props.entity.url}
+              </span>
+
+                <input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.state.url}
+                       onChange={this.updateURL.bind(this)}/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

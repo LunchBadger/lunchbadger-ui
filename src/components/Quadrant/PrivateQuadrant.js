@@ -18,7 +18,7 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      switch (entity.type) {
+      switch (entity.constructor.type) {
         case 'Model':
           return (
             <Model paper={this.props.paper}
@@ -46,7 +46,7 @@ class PrivateQuadrant extends Component {
   }
 
   moveEntity(entity, left, top) {
-    switch (entity.type) {
+    switch (entity.constructor.type) {
       case 'PrivateEndpoint':
         updatePrivateEndpoint(entity.id, {left, top});
         break;

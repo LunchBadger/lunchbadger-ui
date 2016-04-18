@@ -12,6 +12,7 @@ class Gateway extends BaseStore {
       switch (action.type) {
         case 'AddGateway':
           Gateways.push(action.gateway);
+          action.gateway.top = this.getNewElementPosition(Gateways);
           this.emitChange();
           break;
         case 'UpdateGateway':

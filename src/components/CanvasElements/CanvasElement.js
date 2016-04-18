@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
+import addElement from 'actions/addElement';
 import { DragSource } from 'react-dnd';
 
 const boxSource = {
@@ -37,12 +38,21 @@ export default (ComposedComponent) => {
 
       this.state = {
         name: props.entity.name,
-        editable: true
+        editable: true,
+        expanded: true
       };
     }
 
     componentDidMount() {
       this.triggerElementAutofocus();
+
+      setTimeout(() => addElement(this.element));
+
+      this.props.entity.elementDOM = this.elementDOM;
+    }
+
+    componentDidUpdate() {
+      this.props.entity.elementDOM = this.elementDOM;
     }
 
     update() {
@@ -51,7 +61,10 @@ export default (ComposedComponent) => {
       } else if (typeof this.element.decoratedComponentInstance.update === 'function') {
         this.element.decoratedComponentInstance.update();
       }
-      this.setState({editable: false});
+      this.setState({
+        editable: false,
+        expanded: false
+      });
     }
 
     updateName(evt) {
@@ -69,34 +82,45 @@ export default (ComposedComponent) => {
       nameInput.focus();
     }
 
+    handleEnterPress(event) {
+      const keyCode = event.which || event.keyCode;
+
+      // ENTER
+      if (keyCode === 13) {
+        this.update();
+      }
+    }
+
     render() {
       const elementClass = classNames({
         'canvas-element': true,
-        'editable': this.state.editable
+        editable: this.state.editable,
+        expanded: this.state.expanded
       });
       const { hideSourceOnDrag, left, top, connectDragSource, isDragging } = this.props;
       if (isDragging && hideSourceOnDrag) {
         return null;
       }
       return connectDragSource(
-        <div className={elementClass} style={{ left, top }}>
+        <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top }}>
           <div className="canvas-element__inside">
-            <div className="canvas-element__icon">
+            <div className="canvas-element__icon" onClick={() => this.setState({expanded: !this.state.expanded})}>
               <i className={`fa ${this.props.icon}`}/>
             </div>
             <div className="canvas-element__title">
-              <span className="canvas-element__name"
+              <span className="canvas-element__name hide-while-edit"
                     onDoubleClick={() => this.setState({editable: true})}>{this.props.entity.name}</span>
-              <input className="canvas-element__nam-edit"
+              <input className="canvas-element__input editable-only"
                      ref="nameInput"
                      value={this.state.name}
+                     onKeyPress={this.handleEnterPress.bind(this)}
                      onChange={this.updateName.bind(this)}/>
             </div>
           </div>
           <div className="canvas-element__extra">
             <ComposedComponent ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
           </div>
-          <div className="canvas-element__actions">
+          <div className="canvas-element__actions editable-only">
             <button className="canvas-element__button" onClick={() => this.update()}>OK</button>
           </div>
         </div>

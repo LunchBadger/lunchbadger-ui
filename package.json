@@ -76,6 +76,7 @@
     "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
     "jsplumb": "^2.0.7",
+    "keymirror": "^0.1.1",
     "lodash": "^4.7.0",
     "normalize.css": "^4.0.0",
     "react": "^0.14.0",

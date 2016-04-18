@@ -20,9 +20,8 @@ class PublicQuadrant extends Component {
   }
 
   renderEntities() {
-    return this.state.entities.map((entity) => {
-
-      switch (entity.type) {
+    return this.props.entities.map((entity) => {
+      switch (entity.constructor.type) {
         case 'API':
           return (
             <API key={entity.id}
@@ -50,7 +49,7 @@ class PublicQuadrant extends Component {
   }
 
   moveEntity(entity, left, top) {
-    switch (entity.type) {
+    switch (entity.constructor.type) {
       case 'PublicEndpoint':
         updatePublicEndpoint(entity.id, {left, top});
         break;

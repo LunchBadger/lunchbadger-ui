@@ -37,6 +37,8 @@ export default class Panel extends Component {
       panelHeight = this.state.height;
     }
 
+    console.log(this.props);
+
     return (
       <div className="panel">
         <div className="panel__container" style={{height: panelHeight}}>

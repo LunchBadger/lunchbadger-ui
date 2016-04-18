@@ -16,7 +16,8 @@ export default (ComposedComponent) => {
 
       this.state = {
         name: props.entity.name,
-        editable: true
+        editable: true,
+        expanded: true
       };
     }
 
@@ -29,8 +30,12 @@ export default (ComposedComponent) => {
     update() {
       if (typeof this.element.update === 'function') {
         this.element.update();
-        this.setState({editable: false});
       }
+
+      this.setState({
+        editable: false,
+        expanded: false
+      });
     }
 
     updateName(evt) {
@@ -66,18 +71,19 @@ export default (ComposedComponent) => {
     render() {
       const elementClass = classNames({
         'canvas-element': true,
-        'editable': this.state.editable
+        editable: this.state.editable,
+        expanded: this.state.expanded
       });
       return (
         <div ref="element" className={elementClass}>
           <div className="canvas-element__inside">
-            <div className="canvas-element__icon">
+            <div className="canvas-element__icon" onClick={() => this.setState({expanded: !this.state.expanded})}>
               <i className={`fa ${this.props.icon}`}/>
             </div>
             <div className="canvas-element__title">
-              <span className="canvas-element__name"
+              <span className="canvas-element__name hide-while-edit"
                     onDoubleClick={() => this.setState({editable: true})}>{this.props.entity.name}</span>
-              <input className="canvas-element__nam-edit"
+              <input className="canvas-element__input editable-only"
                      ref="nameInput"
                      value={this.state.name}
                      onKeyPress={this.handleEnterPress.bind(this)}
@@ -87,7 +93,7 @@ export default (ComposedComponent) => {
           <div className="canvas-element__extra">
             <ComposedComponent ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
           </div>
-          <div className="canvas-element__actions">
+          <div className="canvas-element__actions editable-only">
             <button className="canvas-element__button" onClick={() => this.update()}>OK</button>
           </div>
         </div>

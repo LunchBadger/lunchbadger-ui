@@ -10,9 +10,10 @@ import { DropTarget } from 'react-dnd';
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-
-    component.onAddEndpoint(item.entity.name);
-    removePublicEndpoint(item.entity);
+    if (item.entity.constructor.type === 'PublicEndpoint') {
+      component.onAddEndpoint(item.entity.name);
+      removePublicEndpoint(item.entity);
+    }
   }
 };
 

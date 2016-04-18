@@ -8,6 +8,10 @@
   overflow: hidden;
 }
 
+.canvas--disabled {
+  pointer-events: none;
+}
+
 .canvas__wrapper {
   overflow: hidden;
 }

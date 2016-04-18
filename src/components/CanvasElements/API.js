@@ -2,26 +2,32 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import './CanvasElement.scss';
-import Sortable from 'react-sortablejs';
 import updateAPI from '../../actions/API/update';
 import addEndpoint from '../../actions/API/addEndpoint';
+import removePublicEndpoint from 'actions/PublicEndpoint/remove';
+import { DropTarget, DragDropContext } from 'react-dnd';
 
-const sortableOptions = {
-  ref: 'endpoints',
-  model: 'endpoints',
-  group: {name: 'all', put: true, pull: false},
-  onAdd: 'handleAdd',
-  sort: false
+const boxTarget = {
+  drop(props, monitor, component) {
+    const item = monitor.getItem();
+    const delta = monitor.getDifferenceFromInitialOffset();
+    const left = Math.round(item.left + delta.x);
+    const top = Math.round(item.top + delta.y);
+
+    component.onAddEndpoint(item.entity.name);
+    removePublicEndpoint(item.entity);
+  }
 };
 
-class Product extends Component {
+@DropTarget('canvasElement', boxTarget, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))
+
+class API extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object
   };
-  handleAdd(evt) {
-    console.log('handleAdd:', evt, this.props.entity);
-  }
 
   update() {
     updateAPI(this.props.entity.id, {
@@ -37,14 +43,23 @@ class Product extends Component {
     return this.props.entity.endpoints.map((endpoint) => {
       return (
         <div key={endpoint.id} className="canvas-element__sub-element">
-          <PublicEndpoint entity={endpoint} paper={this.props.paper}/>
+          <PublicEndpoint
+            parent={this.props.entity}
+            key={endpoint.id}
+            id={endpoint.id}
+            entity={endpoint}
+            hideSourceOnDrag={true}
+            paper={this.props.paper}
+            left={endpoint.left}
+            top={endpoint.top}/>
         </div>
       );
     });
   }
 
   render() {
-    return (
+    const { connectDropTarget } = this.props;
+    return connectDropTarget(
       <div>
         <div className="canvas-element__sub-elements">
           <div className="canvas-element__sub-elements__title">Endpoints<i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus"></i></div>
@@ -55,4 +70,4 @@ class Product extends Component {
   }
 }
 
-export default Sortable(sortableOptions)(CanvasElement(Product));
+export default CanvasElement(API);

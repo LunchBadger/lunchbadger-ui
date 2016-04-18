@@ -2,6 +2,8 @@ import uuid from 'uuid';
 
 export default class BaseModel {
   _id = null;
+  left = 0;
+  top = 0;
 
   constructor(id) {
     if (id) {
@@ -21,6 +23,10 @@ export default class BaseModel {
     });
 
     return object;
+  }
+
+  remove() {
+    delete this;
   }
 
   update(data) {

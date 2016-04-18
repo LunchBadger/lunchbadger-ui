@@ -14,6 +14,11 @@ class Public extends BaseStore {
           Publics.push(action.endpoint);
           this.emitChange();
           break;
+        case 'RemovePublicEndpoint':
+          Publics.splice(this.findEntityIndex(action.endpoint.id), 1);
+          action.endpoint.remove();
+          this.emitChange();
+          break;
         case 'UpdatePublicEndpoint':
           this.updateEntity(action.id, action.data);
           this.emitChange();
@@ -30,6 +35,10 @@ class Public extends BaseStore {
           action.api.addEndpoint(PublicEndpoint.create({name: action.name}));
           this.emitChange();
           break;
+        case 'RemoveEndpoint':
+          action.api.removeEndpoint(action.endpoint);
+          this.emitChange();
+          break;
       }
     });
   }
@@ -40,6 +49,10 @@ class Public extends BaseStore {
 
   findEntity(id) {
     return _.find(Publics, {id: id});
+  }
+
+  findEntityIndex(id) {
+    return _.findIndex(Publics, {id: id});
   }
 }
 

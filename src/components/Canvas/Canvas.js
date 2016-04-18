@@ -14,7 +14,7 @@ export default class Canvas extends Component {
     super(props);
 
     this.state = {
-      lastUpdate: new Date()
+      lastUpdate: new Date(),
     };
 
     this.dataUpdated = () => {
@@ -69,6 +69,7 @@ export default class Canvas extends Component {
             <PrivateQuadrant paper={this.paper} ref="privateQuadrant" data={Private} resizable title="Private"/>
             <GatewaysQuadrant paper={this.paper} ref="gatewaysQuadrant" data={Gateway} resizable title="Gateways"/>
             <PublicQuadrant paper={this.paper} ref="publicQuadrant" data={Public} title="Public"/>
+            <QuadrantDragLayer snapToGrid={true} />
           </div>
         </div>
       </section>

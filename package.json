@@ -79,6 +79,8 @@
     "lodash": "^4.7.0",
     "normalize.css": "^4.0.0",
     "react": "^0.14.0",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^0.14.0",
     "react-edit-inline": "^1.0.6",
     "react-sortablejs": "^0.7.0",

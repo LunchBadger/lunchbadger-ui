@@ -1,16 +1,38 @@
 import React, {Component, PropTypes} from 'react';
-import Sortable from 'react-sortablejs';
+import update from 'react/lib/update';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
+import { DropTarget, DragDropContext } from 'react-dnd';
+import addPublicEndpoint from 'actions/PublicEndpoint/add';
+import removeEndpoint from 'actions/API/removeEndpoint';
 
-const sortableOptions = {
-  ref: 'list',
-  model: 'entities',
-  group: 'all',
-  onStar: 'handleStart',
-  onEnd: 'handleEnd'
+const boxTarget = {
+  drop(props, monitor, component) {
+    const hasDroppedOnChild = monitor.didDrop();
+
+    if (!hasDroppedOnChild) {
+      const item = monitor.getItem();
+      if (item.subelement) {
+        addPublicEndpoint(item.entity.name);
+        removeEndpoint(item.parent, item.entity);
+      } else {
+        const delta = monitor.getDifferenceFromInitialOffset();
+        const left = Math.round(item.left + delta.x);
+        const top = Math.round(item.top + delta.y);
+        component.moveEntity(item.entity, left, top);
+      }
+    }
+
+    component.setState({
+      hasDropped: true,
+      hasDroppedOnChild: hasDroppedOnChild
+    });
+  }
 };
 
+@DropTarget('canvasElement', boxTarget, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))
 export default (ComposedComponent) => {
   class Quadrant extends Component {
     static propTypes = {
@@ -18,23 +40,17 @@ export default (ComposedComponent) => {
       sortableInstance: React.PropTypes.object,
       resizable: PropTypes.bool,
       data: PropTypes.object.isRequired,
-      paper: PropTypes.object
+      paper: PropTypes.object,
     };
-
-    handleStart(evt) {
-      console.log('handleStart:', evt);
-    }
-
-    handleEnd(evt) {
-      console.log('handleEnd:', evt);
-    }
 
     constructor(props) {
       super(props);
 
       this.state = {
         quadrantWidth: '25%',
-        entities: this.props.data.getData()
+        entities: this.props.data.getData(),
+        hasDroppedOnChild: false,
+        hasDropped: false
       };
     }
 
@@ -45,19 +61,27 @@ export default (ComposedComponent) => {
     }
 
     recalculateQuadrantWidth(event) {
-      const quadrantBounds = this.refs.quadrant.getBoundingClientRect();
+      const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
       const newWidth = event.clientX - quadrantBounds.left;
 
       this.setState({quadrantWidth: `${newWidth}px`});
       this.props.paper.repaintEverything();
     }
 
+    moveEntity(...props) {
+      if (typeof this.quadrant.moveEntity === 'function') {
+        this.quadrant.moveEntity(...props);
+      }
+    }
+
     render() {
-      return (
-        <div className="quadrant" ref="quadrant" style={{width: this.state.quadrantWidth}}>
+      const { connectDropTarget } = this.props;
+      const { entities, hasDropped,  hasDroppedOnChild } = this.state;
+      return connectDropTarget(
+        <div className="quadrant" ref={(ref) => this.quadrantDOM = ref} style={{width: this.state.quadrantWidth}}>
           <div className="quadrant__title">{this.props.title}</div>
           <div className="quadrant__body">
-            <ComposedComponent {...this.props} ref="list" entities={this.state.entities}/>
+            <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
           </div>
           {(() => {
             if (this.props.resizable) {
@@ -69,5 +93,5 @@ export default (ComposedComponent) => {
     }
   }
 
-  return Sortable(sortableOptions)(Quadrant);
+  return Quadrant;
 }

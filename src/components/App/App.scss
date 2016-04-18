@@ -6,13 +6,16 @@
   margin: 0;
 }
 
+body {
+  overflow: hidden;
+}
+
 .app {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .app__container {
   width: 100%;
-  min-height: 100vh;
+  height: calc(100vh - #{$header-height});
   padding-left: $aside-width;
-  padding-top: $header-height;
 }

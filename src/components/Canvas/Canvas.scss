@@ -13,7 +13,8 @@
 }
 
 .canvas__wrapper {
-  overflow: hidden;
+  overflow: auto;
+  height: calc(100vh - #{$header-height});
 }
 
 .canvas__container {

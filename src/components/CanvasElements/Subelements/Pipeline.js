@@ -22,8 +22,7 @@ export default class Pipeline extends Component {
 
     this.state = {
       opened: false,
-      proxiedByModel: false,
-      proxiedByEndpoint: false
+      proxiedBy: []
     };
 
     this.newConnectionListener = (info) => {
@@ -45,13 +44,6 @@ export default class Pipeline extends Component {
 
   componentWillUpdate() {
     AppState.addChangeListener(this.appStateUpdate);
-  }
-
-  componentDidUpdate() {
-    if (this.state.proxiedByEndpoint && this.state.proxiedByModel && this.removeNewConnectionListener) {
-      this.removeNewConnectionListener();
-      AppState.removeChangeListener(this.appStateUpdate);
-    }
   }
 
   componentWillUnmount() {
@@ -87,26 +79,26 @@ export default class Pipeline extends Component {
   _handleActionIfTargetTaken(source) {
     const sourceClassList = source.classList;
 
-    if (sourceClassList.contains(`port-${Model.type}`) && !this.state.proxiedByModel) {
+    if (sourceClassList.contains(`port-${Model.type}`) && this.state.proxiedBy.indexOf(source.id) < 0) {
       this._handleActionIfTargetIsModel();
-    } else if (sourceClassList.contains(`port-${PrivateEndpoint.type}`) && !this.state.proxiedByEndpoint) {
+    } else if (sourceClassList.contains(`port-${PrivateEndpoint.type}`) && this.state.proxiedBy.indexOf(source.id) < 0) {
       this._handleActionIfTargetIsPrivateEndpoint();
     }
   }
 
   _handleActionIfTargetIsModel() {
     addPublicEndpoint('Public Model Endpoint');
-    this.setState({proxiedByModel: true});
     this._createConnectionWithNewlyCreatedElement();
   }
 
   _handleActionIfTargetIsPrivateEndpoint() {
     addPublicEndpoint('Public Endpoint');
-    this.setState({proxiedByEndpoint: true});
     this._createConnectionWithNewlyCreatedElement();
   }
 
   _createConnectionWithNewlyCreatedElement() {
+    const {proxiedBy} = this.state;
+
     setTimeout(() => {
       const element = findDOMNode(AppState.getStateKey('recentElement'));
 
@@ -115,20 +107,21 @@ export default class Pipeline extends Component {
         const sourcePort = findDOMNode(this.refs['port-out']);
 
         if (targetPort && sourcePort) {
+          proxiedBy.push(sourcePort.id);
+
           this.props.paper.connect({
             source: sourcePort,
             target: targetPort
           });
+
+          this.setState({proxiedBy});
         }
       }
     });
   }
 
   _handleActionIfSourceTaken() {
-    this.setState({
-      proxiedByModel: true,
-      proxiedByEndpoint: true
-    });
+    this.removeNewConnectionListener();
   }
 
   renderPolicies() {

@@ -8,7 +8,7 @@ class DataSource extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
   };
 
   constructor(props) {

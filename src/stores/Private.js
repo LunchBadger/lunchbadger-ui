@@ -11,11 +11,13 @@ class Private extends BaseStore {
       switch (action.type) {
         case 'AddPrivateEndpoint':
           Privates.push(action.endpoint);
+          action.endpoint.top = this.getNewElementPosition(Privates);
           this.emitChange();
           break;
 
         case 'AddModel':
           Privates.push(action.model);
+          action.model.top = this.getNewElementPosition(Privates);
           this.emitChange();
           break;
 

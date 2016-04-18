@@ -3,12 +3,34 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import addElement from 'actions/addElement';
+import { DragSource } from 'react-dnd';
+
+const boxSource = {
+  beginDrag(props) {
+    const { entity, left, top } = props;
+    return { entity, left, top };
+  },
+  endDrag(props) {
+    const { entity, left, top } = props;
+    return { entity, left, top };
+  }
+};
+
+@DragSource('canvasElement', boxSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))
 
 export default (ComposedComponent) => {
   return class CanvasElement extends Component {
     static propTypes = {
       icon: PropTypes.string.isRequired,
-      entity: PropTypes.object.isRequired
+      entity: PropTypes.object.isRequired,
+      connectDragSource: PropTypes.func.isRequired,
+      isDragging: PropTypes.bool.isRequired,
+      left: PropTypes.number.isRequired,
+      top: PropTypes.number.isRequired,
+      hideSourceOnDrag: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -24,14 +46,21 @@ export default (ComposedComponent) => {
     componentDidMount() {
       this.triggerElementAutofocus();
 
-      setTimeout(() => addElement(this.refs.element));
+      setTimeout(() => addElement(this.element));
+
+      this.props.entity.elementDOM = this.elementDOM;
+    }
+
+    componentDidUpdate() {
+      this.props.entity.elementDOM = this.elementDOM;
     }
 
     update() {
       if (typeof this.element.update === 'function') {
         this.element.update();
+      } else if (typeof this.element.decoratedComponentInstance.update === 'function') {
+        this.element.decoratedComponentInstance.update();
       }
-
       this.setState({
         editable: false,
         expanded: false
@@ -40,12 +69,6 @@ export default (ComposedComponent) => {
 
     updateName(evt) {
       this.setState({name: evt.target.value});
-    }
-
-    handleAdd(evt) {
-      if (typeof this.element.handleAdd === 'function') {
-        this.element.handleAdd(evt);
-      }
     }
 
     triggerElementAutofocus() {
@@ -74,8 +97,12 @@ export default (ComposedComponent) => {
         editable: this.state.editable,
         expanded: this.state.expanded
       });
-      return (
-        <div ref="element" className={elementClass}>
+      const { hideSourceOnDrag, left, top, connectDragSource, isDragging } = this.props;
+      if (isDragging && hideSourceOnDrag) {
+        return null;
+      }
+      return connectDragSource(
+        <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top }}>
           <div className="canvas-element__inside">
             <div className="canvas-element__icon" onClick={() => this.setState({expanded: !this.state.expanded})}>
               <i className={`fa ${this.props.icon}`}/>

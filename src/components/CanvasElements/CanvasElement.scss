@@ -4,13 +4,15 @@
   max-width: 80%;
   min-width: 200px;
   color: $font-base;
-  position: relative;
+  position: absolute;
   display: block;
   margin: 0 auto;
   background: $ui-light;
   border-radius: 10px;
   border: 2px solid $ui-base-border;
   padding: 15px 20px;
+  left: 10% !important;
+  right: 10%;
 
   &.editable {
     border-radius: 0;
@@ -30,9 +32,6 @@
     }
   }
 
-  & + & {
-    margin-top: 15px;
-  }
 }
 
 .editable-only {

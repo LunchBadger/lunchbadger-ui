@@ -11,6 +11,7 @@ class Backend extends BaseStore {
       switch (action.type) {
         case 'AddDataSource':
           Backends.push(action.dataSource);
+          action.dataSource.top = this.getNewElementPosition(Backends);
           this.emitChange();
           break;
 
@@ -29,6 +30,7 @@ class Backend extends BaseStore {
   findEntity(id) {
     return _.find(Backends, {id: id});
   }
+
 }
 
 export default new Backend;

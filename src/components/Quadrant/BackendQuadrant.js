@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
 import DataSource from '../CanvasElements/DataSource';
+import updateDataSource from 'actions/DataSource/update';
 
 class BackendQuadrant extends Component {
   static propTypes = {
@@ -18,8 +19,15 @@ class BackendQuadrant extends Component {
       return <DataSource paper={this.props.paper}
                          key={entity.id}
                          icon="fa-database"
+                         hideSourceOnDrag={true}
+                         left={entity.left}
+                         top={entity.top}
                          entity={entity}/>;
     })
+  }
+
+  moveEntity(entity, left, top) {
+    updateDataSource(entity.id, {left, top});
   }
 
   render() {

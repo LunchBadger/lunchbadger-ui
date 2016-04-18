@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events';
 import {register} from '../dispatcher/AppDispatcher';
+import _ from 'lodash';
 
 export default class BaseStore extends EventEmitter {
   constructor() {
@@ -36,5 +37,21 @@ export default class BaseStore extends EventEmitter {
     if (entity) {
       entity.update(data);
     }
+  }
+
+  getLowestElement(store) {
+    return _.maxBy(store, 'top')
+  }
+
+  getNewElementPosition(store) {
+    if (store.length === 1) {
+      return 20;
+    } else {
+      const el = this.getLowestElement(store);
+      const bbox = el.elementDOM.getBoundingClientRect();
+      return el.top + bbox.height + 20;
+    }
+
+
   }
 }

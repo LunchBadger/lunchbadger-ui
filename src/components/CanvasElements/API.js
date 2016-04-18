@@ -25,7 +25,7 @@ class Product extends Component {
 
   update() {
     updateAPI(this.props.entity.id, {
-      name: this.props.name,
+      name: this.props.name
     });
   }
 

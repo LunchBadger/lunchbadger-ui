@@ -8,6 +8,7 @@ import Public from '../../stores/Public';
 import Gateway from '../../stores/Gateway';
 import Backend from '../../stores/Backend';
 import './Canvas.scss';
+import classNames from 'classnames';
 
 export default class Canvas extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class Canvas extends Component {
 
     this.state = {
       lastUpdate: new Date(),
+      disabled: false
     };
 
     this.dataUpdated = () => {
@@ -65,8 +67,13 @@ export default class Canvas extends Component {
   }
 
   render() {
+    const canvasClass = classNames({
+      canvas: true,
+      'canvas--disabled': this.state.disabled
+    });
+    
     return (
-      <section className="canvas">
+      <section className={canvasClass}>
         <div className="canvas__wrapper">
           <div className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>

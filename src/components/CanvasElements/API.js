@@ -5,14 +5,11 @@ import './CanvasElement.scss';
 import updateAPI from '../../actions/API/update';
 import addEndpoint from '../../actions/API/addEndpoint';
 import removePublicEndpoint from 'actions/PublicEndpoint/remove';
-import { DropTarget, DragDropContext } from 'react-dnd';
+import { DropTarget } from 'react-dnd';
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    const delta = monitor.getDifferenceFromInitialOffset();
-    const left = Math.round(item.left + delta.x);
-    const top = Math.round(item.top + delta.y);
 
     component.onAddEndpoint(item.entity.name);
     removePublicEndpoint(item.entity);
@@ -51,7 +48,8 @@ class API extends Component {
             hideSourceOnDrag={true}
             paper={this.props.paper}
             left={endpoint.left}
-            top={endpoint.top}/>
+            top={endpoint.top}
+            hideSourceOnDrag={true}/>
         </div>
       );
     });

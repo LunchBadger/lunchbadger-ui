@@ -23,6 +23,10 @@ class AppState extends BaseStore {
       case 'AddElement':
         this.setStateKey('recentElement', action.element);
         break;
+
+      case 'TogglePanel':
+        this.setStateKey('panelExpanded', !this.getStateKey('panelExpanded'));
+        this.emitChange();
     }
   }
 }

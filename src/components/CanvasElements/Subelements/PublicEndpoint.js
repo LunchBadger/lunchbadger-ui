@@ -51,7 +51,7 @@ export default class PublicEndpoint extends Component {
   }
 
   render() {
-    const { hideSourceOnDrag, left, top, connectDragSource, isDragging } = this.props;
+    const { connectDragSource } = this.props;
     return connectDragSource(
       <div className="public-endpoint">
         <div className="public-endpoint__info">

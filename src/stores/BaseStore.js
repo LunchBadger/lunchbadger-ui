@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events';
 import {register} from '../dispatcher/AppDispatcher';
+import _ from 'lodash';
 
 export default class BaseStore extends EventEmitter {
   constructor() {

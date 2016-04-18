@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import update from 'react/lib/update';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
-import { DropTarget, DragDropContext } from 'react-dnd';
+import { DropTarget } from 'react-dnd';
 import addPublicEndpoint from 'actions/PublicEndpoint/add';
 import removeEndpoint from 'actions/API/removeEndpoint';
 
@@ -40,7 +39,7 @@ export default (ComposedComponent) => {
       sortableInstance: React.PropTypes.object,
       resizable: PropTypes.bool,
       data: PropTypes.object.isRequired,
-      paper: PropTypes.object,
+      paper: PropTypes.object
     };
 
     constructor(props) {
@@ -76,7 +75,6 @@ export default (ComposedComponent) => {
 
     render() {
       const { connectDropTarget } = this.props;
-      const { entities, hasDropped,  hasDroppedOnChild } = this.state;
       return connectDropTarget(
         <div className="quadrant" ref={(ref) => this.quadrantDOM = ref} style={{width: this.state.quadrantWidth}}>
           <div className="quadrant__title">{this.props.title}</div>

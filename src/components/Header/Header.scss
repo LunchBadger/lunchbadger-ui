@@ -2,11 +2,42 @@
 
 .header {
   background: $ui-base;
-  position: fixed;
+  position: relative;
   width: 100%;
   top: 0;
   left: 0;
   height: $header-height;
   border-bottom: 2px solid $ui-base-border;
   display: table;
+  z-index: $z-index-high;
+}
+
+.header__menu {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.header__menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__menu__element {
+  display: inline-block;
+  margin: 0 7px;
+}
+
+.header__menu__link {
+  display: block;
+  line-height: $header-height;
+  font-size: 28px;
+  color: $font-base;
+  transition: all .3s ease;
+
+  &:hover {
+    text-decoration: none;
+    color: lighten($font-base, 35%);
+  }
 }

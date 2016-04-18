@@ -8,7 +8,7 @@ import API from '../CanvasElements/API';
 class PublicQuadrant extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    entities: PropTypes.array,
+    entities: PropTypes.array
   };
 
   constructor(props) {

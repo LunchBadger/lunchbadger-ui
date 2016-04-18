@@ -16,7 +16,7 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      switch (entity.type) {
+      switch (entity.constructor.type) {
         case 'Model':
           return (
             <Model paper={this.props.paper}

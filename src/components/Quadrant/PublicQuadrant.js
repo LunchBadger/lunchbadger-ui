@@ -15,7 +15,7 @@ class PublicQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      switch (entity.type) {
+      switch (entity.constructor.type) {
         case 'API':
           return (
             <API key={entity.id}

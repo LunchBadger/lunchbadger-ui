@@ -1,8 +1,9 @@
 import BaseModel from './BaseModel';
 import Port from './Port';
+import portGroups from '../constants/portGroups';
 
 export default class DataSource extends BaseModel {
-  type = 'DataSource';
+  static type = 'DataSource';
 
 	/**
    * Collection of ports
@@ -43,7 +44,7 @@ export default class DataSource extends BaseModel {
     this.ports = [
       Port.create({
         id: this.id,
-        portGroup: 'private',
+        portGroup: portGroups.PRIVATE,
         portType: 'out'
       })
     ];

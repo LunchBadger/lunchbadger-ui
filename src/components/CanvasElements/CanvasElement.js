@@ -97,12 +97,10 @@ export default (ComposedComponent) => {
         editable: this.state.editable,
         expanded: this.state.expanded
       });
-      const { hideSourceOnDrag, left, top, connectDragSource, isDragging } = this.props;
-      if (isDragging && hideSourceOnDrag) {
-        return null;
-      }
+      const { left, top, connectDragSource, isDragging } = this.props;
+      const opacity = isDragging ? 0.2 : 1;
       return connectDragSource(
-        <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top }}>
+        <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top, opacity }}>
           <div className="canvas-element__inside">
             <div className="canvas-element__icon" onClick={() => this.setState({expanded: !this.state.expanded})}>
               <i className={`fa ${this.props.icon}`}/>

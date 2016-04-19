@@ -62,7 +62,7 @@ class DataSource extends Component {
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties expanded-only">
-          <div className="canvas-element__properties__title">Properties</div>
+          <div className="canvas-element__properties__title">Properties<i className="fa fa-plus" ></i></div>
 
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">

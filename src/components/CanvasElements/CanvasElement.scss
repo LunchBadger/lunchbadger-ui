@@ -13,6 +13,11 @@
   padding: 15px 20px;
   left: 10% !important;
   right: 10%;
+  z-index: 0;
+
+  &.mouse-over {
+    z-index: 1;
+  }
 
   &.editable {
     border-radius: 0;
@@ -216,4 +221,47 @@
   vertical-align: middle;
   padding-top: 10px;
   padding-left: 15px;
+}
+.canvas-element.Model {
+  .canvas-element__inside {
+    width: 66%;
+    min-width: 150px;
+  }
+  .canvas-element__properties__property-value {
+    padding-left: 0;
+  }
+  .canvas-element__model-endpoint {
+    line-height: 44px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 20px;
+    font-size: 30px;
+    border-left: 2px solid $ui-base-border;
+  }
+  &.editable, &.expanded {
+    .canvas-element__model-endpoint {
+      border-left: none;
+    }
+    .canvas-element__input.canvas-element__input--property, .canvas-element__span--property {
+      width: 45%;
+      float: left;
+      margin-right: 2.5%;
+    }
+  }
+  &.expanded {
+    .canvas-element__span--property {
+      margin: 0;
+      padding: 2px 5px;
+      border: 1px solid #ccc;
+    }
+  }
+  .fa-plus {
+    display: none;
+  }
+  &.editable {
+    .fa-plus {
+      display: initial;
+    }
+  }
 }

@@ -39,7 +39,8 @@ export default (ComposedComponent) => {
       this.state = {
         name: props.entity.name,
         editable: true,
-        expanded: true
+        expanded: true,
+        mouseOver: false
       };
     }
 
@@ -106,13 +107,18 @@ export default (ComposedComponent) => {
         editable: this.state.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        wip: !ready
+        wip: !ready,
+        'mouse-over': this.state.mouseOver
       });
       const {left, top, connectDragSource, isDragging} = this.props;
       const opacity = isDragging ? 0.2 : 1;
 
       return connectDragSource(
-        <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top, opacity }}>
+        <div ref={(ref) => this.elementDOM = ref}
+             className={`${elementClass} ${this.props.entity.constructor.type}`}
+             style={{ left, top, opacity }}
+             onMouseEnter={() => this.setState({mouseOver: true})}
+             onMouseLeave={() => this.setState({mouseOver: false})}>
           <div className="canvas-element__inside">
             <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
               <i className={`fa ${this.props.icon}`}/>

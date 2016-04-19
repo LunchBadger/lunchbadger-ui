@@ -3,16 +3,16 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import addElement from 'actions/addElement';
-import { DragSource } from 'react-dnd';
+import {DragSource} from 'react-dnd';
 
 const boxSource = {
   beginDrag(props) {
-    const { entity, left, top } = props;
-    return { entity, left, top };
+    const {entity, left, top} = props;
+    return {entity, left, top};
   },
   endDrag(props) {
-    const { entity, left, top } = props;
-    return { entity, left, top };
+    const {entity, left, top} = props;
+    return {entity, left, top};
   }
 };
 
@@ -108,7 +108,7 @@ export default (ComposedComponent) => {
         collapsed: !this.state.expanded,
         wip: !ready
       });
-      const { left, top, connectDragSource, isDragging } = this.props;
+      const {left, top, connectDragSource, isDragging} = this.props;
       const opacity = isDragging ? 0.2 : 1;
 
       return connectDragSource(

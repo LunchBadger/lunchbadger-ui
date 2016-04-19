@@ -2,6 +2,13 @@ import uuid from 'uuid';
 
 export default class BaseModel {
   _id = null;
+
+  /**
+   * Indicates if given entity is deployed and ready to work
+   * @type {boolean}
+   * @private
+   */
+  _ready = true;
   left = 0;
   top = 0;
 
@@ -43,5 +50,13 @@ export default class BaseModel {
 
   get id() {
     return this._id;
+  }
+
+  set ready(ready) {
+    return this._ready = ready;
+  }
+
+  get ready() {
+    return this._ready;
   }
 }

@@ -9,6 +9,8 @@ import Gateway from '../../stores/Gateway';
 import Backend from '../../stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
+import addConnection from 'actions/Connection/add';
+import Connection from 'stores/Connection';
 
 export default class Canvas extends Component {
   constructor(props) {
@@ -45,6 +47,16 @@ export default class Canvas extends Component {
 
     this.paper.bind('connection', (info) => {
       this._handleExistingConnectionDetach(info);
+
+      if (Connection.findEntityIndexBySourceAndTarget(info.sourceId, info.targetId) < 0) {
+        addConnection(info.sourceId, info.targetId);
+      }
+    });
+
+    this.paper.bind('beforeDrag', () => {
+      this.paper.repaintEverything();
+
+      return true;
     });
 
     jsPlumb.fire('canvasLoaded', this.paper);
@@ -71,7 +83,7 @@ export default class Canvas extends Component {
       canvas: true,
       'canvas--disabled': this.state.disabled
     });
-    
+
     return (
       <section className={canvasClass}>
         <div className="canvas__wrapper">

@@ -11,9 +11,7 @@ class Gateway extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'AddGateway':
-          Gateways.push(action.gateway);
-          action.gateway.top = this.getNewElementPosition(Gateways);
-          this.emitChange();
+          this.addGateway(action.gateway);
           break;
         case 'UpdateGateway':
           this.updateEntity(action.id, action.data);
@@ -23,16 +21,49 @@ class Gateway extends BaseStore {
           action.gateway.addPipeline(Pipeline.create({name: action.name}));
           this.emitChange();
           break;
+        case 'DeployGateway':
+          this.addGateway(action.gateway);
+          break;
+        case 'DeployGatewaySuccess':
+          const gateway = this.findEntityByGateway(action.gateway);
+
+          if (gateway) {
+            gateway.ready = true;
+            this.emitChange();
+          }
+          break;
       }
     });
   }
 
+  /**
+   * @param gateway {Gateway}
+   */
+  addGateway(gateway) {
+    Gateways.push(gateway);
+    gateway.top = this.getNewElementPosition(Gateways);
+    this.emitChange();
+  }
+
+  /**
+   * @returns {Gateway[]}
+   */
   getData() {
     return Gateways;
   }
 
   findEntity(id) {
     return _.find(Gateways, {id: id});
+  }
+
+  /**
+   * @param gateway {Gateway}
+   * @returns {Gateway|undefined}
+   */
+  findEntityByGateway(gateway) {
+    const id = gateway.id;
+
+    return this.findEntity(id);
   }
 }
 

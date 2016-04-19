@@ -4,15 +4,37 @@ import Pipeline from './Subelements/Pipeline';
 import './CanvasElement.scss';
 import updateGateway from '../../actions/Gateway/update';
 import addPipeline from '../../actions/Gateway/addPipeline';
+import {notify} from 'react-notify-toast';
 
 class Gateway extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    parent: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      deployed: false
+    };
+
+    this.onDeploy = (nextProps) => {
+      if (nextProps.entity.ready === true && this.state.deployed === false) {
+        this.setState({deployed: true});
+        notify.show('Gateway successfully deployed', 'success');
+        this.props.parent.triggerElementAutofocus();
+
+        delete this.onDeploy;
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.onDeploy) {
+      this.onDeploy(nextProps);
+    }
   }
 
   renderPipelines() {
@@ -39,8 +61,11 @@ class Gateway extends Component {
     return (
       <div>
         <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">Pipelines<i onClick={() => this.onAddPipeline('Pipeline')} className="canvas-element__add fa fa-plus"></i></div>
-            <div>{this.renderPipelines()}</div>
+          <div className="canvas-element__sub-elements__title">
+            Pipelines
+            <i onClick={() => this.onAddPipeline('Pipeline')} className="canvas-element__add fa fa-plus"/>
+          </div>
+          <div>{this.renderPipelines()}</div>
         </div>
       </div>
     );

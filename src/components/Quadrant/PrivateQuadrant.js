@@ -41,8 +41,7 @@ class PrivateQuadrant extends Component {
               entity={entity}/>
           );
       }
-
-    })
+    });
   }
 
   moveEntity(entity, left, top) {

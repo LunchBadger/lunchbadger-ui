@@ -18,6 +18,7 @@ export default class Gateway extends BaseModel {
     super(id);
 
     this.name = name;
+    this.ready = false;
     this.addPipeline(pipeline);
   }
 

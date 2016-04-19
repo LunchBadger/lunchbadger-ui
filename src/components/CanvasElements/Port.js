@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 export default class Port extends Component {
   static propTypes = {
+    elementId: PropTypes.string.isRequired,
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
     paper: PropTypes.object.isRequired,
@@ -56,6 +57,10 @@ export default class Port extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.paper.remove(findDOMNode(this.refs.port));
+  }
+
   render() {
     const portClass = classNames({
       'canvas-element__port--out': this.props.way === 'out',
@@ -66,7 +71,8 @@ export default class Port extends Component {
     });
 
     return (
-      <div ref="port" className={`${portClass} ${this.props.className || ''}`}>
+      <div ref="port" id={`port_${this.props.way}_${this.props.elementId}`}
+           className={`${portClass} ${this.props.className || ''}`}>
         <div className="port__inside">
           <i className="port__icon fa fa-arrow-right"/>
         </div>

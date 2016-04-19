@@ -137,6 +137,7 @@ export default class Pipeline extends Component {
               ref={`port-${port.portType}`}
               paper={this.props.paper}
               way={port.portType}
+              elementId={this.props.entity.id}
               middle={true}
               scope={port.portGroup}/>
       );

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updatePublicEndpoint from '../../actions/PublicEndpoint/update';
+import updatePublicEndpoint from 'actions/PublicEndpoint/update';
 
 class PublicEndpoint extends Component {
   static propTypes = {
@@ -32,7 +32,9 @@ class PublicEndpoint extends Component {
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
+              elementId={this.props.entity.id}
               className={`port-${port.portType} port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+              ref={`port-${port.portType}`}
               scope={port.portGroup}/>
       );
     });

@@ -50,6 +50,7 @@ class DataSource extends Component {
         <Port key={`port-${port.portType}-${port.id}`}
               paper={this.props.paper}
               way={port.portType}
+              elementId={this.props.entity.id}
               scope={port.portGroup}/>
       );
     });
@@ -62,8 +63,7 @@ class DataSource extends Component {
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties">
-          <div className="canvas-element__properties__title">Properties<i className="fa fa-plus" ></i></div>
-
+          <div className="canvas-element__properties__title">Properties</div>
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">URL</div>

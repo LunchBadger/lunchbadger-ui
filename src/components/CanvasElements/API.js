@@ -50,19 +50,6 @@ class API extends Component {
 
   onAddEndpoint(name) {
     addEndpoint(this.props.entity, name);
-
-    setTimeout(() => this.revertConnection());
-  }
-
-  revertConnection() {
-    if (this.previousConnection) {
-      const {source} = this.previousConnection;
-      const recentElement = AppState.getStateKey('recentElement');
-
-      if (recentElement && recentElement.props.entity.constructor.type === PublicEndpointClass.type) {
-        this.props.paper.connect({source: source, target: findDOMNode(recentElement.refs['port-in'])});
-      }
-    }
   }
 
   renderEndpoints() {

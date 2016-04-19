@@ -56,6 +56,10 @@ export default class Port extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.paper.remove(findDOMNode(this.refs.port));
+  }
+
   render() {
     const portClass = classNames({
       'canvas-element__port--out': this.props.way === 'out',

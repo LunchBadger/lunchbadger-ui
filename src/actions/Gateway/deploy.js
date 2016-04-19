@@ -1,3 +1,18 @@
-/**
- * Created by biedrzycki on 19.04.2016.
- */
+import {dispatch} from 'dispatcher/AppDispatcher';
+import Gateway from 'models/Gateway';
+
+export default (name) => {
+  const gateway = Gateway.create({
+    name: name || 'Gateway'
+  });
+
+  setTimeout(() => {
+    dispatch('DeployGatewaySuccess', {
+      gateway
+    });
+  }, 5000);
+
+  dispatch('DeployGateway', {
+    gateway
+  });
+};

@@ -47,6 +47,12 @@ export default class Canvas extends Component {
       this._handleExistingConnectionDetach(info);
     });
 
+    this.paper.bind('beforeDrag', () => {
+      this.paper.repaintEverything();
+
+      return true;
+    });
+
     jsPlumb.fire('canvasLoaded', this.paper);
   }
 
@@ -71,7 +77,7 @@ export default class Canvas extends Component {
       canvas: true,
       'canvas--disabled': this.state.disabled
     });
-    
+
     return (
       <section className={canvasClass}>
         <div className="canvas__wrapper">

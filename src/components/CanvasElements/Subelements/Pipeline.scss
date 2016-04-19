@@ -3,12 +3,21 @@
 .pipeline {
   position: relative;
   font-size: 16px;
+
+  .collapsed &,
+  .wip & {
+    position: static;
+
+    .port {
+      visibility: visible;
+      top: 20px;
+    }
+  }
 }
 
 .pipeline__info {
   cursor: pointer;
   padding-left: 18px;
-  position: relative;
 
   &:before {
     content: '';

@@ -44,10 +44,11 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
-      this.triggerElementAutofocus();
+      if (this.props.entity.ready) {
+        this.triggerElementAutofocus();
+      }
 
       setTimeout(() => addElement(this.element));
-
       this.props.entity.elementDOM = this.elementDOM;
     }
 
@@ -61,6 +62,7 @@ export default (ComposedComponent) => {
       } else if (typeof this.element.decoratedComponentInstance.update === 'function') {
         this.element.decoratedComponentInstance.update();
       }
+
       this.setState({
         editable: false,
         expanded: false
@@ -91,18 +93,28 @@ export default (ComposedComponent) => {
       }
     }
 
+    toggleExpandedState() {
+      this.setState({expanded: !this.state.expanded}, () => {
+        this.props.paper.repaintEverything();
+      });
+    }
+
     render() {
+      const {ready} = this.props.entity;
       const elementClass = classNames({
         'canvas-element': true,
-        editable: this.state.editable,
-        expanded: this.state.expanded
+        editable: this.state.editable && ready,
+        expanded: this.state.expanded && ready,
+        collapsed: !this.state.expanded,
+        wip: !ready
       });
       const { left, top, connectDragSource, isDragging } = this.props;
       const opacity = isDragging ? 0.2 : 1;
+
       return connectDragSource(
         <div ref={(ref) => this.elementDOM = ref} className={elementClass} style={{ left, top, opacity }}>
           <div className="canvas-element__inside">
-            <div className="canvas-element__icon" onClick={() => this.setState({expanded: !this.state.expanded})}>
+            <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
               <i className={`fa ${this.props.icon}`}/>
             </div>
             <div className="canvas-element__title">
@@ -116,7 +128,7 @@ export default (ComposedComponent) => {
             </div>
           </div>
           <div className="canvas-element__extra">
-            <ComposedComponent ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+            <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
           </div>
           <div className="canvas-element__actions editable-only">
             <button className="canvas-element__button" onClick={() => this.update()}>OK</button>

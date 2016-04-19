@@ -48,7 +48,7 @@ class PublicEndpoint extends Component {
         <div>
           {this.renderPorts()}
         </div>
-        <div className="canvas-element__properties expanded-only">
+        <div className="canvas-element__properties">
           <div className="canvas-element__properties__title">Properties</div>
 
           <div className="canvas-element__properties__table">

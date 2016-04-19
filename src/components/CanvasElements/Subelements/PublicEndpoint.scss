@@ -3,12 +3,20 @@
 .public-endpoint {
   position: relative;
   font-size: 16px;
+
+  .collapsed & {
+    position: static;
+
+    .port {
+      visibility: visible;
+      top: 20px;
+    }
+  }
 }
 
 .public-endpoint__info {
   cursor: pointer;
   padding-left: 18px;
-  position: relative;
 }
 
 .public-endpoint__name {

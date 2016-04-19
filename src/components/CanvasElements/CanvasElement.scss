@@ -30,8 +30,22 @@
     .expanded-only {
       display: block;
     }
+
+    .canvas-element__extra {
+      max-height: 9999px;
+      overflow: hidden;
+    }
   }
 
+  &.wip {
+    opacity: .4 !important;
+    pointer-events: none !important;
+
+    .canvas-element__extra {
+      max-height: 0;
+      visibility: hidden;
+    }
+  }
 }
 
 .editable-only {
@@ -92,11 +106,15 @@
 }
 
 .canvas-element__extra {
-  margin: 0 -20px;
+  margin: 0 -40px;
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
 }
 
 .canvas-element__sub-element {
   padding-top: 10px;
+  padding-bottom: 5px;
 }
 
 .canvas-element__sub-elements {

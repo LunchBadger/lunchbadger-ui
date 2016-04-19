@@ -4,6 +4,6 @@ export default (model, key, value) => {
   dispatch('AddModelProperty', {
     model,
     key: key || ' ',
-    value: value || ' ',
+    value: value || ' '
   });
 };

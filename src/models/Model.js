@@ -3,12 +3,10 @@ import Port from './Port';
 import portGroups from '../constants/portGroups';
 import ModelProperty from 'models/ModelProperty';
 
-const defaultProperties = [
-  ModelProperty.create({
-    propertyKey: 'key',
-    propertyValue: 'value'
-  })
-];
+const defaultProperty = ModelProperty.create({
+  propertyKey: 'key',
+  propertyValue: 'value'
+});
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -20,7 +18,7 @@ export default class Model extends BaseModel {
 
     this.name = name;
 
-    this.properties = defaultProperties;
+    this.addProperty(defaultProperty);
 
     this.ports = [
       Port.create({

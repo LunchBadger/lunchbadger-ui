@@ -8,6 +8,7 @@ import './App.scss';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import AppState from 'stores/AppState';
+import Notifications from 'react-notify-toast';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
@@ -42,6 +43,7 @@ export default class App extends Component {
                  container={() => this.refs.container}/>
           <Canvas ref="canvas"/>
         </div>
+        <Notifications />
       </div>
     );
   }

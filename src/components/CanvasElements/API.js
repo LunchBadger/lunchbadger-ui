@@ -7,14 +7,12 @@ import updateAPI from 'actions/API/update';
 import addEndpoint from 'actions/API/addEndpoint';
 import removePublicEndpoint from 'actions/PublicEndpoint/remove';
 import {DropTarget} from 'react-dnd';
-import AppState from 'stores/AppState';
-import {findDOMNode} from 'react-dom';
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     if (item.entity.constructor.type === PublicEndpointClass.type) {
-      component.onAddEndpoint(item.entity.name);
+      component.onAddEndpoint(item.entity);
       removePublicEndpoint(item.entity);
     }
   }
@@ -48,8 +46,8 @@ class API extends Component {
     });
   }
 
-  onAddEndpoint(name) {
-    addEndpoint(this.props.entity, name);
+  onAddEndpoint(endpoint) {
+    addEndpoint(this.props.entity, endpoint);
   }
 
   renderEndpoints() {
@@ -76,8 +74,10 @@ class API extends Component {
     return connectDropTarget(
       <div>
         <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">Endpoints<i
-            onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus"></i></div>
+          <div className="canvas-element__sub-elements__title">
+            Endpoints
+            <i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus" />
+          </div>
           <div ref="endpoints">{this.renderEndpoints()}</div>
         </div>
       </div>

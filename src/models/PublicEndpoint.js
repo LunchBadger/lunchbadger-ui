@@ -5,7 +5,7 @@ import portGroups from '../constants/portGroups';
 export default class PublicEndpoint extends BaseModel {
   static type = 'PublicEndpoint';
   _ports = [];
-  url = 'http://url.com';
+  url = 'https://root/endpoint';
 
   constructor(id, name) {
     super(id);

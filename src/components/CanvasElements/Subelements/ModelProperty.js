@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-//import './ModelProperty.scss';
+import './ModelProperty.scss';
 
 export default class ModelProperty extends Component {
   static propTypes = {
@@ -26,16 +26,22 @@ export default class ModelProperty extends Component {
 
   render() {
     return (
-      <div className="canvas-element__properties__property">
-        <div className="canvas-element__properties__property-value">
-          <span className="canvas-element__span--property key hide-while-edit">{this.state.propertyKey}</span>
-          <input className="canvas-element__input canvas-element__input--property editable-only"
+      <div className="model-property">
+        <div className="model-property__key-cell">
+          <span className="model-property__value key hide-while-edit">
+            {this.state.propertyKey}
+          </span>
+          <input className="model-property__input editable-only"
                  value={this.state.propertyKey}
                  type="text"
                  onChange={this.updatePropertyKey.bind(this)}
           />
-          <span className="canvas-element__span--property value hide-while-edit">{this.state.propertyValue}</span>
-          <input className="canvas-element__input canvas-element__input--property editable-only"
+        </div>
+        <div className="model-property__value-cell">
+          <span className="model-property__value value hide-while-edit">
+            {this.state.propertyValue}
+          </span>
+          <input className="model-property__input editable-only"
                  value={this.state.propertyValue}
                  type="text"
                  onChange={this.updatePropertyValue.bind(this)}

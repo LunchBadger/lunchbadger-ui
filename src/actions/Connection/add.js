@@ -1,9 +1,9 @@
 import {dispatch} from '../../dispatcher/AppDispatcher';
-import Connection from 'models/Connection';
 
-export default (from, to) => {
+export default (from, to, info) => {
   dispatch('AddConnection', {
     from,
-    to
+    to,
+    info
   });
 };

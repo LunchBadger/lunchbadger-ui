@@ -1,6 +1,5 @@
 import BaseStore from 'stores/BaseStore';
 import {register} from '../dispatcher/AppDispatcher';
-import PublicEndpoint from '../models/PublicEndpoint';
 import _ from 'lodash';
 
 const Publics = [];
@@ -24,6 +23,11 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
+        case 'MovePublicEndpoint':
+          Publics.push(action.endpoint);
+          action.endpoint.top = this.getNewElementPosition(Publics);
+          this.emitChange();
+          break;
         case 'AddAPI':
           Publics.push(action.API);
           action.API.top = this.getNewElementPosition(Publics);
@@ -34,7 +38,7 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddEndpoint':
-          action.api.addEndpoint(PublicEndpoint.create({name: action.name}));
+          action.api.addEndpoint(action.endpoint);
           this.emitChange();
           break;
         case 'RemoveEndpoint':

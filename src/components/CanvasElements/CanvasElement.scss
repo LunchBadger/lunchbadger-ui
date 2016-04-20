@@ -199,27 +199,28 @@
 }
 
 .canvas-element__properties__table {
-  display: table;
+  display: block;
   width: 100%;
 }
 
 .canvas-element__properties__property {
-  display: table-row;
+  display: block;
   width: 100%;
 }
 
 .canvas-element__properties__property-title {
-  display: table-cell;
+  display: block;
   font-size: 13px;
-  vertical-align: middle;
   padding-top: 10px;
 }
 
 .canvas-element__properties__property-value {
-  display: table-cell;
-  vertical-align: middle;
-  padding-top: 10px;
-  padding-left: 15px;
+  display: block;
+  padding-top: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 .canvas-element.Model {
   .canvas-element__inside {

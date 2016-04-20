@@ -87,6 +87,7 @@
     "react-edit-inline": "^1.0.6",
     "react-notify-toast": "^0.1.1",
     "react-sortablejs": "^0.7.0",
+    "slug": "^0.9.1",
     "sortablejs": "^1.4.2",
     "uuid": "^2.0.1"
   }

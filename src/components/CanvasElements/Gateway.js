@@ -17,7 +17,8 @@ class Gateway extends Component {
     super(props);
 
     this.state = {
-      deployed: false
+      deployed: false,
+      rootPath: props.entity.rootPath
     };
 
     this.onDeploy = (nextProps) => {
@@ -41,7 +42,7 @@ class Gateway extends Component {
     return this.props.entity.pipelines.map((pipeline) => {
       return (
         <div key={pipeline.id} className="canvas-element__sub-element">
-          <Pipeline paper={this.props.paper} entity={pipeline}/>
+          <Pipeline paper={this.props.paper} rootPath={this.state.rootPath} entity={pipeline}/>
         </div>
       );
     });
@@ -49,7 +50,8 @@ class Gateway extends Component {
 
   update() {
     updateGateway(this.props.entity.id, {
-      name: this.props.name
+      name: this.props.name,
+      rootPath: this.state.rootPath
     });
   }
 
@@ -57,9 +59,31 @@ class Gateway extends Component {
     addPipeline(this.props.entity, name);
   }
 
+  updateRootPath(evt) {
+    this.setState({rootPath: evt.target.value});
+  }
+
   render() {
     return (
       <div>
+        <div className="canvas-element__properties">
+          <div className="canvas-element__properties__title">Properties</div>
+
+          <div className="canvas-element__properties__table">
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">Root path</div>
+              <div className="canvas-element__properties__property-value">
+              <span className="hide-while-edit">
+                {this.props.entity.rootPath}
+              </span>
+
+                <input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.state.rootPath}
+                       onChange={this.updateRootPath.bind(this)}/>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="canvas-element__sub-elements">
           <div className="canvas-element__sub-elements__title">
             Pipelines

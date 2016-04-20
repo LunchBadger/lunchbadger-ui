@@ -1,5 +1,5 @@
 import BaseStore from './BaseStore';
-import ConnectionClass from 'models/Connection';
+import ConnectionFactory from 'models/Connection';
 import _ from 'lodash';
 
 const connections = [];
@@ -16,9 +16,10 @@ class Connection extends BaseStore {
       case 'AddConnection':
         const fromId = this._formatPortId(action.from);
         const toId = this._formatPortId(action.to);
-        const connection = ConnectionClass.create({
+        const connection = ConnectionFactory.create({
           fromId: fromId,
-          toId: toId
+          toId: toId,
+          info: action.info
         });
 
         this.addConnection(connection);
@@ -26,10 +27,11 @@ class Connection extends BaseStore {
 
         break;
       case 'RemoveConnection':
-        if (this.removeConnection(this.findEntityIndexBySourceAndTarget(action.from, action.to))) {
-          this.emitChange();
-        }
+        this._handleConnectionRemoval(action);
+        break;
 
+      case 'ReplaceConnection':
+        this._handleConnectionReplace(action);
         break;
     }
   }
@@ -44,8 +46,30 @@ class Connection extends BaseStore {
     }
   }
 
+  removeMultipleConnections(connections) {
+    connections.forEach((connection) => {
+      this.removeConnection(this.findEntityIndexBySourceAndTarget(connection.fromId, connection.toId));
+    });
+  }
+
+  getConnectionsForTarget(target) {
+    return this.search({toId: target});
+  }
+
+  getConnectionsForSource(source) {
+    return this.search({fromId: source});
+  }
+
+  getLastConnection() {
+    return connections.slice(-1)[0];
+  }
+
   findEntity(id) {
     return _.find(connections, {id: id});
+  }
+
+  search(filter) {
+    return _.filter(connections, filter);
   }
 
   findEntityIndex(id) {
@@ -57,6 +81,46 @@ class Connection extends BaseStore {
     const toId = this._formatPortId(to);
 
     return _.findIndex(connections, {fromId: fromId, toId: toId});
+  }
+
+  _handleConnectionRemoval(action) {
+    if (action.from && action.to) {
+      if (this.removeConnection(this.findEntityIndexBySourceAndTarget(action.from, action.to))) {
+        this.emitChange();
+      }
+    } else if (action.to) {
+      const connections = this.getConnectionsForTarget(action.to);
+
+      if (connections.length) {
+        this.removeMultipleConnections(connections);
+        this.emitChange();
+      }
+    } else if (action.from) {
+      const connections = this.getConnectionsForSource(action.from);
+
+      if (connections.length) {
+        this.removeMultipleConnections(connections);
+        this.emitChange();
+      }
+    }
+  }
+
+  _handleConnectionReplace(action) {
+    const currentConnectionIndex = this.findEntityIndexBySourceAndTarget(action.from, action.to);
+
+    if (currentConnectionIndex > -1) {
+      this.removeConnection(currentConnectionIndex);
+
+      const fromId = this._formatPortId(action.from);
+      const toId = this._formatPortId(action.newTo);
+      const connection = ConnectionFactory.create({
+        fromId: fromId,
+        toId: toId,
+        info: action.info
+      });
+
+      this.addConnection(connection);
+    }
   }
 
   _formatPortId(portId) {

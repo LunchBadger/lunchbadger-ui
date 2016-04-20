@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Port from '../Port';
 import Policy from './Policy';
-import portGroups from 'constants/portGroups';
 import classNames from 'classnames';
 import './Pipeline.scss';
 import {findDOMNode} from 'react-dom';
@@ -10,11 +9,14 @@ import Model from 'models/Model';
 import PrivateEndpoint from 'models/PrivateEndpoint';
 import PublicEndpoint from 'models/PublicEndpoint';
 import AppState from 'stores/AppState';
+import Connection from 'stores/Connection';
+import Private from 'stores/Private';
 
 export default class Pipeline extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    rootPath: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -25,12 +27,16 @@ export default class Pipeline extends Component {
       proxiedBy: []
     };
 
-    this.newConnectionListener = (info) => {
-      this._handleReverseProxyConnection(info);
+    this.newConnectionListener = () => {
+      const connection = Connection.getLastConnection();
+
+      if (connection && connection.toId === this.props.entity.id) {
+        this._handleReverseProxyConnection(connection);
+      }
     };
 
     this.removeNewConnectionListener = () => {
-      this.props.paper.unbind('connection', this.newConnectionListener);
+      Connection.removeChangeListener(this.newConnectionListener);
       this.removeNewConnectionListener = null;
     };
 
@@ -39,7 +45,7 @@ export default class Pipeline extends Component {
   }
 
   componentDidMount() {
-    this.props.paper.bind('connection', this.newConnectionListener);
+    Connection.addChangeListener(this.newConnectionListener);
   }
 
   componentWillMount() {
@@ -54,46 +60,24 @@ export default class Pipeline extends Component {
     AppState.removeChangeListener(this.appStateUpdate);
   }
 
-  _handleReverseProxyConnection(info) {
-    const {connection} = info;
+  _handleReverseProxyConnection(connection) {
+    const connectionEntity = Private.findEntity(connection.fromId);
 
-    if (connection.scope === portGroups.GATEWAYS || connection.scope === portGroups.PUBLIC) {
-      this._checkConnectionTargetAndSource(connection.target, connection.source);
+    if (connectionEntity.constructor.type === Model.type) {
+      this._handleElementCreation(connectionEntity, 'Public Model Endpoint');
+    } else if (connectionEntity.constructor.type === PrivateEndpoint.type) {
+      this._handleElementCreation(connectionEntity, 'Public Endpoint');
     }
   }
 
-  _checkConnectionTargetAndSource(target, source) {
-    const {ports} = this.props.entity;
-
-    ports.forEach((port) => {
-      const portDOMNode = findDOMNode(this.refs[`port-${port.portType}`]);
-
-      if (portDOMNode === target) {
-        this._handleActionIfTargetTaken(source);
-      } else if (portDOMNode === source) {
-        this._handleActionIfSourceTaken();
-      }
-    });
-  }
-
-  _handleActionIfTargetTaken(source) {
-    const sourceClassList = source.classList;
-
-    if (sourceClassList.contains(`port-${Model.type}`) && this.state.proxiedBy.indexOf(source.id) < 0) {
-      this._handleActionIfTargetIsModel();
-    } else if (sourceClassList.contains(`port-${PrivateEndpoint.type}`) && this.state.proxiedBy.indexOf(source.id) < 0) {
-      this._handleActionIfTargetIsPrivateEndpoint();
-    }
-  }
-
-  _handleActionIfTargetIsModel() {
-    addPublicEndpoint('Public Model Endpoint');
-    this._createConnectionWithNewlyCreatedElement();
-  }
-
-  _handleActionIfTargetIsPrivateEndpoint() {
-    addPublicEndpoint('Public Endpoint');
-    this._createConnectionWithNewlyCreatedElement();
+  /**
+   * @param connectionEntity {Model|PrivateEndpoint}
+   * @param name {String}
+   * @private
+   */
+  _handleElementCreation(connectionEntity, name) {
+    addPublicEndpoint(name, `${this.props.rootPath}/${connectionEntity.contextPath}`);
+    setTimeout(() => this._createConnectionWithNewlyCreatedElement());
   }
 
   _createConnectionWithNewlyCreatedElement() {
@@ -118,10 +102,6 @@ export default class Pipeline extends Component {
         }
       }
     });
-  }
-
-  _handleActionIfSourceTaken() {
-    this.removeNewConnectionListener();
   }
 
   renderPolicies() {

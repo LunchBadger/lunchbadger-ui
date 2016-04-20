@@ -4,12 +4,14 @@ export default class Connection extends BaseModel {
   static type = 'Connection';
   _fromId = null;
   _toId = null;
+  _info = null;
 
-  constructor(id, fromId, toId) {
+  constructor(id, fromId, toId, info) {
     super(id);
 
     this._fromId = fromId;
     this._toId = toId;
+    this._info = info;
   }
 
   get fromId() {
@@ -26,5 +28,13 @@ export default class Connection extends BaseModel {
 
   set toId(toId) {
     this._toId = toId;
+  }
+  
+  get info() {
+    return this._info;
+  }
+  
+  set info(info) {
+    this._info = info;
   }
 }

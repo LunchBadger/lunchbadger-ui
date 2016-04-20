@@ -3,6 +3,7 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updatePrivateEndpoint from '../../actions/PrivateEndpoint/update';
+import slug from 'slug';
 
 class PrivateEndpoint extends Component {
   static propTypes = {
@@ -16,7 +17,8 @@ class PrivateEndpoint extends Component {
     super(props);
 
     this.state = {
-      contextPath: this.props.entity.contextPath
+      contextPath: this.props.entity.contextPath,
+      contextPathDirty: false
     };
   }
 
@@ -25,6 +27,12 @@ class PrivateEndpoint extends Component {
       name: this.props.name,
       contextPath: this.state.contextPath
     });
+  }
+
+  updateName(event) {
+    if (!this.state.contextPathDirty) {
+      this.setState({contextPath: slug(event.target.value, {lower: true})});
+    }
   }
 
   renderPorts() {
@@ -41,7 +49,10 @@ class PrivateEndpoint extends Component {
   }
 
   updateContextPath(evt) {
-    this.setState({contextPath: evt.target.value});
+    this.setState({
+      contextPath: evt.target.value,
+      contextPathDirty: true
+    });
   }
 
   render() {

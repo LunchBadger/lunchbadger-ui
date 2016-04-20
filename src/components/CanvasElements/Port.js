@@ -59,6 +59,9 @@ export default class Port extends Component {
 
   componentWillUnmount() {
     this.props.paper.remove(findDOMNode(this.refs.port));
+
+    // TODO:
+    // remove connections attached to that port from Connection store
   }
 
   render() {

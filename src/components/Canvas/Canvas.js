@@ -10,6 +10,7 @@ import Backend from '../../stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
 import addConnection from 'actions/Connection/add';
+import removeConnection from 'actions/Connection/remove';
 import Connection from 'stores/Connection';
 
 export default class Canvas extends Component {

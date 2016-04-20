@@ -31,7 +31,7 @@ export default class Pipeline extends Component {
       const connection = Connection.getLastConnection();
 
       if (connection && connection.toId === this.props.entity.id) {
-        setTimeout(() => this._handleReverseProxyConnection(connection));
+        this._handleReverseProxyConnection(connection);
       }
     };
 

@@ -39,10 +39,6 @@ export default class PublicEndpoint extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    setTimeout(() => addElement(this));
-  }
-
   renderPorts() {
     return this.props.entity.ports.map((port) => {
       return (

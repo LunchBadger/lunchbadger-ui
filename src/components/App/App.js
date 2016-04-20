@@ -7,29 +7,13 @@ import 'font-awesome/css/font-awesome.css';
 import './App.scss';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import AppState from 'stores/AppState';
 import Notifications from 'react-notify-toast';
+import panelKeys from 'constants/panelKeys';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      panelOpened: false
-    };
-
-    this.appStateUpdate = () => {
-      this.setState({panelOpened: !!AppState.getStateKey('panelExpanded')});
-    }
-  }
-
-  componentWillMount() {
-    AppState.addChangeListener(this.appStateUpdate);
-  }
-
-  componentWillUnmount() {
-    AppState.removeChangeListener(this.appStateUpdate);
   }
 
   render() {
@@ -38,9 +22,20 @@ export default class App extends Component {
         <Header />
         <Aside />
         <div ref="container" className="app__container">
-          <Panel opened={this.state.panelOpened}
-                 canvas={() => this.refs.canvas}
-                 container={() => this.refs.container}/>
+          <div className="app__panel-wrapper">
+            <Panel canvas={() => this.refs.canvas}
+                   title="Details"
+                   storageKey={panelKeys.DETAILS_PANEL}
+                   container={() => this.refs.container}/>
+            <Panel canvas={() => this.refs.canvas}
+                   title="Metrics"
+                   storageKey={panelKeys.METRICS_PANEL}
+                   container={() => this.refs.container}/>
+            <Panel canvas={() => this.refs.canvas}
+                   title="Forecasts"
+                   storageKey={panelKeys.FORECASTS_PANEL}
+                   container={() => this.refs.container}/>
+          </div>
           <Canvas ref="canvas"/>
         </div>
         <Notifications />

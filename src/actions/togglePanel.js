@@ -1,5 +1,7 @@
 import {dispatch} from 'dispatcher/AppDispatcher';
 
-export default () => {
-  dispatch('TogglePanel');
+export default (panelKey) => {
+  dispatch('TogglePanel', {
+    panelKey
+  });
 };

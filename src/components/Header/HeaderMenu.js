@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import togglePanel from 'actions/togglePanel';
+import HeaderMenuLink from './HeaderMenuLink';
 import panelKeys from 'constants/panelKeys';
 
 export default class HeaderMenu extends Component {
@@ -12,19 +12,13 @@ export default class HeaderMenu extends Component {
       <nav className="header__menu">
         <ul className="header__menu__list">
           <li className="header__menu__element">
-            <a href="#" className="header__menu__link" onClick={() => togglePanel(panelKeys.DETAILS_PANEL)}>
-              <i className="fa fa-list"/>
-            </a>
+            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="fa-list"/>
           </li>
           <li className="header__menu__element">
-            <a href="#" className="header__menu__link" onClick={() => togglePanel(panelKeys.METRICS_PANEL)}>
-              <i className="fa fa-bar-chart"/>
-            </a>
+            <HeaderMenuLink togglePanel={panelKeys.METRICS_PANEL} icon="fa-bar-chart"/>
           </li>
           <li className="header__menu__element">
-            <a href="#" className="header__menu__link" onClick={() => togglePanel(panelKeys.FORECASTS_PANEL)}>
-              <i className="fa fa-cog"/>
-            </a>
+            <HeaderMenuLink togglePanel={panelKeys.FORECASTS_PANEL} icon="fa-cog"/>
           </li>
         </ul>
       </nav>

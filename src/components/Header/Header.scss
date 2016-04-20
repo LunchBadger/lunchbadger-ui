@@ -27,18 +27,28 @@
 
 .header__menu__element {
   display: inline-block;
-  margin: 0 7px;
+  height: $header-height;
 }
 
 .header__menu__link {
   display: block;
-  line-height: $header-height;
   font-size: 28px;
   color: $font-base;
   transition: all .3s ease;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+  height: 40px;
+  line-height: 40px;
+  padding: 0 7px;
+  border-radius: 10px;
 
   &:hover {
     text-decoration: none;
     color: lighten($font-base, 35%);
   }
+}
+
+.header__menu__link--pressed {
+  background: darken($ui-base-border, 5%);
 }

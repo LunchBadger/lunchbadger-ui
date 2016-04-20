@@ -23,6 +23,11 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
+        case 'MovePublicEndpoint':
+          Publics.push(action.endpoint);
+          action.endpoint.top = this.getNewElementPosition(Publics);
+          this.emitChange();
+          break;
         case 'AddAPI':
           Publics.push(action.API);
           action.API.top = this.getNewElementPosition(Publics);

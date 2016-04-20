@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
-import { DropTarget } from 'react-dnd';
-import addPublicEndpoint from 'actions/PublicEndpoint/add';
+import {DropTarget} from 'react-dnd';
+import movePublicEndpoint from 'actions/PublicEndpoint/move';
 import removeEndpoint from 'actions/API/removeEndpoint';
 
 const boxTarget = {
@@ -12,7 +12,7 @@ const boxTarget = {
     if (!hasDroppedOnChild) {
       const item = monitor.getItem();
       if (item.subelement) {
-        addPublicEndpoint(item.entity.name);
+        movePublicEndpoint(item.entity);
         removeEndpoint(item.parent, item.entity);
       } else {
         const delta = monitor.getDifferenceFromInitialOffset();
@@ -74,7 +74,7 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      const { connectDropTarget } = this.props;
+      const {connectDropTarget} = this.props;
       return connectDropTarget(
         <div className="quadrant" ref={(ref) => this.quadrantDOM = ref} style={{width: this.state.quadrantWidth}}>
           <div className="quadrant__title">{this.props.title}</div>

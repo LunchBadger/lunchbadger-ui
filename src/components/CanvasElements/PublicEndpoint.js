@@ -3,6 +3,8 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updatePublicEndpoint from 'actions/PublicEndpoint/update';
+import Connection from 'stores/Connection';
+import {findDOMNode} from 'react-dom';
 
 class PublicEndpoint extends Component {
   static propTypes = {
@@ -17,6 +19,22 @@ class PublicEndpoint extends Component {
     this.state = {
       url: this.props.entity.url
     };
+  }
+
+  componentDidMount() {
+    const targetConnections = Connection.getConnectionsForTarget(this.props.entity.id);
+
+    if (targetConnections) {
+      targetConnections.forEach((connection) => {
+        const sourcePort = connection.info.source;
+        const targetPort = findDOMNode(this.refs['port-in']);
+
+        this.props.paper.connect({
+          source: sourcePort,
+          target: targetPort
+        });
+      });
+    }
   }
 
   update() {

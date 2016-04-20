@@ -7,8 +7,6 @@ import updateAPI from 'actions/API/update';
 import addEndpoint from 'actions/API/addEndpoint';
 import removePublicEndpoint from 'actions/PublicEndpoint/remove';
 import {DropTarget} from 'react-dnd';
-import AppState from 'stores/AppState';
-import {findDOMNode} from 'react-dom';
 
 const boxTarget = {
   drop(props, monitor, component) {

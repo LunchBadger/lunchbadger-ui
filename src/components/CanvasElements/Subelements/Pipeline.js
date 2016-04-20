@@ -14,7 +14,8 @@ import AppState from 'stores/AppState';
 export default class Pipeline extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    rootPath: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -87,12 +88,12 @@ export default class Pipeline extends Component {
   }
 
   _handleActionIfTargetIsModel() {
-    addPublicEndpoint('Public Model Endpoint');
+    addPublicEndpoint('Public Model Endpoint', `${this.props.rootPath}/`);
     this._createConnectionWithNewlyCreatedElement();
   }
 
   _handleActionIfTargetIsPrivateEndpoint() {
-    addPublicEndpoint('Public Endpoint');
+    addPublicEndpoint('Public Endpoint', `${this.props.rootPath}/`);
     this._createConnectionWithNewlyCreatedElement();
   }
 

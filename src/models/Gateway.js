@@ -7,6 +7,7 @@ const pipeline = Pipeline.create({
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
+  rootPath = 'https://gateway.root';
 
   /**
    * @type {Pipeline[]}

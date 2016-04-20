@@ -55,7 +55,7 @@ class PrivateEndpoint extends Component {
 
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
+              <div className="canvas-element__properties__property-title">Context path</div>
               <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">
                 {this.props.entity.url}

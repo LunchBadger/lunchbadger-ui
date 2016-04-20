@@ -71,8 +71,6 @@ export default class Pipeline extends Component {
 
       if (portDOMNode === target) {
         this._handleActionIfTargetTaken(source);
-      } else if (portDOMNode === source) {
-        this._handleActionIfSourceTaken();
       }
     });
   }
@@ -119,10 +117,6 @@ export default class Pipeline extends Component {
         }
       }
     });
-  }
-
-  _handleActionIfSourceTaken() {
-    this.removeNewConnectionListener();
   }
 
   renderPolicies() {

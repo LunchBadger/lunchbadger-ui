@@ -39,19 +39,11 @@ export default class BaseStore extends EventEmitter {
     }
   }
 
-  getLowestElement(store) {
-    return _.maxBy(store, 'top')
-  }
-
-  getNewElementPosition(store) {
-    if (store.length === 1) {
-      return 20;
-    } else {
-      const el = this.getLowestElement(store);
-      const bbox = el.elementDOM.getBoundingClientRect();
-      return el.top + bbox.height + 20;
-    }
-
-
+  setEntitiesOrder(store) {
+    console.log(store);
+    return _.each(store, function (entity, index) {
+      console.log(entity, index);
+      entity.itemOrder = index;
+    });
   }
 }

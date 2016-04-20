@@ -11,6 +11,7 @@ export default class BaseModel {
   _ready = true;
   left = 0;
   top = 0;
+  itemOrder = 0;
 
   constructor(id) {
     if (id) {

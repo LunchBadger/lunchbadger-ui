@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Pipeline from './Subelements/Pipeline';
 import './CanvasElement.scss';
-import updateGateway from '../../actions/Gateway/update';
-import addPipeline from '../../actions/Gateway/addPipeline';
+import updateGateway from '../../actions/CanvasElements/Gateway/update';
+import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
 
 class Gateway extends Component {

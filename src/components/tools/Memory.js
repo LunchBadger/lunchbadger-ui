@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddDataSource from '../../actions/DataSource/add';
+import AddDataSource from '../../actions/CanvasElements/DataSource/add';
 
 export default class Memory extends Component {
   render() {

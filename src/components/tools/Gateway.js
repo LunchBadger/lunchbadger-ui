@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import DeployGateway from '../../actions/Gateway/deploy';
+import DeployGateway from '../../actions/CanvasElements/Gateway/deploy';
 
 export default class Gateway extends Component {
   render() {

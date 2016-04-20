@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updateDataSource from '../../actions/DataSource/update';
+import updateDataSource from '../../actions/CanvasElements/DataSource/update';
 
 class DataSource extends Component {
   static propTypes = {

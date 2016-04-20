@@ -3,8 +3,8 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import './CanvasElement.scss';
-import updateModel from '../../actions/Model/update';
-import addProperty from 'actions/Model/addProperty';
+import updateModel from '../../actions/CanvasElements/Model/update';
+import addProperty from '../../actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 
 class Model extends Component {

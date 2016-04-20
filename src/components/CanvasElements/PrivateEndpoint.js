@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updatePrivateEndpoint from '../../actions/PrivateEndpoint/update';
+import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 import slug from 'slug';
 
 class PrivateEndpoint extends Component {

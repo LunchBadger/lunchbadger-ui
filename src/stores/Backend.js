@@ -9,9 +9,14 @@ class Backend extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'UpdateBackendOrder':
+          Backends.splice(action.itemOrder, 0, Backends.splice(action.hoverOrder, 1)[0]);
+          this.setEntitiesOrder(Backends);
+          this.emitChange();
+          break;
         case 'AddDataSource':
           Backends.push(action.dataSource);
-          action.dataSource.top = this.getNewElementPosition(Backends);
+          action.dataSource.itemOrder = Backends.length - 1;
           this.emitChange();
           break;
 

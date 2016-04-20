@@ -10,8 +10,15 @@ class Gateway extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'UpdateGatewayOrder':
+          Gateways.splice(action.itemOrder, 0, Gateways.splice(action.hoverOrder, 1)[0]);
+          this.setEntitiesOrder(Gateways);
+          this.emitChange();
+          break;
         case 'AddGateway':
-          this.addGateway(action.gateway);
+          Gateways.push(action.gateway);
+          action.gateway.itemOrder = Gateways.length - 1;
+          this.emitChange();
           break;
         case 'UpdateGateway':
           this.updateEntity(action.id, action.data);
@@ -22,7 +29,9 @@ class Gateway extends BaseStore {
           this.emitChange();
           break;
         case 'DeployGateway':
-          this.addGateway(action.gateway);
+          Gateways.push(action.gateway);
+          action.gateway.itemOrder = Gateways.length - 1;
+          this.emitChange();
           break;
         case 'DeployGatewaySuccess':
           const gateway = this.findEntityByGateway(action.gateway);
@@ -34,15 +43,6 @@ class Gateway extends BaseStore {
           break;
       }
     });
-  }
-
-  /**
-   * @param gateway {Gateway}
-   */
-  addGateway(gateway) {
-    Gateways.push(gateway);
-    gateway.top = this.getNewElementPosition(Gateways);
-    this.emitChange();
   }
 
   /**

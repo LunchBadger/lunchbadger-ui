@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
+import update from 'react/lib/update';
 import Quadrant from './Quadrant';
 import PublicEndpoint from '../CanvasElements/PublicEndpoint';
-import updatePublicEndpoint from 'actions/PublicEndpoint/update';
-import updateAPI from 'actions/API/update';
+import updateOrder from 'actions/Quadrants/Public/updateOrder';
 import API from '../CanvasElements/API';
 
 class PublicQuadrant extends Component {
@@ -13,10 +13,6 @@ class PublicQuadrant extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state  = {
-      entities: this.props.entities
-    };
   }
 
   renderEntities() {
@@ -29,8 +25,8 @@ class PublicQuadrant extends Component {
                  id={entity.id}
                  icon="fa-archive"
                  hideSourceOnDrag={true}
-                 left={entity.left}
-                 top={entity.top}
+                 itemOrder={entity.itemOrder}
+                 moveEntity={this.moveEntity}
                  entity={entity}/>
           );
         case 'PublicEndpoint':
@@ -40,23 +36,16 @@ class PublicQuadrant extends Component {
                             id={entity.id}
                             icon="fa-user"
                             hideSourceOnDrag={true}
-                            left={entity.left}
-                            top={entity.top}
+                            itemOrder={entity.itemOrder}
+                            moveEntity={this.moveEntity}
                             entity={entity}/>
           );
       }
     })
   }
 
-  moveEntity(entity, left, top) {
-    switch (entity.constructor.type) {
-      case 'PublicEndpoint':
-        updatePublicEndpoint(entity.id, {left, top});
-        break;
-      case 'API':
-        updateAPI(entity.id, {left, top});
-        break;
-    }
+  moveEntity(entity, itemOrder, hoverOrder) {
+    updateOrder(entity, itemOrder, hoverOrder);
   }
 
   render() {

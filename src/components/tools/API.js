@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddAPI from 'actions/API/add';
+import AddAPI from '../../actions/CanvasElements/API/add';
 
 export default class API extends Component {
   render() {

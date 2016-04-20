@@ -1,4 +1,5 @@
 import BaseStore from 'stores/BaseStore';
+import update from 'react/lib/update';
 import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
@@ -9,9 +10,14 @@ class Public extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'UpdatePublicOrder':
+          Publics.splice(action.itemOrder, 0, Publics.splice(action.hoverOrder, 1)[0]);
+          this.setEntitiesOrder(Publics);
+          this.emitChange();
+          break;
         case 'AddPublicEndpoint':
           Publics.push(action.endpoint);
-          action.endpoint.top = this.getNewElementPosition(Publics);
+          action.endpoint.itemOrder = Publics.length - 1;
           this.emitChange();
           break;
         case 'RemovePublicEndpoint':
@@ -25,12 +31,11 @@ class Public extends BaseStore {
           break;
         case 'MovePublicEndpoint':
           Publics.push(action.endpoint);
-          action.endpoint.top = this.getNewElementPosition(Publics);
           this.emitChange();
           break;
         case 'AddAPI':
           Publics.push(action.API);
-          action.API.top = this.getNewElementPosition(Publics);
+          action.API.itemOrder = Publics.length - 1;
           this.emitChange();
           break;
         case 'UpdateAPI':

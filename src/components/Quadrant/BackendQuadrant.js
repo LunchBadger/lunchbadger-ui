@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
 import DataSource from '../CanvasElements/DataSource';
-import updateDataSource from 'actions/DataSource/update';
+import updateOrder from 'actions/Quadrants/Backend/updateOrder';
 
 class BackendQuadrant extends Component {
   static propTypes = {
@@ -20,14 +20,14 @@ class BackendQuadrant extends Component {
                          key={entity.id}
                          icon="fa-database"
                          hideSourceOnDrag={true}
-                         left={entity.left}
-                         top={entity.top}
+                         itemOrder={entity.itemOrder}
+                         moveEntity={this.moveEntity}
                          entity={entity}/>;
     })
   }
 
-  moveEntity(entity, left, top) {
-    updateDataSource(entity.id, {left, top});
+  moveEntity(entity, itemOrder, hoverOrder) {
+    updateOrder(entity, itemOrder, hoverOrder);
   }
 
   render() {

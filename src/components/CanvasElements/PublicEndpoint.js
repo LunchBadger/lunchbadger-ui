@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updatePublicEndpoint from 'actions/PublicEndpoint/update';
+import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
 import Connection from 'stores/Connection';
 import {findDOMNode} from 'react-dom';
 

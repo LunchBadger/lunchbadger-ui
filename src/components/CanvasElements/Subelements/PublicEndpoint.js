@@ -3,6 +3,8 @@ import Port from '../Port';
 import './PublicEndpoint.scss';
 import { DragSource } from 'react-dnd';
 import addElement from 'actions/addElement';
+import Connection from 'stores/Connection';
+import {findDOMNode} from 'react-dom';
 
 const boxSource = {
   beginDrag(props) {
@@ -33,6 +35,20 @@ export default class PublicEndpoint extends Component {
 
   componentDidMount() {
     setTimeout(() => addElement(this));
+
+    const targetConnections = Connection.getConnectionsForTarget(this.props.entity.id);
+
+    if (targetConnections) {
+      targetConnections.forEach((connection) => {
+        const sourcePort = connection.info.source;
+        const targetPort = findDOMNode(this.refs['port-in']);
+
+        this.props.paper.connect({
+          source: sourcePort,
+          target: targetPort
+        });
+      });
+    }
   }
 
   constructor(props) {

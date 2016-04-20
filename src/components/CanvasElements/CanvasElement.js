@@ -49,7 +49,7 @@ export default (ComposedComponent) => {
         this.triggerElementAutofocus();
       }
 
-      addElement(this.element);
+      setTimeout(() => addElement(this.element));
       this.props.entity.elementDOM = this.elementDOM;
     }
 

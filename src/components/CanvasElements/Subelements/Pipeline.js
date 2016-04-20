@@ -77,7 +77,7 @@ export default class Pipeline extends Component {
    */
   _handleElementCreation(connectionEntity, name) {
     addPublicEndpoint(name, `${this.props.rootPath}/${connectionEntity.contextPath}`);
-    this._createConnectionWithNewlyCreatedElement();
+    setTimeout(() => this._createConnectionWithNewlyCreatedElement());
   }
 
   _createConnectionWithNewlyCreatedElement() {

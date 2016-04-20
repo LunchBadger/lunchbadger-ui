@@ -58,10 +58,10 @@ export default (ComposedComponent) => {
     }
 
     update() {
-      if (typeof this.element.update === 'function') {
-        this.element.update();
-      } else if (typeof this.element.decoratedComponentInstance.update === 'function') {
-        this.element.decoratedComponentInstance.update();
+      const element = this.element.decoratedComponentInstance || this.element;
+
+      if (typeof element.update === 'function') {
+        element.update();
       }
 
       this.setState({
@@ -71,7 +71,13 @@ export default (ComposedComponent) => {
     }
 
     updateName(evt) {
+      const element = this.element.decoratedComponentInstance || this.element;
+
       this.setState({name: evt.target.value});
+
+      if (typeof element.updateName === 'function') {
+        element.updateName(evt);
+      }
     }
 
     triggerElementAutofocus() {

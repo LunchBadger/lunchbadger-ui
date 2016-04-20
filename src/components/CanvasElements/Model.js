@@ -5,6 +5,7 @@ import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import './CanvasElement.scss';
 import updateModel from '../../actions/Model/update';
 import addProperty from 'actions/Model/addProperty';
+import slug from 'slug';
 
 class Model extends Component {
   static propTypes = {
@@ -17,7 +18,8 @@ class Model extends Component {
     super(props);
 
     this.state = {
-      contextPath: this.props.entity.contextPath
+      contextPath: this.props.entity.contextPath,
+      contextPathDirty: false
     };
   }
 
@@ -26,6 +28,12 @@ class Model extends Component {
       name: this.props.name,
       contextPath: this.state.contextPath
     });
+  }
+
+  updateName(event) {
+    if (!this.state.contextPathDirty) {
+      this.setState({contextPath: slug(event.target.value, {lower: true})});
+    }
   }
 
   renderPorts() {
@@ -56,7 +64,10 @@ class Model extends Component {
   }
 
   updateContextPath(evt) {
-    this.setState({contextPath: evt.target.value});
+    this.setState({
+      contextPath: evt.target.value,
+      contextPathDirty: true
+    });
   }
 
   render() {
@@ -96,7 +107,6 @@ class Model extends Component {
           </div>
         </div>
       </div>
-
     );
   }
 }

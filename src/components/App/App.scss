@@ -19,3 +19,10 @@ body {
   height: calc(100vh - #{$header-height});
   padding-left: $aside-width;
 }
+
+.app__panel-wrapper {
+  display: block;
+  width: 100%;
+  position: relative;
+  min-height: 4px;
+}

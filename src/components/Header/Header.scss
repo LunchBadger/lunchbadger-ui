@@ -10,6 +10,7 @@
   border-bottom: 2px solid $ui-base-border;
   display: table;
   z-index: $z-index-high;
+  padding-left: $aside-width;
 }
 
 .header__menu {

@@ -9,6 +9,8 @@
   position: relative;
   transition: all .5s ease;
   height: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .panel__container--dragging {
@@ -16,12 +18,9 @@
 }
 
 .panel__body {
-  position: absolute;
-  left: 15px;
-  right: 15px;
-  top: 15px;
-  bottom: 15px;
-  overflow: auto;
+  position: relative;
+  padding: 15px;
+  height: 100%;
 }
 
 .panel__handle {
@@ -49,4 +48,10 @@
 .panel__handle--resizable {
   pointer-events: all;
   cursor: ns-resize;
+}
+
+.panel__title {
+  text-align: center;
+  padding: 20px 15px;
+  font-size: 20px;
 }

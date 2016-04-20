@@ -111,7 +111,11 @@ export default class Panel extends Component {
     return (
       <div className="panel">
         <div className={containerClass} style={{height: panelHeight}}>
-          <div className="panel__body"></div>
+          <div className="panel__body">
+            <div className="panel__title">
+              {this.props.title}
+            </div>
+          </div>
         </div>
         <PanelResizeHandle resizable={this.state.opened}
                            onDragEnd={this.handlePanelResizeEnd.bind(this)}

@@ -13,9 +13,18 @@ class Model extends Component {
     name: PropTypes.string.isRequired
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      contextPath: this.props.entity.contextPath
+    };
+  }
+
   update() {
     updateModel(this.props.entity.id, {
-      name: this.props.name
+      name: this.props.name,
+      contextPath: this.state.contextPath
     });
   }
 
@@ -46,25 +55,45 @@ class Model extends Component {
     addProperty(this.props.entity, key, value);
   }
 
+  updateContextPath(evt) {
+    this.setState({contextPath: evt.target.value});
+  }
+
   render() {
     return (
       <div>
         <div>
           <div className="canvas-element__model-endpoint">
-            <i className="canvas-element__model-endpoint-icon fa fa-compass"></i>
+            <i className="canvas-element__model-endpoint-icon fa fa-compass"/>
           </div>
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties expanded-only">
-          <div className="canvas-element__properties__title">Properties<i onClick={() => this.onAddProperty('key', 'value')} className="canvas-element__add fa fa-plus"></i></div>
+          <div className="canvas-element__properties__title">
+            Properties
+            <i onClick={() => this.onAddProperty('key', 'value')} className="canvas-element__add fa fa-plus"/>
+          </div>
 
           <div className="canvas-element__properties__table">
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">Context path</div>
+              <div className="canvas-element__properties__property-value">
+                <span className="hide-while-edit">
+                  {this.props.entity.contextPath}
+                </span>
+
+                <input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.state.contextPath}
+                       onChange={this.updateContextPath.bind(this)}/>
+              </div>
+            </div>
+
             {this.renderProperties()}
           </div>
         </div>
       </div>
 
-  );
+    );
   }
 }
 

@@ -16,14 +16,14 @@ class PrivateEndpoint extends Component {
     super(props);
 
     this.state = {
-      url: this.props.entity.url
+      contextPath: this.props.entity.contextPath
     };
   }
 
   update() {
     updatePrivateEndpoint(this.props.entity.id, {
       name: this.props.name,
-      url: this.state.url
+      contextPath: this.state.contextPath
     });
   }
 
@@ -40,8 +40,8 @@ class PrivateEndpoint extends Component {
     });
   }
 
-  updateURL(evt) {
-    this.setState({url: evt.target.value});
+  updateContextPath(evt) {
+    this.setState({contextPath: evt.target.value});
   }
 
   render() {
@@ -57,13 +57,13 @@ class PrivateEndpoint extends Component {
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Context path</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.url}
-              </span>
+                <span className="hide-while-edit">
+                  {this.props.entity.contextPath}
+                </span>
 
                 <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.url}
-                       onChange={this.updateURL.bind(this)}/>
+                       value={this.state.contextPath}
+                       onChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
           </div>

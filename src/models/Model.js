@@ -12,6 +12,7 @@ export default class Model extends BaseModel {
   static type = 'Model';
   _ports = [];
   _properties = [];
+  contextPath = 'private-model';
 
   constructor(id, name) {
     super(id);

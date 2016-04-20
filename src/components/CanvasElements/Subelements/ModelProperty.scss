@@ -1,0 +1,41 @@
+@import '../../../config';
+
+.model-property {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid $ui-base-border;
+
+  &:first-child {
+    border-top: 1px solid $ui-base-border;
+  }
+}
+
+.model-property__key-cell {
+  float: left;
+  width: 50%;
+  padding: 5px 10px 5px 5px;
+  border-right: 1px solid $ui-base-border;
+}
+
+.model-property__value-cell {
+  float: left;
+  width: 50%;
+  padding: 5px 5px 5px 10px;
+}
+
+.model-property__key-cell,
+.model-property__value-cell {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.model-property__value {
+
+}
+
+.model-property__input {
+  width: 100%;
+  font-size: 14px;
+}

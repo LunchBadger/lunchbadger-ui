@@ -87,8 +87,12 @@ class Model extends Component {
                        onChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
-
-            {this.renderProperties()}
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">Model properties</div>
+              <div className="canvas-element__properties__property-value">
+                {this.renderProperties()}
+              </div>
+            </div>
           </div>
         </div>
       </div>

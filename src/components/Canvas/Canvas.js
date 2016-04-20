@@ -49,7 +49,7 @@ export default class Canvas extends Component {
       this._handleExistingConnectionDetach(info);
 
       if (Connection.findEntityIndexBySourceAndTarget(info.sourceId, info.targetId) < 0) {
-        addConnection(info.sourceId, info.targetId);
+        addConnection(info.sourceId, info.targetId, info);
       }
     });
 

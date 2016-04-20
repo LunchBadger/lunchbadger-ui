@@ -18,7 +18,8 @@ class Connection extends BaseStore {
         const toId = this._formatPortId(action.to);
         const connection = ConnectionClass.create({
           fromId: fromId,
-          toId: toId
+          toId: toId,
+          info: action.info
         });
 
         this.addConnection(connection);
@@ -42,6 +43,10 @@ class Connection extends BaseStore {
     if (index > -1) {
       connections.splice(index, 1);
     }
+  }
+
+  getLastConnection() {
+    return connections.slice(-1)[0];
   }
 
   findEntity(id) {

@@ -6,7 +6,6 @@
   color: $font-base;
   position: relative;
   display: block;
-  margin: 0 auto;
   background: $ui-light;
   border-radius: 10px;
   border: 2px solid $ui-base-border;
@@ -107,6 +106,7 @@
 
 .canvas-element__port--in {
   left: -12px;
+  pointer-events: none;
 }
 
 .canvas-element__port--out {

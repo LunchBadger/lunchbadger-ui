@@ -47,19 +47,7 @@ export default class Canvas extends Component {
       Anchors: [0.5, 0, 0.5, 0.5]
     });
 
-    this.paper.bind('connection', (info) => {
-      this._handleExistingConnectionDetach(info);
-
-      if (Connection.findEntityIndexBySourceAndTarget(info.sourceId, info.targetId) < 0) {
-        addConnection(info.sourceId, info.targetId, info);
-      }
-    });
-
-    this.paper.bind('beforeDrag', () => {
-      this.paper.repaintEverything();
-
-      return true;
-    });
+    this._attachPaperEvents();
 
     jsPlumb.fire('canvasLoaded', this.paper);
   }
@@ -69,8 +57,34 @@ export default class Canvas extends Component {
     const existingConnections = this.paper.select({source: connection.sourceId, target: connection.targetId});
 
     if (existingConnections.length > 1) {
-      this.paper.detach(connection);
+      this.paper.detach(connection, {
+        fireEvent: false
+      });
     }
+  }
+
+  _attachPaperEvents() {
+    this.paper.bind('connection', (info) => {
+      this._handleExistingConnectionDetach(info);
+
+      if (Connection.findEntityIndexBySourceAndTarget(info.sourceId, info.targetId) < 0) {
+        addConnection(info.sourceId, info.targetId, info);
+      }
+    });
+
+    this.paper.bind('connectionDetached', (info) => {
+      removeConnection(info.sourceId, info.targetId);
+    });
+
+    this.paper.bind('connectionMoved', (info) => {
+      removeConnection(info.originalSourceId, info.originalTargetId);
+    });
+
+    this.paper.bind('beforeDrag', () => {
+      this.paper.repaintEverything();
+
+      return true;
+    });
   }
 
   componentWillUnmount() {

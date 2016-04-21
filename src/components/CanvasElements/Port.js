@@ -23,7 +23,7 @@ export default class Port extends Component {
     if (this.props.way === 'in') {
       this.props.paper.makeTarget(portDOM, {
         maxConnections: -1,
-        endpoint: 'Blank',
+        endpoint: ['Dot', {radius: 11, cssClass: 'target-port'}],
         paintStyle: {
           fillStyle: '#ffffff'
         },

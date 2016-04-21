@@ -30,7 +30,7 @@ class Connection extends BaseStore {
         this._handleConnectionRemoval(action);
         break;
 
-      case 'ReplaceConnection':
+      case 'MoveConnection':
         this._handleConnectionReplace(action);
         break;
     }

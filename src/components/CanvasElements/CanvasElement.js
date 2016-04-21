@@ -69,7 +69,7 @@ export default (ComposedComponent) => {
       this.appStateUpdate = () => {
         const currentElement = AppState.getStateKey('currentElement');
         this.setState({highlighted: currentElement && currentElement.id === this.props.entity.id ? true:false})
-      }
+      };
 
       this.state = {
         name: props.entity.name,
@@ -83,6 +83,7 @@ export default (ComposedComponent) => {
     componentWillMount() {
       AppState.addChangeListener(this.appStateUpdate);
     }
+
     componentWillUnmount() {
       AppState.removeChangeListener(this.appStateUpdate);
     }

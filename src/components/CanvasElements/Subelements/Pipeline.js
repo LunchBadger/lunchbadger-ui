@@ -30,8 +30,14 @@ export default class Pipeline extends Component {
     this.newConnectionListener = () => {
       const connection = Connection.getLastConnection();
 
-      if (connection && connection.toId === this.props.entity.id) {
+      if (connection && connection.toId === this.props.entity.id
+        && this.state.proxiedBy.indexOf(connection.fromId) < 0) {
+        const {proxiedBy} = this.state;
+
         this._handleReverseProxyConnection(connection);
+
+        proxiedBy.push(connection.fromId);
+        this.setState({proxiedBy: proxiedBy});
       }
     };
 
@@ -81,8 +87,6 @@ export default class Pipeline extends Component {
   }
 
   _createConnectionWithNewlyCreatedElement() {
-    const {proxiedBy} = this.state;
-
     setTimeout(() => {
       const element = findDOMNode(AppState.getStateKey('recentElement'));
 
@@ -91,14 +95,10 @@ export default class Pipeline extends Component {
         const sourcePort = findDOMNode(this.refs['port-out']);
 
         if (targetPort && sourcePort) {
-          proxiedBy.push(sourcePort.id);
-
           this.props.paper.connect({
             source: sourcePort,
             target: targetPort
           });
-
-          this.setState({proxiedBy});
         }
       }
     });

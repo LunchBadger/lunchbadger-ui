@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import addConnection from '../../actions/Connection/add';
 import removeConnection from '../../actions/Connection/remove';
 import Connection from 'stores/Connection';
+import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 
 export default class Canvas extends Component {
   constructor(props) {
@@ -86,7 +87,7 @@ export default class Canvas extends Component {
     });
 
     return (
-      <section className={canvasClass}>
+      <section className={canvasClass} onClick={() => toggleHighlight(null)}>
         <div className="canvas__wrapper">
           <div className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>

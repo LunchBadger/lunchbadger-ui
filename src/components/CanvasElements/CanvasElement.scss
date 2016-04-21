@@ -49,6 +49,11 @@
       visibility: hidden;
     }
   }
+
+  &.highlighted {
+    border-colotr: #fbb;
+    background: #fbb;
+  }
 }
 
 .editable-only {

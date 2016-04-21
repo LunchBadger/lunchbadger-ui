@@ -10,15 +10,20 @@ class Private extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'UpdatePrivateOrder':
+          Privates.splice(action.itemOrder, 0, Privates.splice(action.hoverOrder, 1)[0]);
+          this.setEntitiesOrder(Privates);
+          this.emitChange();
+          break;
         case 'AddPrivateEndpoint':
           Privates.push(action.endpoint);
-          action.endpoint.top = this.getNewElementPosition(Privates);
+          action.endpoint.itemOrder = Privates.length - 1;
           this.emitChange();
           break;
 
         case 'AddModel':
           Privates.push(action.model);
-          action.model.top = this.getNewElementPosition(Privates);
+          action.model.itemOrder = Privates.length - 1;
           this.emitChange();
           break;
 

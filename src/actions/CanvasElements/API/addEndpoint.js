@@ -1,4 +1,4 @@
-import {dispatch} from '../../dispatcher/AppDispatcher';
+import {dispatch} from 'dispatcher/AppDispatcher';
 
 export default (api, endpoint) => {
   dispatch('AddEndpoint', {

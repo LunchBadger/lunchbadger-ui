@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Quadrant from './Quadrant';
 import Gateway from '../CanvasElements/Gateway';
-import updateGateway from 'actions/Gateway/update';
+import updateOrder from 'actions/Quadrants/Gateway/updateOrder';
 
 class GatewaysQuadrant extends Component {
   static propTypes = {
@@ -19,14 +19,14 @@ class GatewaysQuadrant extends Component {
                       icon="fa-exchange"
                       paper={this.props.paper}
                       hideSourceOnDrag={true}
-                      left={entity.left}
-                      top={entity.top}
+                      itemOrder={entity.itemOrder}
+                      moveEntity={this.moveEntity}
                       entity={entity}/>;
     })
   }
 
-  moveEntity(entity, left, top) {
-    updateGateway(entity.id, {left, top});
+  moveEntity(entity, itemOrder, hoverOrder) {
+    updateOrder(entity, itemOrder, hoverOrder);
   }
 
   render() {

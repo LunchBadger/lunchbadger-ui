@@ -3,9 +3,9 @@ import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import PublicEndpointClass from 'models/PublicEndpoint';
 import './CanvasElement.scss';
-import updateAPI from 'actions/API/update';
-import addEndpoint from 'actions/API/addEndpoint';
-import removePublicEndpoint from 'actions/PublicEndpoint/remove';
+import updateAPI from '../../actions/CanvasElements/API/update';
+import addEndpoint from '../../actions/CanvasElements/API/addEndpoint';
+import removePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/remove';
 import {DropTarget} from 'react-dnd';
 
 const boxTarget = {

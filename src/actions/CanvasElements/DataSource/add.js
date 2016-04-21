@@ -1,5 +1,5 @@
-import {dispatch} from '../../dispatcher/AppDispatcher';
-import DataSource from '../../models/DataSource';
+import {dispatch} from 'dispatcher/AppDispatcher';
+import DataSource from 'models/DataSource';
 
 export default (name) => {
   dispatch('AddDataSource', {

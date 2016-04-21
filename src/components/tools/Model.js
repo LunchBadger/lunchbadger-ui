@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddModel from '../../actions/Model/add';
+import AddModel from '../../actions/CanvasElements/Model/add';
 
 export default class Model extends Component {
   render() {

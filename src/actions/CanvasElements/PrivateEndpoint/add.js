@@ -1,5 +1,5 @@
-import { dispatch } from '../../dispatcher/AppDispatcher';
-import PrivateEndpoint from '../../models/PrivateEndpoint';
+import { dispatch } from 'dispatcher/AppDispatcher';
+import PrivateEndpoint from 'models/PrivateEndpoint';
 
 export default (name) => {
   dispatch('AddPrivateEndpoint', {

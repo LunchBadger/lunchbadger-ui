@@ -4,7 +4,7 @@ import Policy from './Policy';
 import classNames from 'classnames';
 import './Pipeline.scss';
 import {findDOMNode} from 'react-dom';
-import addPublicEndpoint from 'actions/PublicEndpoint/add';
+import addPublicEndpoint from '../../../actions/CanvasElements/PublicEndpoint/add';
 import Model from 'models/Model';
 import PrivateEndpoint from 'models/PrivateEndpoint';
 import PublicEndpoint from 'models/PublicEndpoint';

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Tool.scss';
-import AddPublicEndpoint from '../../actions/PublicEndpoint/add';
+import AddPublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/add';
 
 export default class PrivateEndpoint extends Component {
   render() {

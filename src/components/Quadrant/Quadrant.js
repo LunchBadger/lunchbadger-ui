@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
 import {DropTarget} from 'react-dnd';
-import movePublicEndpoint from 'actions/PublicEndpoint/move';
-import removeEndpoint from 'actions/API/removeEndpoint';
+import movePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/move';
+import removeEndpoint from '../../actions/CanvasElements/API/removeEndpoint';
 
 const boxTarget = {
   drop(props, monitor, component) {
@@ -44,6 +44,7 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
+      this.moveEntity = this.moveEntity.bind(this);
 
       this.state = {
         quadrantWidth: '25%',

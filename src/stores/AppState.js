@@ -37,6 +37,14 @@ class AppState extends BaseStore {
 
         this.setStateKey('isPanelOpened', panel ? true : false);
         this.emitChange();
+        break;
+
+      case 'ToggleHighlight':
+        const currentElement = this.getStateKey('currentElement');
+
+        this.setStateKey('currentElement', action.element);
+        this.emitChange();
+        break;
     }
   }
 }

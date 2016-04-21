@@ -4,6 +4,8 @@ import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import addElement from 'actions/addElement';
 import {DragSource, DropTarget} from 'react-dnd';
+import AppState from 'stores/AppState';
+import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 
 const boxSource = {
   beginDrag(props) {
@@ -16,44 +18,29 @@ const boxTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().itemOrder;
     const hoverIndex = props.itemOrder;
-    // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
       return;
     }
 
-    // Determine rectangle on screen
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
 
-    // Get vertical middle
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
-    // Determine mouse position
     const clientOffset = monitor.getClientOffset();
 
-    // Get pixels to the top
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    // Only perform the move when the mouse has crossed half of the items height
-    // When dragging downwards, only move when the cursor is below 50%
-    // When dragging upwards, only move when the cursor is above 50%
 
-    // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
     }
 
-    // Dragging upwards
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
       return;
     }
 
-    // Time to actually perform the action
     props.moveEntity(monitor.getItem().entity, dragIndex, hoverIndex);
 
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
     monitor.getItem().itemOrder = hoverIndex;
   }
 }
@@ -79,12 +66,25 @@ export default (ComposedComponent) => {
     constructor(props) {
       super(props);
 
+      this.appStateUpdate = () => {
+        const currentElement = AppState.getStateKey('currentElement');
+        this.setState({highlighted: currentElement && currentElement.id === this.props.entity.id ? true:false})
+      }
+
       this.state = {
         name: props.entity.name,
         editable: true,
         expanded: true,
-        mouseOver: false
+        mouseOver: false,
+        highlighted: false
       };
+    }
+
+    componentWillMount() {
+      AppState.addChangeListener(this.appStateUpdate);
+    }
+    componentWillUnmount() {
+      AppState.removeChangeListener(this.appStateUpdate);
     }
 
     componentDidMount() {
@@ -149,6 +149,10 @@ export default (ComposedComponent) => {
       });
     }
 
+    toggleHighlighted() {
+      toggleHighlight(this.props.entity);
+    }
+
     render() {
       const {ready} = this.props.entity;
       const elementClass = classNames({
@@ -156,6 +160,7 @@ export default (ComposedComponent) => {
         editable: this.state.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
+        highlighted: this.state.highlighted,
         wip: !ready,
         'mouse-over': this.state.mouseOver
       });
@@ -166,6 +171,7 @@ export default (ComposedComponent) => {
         <div ref={(ref) => this.elementDOM = ref}
              className={`${elementClass} ${this.props.entity.constructor.type}`}
              style={{ opacity }}
+             onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
              onMouseEnter={() => this.setState({mouseOver: true})}
              onMouseLeave={() => this.setState({mouseOver: false})}>
           <div className="canvas-element__inside">

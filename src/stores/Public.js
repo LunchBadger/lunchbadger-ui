@@ -1,5 +1,4 @@
 import BaseStore from 'stores/BaseStore';
-import update from 'react/lib/update';
 import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 

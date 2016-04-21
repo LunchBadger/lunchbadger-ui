@@ -3,23 +3,42 @@ import './Panel.scss';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
-import togglePanel from 'actions/togglePanel';
-
-const storageKey = 'PANEL_HEIGHT';
+import AppState from 'stores/AppState';
 
 export default class Panel extends Component {
   static propTypes = {
     canvas: PropTypes.func.isRequired,
-    opened: PropTypes.bool.isRequired,
-    container: PropTypes.func.isRequired
+    container: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    storageKey: PropTypes.string.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      height: '50vh'
+      height: '50vh',
+      opened: false
     };
+
+    this.appStateUpdate = () => {
+      const currentPanel = AppState.getStateKey('currentlyOpenedPanel');
+
+      if (this.props.storageKey === currentPanel) {
+        // keep the timeout equal to css animation time...
+        const animationTime = (AppState.getStateKey('isPanelOpened')) ? 500 : 0;
+
+        setTimeout(() => {
+          this.setState({opened: true});
+        }, animationTime);
+      } else {
+        this.setState({opened: false});
+      }
+    }
+  }
+
+  componentWillMount() {
+    AppState.addChangeListener(this.appStateUpdate);
   }
 
   componentDidMount() {
@@ -28,8 +47,8 @@ export default class Panel extends Component {
       const containerBBox = container.getBoundingClientRect();
       let panelDefaultHeight = '50vh';
 
-      if (lockr.get(storageKey)) {
-        panelDefaultHeight = `${parseInt(lockr.get(storageKey) / 100 * containerBBox.height)}px`;
+      if (lockr.get(this.props.storageKey)) {
+        panelDefaultHeight = `${parseInt(lockr.get(this.props.storageKey) / 100 * containerBBox.height)}px`;
       }
 
       this.setState({height: panelDefaultHeight});
@@ -39,11 +58,15 @@ export default class Panel extends Component {
   componentDidUpdate() {
     const canvas = this.props.canvas();
 
-    if (this.props.opened) {
+    if (this.state.opened) {
       canvas.setState({disabled: true});
     } else {
       canvas.setState({disabled: false});
     }
+  }
+
+  componentWillUnmount() {
+    AppState.removeChangeListener(this.appStateUpdate);
   }
 
   handlePanelResize(event) {
@@ -57,12 +80,11 @@ export default class Panel extends Component {
       newPixelHeight = containerBBox.height - 100;
     } else if (newPixelHeight < 50) {
       newPixelHeight = 80;
-      togglePanel();
     }
 
     const newHeight = parseInt(newPixelHeight / containerBBox.height * 100, 10);
 
-    lockr.set(storageKey, newHeight);
+    lockr.set(this.props.storageKey, newHeight);
 
     this.setState({
       dragging: true,
@@ -77,7 +99,7 @@ export default class Panel extends Component {
   render() {
     let panelHeight = '0px';
 
-    if (this.props.opened) {
+    if (this.state.opened) {
       panelHeight = this.state.height;
     }
 
@@ -89,9 +111,13 @@ export default class Panel extends Component {
     return (
       <div className="panel">
         <div className={containerClass} style={{height: panelHeight}}>
-          <div className="panel__body"></div>
+          <div className="panel__body">
+            <div className="panel__title">
+              {this.props.title}
+            </div>
+          </div>
         </div>
-        <PanelResizeHandle resizable={this.props.opened}
+        <PanelResizeHandle resizable={this.state.opened}
                            onDragEnd={this.handlePanelResizeEnd.bind(this)}
                            onDrag={this.handlePanelResize.bind(this)}/>
       </div>

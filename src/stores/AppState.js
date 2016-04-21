@@ -25,7 +25,17 @@ class AppState extends BaseStore {
         break;
 
       case 'TogglePanel':
-        this.setStateKey('panelExpanded', !this.getStateKey('panelExpanded'));
+        const currentPanel = this.getStateKey('currentlyOpenedPanel');
+        let panel = action.panelKey;
+
+        if (currentPanel === panel) {
+          panel = null;
+        }
+
+        this.setStateKey('currentlyOpenedPanel', panel);
+        this.emitChange();
+
+        this.setStateKey('isPanelOpened', panel ? true : false);
         this.emitChange();
     }
   }

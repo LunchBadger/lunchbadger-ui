@@ -20,41 +20,33 @@ export default class Port extends Component {
   componentDidMount() {
     const portDOM = findDOMNode(this.refs.port);
 
-    if (this.props.way === 'in') {
-      this.props.paper.makeTarget(portDOM, {
-        maxConnections: -1,
-        endpoint: ['Dot', {radius: 11, cssClass: 'target-port'}],
-        paintStyle: {
-          fillStyle: '#ffffff'
-        },
-        dropOptions: {
-          hoverClass: 'hover',
-          activeClass: 'active'
-        },
-        anchor: [0.5, 0.5, 0, 0],
-        scope: this.props.scope
-      });
-    } else {
-      this.props.paper.makeSource(portDOM, {
-        maxConnections: -1,
-        endpoint: 'Blank',
-        paintStyle: {
-          fillStyle: '#ffffff'
-        },
-        connectorStyle: {
-          lineWidth: 6,
-          strokeStyle: '#ffffff',
-          joinstyle: 'round',
-          outlineColor: '#c1c1c1',
-          outlineWidth: 2
-        },
-        connectorHoverStyle: {
-          outlineColor: '#919191'
-        },
-        anchor: [0.7, 0.5, 1, 1],
-        scope: this.props.scope
-      });
-    }
+    const endpointOptions = {
+      maxConnections: -1,
+      paintStyle: {
+        fillStyle: 'transparent'
+      },
+      connectorStyle: {
+        lineWidth: 4,
+        strokeStyle: '#ffffff',
+        joinstyle: 'round',
+        outlineColor: '#c1c1c1',
+        outlineWidth: 2
+      },
+      anchor: ['Perimeter', { shape: 'Circle' }],
+      scope: this.props.scope
+    };
+
+    this.props.paper.makeSource(portDOM, {
+      endpoint: ['Dot', {radius: 6}],
+      filter: '.port__inside',
+      allowLoopback: false
+    }, endpointOptions);
+
+    this.props.paper.makeTarget(portDOM, {
+      endpoint: ['Dot', {radius: 6}],
+      filter: '.port__inside',
+      allowLoopback: false
+    }, endpointOptions);
   }
 
   componentWillUnmount() {
@@ -77,7 +69,6 @@ export default class Port extends Component {
       <div ref="port" id={`port_${this.props.way}_${this.props.elementId}`}
            className={`${portClass} ${this.props.className || ''}`}>
         <div className="port__inside">
-          <i className="port__icon fa fa-arrow-right"/>
         </div>
       </div>
     );

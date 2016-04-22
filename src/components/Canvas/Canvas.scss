@@ -9,17 +9,9 @@
   transition: all .3s ease;
 
   // jsplumbs overrides
-  .target-port {
+  .jsplumb-endpoint,
+  .jsplumb-connector {
     z-index: 5;
-
-    & > svg {
-      left: 0 !important;
-      top: 2px !important;
-
-      & > circle {
-        fill: transparent;
-      }
-    }
   }
 }
 

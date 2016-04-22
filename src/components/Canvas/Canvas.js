@@ -73,15 +73,29 @@ export default class Canvas extends Component {
     });
 
     this.paper.bind('connectionDetached', (info) => {
-      removeConnection(info.sourceId, info.targetId);
+      this.paper.connect({
+        source: info.source,
+        target: info.target
+      });
     });
 
     this.paper.bind('connectionMoved', (info) => {
-      removeConnection(info.originalSourceId, info.originalTargetId);
+      this.paper.connect({
+        source: info.originalSourceEndpoint.element,
+        target: info.originalTargetEndpoint.element
+      });
     });
 
     this.paper.bind('beforeDrag', () => {
       this.paper.repaintEverything();
+
+      return true;
+    });
+
+    this.paper.bind('connectionAborted', () => {
+      setTimeout(() => {
+        this.paper.repaintEverything();
+      });
 
       return true;
     });

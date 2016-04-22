@@ -20,10 +20,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   addChangeListener(callback) {
-    const debounced = _.bind(_.debounce(callback), this);
-    this.on('CHANGE', debounced);
-
-    return debounced;
+    this.on('CHANGE', callback);
   }
 
   removeChangeListener(callback) {

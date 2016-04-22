@@ -83,25 +83,23 @@ export default class Pipeline extends Component {
    */
   _handleElementCreation(connectionEntity, name) {
     addPublicEndpoint(name, `${this.props.rootPath}/${connectionEntity.contextPath}`);
-    setTimeout(() => this._createConnectionWithNewlyCreatedElement());
+    this._createConnectionWithNewlyCreatedElement();
   }
 
   _createConnectionWithNewlyCreatedElement() {
-    setTimeout(() => {
-      const element = findDOMNode(AppState.getStateKey('recentElement'));
+    const element = findDOMNode(AppState.getStateKey('recentElement'));
 
-      if (element) {
-        const targetPort = element.querySelector(`.port-in.port-${PublicEndpoint.type}`);
-        const sourcePort = findDOMNode(this.refs['port-out']);
+    if (element) {
+      const targetPort = element.querySelector(`.port-in.port-${PublicEndpoint.type}`);
+      const sourcePort = findDOMNode(this.refs['port-out']);
 
-        if (targetPort && sourcePort) {
-          this.props.paper.connect({
-            source: sourcePort,
-            target: targetPort
-          });
-        }
+      if (targetPort && sourcePort) {
+        this.props.paper.connect({
+          source: sourcePort,
+          target: targetPort
+        });
       }
-    });
+    }
   }
 
   renderPolicies() {

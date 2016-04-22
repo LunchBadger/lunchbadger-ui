@@ -81,11 +81,11 @@ export default (ComposedComponent) => {
     }
 
     componentWillMount() {
-      this.listener = AppState.addChangeListener(this.appStateUpdate);
+      AppState.addChangeListener(this.appStateUpdate);
     }
 
     componentWillUnmount() {
-      AppState.removeChangeListener(this.listener);
+      AppState.removeChangeListener(this.appStateUpdate);
     }
 
     componentDidMount() {

@@ -28,7 +28,13 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
-        case 'MovePublicEndpoint':
+        case 'BundleAPI':
+          Publics.splice(this.findEntityIndex(action.endpoint.id), 1);
+          action.api.addEndpoint(action.endpoint);
+          this.emitChange();
+          break;
+        case 'UnbundleAPI':
+          action.api.removeEndpoint(action.endpoint);
           Publics.push(action.endpoint);
           this.emitChange();
           break;
@@ -39,14 +45,6 @@ class Public extends BaseStore {
           break;
         case 'UpdateAPI':
           this.updateEntity(action.id, action.data);
-          this.emitChange();
-          break;
-        case 'AddEndpoint':
-          action.api.addEndpoint(action.endpoint);
-          this.emitChange();
-          break;
-        case 'RemoveEndpoint':
-          action.api.removeEndpoint(action.endpoint);
           this.emitChange();
           break;
       }

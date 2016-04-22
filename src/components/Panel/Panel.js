@@ -4,6 +4,7 @@ import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
 import AppState from 'stores/AppState';
+import PublicEndpointDetails from './EntitiesDetails/PublicEndpointDetails';
 
 export default class Panel extends Component {
   static propTypes = {
@@ -18,7 +19,8 @@ export default class Panel extends Component {
 
     this.state = {
       height: '50vh',
-      opened: false
+      opened: false,
+      element: false
     };
 
     this.appStateUpdate = () => {
@@ -34,6 +36,8 @@ export default class Panel extends Component {
       } else {
         this.setState({opened: false});
       }
+
+      this.setState({element: AppState.getStateKey('currentElement')});
     }
   }
 
@@ -96,6 +100,18 @@ export default class Panel extends Component {
     this.setState({dragging: false});
   }
 
+  renderDetails() {
+    if (this.state.element) {
+      switch (this.state.element.constructor.type) {
+        case 'PublicEndpoint':
+          return (
+            <PublicEndpointDetails entity={this.state.element}/>
+          );
+          break;
+      }
+    }
+  }
+
   render() {
     let panelHeight = '0px';
 
@@ -114,6 +130,7 @@ export default class Panel extends Component {
           <div className="panel__body">
             <div className="panel__title">
               {this.props.title}
+              {this.renderDetails()}
             </div>
           </div>
         </div>

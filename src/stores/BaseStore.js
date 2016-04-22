@@ -5,6 +5,8 @@ import _ from 'lodash';
 export default class BaseStore extends EventEmitter {
   constructor() {
     super();
+
+    this.setMaxListeners(400);
   }
 
   subscribe(actionSubscribe) {
@@ -16,7 +18,9 @@ export default class BaseStore extends EventEmitter {
   }
 
   emitChange() {
-    this.emit('CHANGE');
+    setTimeout(() => {
+      this.emit('CHANGE');
+    });
   }
 
   addChangeListener(callback) {

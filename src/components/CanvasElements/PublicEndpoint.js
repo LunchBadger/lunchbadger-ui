@@ -30,7 +30,7 @@ class PublicEndpoint extends Component {
     const connections = Connection.getConnectionsForTarget(this.props.entity.id);
 
     _.forEach(connections, (connection) => {
-      connection.info = this.props.paper.connect({
+      this.props.paper.connect({
         source: connection.info.source,
         target: findDOMNode(this.refs['port-in'])
       });

@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
-import addElement from 'actions/addElement';
 import {DragSource, DropTarget} from 'react-dnd';
 import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
@@ -89,7 +88,6 @@ export default (ComposedComponent) => {
         this.triggerElementAutofocus();
       }
 
-      setTimeout(() => addElement(this.element));
       this.props.entity.elementDOM = this.elementDOM;
     }
 

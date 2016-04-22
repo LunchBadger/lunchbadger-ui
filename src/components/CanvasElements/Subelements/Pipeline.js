@@ -81,14 +81,12 @@ export default class Pipeline extends Component {
    * @private
    */
   _handleElementCreation(connectionEntity, name) {
-    setTimeout(
-      () => addPublicEndpointAndConnect(
+      addPublicEndpointAndConnect(
         name,
         `${this.props.rootPath}/${connectionEntity.contextPath}`,
         this.props.entity.id,
         findDOMNode(this.refs['port-out'])
-      )
-    );
+      );
   }
 
   renderPolicies() {

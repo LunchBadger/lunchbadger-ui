@@ -9,8 +9,9 @@ import Gateway from '../../stores/Gateway';
 import Backend from '../../stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
-import addConnection from '../../actions/Connection/add';
-import removeConnection from '../../actions/Connection/remove';
+import addConnection from 'actions/Connection/add';
+import removeConnection from 'actions/Connection/remove';
+import moveConnection from 'actions/Connection/move';
 import Connection from 'stores/Connection';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 
@@ -67,11 +68,9 @@ export default class Canvas extends Component {
 
       if (Connection.findEntityIndexBySourceAndTarget(info.sourceId, info.targetId) < 0) {
         addConnection(info.sourceId, info.targetId, info);
+      } else {
+        moveConnection(info.sourceId, info.targetId, info.targetId, info);
       }
-    });
-
-    this.paper.bind('connectionDetached', (info) => {
-      removeConnection(info.sourceId, info.targetId);
     });
 
     this.paper.bind('connectionMoved', (info) => {

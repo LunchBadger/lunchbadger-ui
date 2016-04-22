@@ -1,4 +1,6 @@
 import BaseStore from 'stores/BaseStore';
+import Connection from './Connection';
+import ConnectionFactory from 'models/Connection';
 import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
@@ -15,8 +17,19 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddPublicEndpoint':
-          Publics.push(action.endpoint);
-          action.endpoint.itemOrder = Publics.length - 1;
+          this._insertPublicEndpoint(action);
+          this.emitChange();
+          break;
+        case 'AddPublicEndpointAndConnect':
+          const {endpoint} = action;
+          this._insertPublicEndpoint(endpoint);
+          Connection.addConnection(ConnectionFactory.create({
+            fromId: action.sourceId,
+            toId: endpoint.id,
+            info: {
+              source: action.outPort
+            }
+          }));
           this.emitChange();
           break;
         case 'RemovePublicEndpoint':
@@ -61,6 +74,11 @@ class Public extends BaseStore {
 
   findEntityIndex(id) {
     return _.findIndex(Publics, {id: id});
+  }
+
+  _insertPublicEndpoint(endpoint) {
+    endpoint.itemOrder = Publics.length;
+    Publics.push(endpoint);
   }
 }
 

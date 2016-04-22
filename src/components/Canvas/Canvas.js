@@ -24,9 +24,7 @@ export default class Canvas extends Component {
     };
 
     this.dataUpdated = () => {
-      this.setState({lastUpdate: new Date()}, () => {
-        console.log(this.state.lastUpdate);
-      });
+      this.setState({lastUpdate: new Date()});
     }
   }
 

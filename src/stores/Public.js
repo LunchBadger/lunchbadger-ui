@@ -17,7 +17,7 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddPublicEndpoint':
-          this._insertPublicEndpoint(action);
+          this._insertPublicEndpoint(action.endpoint);
           this.emitChange();
           break;
         case 'AddPublicEndpointAndConnect':

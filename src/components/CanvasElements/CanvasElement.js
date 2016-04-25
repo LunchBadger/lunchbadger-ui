@@ -162,14 +162,35 @@ export default (ComposedComponent) => {
       });
     }
 
-    toggleEditableState() {
+    toggleEditableState(event) {
+      const {target} = event;
+
+      if (this.state.editable) {
+        return;
+      }
+
       if (this.currentOpenedPanel !== panelKeys.DETAILS_PANEL) {
-        this.setState({editable: true});
+        this.setState({editable: true}, () => {
+          this._focusClosestInput(target);
+        });
       }
     }
 
     toggleHighlighted() {
       toggleHighlight(this.props.entity);
+    }
+
+    _focusClosestInput(target) {
+      const closestProperty = target.closest('.canvas-element__properties__property');
+      const closestPropertyInput = closestProperty && closestProperty.querySelector('input');
+      const closestElement = target.closest('.canvas-element');
+      const closestInput = closestElement.querySelector('input');
+
+      if (closestPropertyInput) {
+        return closestPropertyInput.focus();
+      } else if (closestInput) {
+        closestInput.focus();
+      }
     }
 
     render() {
@@ -191,6 +212,7 @@ export default (ComposedComponent) => {
              className={`${elementClass} ${this.props.entity.constructor.type}`}
              style={{ opacity }}
              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
+             onDoubleClick={this.toggleEditableState.bind(this)}
              onMouseEnter={() => this.setState({mouseOver: true})}
              onMouseLeave={() => this.setState({mouseOver: false})}>
           <div className="canvas-element__inside">
@@ -198,8 +220,7 @@ export default (ComposedComponent) => {
               <i className={`fa ${this.props.icon}`}/>
             </div>
             <div className="canvas-element__title">
-              <span className="canvas-element__name hide-while-edit"
-                    onDoubleClick={this.toggleEditableState.bind(this)}>{this.props.entity.name}</span>
+              <span className="canvas-element__name hide-while-edit">{this.props.entity.name}</span>
               <input className="canvas-element__input editable-only"
                      ref="nameInput"
                      value={this.state.name}

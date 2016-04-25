@@ -30,6 +30,23 @@
       }
     }
   }
+
+  .remove-button {
+    color: $ui-light;
+    background: red;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    padding: 3px 6px;
+    font-size: 11px;
+    cursor: pointer;
+    display: none;
+    z-index: 10;
+
+    &.jsplumb-hover {
+      display: block;
+    }
+  }
 }
 
 .canvas--disabled {

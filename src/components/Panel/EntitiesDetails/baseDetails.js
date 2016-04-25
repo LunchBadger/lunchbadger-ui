@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import ShowModalButton from '../ShowModalButton';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
@@ -19,6 +20,11 @@ export default (ComposedComponent) => {
       });
     }
 
+    discardChanges() {
+      this.setState({
+        name: this.props.entity.name
+      });
+    }
 
     update() {
       const element = this.element.decoratedComponentInstance || this.element;
@@ -50,6 +56,7 @@ export default (ComposedComponent) => {
     render() {
       return (
         <div className="details-panel__element">
+          <ShowModalButton className="confirm-button__cancel" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)}/>
           <div className="details-panel__title">
                 <span className="details-panel__label">Name</span>
           <input className="details-panel__input"
@@ -58,7 +65,7 @@ export default (ComposedComponent) => {
                  onChange={this.updateName.bind(this)}/>
           </div>
           <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-          <button className="details-panel__save" onClick={this.update.bind(this)}>Save</button>
+          <ShowModalButton className="confirm-button__accept" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)} />
         </div>
       )
     }

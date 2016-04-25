@@ -4,10 +4,9 @@ import Policy from './Policy';
 import classNames from 'classnames';
 import './Pipeline.scss';
 import {findDOMNode} from 'react-dom';
-import addPublicEndpoint from '../../../actions/CanvasElements/PublicEndpoint/add';
+import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/addAndConnect';
 import Model from 'models/Model';
 import PrivateEndpoint from 'models/PrivateEndpoint';
-import PublicEndpoint from 'models/PublicEndpoint';
 import AppState from 'stores/AppState';
 import Connection from 'stores/Connection';
 import Private from 'stores/Private';
@@ -69,6 +68,10 @@ export default class Pipeline extends Component {
   _handleReverseProxyConnection(connection) {
     const connectionEntity = Private.findEntity(connection.fromId);
 
+    if (!connectionEntity) {
+      return;
+    }
+
     if (connectionEntity.constructor.type === Model.type) {
       this._handleElementCreation(connectionEntity, 'Public Model Endpoint');
     } else if (connectionEntity.constructor.type === PrivateEndpoint.type) {
@@ -82,26 +85,12 @@ export default class Pipeline extends Component {
    * @private
    */
   _handleElementCreation(connectionEntity, name) {
-    addPublicEndpoint(name, `${this.props.rootPath}/${connectionEntity.contextPath}`);
-    setTimeout(() => this._createConnectionWithNewlyCreatedElement());
-  }
-
-  _createConnectionWithNewlyCreatedElement() {
-    setTimeout(() => {
-      const element = findDOMNode(AppState.getStateKey('recentElement'));
-
-      if (element) {
-        const targetPort = element.querySelector(`.port-in.port-${PublicEndpoint.type}`);
-        const sourcePort = findDOMNode(this.refs['port-out']);
-
-        if (targetPort && sourcePort) {
-          this.props.paper.connect({
-            source: sourcePort,
-            target: targetPort
-          });
-        }
-      }
-    });
+      addPublicEndpointAndConnect(
+        name,
+        `${this.props.rootPath}/${connectionEntity.contextPath}`,
+        this.props.entity.id,
+        findDOMNode(this.refs['port-out'])
+      );
   }
 
   renderPolicies() {

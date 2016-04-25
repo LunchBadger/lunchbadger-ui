@@ -3,8 +3,9 @@ import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
-import Connection from 'stores/Connection';
 import {findDOMNode} from 'react-dom';
+import Connection from 'stores/Connection';
+import _ from 'lodash';
 
 class PublicEndpoint extends Component {
   static propTypes = {
@@ -22,19 +23,18 @@ class PublicEndpoint extends Component {
   }
 
   componentDidMount() {
-    const targetConnections = Connection.getConnectionsForTarget(this.props.entity.id);
+    this._checkAndReconnectElementIfRequired();
+  }
 
-    if (targetConnections) {
-      targetConnections.forEach((connection) => {
-        const sourcePort = connection.info.source;
-        const targetPort = findDOMNode(this.refs['port-in']);
+  _checkAndReconnectElementIfRequired() {
+    const connections = Connection.getConnectionsForTarget(this.props.entity.id);
 
-        this.props.paper.connect({
-          source: sourcePort,
-          target: targetPort
-        });
+    _.forEach(connections, (connection) => {
+      this.props.paper.connect({
+        source: connection.info.source,
+        target: findDOMNode(this.refs['port-in'])
       });
-    }
+    });
   }
   
   update() {
@@ -51,7 +51,7 @@ class PublicEndpoint extends Component {
               paper={this.props.paper}
               way={port.portType}
               elementId={this.props.entity.id}
-              className={`port-${port.portType} port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
               ref={`port-${port.portType}`}
               scope={port.portGroup}/>
       );

@@ -7,6 +7,7 @@ import APIDetails from './EntitiesDetails/APIDetails';
 import ModelDetails from './EntitiesDetails/ModelDetails';
 import GatewayDetails from './EntitiesDetails/GatewayDetails';
 import DataSourceDetails from './EntitiesDetails/DataSourceDetails';
+import ShowModalButton from './ShowModalButton';
 import AppState from 'stores/AppState';
 
 class DetailsPanel extends Component {

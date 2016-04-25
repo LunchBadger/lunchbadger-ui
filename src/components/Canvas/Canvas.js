@@ -9,8 +9,8 @@ import Gateway from '../../stores/Gateway';
 import Backend from '../../stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
-import addConnection from '../../actions/Connection/add';
-import removeConnection from '../../actions/Connection/remove';
+import addConnection from 'actions/Connection/add';
+import removeConnection from 'actions/Connection/remove';
 import moveConnection from 'actions/Connection/move';
 import Connection from 'stores/Connection';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
@@ -25,9 +25,7 @@ export default class Canvas extends Component {
     };
 
     this.dataUpdated = () => {
-      this.setState({lastUpdate: new Date()}, () => {
-        console.log(this.state.lastUpdate);
-      });
+      this.setState({lastUpdate: new Date()});
     }
   }
 

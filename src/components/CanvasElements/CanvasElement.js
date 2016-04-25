@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
-import addElement from 'actions/addElement';
 import {DragSource, DropTarget} from 'react-dnd';
 import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
@@ -18,18 +17,15 @@ const boxTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().itemOrder;
     const hoverIndex = props.itemOrder;
+
     if (dragIndex === hoverIndex) {
       return;
     }
 
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
     const clientOffset = monitor.getClientOffset();
-
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
 
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
@@ -40,10 +36,9 @@ const boxTarget = {
     }
 
     props.moveEntity(monitor.getItem().entity, dragIndex, hoverIndex);
-
     monitor.getItem().itemOrder = hoverIndex;
   }
-}
+};
 
 @DragSource('canvasElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
@@ -68,7 +63,7 @@ export default (ComposedComponent) => {
 
       this.appStateUpdate = () => {
         const currentElement = AppState.getStateKey('currentElement');
-        this.setState({highlighted: currentElement && currentElement.id === this.props.entity.id ? true:false})
+        this.setState({highlighted: currentElement && currentElement.id === this.props.entity.id ? true : false})
       };
 
       this.state = {
@@ -93,7 +88,6 @@ export default (ComposedComponent) => {
         this.triggerElementAutofocus();
       }
 
-      setTimeout(() => addElement(this.element));
       this.props.entity.elementDOM = this.elementDOM;
     }
 

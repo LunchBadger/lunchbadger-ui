@@ -2,8 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
 import {DropTarget} from 'react-dnd';
-import movePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/move';
-import removeEndpoint from '../../actions/CanvasElements/API/removeEndpoint';
+import unbundleAPI from 'actions/CanvasElements/API/unbundle';
 
 const boxTarget = {
   drop(props, monitor, component) {
@@ -12,8 +11,7 @@ const boxTarget = {
     if (!hasDroppedOnChild) {
       const item = monitor.getItem();
       if (item.subelement) {
-        movePublicEndpoint(item.entity);
-        removeEndpoint(item.parent, item.entity);
+        unbundleAPI(item.parent, item.entity);
       } else {
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);

@@ -4,8 +4,7 @@ import PublicEndpoint from './Subelements/PublicEndpoint';
 import PublicEndpointClass from 'models/PublicEndpoint';
 import './CanvasElement.scss';
 import updateAPI from '../../actions/CanvasElements/API/update';
-import addEndpoint from '../../actions/CanvasElements/API/addEndpoint';
-import removePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/remove';
+import bundleAPI from 'actions/CanvasElements/API/bundle';
 import {DropTarget} from 'react-dnd';
 
 const boxTarget = {
@@ -13,7 +12,6 @@ const boxTarget = {
     const item = monitor.getItem();
     if (item.entity.constructor.type === PublicEndpointClass.type) {
       component.onAddEndpoint(item.entity);
-      removePublicEndpoint(item.entity);
     }
   }
 };
@@ -47,7 +45,7 @@ class API extends Component {
   }
 
   onAddEndpoint(endpoint) {
-    addEndpoint(this.props.entity, endpoint);
+    bundleAPI(this.props.entity, endpoint);
   }
 
   renderEndpoints() {

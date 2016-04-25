@@ -1,10 +1,6 @@
 import BaseModel from './BaseModel';
 import Pipeline from './Pipeline';
 
-const pipeline = Pipeline.create({
-  name: 'Pipeline 1'
-});
-
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
   rootPath = 'https://gateway.root';
@@ -20,6 +16,11 @@ export default class Gateway extends BaseModel {
 
     this.name = name;
     this.ready = false;
+
+    const pipeline = Pipeline.create({
+      name: 'Pipeline 1'
+    });
+
     this.addPipeline(pipeline);
   }
 

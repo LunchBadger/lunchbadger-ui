@@ -1,19 +1,19 @@
 import React, {Component, PropTypes} from 'react';
 import Port from '../Port';
 import './PublicEndpoint.scss';
-import { DragSource } from 'react-dnd';
-import addElement from 'actions/addElement';
+import {DragSource} from 'react-dnd';
 import Connection from 'stores/Connection';
 import {findDOMNode} from 'react-dom';
+import _ from 'lodash';
 
 const boxSource = {
   beginDrag(props) {
-    const { entity, left, top, parent } = props;
-    return { entity, left, top, parent, subelement: true };
+    const {entity, left, top, parent} = props;
+    return {entity, left, top, parent, subelement: true};
   },
   endDrag(props) {
-    const { entity, left, top, parent } = props;
-    return { entity, left, top, parent, subelement: true };
+    const {entity, left, top, parent} = props;
+    return {entity, left, top, parent, subelement: true};
   }
 };
 
@@ -33,26 +33,23 @@ export default class PublicEndpoint extends Component {
     hideSourceOnDrag: PropTypes.bool.isRequired
   };
 
-  componentDidMount() {
-    setTimeout(() => addElement(this));
-
-    const targetConnections = Connection.getConnectionsForTarget(this.props.entity.id);
-
-    if (targetConnections) {
-      targetConnections.forEach((connection) => {
-        const sourcePort = connection.info.source;
-        const targetPort = findDOMNode(this.refs['port-in']);
-
-        this.props.paper.connect({
-          source: sourcePort,
-          target: targetPort
-        });
-      });
-    }
-  }
-
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this._checkAndReconnectElementIfRequired();
+  }
+
+  _checkAndReconnectElementIfRequired() {
+    const connections = Connection.getConnectionsForTarget(this.props.entity.id);
+
+    _.forEach(connections, (connection) => {
+      connection.info = this.props.paper.connect({
+        source: connection.info.source,
+        target: findDOMNode(this.refs['port-in'])
+      });
+    });
   }
 
   renderPorts() {
@@ -74,7 +71,7 @@ export default class PublicEndpoint extends Component {
   }
 
   render() {
-    const { connectDragSource } = this.props;
+    const {connectDragSource} = this.props;
     return connectDragSource(
       <div className="public-endpoint">
         <div className="public-endpoint__info">

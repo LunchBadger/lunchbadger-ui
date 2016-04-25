@@ -5,12 +5,10 @@ import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 class PublicEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
-    
-    
   }
 
   update() {

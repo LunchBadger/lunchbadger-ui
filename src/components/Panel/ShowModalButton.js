@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import ConfirmModal from './ConfirmModal';
 import './ShowModalButton.scss';
 
-export default class ShowModalButton extends React.Component {
+export default class ShowModalButton extends Component {
   state = {
     isShowingModal: false
-  }
+  };
+
   handleClick = () => this.setState({isShowingModal: true})
   handleClose = () => this.setState({isShowingModal: false})
 
@@ -13,10 +14,11 @@ export default class ShowModalButton extends React.Component {
     return (
       <a className={this.props.className} onClick={this.handleClick}>
         <span className="confirm-button__button">Save</span>
-        <i className="fa fa-remove"></i>
+        <i className="fa fa-remove"/>
+
         {
           this.state.isShowingModal &&
-          <ConfirmModal onClose={this.handleClose} onSave={this.props.onSave}  onCancel={this.props.onCancel}/>
+          <ConfirmModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}/>
         }
       </a>
     );

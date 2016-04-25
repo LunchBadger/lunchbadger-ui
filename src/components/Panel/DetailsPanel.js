@@ -7,7 +7,6 @@ import APIDetails from './EntitiesDetails/APIDetails';
 import ModelDetails from './EntitiesDetails/ModelDetails';
 import GatewayDetails from './EntitiesDetails/GatewayDetails';
 import DataSourceDetails from './EntitiesDetails/DataSourceDetails';
-import ShowModalButton from './ShowModalButton';
 import AppState from 'stores/AppState';
 
 class DetailsPanel extends Component {
@@ -35,33 +34,26 @@ class DetailsPanel extends Component {
           return (
             <PublicEndpointDetails entity={this.state.element}/>
           );
-          break;
         case 'API':
           return (
             <APIDetails entity={this.state.element}/>
           );
-          break;
         case 'PrivateEndpoint':
           return (
             <PrivateEndpointDetails entity={this.state.element}/>
           );
-          break;
         case 'Model':
           return (
             <ModelDetails entity={this.state.element}/>
           );
-          break;
         case 'Gateway':
           return (
             <GatewayDetails entity={this.state.element}/>
           );
-          break;
         case 'DataSource':
           return (
             <DataSourceDetails entity={this.state.element}/>
           );
-          break;
-
       }
     }
   }

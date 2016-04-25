@@ -5,12 +5,10 @@ import updateModel from 'actions/CanvasElements/Model/update';
 class ModelDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
-
-
   }
 
   update() {

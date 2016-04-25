@@ -5,12 +5,10 @@ import updateDataSource from 'actions/CanvasElements/DataSource/update';
 class DataSourceDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
-
-
   }
 
   update() {

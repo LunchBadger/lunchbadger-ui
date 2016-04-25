@@ -5,16 +5,14 @@ import updateGateway from 'actions/CanvasElements/Gateway/update';
 class GatewayDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
-
-
   }
 
   update() {
-    updateDateway(this.props.entity.id, {
+    updateGateway(this.props.entity.id, {
       name: this.props.name
     });
   }

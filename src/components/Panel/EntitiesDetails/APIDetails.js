@@ -5,12 +5,10 @@ import updateAPI from 'actions/CanvasElements/API/update';
 class APIDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
-
-
   }
 
   update() {

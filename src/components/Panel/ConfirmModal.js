@@ -4,7 +4,7 @@ import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 export default class CancelConfirm extends React.Component {
   static propTypes = {
     onClose: PropTypes.func
-  }
+  };
 
   render() {
     return (

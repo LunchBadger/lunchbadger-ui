@@ -43,6 +43,15 @@ export default class Canvas extends Component {
       },
       Connector: ['Bezier', {curviness: 40}],
       Container: 'canvas',
+      ConnectionOverlays: [
+        ['Label',
+          {
+            label: 'X',
+            id: 'remove-button',
+            cssClass: 'remove-button'
+          }
+        ]
+      ],
       Anchors: [0.5, 0, 0.5, 0.5]
     });
 
@@ -55,6 +64,8 @@ export default class Canvas extends Component {
     this.paper.detach(connection, {
       fireEvent: false
     });
+
+    removeConnection(connection.sourceId, connection.targetId);
   }
 
   _handleExistingConnectionDetach(info) {
@@ -117,8 +128,7 @@ export default class Canvas extends Component {
     });
 
     this.paper.bind('connectionMoved', (info) => {
-      if (Connection.findEntityIndexBySourceAndTarget(info.newSourceId, info.newTargetId) > -1 ||
-        !this._isConnectionValid(info.newSourceEndpoint.element, info.newSourceId, info.newTargetEndpoint.element, info.newTargetId)) {
+      if (Connection.findEntityIndexBySourceAndTarget(info.newSourceId, info.newTargetId) > -1 || !this._isConnectionValid(info.newSourceEndpoint.element, info.newSourceId, info.newTargetEndpoint.element, info.newTargetId)) {
         setTimeout(() => {
           this.paper.connect({
             source: info.originalSourceEndpoint.element,
@@ -143,6 +153,12 @@ export default class Canvas extends Component {
       });
 
       return true;
+    });
+
+    this.paper.bind('click', (connection, event) => {
+      if (event.target.classList.contains('remove-button')) {
+        this._disconnect(connection);
+      }
     });
   }
 

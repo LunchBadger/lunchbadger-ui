@@ -8,16 +8,25 @@
   overflow: hidden;
   transition: all .3s ease;
 
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   // jsplumbs overrides
-  .target-port {
+  .jsplumb-endpoint,
+  .jsplumb-connector {
     z-index: 5;
 
-    & > svg {
-      left: 0 !important;
-      top: 2px !important;
+    &.jsplumb-hover {
+      z-index: 10;
 
-      & > circle {
-        fill: transparent;
+      & > svg {
+        circle {
+          fill: #919191;
+        }
       }
     }
   }

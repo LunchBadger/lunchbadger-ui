@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
+import panelKeys from 'constants/panelKeys';
 
 const boxSource = {
   beginDrag(props) {
@@ -61,9 +62,20 @@ export default (ComposedComponent) => {
     constructor(props) {
       super(props);
 
+      this.currentOpenedPanel = null;
+
       this.appStateUpdate = () => {
         const currentElement = AppState.getStateKey('currentElement');
-        this.setState({highlighted: currentElement && currentElement.id === this.props.entity.id ? true : false})
+        this.currentOpenedPanel = AppState.getStateKey('currentlyOpenedPanel');
+        if (currentElement && currentElement.id === this.props.entity.id) {
+          this.setState({highlighted: true});
+          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+            this.setState({editable: false});
+          }
+        } else {
+          this.setState({highlighted: false});
+        }
+
       };
 
       this.state = {
@@ -73,6 +85,12 @@ export default (ComposedComponent) => {
         mouseOver: false,
         highlighted: false
       };
+    }
+
+    componentWillReceiveProps(props) {
+      this.setState({
+        name: props.entity.name
+      });
     }
 
     componentWillMount() {
@@ -144,6 +162,12 @@ export default (ComposedComponent) => {
       });
     }
 
+    toggleEditableState() {
+      if (this.currentOpenedPanel !== panelKeys.DETAILS_PANEL) {
+        this.setState({editable: true});
+      }
+    }
+
     toggleHighlighted() {
       toggleHighlight(this.props.entity);
     }
@@ -175,7 +199,7 @@ export default (ComposedComponent) => {
             </div>
             <div className="canvas-element__title">
               <span className="canvas-element__name hide-while-edit"
-                    onDoubleClick={() => this.setState({editable: true})}>{this.props.entity.name}</span>
+                    onDoubleClick={this.toggleEditableState.bind(this)}>{this.props.entity.name}</span>
               <input className="canvas-element__input editable-only"
                      ref="nameInput"
                      value={this.state.name}

@@ -83,6 +83,23 @@ class Connection extends BaseStore {
     return _.findIndex(connections, {fromId: fromId, toId: toId});
   }
 
+	/**
+   * Update connection specific attributes
+   * @param connection {Connection}
+   * @param attributes {Object}
+   */
+  updateConnection(connection, attributes) {
+    const index = this.findEntityIndex(connection.id);
+
+    if (index > -1) {
+      Object.keys(attributes).forEach((attributeKey) => {
+        connections[index][attributeKey] = attributes[attributeKey];
+      });
+
+      this.emitChange();
+    }
+  }
+
   _handleConnectionRemoval(action) {
     if (action.from && action.to) {
       if (this.removeConnection(this.findEntityIndexBySourceAndTarget(action.from, action.to))) {

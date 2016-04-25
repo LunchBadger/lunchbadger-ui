@@ -1,7 +1,8 @@
 import { dispatch } from 'dispatcher/AppDispatcher';
 
-export default (endpoint) => {
-  dispatch('MovePublicEndpoint', {
+export default (api, endpoint) => {
+  dispatch('UnbundleAPI', {
+    api,
     endpoint
   });
 };

@@ -1,4 +1,6 @@
 import BaseStore from 'stores/BaseStore';
+import Connection from './Connection';
+import ConnectionFactory from 'models/Connection';
 import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
@@ -15,8 +17,19 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddPublicEndpoint':
-          Publics.push(action.endpoint);
-          action.endpoint.itemOrder = Publics.length - 1;
+          this._insertPublicEndpoint(action.endpoint);
+          this.emitChange();
+          break;
+        case 'AddPublicEndpointAndConnect':
+          const {endpoint} = action;
+          this._insertPublicEndpoint(endpoint);
+          Connection.addConnection(ConnectionFactory.create({
+            fromId: action.sourceId,
+            toId: endpoint.id,
+            info: {
+              source: action.outPort
+            }
+          }));
           this.emitChange();
           break;
         case 'RemovePublicEndpoint':
@@ -28,7 +41,13 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
-        case 'MovePublicEndpoint':
+        case 'BundleAPI':
+          Publics.splice(this.findEntityIndex(action.endpoint.id), 1);
+          action.api.addEndpoint(action.endpoint);
+          this.emitChange();
+          break;
+        case 'UnbundleAPI':
+          action.api.removeEndpoint(action.endpoint);
           Publics.push(action.endpoint);
           this.emitChange();
           break;
@@ -39,14 +58,6 @@ class Public extends BaseStore {
           break;
         case 'UpdateAPI':
           this.updateEntity(action.id, action.data);
-          this.emitChange();
-          break;
-        case 'AddEndpoint':
-          action.api.addEndpoint(action.endpoint);
-          this.emitChange();
-          break;
-        case 'RemoveEndpoint':
-          action.api.removeEndpoint(action.endpoint);
           this.emitChange();
           break;
       }
@@ -63,6 +74,11 @@ class Public extends BaseStore {
 
   findEntityIndex(id) {
     return _.findIndex(Publics, {id: id});
+  }
+
+  _insertPublicEndpoint(endpoint) {
+    endpoint.itemOrder = Publics.length;
+    Publics.push(endpoint);
   }
 }
 

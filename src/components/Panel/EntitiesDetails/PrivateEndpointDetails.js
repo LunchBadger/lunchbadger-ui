@@ -1,20 +1,20 @@
 import React, {Component, PropTypes} from 'react';
 import BaseDetails from 'components/Panel/EntitiesDetails/BaseDetails'
-import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
+import updatePrivateEndpoint from 'actions/CanvasElements/PrivateEndpoint/update';
 
-class PublicEndpointDetails extends Component {
+class PrivateEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
-    
-    
+
+
   }
 
   update() {
-    updatePublicEndpoint(this.props.entity.id, {
+    updatePrivateEndpoint(this.props.entity.id, {
       name: this.props.name
     });
   }
@@ -27,5 +27,5 @@ class PublicEndpointDetails extends Component {
   }
 }
 
-export default BaseDetails(PublicEndpointDetails);
+export default BaseDetails(PrivateEndpointDetails);
 

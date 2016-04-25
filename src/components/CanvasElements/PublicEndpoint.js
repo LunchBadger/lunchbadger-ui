@@ -36,7 +36,7 @@ class PublicEndpoint extends Component {
       });
     }
   }
-
+  
   update() {
     updatePublicEndpoint(this.props.entity.id, {
       name: this.props.name,

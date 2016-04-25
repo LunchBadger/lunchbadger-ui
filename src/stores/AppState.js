@@ -40,8 +40,6 @@ class AppState extends BaseStore {
         break;
 
       case 'ToggleHighlight':
-        const currentElement = this.getStateKey('currentElement');
-
         this.setStateKey('currentElement', action.element);
         this.emitChange();
         break;

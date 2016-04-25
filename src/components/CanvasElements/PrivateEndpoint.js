@@ -42,7 +42,7 @@ class PrivateEndpoint extends Component {
               paper={this.props.paper}
               way={port.portType}
               elementId={this.props.entity.id}
-              className={`port-${port.portType} port-${this.props.entity.constructor.type}  port-${port.portGroup}`}
+              className={`port-${this.props.entity.constructor.type}  port-${port.portGroup}`}
               scope={port.portGroup}/>
       );
     });

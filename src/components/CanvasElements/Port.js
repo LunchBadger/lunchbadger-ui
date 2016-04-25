@@ -23,7 +23,7 @@ export default class Port extends Component {
     const endpointOptions = {
       maxConnections: -1,
       paintStyle: {
-        fillStyle: 'transparent'
+        fillStyle: '#c1c1c1'
       },
       connectorStyle: {
         lineWidth: 4,
@@ -32,19 +32,25 @@ export default class Port extends Component {
         outlineColor: '#c1c1c1',
         outlineWidth: 2
       },
-      anchor: ['Perimeter', { shape: 'Circle' }],
+      connectorHoverStyle: {
+        outlineColor: '#919191'
+      },
+      anchor: [
+        [0.5, 0, 0, -1, 0, 0, 'top'],
+        [1, 0.5, 1, 0, 0, 0, 'right'],
+        [0.5, 1, 0, 1, 0, 0, 'bottom'],
+        [0, 0.5, -1, 0, 0, 0, 'left']
+      ],
       scope: this.props.scope
     };
 
     this.props.paper.makeSource(portDOM, {
-      endpoint: ['Dot', {radius: 6}],
-      filter: '.port__inside',
+      endpoint: ['Dot', {radius: 5}],
       allowLoopback: false
     }, endpointOptions);
 
     this.props.paper.makeTarget(portDOM, {
-      endpoint: ['Dot', {radius: 6}],
-      filter: '.port__inside',
+      endpoint: ['Dot', {radius: 5}],
       allowLoopback: false
     }, endpointOptions);
   }
@@ -67,7 +73,7 @@ export default class Port extends Component {
 
     return (
       <div ref="port" id={`port_${this.props.way}_${this.props.elementId}`}
-           className={`${portClass} ${this.props.className || ''}`}>
+           className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}>
         <div className="port__inside">
         </div>
       </div>

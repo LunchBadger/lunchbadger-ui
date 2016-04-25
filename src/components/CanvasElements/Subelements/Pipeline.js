@@ -69,6 +69,10 @@ export default class Pipeline extends Component {
   _handleReverseProxyConnection(connection) {
     const connectionEntity = Private.findEntity(connection.fromId);
 
+    if (!connectionEntity) {
+      return;
+    }
+
     if (connectionEntity.constructor.type === Model.type) {
       this._handleElementCreation(connectionEntity, 'Public Model Endpoint');
     } else if (connectionEntity.constructor.type === PrivateEndpoint.type) {

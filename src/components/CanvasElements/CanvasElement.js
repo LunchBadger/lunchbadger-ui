@@ -6,6 +6,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import panelKeys from 'constants/panelKeys';
+import PublicEndpointClass from 'models/PublicEndpoint';
 
 const boxSource = {
   beginDrag(props) {
@@ -38,6 +39,17 @@ const boxTarget = {
 
     props.moveEntity(monitor.getItem().entity, dragIndex, hoverIndex);
     monitor.getItem().itemOrder = hoverIndex;
+  },
+
+  drop(props, monitor, component) {
+    const item = monitor.getItem();
+    if (item.entity.constructor.type === PublicEndpointClass.type) {
+      const element = component.decoratedComponentInstance || component.element;
+
+      if (typeof element.onDrop === 'function') {
+        element.onDrop(item);
+      }
+    }
   }
 };
 
@@ -56,7 +68,8 @@ export default (ComposedComponent) => {
       connectDragSource: PropTypes.func.isRequired,
       isDragging: PropTypes.bool.isRequired,
       itemOrder: PropTypes.number.isRequired,
-      hideSourceOnDrag: PropTypes.bool.isRequired
+      hideSourceOnDrag: PropTypes.bool.isRequired,
+      isOver: PropTypes.bool
     };
 
     constructor(props) {
@@ -91,6 +104,14 @@ export default (ComposedComponent) => {
       this.setState({
         name: props.entity.name
       });
+
+      if (!this.props.isOver && props.isOver) {
+        // You can use this as enter handler
+      }
+
+      if (this.props.isOver && !props.isOver) {
+        // You can use this as leave handler
+      }
     }
 
     componentWillMount() {

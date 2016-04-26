@@ -1,24 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
-import PublicEndpointClass from 'models/PublicEndpoint';
 import './CanvasElement.scss';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
-import {DropTarget} from 'react-dnd';
-
-const boxTarget = {
-  drop(props, monitor, component) {
-    const item = monitor.getItem();
-    if (item.entity.constructor.type === PublicEndpointClass.type) {
-      component.onAddEndpoint(item.entity);
-    }
-  }
-};
-
-@DropTarget('canvasElement', boxTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
+import _ from 'lodash';
 
 class API extends Component {
   static propTypes = {
@@ -44,6 +30,12 @@ class API extends Component {
     });
   }
 
+  onDrop(item) {
+    if (!_.includes(this.props.entity.endpoints, item.entity)) {
+      this.onAddEndpoint(item.entity);
+    }
+  }
+
   onAddEndpoint(endpoint) {
     bundleAPI(this.props.entity, endpoint);
   }
@@ -57,7 +49,6 @@ class API extends Component {
             key={endpoint.id}
             id={endpoint.id}
             entity={endpoint}
-            hideSourceOnDrag={true}
             paper={this.props.paper}
             left={endpoint.left}
             top={endpoint.top}
@@ -68,8 +59,7 @@ class API extends Component {
   }
 
   render() {
-    const {connectDropTarget} = this.props;
-    return connectDropTarget(
+    return (
       <div>
         <div className="canvas-element__sub-elements">
           <div className="canvas-element__sub-elements__title">

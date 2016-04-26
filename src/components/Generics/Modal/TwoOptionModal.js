@@ -12,7 +12,7 @@ class TwoOptionModal extends Component {
   static defaultProps = {
     title: 'Save changes?',
     confirmText: 'Confirm changes',
-    discardText: 'Discard Changes'
+    discardText: 'Discard changes'
   };
 
   _handleConfirm() {

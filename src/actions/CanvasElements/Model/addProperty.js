@@ -1,9 +1,8 @@
 import {dispatch} from 'dispatcher/AppDispatcher';
 
-export default (model, key, value) => {
+export default (model, attrs) => {
   dispatch('AddModelProperty', {
     model,
-    key: key || ' ',
-    value: value || ' '
+    attrs
   });
 };

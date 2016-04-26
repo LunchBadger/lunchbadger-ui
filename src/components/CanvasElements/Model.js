@@ -19,14 +19,23 @@ class Model extends Component {
 
     this.state = {
       contextPath: this.props.entity.contextPath,
-      contextPathDirty: false
+      contextPathDirty: false,
+      properties: this.props.entity.properties
     };
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      contextPath: props.entity.contextPath,
+      properties: props.entity.properties
+    });
   }
 
   update() {
     updateModel(this.props.entity.id, {
       name: this.props.name,
-      contextPath: this.state.contextPath
+      contextPath: this.state.contextPath,
+      properties: this.state.properties
     });
   }
 
@@ -50,17 +59,23 @@ class Model extends Component {
   }
 
   renderProperties() {
-    return this.props.entity.properties.map((property) => {
+    return this.state.properties.map((property) => {
       return (
         <ModelProperty key={`property-${property.id}`}
-                       propertyKey={property.propertyKey}
-                       propertyValue={property.propertyValue}/>
+                       property={property}/>
       );
     });
   }
 
-  onAddProperty(key, value) {
-    addProperty(this.props.entity, key, value);
+  onAddProperty() {
+    addProperty(this.props.entity, {
+      key: ' ',
+      value: ' ',
+      type: '',
+      isRequired: false,
+      isIndex: false,
+      notes: ''
+    });
   }
 
   updateContextPath(evt) {
@@ -82,7 +97,7 @@ class Model extends Component {
         <div className="canvas-element__properties expanded-only">
           <div className="canvas-element__properties__title">
             Properties
-            <i onClick={() => this.onAddProperty('key', 'value')} className="canvas-element__add fa fa-plus"/>
+            <i onClick={() => this.onAddProperty()} className="canvas-element__add fa fa-plus"/>
           </div>
 
           <div className="canvas-element__properties__table">

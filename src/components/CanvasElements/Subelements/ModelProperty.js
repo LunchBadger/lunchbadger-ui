@@ -3,25 +3,33 @@ import './ModelProperty.scss';
 
 export default class ModelProperty extends Component {
   static propTypes = {
-    propertyKey: PropTypes.string.isRequired,
-    propertyValue: PropTypes.string.isRequired
+    property: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      propertyKey: this.props.propertyKey,
-      propertyValue: this.props.propertyValue
+      propertyKey: this.props.property.propertyKey,
+      propertyValue: this.props.property.propertyValue
     };
   }
 
   updatePropertyKey(evt) {
     this.setState({propertyKey: evt.target.value});
+    this.props.property.update({propertyKey: evt.target.value});
   }
 
   updatePropertyValue(evt) {
     this.setState({propertyValue: evt.target.value});
+    this.props.property.update({propertyValue: evt.target.value});
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      propertyKey: props.property.propertyKey,
+      propertyValue: props.property.propertyValue
+    });
   }
 
   render() {

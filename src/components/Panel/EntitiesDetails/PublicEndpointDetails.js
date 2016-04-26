@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from 'components/Panel/EntitiesDetails/BaseDetails'
+import BaseDetails from './BaseDetails.js'
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 
 class PublicEndpointDetails extends Component {

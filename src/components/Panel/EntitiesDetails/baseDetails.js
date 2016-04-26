@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ShowModalButton from '../ShowModalButton';
+import './BaseDetails.scss';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
@@ -57,14 +58,20 @@ export default (ComposedComponent) => {
       return (
         <div className="details-panel__element">
           <ShowModalButton className="confirm-button__cancel" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)}/>
-          <div className="details-panel__title">
-                <span className="details-panel__label">Name</span>
-          <input className="details-panel__input"
-                 ref="nameInput"
-                 value={this.state.name}
-                 onChange={this.updateName.bind(this)}/>
+          <div className="details-panel__details">
+            <h2 className="details-panel__title"><i className="fa fa-caret-down"></i>Details</h2>
+            <div className="details-panel__fieldset">
+              <span className="details-panel__label">Name</span>
+              <input className="details-panel__input"
+                   ref="nameInput"
+                   value={this.state.name}
+                   onChange={this.updateName.bind(this)}/>
+            </div>
           </div>
-          <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+          <div className="details-panel__properties">
+            <h2 className="details-panel__title"><i className="fa fa-caret-down"></i>Properties</h2>
+            <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+          </div>
           <ShowModalButton className="confirm-button__accept" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)} />
         </div>
       )

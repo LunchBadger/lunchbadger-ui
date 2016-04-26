@@ -1,3 +1,5 @@
+@import '../../../config';
+
 .modal {
 
 }
@@ -7,29 +9,48 @@
 }
 
 .modal__body {
-
+  padding: 5px 10px;
+  text-align: center;
 }
 
 .modal__title {
-
+  font-size: 26px;
+  padding-bottom: 10px;
 }
 
 .modal__message {
-
+  font-size: 16px;
+  line-height: 1.25;
 }
 
 .modal__actions {
-
+  padding-top: 15px;
 }
 
 .modal__actions__button {
+  border: 1px solid $ui-dark;
+  border-radius: 5px;
+  background: $ui-dark;
+  padding: 8px 20px;
+  color: $font-light;
+  display: inline-block;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .3s ease;
 
+  &:hover {
+    opacity: 0.9;
+  }
+
+  & + & {
+    margin-left: 20px;
+  }
 }
 
 .modal__actions__button--confirm {
-
+  background: $ui-accept;
 }
 
 .modal__actions__button--discard {
-
+  background: $ui-discard;
 }

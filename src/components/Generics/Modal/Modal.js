@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+import './Modal.scss';
 
 export default (ComposedComponent) => {
   return class Modal extends Component {
@@ -11,7 +12,7 @@ export default (ComposedComponent) => {
     };
 
     static defaultProps = {
-      width: 350
+      width: 450
     };
 
     render() {

@@ -18,7 +18,9 @@ export default class ShowModalButton extends Component {
 
         {
           this.state.isShowingModal &&
-          <TwoOptionModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}/>
+          <TwoOptionModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}>
+            <span>You have unsaved changes, what You gonna do with that?</span>
+          </TwoOptionModal>
         }
       </a>
     );

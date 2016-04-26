@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ConfirmModal from './ConfirmModal';
+import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
 import './ShowModalButton.scss';
 
 export default class ShowModalButton extends Component {
@@ -7,8 +7,8 @@ export default class ShowModalButton extends Component {
     isShowingModal: false
   };
 
-  handleClick = () => this.setState({isShowingModal: true})
-  handleClose = () => this.setState({isShowingModal: false})
+  handleClick = () => this.setState({isShowingModal: true});
+  handleClose = () => this.setState({isShowingModal: false});
 
   render() {
     return (
@@ -18,7 +18,7 @@ export default class ShowModalButton extends Component {
 
         {
           this.state.isShowingModal &&
-          <ConfirmModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}/>
+          <TwoOptionModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}/>
         }
       </a>
     );

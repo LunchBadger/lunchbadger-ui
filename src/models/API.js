@@ -11,6 +11,8 @@ export default class API extends BaseModel {
    */
   _endpoints = [];
 
+  _accept = [PublicEndpoint.type];
+
   constructor(id, name) {
     super(id);
 
@@ -44,5 +46,9 @@ export default class API extends BaseModel {
 
   removeEndpoint(endpoint) {
     this._endpoints.splice(_.findIndex(this.endpoints, {id: endpoint.id}), 1);
+  }
+
+  get accept() {
+    return this._accept;
   }
 }

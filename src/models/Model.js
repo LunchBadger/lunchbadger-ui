@@ -5,7 +5,11 @@ import ModelProperty from 'models/ModelProperty';
 
 const defaultProperty = ModelProperty.create({
   propertyKey: 'key',
-  propertyValue: 'value'
+  propertyValue: 'value',
+  propertyType: 'type',
+  propertyIsRequired: true,
+  propertyIsIndex: true,
+  propertyNotes: 'sth'
 });
 
 export default class Model extends BaseModel {

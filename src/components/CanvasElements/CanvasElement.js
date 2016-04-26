@@ -82,7 +82,6 @@ export default (ComposedComponent) => {
         name: props.entity.name,
         editable: true,
         expanded: true,
-        mouseOver: false,
         highlighted: false
       };
     }
@@ -177,7 +176,9 @@ export default (ComposedComponent) => {
     }
 
     toggleHighlighted() {
-      toggleHighlight(this.props.entity);
+      if (!this.state.highlighted) {
+        toggleHighlight(this.props.entity);
+      }
     }
 
     _focusClosestInput(target) {
@@ -201,8 +202,7 @@ export default (ComposedComponent) => {
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
         highlighted: this.state.highlighted,
-        wip: !ready,
-        'mouse-over': this.state.mouseOver
+        wip: !ready
       });
       const {connectDragSource, connectDropTarget, isDragging} = this.props;
       const opacity = isDragging ? 0.2 : 1;
@@ -212,9 +212,7 @@ export default (ComposedComponent) => {
              className={`${elementClass} ${this.props.entity.constructor.type}`}
              style={{ opacity }}
              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
-             onDoubleClick={this.toggleEditableState.bind(this)}
-             onMouseEnter={() => this.setState({mouseOver: true})}
-             onMouseLeave={() => this.setState({mouseOver: false})}>
+             onDoubleClick={this.toggleEditableState.bind(this)}>
           <div className="canvas-element__inside">
             <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
               <i className={`fa ${this.props.icon}`}/>

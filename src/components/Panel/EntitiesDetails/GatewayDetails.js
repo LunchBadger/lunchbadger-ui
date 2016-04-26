@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from 'components/Panel/EntitiesDetails/BaseDetails'
+import BaseDetails from './BaseDetails.js'
 import updateGateway from 'actions/CanvasElements/Gateway/update';
 
 class GatewayDetails extends Component {

@@ -24,6 +24,15 @@ class DataSource extends Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      url: props.entity.url,
+      schema: props.entity.schema,
+      username: props.entity.username,
+      password: props.entity.password
+    });
+  }
+
   update() {
     updateDataSource(this.props.entity.id, {
       name: this.props.name,

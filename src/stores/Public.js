@@ -47,8 +47,8 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'UnbundleAPI':
-          action.api.removeEndpoint(action.endpoint);
           Publics.push(action.endpoint);
+          action.api.removeEndpoint(action.endpoint);
           this.emitChange();
           break;
         case 'RebundleAPI':

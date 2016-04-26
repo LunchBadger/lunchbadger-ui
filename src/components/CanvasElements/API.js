@@ -91,7 +91,7 @@ class API extends Component {
 
   _handleClose() {
     this.setState({isShowingModal: false});
-  };
+  }
 
   render() {
     return (

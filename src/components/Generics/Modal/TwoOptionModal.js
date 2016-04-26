@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 import Modal from './Modal';
 
 class TwoOptionModal extends Component {

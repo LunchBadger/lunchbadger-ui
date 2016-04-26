@@ -45,7 +45,9 @@ export default class BaseStore extends EventEmitter {
 
   setEntitiesOrder(store) {
     return _.each(store, function (entity, index) {
-      entity.itemOrder = index;
+      if (entity) {
+        entity.itemOrder = index;
+      }
     });
   }
 }

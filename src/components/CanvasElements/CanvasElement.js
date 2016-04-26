@@ -6,6 +6,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import panelKeys from 'constants/panelKeys';
+import _ from 'lodash';
 
 const boxSource = {
   beginDrag(props) {
@@ -36,8 +37,29 @@ const boxTarget = {
       return;
     }
 
-    props.moveEntity(monitor.getItem().entity, dragIndex, hoverIndex);
+    const item = monitor.getItem();
+
+    if (item.subelement) {
+      return;
+    }
+
+    props.moveEntity(item.entity, dragIndex || 0, hoverIndex || 0);
     monitor.getItem().itemOrder = hoverIndex;
+  },
+
+  canDrop(props, monitor) {
+    const item = monitor.getItem();
+
+    return _.includes(props.entity.accept, item.entity.constructor.type);
+  },
+
+  drop(props, monitor, component) {
+    const item = monitor.getItem();
+    const element = component.element.decoratedComponentInstance || component.element;
+
+    if (typeof element.onDrop === 'function') {
+      setTimeout(() => element.onDrop(item));
+    }
   }
 };
 
@@ -45,8 +67,10 @@ const boxTarget = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-@DropTarget('canvasElement', boxTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
+@DropTarget('canvasElement', boxTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
 }))
 export default (ComposedComponent) => {
   return class CanvasElement extends Component {
@@ -56,7 +80,9 @@ export default (ComposedComponent) => {
       connectDragSource: PropTypes.func.isRequired,
       isDragging: PropTypes.bool.isRequired,
       itemOrder: PropTypes.number.isRequired,
-      hideSourceOnDrag: PropTypes.bool.isRequired
+      hideSourceOnDrag: PropTypes.bool.isRequired,
+      isOver: PropTypes.bool,
+      canDrop: PropTypes.bool
     };
 
     constructor(props) {
@@ -91,6 +117,8 @@ export default (ComposedComponent) => {
       this.setState({
         name: props.entity.name
       });
+
+      this._handleOnOver(props);
     }
 
     componentWillMount() {
@@ -190,6 +218,20 @@ export default (ComposedComponent) => {
         return closestPropertyInput.focus();
       } else if (closestInput) {
         closestInput.focus();
+      }
+    }
+
+    _handleOnOver(props) {
+      if (!this.props.canDrop) {
+        return;
+      }
+
+      if (!this.props.isOver && props.isOver) {
+        this.setState({highlighted: true});
+      }
+
+      if (this.props.isOver && !props.isOver) {
+        this.setState({highlighted: false});
       }
     }
 

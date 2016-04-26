@@ -45,6 +45,10 @@ export default class PublicEndpoint extends Component {
     const connections = Connection.getConnectionsForTarget(this.props.entity.id);
 
     _.forEach(connections, (connection) => {
+      if (connection.info && connection.info.target) {
+        this.props.paper.remove(connection.info.target);
+      }
+
       connection.info = this.props.paper.connect({
         source: connection.info.source,
         target: findDOMNode(this.refs['port-in'])
@@ -59,7 +63,7 @@ export default class PublicEndpoint extends Component {
               paper={this.props.paper}
               way={port.portType}
               middle={true}
-              elementId={this.props.entity.id}
+              elementId={`sub_${this.props.entity.id}`}
               ref={`port-${port.portType}`}
               scope={port.portGroup}/>
       );

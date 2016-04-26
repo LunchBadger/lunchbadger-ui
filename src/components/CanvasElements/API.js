@@ -1,24 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
-import PublicEndpointClass from 'models/PublicEndpoint';
 import './CanvasElement.scss';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
-import {DropTarget} from 'react-dnd';
-
-const boxTarget = {
-  drop(props, monitor, component) {
-    const item = monitor.getItem();
-    if (item.entity.constructor.type === PublicEndpointClass.type) {
-      component.onAddEndpoint(item.entity);
-    }
-  }
-};
-
-@DropTarget('canvasElement', boxTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
+import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
+import _ from 'lodash';
+import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
 
 class API extends Component {
   static propTypes = {
@@ -30,6 +18,11 @@ class API extends Component {
     super(props);
 
     this.previousConnection = null;
+
+    this.state = {
+      showingModal: false,
+      bundledItem: null
+    }
   }
 
   componentDidMount() {
@@ -44,8 +37,21 @@ class API extends Component {
     });
   }
 
+  onDrop(item) {
+    if (item) {
+      this.setState({
+        isShowingModal: true,
+        bundledItem: item
+      });
+    }
+  }
+
   onAddEndpoint(endpoint) {
     bundleAPI(this.props.entity, endpoint);
+  }
+
+  onMoveEndpoint(item) {
+    moveBetweenAPIs(item.parent, this.props.entity, item.entity);
   }
 
   renderEndpoints() {
@@ -57,7 +63,6 @@ class API extends Component {
             key={endpoint.id}
             id={endpoint.id}
             entity={endpoint}
-            hideSourceOnDrag={true}
             paper={this.props.paper}
             left={endpoint.left}
             top={endpoint.top}
@@ -67,17 +72,53 @@ class API extends Component {
     });
   }
 
+  _handleModalConfirm() {
+    const item = this.state.bundledItem;
+
+    if (item.parent) {
+      this.onMoveEndpoint(item);
+    }
+
+    if (!_.includes(this.props.entity.endpoints, item.entity)) {
+      this.onAddEndpoint(item.entity);
+    }
+
+    this.props.parent.setState({
+      editable: true,
+      expanded: true
+    });
+  }
+
+  _handleClose() {
+    this.setState({isShowingModal: false});
+  }
+
   render() {
-    const {connectDropTarget} = this.props;
-    return connectDropTarget(
+    return (
       <div>
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            Endpoints
-            <i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus" />
-          </div>
-          <div ref="endpoints">{this.renderEndpoints()}</div>
-        </div>
+        {
+          this.props.entity.endpoints.length > 0 && (
+            <div className="canvas-element__sub-elements">
+              <div className="canvas-element__sub-elements__title">
+                Endpoints
+              </div>
+              <div ref="endpoints">{this.renderEndpoints()}</div>
+            </div>
+          )
+        }
+
+        {
+          this.state.isShowingModal &&
+          <TwoOptionModal title="Bundle API"
+                          confirmText="Yes"
+                          discardText="No"
+                          onClose={this._handleClose.bind(this)}
+                          onSave={this._handleModalConfirm.bind(this)}>
+            <span>
+              Are you sure you want to bundle "{this.state.bundledItem.entity.name}" endpoint into "{this.props.entity.name}"?
+            </span>
+          </TwoOptionModal>
+        }
       </div>
     );
   }

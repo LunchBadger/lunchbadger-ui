@@ -2,10 +2,6 @@ import BaseModel from './BaseModel';
 import PublicEndpoint from './PublicEndpoint';
 import _ from 'lodash';
 
-const endpoint = PublicEndpoint.create({
-  name: 'Endpoint 1'
-});
-
 export default class API extends BaseModel {
   static type = 'API';
 
@@ -19,7 +15,10 @@ export default class API extends BaseModel {
     super(id);
 
     this.name = name;
-    this.addEndpoint(endpoint);
+
+    this.addEndpoint(PublicEndpoint.create({
+      name: 'Endpoint 1'
+    }));
   }
 
   /**
@@ -42,6 +41,7 @@ export default class API extends BaseModel {
   addEndpoint(endpoint) {
     this._endpoints.push(endpoint);
   }
+
   removeEndpoint(endpoint) {
     this._endpoints.splice(_.findIndex(this.endpoints, {id: endpoint.id}), 1);
   }

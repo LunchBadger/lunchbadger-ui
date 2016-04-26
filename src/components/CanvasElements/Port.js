@@ -51,15 +51,9 @@ export default class Port extends Component {
 
     this.props.paper.makeTarget(portDOM, {
       endpoint: ['Dot', {radius: 5}],
-      allowLoopback: false
+      allowLoopback: false,
+      deleteEndpointsOnDetach: true
     }, endpointOptions);
-  }
-
-  componentWillUnmount() {
-    this.props.paper.remove(findDOMNode(this.refs.port));
-
-    // TODO:
-    // remove connections attached to that port from Connection store
   }
 
   render() {

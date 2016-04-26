@@ -4,6 +4,7 @@ import PublicEndpoint from './Subelements/PublicEndpoint';
 import './CanvasElement.scss';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
+import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import _ from 'lodash';
 
 class API extends Component {
@@ -31,6 +32,10 @@ class API extends Component {
   }
 
   onDrop(item) {
+    if (item.parent) {
+      this.onMoveEndpoint(item);
+    }
+
     if (!_.includes(this.props.entity.endpoints, item.entity)) {
       this.onAddEndpoint(item.entity);
     }
@@ -38,6 +43,10 @@ class API extends Component {
 
   onAddEndpoint(endpoint) {
     bundleAPI(this.props.entity, endpoint);
+  }
+
+  onMoveEndpoint(item) {
+    moveBetweenAPIs(item.parent, this.props.entity, item.entity);
   }
 
   renderEndpoints() {
@@ -64,7 +73,7 @@ class API extends Component {
         <div className="canvas-element__sub-elements">
           <div className="canvas-element__sub-elements__title">
             Endpoints
-            <i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus" />
+            <i onClick={() => this.onAddEndpoint('Endpoint')} className="canvas-element__add fa fa-plus"/>
           </div>
           <div ref="endpoints">{this.renderEndpoints()}</div>
         </div>

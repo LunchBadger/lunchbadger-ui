@@ -51,6 +51,11 @@ class Public extends BaseStore {
           Publics.push(action.endpoint);
           this.emitChange();
           break;
+        case 'RebundleAPI':
+          action.fromAPI.removeEndpoint(action.endpoint);
+          action.toAPI.addEndpoint(action.endpoint);
+          this.emitChange();
+          break;
         case 'AddAPI':
           Publics.push(action.API);
           action.API.itemOrder = Publics.length - 1;

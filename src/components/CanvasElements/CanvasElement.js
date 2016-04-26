@@ -37,7 +37,13 @@ const boxTarget = {
       return;
     }
 
-    props.moveEntity(monitor.getItem().entity, dragIndex || 0, hoverIndex || 0);
+    const item = monitor.getItem();
+
+    if (item.subelement) {
+      return;
+    }
+
+    props.moveEntity(item.entity, dragIndex || 0, hoverIndex || 0);
     monitor.getItem().itemOrder = hoverIndex;
   },
 
@@ -52,9 +58,7 @@ const boxTarget = {
     const element = component.element.decoratedComponentInstance || component.element;
 
     if (typeof element.onDrop === 'function') {
-      setTimeout(() => {
-        element.onDrop(item);
-      });
+      setTimeout(() => element.onDrop(item));
     }
   }
 };

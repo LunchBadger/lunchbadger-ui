@@ -3,32 +3,32 @@ import BaseModel from './BaseModel';
 export default class ModelProperty extends BaseModel {
   static type = 'ModelProperty';
 
-	/**
+  /**
    * @type {string}
    */
   propertyKey = '';
 
-	/**
+  /**
    * @type {string}
    */
   propertyValue = '';
 
-	/**
+  /**
    * @type {string}
    */
   propertyType = '';
 
-	/**
+  /**
    * @type {boolean}
    */
   propertyIsRequired = false;
 
-	/**
+  /**
    * @type {boolean}
    */
   propertyIsIndex = false;
 
-	/**
+  /**
    * @type {string}
    */
   propertyNotes = '';

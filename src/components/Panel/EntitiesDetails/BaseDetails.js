@@ -7,7 +7,7 @@ export default (ComposedComponent) => {
   return class BaseDetails extends Component {
     static propTypes = {
       entity: PropTypes.object.isRequired
-    }
+    };
 
     constructor(props) {
       super(props);
@@ -19,7 +19,6 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(props) {
-      const element = this.element.decoratedComponentInstance || this.element;
       this.setState({
         name: props.entity.name
       });

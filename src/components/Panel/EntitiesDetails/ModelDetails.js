@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import BaseDetails from './BaseDetails.js'
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
-import addProperty from 'actions/CanvasElements/Model/addProperty';
 import ModelProperty from 'models/ModelProperty';
+import _ from 'lodash';
 
 class ModelDetails extends Component {
   static propTypes = {

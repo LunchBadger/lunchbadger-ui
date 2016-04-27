@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
-    property: PropTypes.object.isRequired,
+    property: PropTypes.object.isRequired
   };
 
   constructor(props) {

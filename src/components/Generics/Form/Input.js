@@ -28,6 +28,7 @@ class Input extends Component {
     return (
       <input className={this.props.className || ''}
              value={this.props.getValue()}
+             type="text"
              onKeyPress={this._handleKeyPress.bind(this)}
              onChange={this._handleChange.bind(this)}/>
     );

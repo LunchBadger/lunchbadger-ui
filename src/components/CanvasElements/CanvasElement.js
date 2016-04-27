@@ -169,15 +169,6 @@ export default (ComposedComponent) => {
       nameInput.focus();
     }
 
-    handleEnterPress(event) {
-      const keyCode = event.which || event.keyCode;
-
-      // ENTER
-      if (keyCode === 13) {
-        this.update(this.refs.form.getModel());
-      }
-    }
-
     toggleExpandedState() {
       this.setState({expanded: !this.state.expanded}, () => {
         this.props.paper.repaintEverything();
@@ -250,7 +241,7 @@ export default (ComposedComponent) => {
              style={{ opacity }}
              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
              onDoubleClick={this.toggleEditableState.bind(this)}>
-          <Form ref="form" onValidSubmit={this.update.bind(this)}>
+          <Form name="elementForm" ref="form" onValidSubmit={this.update.bind(this)}>
             <div className="canvas-element__inside">
               <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
                 <i className={`fa ${this.props.icon}`}/>
@@ -261,8 +252,7 @@ export default (ComposedComponent) => {
                        ref="nameInput"
                        name="name"
                        value={this.props.entity.name}
-                       handleChange={this.updateName.bind(this)}
-                       handleKeyPress={this.handleEnterPress.bind(this)}/>
+                       handleChange={this.updateName.bind(this)}/>
               </div>
             </div>
             <div className="canvas-element__extra">

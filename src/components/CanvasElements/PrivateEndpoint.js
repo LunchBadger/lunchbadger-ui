@@ -9,8 +9,7 @@ import Input from 'components/Generics/Form/Input';
 class PrivateEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
-    name: PropTypes.string
+    paper: PropTypes.object
   };
 
   constructor(props) {

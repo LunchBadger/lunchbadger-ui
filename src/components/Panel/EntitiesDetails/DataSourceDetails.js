@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import BaseDetails from './BaseDetails.js'
 import updateDataSource from 'actions/CanvasElements/DataSource/update';
+import Input from 'components/Generics/Form/Input';
 
 class DataSourceDetails extends Component {
   static propTypes = {
@@ -9,74 +10,40 @@ class DataSourceDetails extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      url: props.entity.url,
-      schema: props.entity.schema,
-      username: props.entity.username,
-      password: props.entity.password
-    }
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      url: props.entity.url,
-      schema: props.entity.schema,
-      username: props.entity.username,
-      password: props.entity.password
-    });
+  update(model) {
+    updateDataSource(this.props.entity.id, model);
   }
-
-  update() {
-    updateDataSource(this.props.entity.id, {
-      name: this.props.name,
-      url: this.state.url,
-      schema: this.state.schema,
-      username: this.state.username,
-      password: this.state.password
-    });
-  }
-
-  updateProperty(event, key) {
-    const {target} = event;
-    const newState = {};
-
-    newState[key] = target.value;
-
-    this.setState(newState);
-  }
-
 
   render() {
+    const {entity} = this.props;
+    
     return (
       <div className="details-panel__container details-panel__columns">
         <div className="details-panel__fieldset">
           <span className="details-panel__label">URL</span>
-          <input className="details-panel__input"
-                 value={this.state.url}
-                 type="text"
-                 onChange={(event) => this.updateProperty(event, 'url')}/>
+          <Input className="details-panel__input"
+                 value={entity.url}
+                 name="url"/>
         </div>
         <div className="details-panel__fieldset">
           <span className="details-panel__label">Schema</span>
-          <input className="details-panel__input"
-                 value={this.state.schema}
-                 type="text"
-                 onChange={(event) => this.updateProperty(event, 'schema')}/>
+          <Input className="details-panel__input"
+                 value={entity.schema}
+                 name="schema"/>
         </div>
         <div className="details-panel__fieldset">
           <span className="details-panel__label">Username</span>
-          <input className="details-panel__input"
-                 value={this.state.username}
-                 type="text"
-                 onChange={(event) => this.updateProperty(event, 'username')}/>
+          <Input className="details-panel__input"
+                 value={entity.username}
+                 name="username"/>
         </div>
         <div className="details-panel__fieldset">
           <span className="details-panel__label">Password</span>
-          <input className="details-panel__input"
-                 value={this.state.password}
-                 type="text"
-                 onChange={(event) => this.updateProperty(event, 'password')}/>
+          <Input className="details-panel__input"
+                 value={entity.password}
+                 name="password"/>
         </div>
       </div>
     )

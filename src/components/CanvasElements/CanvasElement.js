@@ -202,9 +202,9 @@ export default (ComposedComponent) => {
       const closestInput = closestElement.querySelector('input');
 
       if (closestPropertyInput) {
-        return closestPropertyInput.focus();
+        closestPropertyInput.select();
       } else if (closestInput) {
-        closestInput.focus();
+        closestInput.select();
       }
     }
 

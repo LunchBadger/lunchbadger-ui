@@ -24,7 +24,7 @@ class DetailsPanel extends Component {
     }
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     if (nextProps.opened && !this.props.opened) {
       AppState.addChangeListener(this.appStateUpdate);
 

@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import ShowModalButton from '../ShowModalButton';
 import './BaseDetails.scss';
 import classNames from 'classnames';
 import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';
+import CloseButton from '../CloseButton';
+import SaveButton from '../SaveButton';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
@@ -38,14 +39,24 @@ export default (ComposedComponent) => {
         model = this.refs.form.getModel();
       }
 
-
       if (typeof element.update === 'function') {
         element.update(model);
       }
+
+      this.setState({isPristine: true});
     }
 
     checkPristine(model, changed) {
       this.setState({isPristine: !changed});
+    }
+
+    _preventSubmit(event) {
+      const keyCode = event.keyCode || event.which;
+
+      if (keyCode === 13) {
+        event.preventDefault();
+        return false;
+      }
     }
 
     render() {
@@ -62,8 +73,9 @@ export default (ComposedComponent) => {
                 ref="form"
                 onChange={this.checkPristine.bind(this)}
                 onValidSubmit={this.update.bind(this)}>
-            <ShowModalButton className="confirm-button__cancel" onSave={this.update.bind(this)}
-                             onCancel={this.discardChanges.bind(this)}/>
+            <CloseButton showConfirmation={!this.state.isPristine}
+                         onSave={this.update.bind(this)}
+                         onCancel={this.discardChanges.bind(this)}/>
             <div className="details-panel__details">
               <h2 className={`${detailsClass} details-panel__title`}
                   onClick={() => {this.setState({collapsedDetails: !this.state.collapsedDetails});}}>
@@ -74,6 +86,7 @@ export default (ComposedComponent) => {
                 <div className="details-panel__fieldset">
                   <span className="details-panel__label">Name</span>
                   <Input className="details-panel__input"
+                         handleKeyPress={this._preventSubmit.bind(this)}
                          value={this.props.entity.name}
                          name="name"/>
                 </div>
@@ -89,8 +102,9 @@ export default (ComposedComponent) => {
                 <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
               </div>
             </div>
-            <ShowModalButton className="confirm-button__accept" onSave={this.update.bind(this)}
-                             onCancel={this.discardChanges.bind(this)}/>
+            <SaveButton showConfirmation={!this.state.isPristine}
+                        onSave={this.update.bind(this)}
+                        onCancel={this.discardChanges.bind(this)}/>
           </Form>
         </div>
       )

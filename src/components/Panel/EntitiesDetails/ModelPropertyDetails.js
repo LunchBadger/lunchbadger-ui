@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import Input from 'components/Generics/Form/Input';
+import Checkbox from 'components/Generics/Form/Checkbox';
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
@@ -7,103 +9,52 @@ export default class ModelPropertyDetails extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      propertyKey: this.props.property.propertyKey,
-      propertyValue: this.props.property.propertyValue,
-      propertyType: this.props.property.propertyType,
-      propertyIsRequired: this.props.property.propertyIsRequired,
-      propertyIsIndex: this.props.property.propertyIsIndex,
-      propertyNotes: this.props.property.propertyNotes
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({
-      propertyKey: props.property.propertyKey,
-      propertyValue: props.property.propertyValue,
-      propertyType: props.property.propertyType,
-      propertyIsRequired: props.property.propertyIsRequired,
-      propertyIsIndex: props.property.propertyIsIndex,
-      propertyNotes: props.property.propertyNotes
-    });
-  }
-
-  updatePropertyKey(evt) {
-    this.setState({propertyKey: evt.target.value});
-    this.props.property.update({propertyKey: evt.target.value});
-  }
-
-  updatePropertyValue(evt) {
-    this.setState({propertyValue: evt.target.value});
-    this.props.property.update({propertyValue: evt.target.value});
-  }
-
-  updatePropertyType(evt) {
-    this.setState({propertyType: evt.target.value});
-    this.props.property.update({propertyType: evt.target.value});
-  }
-
-  updatePropertyIsRequired(evt) {
-    this.setState({propertyIsRequired: evt.target.value});
-    this.props.property.update({propertyIsRequired: evt.target.value});
-  }
-
-  updatePropertyIsIndex(evt) {
-    this.setState({propertyIsIndex: evt.target.value});
-    this.props.property.update({propertyIsIndex: evt.target.value});
-  }
-
-  updatePropertyNotes(evt) {
-    this.setState({propertyNotes: evt.target.value});
-    this.props.property.update({propertyNotes: evt.target.value});
   }
 
   render() {
+    const {property, index} = this.props;
+
     return (
       <tr>
         <td>
-          <input className="details-panel__input"
-                 value={this.state.propertyKey}
+          <Input value={property.id}
+                 type="hidden"
+                 name={`properties[${index}][id]`}/>
+
+          <Input className="details-panel__input"
+                 value={property.propertyKey}
+                 name={`properties[${index}][propertyKey]`}
+          />
+        </td>
+        <td>
+          <Input className="details-panel__input"
+                 value={property.propertyType}
+                 name={`properties[${index}][propertyType]`}
+          />
+        </td>
+        <td>
+          <Input className="details-panel__input"
+                 value={property.propertyValue}
+                 name={`properties[${index}][propertyValue]`}
+          />
+        </td>
+        <td>
+          <Checkbox className="model-property__input"
+                 value={property.propertyIsRequired}
+                 name={`properties[${index}][propertyIsRequired]`}
+          />
+        </td>
+        <td>
+          <Checkbox className="model-property__input"
+                 value={property.propertyIsIndex}
+                 name={`properties[${index}][propertyIsIndex]`}
+          />
+        </td>
+        <td>
+          <Input className="details-panel__input"
+                 value={property.propertyNotes}
+                 name={`properties[${index}][propertyNotes]`}
                  type="text"
-                 onChange={this.updatePropertyKey.bind(this)}
-          />
-        </td>
-        <td>
-          <input className="details-panel__input"
-                 value={this.state.propertyType}
-                 type="text"
-                 onChange={this.updatePropertyType.bind(this)}
-          />
-        </td>
-        <td>
-          <input className="details-panel__input"
-                 value={this.state.propertyValue}
-                 type="text"
-                 onChange={this.updatePropertyValue.bind(this)}
-          />
-        </td>
-        <td>
-          <input className="model-property__input"
-                 value={this.state.propertyIsRequired}
-                 checked={this.state.propertyIsRequired}
-                 type="checkbox"
-                 onChange={this.updatePropertyIsRequired.bind(this)}
-          />
-        </td>
-        <td>
-          <input className="model-property__input"
-                 value={this.state.propertyIsIndex}
-                 checked={this.state.propertyIsIndex}
-                 type="checkbox"
-                 onChange={this.updatePropertyIsIndex.bind(this)}
-          />
-        </td>
-        <td>
-          <input className="details-panel__input"
-                 value={this.state.propertyNotes}
-                 type="text"
-                 onChange={this.updatePropertyNotes.bind(this)}
           />
         </td>
       </tr>

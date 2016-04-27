@@ -4,6 +4,7 @@ import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
+import Input from 'components/Generics/Form/Input';
 
 class ModelDetails extends Component {
   static propTypes = {
@@ -14,91 +15,80 @@ class ModelDetails extends Component {
     super(props);
 
     this.state = {
-      properties: _.cloneDeep(this.props.entity.properties),
-      contextPath: this.props.entity.contextPath
+      properties: props.entity.properties.slice()
     }
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      properties: props.entity.properties,
-      contextPath: props.entity.contextPath
-    });
-  }
-
   discardChanges() {
-    this.setState({
-      properties: this.props.entity.properties,
-      contextPath: this.props.entity.contextPath
-    });
+    // revert properties
+    this.setState({properties: this.props.entity.properties.slice()});
   }
 
-  update() {
-    updateModel(this.props.entity.id, {
-      name: this.props.name,
-      properties: this.state.properties,
-      contextPath: this.state.contextPath
+  update(model) {
+    let data = {
+      properties: []
+    };
+
+    model.properties.forEach((property) => {
+      data.properties.push(ModelProperty.create(property));
     });
+
+    updateModel(this.props.entity.id, _.merge(model, data));
   }
 
   onAddProperty() {
-    const properties = this.state.properties;
-    properties.push(ModelProperty.create({
-      propertyKey: '',
-      propertyValue: '',
-      propertyType: '',
-      propertyIsRequired: false,
-      propertyIsIndex: false,
-      propertyNotes: ''
-    }));
+    const {properties} = this.state;
+
+    properties.push(
+      ModelProperty.create({
+        propertyIsRequired: false,
+        propertyIsIndex: false
+      })
+    );
+
     this.setState({properties: properties});
   }
 
-  updateContextPath(evt) {
-    this.setState({
-      contextPath: evt.target.value
-    });
-  }
-
   renderProperties() {
-    return this.state.properties.map((property) => {
+    return this.state.properties.map((property, index) => {
       return (
-        <ModelPropertyDetails key={`property-${property.id}`}
-                       property={property}/>
+        <ModelPropertyDetails index={index}
+                              key={`property-${property.id}`}
+                              property={property}/>
       );
     });
   }
 
-
   render() {
+    const {entity} = this.props;
+
     return (
       <div className="details-panel__container details-panel__columns">
         <div className="details-panel__fieldset">
           <span className="details-panel__label">Context path</span>
-          <input className="details-panel__input"
-                 value={this.state.contextPath}
-                 type="text"
-                 onChange={(event) => this.updateContextPath(event)}/>
+          <Input className="details-panel__input"
+                 value={entity.contextPath}
+                 name="contextPath"/>
         </div>
         <table className="details-panel__table">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Data type</th>
-              <th>Default Value</th>
-              <th>Required</th>
-              <th>Is index</th>
-              <th>
-                Notes
-                <a  onClick={() => this.onAddProperty()} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add property
-                </a>
-              </th>
-            </tr>
+          <tr>
+            <th>Name</th>
+            <th>Data type</th>
+            <th>Default Value</th>
+            <th>Required</th>
+            <th>Is index</th>
+            <th>
+              Notes
+              <a onClick={() => this.onAddProperty()} className="details-panel__add">
+                <i className="fa fa-plus"/>
+                Add property
+              </a>
+            </th>
+          </tr>
           </thead>
           <tbody>
-            {this.renderProperties()}
+          {this.renderProperties()}
           </tbody>
         </table>
       </div>

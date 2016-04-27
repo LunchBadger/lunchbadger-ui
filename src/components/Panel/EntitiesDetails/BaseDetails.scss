@@ -2,15 +2,18 @@
   text-align: left;
   font-size: 14px;
 }
+
 .details-panel__details,
 .details-panel__properties {
   div.collapsed {
     display: none;
   }
 }
+
 .details-panel__fieldset {
   padding: 1em;
 }
+
 .details-panel__title {
   font-size: 1.2em;
   margin-top: 1em;
@@ -24,12 +27,14 @@
     }
   }
 }
+
 .details-panel__label {
   display: block;
   color: #999;
   display: block;
   margin: .5em 0;
 }
+
 .details-panel__input {
   border-radius: 5px;
   padding: 0 1em;
@@ -38,6 +43,7 @@
   font-size: 1.2em;
   line-height: 2em;
 }
+
 .confirm-button__cancel {
   display: block;
   position: absolute;
@@ -45,10 +51,12 @@
   top: 1em;
   font-size: 40px;
 }
+
 .confirm-button__accept {
   float: right;
   margin-right: 1em;
 }
+
 .confirm-button__button {
   cursor: pointer;
   background: #00d8b2;
@@ -60,12 +68,14 @@
   display: inline-block;
   float: right;
 }
+
 .details-panel__columns {
   .details-panel__fieldset {
     width: 50%;
     float: left;
   }
 }
+
 .details-panel__table {
   width: 100%;
   border-collapse: collapse;
@@ -82,10 +92,8 @@
     text-transform: uppercase;
     min-width: 100px;
   }
-  .details-panel__input {
-    border: none;
-  }
 }
+
 .details-panel__add {
   cursor: pointer;
   background: #00d8b2;

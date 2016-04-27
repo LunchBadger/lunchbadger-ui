@@ -1,60 +1,54 @@
 import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
+import Input from 'components/Generics/Form/Input';
 
 export default class ModelProperty extends Component {
   static propTypes = {
-    property: PropTypes.object.isRequired
+    property: PropTypes.object.isRequired,
+    index: PropTypes.number.isRequired
   };
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      propertyKey: this.props.property.propertyKey,
-      propertyValue: this.props.property.propertyValue
-    };
-  }
-
-  updatePropertyKey(evt) {
-    this.setState({propertyKey: evt.target.value});
-    this.props.property.update({propertyKey: evt.target.value});
-  }
-
-  updatePropertyValue(evt) {
-    this.setState({propertyValue: evt.target.value});
-    this.props.property.update({propertyValue: evt.target.value});
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({
-      propertyKey: props.property.propertyKey,
-      propertyValue: props.property.propertyValue
-    });
   }
 
   render() {
+    const {property, index} = this.props;
+
     return (
       <div className="model-property">
         <div className="model-property__key-cell">
           <span className="model-property__value key hide-while-edit">
-            {this.state.propertyKey}
+            {property.propertyKey}
           </span>
-          <input className="model-property__input editable-only"
-                 value={this.state.propertyKey}
-                 type="text"
-                 onChange={this.updatePropertyKey.bind(this)}
-          />
+          <Input className="model-property__input editable-only"
+                 value={property.propertyKey}
+                 name={`properties[${index}][propertyKey]`}/>
         </div>
         <div className="model-property__value-cell">
           <span className="model-property__value value hide-while-edit">
-            {this.state.propertyValue}
+            {property.propertyValue}
           </span>
-          <input className="model-property__input editable-only"
-                 value={this.state.propertyValue}
-                 type="text"
-                 onChange={this.updatePropertyValue.bind(this)}
-          />
+          <Input className="model-property__input editable-only"
+                 value={property.propertyValue}
+                 name={`properties[${index}][propertyValue]`}/>
         </div>
+
+        <Input value={property.propertyIsIndex}
+               type="hidden"
+               name={`properties[${index}][propertyIsIndex]`}/>
+        <Input value={property.propertyIsRequired}
+               type="hidden"
+               name={`properties[${index}][propertyIsRequired]`}/>
+        <Input value={property.propertyNotes}
+               type="hidden"
+               name={`properties[${index}][propertyNotes]`}/>
+        <Input value={property.propertyType}
+               type="hidden"
+               name={`properties[${index}][propertyType]`}/>
+        <Input value={property.id}
+               type="hidden"
+               name={`properties[${index}][id]`}/>
       </div>
     );
   }

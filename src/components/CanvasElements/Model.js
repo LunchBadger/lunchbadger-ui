@@ -2,11 +2,13 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
+import ModelPropertyFactory from 'models/ModelProperty';
 import './CanvasElement.scss';
 import updateModel from 'actions/CanvasElements/Model/update';
 import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import Input from 'components/Generics/Form/Input';
+import _ from 'lodash';
 
 class Model extends Component {
   static propTypes = {
@@ -19,13 +21,20 @@ class Model extends Component {
 
     this.state = {
       contextPath: props.entity.contextPath,
-      contextPathDirty: false,
-      properties: this.props.entity.properties
+      contextPathDirty: false
     };
   }
 
   update(model) {
-    updateModel(this.props.entity.id, Object.assign({}, model, {properties: this.state.properties}));
+    let data = {
+      properties: []
+    };
+
+    model.properties.forEach((property) => {
+      data.properties.push(ModelPropertyFactory.create(property));
+    });
+
+    updateModel(this.props.entity.id, _.merge(model, data));
   }
 
   updateName(event) {
@@ -48,9 +57,9 @@ class Model extends Component {
   }
 
   renderProperties() {
-    return this.state.properties.map((property) => {
+    return this.props.entity.properties.map((property, index) => {
       return (
-        <ModelProperty key={`property-${property.id}`}
+        <ModelProperty index={index} key={`property-${property.id}`}
                        property={property}/>
       );
     });

@@ -7,7 +7,8 @@ class Input extends Component {
     setValue: PropTypes.func,
     handleKeyPress: PropTypes.func,
     handleChange: PropTypes.func,
-    className: PropTypes.string
+    className: PropTypes.string,
+    type: PropTypes.string
   };
 
   _handleKeyPress(event) {
@@ -28,7 +29,7 @@ class Input extends Component {
     return (
       <input className={this.props.className || ''}
              value={this.props.getValue()}
-             type="text"
+             type={this.props.type || 'text'}
              onKeyPress={this._handleKeyPress.bind(this)}
              onChange={this._handleChange.bind(this)}/>
     );

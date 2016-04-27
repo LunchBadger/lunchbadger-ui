@@ -75,6 +75,7 @@
     "core-js": "^2.0.0",
     "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
+    "formsy-react": "^0.18.0",
     "jsplumb": "^2.0.7",
     "keymirror": "^0.1.1",
     "lockr": "^0.8.4",

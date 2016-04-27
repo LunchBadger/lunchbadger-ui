@@ -4,6 +4,7 @@ import Port from './Port';
 import './CanvasElement.scss';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 import slug from 'slug';
+import Input from 'components/Generics/Form/Input';
 
 class PrivateEndpoint extends Component {
   static propTypes = {
@@ -12,21 +13,17 @@ class PrivateEndpoint extends Component {
     name: PropTypes.string
   };
 
-
   constructor(props) {
     super(props);
 
     this.state = {
-      contextPath: this.props.entity.contextPath,
+      contextPath: props.entity.contextPath,
       contextPathDirty: false
     };
   }
 
-  update() {
-    updatePrivateEndpoint(this.props.entity.id, {
-      name: this.props.name,
-      contextPath: this.state.contextPath
-    });
+  update(model) {
+    updatePrivateEndpoint(this.props.entity.id, model);
   }
 
   updateName(event) {
@@ -48,11 +45,8 @@ class PrivateEndpoint extends Component {
     });
   }
 
-  updateContextPath(evt) {
-    this.setState({
-      contextPath: evt.target.value,
-      contextPathDirty: true
-    });
+  updateContextPath() {
+    this.setState({contextPathDirty: true});
   }
 
   render() {
@@ -72,9 +66,10 @@ class PrivateEndpoint extends Component {
                   {this.props.entity.contextPath}
                 </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.state.contextPath}
-                       onChange={this.updateContextPath.bind(this)}/>
+                       name="contextPath"
+                       handleChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
           </div>

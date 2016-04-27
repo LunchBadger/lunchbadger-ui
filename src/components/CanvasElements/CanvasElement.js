@@ -7,6 +7,8 @@ import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
+import {Form} from 'formsy-react';
+import Input from 'components/Generics/Form/Input';
 
 const boxSource = {
   beginDrag(props) {
@@ -105,7 +107,6 @@ export default (ComposedComponent) => {
       };
 
       this.state = {
-        name: props.entity.name,
         editable: true,
         expanded: true,
         highlighted: false
@@ -113,10 +114,6 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(props) {
-      this.setState({
-        name: props.entity.name
-      });
-
       this._handleOnOver(props);
     }
 
@@ -140,11 +137,11 @@ export default (ComposedComponent) => {
       this.props.entity.elementDOM = this.elementDOM;
     }
 
-    update() {
+    update(model) {
       const element = this.element.decoratedComponentInstance || this.element;
 
       if (typeof element.update === 'function') {
-        element.update();
+        element.update(model);
       }
 
       this.setState({
@@ -155,8 +152,6 @@ export default (ComposedComponent) => {
 
     updateName(evt) {
       const element = this.element.decoratedComponentInstance || this.element;
-
-      this.setState({name: evt.target.value});
 
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
@@ -179,7 +174,7 @@ export default (ComposedComponent) => {
 
       // ENTER
       if (keyCode === 13) {
-        this.update();
+        this.update(this.refs.form.getModel());
       }
     }
 
@@ -255,25 +250,28 @@ export default (ComposedComponent) => {
              style={{ opacity }}
              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
              onDoubleClick={this.toggleEditableState.bind(this)}>
-          <div className="canvas-element__inside">
-            <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
-              <i className={`fa ${this.props.icon}`}/>
+          <Form ref="form" onValidSubmit={this.update.bind(this)}>
+            <div className="canvas-element__inside">
+              <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
+                <i className={`fa ${this.props.icon}`}/>
+              </div>
+              <div className="canvas-element__title">
+                <span className="canvas-element__name hide-while-edit">{this.props.entity.name}</span>
+                <Input className="canvas-element__input editable-only"
+                       ref="nameInput"
+                       name="name"
+                       value={this.props.entity.name}
+                       handleChange={this.updateName.bind(this)}
+                       handleKeyPress={this.handleEnterPress.bind(this)}/>
+              </div>
             </div>
-            <div className="canvas-element__title">
-              <span className="canvas-element__name hide-while-edit">{this.props.entity.name}</span>
-              <input className="canvas-element__input editable-only"
-                     ref="nameInput"
-                     value={this.state.name}
-                     onKeyPress={this.handleEnterPress.bind(this)}
-                     onChange={this.updateName.bind(this)}/>
+            <div className="canvas-element__extra">
+              <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
             </div>
-          </div>
-          <div className="canvas-element__extra">
-            <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-          </div>
-          <div className="canvas-element__actions editable-only">
-            <button className="canvas-element__button" onClick={() => this.update()}>OK</button>
-          </div>
+            <div className="canvas-element__actions editable-only">
+              <button type="submit" className="canvas-element__button">OK</button>
+            </div>
+          </Form>
         </div>
       ));
     }

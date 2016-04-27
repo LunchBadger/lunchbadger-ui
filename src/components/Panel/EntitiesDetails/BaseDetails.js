@@ -15,7 +15,8 @@ export default (ComposedComponent) => {
       super(props);
       this.state = {
         collapsedDetails: false,
-        collapsedProperties: false
+        collapsedProperties: false,
+        isPristine: true
       }
     }
 
@@ -37,9 +38,14 @@ export default (ComposedComponent) => {
         model = this.refs.form.getModel();
       }
 
+
       if (typeof element.update === 'function') {
         element.update(model);
       }
+    }
+
+    checkPristine(model, changed) {
+      this.setState({isPristine: !changed});
     }
 
     render() {
@@ -52,7 +58,10 @@ export default (ComposedComponent) => {
 
       return (
         <div className="details-panel__element">
-          <Form name="panelForm" ref="form" onValidSubmit={this.update.bind(this)}>
+          <Form name="panelForm"
+                ref="form"
+                onChange={this.checkPristine.bind(this)}
+                onValidSubmit={this.update.bind(this)}>
             <ShowModalButton className="confirm-button__cancel" onSave={this.update.bind(this)}
                              onCancel={this.discardChanges.bind(this)}/>
             <div className="details-panel__details">

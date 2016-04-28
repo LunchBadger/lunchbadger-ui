@@ -19,7 +19,7 @@ class Gateway extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.ready === true && this.props.ready === false) {
+    if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
     }
   }
@@ -41,7 +41,7 @@ class Gateway extends Component {
   onAddPipeline(name) {
     addPipeline(this.props.entity, name);
   }
-  
+
   _onDeploy() {
     notify.show('Gateway successfully deployed', 'success');
     this.props.parent.triggerElementAutofocus();

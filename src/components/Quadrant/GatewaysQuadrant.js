@@ -21,6 +21,7 @@ class GatewaysQuadrant extends Component {
                       hideSourceOnDrag={true}
                       itemOrder={entity.itemOrder}
                       moveEntity={this.moveEntity}
+                      ready={entity.ready}
                       entity={entity}/>;
     })
   }

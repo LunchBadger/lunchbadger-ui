@@ -17,24 +17,13 @@ class Gateway extends Component {
     super(props);
 
     this.state = {
-      deployed: false,
       rootPath: props.entity.rootPath
     };
-
-    this.onDeploy = (nextProps) => {
-      if (nextProps.entity.ready === true && this.state.deployed === false) {
-        this.setState({deployed: true});
-        notify.show('Gateway successfully deployed', 'success');
-        this.props.parent.triggerElementAutofocus();
-
-        delete this.onDeploy;
-      }
-    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.onDeploy) {
-      this.onDeploy(nextProps);
+    if (nextProps.ready === true && this.props.ready === false) {
+      this._onDeploy();
     }
   }
 
@@ -61,6 +50,11 @@ class Gateway extends Component {
 
   updateRootPath(evt) {
     this.setState({rootPath: evt.target.value});
+  }
+
+  _onDeploy() {
+    notify.show('Gateway successfully deployed', 'success');
+    this.props.parent.triggerElementAutofocus();
   }
 
   render() {

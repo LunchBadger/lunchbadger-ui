@@ -1,67 +1,63 @@
 import React, {Component, PropTypes} from 'react';
-import ShowModalButton from '../ShowModalButton';
 import './BaseDetails.scss';
 import classNames from 'classnames';
+import {Form} from 'formsy-react';
+import Input from 'components/Generics/Form/Input';
+import CloseButton from '../CloseButton';
+import SaveButton from '../SaveButton';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
     static propTypes = {
       entity: PropTypes.object.isRequired
-    }
+    };
 
     constructor(props) {
       super(props);
       this.state = {
-        name: props.entity.name,
         collapsedDetails: false,
-        collapsedProperties: false
+        collapsedProperties: false,
+        isPristine: true
       }
     }
 
-    componentWillReceiveProps(props) {
-      const element = this.element.decoratedComponentInstance || this.element;
-      this.setState({
-        name: props.entity.name
-      });
-    }
-
     discardChanges() {
-      const element = this.element.decoratedComponentInstance || this.element;
+      const element = this.element;
 
       if (typeof element.discardChanges === 'function') {
         element.discardChanges();
       }
-      this.setState({
-        name: this.props.entity.name
-      });
+
+      this.refs.form.reset();
+      this.forceUpdate();
     }
 
-    update() {
-      const element = this.element.decoratedComponentInstance || this.element;
+    update(model) {
+      const element = this.element;
+
+      if (!model) {
+        model = this.refs.form.getModel();
+      }
 
       if (typeof element.update === 'function') {
-        element.update();
+        element.update(model);
       }
+
+      this.setState({isPristine: true});
     }
 
-    updateName(evt) {
-      const element = this.element.decoratedComponentInstance || this.element;
-
-      this.setState({name: evt.target.value});
-
-      if (typeof element.updateName === 'function') {
-        element.updateName(evt);
-      }
+    checkPristine(model, changed) {
+      this.setState({isPristine: !changed});
     }
 
-    /*handleEnterPress(event) {
-      const keyCode = event.which || event.keyCode;
+    _preventSubmit(event) {
+      const keyCode = event.keyCode || event.which;
 
-      // ENTER
       if (keyCode === 13) {
-        this.update();
+        event.preventDefault();
+        return false;
       }
-    }*/
+    }
 
     render() {
       const detailsClass = classNames({
@@ -70,34 +66,46 @@ export default (ComposedComponent) => {
       const propertiesClass = classNames({
         'collapsed': this.state.collapsedProperties
       });
+
       return (
         <div className="details-panel__element">
-          <ShowModalButton className="confirm-button__cancel" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)}/>
-          <div className="details-panel__details">
-            <h2 className={`${detailsClass} details-panel__title`} onClick={() => {this.setState({collapsedDetails: !this.state.collapsedDetails});}}>
-              <i className="fa fa-caret-down"></i>
-              Details
-            </h2>
-            <div className={detailsClass}>
-              <div className="details-panel__fieldset">
-                <span className="details-panel__label">Name</span>
-                <input className="details-panel__input"
-                     ref="nameInput"
-                     value={this.state.name}
-                     onChange={this.updateName.bind(this)}/>
+          <Form name="panelForm"
+                ref="form"
+                onChange={this.checkPristine.bind(this)}
+                onValidSubmit={this.update.bind(this)}>
+            <CloseButton showConfirmation={!this.state.isPristine}
+                         onSave={this.update.bind(this)}
+                         onCancel={this.discardChanges.bind(this)}/>
+            <div className="details-panel__details">
+              <h2 className={`${detailsClass} details-panel__title`}
+                  onClick={() => {this.setState({collapsedDetails: !this.state.collapsedDetails});}}>
+                <i className="fa fa-caret-down"/>
+                Details
+              </h2>
+              <div className={detailsClass}>
+                <div className="details-panel__fieldset">
+                  <span className="details-panel__label">Name</span>
+                  <Input className="details-panel__input"
+                         handleKeyPress={this._preventSubmit.bind(this)}
+                         value={this.props.entity.name}
+                         name="name"/>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="details-panel__properties">
-            <h2 className={`${propertiesClass} details-panel__title`} onClick={() => {this.setState({collapsedProperties: !this.state.collapsedProperties});}}>
-              <i className="fa fa-caret-down"></i>
-              Properties
-            </h2>
-            <div className={propertiesClass}>
-              <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+            <div className="details-panel__properties">
+              <h2 className={`${propertiesClass} details-panel__title`}
+                  onClick={() => {this.setState({collapsedProperties: !this.state.collapsedProperties});}}>
+                <i className="fa fa-caret-down"/>
+                Properties
+              </h2>
+              <div className={propertiesClass}>
+                <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+              </div>
             </div>
-          </div>
-          <ShowModalButton className="confirm-button__accept" onSave={this.update.bind(this)} onCancel={this.discardChanges.bind(this)} />
+            <SaveButton showConfirmation={!this.state.isPristine}
+                        onSave={this.update.bind(this)}
+                        onCancel={this.discardChanges.bind(this)}/>
+          </Form>
         </div>
       )
     }

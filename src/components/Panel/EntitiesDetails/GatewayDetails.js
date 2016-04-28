@@ -11,12 +11,9 @@ class GatewayDetails extends Component {
     super(props);
   }
 
-  update() {
-    redeployGateway(this.props.entity.id, {
-      name: this.props.name
-    });
+  update(model) {
+    redeployGateway(this.props.entity.id, model);
   }
-
 
   render() {
     return (

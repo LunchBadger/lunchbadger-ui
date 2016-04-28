@@ -2,9 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Pipeline from './Subelements/Pipeline';
 import './CanvasElement.scss';
-import updateGateway from '../../actions/CanvasElements/Gateway/update';
-import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
+import updateGateway from 'actions/CanvasElements/Gateway/update';
+import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
+import Input from 'components/Generics/Form/Input';
 
 class Gateway extends Component {
   static propTypes = {
@@ -15,10 +16,6 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      rootPath: props.entity.rootPath
-    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,27 +28,20 @@ class Gateway extends Component {
     return this.props.entity.pipelines.map((pipeline) => {
       return (
         <div key={pipeline.id} className="canvas-element__sub-element">
-          <Pipeline paper={this.props.paper} rootPath={this.state.rootPath} entity={pipeline}/>
+          <Pipeline paper={this.props.paper} rootPath={this.props.entity.rootPath} entity={pipeline}/>
         </div>
       );
     });
   }
 
-  update() {
-    updateGateway(this.props.entity.id, {
-      name: this.props.name,
-      rootPath: this.state.rootPath
-    });
+  update(model) {
+    updateGateway(this.props.entity.id, model);
   }
 
   onAddPipeline(name) {
     addPipeline(this.props.entity, name);
   }
-
-  updateRootPath(evt) {
-    this.setState({rootPath: evt.target.value});
-  }
-
+  
   _onDeploy() {
     notify.show('Gateway successfully deployed', 'success');
     this.props.parent.triggerElementAutofocus();
@@ -71,9 +61,9 @@ class Gateway extends Component {
                 {this.props.entity.rootPath}
               </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.rootPath}
-                       onChange={this.updateRootPath.bind(this)}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       name="rootPath"
+                       value={this.props.entity.rootPath}/>
               </div>
             </div>
           </div>

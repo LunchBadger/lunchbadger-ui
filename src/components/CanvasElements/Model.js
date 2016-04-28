@@ -2,41 +2,39 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
+import ModelPropertyFactory from 'models/ModelProperty';
 import './CanvasElement.scss';
-import updateModel from '../../actions/CanvasElements/Model/update';
-import addProperty from '../../actions/CanvasElements/Model/addProperty';
+import updateModel from 'actions/CanvasElements/Model/update';
+import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
+import Input from 'components/Generics/Form/Input';
+import _ from 'lodash';
 
 class Model extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
-    name: PropTypes.string.isRequired
+    paper: PropTypes.object
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      contextPath: this.props.entity.contextPath,
-      contextPathDirty: false,
-      properties: this.props.entity.properties
+      contextPath: props.entity.contextPath,
+      contextPathDirty: false
     };
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      contextPath: props.entity.contextPath,
-      properties: props.entity.properties
-    });
-  }
+  update(model) {
+    let data = {
+      properties: []
+    };
 
-  update() {
-    updateModel(this.props.entity.id, {
-      name: this.props.name,
-      contextPath: this.state.contextPath,
-      properties: this.state.properties
+    model.properties.forEach((property) => {
+      data.properties.push(ModelPropertyFactory.create(property));
     });
+
+    updateModel(this.props.entity.id, _.merge(model, data));
   }
 
   updateName(event) {
@@ -59,9 +57,9 @@ class Model extends Component {
   }
 
   renderProperties() {
-    return this.state.properties.map((property) => {
+    return this.props.entity.properties.map((property, index) => {
       return (
-        <ModelProperty key={`property-${property.id}`}
+        <ModelProperty index={index} key={`property-${property.id}`}
                        property={property}/>
       );
     });
@@ -78,11 +76,8 @@ class Model extends Component {
     });
   }
 
-  updateContextPath(evt) {
-    this.setState({
-      contextPath: evt.target.value,
-      contextPathDirty: true
-    });
+  updateContextPath() {
+    this.setState({contextPathDirty: true});
   }
 
   render() {
@@ -108,9 +103,10 @@ class Model extends Component {
                   {this.props.entity.contextPath}
                 </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.state.contextPath}
-                       onChange={this.updateContextPath.bind(this)}/>
+                       name="contextPath"
+                       handleChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
             <div className="canvas-element__properties__property">

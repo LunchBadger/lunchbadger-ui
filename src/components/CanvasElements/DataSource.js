@@ -2,54 +2,21 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updateDataSource from '../../actions/CanvasElements/DataSource/update';
+import updateDataSource from 'actions/CanvasElements/DataSource/update';
+import Input from 'components/Generics/Form/Input';
 
 class DataSource extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
-    name: PropTypes.string.isRequired
+    paper: PropTypes.object
   };
 
   constructor(props) {
     super(props);
-
-    const {entity} = props;
-
-    this.state = {
-      url: entity.url,
-      schema: entity.schema,
-      username: entity.username,
-      password: entity.password
-    }
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      url: props.entity.url,
-      schema: props.entity.schema,
-      username: props.entity.username,
-      password: props.entity.password
-    });
-  }
-
-  update() {
-    updateDataSource(this.props.entity.id, {
-      name: this.props.name,
-      url: this.state.url,
-      schema: this.state.schema,
-      username: this.state.username,
-      password: this.state.password
-    });
-  }
-
-  updateProperty(event, key) {
-    const {target} = event;
-    const newState = {};
-
-    newState[key] = target.value;
-
-    this.setState(newState);
+  update(model) {
+    updateDataSource(this.props.entity.id, model);
   }
 
   renderPorts() {
@@ -66,6 +33,8 @@ class DataSource extends Component {
   }
 
   render() {
+    const {entity} = this.props;
+
     return (
       <div>
         <div>
@@ -77,56 +46,52 @@ class DataSource extends Component {
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">URL</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.url}
-              </span>
+                <span className="hide-while-edit">
+                  {entity.url}
+                </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.url}
-                       type="text"
-                       onChange={(event) => this.updateProperty(event, 'url')}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={entity.url}
+                       name="url"/>
               </div>
             </div>
 
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Schema</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.schema}
-              </span>
+                <span className="hide-while-edit">
+                  {entity.schema}
+                </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.schema}
-                       type="text"
-                       onChange={(event) => this.updateProperty(event, 'schema')}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={entity.schema}
+                       name="schema"/>
               </div>
             </div>
 
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Username</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.username}
-              </span>
+                <span className="hide-while-edit">
+                  {entity.username}
+                </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.username}
-                       type="text"
-                       onChange={(event) => this.updateProperty(event, 'username')}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={entity.username}
+                       name="username"/>
               </div>
             </div>
 
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Password</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.password}
-              </span>
+                <span className="hide-while-edit">
+                  {entity.password}
+                </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.password}
-                       type="text"
-                       onChange={(event) => this.updateProperty(event, 'password')}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={entity.password}
+                       name="password"/>
               </div>
             </div>
           </div>

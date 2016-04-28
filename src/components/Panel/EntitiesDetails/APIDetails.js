@@ -11,12 +11,9 @@ class APIDetails extends Component {
     super(props);
   }
 
-  update() {
-    updateAPI(this.props.entity.id, {
-      name: this.props.name
-    });
+  update(model) {
+    updateAPI(this.props.entity.id, model);
   }
-
 
   render() {
     return (

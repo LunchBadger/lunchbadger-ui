@@ -2,24 +2,20 @@ import React, {Component, PropTypes} from 'react';
 import CanvasElement from './CanvasElement';
 import Port from './Port';
 import './CanvasElement.scss';
-import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
+import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 import {findDOMNode} from 'react-dom';
 import Connection from 'stores/Connection';
 import _ from 'lodash';
+import Input from 'components/Generics/Form/Input';
 
 class PublicEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
-    name: PropTypes.string
+    paper: PropTypes.object
   };
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      url: this.props.entity.url
-    };
   }
 
   componentDidMount() {
@@ -41,11 +37,8 @@ class PublicEndpoint extends Component {
     });
   }
 
-  update() {
-    updatePublicEndpoint(this.props.entity.id, {
-      name: this.props.name,
-      url: this.state.url
-    });
+  update(model) {
+    updatePublicEndpoint(this.props.entity.id, model);
   }
 
   renderPorts() {
@@ -60,10 +53,6 @@ class PublicEndpoint extends Component {
               scope={port.portGroup}/>
       );
     });
-  }
-
-  updateURL(evt) {
-    this.setState({url: evt.target.value});
   }
 
   render() {
@@ -83,9 +72,9 @@ class PublicEndpoint extends Component {
                 {this.props.entity.url}
               </span>
 
-                <input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.url}
-                       onChange={this.updateURL.bind(this)}/>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.props.entity.url}
+                       name="url"/>
               </div>
             </div>
           </div>

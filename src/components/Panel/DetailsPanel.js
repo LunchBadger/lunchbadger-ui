@@ -18,13 +18,22 @@ class DetailsPanel extends Component {
     this.state = {
       element: null
     };
+
     this.appStateUpdate = () => {
       this.setState({element: AppState.getStateKey('currentElement')});
     }
   }
 
-  componentWillMount() {
-    AppState.addChangeListener(this.appStateUpdate);
+  componentWillUpdate(nextProps) {
+    if (nextProps.opened && !this.props.opened) {
+      AppState.addChangeListener(this.appStateUpdate);
+
+      this.setState({element: AppState.getStateKey('currentElement')});
+    }
+
+    if (!nextProps.opened && this.props.opened) {
+      AppState.removeChangeListener(this.appStateUpdate);
+    }
   }
 
   renderDetails() {

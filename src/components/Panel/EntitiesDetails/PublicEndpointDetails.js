@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import BaseDetails from './BaseDetails.js'
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
+import Input from 'components/Generics/Form/Input';
 
 class PublicEndpointDetails extends Component {
   static propTypes = {
@@ -11,16 +12,22 @@ class PublicEndpointDetails extends Component {
     super(props);
   }
 
-  update() {
-    updatePublicEndpoint(this.props.entity.id, {
-      name: this.props.name
-    });
+  update(model) {
+    updatePublicEndpoint(this.props.entity.id, model);
   }
 
-
   render() {
+    const {entity} = this.props;
+
     return (
-      <h2>{this.props.name}</h2>
+      <div className="details-panel__container details-panel__columns">
+        <div className="details-panel__fieldset">
+          <span className="details-panel__label">URL</span>
+          <Input className="details-panel__input"
+                 value={entity.url}
+                 name="url"/>
+        </div>
+      </div>
     )
   }
 }

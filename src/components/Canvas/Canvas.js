@@ -3,15 +3,17 @@ import BackendQuadrant from '../Quadrant/BackendQuadrant';
 import PrivateQuadrant from '../Quadrant/PrivateQuadrant';
 import GatewaysQuadrant from '../Quadrant/GatewaysQuadrant';
 import PublicQuadrant from '../Quadrant/PublicQuadrant';
-import Private from '../../stores/Private';
-import Public from '../../stores/Public';
-import Gateway from '../../stores/Gateway';
-import Backend from '../../stores/Backend';
+import Private from 'stores/Private';
+import Public from 'stores/Public';
+import Gateway from 'stores/Gateway';
+import Backend from 'stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
 import addConnection from 'actions/Connection/add';
 import removeConnection from 'actions/Connection/remove';
 import moveConnection from 'actions/Connection/move';
+import reattachConnection from 'actions/Connection/reattach';
+import attachConnection from 'actions/Connection/attach';
 import Connection from 'stores/Connection';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 
@@ -56,6 +58,7 @@ export default class Canvas extends Component {
     });
 
     this._attachPaperEvents();
+    this._registerConnectionTypes();
 
     jsPlumb.fire('canvasLoaded', this.paper);
   }
@@ -98,6 +101,22 @@ export default class Canvas extends Component {
     return true;
   }
 
+  _registerConnectionTypes() {
+    this.paper.registerConnectionTypes({
+      'wip': {
+        cssClass: 'loading',
+        detachable: false
+      }
+    });
+  }
+
+  _checkIfConnectionWasMadeBetweenModelAndDataSource(sourceId, targetId) {
+    const isBackend = Backend.findEntity(sourceId);
+    const isPrivate = Private.findEntity(targetId);
+
+    return isBackend && isPrivate;
+  }
+
   _attachPaperEvents() {
     this.paper.bind('connection', (info) => {
       const {source, sourceId, target, targetId, connection} = info;
@@ -116,7 +135,11 @@ export default class Canvas extends Component {
       this._handleExistingConnectionDetach(info);
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        addConnection(sourceId, targetId, info);
+        if (this._checkIfConnectionWasMadeBetweenModelAndDataSource(sourceId, targetId)) {
+          attachConnection(sourceId, targetId, info);
+        } else {
+          addConnection(sourceId, targetId, info);
+        }
       }
     });
 
@@ -137,7 +160,11 @@ export default class Canvas extends Component {
         });
 
       } else {
-        moveConnection(info.originalSourceId, info.originalTargetId, info.newTargetId, info);
+        if (this._checkIfConnectionWasMadeBetweenModelAndDataSource(info.newSourceId, info.newTargetId)) {
+          reattachConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
+        } else {
+          moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
+        }
       }
     });
 

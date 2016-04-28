@@ -33,6 +33,8 @@ class Backend extends BaseStore {
   }
 
   findEntity(id) {
+    id = this.formatId(id);
+    
     return _.find(Backends, {id: id});
   }
 

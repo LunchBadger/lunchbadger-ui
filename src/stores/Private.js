@@ -57,6 +57,8 @@ class Private extends BaseStore {
   }
 
   findEntity(id) {
+    id = this.formatId(id);
+    
     return _.find(Privates, {id: id});
   }
 }

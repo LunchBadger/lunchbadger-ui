@@ -4,7 +4,6 @@ import togglePanel from 'actions/togglePanel';
 
 export default class CloseButton extends Component {
   static propTypes = {
-    handleClick: PropTypes.func,
     showConfirmation: PropTypes.bool,
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired

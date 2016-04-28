@@ -1,45 +1,35 @@
 import React, {Component, PropTypes} from 'react';
-import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
+import classNames from 'classnames';
 
 export default class SaveButton extends Component {
   static propTypes = {
-    handleClick: PropTypes.func,
-    showConfirmation: PropTypes.bool,
     onSave: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired
+    enabled: PropTypes.func
+  };
+
+  static defaultProps = {
+    enabled: false
   };
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      isShowingModal: false
-    };
-
     this.handleClick = () => {
-      if (this.props.showConfirmation) {
-        this.setState({isShowingModal: true});
-      } else {
+      if (this.props.enabled) {
         this.props.onSave();
       }
-    };
-
-    this.handleClose = () => {
-      this.setState({isShowingModal: false});
     };
   }
 
   render() {
-    return (
-      <a className="confirm-button__accept" onClick={this.handleClick.bind(this)}>
-        <span className="confirm-button__button">Save</span>
+    const buttonClass = classNames({
+      'confirm-button__accept': true,
+      'confirm-button__accept--enabled': this.props.enabled
+    });
 
-        {
-          this.state.isShowingModal &&
-          <TwoOptionModal onClose={this.handleClose} onSave={this.props.onSave} onCancel={this.props.onCancel}>
-            <span>You have unsaved changes, what You gonna do with that?</span>
-          </TwoOptionModal>
-        }
+    return (
+      <a className={buttonClass} onClick={this.handleClick.bind(this)}>
+        <span className="confirm-button__button">Save</span>
       </a>
     )
   }

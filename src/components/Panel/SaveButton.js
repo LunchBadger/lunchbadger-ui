@@ -4,7 +4,7 @@ import classNames from 'classnames';
 export default class SaveButton extends Component {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
-    enabled: PropTypes.func
+    enabled: PropTypes.bool
   };
 
   static defaultProps = {

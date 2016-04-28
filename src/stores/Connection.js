@@ -14,8 +14,8 @@ class Connection extends BaseStore {
   _registerEvents(action) {
     switch (action.type) {
       case 'AddConnection':
-        const fromId = this._formatPortId(action.from);
-        const toId = this._formatPortId(action.to);
+        const fromId = this.formatId(action.from);
+        const toId = this.formatId(action.to);
         const connection = ConnectionFactory.create({
           fromId: fromId,
           toId: toId,
@@ -77,8 +77,8 @@ class Connection extends BaseStore {
   }
 
   findEntityIndexBySourceAndTarget(from, to) {
-    const fromId = this._formatPortId(from);
-    const toId = this._formatPortId(to);
+    const fromId = this.formatId(from);
+    const toId = this.formatId(to);
 
     return _.findIndex(connections, {fromId: fromId, toId: toId});
   }
@@ -128,8 +128,8 @@ class Connection extends BaseStore {
     if (currentConnectionIndex > -1) {
       this.removeConnection(currentConnectionIndex);
 
-      const fromId = this._formatPortId(action.from);
-      const toId = this._formatPortId(action.newTo);
+      const fromId = this.formatId(action.newFrom);
+      const toId = this.formatId(action.newTo);
       const connection = ConnectionFactory.create({
         fromId: fromId,
         toId: toId,
@@ -140,11 +140,7 @@ class Connection extends BaseStore {
     }
   }
 
-  _formatPortId(portId) {
-    const idSplit = portId.split('_');
 
-    return idSplit.slice(-1)[0];
-  }
 }
 
 export default new Connection;

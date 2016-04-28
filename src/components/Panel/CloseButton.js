@@ -20,7 +20,6 @@ export default class CloseButton extends Component {
       if (this.props.showConfirmation) {
         this.setState({isShowingModal: true});
       } else {
-        this.props.onSave();
         togglePanel(null);
       }
     };

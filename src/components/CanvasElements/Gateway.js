@@ -16,25 +16,11 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      deployed: false
-    };
-
-    this.onDeploy = (nextProps) => {
-      if (nextProps.entity.ready === true && this.state.deployed === false) {
-        this.setState({deployed: true});
-        notify.show('Gateway successfully deployed', 'success');
-        this.props.parent.triggerElementAutofocus();
-
-        delete this.onDeploy;
-      }
-    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.onDeploy) {
-      this.onDeploy(nextProps);
+    if (nextProps.ready && !this.props.ready) {
+      this._onDeploy();
     }
   }
 
@@ -54,6 +40,11 @@ class Gateway extends Component {
 
   onAddPipeline(name) {
     addPipeline(this.props.entity, name);
+  }
+
+  _onDeploy() {
+    notify.show('Gateway successfully deployed', 'success');
+    this.props.parent.triggerElementAutofocus();
   }
 
   render() {

@@ -102,9 +102,8 @@ export default (ComposedComponent) => {
                 <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
               </div>
             </div>
-            <SaveButton showConfirmation={!this.state.isPristine}
-                        onSave={this.update.bind(this)}
-                        onCancel={this.discardChanges.bind(this)}/>
+            <SaveButton enabled={!this.state.isPristine}
+                        onSave={this.update.bind(this)}/>
           </Form>
         </div>
       )

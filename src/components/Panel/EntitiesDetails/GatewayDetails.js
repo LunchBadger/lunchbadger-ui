@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import BaseDetails from './BaseDetails.js'
-import updateGateway from 'actions/CanvasElements/Gateway/update';
+import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
 
 class GatewayDetails extends Component {
   static propTypes = {
@@ -12,7 +12,7 @@ class GatewayDetails extends Component {
   }
 
   update() {
-    updateGateway(this.props.entity.id, {
+    redeployGateway(this.props.entity.id, {
       name: this.props.name
     });
   }

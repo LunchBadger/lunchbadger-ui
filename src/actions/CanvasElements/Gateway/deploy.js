@@ -10,7 +10,7 @@ export default (name) => {
     dispatch('DeployGatewaySuccess', {
       gateway
     });
-  }, 500);
+  }, 1500);
 
   dispatch('DeployGateway', {
     gateway

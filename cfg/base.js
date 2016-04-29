@@ -7,7 +7,11 @@ let defaultSettings = require('./defaults');
 // @example:
 // let npmBase = path.join(__dirname, '../node_modules');
 // let additionalPaths = [ path.join(npmBase, 'react-bootstrap') ];
-let additionalPaths = [];
+let additionalPaths = [
+  path.join(__dirname, '../index.js'),
+  path.join(__dirname, '../../../index.js'),
+  path.join(__dirname, '../../../src')
+];
 
 module.exports = {
   additionalPaths: additionalPaths,
@@ -15,8 +19,8 @@ module.exports = {
   debug: true,
   devtool: 'eval',
   output: {
-    path: path.join(__dirname, '/../dist/assets'),
-    filename: 'app.js',
+    path: path.join(__dirname, '/../dist'),
+    filename: 'plugin.js',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {
@@ -30,11 +34,13 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      actions: `${defaultSettings.srcPath}/actions/`,
-      components: `${defaultSettings.srcPath}/components/`,
-      models: `${defaultSettings.srcPath}/models/`,
-      stores: `${defaultSettings.srcPath}/stores/`,
-      config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
+      actions: `${defaultSettings.corePath}/actions`,
+      components: `${defaultSettings.corePath}/components`,
+      constants: `${defaultSettings.corePath}/constants`,
+      dispatcher: `${defaultSettings.corePath}/dispatcher`,
+      models: `${defaultSettings.corePath}/models`,
+      stores: `${defaultSettings.corePath}/stores`,
+      config: `${defaultSettings.corePath}/config` + process.env.REACT_WEBPACK_ENV
     }
   },
   module: {},

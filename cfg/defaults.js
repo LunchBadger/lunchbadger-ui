@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path');
 const srcPath = path.join(__dirname, '/../src');
+const corePath = path.join(__dirname, '/../../../src');
 const dfltPort = 8001;
 function getDefaultModules() {
   return {
@@ -43,7 +44,8 @@ function getDefaultModules() {
 }
 module.exports = {
   srcPath: srcPath,
-  publicPath: '/assets/',
+  corePath: corePath,
+  publicPath: '/',
   port: dfltPort,
   getDefaultModules: getDefaultModules,
   postcss: function () {

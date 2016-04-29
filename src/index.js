@@ -1,3 +1,7 @@
+// load plugins first
+import 'plugins/lunch-badger-plugin-monitor';
+
+// import rest of app
 import 'core-js/fn/object/assign';
 import 'jsplumb';
 import React from 'react';

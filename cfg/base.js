@@ -36,8 +36,13 @@ module.exports = {
       dispatcher: `${defaultSettings.srcPath}/dispatcher/`,
       models: `${defaultSettings.srcPath}/models/`,
       stores: `${defaultSettings.srcPath}/stores/`,
+      plugins: `${defaultSettings.srcPath}/../plugins/`,
       config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
     }
+  },
+  externals: {
+    'React': 'React',
+    'jsPlumb': 'jsPlumb'
   },
   module: {},
   postcss: function () {

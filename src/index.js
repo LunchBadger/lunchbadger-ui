@@ -1,19 +1,35 @@
-// start core...
+/**
+ * This file is entry point for each plugin
+ * You need to import this file to get access to core api and base elements
+ */
 
-// dispatcher
-export * as AppDispatcher from './dispatcher/AppDispatcher'
+//dispatcher
+import * as AppDispatcher from './dispatcher/AppDispatcher';
 
 // Components
-export Panel from './components/Panel/Panel';
-export CanvasElement from './components/CanvasElements/CanvasElement';
-export BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
-
-// actions
-export registerPlugin from './actions/registerPlugin';
+import Panel from './components/Panel/Panel';
+import CanvasElement from './components/CanvasElements/CanvasElement';
+import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
 
 // models
-export BaseModel from './models/BaseModel';
-export Plugin from './models/Plugin';
-export PanelButtonComponent from './models/Plugin/PanelButtonComponent';
-export PanelComponent from './models/Plugin/PanelComponent';
-export ToolComponent from './models/Plugin/ToolComponent';
+import BaseModel from './models/BaseModel';
+import Plugin from './models/Plugin';
+import PanelButtonComponent from './models/Plugin/PanelButtonComponent';
+import PanelComponent from './models/Plugin/PanelComponent';
+import ToolComponent from './models/Plugin/ToolComponent';
+
+// actions
+import registerPlugin from './actions/registerPlugin';
+
+export {
+  AppDispatcher,
+  Panel,
+  CanvasElement,
+  BaseDetails,
+  BaseModel,
+  Plugin,
+  PanelButtonComponent,
+  PanelComponent,
+  ToolComponent,
+  registerPlugin
+}

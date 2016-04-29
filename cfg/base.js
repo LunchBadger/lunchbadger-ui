@@ -26,10 +26,12 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      actions: `${defaultSettings.srcPath}/actions/`,
-      components: `${defaultSettings.srcPath}/components/`,
-      models: `${defaultSettings.srcPath}/models/`,
-      stores: `${defaultSettings.srcPath}/stores/`
+      actions: `${defaultSettings.srcPath}/actions`,
+      dispatcher: `${defaultSettings.srcPath}/dispatcher`,
+      components: `${defaultSettings.srcPath}/components`,
+      models: `${defaultSettings.srcPath}/models`,
+      constants: `${defaultSettings.srcPath}/constants`,
+      stores: `${defaultSettings.srcPath}/stores`
     }
   },
   module: {}

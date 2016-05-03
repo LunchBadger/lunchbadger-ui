@@ -60,7 +60,8 @@ class Model extends Component {
     return this.props.entity.properties.map((property, index) => {
       return (
         <ModelProperty index={index} key={`property-${property.id}`}
-                       property={property}/>
+                       property={property}
+                       entity={this.props.entity}/>
       );
     });
   }

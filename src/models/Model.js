@@ -56,10 +56,19 @@ export default class Model extends BaseModel {
   }
 
   /**
-   * @param policy {Property}
+   * @param property {Property}
    */
   addProperty(property) {
     this._properties.push(property);
+  }
+
+  /**
+   * @param property {Property}
+   */
+  removeProperty(property) {
+    _.remove(this._properties, function (prop) {
+      return prop.id === property.id
+    });
   }
 
   get ports() {

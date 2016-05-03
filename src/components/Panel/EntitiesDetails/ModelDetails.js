@@ -45,8 +45,20 @@ class ModelDetails extends Component {
         propertyIsIndex: false
       })
     );
+    this.setState({
+      properties: properties
+    });
+  }
 
-    this.setState({properties: properties});
+  onRemoveProperty(property) {
+    const {properties} = this.state;
+    
+    _.remove(properties, function (prop) {
+      return prop.id === property.id;
+    });
+    this.setState({
+      properties: properties
+    });
   }
 
   renderProperties() {
@@ -54,6 +66,7 @@ class ModelDetails extends Component {
       return (
         <ModelPropertyDetails index={index}
                               key={`property-${property.id}`}
+                              onRemove={this.onRemoveProperty.bind(this)}
                               property={property}/>
       );
     });
@@ -85,6 +98,7 @@ class ModelDetails extends Component {
                 Add property
               </a>
             </th>
+            <th></th>
           </tr>
           </thead>
           <tbody>

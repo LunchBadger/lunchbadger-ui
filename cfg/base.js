@@ -31,12 +31,22 @@ module.exports = {
       components: `${defaultSettings.srcPath}/components`,
       models: `${defaultSettings.srcPath}/models`,
       constants: `${defaultSettings.srcPath}/constants`,
-      stores: `${defaultSettings.srcPath}/stores`,
-      plugins: `${defaultSettings.srcPath}/../plugins`
+      stores: `${defaultSettings.srcPath}/stores`
     }
   },
   externals: {
-    'React': 'React'
+    "react": {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    "react-dom": {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
   },
   module: {},
   postcss: function () {

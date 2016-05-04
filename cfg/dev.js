@@ -15,7 +15,7 @@ let config = Object.assign({}, baseConfig, {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    core: './core/index',
+    core: './plugins/lunch-badger-core/index',
     plugins: [
       './plugins/lunch-badger-plugin-monitor/index',
       './plugins/lunch-badger-plugin-base/index'

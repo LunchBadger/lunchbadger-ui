@@ -32,6 +32,3 @@ bower_components/
 
 # Editors
 .idea/
-
-# Core
-core/*

@@ -12,7 +12,7 @@ let BowerWebpackPlugin = require('bower-webpack-plugin');
 let config = Object.assign({}, baseConfig, {
   entry: {
     start: './src/index',
-    core: './core/index',
+    core: './plugins/lunch-badger-core/index',
     plugins: [
       './plugins/lunch-badger-plugin-monitor/index',
       './plugins/lunch-badger-plugin-base/index'

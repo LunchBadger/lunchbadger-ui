@@ -7,7 +7,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var containerNodeModules = path.join(__dirname, '..', '..', 'node_modules');
+var containerNodeModules = path.join(__dirname, '..', '..', '..', 'node_modules');
 var localNodeModules = path.join(__dirname, '..', 'node_modules');
 
 fs.symlinkSync(containerNodeModules, localNodeModules, 'dir');

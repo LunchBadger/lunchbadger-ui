@@ -1,5 +1,6 @@
-import { dispatch } from 'dispatcher/AppDispatcher';
 import PublicEndpoint from 'models/PublicEndpoint';
+
+const {dispatch} = LBCore.dispatcher.AppDispatcher;
 
 export default (name, url) => {
   dispatch('AddPublicEndpoint', {

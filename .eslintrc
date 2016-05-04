@@ -10,6 +10,11 @@
       "jsx": true
     }
   },
+  "globals": {
+    "LBCore": true,
+    "jsPlumb": true,
+    "console": true
+  },
   "env": {
     "browser": true,
     "amd": true,
@@ -24,7 +29,7 @@
     "global-strict": 0,
     "no-extra-semi": 1,
     "no-underscore-dangle": 0,
-    "no-console": 1,
+    "no-console": 0,
     "no-unused-vars": 1,
     "no-trailing-spaces": [1, { "skipBlankLines": true }],
     "no-unreachable": 1,

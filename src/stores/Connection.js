@@ -1,7 +1,7 @@
-import BaseStore from './BaseStore';
 import ConnectionFactory from 'models/Connection';
 import _ from 'lodash';
 
+const {BaseStore} = LBCore.stores;
 const connections = [];
 
 class Connection extends BaseStore {

@@ -2,7 +2,7 @@ import App from './components/App/App';
 
 let LBBase = {
   components: {
-    App: App,
+    App: App
   }
 };
 

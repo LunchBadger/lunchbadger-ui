@@ -10,6 +10,12 @@
       "jsx": true
     }
   },
+  "globals": {
+    "LBCore": true,
+    "LBBase": true,
+    "jsPlumb": true,
+    "console": true
+  },
   "env": {
     "browser": true,
     "amd": true,

@@ -29,7 +29,7 @@ class ModelDetails extends Component {
       properties: []
     };
 
-    model.properties.forEach((property) => {
+    model.properties && model.properties.forEach((property) => {
       data.properties.push(ModelProperty.create(property));
     });
 
@@ -52,7 +52,7 @@ class ModelDetails extends Component {
 
   onRemoveProperty(property) {
     const {properties} = this.state;
-    
+
     _.remove(properties, function (prop) {
       return prop.id === property.id;
     });

@@ -30,7 +30,7 @@ class Model extends Component {
       properties: []
     };
 
-    model.properties.forEach((property) => {
+    model.properties && model.properties.forEach((property) => {
       data.properties.push(ModelPropertyFactory.create(property));
     });
 
@@ -110,12 +110,16 @@ class Model extends Component {
                        handleChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Model properties</div>
-              <div className="canvas-element__properties__property-value">
-                {this.renderProperties()}
-              </div>
-            </div>
+            {
+              this.props.entity.properties.length > 0 && (
+                <div className="canvas-element__properties__property">
+                  <div className="canvas-element__properties__property-title">Model properties</div>
+                  <div className="canvas-element__properties__property-value">
+                    {this.renderProperties()}
+                  </div>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>

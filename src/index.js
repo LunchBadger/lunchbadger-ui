@@ -15,6 +15,14 @@ import Pluggable from './stores/Pluggable';
 import Panel from './components/Panel/Panel';
 import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
+import Input from './components/Generics/Form/Input';
+import Checkbox from './components/Generics/Form/Checkbox';
+import CloseButton from './components/Panel/CloseButton';
+import SaveButton from './components/Panel/SaveButton';
+import Draggable from './components/Draggable/Draggable';
+import Modal from './components/Generics/Modal/Modal';
+import TwoOptionModal from './components/Generics/Modal/TwoOptionModal';
+import Quadrant from './components/Quadrant/Quadrant';
 
 // models
 import BaseModel from './models/BaseModel';
@@ -25,26 +33,52 @@ import ToolComponent from './models/Plugin/ToolComponent';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
+import togglePanel from './actions/togglePanel';
+import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 
-let LBCore = {};
+// constants
+import panelKeys from './constants/panelKeys';
+import portGroups from './constants/portGroups';
 
-LBCore.AppDispatcher = AppDispatcher;
-
-LBCore.BaseStore = BaseStore;
-LBCore.AppState = AppState;
-LBCore.Pluggable = Pluggable;
-
-LBCore.Panel = Panel;
-LBCore.CanvasElement = CanvasElement;
-LBCore.BaseDetails = BaseDetails;
-
-LBCore.BaseModel = BaseModel;
-LBCore.Plugin = Plugin;
-LBCore.PanelButtonComponent = PanelButtonComponent;
-LBCore.PanelComponent = PanelComponent;
-LBCore.ToolComponent = ToolComponent;
-
-LBCore.registerPlugin = registerPlugin;
+let LBCore = {
+  dispatcher: {
+    AppDispatcher: AppDispatcher
+  },
+  actions: {
+    registerPlugin: registerPlugin,
+    togglePanel: togglePanel,
+    toggleHighlight: toggleHighlight
+  },
+  components: {
+    Panel: Panel,
+    CanvasElement: CanvasElement,
+    BaseDetails: BaseDetails,
+    Input: Input,
+    Checkbox: Checkbox,
+    CloseButton: CloseButton,
+    SaveButton: SaveButton,
+    Draggable: Draggable,
+    Modal: Modal,
+    TwoOptionModal: TwoOptionModal,
+    Quadrant: Quadrant
+  },
+  stores: {
+    BaseStore: BaseStore,
+    AppState: AppState,
+    Pluggable: Pluggable
+  },
+  models: {
+    BaseModel: BaseModel,
+    Plugin: Plugin,
+    PanelButtonComponent: PanelButtonComponent,
+    PanelComponent: PanelComponent,
+    ToolComponent: ToolComponent
+  },
+  constants: {
+    panelKeys: panelKeys,
+    portGroups: portGroups
+  }
+};
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
   global.LBCore = LBCore;

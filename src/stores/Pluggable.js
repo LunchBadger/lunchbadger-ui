@@ -26,7 +26,6 @@ class Pluggable extends BaseStore {
    * @param plugin {Plugin}
    */
   registerPlugin(plugin) {
-    debugger;
     plugins.push(plugin);
   }
 
@@ -34,8 +33,6 @@ class Pluggable extends BaseStore {
    * @returns {Plugin[]}
    */
   getPlugins() {
-    console.log(this, 'returning');
-
     return plugins;
   }
 

@@ -31,8 +31,19 @@ module.exports = {
       components: `${defaultSettings.srcPath}/components`,
       models: `${defaultSettings.srcPath}/models`,
       constants: `${defaultSettings.srcPath}/constants`,
-      stores: `${defaultSettings.srcPath}/stores`
+      stores: `${defaultSettings.srcPath}/stores`,
+      plugins: `${defaultSettings.srcPath}/../plugins`
     }
   },
-  module: {}
+  externals: {
+    'React': 'React'
+  },
+  module: {},
+  postcss: function () {
+    return [
+      require('autoprefixer')({
+        browsers: ['last 2 versions', 'ie >= 10']
+      })
+    ];
+  }
 };

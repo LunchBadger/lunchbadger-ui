@@ -6,14 +6,13 @@
   "main": "",
   "scripts": {
     "clean": "rimraf dist/*",
-    "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
-    "dist": "npm run copy & webpack --env=dist",
+    "dist": "webpack --env=dist",
     "lint": "eslint ./src",
     "posttest": "npm run lint",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
-    "start": "npm run copy & webpack --env=dev --watch",
+    "start": "webpack --env=dev --watch",
     "test": "karma start",
     "test:watch": "karma start --autoWatch=true --singleRun=false"
   },
@@ -63,9 +62,9 @@
     "postcss-loader": "^0.8.0"
   },
   "dependencies": {
-    "core-js": "^2.0.0",
-    "normalize.css": "^4.0.0",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "core-js": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0"
   }
 }

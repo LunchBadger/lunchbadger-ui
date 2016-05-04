@@ -1,15 +1,14 @@
 'use strict';
 const path = require('path');
 const srcPath = path.join(__dirname, '/../src');
-const corePath = path.join(__dirname, '/../../../src');
 const dfltPort = 8001;
 function getDefaultModules() {
   return {
     preLoaders: [{
-        test: /\.(js|jsx)$/,
-        include: srcPath,
-        loader: 'eslint-loader'
-      }],
+      test: /\.(js|jsx)$/,
+      include: srcPath,
+      loader: 'eslint-loader'
+    }],
     loaders: [
       {
         test: /\.css$/,
@@ -44,7 +43,6 @@ function getDefaultModules() {
 }
 module.exports = {
   srcPath: srcPath,
-  corePath: corePath,
   publicPath: '/',
   port: dfltPort,
   getDefaultModules: getDefaultModules,

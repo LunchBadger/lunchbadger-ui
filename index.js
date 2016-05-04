@@ -1,1 +1,1 @@
-require('./dist/plugin');
+require('./dist/monitor');

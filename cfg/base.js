@@ -1,17 +1,7 @@
 'use strict';
 let path = require('path');
 let defaultSettings = require('./defaults');
-
-// Additional npm or bower modules to include in builds
-// Add all foreign plugins you may need into this array
-// @example:
-// let npmBase = path.join(__dirname, '../node_modules');
-// let additionalPaths = [ path.join(npmBase, 'react-bootstrap') ];
-let additionalPaths = [
-  path.join(__dirname, '../index.js'),
-  path.join(__dirname, '../../../index.js'),
-  path.join(__dirname, '../../../src')
-];
+let additionalPaths = [];
 
 module.exports = {
   additionalPaths: additionalPaths,
@@ -20,7 +10,9 @@ module.exports = {
   devtool: 'eval',
   output: {
     path: path.join(__dirname, '/../dist'),
-    filename: 'plugin.js',
+    filename: 'monitor.js',
+    libraryTarget: 'umd',
+    library: 'LBMonitor',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {
@@ -34,14 +26,17 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      actions: `${defaultSettings.corePath}/actions`,
-      components: `${defaultSettings.corePath}/components`,
-      constants: `${defaultSettings.corePath}/constants`,
-      dispatcher: `${defaultSettings.corePath}/dispatcher`,
-      models: `${defaultSettings.corePath}/models`,
-      stores: `${defaultSettings.corePath}/stores`,
-      config: `${defaultSettings.corePath}/config` + process.env.REACT_WEBPACK_ENV
+      actions: `${defaultSettings.srcPath}/actions`,
+      dispatcher: `${defaultSettings.srcPath}/dispatcher`,
+      components: `${defaultSettings.srcPath}/components`,
+      models: `${defaultSettings.srcPath}/models`,
+      constants: `${defaultSettings.srcPath}/constants`,
+      stores: `${defaultSettings.srcPath}/stores`,
+      plugins: `${defaultSettings.srcPath}/../plugins`
     }
+  },
+  externals: {
+    'React': 'React'
   },
   module: {},
   postcss: function () {

@@ -1,6 +1,12 @@
-// core
-import 'core/index';
+// entry for app...
+import React from 'react';
+import ReactDOM from 'react-dom';
+import 'font-awesome/css/font-awesome.css';
+import 'jsplumb';
 
-// plugins
-import 'plugins/lunch-badger-plugin-monitor/index';
-import 'plugins/lunch-badger-plugin-base/index';
+const App = LBBase.components.App;
+
+console.info('Application started..!');
+
+// Render the main component into the dom
+ReactDOM.render(<App />, document.getElementById('app'));

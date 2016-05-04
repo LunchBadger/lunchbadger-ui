@@ -10,10 +10,8 @@ module.exports = {
   devtool: 'eval',
   output: {
     path: path.join(__dirname, '/../dist'),
-    filename: 'core.js',
-    libraryTarget: 'umd',
-    library: 'LBCore',
-    publicPath: `.${defaultSettings.publicPath}`
+    filename: '[name].js',
+    publicPath: defaultSettings.publicPath
   },
   devServer: {
     contentBase: './src/',
@@ -31,7 +29,8 @@ module.exports = {
     }
   },
   externals: {
-    'React': 'React'
+    'react': 'React',
+    'react-dom': 'ReactDOM'
   },
   module: {},
   postcss: function () {

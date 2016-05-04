@@ -10,7 +10,14 @@ let defaultSettings = require('./defaults');
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
-  entry: path.join(__dirname, '../src/index'),
+  entry: {
+    start: './src/index',
+    core: './core/index',
+    plugins: [
+      './plugins/lunch-badger-plugin-monitor/index',
+      './plugins/lunch-badger-plugin-base/index'
+    ]
+  },
   cache: false,
   devtool: 'sourcemap',
   plugins: [
@@ -21,7 +28,6 @@ let config = Object.assign({}, baseConfig, {
     new BowerWebpackPlugin({
       searchResolveModulesDirectories: false
     }),
-    new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.NoErrorsPlugin()

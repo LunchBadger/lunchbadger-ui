@@ -9,11 +9,18 @@ let defaultSettings = require('./defaults');
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
-  entry: [
-    'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
+  entry: {
+    start: [
+      'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
+      'webpack/hot/only-dev-server',
+      './src/index'
+    ],
+    core: './core/index',
+    plugins: [
+      './plugins/lunch-badger-plugin-monitor/index',
+      './plugins/lunch-badger-plugin-base/index'
+    ]
+  },
   cache: true,
   devtool: 'eval-source-map',
   plugins: [

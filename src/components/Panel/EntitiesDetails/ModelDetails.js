@@ -15,7 +15,8 @@ class ModelDetails extends Component {
     super(props);
 
     this.state = {
-      properties: props.entity.properties.slice()
+      properties: props.entity.properties.slice(),
+      changed: false
     }
   }
 
@@ -45,8 +46,13 @@ class ModelDetails extends Component {
         propertyIsIndex: false
       })
     );
+
     this.setState({
       properties: properties
+    });
+
+    this.setState({changed: true}, () => {
+      this.props.parent.checkPristine();
     });
   }
 
@@ -56,8 +62,19 @@ class ModelDetails extends Component {
     _.remove(properties, function (prop) {
       return prop.id === property.id;
     });
+
     this.setState({
       properties: properties
+    });
+
+    if (!_.isEqual(properties, this.props.entity.properties)) {
+      this.setState({changed: true});
+    } else {
+      this.setState({changed: false});
+    }
+
+    setTimeout(() => {
+      this.props.parent.checkPristine();
     });
   }
 

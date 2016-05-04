@@ -34,4 +34,4 @@ bower_components/
 .idea/
 
 # Core
-core/*
+core/

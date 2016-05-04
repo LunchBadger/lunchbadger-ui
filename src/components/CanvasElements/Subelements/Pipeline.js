@@ -7,9 +7,10 @@ import {findDOMNode} from 'react-dom';
 import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/addAndConnect';
 import Model from 'models/Model';
 import PrivateEndpoint from 'models/PrivateEndpoint';
-import AppState from 'stores/AppState';
 import Connection from 'stores/Connection';
 import Private from 'stores/Private';
+
+const AppState = LBCore.stores.AppState;
 
 export default class Pipeline extends Component {
   static propTypes = {

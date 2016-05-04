@@ -1,12 +1,6 @@
 'use strict';
 let path = require('path');
 let defaultSettings = require('./defaults');
-
-// Additional npm or bower modules to include in builds
-// Add all foreign plugins you may need into this array
-// @example:
-// let npmBase = path.join(__dirname, '../node_modules');
-// let additionalPaths = [ path.join(npmBase, 'react-bootstrap') ];
 let additionalPaths = [];
 
 module.exports = {
@@ -15,9 +9,11 @@ module.exports = {
   debug: true,
   devtool: 'eval',
   output: {
-    path: path.join(__dirname, '/../dist/assets'),
-    filename: 'app.js',
-    publicPath: defaultSettings.publicPath
+    path: path.join(__dirname, '/../dist'),
+    filename: 'base.js',
+    libraryTarget: 'umd',
+    library: 'LBBase',
+    publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {
     contentBase: './src/',
@@ -30,19 +26,27 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      actions: `${defaultSettings.srcPath}/actions/`,
-      components: `${defaultSettings.srcPath}/components/`,
-      constants: `${defaultSettings.srcPath}/constants/`,
-      dispatcher: `${defaultSettings.srcPath}/dispatcher/`,
-      models: `${defaultSettings.srcPath}/models/`,
-      stores: `${defaultSettings.srcPath}/stores/`,
-      plugins: `${defaultSettings.srcPath}/../plugins/`,
-      config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
+      actions: `${defaultSettings.srcPath}/actions`,
+      dispatcher: `${defaultSettings.srcPath}/dispatcher`,
+      components: `${defaultSettings.srcPath}/components`,
+      models: `${defaultSettings.srcPath}/models`,
+      constants: `${defaultSettings.srcPath}/constants`,
+      stores: `${defaultSettings.srcPath}/stores`
     }
   },
   externals: {
-    'React': 'React',
-    'jsPlumb': 'jsPlumb'
+    "react": {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    "react-dom": {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
   },
   module: {},
   postcss: function () {

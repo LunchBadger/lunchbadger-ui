@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
-import Input from 'components/Generics/Form/Input';
+
+const Input = LBCore.components.Input;
 
 export default class ModelProperty extends Component {
   static propTypes = {

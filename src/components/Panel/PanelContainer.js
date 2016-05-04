@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
-import MetricsPanel from './MetricsPanel';
 import ForecastsPanel from './ForecastsPanel';
 
 export default class PanelContainer extends Component {
@@ -17,8 +16,6 @@ export default class PanelContainer extends Component {
     return (
       <div>
         <DetailsPanel canvas={this.props.canvas}
-                      container={this.props.container}/>
-        <MetricsPanel canvas={this.props.canvas}
                       container={this.props.container}/>
         <ForecastsPanel canvas={this.props.canvas}
                         container={this.props.container}/>

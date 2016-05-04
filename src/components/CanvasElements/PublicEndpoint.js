@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import Port from './Port';
-import './CanvasElement.scss';
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 import {findDOMNode} from 'react-dom';
 import Connection from 'stores/Connection';
 import _ from 'lodash';
-import Input from 'components/Generics/Form/Input';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const Input = LBCore.components.Input;
 
 class PublicEndpoint extends Component {
   static propTypes = {

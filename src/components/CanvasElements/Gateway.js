@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import Pipeline from './Subelements/Pipeline';
-import './CanvasElement.scss';
 import updateGateway from 'actions/CanvasElements/Gateway/update';
 import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
-import Input from 'components/Generics/Form/Input';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const Input = LBCore.components.Input;
 
 class Gateway extends Component {
   static propTypes = {

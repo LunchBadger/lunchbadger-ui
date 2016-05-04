@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import Panel from './Panel';
-import panelKeys from 'constants/panelKeys';
+
+const Panel = LBCore.components.Panel;
+const panelKeys = LBCore.constants.panelKeys;
 
 class ForecastsPanel extends Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class ForecastsPanel extends Component {
 
     props.parent.storageKey = panelKeys.FORECASTS_PANEL;
   }
-  
+
   render() {
     return (
       <div className="panel__body">

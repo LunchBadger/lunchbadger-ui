@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import togglePanel from 'actions/togglePanel';
-import AppState from 'stores/AppState';
 import classNames from 'classnames';
+
+const togglePanel = LBCore.actions.togglePanel;
+const AppState = LBCore.stores.AppState;
 
 export default class HeaderMenuLink extends Component {
   static propTypes = {

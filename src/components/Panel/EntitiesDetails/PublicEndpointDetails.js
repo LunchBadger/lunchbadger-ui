@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from './BaseDetails.js'
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
-import Input from 'components/Generics/Form/Input';
+
+const BaseDetails = LBCore.components.BaseDetails;
+const Input = LBCore.components.Input;
 
 class PublicEndpointDetails extends Component {
   static propTypes = {

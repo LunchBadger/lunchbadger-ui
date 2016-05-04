@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import Panel from './Panel';
-import panelKeys from 'constants/panelKeys';
 import PublicEndpointDetails from './EntitiesDetails/PublicEndpointDetails';
 import PrivateEndpointDetails from './EntitiesDetails/PrivateEndpointDetails';
 import APIDetails from './EntitiesDetails/APIDetails';
 import ModelDetails from './EntitiesDetails/ModelDetails';
 import GatewayDetails from './EntitiesDetails/GatewayDetails';
 import DataSourceDetails from './EntitiesDetails/DataSourceDetails';
-import AppState from 'stores/AppState';
+
+const AppState = LBCore.stores.AppState;
+const Panel = LBCore.components.Panel;
+const panelKeys = LBCore.constants.panelKeys;
 
 class DetailsPanel extends Component {
   constructor(props) {

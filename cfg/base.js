@@ -26,11 +26,34 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      actions: `${defaultSettings.srcPath}/actions/`,
-      components: `${defaultSettings.srcPath}/components/`,
-      models: `${defaultSettings.srcPath}/models/`,
-      stores: `${defaultSettings.srcPath}/stores/`
+      actions: `${defaultSettings.srcPath}/actions`,
+      dispatcher: `${defaultSettings.srcPath}/dispatcher`,
+      components: `${defaultSettings.srcPath}/components`,
+      models: `${defaultSettings.srcPath}/models`,
+      constants: `${defaultSettings.srcPath}/constants`,
+      stores: `${defaultSettings.srcPath}/stores`
     }
   },
-  module: {}
+  externals: {
+    "react": {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    "react-dom": {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
+  },
+  module: {},
+  postcss: function () {
+    return [
+      require('autoprefixer')({
+        browsers: ['last 2 versions', 'ie >= 10']
+      })
+    ];
+  }
 };

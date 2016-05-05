@@ -1,3 +1,3 @@
-# Lunch Badger Core Plugin
+# Lunch Badger Core
 
-Just put the plugin inside plugins/ directory of core and start development.
+Core required for development

@@ -1,0 +1,270 @@
+@import '../../config';
+
+.canvas-element {
+  max-width: 80%;
+  min-width: 200px;
+  color: $font-base;
+  position: relative;
+  display: block;
+  background: $ui-light;
+  border-radius: 10px;
+  border: 2px solid $ui-base-border;
+  padding: 15px 20px;
+  margin: 20px 10%;
+
+  &.mouse-over {
+    z-index: 1;
+  }
+
+  &.editable {
+    border-radius: 0;
+
+    .hide-while-edit {
+      display: none;
+    }
+
+    .editable-only {
+      display: block;
+    }
+  }
+
+  &.expanded {
+    .expanded-only {
+      display: block;
+    }
+
+    .canvas-element__extra {
+      max-height: 9999px;
+      overflow: hidden;
+    }
+  }
+
+  &.wip {
+    opacity: .4 !important;
+    pointer-events: none !important;
+
+    .canvas-element__extra {
+      max-height: 0;
+      visibility: hidden;
+    }
+  }
+
+  &.highlighted {
+    border-colotr: #fbb;
+    background: #fbb;
+  }
+}
+
+.editable-only {
+  display: none;
+}
+
+.expanded-only {
+  display: none;
+}
+
+.canvas-element__actions {
+  text-align: right;
+}
+
+.canvas-element__inside {
+  overflow: hidden;
+  width: 100%;
+  display: table;
+}
+
+.canvas-element__icon {
+  text-align: center;
+  padding-right: 10px;
+  width: 50px;
+  display: table-cell;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.canvas-element__title {
+  text-align: left;
+  font-size: 17px;
+  display: table-cell;
+  vertical-align: middle;
+
+  .editing {
+    font-size: 17px;
+    margin-left: -2px;
+  }
+}
+
+.canvas-element__icon {
+  font-size: 26px;
+}
+
+.canvas-element__port {
+  position: absolute;
+  margin-top: 20px;
+  top: 0;
+}
+
+.canvas-element__port--in {
+  left: -12px;
+}
+
+.canvas-element__port--out {
+  right: -12px;
+}
+
+.canvas-element__extra {
+  margin: 0 -40px;
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.canvas-element__sub-element {
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.canvas-element__sub-elements {
+  padding-top: 8px;
+
+  .canvas-element {
+    padding: 0 20px;
+    border: none;
+    width: 100%;
+    min-width: 100%;
+
+    .canvas-element__icon {
+      width: 20px;
+      padding-left: 10px;
+      font-size: 16px;
+    }
+  }
+}
+
+.canvas-element__sub-elements__title {
+  font-weight: 700;
+  font-size: 14px;
+  padding-left: 30px;
+  color: $ui-dark-background;
+
+  &:hover {
+    .canvas-element__add {
+      display: initial;
+    }
+  }
+}
+
+.canvas-element__add {
+  display: none;
+  float: right;
+  font-size: 14px;
+  cursor: pointer;
+  padding: .2em .5em;
+  margin-right: 1em;
+  color: #ccc;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.canvas-element__button {
+  font-size: 17px;
+  margin: 1em .5em 0 .5em;
+  padding: .2em .5em;
+  border-radius: 5px;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: #ccc;
+  }
+}
+
+.canvas-element__input {
+  font-size: 17px;
+  width: 100%;
+}
+
+.canvas-element__input--property {
+  font-size: 16px;
+}
+
+.canvas-element__properties {
+  padding: 10px 30px 0;
+}
+
+.canvas-element__properties__title {
+  font-weight: 700;
+  font-size: 14px;
+  color: $ui-dark-background;
+}
+
+.canvas-element__properties__table {
+  display: block;
+  width: 100%;
+}
+
+.canvas-element__properties__property {
+  display: block;
+  width: 100%;
+}
+
+.canvas-element__properties__property-title {
+  display: block;
+  font-size: 13px;
+  padding-top: 10px;
+}
+
+.canvas-element__properties__property-value {
+  display: block;
+  padding-top: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+.canvas-element.Model {
+  .canvas-element__inside {
+    width: 66%;
+    min-width: 150px;
+  }
+  .canvas-element__properties__property-value {
+    padding-left: 0;
+  }
+  .canvas-element__model-endpoint {
+    line-height: 44px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 20px;
+    font-size: 30px;
+    border-left: 2px solid $ui-base-border;
+  }
+  &.editable, &.expanded {
+    .canvas-element__model-endpoint {
+      border-left: none;
+    }
+    .canvas-element__input.canvas-element__input--property, .canvas-element__span--property {
+      width: 45%;
+      float: left;
+      margin-right: 2.5%;
+    }
+  }
+  &.expanded {
+    .canvas-element__span--property {
+      margin: 0;
+      padding: 2px 5px;
+      border: 1px solid #ccc;
+    }
+  }
+  .fa-plus {
+    display: none;
+  }
+  &.editable {
+    .fa-plus {
+      display: initial;
+    }
+  }
+}

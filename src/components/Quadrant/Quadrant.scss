@@ -1,0 +1,35 @@
+@import '../../config';
+
+.quadrant {
+  vertical-align: top;
+  min-width: 25%;
+  position: relative;
+  border-right: 1px dashed $ui-dark-border;
+  flex: 0 0 auto;
+}
+
+.quadrant__title {
+  color: $font-light;
+  background: $ui-dark;
+  padding: 15px 20px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 1px solid $ui-dark-border;
+  border-right: 1px solid $ui-dark-border;
+}
+
+.quadrant__body {
+  padding: 20px;
+  position: relative;
+}
+
+.quadrant__resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: transparent;
+  cursor: ew-resize;
+  z-index: 1;
+}

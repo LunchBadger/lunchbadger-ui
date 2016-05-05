@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
+import unbundleAPI from 'actions/CanvasElements/API/unbundle';
 import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import _ from 'lodash';
 
@@ -64,10 +65,15 @@ class API extends Component {
             paper={this.props.paper}
             left={endpoint.left}
             top={endpoint.top}
+            handleEndDrag={this._handleDrop.bind(this)}
             hideSourceOnDrag={true}/>
         </div>
       );
     });
+  }
+
+  _handleDrop(item) {
+    unbundleAPI(item.parent, item.entity);
   }
 
   _handleModalConfirm() {

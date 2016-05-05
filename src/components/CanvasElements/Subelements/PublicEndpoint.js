@@ -8,12 +8,12 @@ import _ from 'lodash';
 
 const boxSource = {
   beginDrag(props) {
-    const {entity, left, top, parent} = props;
-    return {entity, left, top, parent, subelement: true};
+    const {entity, left, top, parent, handleEndDrag} = props;
+    return {entity, left, top, parent, handleEndDrag, subelement: true};
   },
   endDrag(props) {
-    const {entity, left, top, parent} = props;
-    return {entity, left, top, parent, subelement: true};
+    const {entity, left, top, parent, handleEndDrag} = props;
+    return {entity, left, top, parent, handleEndDrag, subelement: true};
   }
 };
 
@@ -30,7 +30,8 @@ export default class PublicEndpoint extends Component {
     paper: PropTypes.object,
     left: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
-    hideSourceOnDrag: PropTypes.bool.isRequired
+    hideSourceOnDrag: PropTypes.bool.isRequired,
+    handleEndDrag: PropTypes.func
   };
 
   constructor(props) {

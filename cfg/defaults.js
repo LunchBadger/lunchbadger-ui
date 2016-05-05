@@ -49,19 +49,13 @@ function getDefaultModules() {
       }, {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url-loader?limit=10000&mimetype=image/svg+xml"
-      }, {
-        test: require.resolve('jsplumb'),
-        loaders: [
-          'imports?this=>window',
-          'script'
-        ]
       }
     ]
   };
 }
 module.exports = {
   srcPath: srcPath,
-  publicPath: '/assets/',
+  publicPath: '/',
   port: dfltPort,
   getDefaultModules: getDefaultModules,
   postcss: function () {

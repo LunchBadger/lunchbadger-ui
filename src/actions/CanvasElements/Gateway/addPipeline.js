@@ -1,4 +1,4 @@
-import {dispatch} from 'dispatcher/AppDispatcher';
+const {dispatch} = LBCore.dispatcher.AppDispatcher;
 
 export default (gateway, name) => {
   dispatch('AddPipeline', {

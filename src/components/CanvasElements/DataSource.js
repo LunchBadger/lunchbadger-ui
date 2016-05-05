@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import Port from './Port';
-import './CanvasElement.scss';
 import updateDataSource from 'actions/CanvasElements/DataSource/update';
-import Input from 'components/Generics/Form/Input';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const Input = LBCore.components.Input;
 
 class DataSource extends Component {
   static propTypes = {

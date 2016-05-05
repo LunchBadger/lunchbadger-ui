@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
-import MetricsPanel from './MetricsPanel';
 import ForecastsPanel from './ForecastsPanel';
+
+const Pluggable = LBCore.stores.Pluggable;
 
 export default class PanelContainer extends Component {
   static propTypes = {
@@ -11,6 +12,34 @@ export default class PanelContainer extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      pluggedPanels: Pluggable.getPanels()
+    };
+
+    this.pluginStoreChanged = () => {
+      this.setState({pluggedPanels: Pluggable.getPanels()});
+    }
+  }
+
+  componentWillMount() {
+    Pluggable.addChangeListener(this.pluginStoreChanged);
+  }
+
+  componentWillUnmount() {
+    Pluggable.removeChangeListener(this.pluginStoreChanged);
+  }
+
+  renderPanels() {
+    return this.state.pluggedPanels.map((panel) => {
+      const PanelComponent = panel.panel.component;
+
+      return (
+        <PanelComponent key={`${panel.panelButton.panelKey}-panel-plugin`}
+                        canvas={this.props.canvas}
+                        container={this.props.container} />
+      );
+    });
   }
 
   render() {
@@ -18,10 +47,9 @@ export default class PanelContainer extends Component {
       <div>
         <DetailsPanel canvas={this.props.canvas}
                       container={this.props.container}/>
-        <MetricsPanel canvas={this.props.canvas}
-                      container={this.props.container}/>
         <ForecastsPanel canvas={this.props.canvas}
                         container={this.props.container}/>
+        {this.renderPanels()}
       </div>
     );
   }

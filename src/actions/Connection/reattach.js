@@ -1,5 +1,6 @@
-import {dispatch} from 'dispatcher/AppDispatcher';
 import {notify} from 'react-notify-toast';
+
+const {dispatch} = LBCore.dispatcher.AppDispatcher;
 
 export default (from, to, newFrom, newTo, info) => {
   info.connection.setType('wip');

@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import Port from './Port';
-import './CanvasElement.scss';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 import slug from 'slug';
-import Input from 'components/Generics/Form/Input';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const Input = LBCore.components.Input;
 
 class PrivateEndpoint extends Component {
   static propTypes = {

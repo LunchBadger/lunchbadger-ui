@@ -1,9 +1,9 @@
-import BaseStore from 'stores/BaseStore';
 import Connection from './Connection';
 import ConnectionFactory from 'models/Connection';
-import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
+const {BaseStore} = LBCore.stores;
+const {register} = LBCore.dispatcher.AppDispatcher;
 const Publics = [];
 
 class Public extends BaseStore {

@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import Quadrant from './Quadrant';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
 import Model from '../CanvasElements/Model';
 import updateOrder from 'actions/Quadrants/Private/updateOrder';
+
+const Quadrant = LBCore.components.Quadrant;
 
 class PrivateQuadrant extends Component {
   static propTypes = {

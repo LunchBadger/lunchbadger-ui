@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from './BaseDetails.js'
 import updateAPI from 'actions/CanvasElements/API/update';
+
+const BaseDetails = LBCore.components.BaseDetails;
 
 class APIDetails extends Component {
   static propTypes = {

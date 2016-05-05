@@ -15,7 +15,8 @@ import moveConnection from 'actions/Connection/move';
 import reattachConnection from 'actions/Connection/reattach';
 import attachConnection from 'actions/Connection/attach';
 import Connection from 'stores/Connection';
-import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
+
+const toggleHighlight = LBCore.actions.toggleHighlight;
 
 export default class Canvas extends Component {
   constructor(props) {

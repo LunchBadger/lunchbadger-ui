@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import Quadrant from './Quadrant';
 import PublicEndpoint from '../CanvasElements/PublicEndpoint';
 import updateOrder from 'actions/Quadrants/Public/updateOrder';
 import API from '../CanvasElements/API';
+
+const Quadrant = LBCore.components.Quadrant;
 
 class PublicQuadrant extends Component {
   static propTypes = {

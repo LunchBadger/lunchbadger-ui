@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from './BaseDetails.js'
 import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
+
+const BaseDetails = LBCore.components.BaseDetails;
 
 class GatewayDetails extends Component {
   static propTypes = {

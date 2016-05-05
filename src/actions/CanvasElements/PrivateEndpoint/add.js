@@ -1,5 +1,6 @@
-import { dispatch } from 'dispatcher/AppDispatcher';
 import PrivateEndpoint from 'models/PrivateEndpoint';
+
+const {dispatch} = LBCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   dispatch('AddPrivateEndpoint', {

@@ -1,7 +1,7 @@
-import BaseStore from './BaseStore';
-import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
+const {BaseStore} = LBCore.stores;
+const {register} = LBCore.dispatcher.AppDispatcher;
 const Backends = [];
 
 class Backend extends BaseStore {

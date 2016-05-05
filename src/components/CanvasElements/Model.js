@@ -1,14 +1,14 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import Port from './Port';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import ModelPropertyFactory from 'models/ModelProperty';
-import './CanvasElement.scss';
 import updateModel from 'actions/CanvasElements/Model/update';
 import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
-import Input from 'components/Generics/Form/Input';
 import _ from 'lodash';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const Input = LBCore.components.Input;
 
 class Model extends Component {
   static propTypes = {

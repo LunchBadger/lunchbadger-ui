@@ -1,5 +1,6 @@
-import { dispatch } from '../../dispatcher/AppDispatcher';
-import Gateway from '../../models/Gateway';
+import Gateway from 'models/Gateway';
+
+const {dispatch} = LBCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   dispatch('AddGateway', {

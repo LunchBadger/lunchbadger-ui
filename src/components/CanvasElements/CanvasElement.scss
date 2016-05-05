@@ -19,6 +19,12 @@
   &.editable {
     border-radius: 0;
 
+    .model-property:hover {
+      .model-property__remove.fa {
+        display: block;
+      }
+    }
+
     .hide-while-edit {
       display: none;
     }
@@ -225,6 +231,7 @@
   white-space: nowrap;
   width: 100%;
 }
+
 .canvas-element.Model {
   .canvas-element__inside {
     width: 66%;
@@ -267,4 +274,19 @@
       display: initial;
     }
   }
+}
+
+.Model .canvas-element__properties__property-title {
+  clear: both;
+}
+
+.Model .canvas-element__properties__property-value {
+  overflow: visible;
+  .model-property {
+    overflow-y: visible;
+  }
+}
+
+.clearfix {
+  clear: both;
 }

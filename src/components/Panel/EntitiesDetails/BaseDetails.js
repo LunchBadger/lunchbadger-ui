@@ -47,7 +47,15 @@ export default (ComposedComponent) => {
     }
 
     checkPristine(model, changed) {
-      this.setState({isPristine: !changed});
+      if (!changed) {
+        changed = this.refs.form.isChanged();
+      }
+
+      if (this.element.state.changed) {
+        this.setState({isPristine: false});
+      } else {
+        this.setState({isPristine: !changed});
+      }
     }
 
     _preventSubmit(event) {
@@ -61,10 +69,10 @@ export default (ComposedComponent) => {
 
     render() {
       const detailsClass = classNames({
-        'collapsed': this.state.collapsedDetails
+        collapsed: this.state.collapsedDetails
       });
       const propertiesClass = classNames({
-        'collapsed': this.state.collapsedProperties
+        collapsed: this.state.collapsedProperties
       });
 
       return (

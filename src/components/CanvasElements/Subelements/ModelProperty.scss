@@ -3,9 +3,8 @@
 .model-property {
   display: block;
   width: 100%;
-  overflow: hidden;
   border-bottom: 1px solid $ui-base-border;
-
+  position: relative;
   &:first-child {
     border-top: 1px solid $ui-base-border;
   }
@@ -38,4 +37,20 @@
 .model-property__input {
   width: 100%;
   font-size: 14px;
+}
+.model-property__remove.fa {
+  display: none;
+  color: #999;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  right: -20px;
+  line-height: 20px;
+  text-align: center;
+  transform: translateY(-50%);
+  &:hover {
+    color: #000;
+  }
 }

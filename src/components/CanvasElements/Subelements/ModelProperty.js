@@ -1,16 +1,22 @@
 import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
+import removeProperty from 'actions/CanvasElements/Model/removeProperty';
 
 const Input = LBCore.components.Input;
 
 export default class ModelProperty extends Component {
   static propTypes = {
+    entity: PropTypes.object.isRequired,
     property: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired
   };
 
   constructor(props) {
     super(props);
+  }
+
+  onRemove(entity, property) {
+    removeProperty(entity, property);
   }
 
   render() {
@@ -50,6 +56,8 @@ export default class ModelProperty extends Component {
         <Input value={property.id}
                type="hidden"
                name={`properties[${index}][id]`}/>
+        <i className="model-property__remove fa fa-remove" onClick={() => this.onRemove(this.props.entity, property)}></i>
+        <div className="clearfix"></div>
       </div>
     );
   }

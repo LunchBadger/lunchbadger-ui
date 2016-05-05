@@ -48,6 +48,11 @@ class Private extends BaseStore {
           }));
           this.emitChange();
           break;
+        
+        case 'RemoveModelProperty':
+          action.model.removeProperty(action.property);
+          this.emitChange();
+          break;
       }
     });
   }

@@ -5,11 +5,16 @@ const Checkbox = LBCore.components.Checkbox;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
-    property: PropTypes.object.isRequired
+    property: PropTypes.object.isRequired,
+    onRemove: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
+  }
+
+  onRemove(property) {
+    this.props.onRemove(property);
   }
 
   render() {
@@ -58,6 +63,7 @@ export default class ModelPropertyDetails extends Component {
                  type="text"
           />
         </td>
+        <td><i className="fa fa-remove" onClick={() => this.onRemove(property)}></i></td>
       </tr>
     );
   }

@@ -16,7 +16,8 @@ class ModelDetails extends Component {
     super(props);
 
     this.state = {
-      properties: props.entity.properties.slice()
+      properties: props.entity.properties.slice(),
+      changed: false
     }
   }
 
@@ -30,7 +31,7 @@ class ModelDetails extends Component {
       properties: []
     };
 
-    model.properties.forEach((property) => {
+    model.properties && model.properties.forEach((property) => {
       data.properties.push(ModelProperty.create(property));
     });
 
@@ -47,7 +48,35 @@ class ModelDetails extends Component {
       })
     );
 
-    this.setState({properties: properties});
+    this.setState({
+      properties: properties
+    });
+
+    this.setState({changed: true}, () => {
+      this.props.parent.checkPristine();
+    });
+  }
+
+  onRemoveProperty(property) {
+    const {properties} = this.state;
+
+    _.remove(properties, function (prop) {
+      return prop.id === property.id;
+    });
+
+    this.setState({
+      properties: properties
+    });
+
+    if (!_.isEqual(properties, this.props.entity.properties)) {
+      this.setState({changed: true});
+    } else {
+      this.setState({changed: false});
+    }
+
+    setTimeout(() => {
+      this.props.parent.checkPristine();
+    });
   }
 
   renderProperties() {
@@ -55,6 +84,7 @@ class ModelDetails extends Component {
       return (
         <ModelPropertyDetails index={index}
                               key={`property-${property.id}`}
+                              onRemove={this.onRemoveProperty.bind(this)}
                               property={property}/>
       );
     });
@@ -86,6 +116,7 @@ class ModelDetails extends Component {
                 Add property
               </a>
             </th>
+            <th></th>
           </tr>
           </thead>
           <tbody>

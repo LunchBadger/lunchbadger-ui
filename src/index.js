@@ -23,6 +23,8 @@ import Draggable from './components/Draggable/Draggable';
 import Modal from './components/Generics/Modal/Modal';
 import TwoOptionModal from './components/Generics/Modal/TwoOptionModal';
 import Quadrant from './components/Quadrant/Quadrant';
+import ToolGroup from './components/Tools/ToolGroup';
+import Tool from './components/Tools/Tool';
 
 // models
 import BaseModel from './models/BaseModel';
@@ -30,6 +32,7 @@ import Plugin from './models/Plugin';
 import PanelButtonComponent from './models/Plugin/PanelButtonComponent';
 import PanelComponent from './models/Plugin/PanelComponent';
 import ToolComponent from './models/Plugin/ToolComponent';
+import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
@@ -60,7 +63,9 @@ let LBCore = {
     Draggable: Draggable,
     Modal: Modal,
     TwoOptionModal: TwoOptionModal,
-    Quadrant: Quadrant
+    Quadrant: Quadrant,
+    Tool: Tool,
+    ToolGroup: ToolGroup
   },
   stores: {
     BaseStore: BaseStore,
@@ -72,7 +77,8 @@ let LBCore = {
     Plugin: Plugin,
     PanelButtonComponent: PanelButtonComponent,
     PanelComponent: PanelComponent,
-    ToolComponent: ToolComponent
+    ToolComponent: ToolComponent,
+    ToolGroupComponent: ToolGroupComponent
   },
   constants: {
     panelKeys: panelKeys,

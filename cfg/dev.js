@@ -18,6 +18,7 @@ let config = Object.assign({}, baseConfig, {
     core: './plugins/lunch-badger-core/index',
     plugins: [
       './plugins/lunch-badger-plugin-monitor/index',
+      './plugins/lunch-badger-plugin-optimize/index',
       './plugins/lunch-badger-plugin-base/index'
     ]
   },

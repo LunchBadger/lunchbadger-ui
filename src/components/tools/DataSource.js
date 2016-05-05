@@ -6,7 +6,9 @@ import Oracle from './Oracle';
 import SQL from './SQL';
 import Salesforce from './Salesforce';
 
-export default class DataSource extends Component {
+const Tool = LBCore.components.Tool;
+
+class DataSource extends Component {
   render() {
     return (
       <div className="dataSource tool context">
@@ -33,3 +35,5 @@ export default class DataSource extends Component {
     );
   }
 }
+
+export default Tool(DataSource);

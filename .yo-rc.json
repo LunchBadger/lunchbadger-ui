@@ -1,6 +1,6 @@
 {
   "generator-react-webpack": {
-    "appName": "lunchBagerPluginCore",
+    "appName": "lunchBagerCore",
     "style": "scss",
     "postcss": true,
     "generatedWithVersion": 3

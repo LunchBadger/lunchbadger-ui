@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
-import ForecastsPanel from './ForecastsPanel';
 
 const Pluggable = LBCore.stores.Pluggable;
 
@@ -47,8 +46,6 @@ export default class PanelContainer extends Component {
       <div>
         <DetailsPanel canvas={this.props.canvas}
                       container={this.props.container}/>
-        <ForecastsPanel canvas={this.props.canvas}
-                        container={this.props.container}/>
         {this.renderPanels()}
       </div>
     );

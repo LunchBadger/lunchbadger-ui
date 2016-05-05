@@ -2,6 +2,7 @@ import BaseModel from './BaseModel';
 import Port from './Port';
 import portGroups from '../constants/portGroups';
 import ModelProperty from 'models/ModelProperty';
+import _ from 'lodash';
 
 const defaultProperty = ModelProperty.create({
   propertyKey: 'key',
@@ -37,8 +38,6 @@ export default class Model extends BaseModel {
         portType: 'out'
       })
     ];
-
-
   }
 
   /**

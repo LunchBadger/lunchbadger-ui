@@ -1,5 +1,9 @@
 import App from './components/App/App';
+import BaseTools from './plugs/BaseTools';
 
+LBCore.actions.registerPlugin(BaseTools);
+
+// export
 let LBBase = {
   components: {
     App: App

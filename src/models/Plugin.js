@@ -14,12 +14,12 @@ export default class Plugin {
   _panel = null;
 
 	/**
-   * @type {ToolComponent|null}
+   * @type {ToolGroupComponent|null}
    * @private
    */
-  _tool = null;
+  _toolGroup = null;
 
-  _toolPriority = 0;
+  _toolGroupPriority = 0;
   _panelPriority = 0;
 
   constructor(name) {
@@ -42,16 +42,16 @@ export default class Plugin {
     return this._panelButton;
   }
 
-  get tool() {
-    return this._tool;
+  get toolGroup() {
+    return this._toolGroup;
   }
 
   get panelPriority() {
     return this._panelPriority;
   }
 
-  get toolPriority() {
-    return this._toolPriority;
+  get toolGroupPriority() {
+    return this._toolGroupPriority;
   }
 
 	/**
@@ -70,29 +70,11 @@ export default class Plugin {
   }
 
 	/**
-   * @param toolComponent {ToolComponent}
-   * @param toolPriority {Number}
+   * @param toolGroupComponent {ToolGroupComponent}
+   * @param toolGroupPriority {Number}
    */
-  registerTool(toolComponent, toolPriority = 0) {
-    this._tool = toolComponent;
-    this._toolPriority = toolPriority;
-  }
-
-  renderPanelButton() {
-    if (this._panelButton) {
-      return this._panelButton;
-    }
-  }
-
-  renderPanel() {
-    if (this._panel) {
-      return this._panel;
-    }
-  }
-
-  renderTool() {
-    if (this._tool) {
-      return this._tool;
-    }
+  registerToolGroup(toolGroupComponent, toolGroupPriority = 0) {
+    this._toolGroup = toolGroupComponent;
+    this._toolGroupPriority = toolGroupPriority;
   }
 }

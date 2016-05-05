@@ -52,13 +52,13 @@ class Pluggable extends BaseStore {
     });
   }
 
-  getTools() {
-    const pluginsWithTool = _.filter(plugins, (plugin) => {
-      return plugin.tool;
+  getToolGroups() {
+    const pluginsWithToolGroups = _.filter(plugins, (plugin) => {
+      return plugin.toolGroup;
     });
 
-    return _.sortBy(pluginsWithTool, (plugin) => {
-      return plugin.toolPriority;
+    return _.sortBy(pluginsWithToolGroups, (plugin) => {
+      return plugin.toolGroupPriority;
     });
   }
 }

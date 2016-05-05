@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
 import {DropTarget} from 'react-dnd';
-// import unbundleAPI from 'actions/CanvasElements/API/unbundle';
 
 const boxTarget = {
   drop(props, monitor, component) {
@@ -11,8 +10,9 @@ const boxTarget = {
     if (!hasDroppedOnChild) {
       const item = monitor.getItem();
       if (item.subelement) {
-        debugger;
-        // unbundleAPI(item.parent, item.entity);
+        if (typeof item.handleEndDrag === 'function') {
+          item.handleEndDrag(item);
+        }
       } else {
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);

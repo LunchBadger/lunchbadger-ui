@@ -49,7 +49,7 @@ class Pluggable extends BaseStore {
 
     return _.sortBy(pluginsWithPanelButton, (plugin) => {
       return plugin.panelPriority;
-    }).reverse();
+    });
   }
 
   getTools() {
@@ -59,7 +59,7 @@ class Pluggable extends BaseStore {
 
     return _.sortBy(pluginsWithTool, (plugin) => {
       return plugin.toolPriority;
-    }).reverse();
+    });
   }
 }
 

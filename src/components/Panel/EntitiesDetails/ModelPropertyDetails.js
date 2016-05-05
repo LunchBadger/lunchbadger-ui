@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import Input from 'components/Generics/Form/Input';
-import Checkbox from 'components/Generics/Form/Checkbox';
+
+const Input = LBCore.components.Input;
+const Checkbox = LBCore.components.Checkbox;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {

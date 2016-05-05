@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import CanvasElement from './CanvasElement';
 import PublicEndpoint from './Subelements/PublicEndpoint';
-import './CanvasElement.scss';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
 import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import _ from 'lodash';
-import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
+
+const CanvasElement = LBCore.components.CanvasElement;
+const TwoOptionModal = LBCore.components.TwoOptionModal;
 
 class API extends Component {
   static propTypes = {

@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react';
-import BaseDetails from './BaseDetails.js'
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
-import Input from 'components/Generics/Form/Input';
+
+const BaseDetails = LBCore.components.BaseDetails;
+const Input = LBCore.components.Input;
 
 class ModelDetails extends Component {
   static propTypes = {

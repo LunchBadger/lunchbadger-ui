@@ -1,8 +1,8 @@
-import BaseStore from 'stores/BaseStore';
-import {register} from '../dispatcher/AppDispatcher';
 import Pipeline from '../models/Pipeline';
 import _ from 'lodash';
 
+const {BaseStore} = LBCore.stores;
+const {register} = LBCore.dispatcher.AppDispatcher;
 const Gateways = [];
 
 class Gateway extends BaseStore {

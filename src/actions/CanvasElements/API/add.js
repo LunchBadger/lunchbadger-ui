@@ -1,6 +1,6 @@
 import API from 'models/API';
 
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default () => {
   dispatch('AddAPI', {

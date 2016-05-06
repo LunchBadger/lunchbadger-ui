@@ -3,7 +3,7 @@ import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
 import Model from '../CanvasElements/Model';
 import updateOrder from 'actions/Quadrants/Private/updateOrder';
 
-const Quadrant = LBCore.components.Quadrant;
+const Quadrant = LunchBadgerCore.components.Quadrant;
 
 class PrivateQuadrant extends Component {
   static propTypes = {

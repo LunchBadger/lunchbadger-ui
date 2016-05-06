@@ -1,6 +1,6 @@
 import Gateway from 'models/Gateway';
 
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   const gateway = Gateway.create({

@@ -1,7 +1,7 @@
 import ConnectionFactory from 'models/Connection';
 import _ from 'lodash';
 
-const {BaseStore} = LBCore.stores;
+const {BaseStore} = LunchBadgerCore.stores;
 const connections = [];
 
 class Connection extends BaseStore {

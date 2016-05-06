@@ -2,8 +2,8 @@ import Connection from './Connection';
 import ConnectionFactory from 'models/Connection';
 import _ from 'lodash';
 
-const {BaseStore} = LBCore.stores;
-const {register} = LBCore.dispatcher.AppDispatcher;
+const {BaseStore} = LunchBadgerCore.stores;
+const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Publics = [];
 
 class Public extends BaseStore {

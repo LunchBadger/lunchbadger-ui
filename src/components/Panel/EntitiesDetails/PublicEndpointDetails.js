@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 
-const BaseDetails = LBCore.components.BaseDetails;
-const Input = LBCore.components.Input;
+const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const Input = LunchBadgerCore.components.Input;
 
 class PublicEndpointDetails extends Component {
   static propTypes = {

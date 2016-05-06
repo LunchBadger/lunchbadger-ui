@@ -6,8 +6,8 @@ import unbundleAPI from 'actions/CanvasElements/API/unbundle';
 import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import _ from 'lodash';
 
-const CanvasElement = LBCore.components.CanvasElement;
-const TwoOptionModal = LBCore.components.TwoOptionModal;
+const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
 class API extends Component {
   static propTypes = {

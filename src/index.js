@@ -1,17 +1,17 @@
 import App from './components/App/App';
 import BaseTools from './plugs/BaseTools';
 
-LBCore.actions.registerPlugin(BaseTools);
+LunchBadgerCore.actions.registerPlugin(BaseTools);
 
 // export
-let LBBase = {
+let LunchBadgerCompose = {
   components: {
     App: App
   }
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
-  global.LBBase = LBBase;
+  global.LunchBadgerCompose = LunchBadgerCompose;
 }
 
-module.exports = LBBase;
+module.exports = LunchBadgerCompose;

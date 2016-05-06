@@ -4,8 +4,8 @@ import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
 
-const BaseDetails = LBCore.components.BaseDetails;
-const Input = LBCore.components.Input;
+const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const Input = LunchBadgerCore.components.Input;
 
 class ModelDetails extends Component {
   static propTypes = {

@@ -3,7 +3,7 @@ import PublicEndpoint from '../CanvasElements/PublicEndpoint';
 import updateOrder from 'actions/Quadrants/Public/updateOrder';
 import API from '../CanvasElements/API';
 
-const Quadrant = LBCore.components.Quadrant;
+const Quadrant = LunchBadgerCore.components.Quadrant;
 
 class PublicQuadrant extends Component {
   static propTypes = {

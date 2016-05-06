@@ -1,3 +1,12 @@
+# LunchBadger Compose Plugin
+
+### Important!
+**This plugin is required for application to work!**
+
+To develop, you require core of Lunch Badger application.
+Just put the plugin inside plugins/ directory of core and start development.
+
+
 ## Installation
 Simply run `npm install` inside the main catalog
 

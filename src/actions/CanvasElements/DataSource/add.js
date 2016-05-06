@@ -1,6 +1,6 @@
 import DataSource from 'models/DataSource';
 
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   dispatch('AddDataSource', {

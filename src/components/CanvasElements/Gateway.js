@@ -4,8 +4,8 @@ import updateGateway from 'actions/CanvasElements/Gateway/update';
 import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
 
-const CanvasElement = LBCore.components.CanvasElement;
-const Input = LBCore.components.Input;
+const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const Input = LunchBadgerCore.components.Input;
 
 class Gateway extends Component {
   static propTypes = {

@@ -7,8 +7,8 @@ import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import _ from 'lodash';
 
-const CanvasElement = LBCore.components.CanvasElement;
-const Input = LBCore.components.Input;
+const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const Input = LunchBadgerCore.components.Input;
 
 class Model extends Component {
   static propTypes = {

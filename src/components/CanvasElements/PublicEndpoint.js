@@ -5,8 +5,8 @@ import {findDOMNode} from 'react-dom';
 import Connection from 'stores/Connection';
 import _ from 'lodash';
 
-const CanvasElement = LBCore.components.CanvasElement;
-const Input = LBCore.components.Input;
+const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const Input = LunchBadgerCore.components.Input;
 
 class PublicEndpoint extends Component {
   static propTypes = {

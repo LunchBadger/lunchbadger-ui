@@ -6,9 +6,9 @@ import ModelDetails from './EntitiesDetails/ModelDetails';
 import GatewayDetails from './EntitiesDetails/GatewayDetails';
 import DataSourceDetails from './EntitiesDetails/DataSourceDetails';
 
-const AppState = LBCore.stores.AppState;
-const Panel = LBCore.components.Panel;
-const panelKeys = LBCore.constants.panelKeys;
+const AppState = LunchBadgerCore.stores.AppState;
+const Panel = LunchBadgerCore.components.Panel;
+const panelKeys = LunchBadgerCore.constants.panelKeys;
 
 class DetailsPanel extends Component {
   constructor(props) {

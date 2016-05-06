@@ -10,7 +10,7 @@ import PrivateEndpoint from 'models/PrivateEndpoint';
 import Connection from 'stores/Connection';
 import Private from 'stores/Private';
 
-const AppState = LBCore.stores.AppState;
+const AppState = LunchBadgerCore.stores.AppState;
 
 export default class Pipeline extends Component {
   static propTypes = {

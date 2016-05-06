@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import DataSource from '../CanvasElements/DataSource';
 import updateOrder from 'actions/Quadrants/Backend/updateOrder';
 
-const Quadrant = LBCore.components.Quadrant;
+const Quadrant = LunchBadgerCore.components.Quadrant;
 
 class BackendQuadrant extends Component {
   static propTypes = {

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
 import removeProperty from 'actions/CanvasElements/Model/removeProperty';
 
-const Input = LBCore.components.Input;
+const Input = LunchBadgerCore.components.Input;
 
 export default class ModelProperty extends Component {
   static propTypes = {

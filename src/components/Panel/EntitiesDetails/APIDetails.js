@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import updateAPI from 'actions/CanvasElements/API/update';
 
-const BaseDetails = LBCore.components.BaseDetails;
+const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
 class APIDetails extends Component {
   static propTypes = {

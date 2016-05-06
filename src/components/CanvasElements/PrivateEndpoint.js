@@ -3,8 +3,8 @@ import Port from './Port';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 import slug from 'slug';
 
-const CanvasElement = LBCore.components.CanvasElement;
-const Input = LBCore.components.Input;
+const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const Input = LunchBadgerCore.components.Input;
 
 class PrivateEndpoint extends Component {
   static propTypes = {

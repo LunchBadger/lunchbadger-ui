@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'base.js',
     libraryTarget: 'umd',
-    library: 'LBBase',
+    library: 'LunchBadgerCompose',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

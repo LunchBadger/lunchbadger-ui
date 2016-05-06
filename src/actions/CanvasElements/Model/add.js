@@ -1,6 +1,6 @@
 import Model from 'models/Model';
 
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   dispatch('AddModel', {

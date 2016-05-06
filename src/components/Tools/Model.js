@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './Tool.scss';
 import AddModel from '../../actions/CanvasElements/Model/add';
 
-const Tool = LBCore.components.Tool;
+const Tool = LunchBadgerCore.components.Tool;
 
 class Model extends Component {
   render() {

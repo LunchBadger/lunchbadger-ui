@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
 
-const Pluggable = LBCore.stores.Pluggable;
+const Pluggable = LunchBadgerCore.stores.Pluggable;
 
 export default class PanelContainer extends Component {
   static propTypes = {

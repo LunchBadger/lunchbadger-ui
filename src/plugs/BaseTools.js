@@ -1,14 +1,14 @@
 import DataSource from '../components/Tools/DataSource';
 import Model from '../components/Tools/Model';
 
-const toolsPlugin = new LBCore.models.Plugin('BaseTools');
-const toolGroupComponent = LBCore.components.ToolGroup;
+const toolsPlugin = new LunchBadgerCore.models.Plugin('BaseTools');
+const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 
 const tools = [
-  new LBCore.models.ToolComponent(DataSource),
-  new LBCore.models.ToolComponent(Model)
+  new LunchBadgerCore.models.ToolComponent(DataSource),
+  new LunchBadgerCore.models.ToolComponent(Model)
 ];
-const toolGroup = new LBCore.models.ToolGroupComponent(toolGroupComponent, tools);
+const toolGroup = new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools);
 
 toolsPlugin.registerToolGroup(toolGroup, 5);
 

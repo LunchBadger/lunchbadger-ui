@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import Gateway from '../CanvasElements/Gateway';
 import updateOrder from 'actions/Quadrants/Gateway/updateOrder';
 
-const Quadrant = LBCore.components.Quadrant;
+const Quadrant = LunchBadgerCore.components.Quadrant;
 
 class GatewaysQuadrant extends Component {
   static propTypes = {

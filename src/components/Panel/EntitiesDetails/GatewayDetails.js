@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
 
-const BaseDetails = LBCore.components.BaseDetails;
+const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
 class GatewayDetails extends Component {
   static propTypes = {

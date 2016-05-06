@@ -1,6 +1,6 @@
 import PublicEndpoint from 'models/PublicEndpoint';
 
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (name, url, sourceId, outPort) => {
   dispatch('AddPublicEndpointAndConnect', {

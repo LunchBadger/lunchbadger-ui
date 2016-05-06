@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
-const Input = LBCore.components.Input;
-const Checkbox = LBCore.components.Checkbox;
+const Input = LunchBadgerCore.components.Input;
+const Checkbox = LunchBadgerCore.components.Checkbox;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {

@@ -4,7 +4,7 @@ import Endpoint from '../Tools/Endpoint';
 import Gateway from '../Tools/Gateway';
 import API from '../Tools/API';
 
-const Pluggable = LBCore.stores.Pluggable;
+const Pluggable = LunchBadgerCore.stores.Pluggable;
 
 export default class Aside extends Component {
   constructor(props) {

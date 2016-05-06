@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
 
-const Pluggable = LBCore.stores.Pluggable;
-const panelKeys = LBCore.constants.panelKeys;
+const Pluggable = LunchBadgerCore.stores.Pluggable;
+const panelKeys = LunchBadgerCore.constants.panelKeys;
 
 export default class HeaderMenu extends Component {
   constructor(props) {

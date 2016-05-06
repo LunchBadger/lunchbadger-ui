@@ -6,7 +6,7 @@ import Oracle from './Oracle';
 import SQL from './SQL';
 import Salesforce from './Salesforce';
 
-const Tool = LBCore.components.Tool;
+const Tool = LunchBadgerCore.components.Tool;
 
 class DataSource extends Component {
   render() {

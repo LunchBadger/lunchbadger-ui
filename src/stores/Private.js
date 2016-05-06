@@ -1,8 +1,8 @@
 import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
 
-const {BaseStore} = LBCore.stores;
-const {register} = LBCore.dispatcher.AppDispatcher;
+const {BaseStore} = LunchBadgerCore.stores;
+const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Privates = [];
 
 class Private extends BaseStore {

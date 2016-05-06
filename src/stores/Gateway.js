@@ -1,8 +1,8 @@
 import Pipeline from '../models/Pipeline';
 import _ from 'lodash';
 
-const {BaseStore} = LBCore.stores;
-const {register} = LBCore.dispatcher.AppDispatcher;
+const {BaseStore} = LunchBadgerCore.stores;
+const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Gateways = [];
 
 class Gateway extends BaseStore {

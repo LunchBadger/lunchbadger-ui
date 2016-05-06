@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-const {BaseStore} = LBCore.stores;
-const {register} = LBCore.dispatcher.AppDispatcher;
+const {BaseStore} = LunchBadgerCore.stores;
+const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Backends = [];
 
 class Backend extends BaseStore {

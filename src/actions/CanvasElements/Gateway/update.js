@@ -1,4 +1,4 @@
-const {dispatch} = LBCore.dispatcher.AppDispatcher;
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (id, props) => {
   dispatch('UpdateGateway', {

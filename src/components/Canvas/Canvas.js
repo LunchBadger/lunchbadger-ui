@@ -16,7 +16,7 @@ import reattachConnection from 'actions/Connection/reattach';
 import attachConnection from 'actions/Connection/attach';
 import Connection from 'stores/Connection';
 
-const toggleHighlight = LBCore.actions.toggleHighlight;
+const toggleHighlight = LunchBadgerCore.actions.toggleHighlight;
 
 export default class Canvas extends Component {
   constructor(props) {

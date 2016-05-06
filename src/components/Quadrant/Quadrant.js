@@ -38,6 +38,7 @@ export default (ComposedComponent) => {
       sortableInstance: React.PropTypes.object,
       resizable: PropTypes.bool,
       data: PropTypes.object.isRequired,
+      initialPercentageWidth: PropTypes.number,
       paper: PropTypes.object
     };
 
@@ -45,18 +46,30 @@ export default (ComposedComponent) => {
       super(props);
       this.moveEntity = this.moveEntity.bind(this);
 
+      this.dataStoreUpdate = () => {
+        this.setState({entities: this.props.data.getData()});
+      };
+
       this.state = {
-        quadrantWidth: '25%',
+        quadrantWidth: `${props.initialPercentageWidth}%`,
         entities: this.props.data.getData(),
         hasDroppedOnChild: false,
         hasDropped: false
       };
     }
 
+    componentWillMount() {
+      this.props.data.addChangeListener(this.dataStoreUpdate);
+    }
+
     componentDidUpdate() {
       if (this.props.paper) {
         this.props.paper.repaintEverything();
       }
+    }
+
+    componentWillUnmount() {
+      this.props.data.removeChangeListener(this.dataStoreUpdate);
     }
 
     recalculateQuadrantWidth(event) {

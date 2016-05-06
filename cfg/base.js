@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'monetize.js',
     libraryTarget: 'umd',
-    library: 'LBMonetize',
+    library: 'LunchBadgerMonetize',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

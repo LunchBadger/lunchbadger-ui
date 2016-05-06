@@ -47,11 +47,11 @@ export default (ComposedComponent) => {
     }
 
     checkPristine(model, changed) {
-      if (!changed) {
+      if (typeof changed === 'undefined') {
         changed = this.refs.form.isChanged();
       }
 
-      if (this.element.state.changed) {
+      if (this.element.state && this.element.state.changed) {
         this.setState({isPristine: false});
       } else {
         this.setState({isPristine: !changed});

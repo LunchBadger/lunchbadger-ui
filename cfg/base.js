@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'core.js',
     libraryTarget: 'umd',
-    library: 'LBCore',
+    library: 'LunchBadgerCore',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

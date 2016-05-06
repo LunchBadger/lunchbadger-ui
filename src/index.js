@@ -43,7 +43,7 @@ import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import panelKeys from './constants/panelKeys';
 import portGroups from './constants/portGroups';
 
-let LBCore = {
+let LunchBadgerCore = {
   dispatcher: {
     AppDispatcher: AppDispatcher
   },
@@ -87,7 +87,7 @@ let LBCore = {
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
-  global.LBCore = LBCore;
+  global.LunchBadgerCore = LunchBadgerCore;
 }
 
-module.exports = LBCore;
+module.exports = LunchBadgerCore;

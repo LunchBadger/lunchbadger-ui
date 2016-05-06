@@ -33,6 +33,7 @@ import PanelButtonComponent from './models/Plugin/PanelButtonComponent';
 import PanelComponent from './models/Plugin/PanelComponent';
 import ToolComponent from './models/Plugin/ToolComponent';
 import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
+import QuadrantComponent from './models/Plugin/QuadrantComponent';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
@@ -78,7 +79,8 @@ let LunchBadgerCore = {
     PanelButtonComponent: PanelButtonComponent,
     PanelComponent: PanelComponent,
     ToolComponent: ToolComponent,
-    ToolGroupComponent: ToolGroupComponent
+    ToolGroupComponent: ToolGroupComponent,
+    QuadrantComponent: QuadrantComponent
   },
   constants: {
     panelKeys: panelKeys,

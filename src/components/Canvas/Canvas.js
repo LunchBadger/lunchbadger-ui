@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
-import BackendQuadrant from '../Quadrant/BackendQuadrant';
-import PrivateQuadrant from '../Quadrant/PrivateQuadrant';
-import GatewaysQuadrant from '../Quadrant/GatewaysQuadrant';
-import PublicQuadrant from '../Quadrant/PublicQuadrant';
+import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import Private from 'stores/Private';
-import Public from 'stores/Public';
-import Gateway from 'stores/Gateway';
 import Backend from 'stores/Backend';
 import './Canvas.scss';
 import classNames from 'classnames';
@@ -26,18 +21,9 @@ export default class Canvas extends Component {
       lastUpdate: new Date(),
       disabled: false
     };
-
-    this.dataUpdated = () => {
-      this.setState({lastUpdate: new Date()});
-    }
   }
 
   componentDidMount() {
-    Private.addChangeListener(this.dataUpdated);
-    Public.addChangeListener(this.dataUpdated);
-    Gateway.addChangeListener(this.dataUpdated);
-    Backend.addChangeListener(this.dataUpdated);
-
     this.paper = jsPlumb.getInstance({
       DragOptions: {cursor: 'pointer', zIndex: 2000},
       PaintStyle: {
@@ -190,13 +176,6 @@ export default class Canvas extends Component {
     });
   }
 
-  componentWillUnmount() {
-    Private.removeChangeListener(this.dataUpdated);
-    Public.removeChangeListener(this.dataUpdated);
-    Gateway.removeChangeListener(this.dataUpdated);
-    Backend.removeChangeListener(this.dataUpdated);
-  }
-
   render() {
     const canvasClass = classNames({
       canvas: true,
@@ -211,12 +190,7 @@ export default class Canvas extends Component {
             <div className="canvas__label canvas__label--right">Consumers</div>
           </div>
 
-          <div className="canvas__container" id="canvas">
-            <BackendQuadrant paper={this.paper} ref="backendQuadrant" data={Backend} resizable title="Backend"/>
-            <PrivateQuadrant paper={this.paper} ref="privateQuadrant" data={Private} resizable title="Private"/>
-            <GatewaysQuadrant paper={this.paper} ref="gatewaysQuadrant" data={Gateway} resizable title="Gateways"/>
-            <PublicQuadrant paper={this.paper} ref="publicQuadrant" data={Public} title="Public"/>
-          </div>
+          <QuadrantContainer paper={this.paper} className="canvas__container" id="canvas" />
         </div>
       </section>
     );

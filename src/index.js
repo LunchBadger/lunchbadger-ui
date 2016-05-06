@@ -1,7 +1,7 @@
 import App from './components/App/App';
-import BaseTools from './plugs/BaseTools';
+import ComposePlugin from './plugs/ComposePlugin';
 
-LunchBadgerCore.actions.registerPlugin(BaseTools);
+LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 
 // export
 let LunchBadgerCompose = {

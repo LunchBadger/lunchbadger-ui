@@ -19,6 +19,12 @@ export default class Plugin {
    */
   _toolGroup = null;
 
+	/**
+   * @type {QuadrantComponent[]|null}
+   * @private
+   */
+  _quadrants = null;
+
   _toolGroupPriority = 0;
   _panelPriority = 0;
 
@@ -54,6 +60,10 @@ export default class Plugin {
     return this._toolGroupPriority;
   }
 
+  get quadrants() {
+    return this._quadrants;
+  }
+  
 	/**
    * @param panelButtonComponent {PanelButtonComponent}
    * @param panelComponent {PanelComponent}
@@ -76,5 +86,12 @@ export default class Plugin {
   registerToolGroup(toolGroupComponent, toolGroupPriority = 0) {
     this._toolGroup = toolGroupComponent;
     this._toolGroupPriority = toolGroupPriority;
+  }
+
+	/**
+   * @param quadrants[] {QuadrantComponent}
+   */
+  registerQuadrants(quadrants) {
+    this._quadrants = quadrants;
   }
 }

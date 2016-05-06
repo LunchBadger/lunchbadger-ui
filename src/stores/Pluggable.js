@@ -61,6 +61,21 @@ class Pluggable extends BaseStore {
       return plugin.toolGroupPriority;
     });
   }
+
+  getQuadrants() {
+    const pluginsWithQuadrants = _.filter(plugins, (plugin) => {
+      return plugin.quadrants && plugin.quadrants.length;
+    });
+
+    // merge quadrants
+    const reducedQuadrants = pluginsWithQuadrants.reduce((quadrants, plugin) => {
+      return quadrants.concat(plugin.quadrants);
+    }, []);
+
+    return _.sortBy(reducedQuadrants, (quadrant) => {
+      return quadrant.priority;
+    });
+  }
 }
 
 export default new Pluggable();

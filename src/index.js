@@ -10,6 +10,7 @@ import * as AppDispatcher from './dispatcher/AppDispatcher';
 import BaseStore from './stores/BaseStore';
 import AppState from './stores/AppState';
 import Pluggable from './stores/Pluggable';
+import Connection from './stores/Connection';
 
 // components
 import Panel from './components/Panel/Panel';
@@ -25,6 +26,7 @@ import TwoOptionModal from './components/Generics/Modal/TwoOptionModal';
 import Quadrant from './components/Quadrant/Quadrant';
 import ToolGroup from './components/Tools/ToolGroup';
 import Tool from './components/Tools/Tool';
+import PortComponent from './components/CanvasElements/Port';
 
 // models
 import BaseModel from './models/BaseModel';
@@ -34,6 +36,8 @@ import PanelComponent from './models/Plugin/PanelComponent';
 import ToolComponent from './models/Plugin/ToolComponent';
 import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
 import QuadrantComponent from './models/Plugin/QuadrantComponent';
+import Port from './models/Port';
+import ConnectionModel from './models/Connection';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
@@ -66,12 +70,14 @@ let LunchBadgerCore = {
     TwoOptionModal: TwoOptionModal,
     Quadrant: Quadrant,
     Tool: Tool,
-    ToolGroup: ToolGroup
+    ToolGroup: ToolGroup,
+    Port: PortComponent
   },
   stores: {
     BaseStore: BaseStore,
     AppState: AppState,
-    Pluggable: Pluggable
+    Pluggable: Pluggable,
+    Connection: Connection
   },
   models: {
     BaseModel: BaseModel,
@@ -80,7 +86,9 @@ let LunchBadgerCore = {
     PanelComponent: PanelComponent,
     ToolComponent: ToolComponent,
     ToolGroupComponent: ToolGroupComponent,
-    QuadrantComponent: QuadrantComponent
+    QuadrantComponent: QuadrantComponent,
+    Port: Port,
+    Connection: ConnectionModel
   },
   constants: {
     panelKeys: panelKeys,

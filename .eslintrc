@@ -11,8 +11,8 @@
     }
   },
   "globals": {
-    "LBCore": true,
-    "LBBase": true,
+    "LunchBadgerCore": true,
+    "LunchBadgerCompose": true,
     "jsPlumb": true,
     "console": true
   },

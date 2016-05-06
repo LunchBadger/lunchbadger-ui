@@ -1,4 +1,4 @@
-## Lunch Badger Container app
+## LunchBadger Container app
 
 It mixes core and plugins to produce final application
 

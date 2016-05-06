@@ -15,13 +15,13 @@ let config = Object.assign({}, baseConfig, {
       'webpack/hot/only-dev-server',
       './src/index'
     ],
-    core: './plugins/lunch-badger-core/index',
+    core: './plugins/lunchbadger-core/index',
     plugins: [
-      './plugins/lunch-badger-plugin-monitor/index',
-      './plugins/lunch-badger-plugin-optimize/index',
-      './plugins/lunch-badger-plugin-manage/index',
-      './plugins/lunch-badger-plugin-monetize/index',
-      './plugins/lunch-badger-plugin-base/index'
+      './plugins/lunchbadger-monitor/index',
+      './plugins/lunchbadger-optimize/index',
+      './plugins/lunchbadger-manage/index',
+      './plugins/lunchbadger-monetize/index',
+      './plugins/lunchbadger-compose/index'
     ]
   },
   cache: true,

@@ -20,4 +20,4 @@ class MetricsPanel extends Component {
   }
 }
 
-export default LBCore.components.Panel(MetricsPanel);
+export default LunchBadgerCore.components.Panel(MetricsPanel);

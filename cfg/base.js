@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'monitor.js',
     libraryTarget: 'umd',
-    library: 'LBMonitor',
+    library: 'LunchBadgerMonitor',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

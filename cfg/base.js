@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'optimize.js',
     libraryTarget: 'umd',
-    library: 'LBOptimize',
+    library: 'LunchBadgerOptimize',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

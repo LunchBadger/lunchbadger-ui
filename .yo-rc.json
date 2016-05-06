@@ -1,6 +1,6 @@
 {
   "generator-react-webpack": {
-    "appName": "lunchBadgerPluginOptimize",
+    "appName": "lunchbadger-optimize",
     "style": "scss",
     "postcss": true,
     "generatedWithVersion": 3

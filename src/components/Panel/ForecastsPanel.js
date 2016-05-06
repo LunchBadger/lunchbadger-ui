@@ -20,4 +20,4 @@ class ForecastsPanel extends Component {
   }
 }
 
-export default LBCore.components.Panel(ForecastsPanel);
+export default LunchBadgerCore.components.Panel(ForecastsPanel);

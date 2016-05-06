@@ -1,6 +1,6 @@
 {
   "generator-react-webpack": {
-    "appName": "lunchBadgerPluginManage",
+    "appName": "lunchbadger-manage",
     "style": "scss",
     "postcss": true,
     "generatedWithVersion": 3

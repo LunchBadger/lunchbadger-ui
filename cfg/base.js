@@ -12,7 +12,7 @@ module.exports = {
     path: path.join(__dirname, '/../dist'),
     filename: 'manage.js',
     libraryTarget: 'umd',
-    library: 'LBManage',
+    library: 'LunchBadgerManage',
     publicPath: `.${defaultSettings.publicPath}`
   },
   devServer: {

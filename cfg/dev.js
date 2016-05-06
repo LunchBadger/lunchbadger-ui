@@ -8,6 +8,8 @@ let defaultSettings = require('./defaults');
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 
+
+
 let config = Object.assign({}, baseConfig, {
   entry: {
     start: [
@@ -17,11 +19,11 @@ let config = Object.assign({}, baseConfig, {
     ],
     core: './plugins/lunchbadger-core/index',
     plugins: [
+      './plugins/lunchbadger-compose/index',
       './plugins/lunchbadger-monitor/index',
       './plugins/lunchbadger-optimize/index',
       './plugins/lunchbadger-manage/index',
-      './plugins/lunchbadger-monetize/index',
-      './plugins/lunchbadger-compose/index'
+      './plugins/lunchbadger-monetize/index'
     ]
   },
   cache: true,

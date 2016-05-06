@@ -1,0 +1,65 @@
+@import '../../../../../lunchbadger-core/src/config';
+
+.pipeline {
+  position: relative;
+  font-size: 16px;
+
+  .collapsed &,
+  .wip & {
+    position: static;
+
+    .port {
+      visibility: visible;
+      bottom: 19px;
+      top: auto;
+    }
+  }
+}
+
+.pipeline__info {
+  cursor: pointer;
+  padding-left: 18px;
+
+  &:before {
+    content: '';
+    border-style: solid;
+    border-width: 5px 0 5px 9px;
+    border-color: transparent transparent transparent $font-base;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 7px;
+  }
+
+  .pipeline--opened & {
+    &:before {
+      border-width: 10px 5px 0 5px;
+      border-color: $font-base transparent transparent transparent;
+    }
+  }
+}
+
+.pipeline__name {
+  display: inline-block;
+}
+
+.pipeline__icon {
+  display: inline-block;
+  margin-right: 7px;
+}
+
+.pipeline__details {
+  display: none;
+
+  .pipeline--opened & {
+    display: block;
+  }
+}
+
+.pipeline__details__title {
+  font-weight: 700;
+  font-size: 14px;
+  padding-left: 45px;
+  padding-top: 15px;
+  color: $ui-dark-background;
+}

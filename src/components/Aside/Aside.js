@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './Aside.scss';
 import Endpoint from '../Tools/Endpoint';
 import Gateway from '../Tools/Gateway';
-import API from '../Tools/API';
 
 const Pluggable = LunchBadgerCore.stores.Pluggable;
 
@@ -48,7 +47,6 @@ export default class Aside extends Component {
         <hr />
         <Gateway />
         <hr />
-        <API />
       </aside>
     );
   }

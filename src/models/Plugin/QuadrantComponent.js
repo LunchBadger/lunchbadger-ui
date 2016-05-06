@@ -3,16 +3,18 @@ export default class QuadrantComponent {
   _component = null;
   _dataStore = null;
   _priority = null;
+  _overwrite = false;
 
-  constructor(title, component, dataStore, priority = 0) {
+  constructor(title, component, dataStore, priority = 0, overwrite) {
     if (!title || !component || !dataStore) {
       throw new Error('When creating QuadrantComponent title, component and dataStore parameters are required');
     }
-    
+
     this.title = title;
     this.component = component;
     this.dataStore = dataStore;
     this.priority = priority;
+    this.overwrite = overwrite;
   }
 
   get title() {
@@ -45,5 +47,13 @@ export default class QuadrantComponent {
 
   set priority(priority) {
     this._priority = priority;
+  }
+
+  get overwrite() {
+    return this._overwrite;
+  }
+
+  set overwrite(overwrite) {
+    this._overwrite = overwrite;
   }
 }

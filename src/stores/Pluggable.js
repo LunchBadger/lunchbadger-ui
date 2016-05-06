@@ -72,7 +72,11 @@ class Pluggable extends BaseStore {
       return quadrants.concat(plugin.quadrants);
     }, []);
 
-    return _.sortBy(reducedQuadrants, (quadrant) => {
+    const quadrants = _.uniqWith(reducedQuadrants.reverse(), (currentQuadrant, otherQuadrant) => {
+      return (currentQuadrant.priority === otherQuadrant.priority && otherQuadrant.overwrite);
+    });
+
+    return _.sortBy(quadrants, (quadrant) => {
       return quadrant.priority;
     });
   }

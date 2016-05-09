@@ -17,8 +17,8 @@ const gatewayTools = [
   new LunchBadgerCore.models.ToolComponent(Gateway)
 ];
 const toolGroup = [
-  new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, endpointTools, 3),
-  new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, gatewayTools, 4)
+  new LunchBadgerCore.models.ToolGroupComponent('manageEndpoint', toolGroupComponent, endpointTools, 3),
+  new LunchBadgerCore.models.ToolGroupComponent('manageGateway', toolGroupComponent, gatewayTools, 4)
 ];
 
 const quadrants = [

@@ -14,11 +14,11 @@ let config = Object.assign({}, baseConfig, {
     start: './src/index',
     core: './plugins/lunchbadger-core/index',
     plugins: [
+      './plugins/lunchbadger-compose/index',
       './plugins/lunchbadger-monitor/index',
       './plugins/lunchbadger-optimize/index',
       './plugins/lunchbadger-manage/index',
-      './plugins/lunchbadger-monetize/index',
-      './plugins/lunchbadger-compose/index'
+      './plugins/lunchbadger-monetize/index'
     ]
   },
   cache: false,

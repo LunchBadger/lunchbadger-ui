@@ -8,13 +8,15 @@ const Public = LunchBadgerManage.stores.Public;
 const tools = [
   new LunchBadgerCore.models.ToolComponent(API)
 ];
-const toolGroup = new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools);
+const toolGroup = [
+  new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools, 10)
+];
 
 const quadrants = [
   new LunchBadgerCore.models.QuadrantComponent('Public', PublicQuadrant, Public, 3, true)
 ];
 
-monetizePlugin.registerToolGroup(toolGroup, 10);
+monetizePlugin.registerToolGroup(toolGroup);
 monetizePlugin.registerQuadrants(quadrants);
 
 export default monetizePlugin;

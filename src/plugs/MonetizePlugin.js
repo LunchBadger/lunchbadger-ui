@@ -9,7 +9,7 @@ const tools = [
   new LunchBadgerCore.models.ToolComponent(API)
 ];
 const toolGroup = [
-  new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools, 10)
+  new LunchBadgerCore.models.ToolGroupComponent('monetize', toolGroupComponent, tools, 10)
 ];
 
 const quadrants = [

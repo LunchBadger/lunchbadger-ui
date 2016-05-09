@@ -54,11 +54,16 @@ class Pluggable extends BaseStore {
 
   getToolGroups() {
     const pluginsWithToolGroups = _.filter(plugins, (plugin) => {
-      return plugin.toolGroup;
+      return plugin.toolGroups;
     });
 
-    return _.sortBy(pluginsWithToolGroups, (plugin) => {
-      return plugin.toolGroupPriority;
+    // merge groups
+    const reducedToolGroups = pluginsWithToolGroups.reduce((toolGroups, plugin) => {
+      return toolGroups.concat(plugin.toolGroups);
+    }, []);
+
+    return _.sortBy(reducedToolGroups, (plugin) => {
+      return plugin.priority;
     });
   }
 

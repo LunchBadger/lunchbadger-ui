@@ -5,7 +5,7 @@ export default class QuadrantComponent {
   _priority = null;
   _overwrite = false;
 
-  constructor(title, component, dataStore, priority = 0, overwrite) {
+  constructor(title, component, dataStore, priority = 0, overwrite = false) {
     if (!title || !component || !dataStore) {
       throw new Error('When creating QuadrantComponent title, component and dataStore parameters are required');
     }

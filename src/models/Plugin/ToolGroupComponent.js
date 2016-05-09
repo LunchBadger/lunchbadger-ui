@@ -1,5 +1,6 @@
 export default class ToolGroupComponent {
   _component = null;
+  _priority = null;
 
 	/**
    * @type {ToolComponent[]}
@@ -7,9 +8,10 @@ export default class ToolGroupComponent {
    */
   _tools = [];
 
-  constructor(component, tools) {
+  constructor(component, tools, priority = 0) {
     this.component = component;
     this.tools = tools;
+    this.priority = priority;
   }
 
   get component() {
@@ -26,5 +28,13 @@ export default class ToolGroupComponent {
 
   set tools(tools) {
     this._tools = tools;
+  }
+
+  get priority() {
+    return this._priority;
+  }
+
+  set priority(priority) {
+    this._priority = priority;
   }
 }

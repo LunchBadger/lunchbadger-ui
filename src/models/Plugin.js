@@ -14,10 +14,10 @@ export default class Plugin {
   _panel = null;
 
 	/**
-   * @type {ToolGroupComponent|null}
+   * @type {ToolGroupComponent[]|null}
    * @private
    */
-  _toolGroup = null;
+  _toolGroups = null;
 
 	/**
    * @type {QuadrantComponent[]|null}
@@ -25,7 +25,6 @@ export default class Plugin {
    */
   _quadrants = null;
 
-  _toolGroupPriority = 0;
   _panelPriority = 0;
 
   constructor(name) {
@@ -48,16 +47,12 @@ export default class Plugin {
     return this._panelButton;
   }
 
-  get toolGroup() {
-    return this._toolGroup;
+  get toolGroups() {
+    return this._toolGroups;
   }
 
   get panelPriority() {
     return this._panelPriority;
-  }
-
-  get toolGroupPriority() {
-    return this._toolGroupPriority;
   }
 
   get quadrants() {
@@ -80,12 +75,10 @@ export default class Plugin {
   }
 
 	/**
-   * @param toolGroupComponent {ToolGroupComponent}
-   * @param toolGroupPriority {Number}
+   * @param toolGroups {ToolGroupComponent[]}
    */
-  registerToolGroup(toolGroupComponent, toolGroupPriority = 0) {
-    this._toolGroup = toolGroupComponent;
-    this._toolGroupPriority = toolGroupPriority;
+  registerToolGroup(toolGroups) {
+    this._toolGroups = toolGroups;
   }
 
 	/**

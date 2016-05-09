@@ -39,5 +39,6 @@ module.exports = {
         browsers: ['last 2 versions', 'ie >= 10']
       })
     ];
-  }
+  },
+  apiUrl: 'http://0.0.0.0:3000/api/'
 };

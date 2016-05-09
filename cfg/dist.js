@@ -2,9 +2,20 @@
 
 let path = require('path');
 let webpack = require('webpack');
-
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
+
+const info = './bin/info.json';
+const jsonfile = require('jsonfile');
+let infoFile = {};
+
+try {
+  infoFile = jsonfile.readFileSync(info);
+} catch (error) {
+  infoFile = {
+    plugins: []
+  };
+}
 
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');
@@ -13,13 +24,7 @@ let config = Object.assign({}, baseConfig, {
   entry: {
     start: './src/index',
     core: './plugins/lunchbadger-core/index',
-    plugins: [
-      './plugins/lunchbadger-compose/index',
-      './plugins/lunchbadger-monitor/index',
-      './plugins/lunchbadger-optimize/index',
-      './plugins/lunchbadger-manage/index',
-      './plugins/lunchbadger-monetize/index'
-    ]
+    plugins: infoFile.plugins
   },
   cache: false,
   devtool: 'sourcemap',

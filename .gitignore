@@ -32,3 +32,6 @@ bower_components/
 
 # Editors
 .idea/
+
+# Info
+bin/info.json

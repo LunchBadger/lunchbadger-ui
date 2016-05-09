@@ -26,8 +26,8 @@ export default class Aside extends Component {
 
   _renderToolGroups() {
     return this.state.pluggedTools.map((plugin, index) => {
-      const ToolGroupComponent = plugin.toolGroup.component;
-      const tools = plugin.toolGroup.tools;
+      const ToolGroupComponent = plugin.component;
+      const tools = plugin.tools;
 
       return (
         <ToolGroupComponent key={`tools-${plugin.name}-${index}`}

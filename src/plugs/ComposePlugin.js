@@ -12,14 +12,16 @@ const tools = [
   new LunchBadgerCore.models.ToolComponent(DataSource),
   new LunchBadgerCore.models.ToolComponent(Model)
 ];
-const toolGroup = new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools);
+const toolGroup = [
+  new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools, 5)
+];
 
 const quadrants = [
   new LunchBadgerCore.models.QuadrantComponent('Backend', BackendQuadrant, Backend, 0),
   new LunchBadgerCore.models.QuadrantComponent('Private', PrivateQuadrant, Private, 1)
 ];
 
-composePlugin.registerToolGroup(toolGroup, 5);
+composePlugin.registerToolGroup(toolGroup);
 composePlugin.registerQuadrants(quadrants);
 
 export default composePlugin;

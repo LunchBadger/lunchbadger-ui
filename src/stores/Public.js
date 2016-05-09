@@ -1,8 +1,7 @@
-import Connection from './Connection';
-import ConnectionFactory from 'models/Connection';
 import _ from 'lodash';
 
-const {BaseStore} = LunchBadgerCore.stores;
+const ConnectionFactory = LunchBadgerCore.models.Connection;
+const {BaseStore, Connection} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Publics = [];
 

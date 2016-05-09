@@ -1,6 +1,7 @@
 export default class ToolGroupComponent {
   _component = null;
   _priority = null;
+  _name = null;
 
 	/**
    * @type {ToolComponent[]}
@@ -8,10 +9,19 @@ export default class ToolGroupComponent {
    */
   _tools = [];
 
-  constructor(component, tools, priority = 0) {
+  constructor(name, component, tools, priority = 0) {
+    this.name = name;
     this.component = component;
     this.tools = tools;
     this.priority = priority;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(name) {
+    this._name = name;
   }
 
   get component() {

@@ -1,13 +1,20 @@
 import API from '../components/Tools/API';
+import PublicQuadrant from '../components/Quadrants/PublicQuadrant';
 
-const composePlugin = new LunchBadgerCore.models.Plugin('MonetizePlugin');
+const monetizePlugin = new LunchBadgerCore.models.Plugin('MonetizePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
+const Public = LunchBadgerManage.stores.Public;
 
 const tools = [
   new LunchBadgerCore.models.ToolComponent(API)
 ];
 const toolGroup = new LunchBadgerCore.models.ToolGroupComponent(toolGroupComponent, tools);
 
-composePlugin.registerToolGroup(toolGroup, 10);
+const quadrants = [
+  new LunchBadgerCore.models.QuadrantComponent('Public', PublicQuadrant, Public, 3, true)
+];
 
-export default composePlugin;
+monetizePlugin.registerToolGroup(toolGroup, 10);
+monetizePlugin.registerQuadrants(quadrants);
+
+export default monetizePlugin;

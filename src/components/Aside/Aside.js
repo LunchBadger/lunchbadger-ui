@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './Aside.scss';
-import Endpoint from '../Tools/Endpoint';
 
 const Pluggable = LunchBadgerCore.stores.Pluggable;
 
@@ -42,8 +41,6 @@ export default class Aside extends Component {
     return (
       <aside className="aside">
         {this._renderToolGroups()}
-        <Endpoint />
-        <hr />
       </aside>
     );
   }

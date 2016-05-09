@@ -29,7 +29,7 @@ let LunchBadgerCompose = {
   },
   actions: {
     Private: {
-      updateOrder: updateOrder  
+      updateOrder: updateOrder
     }
   }
 };

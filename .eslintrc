@@ -13,6 +13,7 @@
   "globals": {
     "LunchBadgerCore": true,
     "LunchBadgerCompose": true,
+    "LunchBadgerManage": true,
     "jsPlumb": true,
     "console": true
   },

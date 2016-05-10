@@ -1,11 +1,17 @@
 'use strict';
+var fs = require('fs');
 
 const info = './bin/info.json';
+const infoAPI = './../../server/info.json';
 const jsonfile = require('jsonfile');
 let infoFile = {};
 
 try {
-  infoFile = jsonfile.readFileSync(info);
+  if (fs.existsSync(infoAPI)) {
+    infoFile = jsonfile.readFileSync(infoAPI);
+  } else {
+    infoFile = jsonfile.readFileSync(info);
+  }
 } catch (error) {
   infoFile = {
     plugins: [

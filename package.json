@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
-    "dist": "npm run clean && npm run copy & webpack --env=dist --progress",
+    "dist": "node ./bin/dist",
     "lint": "eslint ./src",
     "posttest": "npm run lint",
     "release:major": "npm version major && npm publish && git push --follow-tags",
@@ -15,7 +15,7 @@
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
     "serve": "node server.js --env=dev",
     "serve:dist": "node server.js --env=dist",
-    "start": "npm run clean && node server.js --env=dev",
+    "start": "node ./bin/start",
     "test": "karma start",
     "test:watch": "karma start --autoWatch=true --singleRun=false"
   },
@@ -64,6 +64,7 @@
     "rimraf": "^2.4.3",
     "sass-loader": "^3.1.2",
     "script-loader": "^0.7.0",
+    "shelljs": "^0.7.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.0",
@@ -76,6 +77,7 @@
     "flux": "^2.1.1",
     "font-awesome": "^4.6.1",
     "formsy-react": "^0.18.0",
+    "jsonfile": "^2.3.0",
     "jsplumb": "^2.0.7",
     "keymirror": "^0.1.1",
     "lockr": "^0.8.4",

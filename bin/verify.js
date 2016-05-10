@@ -1,9 +1,13 @@
 #!/usr/bin/env node
+require('shelljs/global');
+
 var Promise = require('bluebird');
 var request = require('request');
 var config = require('../cfg/base');
 var info = './bin/info.json';
 var jsonfile = require('jsonfile');
+
+var infoFile = require('../cfg/load');
 
 module.exports = function () {
   var method = 'GET';
@@ -12,7 +16,9 @@ module.exports = function () {
   // By hand, we will set user id to 1 and then fetch plugins from there
   const userId = 1;
 
-  var verify = new Promise((resolve, reject) => {
+  // TODO: when verification api is available -> get available plugins and build app
+
+  /*var verify = new Promise((resolve, reject) => {
     request({
       method: method,
       url: 'Customers/' + userId,
@@ -31,9 +37,20 @@ module.exports = function () {
         return reject(new Error('General API Error'));
       }
 
+      // install lunchbadger core
+      exec('pwd');
+      echo('CORE!');
+
+      //exec('git clone git@gitlab.neoteric.eu:LunchBadger/lunchbadger-core.git >/dev/null 2>&1');
+
       if (body.plugins) {
         var lunchbadgerPlugins = body.plugins.map(function (plugin) {
           // this map is required until we move to npm - now we need to point to plugins directory to build app
+          // installing from GITLab
+          // TODO: switch to npm after publishing modules
+
+          exec('git clone git@gitlab.neoteric.eu:LunchBadger/lunchbadger-' + plugin + '.git >/dev/null 2>&1');
+
           return './plugins/lunchbadger-' + plugin;
         });
       } else {
@@ -50,12 +67,38 @@ module.exports = function () {
         plugins: lunchbadgerPlugins
       });
     });
+  });*/
+
+  var verify = new Promise((resolve, reject) => {
+    cd('plugins');
+
+    // install lunchbadger core
+    echo('Installing core...');
+    exec('git clone git@gitlab.neoteric.eu:LunchBadger/lunchbadger-core.git >/dev/null 2>&1');
+    cd('lunchbadger-core');
+    exec('npm install --silent && npm run dist >/dev/null 2>&1');
+    cd('..');
+
+    // install plugins
+    infoFile.plugins.forEach(function (plugin) {
+      echo('Installing ' + plugin + ' plugin...');
+      exec('git clone git@gitlab.neoteric.eu:LunchBadger/lunchbadger-' + plugin + '.git >/dev/null 2>&1');
+      cd('lunchbadger-' + plugin);
+
+      exec('npm install --silent && npm run dist >/dev/null 2>&1');
+      cd('..');
+    });
+
+    cd('..');
+
+    return resolve();
   });
 
   verify.then(function () {
-    console.log('verified!');
+    console.log('User verified, installing plugins...');
   }).catch(function () {
-    console.log('error...');
+    console.log('Error while verifying...');
+    exit(-1);
   });
 
   return verify;

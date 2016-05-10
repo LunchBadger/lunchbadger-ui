@@ -9,8 +9,8 @@ try {
 } catch (error) {
   infoFile = {
     plugins: [
-      "./plugins/lunchbadger-compose",
-      "./plugins/lunchbadger-manage"
+      "compose",
+      "manage"
     ]
   };
 }

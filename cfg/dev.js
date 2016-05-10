@@ -18,7 +18,7 @@ let config = Object.assign({}, baseConfig, {
       './src/index'
     ],
     core: './plugins/lunchbadger-core/index',
-    plugins: infoFile.plugins
+    plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
   },
   cache: true,
   devtool: 'eval-source-map',

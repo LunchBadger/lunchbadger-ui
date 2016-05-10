@@ -9,13 +9,13 @@ module.exports = function () {
   var method = 'GET';
 
   //** This must come from API when user is logging in or something... **
-  // Now we can just set that by hand - available options are {1, 2, 3, 4} level (1 lowest - 4 highest subscription)
-  var userLevel = 4;
+  // By hand, we will set user id to 1 and then fetch plugins from there
+  const userId = 1;
 
   var verify = new Promise((resolve, reject) => {
     request({
       method: method,
-      url: 'Customers/' + userLevel,
+      url: 'Customers/' + userId,
       baseUrl: config.apiUrl,
       json: true
     }, (error, response, body) => {
@@ -33,6 +33,7 @@ module.exports = function () {
 
       if (body.plugins) {
         var lunchbadgerPlugins = body.plugins.map(function (plugin) {
+          // this map is required until we move to npm - now we need to point to plugins directory to build app
           return './plugins/lunchbadger-' + plugin;
         });
       } else {

@@ -5,17 +5,7 @@ let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
-const info = './bin/info.json';
-const jsonfile = require('jsonfile');
-let infoFile = {};
-
-try {
-  infoFile = jsonfile.readFileSync(info);
-} catch (error) {
-  infoFile = {
-    plugins: []
-  };
-}
+const infoFile = require('./load');
 
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');

@@ -4,7 +4,7 @@ import Backend from '../stores/Backend';
 import BackendQuadrant from '../components/Quadrant/BackendQuadrant';
 import PrivateQuadrant from '../components/Quadrant/PrivateQuadrant';
 
-const Private = LunchBadgerCore.stores.Private;
+const Private = LunchBadgerManage.stores.Private;
 const composePlugin = new LunchBadgerCore.models.Plugin('ComposePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 

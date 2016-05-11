@@ -8,7 +8,6 @@ import DataSourceComponent from './components/CanvasElements/DataSource';
 import Backend from 'stores/Backend';
 
 // models
-import Model from 'models/Model';
 
 // actions
 
@@ -22,9 +21,6 @@ let LunchBadgerCompose = {
   },
   stores: {
     Backend: Backend
-  },
-  models: {
-    Model: Model
   },
   actions: {}
 };

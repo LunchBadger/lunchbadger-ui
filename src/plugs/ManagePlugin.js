@@ -5,8 +5,8 @@ import PrivateQuadrant from '../components/Quadrants/PrivateQuadrant';
 import PublicQuadrant from '../components/Quadrants/PublicQuadrant';
 import GatewayStore from '../stores/Gateway';
 import Public from '../stores/Public';
+import Private from '../stores/Private';
 
-const Private = LunchBadgerCore.stores.Private;
 const managePlugin = new LunchBadgerCore.models.Plugin('ManagePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 

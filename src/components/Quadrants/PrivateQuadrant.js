@@ -20,6 +20,7 @@ class PrivateQuadrant extends Component {
       return (
         <PrivateEndpoint
           paper={this.props.paper}
+          appState={this.props.appState}
           key={entity.id}
           icon="fa-user-secret"
           hideSourceOnDrag={true}

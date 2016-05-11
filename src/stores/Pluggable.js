@@ -85,6 +85,33 @@ class Pluggable extends BaseStore {
       return quadrant.priority;
     });
   }
+
+  getDetailsPanel(type) {
+    const pluginsWithPanelDetails = _.filter(plugins, (plugin) => {
+      return plugin.panelDetails && plugin.panelDetails.length;
+    });
+
+    // merge detail panels
+    const reducedPanelDetails = pluginsWithPanelDetails.reduce((panelsWithDetails, plugin) => {
+      return panelsWithDetails.concat(plugin.panelDetails);
+    }, []);
+
+    return _.filter(reducedPanelDetails, (detailsPanel) => {
+      return detailsPanel.type === type;
+    });
+  }
+
+  getConnectionCreatedStrategies() {
+    return _.filter(plugins, (plugin) => {
+      return plugin.handleConnectionCreated;
+    });
+  }
+
+  getConnectionMovedStrategies() {
+    return _.filter(plugins, (plugin) => {
+      return plugin.handleConnectionMoved;
+    });
+  }
 }
 
 export default new Pluggable();

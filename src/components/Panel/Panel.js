@@ -3,7 +3,6 @@ import './Panel.scss';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
-import AppState from 'stores/AppState';
 
 export default (ComposedComponent) => {
   return class Panel extends Component {
@@ -20,26 +19,24 @@ export default (ComposedComponent) => {
         opened: false
       };
 
+      let animationTime = (this.props.appState.getStateKey('isPanelOpened')) ? 500 : 0;
       this.storageKey = null;
 
       this.appStateUpdate = () => {
-        const currentPanel = AppState.getStateKey('currentlyOpenedPanel');
+        const currentPanel = this.props.appState.getStateKey('currentlyOpenedPanel');
 
-        if (this.storageKey === currentPanel) {
+        if (this.storageKey === currentPanel && !this.state.opened) {
           // keep the timeout equal to css animation time...
-          const animationTime = (AppState.getStateKey('isPanelOpened')) ? 500 : 0;
 
           setTimeout(() => {
             this.setState({opened: true});
           }, animationTime);
-        } else {
+        } else if (this.storageKey !== currentPanel) {
           this.setState({opened: false});
         }
-      }
-    }
 
-    componentWillMount() {
-      AppState.addChangeListener(this.appStateUpdate);
+        animationTime = (this.props.appState.getStateKey('isPanelOpened')) ? 500 : 0;
+      }
     }
 
     componentDidMount() {
@@ -56,6 +53,10 @@ export default (ComposedComponent) => {
       });
     }
 
+    componentWillReceiveProps() {
+      this.appStateUpdate();
+    }
+
     componentDidUpdate() {
       const canvas = this.props.canvas();
 
@@ -64,10 +65,6 @@ export default (ComposedComponent) => {
       } else {
         canvas.setState({disabled: false});
       }
-    }
-
-    componentWillUnmount() {
-      AppState.removeChangeListener(this.appStateUpdate);
     }
 
     handlePanelResize(event) {

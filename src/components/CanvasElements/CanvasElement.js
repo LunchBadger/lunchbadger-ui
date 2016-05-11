@@ -3,7 +3,6 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
@@ -92,43 +91,39 @@ export default (ComposedComponent) => {
 
       this.currentOpenedPanel = null;
 
-      this.appStateUpdate = () => {
-        const currentElement = AppState.getStateKey('currentElement');
-        this.currentOpenedPanel = AppState.getStateKey('currentlyOpenedPanel');
-        if (currentElement && currentElement.id === this.props.entity.id) {
-          this.setState({highlighted: true});
-          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
-            this.setState({editable: false});
-          }
-        } else {
-          this.setState({highlighted: false});
-        }
-
-      };
-
       this.state = {
         editable: true,
         expanded: true,
         highlighted: false
       };
+
+      this.checkHighlightAndEditableState = (props) => {
+        const currentElement = props.appState.getStateKey('currentElement');
+        const currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
+
+        if (currentElement && currentElement.id === this.props.entity.id) {
+          this.setState({highlighted: true});
+          if (currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+            this.setState({editable: false});
+          }
+        } else {
+          this.setState({highlighted: false});
+        }
+      };
     }
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
-    }
 
-    componentWillMount() {
-      AppState.addChangeListener(this.appStateUpdate);
-    }
-
-    componentWillUnmount() {
-      AppState.removeChangeListener(this.appStateUpdate);
+      this.checkHighlightAndEditableState(props);
     }
 
     componentDidMount() {
       if (this.props.entity.ready) {
         this.triggerElementAutofocus();
       }
+
+      this.checkHighlightAndEditableState(this.props);
 
       this.props.entity.elementDOM = this.elementDOM;
     }

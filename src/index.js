@@ -13,6 +13,7 @@ import Pluggable from './stores/Pluggable';
 import Connection from './stores/Connection';
 
 // components
+import App from './components/App/App';
 import Panel from './components/Panel/Panel';
 import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
@@ -38,11 +39,15 @@ import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
 import QuadrantComponent from './models/Plugin/QuadrantComponent';
 import Port from './models/Port';
 import ConnectionModel from './models/Connection';
+import PanelDetailsComponent from './models/Plugin/PanelDetailsComponent';
+import Strategy from './models/Plugin/Strategy';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
 import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
+import attachConnection from './actions/Connection/attach';
+import reattachConnection from './actions/Connection/reattach';
 
 // constants
 import panelKeys from './constants/panelKeys';
@@ -55,9 +60,14 @@ let LunchBadgerCore = {
   actions: {
     registerPlugin: registerPlugin,
     togglePanel: togglePanel,
-    toggleHighlight: toggleHighlight
+    toggleHighlight: toggleHighlight,
+    Connection: {
+      attachConnection: attachConnection,
+      reattachConnection: reattachConnection
+    }
   },
   components: {
+    App: App,
     Panel: Panel,
     CanvasElement: CanvasElement,
     BaseDetails: BaseDetails,
@@ -88,7 +98,9 @@ let LunchBadgerCore = {
     ToolGroupComponent: ToolGroupComponent,
     QuadrantComponent: QuadrantComponent,
     Port: Port,
-    Connection: ConnectionModel
+    Connection: ConnectionModel,
+    PanelDetailsComponent: PanelDetailsComponent,
+    Strategy: Strategy
   },
   constants: {
     panelKeys: panelKeys,

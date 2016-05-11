@@ -1,14 +1,14 @@
 import React, {Component, PropTypes} from 'react';
-import Port from './Port';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
-import ModelPropertyFactory from 'models/ModelProperty';
 import updateModel from 'actions/CanvasElements/Model/update';
 import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import _ from 'lodash';
 
+const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
+const ModelPropertyFactory = LunchBadgerManage.models.ModelProperty;
 
 class Model extends Component {
   static propTypes = {

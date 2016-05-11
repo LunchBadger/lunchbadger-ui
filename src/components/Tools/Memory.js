@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import './Tool.scss';
 import AddDataSource from '../../actions/CanvasElements/DataSource/add';
 
-export default class Memory extends Component {
+const Tool = LunchBadgerCore.components.Tool;
+
+class Memory extends Component {
   render() {
     return (
       <div className="memory tool__context__item" onClick={() => AddDataSource('Memory')}>
@@ -12,3 +13,5 @@ export default class Memory extends Component {
     );
   }
 }
+
+export default Tool(Memory);

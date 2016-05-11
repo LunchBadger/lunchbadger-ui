@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './Tool.scss';
 import AddModel from '../../actions/CanvasElements/Model/add';
 
 const Tool = LunchBadgerCore.components.Tool;

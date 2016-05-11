@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
-import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
+const ModelProperty = LunchBadgerManage.models.ModelProperty;
 
 class ModelDetails extends Component {
   static propTypes = {

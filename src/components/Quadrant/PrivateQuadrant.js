@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import Model from '../CanvasElements/Model';
-import updateOrder from 'actions/Quadrants/Private/updateOrder';
 
+const updateOrder = LunchBadgerManage.actions.Quadrants.Private.updateOrder;
+const PrivateEndpoint = LunchBadgerManage.components.PrivateEndpoint;
 const Quadrant = LunchBadgerCore.components.Quadrant;
 
 class PrivateQuadrant extends Component {
@@ -17,15 +18,31 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return (
-        <Model paper={this.props.paper}
-               key={entity.id}
-               icon="fa-car"
-               hideSourceOnDrag={true}
-               itemOrder={entity.itemOrder}
-               moveEntity={this.moveEntity}
-               entity={entity}/>
-      );
+      switch (entity.constructor.type) {
+        case 'Model':
+          return (
+            <Model paper={this.props.paper}
+                   appState={this.props.appState}
+                   key={entity.id}
+                   icon="fa-car"
+                   hideSourceOnDrag={true}
+                   itemOrder={entity.itemOrder}
+                   moveEntity={this.moveEntity}
+                   entity={entity}/>
+          );
+        case 'PrivateEndpoint':
+          return (
+            <PrivateEndpoint
+              paper={this.props.paper}
+              appState={this.props.appState}
+              key={entity.id}
+              icon="fa-user-secret"
+              hideSourceOnDrag={true}
+              itemOrder={entity.itemOrder}
+              moveEntity={this.moveEntity}
+              entity={entity}/>
+          );
+      }
     });
   }
 

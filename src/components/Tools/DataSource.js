@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './Tool.scss';
 import Memory from './Memory';
 import Mongo from './Mongo';
 import Oracle from './Oracle';

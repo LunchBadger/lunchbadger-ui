@@ -1,37 +1,28 @@
 import ComposePlugin from './plugs/ComposePlugin';
 
 // components
-import App from './components/App/App';
 import ModelComponent from './components/CanvasElements/Model';
+import DataSourceComponent from './components/CanvasElements/DataSource';
 
 // stores
-import Private from 'stores/Private';
+import Backend from 'stores/Backend';
 
 // models
-import Model from 'models/Model';
 
 // actions
-import updateOrder from './actions/Quadrants/Private/updateOrder';
 
 LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 
 // export
 let LunchBadgerCompose = {
   components: {
-    App: App,
-    Model: ModelComponent
+    Model: ModelComponent,
+    DataSource: DataSourceComponent
   },
   stores: {
-    Private: Private
+    Backend: Backend
   },
-  models: {
-    Model: Model
-  },
-  actions: {
-    Private: {
-      updateOrder: updateOrder
-    }
-  }
+  actions: {}
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {

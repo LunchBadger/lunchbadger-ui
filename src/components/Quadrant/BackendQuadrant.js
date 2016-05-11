@@ -18,6 +18,7 @@ class BackendQuadrant extends Component {
   renderEntities() {
     return this.props.entities.map((entity) => {
       return <DataSource paper={this.props.paper}
+                         appState={this.props.appState}
                          key={entity.id}
                          icon="fa-database"
                          hideSourceOnDrag={true}

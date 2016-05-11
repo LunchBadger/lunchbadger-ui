@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import './Tool.scss';
 import AddDataSource from '../../actions/CanvasElements/DataSource/add';
+
+const Tool = LunchBadgerCore.components.Tool;
 
 export default class Mongo extends Component {
   render() {
@@ -13,3 +14,5 @@ export default class Mongo extends Component {
     );
   }
 }
+
+export default Tool(Mongo);

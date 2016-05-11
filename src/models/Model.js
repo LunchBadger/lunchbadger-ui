@@ -1,8 +1,9 @@
-import BaseModel from './BaseModel';
-import Port from './Port';
-import portGroups from '../constants/portGroups';
 import ModelProperty from 'models/ModelProperty';
 import _ from 'lodash';
+
+const BaseModel = LunchBadgerCore.models.BaseModel;
+const Port = LunchBadgerCore.models.Port;
+const portGroups = LunchBadgerCore.constants.portGroups;
 
 const defaultProperty = ModelProperty.create({
   propertyKey: 'key',

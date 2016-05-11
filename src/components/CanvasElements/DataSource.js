@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import Port from './Port';
 import updateDataSource from 'actions/CanvasElements/DataSource/update';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
+const Port = LunchBadgerCore.components.Port;
 
 class DataSource extends Component {
   static propTypes = {

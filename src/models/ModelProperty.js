@@ -1,4 +1,4 @@
-import BaseModel from './BaseModel';
+const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class ModelProperty extends BaseModel {
   static type = 'ModelProperty';

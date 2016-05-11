@@ -1,6 +1,6 @@
-import BaseModel from './BaseModel';
-import Port from './Port';
-import portGroups from '../constants/portGroups';
+const BaseModel = LunchBadgerCore.models.BaseModel;
+const Port = LunchBadgerCore.models.Port;
+const portGroups = LunchBadgerCore.constants.portGroups;
 
 export default class DataSource extends BaseModel {
   static type = 'DataSource';

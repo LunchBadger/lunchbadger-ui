@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import './Tool.scss';
 import AddDataSource from '../../actions/CanvasElements/DataSource/add';
+
+const Tool = LunchBadgerCore.components.Tool;
 
 export default class Salesforce extends Component {
   render() {
@@ -13,3 +14,5 @@ export default class Salesforce extends Component {
     );
   }
 }
+
+export default Tool(Salesforce);

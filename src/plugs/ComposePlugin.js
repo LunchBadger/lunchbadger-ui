@@ -1,10 +1,10 @@
 import DataSource from '../components/Tools/DataSource';
 import Model from '../components/Tools/Model';
 import Backend from '../stores/Backend';
-import Private from '../stores/Private';
 import BackendQuadrant from '../components/Quadrant/BackendQuadrant';
 import PrivateQuadrant from '../components/Quadrant/PrivateQuadrant';
 
+const Private = LunchBadgerCore.stores.Private;
 const composePlugin = new LunchBadgerCore.models.Plugin('ComposePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 
@@ -18,7 +18,7 @@ const toolGroup = [
 
 const quadrants = [
   new LunchBadgerCore.models.QuadrantComponent('Backend', BackendQuadrant, Backend, 0),
-  new LunchBadgerCore.models.QuadrantComponent('Private', PrivateQuadrant, Private, 1)
+  new LunchBadgerCore.models.QuadrantComponent('Private', PrivateQuadrant, Private, 1, true)
 ];
 
 composePlugin.registerToolGroup(toolGroup);

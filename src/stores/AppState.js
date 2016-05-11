@@ -33,13 +33,9 @@ class AppState extends BaseStore {
         }
 
         this.setStateKey('currentlyOpenedPanel', panel);
+        this.setStateKey('isPanelOpened', panel ? true : false);
         this.emitChange();
 
-        setTimeout(() => {
-          this.setStateKey('isPanelOpened', panel ? true : false);
-          this.emitChange();
-        });
-        
         break;
 
       case 'ToggleHighlight':

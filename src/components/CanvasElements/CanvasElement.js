@@ -3,7 +3,6 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import AppState from 'stores/AppState';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
@@ -84,7 +83,14 @@ export default (ComposedComponent) => {
       itemOrder: PropTypes.number.isRequired,
       hideSourceOnDrag: PropTypes.bool.isRequired,
       isOver: PropTypes.bool,
-      canDrop: PropTypes.bool
+      canDrop: PropTypes.bool,
+      highlighted: PropTypes.bool,
+      editable: PropTypes.bool
+    };
+
+    static defaultProps = {
+      highlighted: false,
+      editable: true
     };
 
     constructor(props) {
@@ -92,37 +98,20 @@ export default (ComposedComponent) => {
 
       this.currentOpenedPanel = null;
 
-      this.appStateUpdate = () => {
-        const currentElement = AppState.getStateKey('currentElement');
-        this.currentOpenedPanel = AppState.getStateKey('currentlyOpenedPanel');
-        if (currentElement && currentElement.id === this.props.entity.id) {
-          this.setState({highlighted: true});
-          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
-            this.setState({editable: false});
-          }
-        } else {
-          this.setState({highlighted: false});
-        }
-
-      };
-
       this.state = {
-        editable: true,
+        editable: props.editable,
         expanded: true,
-        highlighted: false
+        highlighted: props.highlighted
       };
     }
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
-    }
 
-    componentWillMount() {
-      AppState.addChangeListener(this.appStateUpdate);
-    }
-
-    componentWillUnmount() {
-      AppState.removeChangeListener(this.appStateUpdate);
+      this.setState({
+        editable: props.editable,
+        highlighted: props.highlighted
+      })
     }
 
     componentDidMount() {

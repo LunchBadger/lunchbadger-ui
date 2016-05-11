@@ -92,13 +92,6 @@ export default class Canvas extends Component {
     });
   }
 
-  // _checkIfConnectionWasMadeBetweenModelAndDataSource(sourceId, targetId) {
-  //   const isBackend = Backend.findEntity(sourceId);
-  //   const isPrivate = Private.findEntity(targetId);
-  //
-  //   return isBackend && isPrivate;
-  // }
-
   _attachPaperEvents() {
     this.paper.bind('connection', (info) => {
       const {source, sourceId, target, targetId, connection} = info;
@@ -117,11 +110,13 @@ export default class Canvas extends Component {
       this._handleExistingConnectionDetach(info);
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        // if (this._checkIfConnectionWasMadeBetweenModelAndDataSource(sourceId, targetId)) {
-        //   attachConnection(sourceId, targetId, info);
-        // } else {
-        addConnection(sourceId, targetId, info);
-        // }
+        const strategyFulfilled = this.props.plugins.getConnectionCreatedStrategies().some((strategy) => {
+          return strategy.handleConnectionCreated.checkAndFulfill(info);
+        });
+
+        if (!strategyFulfilled) {
+          addConnection(sourceId, targetId, info);
+        }
       }
     });
 
@@ -133,7 +128,8 @@ export default class Canvas extends Component {
     });
 
     this.paper.bind('connectionMoved', (info) => {
-      if (Connection.findEntityIndexBySourceAndTarget(info.newSourceId, info.newTargetId) > -1 || !this._isConnectionValid(info.newSourceEndpoint.element, info.newSourceId, info.newTargetEndpoint.element, info.newTargetId)) {
+      if (Connection.findEntityIndexBySourceAndTarget(info.newSourceId, info.newTargetId) > -1
+        || !this._isConnectionValid(info.newSourceEndpoint.element, info.newSourceId, info.newTargetEndpoint.element, info.newTargetId)) {
         setTimeout(() => {
           this.paper.connect({
             source: info.originalSourceEndpoint.element,
@@ -142,11 +138,13 @@ export default class Canvas extends Component {
         });
 
       } else {
-        // if (this._checkIfConnectionWasMadeBetweenModelAndDataSource(info.newSourceId, info.newTargetId)) {
-        //   reattachConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
-        // } else {
-        moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
-        // }
+        const strategyFulfilled = this.props.plugins.getConnectionMovedStrategies().some((strategy) => {
+          return strategy.handleConnectionMoved.checkAndFulfill(info);
+        });
+
+        if (!strategyFulfilled) {
+          moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
+        }
       }
     });
 

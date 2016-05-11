@@ -91,13 +91,25 @@ class Pluggable extends BaseStore {
       return plugin.panelDetails && plugin.panelDetails.length;
     });
 
-    // merge quadrants
+    // merge detail panels
     const reducedPanelDetails = pluginsWithPanelDetails.reduce((panelsWithDetails, plugin) => {
       return panelsWithDetails.concat(plugin.panelDetails);
     }, []);
 
     return _.filter(reducedPanelDetails, (detailsPanel) => {
       return detailsPanel.type === type;
+    });
+  }
+
+  getConnectionCreatedStrategies() {
+    return _.filter(plugins, (plugin) => {
+      return plugin.handleConnectionCreated;
+    });
+  }
+
+  getConnectionMovedStrategies() {
+    return _.filter(plugins, (plugin) => {
+      return plugin.handleConnectionMoved;
     });
   }
 }

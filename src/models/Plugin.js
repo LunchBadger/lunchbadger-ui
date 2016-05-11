@@ -31,6 +31,18 @@ export default class Plugin {
    */
   _panelDetails = null;
 
+	/**
+   * @type {Strategy|null}
+   * @private
+   */
+  _handleConnectionCreated = null;
+
+  /**
+   * @type {Strategy|null}
+   * @private
+   */
+  _handleConnectionMoved = null;
+  
   _panelPriority = 0;
 
   constructor(name) {
@@ -69,6 +81,14 @@ export default class Plugin {
     return this._panelDetails;
   }
 
+  get handleConnectionCreated() {
+    return this._handleConnectionCreated;
+  }
+
+  get handleConnectionMoved() {
+    return this._handleConnectionMoved;
+  }
+
 	/**
    * @param panelButtonComponent {PanelButtonComponent}
    * @param panelComponent {PanelComponent}
@@ -103,5 +123,16 @@ export default class Plugin {
    */
   registerDetailsPanels(panelDetails) {
     this._panelDetails = panelDetails;
+  }
+
+	/**
+   * @param strategy {Strategy}
+   */
+  registerOnConnectionCreatedStrategy(strategy) {
+    this._handleConnectionCreated = strategy;
+  }
+  
+  registerOnConnectionMovedStrategy(strategy) {
+    this._handleConnectionMoved = strategy;
   }
 }

@@ -11,7 +11,6 @@ import BaseStore from './stores/BaseStore';
 import AppState from './stores/AppState';
 import Pluggable from './stores/Pluggable';
 import Connection from './stores/Connection';
-import Private from './stores/Private';
 
 // components
 import App from './components/App/App';
@@ -40,7 +39,6 @@ import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
 import QuadrantComponent from './models/Plugin/QuadrantComponent';
 import Port from './models/Port';
 import ConnectionModel from './models/Connection';
-import Model from './models/Model';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
@@ -87,12 +85,10 @@ let LunchBadgerCore = {
     BaseStore: BaseStore,
     AppState: AppState,
     Pluggable: Pluggable,
-    Connection: Connection,
-    Private: Private
+    Connection: Connection
   },
   models: {
     BaseModel: BaseModel,
-    Model: Model,
     Plugin: Plugin,
     PanelButtonComponent: PanelButtonComponent,
     PanelComponent: PanelComponent,

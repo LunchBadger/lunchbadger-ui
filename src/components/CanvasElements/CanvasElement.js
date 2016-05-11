@@ -83,14 +83,7 @@ export default (ComposedComponent) => {
       itemOrder: PropTypes.number.isRequired,
       hideSourceOnDrag: PropTypes.bool.isRequired,
       isOver: PropTypes.bool,
-      canDrop: PropTypes.bool,
-      highlighted: PropTypes.bool,
-      editable: PropTypes.bool
-    };
-
-    static defaultProps = {
-      highlighted: false,
-      editable: true
+      canDrop: PropTypes.bool
     };
 
     constructor(props) {
@@ -99,25 +92,38 @@ export default (ComposedComponent) => {
       this.currentOpenedPanel = null;
 
       this.state = {
-        editable: props.editable,
+        editable: true,
         expanded: true,
-        highlighted: props.highlighted
+        highlighted: false
+      };
+
+      this.checkHighlightAndEditableState = (props) => {
+        const currentElement = props.appState.getStateKey('currentElement');
+        const currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
+
+        if (currentElement && currentElement.id === this.props.entity.id) {
+          this.setState({highlighted: true});
+          if (currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+            this.setState({editable: false});
+          }
+        } else {
+          this.setState({highlighted: false});
+        }
       };
     }
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
 
-      this.setState({
-        editable: props.editable,
-        highlighted: props.highlighted
-      })
+      this.checkHighlightAndEditableState(props);
     }
 
     componentDidMount() {
       if (this.props.entity.ready) {
         this.triggerElementAutofocus();
       }
+
+      this.checkHighlightAndEditableState(this.props);
 
       this.props.entity.elementDOM = this.elementDOM;
     }

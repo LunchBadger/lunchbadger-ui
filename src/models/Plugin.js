@@ -25,6 +25,12 @@ export default class Plugin {
    */
   _quadrants = null;
 
+	/**
+   * @type {PanelDetailsComponent[]|null}
+   * @private
+   */
+  _panelDetails = null;
+
   _panelPriority = 0;
 
   constructor(name) {
@@ -58,7 +64,11 @@ export default class Plugin {
   get quadrants() {
     return this._quadrants;
   }
-  
+
+  get panelDetails() {
+    return this._panelDetails;
+  }
+
 	/**
    * @param panelButtonComponent {PanelButtonComponent}
    * @param panelComponent {PanelComponent}
@@ -82,9 +92,16 @@ export default class Plugin {
   }
 
 	/**
-   * @param quadrants[] {QuadrantComponent}
+   * @param quadrants {QuadrantComponent[]}
    */
   registerQuadrants(quadrants) {
     this._quadrants = quadrants;
+  }
+
+	/**
+   * @param panelDetails {PanelDetailsComponent[]}
+   */
+  registerDetailsPanels(panelDetails) {
+    this._panelDetails = panelDetails;
   }
 }

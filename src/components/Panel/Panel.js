@@ -31,7 +31,7 @@ export default (ComposedComponent) => {
           setTimeout(() => {
             this.setState({opened: true});
           }, animationTime);
-        } else {
+        } else if (this.storageKey !== currentPanel) {
           this.setState({opened: false});
         }
 

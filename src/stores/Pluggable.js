@@ -85,6 +85,21 @@ class Pluggable extends BaseStore {
       return quadrant.priority;
     });
   }
+
+  getDetailsPanel(type) {
+    const pluginsWithPanelDetails = _.filter(plugins, (plugin) => {
+      return plugin.panelDetails && plugin.panelDetails.length;
+    });
+
+    // merge quadrants
+    const reducedPanelDetails = pluginsWithPanelDetails.reduce((panelsWithDetails, plugin) => {
+      return panelsWithDetails.concat(plugin.panelDetails);
+    }, []);
+
+    return _.filter(reducedPanelDetails, (detailsPanel) => {
+      return detailsPanel.type === type;
+    });
+  }
 }
 
 export default new Pluggable();

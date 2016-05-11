@@ -32,32 +32,13 @@ class DetailsPanel extends Component {
 
   renderDetails() {
     if (this.state.element) {
-      // switch (this.state.element.constructor.type) {
-      //   case 'PublicEndpoint':
-      //     return (
-      //       <PublicEndpointDetails entity={this.state.element}/>
-      //     );
-      //   case 'API':
-      //     return (
-      //       <APIDetails entity={this.state.element}/>
-      //     );
-      //   case 'PrivateEndpoint':
-      //     return (
-      //       <PrivateEndpointDetails entity={this.state.element}/>
-      //     );
-      //   case 'Model':
-      //     return (
-      //       <ModelDetails entity={this.state.element}/>
-      //     );
-      //   case 'Gateway':
-      //     return (
-      //       <GatewayDetails entity={this.state.element}/>
-      //     );
-      //   case 'DataSource':
-      //     return (
-      //       <DataSourceDetails entity={this.state.element}/>
-      //     );
-      // }
+      const panel = this.props.plugins.getDetailsPanel(this.state.element.constructor.type);
+
+      if (panel.length) {
+        const DetailsPanelComponent = panel[0].component;
+
+        return <DetailsPanelComponent entity={this.state.element}/>;
+      }
     }
   }
 

@@ -18,6 +18,7 @@ export default class PanelContainer extends Component {
       return (
         <PanelComponent key={`${panel.panelButton.panelKey}-panel-plugin`}
                         appState={this.props.appState}
+                        plugins={this.props.plugins}
                         canvas={this.props.canvas}
                         container={this.props.container} />
       );
@@ -28,6 +29,7 @@ export default class PanelContainer extends Component {
     return (
       <div>
         <DetailsPanel canvas={this.props.canvas}
+                      plugins={this.props.plugins}
                       appState={this.props.appState}
                       container={this.props.container}/>
         {this.renderPanels()}

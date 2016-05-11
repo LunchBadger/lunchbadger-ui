@@ -39,6 +39,7 @@ import ToolGroupComponent from './models/Plugin/ToolGroupComponent';
 import QuadrantComponent from './models/Plugin/QuadrantComponent';
 import Port from './models/Port';
 import ConnectionModel from './models/Connection';
+import PanelDetailsComponent from './models/Plugin/PanelDetailsComponent';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
@@ -96,7 +97,8 @@ let LunchBadgerCore = {
     ToolGroupComponent: ToolGroupComponent,
     QuadrantComponent: QuadrantComponent,
     Port: Port,
-    Connection: ConnectionModel
+    Connection: ConnectionModel,
+    PanelDetailsComponent: PanelDetailsComponent
   },
   constants: {
     panelKeys: panelKeys,

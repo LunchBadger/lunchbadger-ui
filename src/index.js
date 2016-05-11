@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 
-const App = LunchBadgerCompose.components.App;
+const App = LunchBadgerCore.components.App;
 
 console.info('Application started..!');
 

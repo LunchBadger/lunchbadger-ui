@@ -22,6 +22,7 @@ class PrivateQuadrant extends Component {
         case 'Model':
           return (
             <Model paper={this.props.paper}
+                   appState={this.props.appState}
                    key={entity.id}
                    icon="fa-car"
                    hideSourceOnDrag={true}
@@ -33,6 +34,7 @@ class PrivateQuadrant extends Component {
           return (
             <PrivateEndpoint
               paper={this.props.paper}
+              appState={this.props.appState}
               key={entity.id}
               icon="fa-user-secret"
               hideSourceOnDrag={true}

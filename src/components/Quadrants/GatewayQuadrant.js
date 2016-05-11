@@ -20,6 +20,7 @@ class GatewaysQuadrant extends Component {
       return <Gateway key={entity.id}
                       icon="fa-exchange"
                       paper={this.props.paper}
+                      appState={this.props.appState}
                       hideSourceOnDrag={true}
                       itemOrder={entity.itemOrder}
                       moveEntity={this.moveEntity}

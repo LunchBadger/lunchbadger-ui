@@ -19,6 +19,7 @@ class PublicQuadrant extends Component {
       return (
         <PublicEndpoint key={entity.id}
                         paper={this.props.paper}
+                        appState={this.props.appState}
                         id={entity.id}
                         icon="fa-user"
                         hideSourceOnDrag={true}

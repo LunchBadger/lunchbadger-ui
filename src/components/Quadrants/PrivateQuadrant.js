@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
+import updateOrder from 'actions/Quadrants/Private/updateOrder';
 
-const Model = LunchBadgerCompose.components.Model;
 const Quadrant = LunchBadgerCore.components.Quadrant;
-const updateOrder = LunchBadgerCompose.actions.Private.updateOrder;
 
 class PrivateQuadrant extends Component {
   static propTypes = {
@@ -18,29 +17,17 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      switch (entity.constructor.type) {
-        case 'Model':
-          return (
-            <Model paper={this.props.paper}
-                   key={entity.id}
-                   icon="fa-car"
-                   hideSourceOnDrag={true}
-                   itemOrder={entity.itemOrder}
-                   moveEntity={this.moveEntity}
-                   entity={entity}/>
-          );
-        case 'PrivateEndpoint':
-          return (
-            <PrivateEndpoint
-              paper={this.props.paper}
-              key={entity.id}
-              icon="fa-user-secret"
-              hideSourceOnDrag={true}
-              itemOrder={entity.itemOrder}
-              moveEntity={this.moveEntity}
-              entity={entity}/>
-          );
-      }
+      return (
+        <PrivateEndpoint
+          paper={this.props.paper}
+          appState={this.props.appState}
+          key={entity.id}
+          icon="fa-user-secret"
+          hideSourceOnDrag={true}
+          itemOrder={entity.itemOrder}
+          moveEntity={this.moveEntity}
+          entity={entity}/>
+      );
     });
   }
 

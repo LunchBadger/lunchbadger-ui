@@ -5,8 +5,14 @@ import PrivateQuadrant from '../components/Quadrants/PrivateQuadrant';
 import PublicQuadrant from '../components/Quadrants/PublicQuadrant';
 import GatewayStore from '../stores/Gateway';
 import Public from '../stores/Public';
+import Private from '../stores/Private';
+import GatewayDetails from '../components/Panel/EntitiesDetails/GatewayDetails';
+import PublicEndpointDetails from '../components/Panel/EntitiesDetails/PublicEndpointDetails';
+import PrivateEndpointDetails from '../components/Panel/EntitiesDetails/PrivateEndpointDetails';
+import PrivateEndpointFactory from '../models/PrivateEndpoint';
+import PublicEndpointFactory from '../models/PublicEndpoint';
+import GatewayFactory from '../models/Gateway';
 
-const Private = LunchBadgerCompose.stores.Private;
 const managePlugin = new LunchBadgerCore.models.Plugin('ManagePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 
@@ -22,12 +28,19 @@ const toolGroup = [
 ];
 
 const quadrants = [
-  new LunchBadgerCore.models.QuadrantComponent('Private', PrivateQuadrant, Private, 1, true),
+  new LunchBadgerCore.models.QuadrantComponent('Private', PrivateQuadrant, Private, 1),
   new LunchBadgerCore.models.QuadrantComponent('Gateway', GatewayQuadrant, GatewayStore, 2),
   new LunchBadgerCore.models.QuadrantComponent('Public', PublicQuadrant, Public, 3)
 ];
 
+const detailsPanels = [
+  new LunchBadgerCore.models.PanelDetailsComponent(GatewayFactory.type, GatewayDetails),
+  new LunchBadgerCore.models.PanelDetailsComponent(PublicEndpointFactory.type, PublicEndpointDetails),
+  new LunchBadgerCore.models.PanelDetailsComponent(PrivateEndpointFactory.type, PrivateEndpointDetails)
+];
+
 managePlugin.registerToolGroup(toolGroup);
 managePlugin.registerQuadrants(quadrants);
+managePlugin.registerDetailsPanels(detailsPanels);
 
 export default managePlugin;

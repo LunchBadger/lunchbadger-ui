@@ -5,10 +5,10 @@ import './Pipeline.scss';
 import {findDOMNode} from 'react-dom';
 import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/addAndConnect';
 import PrivateEndpoint from 'models/PrivateEndpoint';
+import Model from 'models/Model';
+import Private from 'stores/Private';
 
-const Model = LunchBadgerCompose.models.Model;
 const Connection = LunchBadgerCore.stores.Connection;
-const Private = LunchBadgerCompose.stores.Private;
 const Port = LunchBadgerCore.components.Port;
 const AppState = LunchBadgerCore.stores.AppState;
 

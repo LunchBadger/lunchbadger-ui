@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import AddPublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/add';
 
-export default class PrivateEndpoint extends Component {
+const Tool = LunchBadgerCore.components.Tool;
+
+class PrivateEndpoint extends Component {
   render() {
     return (
       <div className="publicendpoint tool__context__item" onClick={() => AddPublicEndpoint('Public Endpoint')}>
@@ -11,3 +13,5 @@ export default class PrivateEndpoint extends Component {
     );
   }
 }
+
+export default Tool(PrivateEndpoint);

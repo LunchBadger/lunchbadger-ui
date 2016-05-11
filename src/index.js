@@ -6,9 +6,11 @@ import PublicEndpoint from './models/PublicEndpoint';
 
 // components
 import PublicEndpointComponent from './components/CanvasElements/PublicEndpoint';
+import PrivateEndpointComponent from './components/CanvasElements/PrivateEndpoint';
 
 // actions
-import updateOrder from './actions/Quadrants/Public/updateOrder';
+import updateOrderPublic from './actions/Quadrants/Public/updateOrder';
+import updateOrderPrivate from './actions/Quadrants/Private/updateOrder';
 
 // stores
 import Public from './stores/Public';
@@ -22,12 +24,16 @@ let LunchBadgerManage = {
     PublicEndpoint: PublicEndpoint
   },
   components: {
-    PublicEndpoint: PublicEndpointComponent
+    PublicEndpoint: PublicEndpointComponent,
+    PrivateEndpoint: PrivateEndpointComponent
   },
   actions: {
     Quadrants: {
       Public: {
-        updateOrder: updateOrder
+        updateOrder: updateOrderPublic
+      },
+      Private: {
+        updateOrder: updateOrderPrivate
       }
     }
   },

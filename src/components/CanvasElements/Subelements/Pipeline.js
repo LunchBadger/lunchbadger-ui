@@ -6,9 +6,9 @@ import {findDOMNode} from 'react-dom';
 import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/addAndConnect';
 import PrivateEndpoint from 'models/PrivateEndpoint';
 
-const Model = LunchBadgerCompose.models.Model;
+const Private = LunchBadgerCore.stores.Private;
+const Model = LunchBadgerCore.models.Model;
 const Connection = LunchBadgerCore.stores.Connection;
-const Private = LunchBadgerCompose.stores.Private;
 const Port = LunchBadgerCore.components.Port;
 const AppState = LunchBadgerCore.stores.AppState;
 

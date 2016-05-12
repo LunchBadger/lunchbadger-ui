@@ -53,6 +53,13 @@ import reattachConnection from './actions/Connection/reattach';
 import panelKeys from './constants/panelKeys';
 import portGroups from './constants/portGroups';
 
+// services
+import ProjectService from './services/ProjectService';
+
+// utils
+import APIInterceptor from './utils/APIInterceptor';
+import URLParamsBind from './utils/URLParamsBind';
+
 let LunchBadgerCore = {
   dispatcher: {
     AppDispatcher: AppDispatcher
@@ -105,6 +112,13 @@ let LunchBadgerCore = {
   constants: {
     panelKeys: panelKeys,
     portGroups: portGroups
+  },
+  services: {
+    ProjectService: ProjectService
+  },
+  utils: {
+    APIInterceptor: APIInterceptor,
+    URLParamsBind: URLParamsBind
   }
 };
 

@@ -60,6 +60,7 @@ export default (ComposedComponent) => {
 
     componentWillMount() {
       this.props.data.addChangeListener(this.dataStoreUpdate);
+      this.props.data.addInitListener(this.dataStoreUpdate);
     }
 
     componentDidUpdate() {
@@ -70,6 +71,7 @@ export default (ComposedComponent) => {
 
     componentWillUnmount() {
       this.props.data.removeChangeListener(this.dataStoreUpdate);
+      this.props.data.removeInitListener(this.dataStoreUpdate);
     }
 
     recalculateQuadrantWidth(event) {

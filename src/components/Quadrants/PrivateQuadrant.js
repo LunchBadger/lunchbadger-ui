@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
 import updateOrder from 'actions/Quadrants/Private/updateOrder';
+import PrivateEndpointFactory from 'models/PrivateEndpoint';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 
@@ -17,7 +18,7 @@ class PrivateQuadrant extends Component {
 
   renderEntities() {
     return this.props.entities.map((entity) => {
-      return (
+      return entity.constructor.type === PrivateEndpointFactory.type && (
         <PrivateEndpoint
           paper={this.props.paper}
           appState={this.props.appState}

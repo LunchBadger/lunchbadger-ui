@@ -5,11 +5,24 @@ const BaseStore = LunchBadgerCore.stores.BaseStore;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Privates = [];
 
+let initCalls = 2;
+
 class Private extends BaseStore {
   constructor() {
     super();
     register((action) => {
       switch (action.type) {
+        case 'InitializePrivate':
+          initCalls--;
+          Privates.push.apply(Privates, action.data);
+          
+          if (initCalls === 0) {
+            this.emitInit();
+          } else {
+            this.emitChange();
+          }
+          
+          break;
         case 'UpdatePrivateOrder':
           Privates.splice(action.itemOrder, 0, Privates.splice(action.hoverOrder, 1)[0]);
           this.setEntitiesOrder(Privates);

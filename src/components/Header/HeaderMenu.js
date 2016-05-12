@@ -27,6 +27,9 @@ export default class HeaderMenu extends Component {
             <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="fa-list"/>
           </li>
           {this.renderButtons()}
+          <li className="header__menu__element">
+            <HeaderMenuLink togglePanel={null} icon="fa-cog"/>
+          </li>
         </ul>
       </nav>
     );

@@ -10,6 +10,7 @@ import Backend from 'stores/Backend';
 // models
 
 // actions
+import initializeBackend from 'actions/Stores/Backend/initialize';
 
 LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 
@@ -22,7 +23,13 @@ let LunchBadgerCompose = {
   stores: {
     Backend: Backend
   },
-  actions: {}
+  actions: {
+    Stores: {
+      Backend: {
+        initialize: initializeBackend
+      }
+    }
+  }
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {

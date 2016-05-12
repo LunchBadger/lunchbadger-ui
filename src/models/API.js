@@ -18,10 +18,6 @@ export default class API extends BaseModel {
     super(id);
 
     this.name = name;
-
-    this.addEndpoint(PublicEndpoint.create({
-      name: 'Endpoint 1'
-    }));
   }
 
   /**

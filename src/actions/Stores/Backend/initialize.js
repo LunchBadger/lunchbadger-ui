@@ -8,6 +8,7 @@ export default (data) => {
   const dataSourceObjects = dataSources.map((dataSource, index) => {
     return DataSource.create({
       itemOrder: index,
+      loaded: true,
       ...dataSource
     });
   });

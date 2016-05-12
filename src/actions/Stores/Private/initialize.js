@@ -7,6 +7,7 @@ export default (data) => {
   const privateModelObjects = privateModels.map((privateModel, index) => {
     return Model.create({
       itemOrder: index,
+      loaded: true,
       ...privateModel
     });
   });

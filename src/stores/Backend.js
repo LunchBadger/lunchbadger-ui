@@ -11,7 +11,6 @@ class Backend extends BaseStore {
       switch (action.type) {
         case 'InitializeBackend':
           Backends.push.apply(Backends, action.data);
-          console.log(action, Backends);
           this.emitInit();
           break;
         case 'UpdateBackendOrder':

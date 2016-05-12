@@ -8,6 +8,8 @@ export default (data) => {
   const gatewayObjects = gateways.map((gateway, index) => {
     return Gateway.create({
       itemOrder: index,
+      ready: true,
+      loaded: true,
       ...gateway
     });
   });

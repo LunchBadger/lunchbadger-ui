@@ -8,6 +8,7 @@ export default (data) => {
   const publicEndpointObjects = publicEndpoints.map((publicEndpoint, index) => {
     return PublicEndpoint.create({
       itemOrder: index,
+      loaded: true,
       ...publicEndpoint
     });
   });

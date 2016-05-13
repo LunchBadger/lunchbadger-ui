@@ -7,6 +7,9 @@ import APIComponent from './components/CanvasElements/API';
 // models
 import API from './models/API';
 
+// actions
+import initializePublic from './actions/Stores/Public/initialize';
+
 LunchBadgerCore.actions.registerPlugin(MonetizePlugin);
 
 // export
@@ -16,6 +19,13 @@ let LunchBadgerMonetize = {
   },
   models: {
     API: API
+  },
+  actions: {
+    Stores: {
+      Public: {
+        initialize: initializePublic
+      }
+    }
   }
 };
 

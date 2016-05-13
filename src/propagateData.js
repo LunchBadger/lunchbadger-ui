@@ -28,6 +28,8 @@ projectData.then((response) => {
 
     const data = response.body[0];
 
+    LunchBadgerCore.actions.Stores.AppState.setProject(data.id, data.name);
+
     waitForStores(storesList, () => {
       // attach connections ;-)
       data.connections.forEach((connection) => {
@@ -56,5 +58,5 @@ projectData.then((response) => {
     }
   }
 }).catch(() => {
-  notify.show('Failed to sync data with API', 'error');
+  notify.show('Failed to sync data with API, working offline! Try to refresh page...', 'error');
 });

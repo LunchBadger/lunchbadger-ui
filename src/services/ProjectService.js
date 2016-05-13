@@ -13,6 +13,10 @@ class ProjectService {
   get(projectId) {
     return this._APIHandle.get(bindParams('Projects', {id: projectId}));
   }
+  
+  saveAll(projectId) {
+    return this._APIHandle.put(bindParams('Projects', {id: projectId}));
+  }
 }
 
 export default new ProjectService();

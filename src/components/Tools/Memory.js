@@ -6,7 +6,7 @@ const Tool = LunchBadgerCore.components.Tool;
 class Memory extends Component {
   render() {
     return (
-      <div className="memory tool__context__item" onClick={() => AddDataSource('Memory')}>
+      <div className="memory tool__context__item" onClick={() => AddDataSource('Memory', 'memory')}>
       	<i className="tool__icon fa fa-database"/>
       	<span className="tool__name">Memory</span>
       </div>

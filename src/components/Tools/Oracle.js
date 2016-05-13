@@ -6,7 +6,7 @@ const Tool = LunchBadgerCore.components.Tool;
 export default class Oracle extends Component {
   render() {
     return (
-      <div className="oracle tool__context__item" onClick={() => AddDataSource('Oracle')}>
+      <div className="oracle tool__context__item" onClick={() => AddDataSource('Oracle', 'oracle')}>
       	<i className="tool__icon fa fa-database"/>
       	<i className="tool__icon fa fa-oracle"/>
       	<span className="tool__name">Oracle</span>

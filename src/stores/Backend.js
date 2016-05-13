@@ -9,6 +9,10 @@ class Backend extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'InitializeBackend':
+          Backends.push.apply(Backends, action.data);
+          this.emitInit();
+          break;
         case 'UpdateBackendOrder':
           Backends.splice(action.itemOrder, 0, Backends.splice(action.hoverOrder, 1)[0]);
           this.setEntitiesOrder(Backends);
@@ -34,7 +38,7 @@ class Backend extends BaseStore {
 
   findEntity(id) {
     id = this.formatId(id);
-    
+
     return _.find(Backends, {id: id});
   }
 

@@ -5,14 +5,14 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
 
-	/**
+  /**
    * Collection of ports
    * @type {Port[]}
    * @private
    */
   _ports = [];
 
-	/**
+  /**
    * @type {String}
    * @private
    */
@@ -36,10 +36,17 @@ export default class DataSource extends BaseModel {
    */
   _password = '';
 
-  constructor(id, name) {
+  /**
+   * @type {String}
+   * @private
+   */
+  _type = '';
+
+  constructor(id, name, type) {
     super(id);
 
     this.name = name;
+    this.type = type;
 
     this.ports = [
       Port.create({
@@ -48,6 +55,18 @@ export default class DataSource extends BaseModel {
         portType: 'out'
       })
     ];
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      url: this.url,
+      schema: this.schema,
+      username: this.username,
+      password: this.password
+    }
   }
 
   get ports() {
@@ -88,5 +107,13 @@ export default class DataSource extends BaseModel {
 
   set password(password) {
     this._password = password;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  set type(type) {
+    this._type = type;
   }
 }

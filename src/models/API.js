@@ -20,6 +20,14 @@ export default class API extends BaseModel {
     this.name = name;
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      publicEndpoints: this.endpoints.map(endpoint => endpoint.toJSON())
+    }
+  }
+
   /**
    * @param endpoints {Endpoint[]}
    */

@@ -48,10 +48,19 @@ import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import attachConnection from './actions/Connection/attach';
 import reattachConnection from './actions/Connection/reattach';
+import setProject from './actions/Stores/AppState/setProject';
 
 // constants
 import panelKeys from './constants/panelKeys';
 import portGroups from './constants/portGroups';
+
+// services
+import ProjectService from './services/ProjectService';
+
+// utils
+import APIInterceptor from './utils/APIInterceptor';
+import {URLParamsBind} from './utils/URLParamsBind';
+import {waitForStores} from './utils/waitForStores';
 
 let LunchBadgerCore = {
   dispatcher: {
@@ -64,6 +73,11 @@ let LunchBadgerCore = {
     Connection: {
       attachConnection: attachConnection,
       reattachConnection: reattachConnection
+    },
+    Stores: {
+      AppState: {
+        setProject: setProject
+      }
     }
   },
   components: {
@@ -105,6 +119,14 @@ let LunchBadgerCore = {
   constants: {
     panelKeys: panelKeys,
     portGroups: portGroups
+  },
+  services: {
+    ProjectService: ProjectService
+  },
+  utils: {
+    APIInterceptor: APIInterceptor,
+    URLParamsBind: URLParamsBind,
+    waitForStores: waitForStores
   }
 };
 

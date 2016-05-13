@@ -99,11 +99,11 @@ export default (ComposedComponent) => {
 
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.appState.getStateKey('currentElement');
-        const currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
+        this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
 
         if (currentElement && currentElement.id === this.props.entity.id) {
           this.setState({highlighted: true});
-          if (currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
             this.setState({editable: false});
           }
         } else {
@@ -119,7 +119,9 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
-      if (this.props.entity.ready) {
+      if (this.props.entity.loaded) {
+        this.setState({editable: false, expanded: false});
+      } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
       }
 

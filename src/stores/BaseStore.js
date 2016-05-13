@@ -23,12 +23,24 @@ export default class BaseStore extends EventEmitter {
     });
   }
 
+  emitInit() {
+    this.emit('INIT');
+  }
+
   addChangeListener(callback) {
     this.on('CHANGE', callback);
   }
 
   removeChangeListener(callback) {
     this.removeListener('CHANGE', callback);
+  }
+
+  addInitListener(callback) {
+    this.once('INIT', callback);
+  }
+
+  removeInitListener(callback) {
+    this.removeListener(callback);
   }
 
   findEntity() {

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
+import HeaderMenuSaveButton from './HeaderMenuSaveButton';
 import panelKeys from 'constants/panelKeys';
 
 export default class HeaderMenu extends Component {
@@ -24,9 +25,15 @@ export default class HeaderMenu extends Component {
       <nav className="header__menu">
         <ul className="header__menu__list">
           <li className="header__menu__element">
+            <HeaderMenuSaveButton/>
+          </li>
+          <li className="header__menu__element">
             <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="fa-list"/>
           </li>
           {this.renderButtons()}
+          <li className="header__menu__element">
+            <HeaderMenuLink togglePanel={null} icon="fa-cog"/>
+          </li>
         </ul>
       </nav>
     );

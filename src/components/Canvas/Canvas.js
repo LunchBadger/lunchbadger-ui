@@ -16,6 +16,14 @@ export default class Canvas extends Component {
       lastUpdate: new Date(),
       disabled: false
     };
+
+    this.connectionStoreChanged = () => {
+
+    };
+  }
+
+  componentWillMount() {
+    Connection.addChangeListener(this.connectionStoreChanged);
   }
 
   componentDidMount() {
@@ -39,10 +47,16 @@ export default class Canvas extends Component {
       Anchors: [0.5, 0, 0.5, 0.5]
     });
 
+    LunchBadgerCore.utils.paper = this.paper;
+
     this._attachPaperEvents();
     this._registerConnectionTypes();
 
     jsPlumb.fire('canvasLoaded', this.paper);
+  }
+
+  componentWillUnmount() {
+    Connection.removeChangeListener(this.connectionStoreChanged);
   }
 
   _disconnect(connection) {

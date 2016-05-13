@@ -31,7 +31,9 @@ module.exports = {
       components: `${defaultSettings.srcPath}/components`,
       models: `${defaultSettings.srcPath}/models`,
       constants: `${defaultSettings.srcPath}/constants`,
-      stores: `${defaultSettings.srcPath}/stores`
+      stores: `${defaultSettings.srcPath}/stores`,
+      services: `${defaultSettings.srcPath}/services`,
+      config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
     }
   },
   externals: {
@@ -47,6 +49,12 @@ module.exports = {
       commonjs: 'react-dom',
       amd: 'react-dom'
     }
+  },
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
   },
   module: {},
   postcss: function () {

@@ -14,6 +14,14 @@ export default class Connection extends BaseModel {
     this._info = info;
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      fromId: this.fromId,
+      toId: this.toId
+    }
+  }
+
   get fromId() {
     return this._fromId;
   }

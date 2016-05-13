@@ -42,6 +42,10 @@ class AppState extends BaseStore {
         this.setStateKey('currentElement', action.element);
         this.emitChange();
         break;
+      
+      case 'SetProject':
+        this.setStateKey('currentProject', action.project);
+        break;
     }
   }
 }

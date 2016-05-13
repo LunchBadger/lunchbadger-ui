@@ -83,7 +83,7 @@ class Connection extends BaseStore {
     return _.findIndex(connections, {fromId: fromId, toId: toId});
   }
 
-	/**
+  /**
    * Update connection specific attributes
    * @param connection {Connection}
    * @param attributes {Object}
@@ -140,7 +140,9 @@ class Connection extends BaseStore {
     }
   }
 
-
+  getData() {
+    return connections;
+  }
 }
 
 export default new Connection;

@@ -23,6 +23,14 @@ export default class PrivateEndpoint extends BaseModel {
     ];
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      contextPath: this.contextPath
+    }
+  }
+
   get ports() {
     return this._ports;
   }

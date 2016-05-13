@@ -29,6 +29,15 @@ export default class Model extends BaseModel {
     ];
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      contextPath: this.contextPath,
+      privateModelProperties: this.properties.map(property => property.toJSON())
+    }
+  }
+
   /**
    * @param properties {Properties[]}
    */

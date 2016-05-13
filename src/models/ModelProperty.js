@@ -43,4 +43,16 @@ export default class ModelProperty extends BaseModel {
     this.propertyIsIndex = isIndex;
     this.propertyNotes = notes;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      propertyKey: this.propertyKey,
+      propertyValue: this.propertyValue,
+      propertyType: this.propertyType,
+      propertyIsRequired: this.propertyIsRequired,
+      propertyIsIndex: this.propertyIsIndex,
+      propertyNotes: this.propertyNotes
+    }
+  }
 }

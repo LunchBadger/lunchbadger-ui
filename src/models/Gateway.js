@@ -25,6 +25,14 @@ export default class Gateway extends BaseModel {
     this.addPipeline(pipeline);
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      rootPath: this.rootPath
+    }
+  }
+
   /**
    * @param pipelines {Pipeline[]}
    */

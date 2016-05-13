@@ -21,6 +21,14 @@ export default class PublicEndpoint extends BaseModel {
     ];
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      url: this.url
+    }
+  }
+
   get ports() {
     return this._ports;
   }

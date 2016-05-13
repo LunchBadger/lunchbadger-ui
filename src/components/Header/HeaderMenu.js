@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
+import HeaderMenuSaveButton from './HeaderMenuSaveButton';
 import panelKeys from 'constants/panelKeys';
 
 export default class HeaderMenu extends Component {
@@ -23,6 +24,9 @@ export default class HeaderMenu extends Component {
     return (
       <nav className="header__menu">
         <ul className="header__menu__list">
+          <li className="header__menu__element">
+            <HeaderMenuSaveButton/>
+          </li>
           <li className="header__menu__element">
             <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="fa-list"/>
           </li>

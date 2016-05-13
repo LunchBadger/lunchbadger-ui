@@ -10,6 +10,10 @@ class Gateway extends BaseStore {
     super();
     register((action) => {
       switch (action.type) {
+        case 'InitializeGateway':
+          Gateways.push.apply(Gateways, action.data);
+          this.emitInit();
+          break;
         case 'UpdateGatewayOrder':
           Gateways.splice(action.itemOrder, 0, Gateways.splice(action.hoverOrder, 1)[0]);
           this.setEntitiesOrder(Gateways);

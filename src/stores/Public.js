@@ -5,11 +5,24 @@ const {BaseStore, Connection} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Publics = [];
 
+let initCalls = 2;
+
 class Public extends BaseStore {
   constructor() {
     super();
     register((action) => {
       switch (action.type) {
+        case 'InitializePublic':
+          initCalls--;
+          Publics.push.apply(Publics, action.data);
+
+          if (initCalls === 0) {
+            this.emitInit();
+          } else {
+            this.emitChange();
+          }
+
+          break;
         case 'UpdatePublicOrder':
           Publics.splice(action.itemOrder, 0, Publics.splice(action.hoverOrder, 1)[0]);
           this.setEntitiesOrder(Publics);

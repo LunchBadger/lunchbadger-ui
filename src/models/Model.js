@@ -1,18 +1,8 @@
-import ModelProperty from './ModelProperty';
 import _ from 'lodash';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
-
-const defaultProperty = ModelProperty.create({
-  propertyKey: 'key',
-  propertyValue: 'value',
-  propertyType: 'type',
-  propertyIsRequired: true,
-  propertyIsIndex: true,
-  propertyNotes: 'sth'
-});
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -24,8 +14,6 @@ export default class Model extends BaseModel {
     super(id);
 
     this.name = name;
-
-    this.addProperty(defaultProperty);
 
     this.ports = [
       Port.create({
@@ -39,6 +27,15 @@ export default class Model extends BaseModel {
         portType: 'out'
       })
     ];
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      contextPath: this.contextPath,
+      privateModelProperties: this.properties.map(property => property.toJSON())
+    }
   }
 
   /**

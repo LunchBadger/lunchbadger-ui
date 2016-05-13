@@ -43,6 +43,7 @@
     "glob": "^7.0.0",
     "imports-loader": "^0.6.5",
     "isparta-instrumenter-loader": "^1.0.0",
+    "json-loader": "^0.5.4",
     "karma": "^0.13.9",
     "karma-chai": "^0.1.0",
     "karma-coverage": "^0.5.3",
@@ -89,7 +90,7 @@
     "react-dom": "^15.0.1",
     "react-modal-dialog": "^2.0.0",
     "react-notify-toast": "^0.1.1",
-    "request": "^2.72.0",
+    "request": "^2.65.0",
     "slug": "^0.9.1",
     "uuid": "^2.0.2"
   }

@@ -8,5 +8,7 @@ const App = LunchBadgerCore.components.App;
 
 console.info('Application started..!');
 
+require('./propagateData');
+
 // Render the main component into the dom
 ReactDOM.render(<App />, document.getElementById('app'));

@@ -13,6 +13,7 @@ class Public extends BaseStore {
     register((action) => {
       switch (action.type) {
         case 'InitializePublic':
+          initCalls--;
           Publics.push.apply(Publics, action.data);
 
           if (initCalls === 0) {
@@ -20,7 +21,7 @@ class Public extends BaseStore {
           } else {
             this.emitChange();
           }
-          
+
           break;
         case 'UpdatePublicOrder':
           Publics.splice(action.itemOrder, 0, Publics.splice(action.hoverOrder, 1)[0]);

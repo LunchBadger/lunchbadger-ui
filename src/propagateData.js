@@ -1,13 +1,44 @@
+import {notify} from 'react-notify-toast';
+
 console.info('Pre-fetching projects data...');
 
 const ProjectService = LunchBadgerCore.services.ProjectService;
 const projectData = ProjectService.getAll();
+const waitForStores = LunchBadgerCore.utils.waitForStores;
+
+let storesList = [];
+
+if (LunchBadgerManage) {
+  storesList.push(
+    LunchBadgerManage.stores.Private,
+    LunchBadgerManage.stores.Gateway,
+    LunchBadgerManage.stores.Public
+  );
+}
+
+if (LunchBadgerCompose) {
+  storesList.push(
+    LunchBadgerCompose.stores.Backend
+  );
+}
 
 projectData.then((response) => {
   if (Array.isArray(response.body)) {
     // right now, just load first available project
 
     const data = response.body[0];
+
+    waitForStores(storesList, () => {
+      // attach connections ;-)
+      data.connections.forEach((connection) => {
+        setTimeout(() => LunchBadgerCore.utils.paper.connect({
+          source: document.getElementById(`port_out_${connection.fromId}`),
+          target: document.getElementById(`port_in_${connection.toId}`)
+        }));
+      });
+
+      notify.show('All data has been synced with API', 'success');
+    });
 
     if (LunchBadgerManage) {
       LunchBadgerManage.actions.Stores.Public.initialize(data);
@@ -24,4 +55,6 @@ projectData.then((response) => {
       LunchBadgerMonetize.actions.Stores.Public.initialize(data);
     }
   }
+}).catch(() => {
+  notify.show('Failed to sync data with API', 'error');
 });

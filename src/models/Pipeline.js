@@ -46,6 +46,13 @@ export default class Pipeline extends BaseModel {
     ];
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name
+    }
+  }
+
   /**
    * @param policies {Policy[]}
    */

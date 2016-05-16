@@ -1,5 +1,3 @@
-import Pipeline from './Pipeline';
-
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Gateway extends BaseModel {
@@ -17,19 +15,14 @@ export default class Gateway extends BaseModel {
 
     this.name = name;
     this.ready = false;
-
-    const pipeline = Pipeline.create({
-      name: 'Pipeline 1'
-    });
-
-    this.addPipeline(pipeline);
   }
 
   toJSON() {
     return {
       id: this.id,
       name: this.name,
-      rootPath: this.rootPath
+      rootPath: this.rootPath,
+      pipelines: this.pipelines.map(pipeline => pipeline.toJSON())
     }
   }
 

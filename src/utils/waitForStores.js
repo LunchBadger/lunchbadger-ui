@@ -14,8 +14,6 @@ export function waitForStores(storesList, readyCallback) {
       store.addInitListener(() => {
         storesCount--;
 
-        console.log(store, storesCount);
-
         if (storesCount === 0) {
           readyCallback();
           waitingFlag = false;

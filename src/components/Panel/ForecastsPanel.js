@@ -10,7 +10,7 @@ export const FORECASTS_PANEL = 'FORECASTS_PANEL';
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    if (item.entity.constructor && item.entity.constructor.type === 'API') {
+    if (item.entity.constructor.type === 'API') {
       const delta = monitor.getSourceClientOffset();
       addAPIForecast(item.entity, delta.x, delta.y - 30);
       component.setState({

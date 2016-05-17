@@ -31,6 +31,7 @@ module.exports = {
       components: `${defaultSettings.srcPath}/components`,
       models: `${defaultSettings.srcPath}/models`,
       constants: `${defaultSettings.srcPath}/constants`,
+      services: `${defaultSettings.srcPath}/services`,
       stores: `${defaultSettings.srcPath}/stores`
     }
   },

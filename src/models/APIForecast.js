@@ -1,5 +1,4 @@
 import APIPlan from 'models/APIPlan';
-import Upgrade from 'models/Upgrade';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 

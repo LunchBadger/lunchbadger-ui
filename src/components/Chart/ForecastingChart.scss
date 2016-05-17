@@ -1,0 +1,76 @@
+.chart {
+  padding: 15px 60px 10px 50px;
+}
+
+.chart__container {
+  position: relative;
+  max-width: 450px;
+  margin: 0 auto;
+
+  & > svg {
+    z-index: 2;
+    position: relative;
+
+    & > g {
+      z-index: 2;
+      position: relative;
+    }
+  }
+
+  .axis text {
+    font: 10px sans-serif;
+  }
+
+  .axis line,
+  .axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .axis--x {
+    position: relative;
+    z-index: 5;
+
+    path {
+      display: none;
+    }
+  }
+}
+
+.chart__tooltip {
+  position: fixed;
+  text-align: center;
+  width: 100px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #000000;
+  border: 0;
+  border-radius: 8px;
+  pointer-events: none;
+  color: #ffffff;
+  z-index: 3;
+}
+
+.chart__bar-selector {
+  position: absolute;
+  width: 50px;
+  background: rgba(141, 223, 238, 0.25);
+  pointer-events: none;
+  opacity: 0.5;
+  border: 2px solid #8ddfee;
+  top: 0;
+  z-index: 2;
+}
+
+.chart__x-axis {
+  position: absolute;
+  background: #dededf;
+  border-radius: 10px;
+  height: 15px;
+  left: 60px;
+  bottom: 20px;
+  width: auto;
+  right: 10px;
+  z-index: 1;
+}

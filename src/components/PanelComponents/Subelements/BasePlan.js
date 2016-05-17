@@ -18,7 +18,7 @@ const boxTarget = {
   }
 };
 
-@DropTarget('planElement', boxTarget, (connect, monitor) => ({
+@DropTarget('planElement', boxTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
 }))
 export default class BasePlan extends Component {

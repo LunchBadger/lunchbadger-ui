@@ -5,8 +5,8 @@ import classNames from 'classnames';
 
 const boxSource = {
   beginDrag(props) {
-    const { entity, left, top } = props;
-    return { entity, left, top };
+    const {entity, left, top} = props;
+    return {entity, left, top};
   }
 };
 
@@ -18,7 +18,7 @@ export default class PlanIcon extends Component {
   static propTypes = {
     icon: PropTypes.string.isRequired,
     entity: PropTypes.object.isRequired,
-    connectDragSource: PropTypes.func.isRequired,
+    connectDragSource: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -37,7 +37,7 @@ export default class PlanIcon extends Component {
 
     return connectDragSource((
       <div className={`base-plan__icon ${elementClass}`}>
-        <i className={`fa ${this.props.icon}`}></i>
+        <i className={`fa ${this.props.icon}`}/>
       </div>
     ))
   }

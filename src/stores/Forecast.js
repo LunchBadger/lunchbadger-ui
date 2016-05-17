@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import APIPlan from 'APIPlan.js';
+import APIPlan from 'models/APIPlan';
 import Tier from 'models/Tier';
 import Upgrade from 'models/Upgrade';
 
@@ -63,11 +63,10 @@ class Forecast extends BaseStore {
   }
 
   addPlanToApi(apiForecast, plan) {
-    apiPlan.addPlan(plan);
+    apiForecast.addPlan(plan);
   }
 
   addUpgradeToApi(apiForecast, upgrade) {
-    console.log(upgrade);
     apiForecast.addUpgrade(upgrade);
   }
 
@@ -78,7 +77,7 @@ class Forecast extends BaseStore {
   removeEntity(id) {
     _.remove(Forecasts, function (forecast) {
       return forecast.id === id;
-    })
+    });
   }
 
 

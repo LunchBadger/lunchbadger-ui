@@ -59,7 +59,7 @@ import ProjectService from './services/ProjectService';
 
 // utils
 import APIInterceptor from './utils/APIInterceptor';
-import {URLParamsBind} from './utils/URLParamsBind';
+import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
 
 let LunchBadgerCore = {
@@ -125,7 +125,7 @@ let LunchBadgerCore = {
   },
   utils: {
     APIInterceptor: APIInterceptor,
-    URLParamsBind: URLParamsBind,
+    URLParams: URLParams,
     waitForStores: waitForStores
   }
 };

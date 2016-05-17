@@ -3,20 +3,21 @@ import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
 import removeAPIForecast from 'actions/API/remove';
-import BasePlan from 'BasePlan.js';
-import addPlan from 'addPlan.js';
+import ForecastingChart from 'components/Chart/ForecastingChart';
+import BasePlan from './Subelements/BasePlan';
+import addPlan from 'actions/API/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import DateSlider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 const boxSource = {
   beginDrag(props) {
-    const { entity, left, top } = props;
-    return { entity, left, top };
+    const {entity, left, top} = props;
+    return {entity, left, top};
   }
 };
 
-@DragSource('forecastElement', boxSource, (connect, monitor) => ({
+@DragSource('forecastElement', boxSource, (connect) => ({
   connectDragSource: connect.dragSource()
 }))
 export default class APIForecast extends Component {
@@ -52,10 +53,10 @@ export default class APIForecast extends Component {
         <li key={`plan_${index}`}>
           <span>{plan.name}</span>
           <BasePlan key={plan.id}
-                        parent={this.props.entity}
-                        entity={plan}
-                        name={plan.name}
-                        icon={plan.icon}/>
+                    parent={this.props.entity}
+                    entity={plan}
+                    name={plan.name}
+                    icon={plan.icon}/>
         </li>
       )
     })
@@ -78,7 +79,7 @@ export default class APIForecast extends Component {
     const elementClass = classNames({
       expanded: this.state.expanded
     });
-    const { hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
+    const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
     if (isDragging && hideSourceOnDrag) {
       return null;
     }
@@ -87,12 +88,20 @@ export default class APIForecast extends Component {
         <div className="api-forecast__header">
           {this.props.entity.name}
           <ul className="api-forecast__header__nav">
-            <li><a onClick={this.remove.bind(this)}><i className="fa fa-remove"></i></a></li>
-            <li><a onClick={this.toggleExpand.bind(this)}><i className="fa fa-expand"></i></a></li>
+            <li>
+              <a onClick={this.remove.bind(this)}>
+                <i className="fa fa-remove"/>
+              </a>
+            </li>
+            <li>
+              <a onClick={this.toggleExpand.bind(this)}>
+                <i className="fa fa-expand"/>
+              </a>
+            </li>
           </ul>
         </div>
         <div className="api-forecast__content">
-          Here comes the chart
+          <ForecastingChart apiForecast={this.props.entity} />
         </div>
         <div className="expanded-only">
           <div className="api-forecast__date-slider">
@@ -101,7 +110,9 @@ export default class APIForecast extends Component {
           <ul className="api-forecast__plans">
             {this.renderPlans()}
             <li>
-              <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}><i className="fa fa-plus"></i></a>
+              <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
+                <i className="fa fa-plus"/>
+              </a>
             </li>
           </ul>
           <ul className="api-forecast__upgrade-sliders">

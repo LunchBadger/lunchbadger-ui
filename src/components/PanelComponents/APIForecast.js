@@ -101,23 +101,26 @@ export default class APIForecast extends Component {
           </ul>
         </div>
         <div className="api-forecast__content">
-          <ForecastingChart apiForecast={this.props.entity} />
-        </div>
-        <div className="expanded-only">
-          <div className="api-forecast__date-slider">
-            <DateSlider parent={this.props.entity}/>
+          <div className="expanded-only">
+            <div className="api-forecast__date-slider">
+              <DateSlider parent={this.props.entity}/>
+            </div>
+            <ul className="api-forecast__plans">
+              {this.renderPlans()}
+              <li>
+                <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
+                  <i className="fa fa-plus"/>
+                </a>
+              </li>
+            </ul>
+            <ul className="api-forecast__upgrade-sliders">
+              {this.renderUpgrades()}
+            </ul>
           </div>
-          <ul className="api-forecast__plans">
-            {this.renderPlans()}
-            <li>
-              <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
-                <i className="fa fa-plus"/>
-              </a>
-            </li>
-          </ul>
-          <ul className="api-forecast__upgrade-sliders">
-            {this.renderUpgrades()}
-          </ul>
+
+          <div className="api-forecast__chart">
+            <ForecastingChart apiForecast={this.props.entity} />
+          </div>
         </div>
       </div>
     );

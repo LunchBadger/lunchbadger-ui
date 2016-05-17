@@ -8,10 +8,19 @@
   background: #fff;
   z-index: 0;
 
+  &:after {
+    content: " ";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
+
   .expanded-only {
     display: none;
     width: 50%;
     position: relative;
+    float: left;
   }
 
   &.expanded {
@@ -22,6 +31,11 @@
     z-index: 2;
     left: 0;
     top: 0;
+
+    .api-forecast__chart {
+      float: left;
+      width: 50%;
+    }
 
     .expanded-only {
       display: block;
@@ -36,6 +50,7 @@
   font-size: 16px;
   text-align: center;
 }
+
 .api-forecast__header__nav {
   list-style: none;
   float: right;
@@ -43,6 +58,10 @@
     float: right;
     margin: .2em;
   }
+}
+
+.api-forecast__chart {
+  width: 100%;
 }
 
 .api-forecast__plans {

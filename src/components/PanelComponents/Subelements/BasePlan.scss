@@ -1,0 +1,31 @@
+.base-plan {
+  &.expanded {
+    .base-plan__tiers {
+      display: block;
+    }
+  }
+}
+
+.base-plan__tiers {
+  border: 1px solid #ff8000;
+  width: 80%;
+  position: absolute;
+  left: 1em;
+  background: #fff;
+  color: #000;
+  display: none;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    line-height: 1.6em;
+  }
+  caption {
+    text-align: left;
+    padding: 0 .5em;
+    text-transform: uppercase;
+    color: #ff8000;
+  }
+}
+.base-plan__add-tier {
+  float: right;
+}

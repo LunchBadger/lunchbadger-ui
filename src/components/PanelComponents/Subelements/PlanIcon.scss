@@ -1,0 +1,12 @@
+.base-plan__icon {
+  background: #ff8000;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  color: #fff;
+  text-align: center;
+  display: block;
+  &.moved {
+    background: lighten(#ff8000, 10%)
+  }
+}

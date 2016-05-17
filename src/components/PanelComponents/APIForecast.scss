@@ -8,6 +8,12 @@
   background: #fff;
   z-index: 0;
 
+  .expanded-only {
+    display: none;
+    width: 50%;
+    position: relative;
+  }
+
   &.expanded {
     position: static;
     width: 100%;
@@ -16,6 +22,10 @@
     z-index: 2;
     left: 0;
     top: 0;
+
+    .expanded-only {
+      display: block;
+    }
   }
 }
 .api-forecast__header {
@@ -30,5 +40,19 @@
   li {
     float: right;
     margin: .2em;
+  }
+}
+
+.api-forecast__plans {
+  list-style: none;
+  position: relative;
+  z-index: 2;
+  min-height: 250px;
+  li {
+    margin: 1em;
+    float: left;
+    &.first-of-type {
+      margin-right: 2em;
+    }
   }
 }

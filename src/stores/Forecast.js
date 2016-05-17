@@ -1,4 +1,7 @@
 import _ from 'lodash';
+import APIPlan from 'APIPlan.js';
+import Tier from 'models/Tier';
+import Upgrade from 'models/Upgrade';
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
@@ -19,6 +22,18 @@ class Forecast extends BaseStore {
           break;
         case 'RemoveAPIForecast':
           this.removeEntity(action.id);
+          this.emitChange();
+          break;
+        case 'AddPlan':
+          this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
+          this.emitChange();
+          break;
+        case 'AddTier':
+          this.addTierToPlan(action.apiPlan, Tier.create(action.data));
+          this.emitChange();
+          break;
+        case 'AddUpgrade':
+          this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
           this.emitChange();
           break;
       }
@@ -45,6 +60,19 @@ class Forecast extends BaseStore {
     if (!this.findEntityByApiId(apiForecast.apiId)) {
       Forecasts.push(apiForecast);
     }
+  }
+
+  addPlanToApi(apiForecast, plan) {
+    apiPlan.addPlan(plan);
+  }
+
+  addUpgradeToApi(apiForecast, upgrade) {
+    console.log(upgrade);
+    apiForecast.addUpgrade(upgrade);
+  }
+
+  addTierToPlan(apiPlan, tier) {
+    apiPlan.addTier(tier);
   }
 
   removeEntity(id) {

@@ -4,6 +4,7 @@ import ForecastDetailsBottom from './ForecastDetailsBottom';
 import ForecastingChart from 'components/Chart/ForecastingChart';
 import ForecastService from 'services/ForecastService';
 import {dataKeys} from 'components/Chart/ForecastingChart';
+import './ForecastDetails.scss';
 
 export default class ForecastDetails extends Component {
   static propTypes = {

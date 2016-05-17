@@ -119,7 +119,7 @@ export default class APIForecast extends Component {
             </ul>
           </div>
 
-          <ForecastDetails className="api-forecast__chart" entity={this.props.entity}/>
+          <ForecastDetails className="api-forecast__details" entity={this.props.entity}/>
         </div>
       </div>
     );

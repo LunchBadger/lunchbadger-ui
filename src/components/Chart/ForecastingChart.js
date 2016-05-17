@@ -6,8 +6,8 @@ export const dataKeys = {
   churn: '-',
   downgrades: '-',
   existing: '+',
-  new: '+',
-  upgrades: '+'
+  upgrades: '+',
+  new: '+'
 };
 
 export default class ForecastingChart extends Component {
@@ -18,7 +18,7 @@ export default class ForecastingChart extends Component {
   constructor(props) {
     super(props);
 
-    this.color = d3.scale.ordinal().range(['#8dad45', '#a8c667', '#ccdea8', '#fad35c', '#f29332']);
+    this.color = d3.scale.ordinal().range(['#8dad45', '#ccdea8', '#a8c667', '#f29332', '#fad35c']);
 
     this.customOffset = (data) => {
       var j = -1,
@@ -83,9 +83,9 @@ export default class ForecastingChart extends Component {
     this.zeroLine = this.svg.append('line')
       .style('stroke', 'black')
       .attr('x1', 0)
-      .attr('y1', this.y(0.164))
+      .attr('y1', this.y(0.17))
       .attr('x2', 500)
-      .attr('y2', this.y(0.164));
+      .attr('y2', this.y(0.17));
 
     return this._renderChart(this.props.data);
   }

@@ -3,8 +3,8 @@ import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
 import removeAPIForecast from 'actions/API/remove';
-import BaseCreature from 'components/PanelComponents/Subelements/BaseCreature';
-import addCreature from 'actions/API/addCreature';
+import BasePlan from 'BasePlan.js';
+import addPlan from 'addPlan.js';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import DateSlider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -42,20 +42,20 @@ export default class APIForecast extends Component {
     this.setState({expanded: !this.state.expanded})
   }
 
-  addCreature() {
-    addCreature(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
+  addPlan() {
+    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
   }
 
-  renderCreatures() {
-    return this.props.entity.creatures.map((creature, index) => {
+  renderPlans() {
+    return this.props.entity.plans.map((plan, index) => {
       return (
-        <li key={`creature_${index}`}>
-          <span>{creature.name}</span>
-          <BaseCreature key={creature.id}
+        <li key={`plan_${index}`}>
+          <span>{plan.name}</span>
+          <BasePlan key={plan.id}
                         parent={this.props.entity}
-                        entity={creature}
-                        name={creature.name}
-                        icon={creature.icon}/>
+                        entity={plan}
+                        name={plan.name}
+                        icon={plan.icon}/>
         </li>
       )
     })
@@ -98,10 +98,10 @@ export default class APIForecast extends Component {
           <div className="api-forecast__date-slider">
             <DateSlider parent={this.props.entity}/>
           </div>
-          <ul className="api-forecast__creature-plans">
-            {this.renderCreatures()}
+          <ul className="api-forecast__plans">
+            {this.renderPlans()}
             <li>
-              <a className="api-forecast__add-plan" onClick={this.addCreature.bind(this)}><i className="fa fa-plus"></i></a>
+              <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}><i className="fa fa-plus"></i></a>
             </li>
           </ul>
           <ul className="api-forecast__upgrade-sliders">

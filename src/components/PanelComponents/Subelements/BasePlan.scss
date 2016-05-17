@@ -1,12 +1,12 @@
-.base-creature {
+.base-plan {
   &.expanded {
-    .base-creature__tiers {
+    .base-plan__tiers {
       display: block;
     }
   }
 }
 
-.base-creature__tiers {
+.base-plan__tiers {
   border: 1px solid #ff8000;
   width: 80%;
   position: absolute;
@@ -26,6 +26,6 @@
     color: #ff8000;
   }
 }
-.base-creature__add-tier {
+.base-plan__add-tier {
   float: right;
 }

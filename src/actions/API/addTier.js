@@ -1,8 +1,8 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (apiCreature, props) => {
+export default (apiPlan, props) => {
   dispatch('AddTier', {
-    apiCreature,
+    apiPlan,
     data: {...props}
   });
 };

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import APICreature from 'models/APICreature';
+import APIPlan from 'APIPlan.js';
 import Tier from 'models/Tier';
 import Upgrade from 'models/Upgrade';
 
@@ -24,12 +24,12 @@ class Forecast extends BaseStore {
           this.removeEntity(action.id);
           this.emitChange();
           break;
-        case 'AddCreature':
-          this.addCreatureToApi(action.apiForecast, APICreature.create(action.data));
+        case 'AddPlan':
+          this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
           this.emitChange();
           break;
         case 'AddTier':
-          this.addTierToCreature(action.apiCreature, Tier.create(action.data));
+          this.addTierToPlan(action.apiPlan, Tier.create(action.data));
           this.emitChange();
           break;
         case 'AddUpgrade':
@@ -62,8 +62,8 @@ class Forecast extends BaseStore {
     }
   }
 
-  addCreatureToApi(apiForecast, creature) {
-    apiForecast.addCreature(creature);
+  addPlanToApi(apiForecast, plan) {
+    apiPlan.addPlan(plan);
   }
 
   addUpgradeToApi(apiForecast, upgrade) {
@@ -71,8 +71,8 @@ class Forecast extends BaseStore {
     apiForecast.addUpgrade(upgrade);
   }
 
-  addTierToCreature(apiCreature, tier) {
-    apiCreature.addTier(tier);
+  addTierToPlan(apiPlan, tier) {
+    apiPlan.addTier(tier);
   }
 
   removeEntity(id) {

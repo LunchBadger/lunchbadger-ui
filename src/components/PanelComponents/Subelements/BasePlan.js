@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import './BaseCreature.scss';
+import './BasePlan.scss';
 import Tier from './Tier';
-import CreatureIcon from './CreatureIcon';
+import PlanIcon from './PlanIcon';
 import classNames from 'classnames';
 import addTier from 'actions/API/addTier';
 import {DropTarget} from 'react-dnd';
@@ -18,10 +18,10 @@ const boxTarget = {
   }
 };
 
-@DropTarget('creatureElement', boxTarget, (connect, monitor) => ({
+@DropTarget('planElement', boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget()
 }))
-export default class BaseCreature extends Component {
+export default class BasePlan extends Component {
   static propTypes = {
     icon: PropTypes.string.isRequired,
     entity: PropTypes.object.isRequired,
@@ -45,7 +45,7 @@ export default class BaseCreature extends Component {
 
   addTier(event) {
     addTier(this.props.entity, {
-      name: 'tier x',
+      name: 'Tier x',
       totals: 'sth',
       charge: 0.0
     });
@@ -71,12 +71,12 @@ export default class BaseCreature extends Component {
     const {connectDropTarget} = this.props;
 
     return connectDropTarget(
-      <div className={`base-creature ${elementClass}`}
+      <div className={`base-plan ${elementClass}`}
            onClick={this.toggleExpanded.bind(this)}>
-        <CreatureIcon icon={this.props.icon} entity={this.props.entity}/>
-        <div className="base-creature__tiers">
+        <PlanIcon icon={this.props.icon} entity={this.props.entity}/>
+        <div className="base-plan__tiers">
           <table>
-            <caption>Tiers <a className="base-creature__add-tier" onClick={this.addTier.bind(this)}><i className="fa fa-plus"></i></a></caption>
+            <caption>Tiers <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}><i className="fa fa-plus"></i></a></caption>
             <tbody>
               {this.renderTiers()}
             </tbody>

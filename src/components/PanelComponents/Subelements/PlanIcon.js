@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import './CreatureIcon.scss';
+import './PlanIcon.scss';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 
@@ -10,11 +10,11 @@ const boxSource = {
   }
 };
 
-@DragSource('creatureElement', boxSource, (connect, monitor) => ({
+@DragSource('planElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class CreatureIcon extends Component {
+export default class PlanIcon extends Component {
   static propTypes = {
     icon: PropTypes.string.isRequired,
     entity: PropTypes.object.isRequired,
@@ -30,13 +30,13 @@ export default class CreatureIcon extends Component {
   }
 
   render() {
-    const {connectDragSource, isDragging} = this.props;
+    const {connectDragSource} = this.props;
     const elementClass = classNames({
       moved: this.state.moved
     });
 
     return connectDragSource((
-      <div className={`base-creature__icon ${elementClass}`}>
+      <div className={`base-plan__icon ${elementClass}`}>
         <i className={`fa ${this.props.icon}`}></i>
       </div>
     ))

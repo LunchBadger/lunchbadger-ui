@@ -1,22 +1,22 @@
-import APICreature from 'models/APICreature';
+import APIPlan from 'models/APIPlan';
 import Upgrade from 'models/Upgrade';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
-const defaultCreatures = [
-  APICreature.create({
+const defaultPlans = [
+  APIPlan.create({
     name: 'User Pool',
     icon: 'fa-user'
   }),
-  APICreature.create({
+  APIPlan.create({
     name: 'Minnow',
     icon: 'fa-paper-plane'
   }),
-  APICreature.create({
+  APIPlan.create({
     name: 'Dolhpin',
     icon: 'fa-plane'
   }),
-  APICreature.create({
+  APIPlan.create({
     name: 'Whale',
     icon: 'fa-fighter-jet'
   })
@@ -29,7 +29,7 @@ export default class APIForecast extends BaseModel {
    * @type {APIForecast[]}
    * @private
    */
-  _creatures = [];
+  _plans = [];
   _upgrades = [];
 
   constructor(id, name, apiId, left, top) {
@@ -40,29 +40,29 @@ export default class APIForecast extends BaseModel {
     this.left = left;
     this.top = top;
 
-    this.creatures = defaultCreatures;
+    this.plans = defaultPlans;
     this.upgrades = [];
   }
 
   /**
-   * @param creatures {Creature[]}
+   * @param plans {Plans[]}
    */
-  set creatures(creatures) {
-    this._creatures = creatures;
+  set plans(plans) {
+    this._plans = plans;
   }
 
   /**
-   * @returns {Creature[]}
+   * @returns {Plans[]}
    */
-  get creatures() {
-    return this._creatures;
+  get plans() {
+    return this._plans;
   }
 
   /**
-   * @param creature {Creature}
+   * @param plan {Plan}
    */
-  addCreature(creature) {
-    this._creatures.push(creature);
+  addPlan(plan) {
+    this._plans.push(plan);
   }
 
   /**

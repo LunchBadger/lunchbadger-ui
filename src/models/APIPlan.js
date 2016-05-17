@@ -25,8 +25,8 @@ const defaultTiers = [
   })
 ];
 
-export default class APICreature extends BaseModel {
-  static type = 'APICreature';
+export default class APIPlan extends BaseModel {
+  static type = 'APIPlan';
 
   _tiers = [];
 

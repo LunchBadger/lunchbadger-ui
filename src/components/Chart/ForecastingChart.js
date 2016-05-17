@@ -1,40 +1,24 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import './ForecastingChart.scss';
-import ForecastService from 'services/ForecastService';
+
+export const dataKeys = {
+  churn: '-',
+  downgrades: '-',
+  existing: '+',
+  new: '+',
+  upgrades: '+'
+};
 
 export default class ForecastingChart extends Component {
   static propTypes = {
-    apiForecast: PropTypes.object.isRequired
+    data: PropTypes.array.isRequired
   };
 
   constructor(props) {
     super(props);
 
-    this.dataKeys = {
-      churn: '-',
-      downgrades: '-',
-      existing: '+',
-      new: '+',
-      upgrades: '+'
-    };
-
     this.color = d3.scale.ordinal().range(['#8dad45', '#a8c667', '#ccdea8', '#fad35c', '#f29332']);
-    this.parseDate = d3.time.format('%m/%Y').parse;
-
-    this.prepareData = (data) => {
-      return data.map((dataRow) => {
-        dataRow.date = this.parseDate(dataRow.date);
-
-        delete dataRow.id;
-
-        Object.keys(this.dataKeys).forEach((dataKey) => {
-          dataRow[dataKey] = +dataRow[dataKey];
-        });
-
-        return dataRow;
-      });
-    };
 
     this.customOffset = (data) => {
       var j = -1,
@@ -103,7 +87,7 @@ export default class ForecastingChart extends Component {
       .attr('x2', 500)
       .attr('y2', this.y(0.164));
 
-    this._fetchChartData();
+    return this._renderChart(this.props.data);
   }
 
   _renderChart(data) {
@@ -118,19 +102,8 @@ export default class ForecastingChart extends Component {
     this._drawAxises();
   }
 
-  _fetchChartData() {
-    ForecastService.get(this.props.apiForecast.apiId).then((response) => {
-      let data = response.body[0].values;
-      data = this.prepareData(data);
-
-      return this._renderChart(data);
-    }).catch((error) => {
-      return console.error(error);
-    });
-  }
-
   _formatData(data) {
-    return d3.layout.stack().offset(this.customOffset)(Object.keys(this.dataKeys).map((dataKey) => {
+    return d3.layout.stack().offset(this.customOffset)(Object.keys(dataKeys).map((dataKey) => {
       return data.map(function (d) {
         return {
           x: d.date,
@@ -153,8 +126,8 @@ export default class ForecastingChart extends Component {
       let minSum = 0;
       let maxSum = 0;
 
-      Object.keys(this.dataKeys).forEach((key) => {
-        if (this.dataKeys[key] === '-') {
+      Object.keys(dataKeys).forEach((key) => {
+        if (dataKeys[key] === '-') {
           minSum -= d[key];
         } else {
           maxSum += d[key];

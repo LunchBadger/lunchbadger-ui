@@ -3,11 +3,12 @@ import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
 import removeAPIForecast from 'actions/API/remove';
-import ForecastingChart from 'components/Chart/ForecastingChart';
 import BasePlan from './Subelements/BasePlan';
 import addPlan from 'actions/API/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
+import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
+
 import 'rc-slider/assets/index.css';
 
 const boxSource = {
@@ -32,7 +33,7 @@ export default class APIForecast extends Component {
 
     this.state = {
       expanded: false
-    }
+    };
   }
 
   remove() {
@@ -118,9 +119,7 @@ export default class APIForecast extends Component {
             </ul>
           </div>
 
-          <div className="api-forecast__chart">
-            <ForecastingChart apiForecast={this.props.entity} />
-          </div>
+          <ForecastDetails className="api-forecast__chart" entity={this.props.entity}/>
         </div>
       </div>
     );

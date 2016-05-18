@@ -1,5 +1,4 @@
 const APIInterceptor = LunchBadgerCore.utils.APIInterceptor;
-const {bindParams} = LunchBadgerCore.utils.URLParams;
 
 class ForecastService {
   constructor() {

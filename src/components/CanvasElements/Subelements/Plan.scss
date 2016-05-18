@@ -1,0 +1,19 @@
+@import '/../../../../../lunchbadger-core/src/config';
+
+.plan {
+  position: relative;
+  font-size: 16px;
+}
+
+.plan__info {
+  padding-left: 18px;
+}
+
+.plan__name {
+  display: inline-block;
+}
+
+.plan__icon {
+  display: inline-block;
+  margin-right: 7px;
+}

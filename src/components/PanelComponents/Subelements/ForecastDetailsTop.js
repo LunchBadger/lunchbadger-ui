@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
 
+const AppState = LunchBadgerCore.stores.AppState;
+
 export default class ForecastDetailsTop extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillUpdate() {
+    console.log(AppState.getStateKey('currentForecast'));
   }
 
   render() {
@@ -59,4 +65,4 @@ export default class ForecastDetailsTop extends Component {
       </div>
     );
   }
-};
+}

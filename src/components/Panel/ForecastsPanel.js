@@ -16,7 +16,7 @@ const boxTarget = {
       component.setState({
         hasDropped: true
       });
-    } else if (item.entity.apiId) {
+    } else if (item.entity.constructor.type === 'APIForecast') {
       const delta = monitor.getDifferenceFromInitialOffset();
       const left = Math.round(item.entity.left + delta.x);
       const top = Math.round(item.entity.top + delta.y);

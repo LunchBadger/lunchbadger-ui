@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
+import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
 
 export const dataKeys = {
@@ -12,7 +13,8 @@ export const dataKeys = {
 
 export default class ForecastingChart extends Component {
   static propTypes = {
-    data: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    forecast: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -206,6 +208,8 @@ export default class ForecastingChart extends Component {
               .attr('selected-date', '')
           );
         }
+
+        setForecast(this.props.forecast, d.x);
 
         this.barSelector
           .style('opacity', 1)

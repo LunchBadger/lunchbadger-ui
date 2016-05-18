@@ -55,4 +55,4 @@ export default class ForecastDetailsBottom extends Component {
       </div>
     );
   }
-};
+}

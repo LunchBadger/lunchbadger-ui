@@ -1,85 +1,41 @@
-import APIPlan from 'models/APIPlan';
-
 const BaseModel = LunchBadgerCore.models.BaseModel;
-
-const defaultPlans = [
-  APIPlan.create({
-    name: 'User Pool',
-    icon: 'fa-user'
-  }),
-  APIPlan.create({
-    name: 'Minnow',
-    icon: 'fa-paper-plane'
-  }),
-  APIPlan.create({
-    name: 'Dolhpin',
-    icon: 'fa-plane'
-  }),
-  APIPlan.create({
-    name: 'Whale',
-    icon: 'fa-fighter-jet'
-  })
-];
 
 export default class APIForecast extends BaseModel {
   static type = 'APIForecast';
 
-  /**
-   * @type {APIForecast[]}
+	/**
+   * @type {Upgrade[]}
    * @private
    */
-  _plans = [];
   _upgrades = [];
 
-  constructor(id, name, apiId, left, top) {
+  constructor(id, name, api, left, top) {
     super(id);
 
     this.name = name;
-    this.apiId = apiId;
+    this.api = api;
     this.left = left;
     this.top = top;
 
-    this.plans = defaultPlans;
     this.upgrades = [];
   }
 
   /**
-   * @param plans {Plans[]}
-   */
-  set plans(plans) {
-    this._plans = plans;
-  }
-
-  /**
-   * @returns {Plans[]}
-   */
-  get plans() {
-    return this._plans;
-  }
-
-  /**
-   * @param plan {Plan}
-   */
-  addPlan(plan) {
-    this._plans.push(plan);
-  }
-
-  /**
-   * @param upgrades {Upgrades[]}
+   * @param upgrades {Upgrade[]}
    */
   set upgrades(upgrades) {
     this._upgrades = upgrades;
   }
 
   /**
-   * @returns {Upgrades[]}
+   * @returns {Upgrade[]}
    */
   get upgrades() {
     return this._upgrades;
   }
 
   /**
-   * @param Upgrade {Upgrade}
+   * @param upgrade {Upgrade}
    */
   addUpgrade(upgrade) {
     this._upgrades.push(upgrade);

@@ -8,6 +8,8 @@ import addPlan from 'actions/API/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
+import ForecastService from 'services/ForecastService';
+import {dataKeys} from 'components/Chart/ForecastingChart';
 
 import 'rc-slider/assets/index.css';
 
@@ -32,8 +34,29 @@ export default class APIForecast extends Component {
     super(props);
 
     this.state = {
-      expanded: false
+      expanded: false,
+      data: []
     };
+
+    this.parseDate = d3.time.format('%m/%Y').parse;
+
+    this.prepareData = (data) => {
+      return data.map((dataRow) => {
+        dataRow.date = this.parseDate(dataRow.date);
+
+        delete dataRow.id;
+
+        Object.keys(dataKeys).forEach((dataKey) => {
+          dataRow[dataKey] = +dataRow[dataKey];
+        });
+
+        return dataRow;
+      });
+    };
+  }
+
+  componentDidMount() {
+    this._fetchForecastData();
   }
 
   remove() {
@@ -76,6 +99,16 @@ export default class APIForecast extends Component {
     })
   }
 
+  _fetchForecastData() {
+    ForecastService.get(this.props.entity.api.id).then((response) => {
+      const data = response.body[0].values;
+
+      this.setState({data: this.prepareData(data)});
+    }).catch((error) => {
+      return console.error(error);
+    });
+  }
+
   render() {
     const elementClass = classNames({
       expanded: this.state.expanded
@@ -87,7 +120,7 @@ export default class APIForecast extends Component {
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
-          {this.props.entity.name}
+          {this.props.entity.api.name}
           <ul className="api-forecast__header__nav">
             <li>
               <a onClick={this.remove.bind(this)}>
@@ -107,7 +140,7 @@ export default class APIForecast extends Component {
               <DateSlider parent={this.props.entity}/>
             </div>
             <ul className="api-forecast__plans">
-              {this.renderPlans()}
+              {/*this.renderPlans()*/}
               <li>
                 <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
                   <i className="fa fa-plus"/>
@@ -118,8 +151,11 @@ export default class APIForecast extends Component {
               {this.renderUpgrades()}
             </ul>
           </div>
-
-          <ForecastDetails className="api-forecast__details" entity={this.props.entity}/>
+          {
+            this.state.data.length > 0 && (
+              <ForecastDetails className="api-forecast__details" data={this.state.data} entity={this.props.entity}/>
+            )
+          }
         </div>
       </div>
     );

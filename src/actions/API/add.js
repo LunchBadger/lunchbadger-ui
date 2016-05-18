@@ -1,12 +1,12 @@
 import APIForecast from 'models/APIForecast';
 
+const API = LunchBadgerMonetize.models.API;
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (entity, left, top) => {
+export default (api, left, top) => {
   dispatch('AddAPIForecast', {
     APIForecast: APIForecast.create({
-      name: entity.name,
-      apiId: entity.id,
+      api: API.create(api.toJSON()),
       left: left || 0,
       top: top || 0
     })

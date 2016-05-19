@@ -9,13 +9,13 @@ export default class PlanDetails extends BaseModel {
   _date = null;
 
   /**
-   * @type {PlanSubscribers[]}
+   * @type {PlanSubscribers}
    * @private
    */
   _subscribers = [];
 
   /**
-   * @type {PlanParameters[]}
+   * @type {PlanParameters}
    * @private
    */
   _parameters = [];
@@ -36,40 +36,40 @@ export default class PlanDetails extends BaseModel {
   }
 
 	/**
-   * @param subscribers {PlanSubscribers[]}
+   * @param subscribers {PlanSubscribers}
    */
   set subscribers(subscribers) {
-    this._subscribers = subscribers.map((subscriber) => {
-      if (subscriber.constructor.type === PlanSubscribers.type) {
-        return subscriber;
-      }
+    if (subscribers.constructor.type === PlanSubscribers.type) {
+      this._subscribers = subscribers;
 
-      return PlanSubscribers.create(subscriber);
-    });
+      return;
+    }
+
+    this._subscribers = PlanSubscribers.create(subscribers);
   }
 
 	/**
-   * @returns {PlanSubscribers[]}
+   * @returns {PlanSubscribers}
    */
   get subscribers() {
     return this._subscribers;
   }
 
 	/**
-   * @param parameters {PlanParameters[]}
+   * @param parameters {PlanParameters}
    */
   set parameters(parameters) {
-    this._parameters = parameters.map((parameter) => {
-      if (parameter.constructor.type === PlanParameters.type) {
-        return parameter;
-      }
+    if (parameters.constructor.type === PlanParameters.type) {
+      this._parameters = parameters;
 
-      return PlanParameters.create(parameter);
-    });
+      return;
+    }
+
+    this._parameters = PlanParameters.create(parameters);
   }
 
 	/**
-   * @returns {PlanParameters[]}
+   * @returns {PlanParameters}
    */
   get parameters() {
     return this._parameters;

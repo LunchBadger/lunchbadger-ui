@@ -10,7 +10,9 @@ class ForecastService {
       qs: {
         filter: JSON.stringify({
           where: {
-            apiId: apiId
+            api: {
+              id: apiId
+            }
           }
         })
       }

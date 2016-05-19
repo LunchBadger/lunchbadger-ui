@@ -1,5 +1,4 @@
 import API from 'models/API';
-import APIPlan from 'models/APIPlan';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

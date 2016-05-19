@@ -6,6 +6,7 @@ import APIComponent from './components/CanvasElements/API';
 
 // models
 import API from './models/API';
+import APIPlan from './models/APIPlan';
 
 // actions
 import initializePublic from './actions/Stores/Public/initialize';
@@ -18,7 +19,8 @@ let LunchBadgerMonetize = {
     API: APIComponent
   },
   models: {
-    API: API
+    API: API,
+    APIPlan: APIPlan
   },
   actions: {
     Stores: {

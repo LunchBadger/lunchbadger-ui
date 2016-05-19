@@ -9,7 +9,7 @@ import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider'
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
 import ForecastService from 'services/ForecastService';
-import {dataKeys} from 'components/Chart/ForecastingChart';
+import ForecastDataParser from 'services/ForecastDataParser';
 
 import 'rc-slider/assets/index.css';
 
@@ -36,22 +36,6 @@ export default class APIForecast extends Component {
     this.state = {
       expanded: false,
       data: []
-    };
-
-    this.parseDate = d3.time.format('%m/%Y').parse;
-
-    this.prepareData = (data) => {
-      return data.map((dataRow) => {
-        dataRow.date = this.parseDate(dataRow.date);
-
-        delete dataRow.id;
-
-        Object.keys(dataKeys).forEach((dataKey) => {
-          dataRow[dataKey] = +dataRow[dataKey];
-        });
-
-        return dataRow;
-      });
     };
   }
 
@@ -103,10 +87,9 @@ export default class APIForecast extends Component {
     ForecastService.get(this.props.entity.api.id).then((response) => {
       const data = response.body;
 
-      debugger;
-
-      if (data.length && data[0].values) {
-        this.setState({data: this.prepareData(data[0].values)});
+      if (data.length) {
+        ForecastDataParser.prepareData(data[0]);
+        //this.setState({data: this.prepareData(data[0].values)});
       }
     }).catch((error) => {
       return console.error(error);

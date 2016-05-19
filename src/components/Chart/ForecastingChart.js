@@ -2,14 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
-
-export const dataKeys = {
-  churn: '-',
-  downgrades: '-',
-  existing: '+',
-  upgrades: '+',
-  new: '+'
-};
+import {dataKeys} from 'services/ForecastDataParser';
 
 export default class ForecastingChart extends Component {
   static propTypes = {

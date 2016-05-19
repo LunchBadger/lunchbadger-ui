@@ -8,7 +8,11 @@ class ForecastService {
   get(apiId) {
     return this._APIHandle.get('Forecasts', {
       qs: {
-        filter: `{"apiId": "${apiId}"}`
+        filter: JSON.stringify({
+          where: {
+            apiId: apiId
+          }
+        })
       }
     });
   }

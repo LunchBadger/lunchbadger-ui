@@ -4,6 +4,12 @@ export default class APIForecast extends BaseModel {
   static type = 'APIForecast';
 
 	/**
+   * @type {ForecastAPI}
+   * @private
+   */
+  _api = null;
+
+	/**
    * @type {Upgrade[]}
    * @private
    */
@@ -18,6 +24,28 @@ export default class APIForecast extends BaseModel {
     this.top = top;
 
     this.upgrades = [];
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      api: this.api.toJSON()
+    }
+  }
+
+	/**
+   * @param api {ForecastAPI}
+   */
+  set api(api) {
+    this._api = api;
+  }
+
+	/**
+   * @returns {ForecastAPI}
+   */
+  get api() {
+    return this._api;
   }
 
   /**

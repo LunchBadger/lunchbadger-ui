@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
-import removeAPIForecast from 'actions/API/remove';
+import removeAPIForecast from 'actions/APIForecast/remove';
 import BasePlan from './Subelements/BasePlan';
-import addPlan from 'actions/API/addPlan';
+import addPlan from 'actions/APIForecast/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
@@ -101,9 +101,13 @@ export default class APIForecast extends Component {
 
   _fetchForecastData() {
     ForecastService.get(this.props.entity.api.id).then((response) => {
-      const data = response.body[0].values;
+      const data = response.body;
 
-      this.setState({data: this.prepareData(data)});
+      debugger;
+
+      if (data.length && data[0].values) {
+        this.setState({data: this.prepareData(data[0].values)});
+      }
     }).catch((error) => {
       return console.error(error);
     });

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {DropTarget} from 'react-dnd';
 import APIForecast from '../PanelComponents/APIForecast';
-import addAPIForecast from 'actions/API/add';
-import updateAPIForecast from 'actions/API/update';
+import addAPIForecast from 'actions/APIForecast/add';
+import updateAPIForecast from 'actions/APIForecast/update';
 import Forecast from 'stores/Forecast';
 
 export const FORECASTS_PANEL = 'FORECASTS_PANEL';
@@ -44,7 +44,7 @@ class ForecastsPanel extends Component {
   componentDidMount() {
     Forecast.addChangeListener(() => {
       this.setState({entities: Forecast.getData()});
-    })
+    });
   }
 
   renderEntities() {

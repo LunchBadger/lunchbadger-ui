@@ -3,9 +3,9 @@ import './BasePlan.scss';
 import Tier from './Tier';
 import PlanIcon from './PlanIcon';
 import classNames from 'classnames';
-import addTier from 'actions/API/addTier';
+import addTier from 'actions/APIForecast/addTier';
 import {DropTarget} from 'react-dnd';
-import addUpgrade from 'actions/API/addUpgrade';
+import addUpgrade from 'actions/APIForecast/addUpgrade';
 
 const boxTarget = {
   drop(props, monitor, component) {

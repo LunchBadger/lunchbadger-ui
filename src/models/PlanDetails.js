@@ -4,6 +4,8 @@ import PlanSubscribers from './PlanSubscribers';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class PlanDetails extends BaseModel {
+  static type = 'PlanDetails';
+
   _date = null;
 
   /**
@@ -21,8 +23,16 @@ export default class PlanDetails extends BaseModel {
   constructor(id, date) {
     super(id);
 
-    this.name = name;
     this.date = date;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      date: this.date,
+      subscribers: this.subscribers,
+      parameters: this.parameters
+    }
   }
 
 	/**
@@ -51,7 +61,7 @@ export default class PlanDetails extends BaseModel {
   set parameters(parameters) {
     this._parameters = parameters.map((parameter) => {
       if (parameter.constructor.type === PlanParameters.type) {
-        return subscriber;
+        return parameter;
       }
 
       return PlanParameters.create(parameter);

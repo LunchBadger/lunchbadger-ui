@@ -1,4 +1,5 @@
 import Tier from './Tier';
+import PlanDetails from './PlanDetails';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -34,6 +35,12 @@ export default class APIPlan extends BaseModel {
    */
   _tiers = [];
 
+	/**
+   * @type {PlanDetails[]}
+   * @private
+   */
+  _details = [];
+
   constructor(id, name, icon) {
     super(id);
 
@@ -50,6 +57,9 @@ export default class APIPlan extends BaseModel {
       icon: this.icon,
       tiers: this.tiers.map((tier) => {
         return tier.toJSON()
+      }),
+      details: this.details.map((detail) => {
+        return detail.toJSON()
       })
     }
   }
@@ -73,5 +83,25 @@ export default class APIPlan extends BaseModel {
    */
   addTier(tier) {
     this._tiers.push(tier);
+  }
+
+	/**
+   * @param details {PlanDetails[]}
+   */
+  set details(details) {
+    this._details = details.map((detail) => {
+      if (detail.constructor.type === PlanDetails.type) {
+        return detail;
+      }
+
+      return PlanDetails.create(detail);
+    });
+  }
+
+	/**
+   * @returns {PlanDetails[]}
+   */
+  get details() {
+    return this._details;
   }
 }

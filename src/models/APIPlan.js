@@ -28,6 +28,10 @@ const defaultTiers = [
 export default class APIPlan extends BaseModel {
   static type = 'APIPlan';
 
+	/**
+   * @type {Tier[]}
+   * @private
+   */
   _tiers = [];
 
   constructor(id, name, icon) {

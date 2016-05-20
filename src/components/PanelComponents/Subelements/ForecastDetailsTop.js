@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {dataKeys} from 'services/ForecastDataParser';
 import numeral from 'numeral';
 
 export default class ForecastDetailsTop extends Component {

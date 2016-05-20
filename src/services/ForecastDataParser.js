@@ -18,10 +18,10 @@ class ForecastDataParser {
       const planDetails = {};
 
       plan.details.forEach((detail) => {
-        const {date} = detail;
-        detail.date = this.parseDate(date);
+        const dateKey = this._checkDateKey(detail.date);
+        detail.date = this.parseDate(dateKey);
 
-        planDetails[date] = detail;
+        planDetails[dateKey] = detail;
       });
 
       parsedData.push(planDetails);
@@ -31,7 +31,19 @@ class ForecastDataParser {
   };
 
   parseDate(date) {
+    if (date instanceof Date) {
+      return date;
+    }
+
     return d3.time.format('%m/%Y').parse(date);
+  }
+
+  _checkDateKey(dateKey) {
+    if (dateKey instanceof Date) {
+      return `${dateKey.getMonth() + 1}/${dateKey.getFullYear()}`;
+    }
+
+    return dateKey;
   }
 }
 

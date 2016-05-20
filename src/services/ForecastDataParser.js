@@ -11,40 +11,26 @@ class ForecastDataParser {
   }
 
   prepareData(data) {
-    const parsedData = {};
+    const parsedData = [];
 
+    // there is potential spot for map/reduce pattern..
     data.api.plans.forEach((plan) => {
+      const planDetails = {};
+
       plan.details.forEach((detail) => {
-        Object.keys(dataKeys).forEach((dataKey) => {
-          if (!parsedData[detail.date]) {
-            parsedData[detail.date] = {};
-          }
+        const {date} = detail;
+        detail.date = this.parseDate(date);
 
-          if (!parsedData[detail.date][dataKey]) {
-            parsedData[detail.date][dataKey] = detail.subscribers[dataKey];
-          } else {
-            parsedData[detail.date][dataKey] += detail.subscribers[dataKey];
-          }
-        });
-      });
-    });
-
-    debugger;
-
-    return data.map((dataRow) => {
-      dataRow.date = this._parseDate(dataRow.date);
-
-      delete dataRow.id;
-
-      Object.keys(dataKeys).forEach((dataKey) => {
-        dataRow[dataKey] = +dataRow[dataKey];
+        planDetails[date] = detail;
       });
 
-      return dataRow;
+      parsedData.push(planDetails);
     });
+
+    return parsedData;
   };
 
-  _parseDate(date) {
+  parseDate(date) {
     return d3.time.format('%m/%Y').parse(date);
   }
 }

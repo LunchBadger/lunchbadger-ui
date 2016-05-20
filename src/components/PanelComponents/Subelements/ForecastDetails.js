@@ -18,8 +18,8 @@ export default class ForecastDetails extends Component {
   render() {
     return (
       <div className={this.props.className || ''}>
-        <ForecastDetailsTop  />
-        <ForecastingChart forecast={this.props.entity}  data={this.props.data}/>
+        <ForecastDetailsTop />
+        <ForecastingChart forecast={this.props.entity} data={this.props.data}/>
         <ForecastDetailsBottom />
       </div>
     );

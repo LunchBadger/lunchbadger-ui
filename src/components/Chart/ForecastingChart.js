@@ -3,6 +3,7 @@ import {findDOMNode} from 'react-dom';
 import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
 import {dataKeys} from 'services/ForecastDataParser';
+import _ from 'lodash';
 
 export default class ForecastingChart extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ export default class ForecastingChart extends Component {
   constructor(props) {
     super(props);
 
-    this.color = d3.scale.ordinal().range(['#8dad45', '#ccdea8', '#a8c667', '#f29332', '#fad35c']);
+    this.color = d3.scale.ordinal().range(['#f29332', '#fad35c', '#8dad45', '#a8c667', '#ccdea8']);
 
     this.customOffset = (data) => {
       var j = -1,
@@ -85,7 +86,33 @@ export default class ForecastingChart extends Component {
     return this._renderChart(this.props.data);
   }
 
+  _prepareChartData(plans) {
+    const parsedData = {};
+
+    plans.forEach((plan) => {
+      Object.keys(plan).forEach((planKey) => {
+        if (!parsedData[planKey]) {
+          parsedData[planKey] = {
+            date: plan[planKey].date
+          };
+        }
+
+        Object.keys(dataKeys).forEach((dataKey) => {
+          if (parsedData[planKey][dataKey]) {
+            parsedData[planKey][dataKey] += plan[planKey].subscribers[dataKey];
+          } else {
+            parsedData[planKey][dataKey] = plan[planKey].subscribers[dataKey];
+          }
+        });
+      });
+    });
+
+    return _.sortBy(parsedData, (row) => row.date);
+  }
+
   _renderChart(data) {
+    data = this._prepareChartData(data);
+
     this.color.domain(d3.keys(data[0]).filter((key) => {
       return key !== 'date';
     }));

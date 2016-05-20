@@ -88,8 +88,7 @@ export default class APIForecast extends Component {
       const data = response.body;
 
       if (data.length) {
-        ForecastDataParser.prepareData(data[0]);
-        //this.setState({data: this.prepareData(data[0].values)});
+        this.setState({data: ForecastDataParser.prepareData(data[0])});
       }
     }).catch((error) => {
       return console.error(error);

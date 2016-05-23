@@ -45,12 +45,14 @@ export default class ForecastDetails extends Component {
   }
 
   _updateForecast(forecast = null) {
+    const selectedDate = (forecast && forecast.selectedDate) ? forecast.selectedDate : this.currentDate;
+
     this.setState({
       incomeSummary: ForecastDataParser.calculateMonthlyIncome(
         this.props.entity.api.plans,
-        forecast ? forecast.selectedDate : this.currentDate
+        selectedDate
       ),
-      selectedDate: forecast ? forecast.selectedDate : this.currentDate
+      selectedDate: selectedDate
     });
   }
 

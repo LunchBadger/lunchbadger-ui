@@ -8,7 +8,8 @@ export default class ForecastDetailsTop extends Component {
       PropTypes.string,
       PropTypes.object
     ]),
-    data: PropTypes.array
+    data: PropTypes.array,
+    incomeSummary: PropTypes.array
   };
 
   constructor(props) {

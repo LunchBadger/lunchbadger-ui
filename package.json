@@ -90,7 +90,7 @@
     "react-dom": "^15.0.1",
     "react-modal-dialog": "^2.0.0",
     "react-notify-toast": "^0.1.1",
-    "request": "^2.65.0",
+    "request": "2.65.0",
     "slug": "^0.9.1",
     "uuid": "^2.0.2"
   }

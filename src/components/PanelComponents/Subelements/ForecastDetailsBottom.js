@@ -64,6 +64,14 @@ export default class ForecastDetailsBottom extends Component {
   _calculateSummaries(incomeSummary) {
     const summary = Object.assign({}, this.state.summary);
 
+    // reset summary first
+    Object.keys(summary).forEach((summaryKey) => {
+      summary[summaryKey] = {
+        sum: 0,
+        users: 0
+      }
+    });
+
     incomeSummary.forEach((planSummary) => {
       Object.keys(this.state.summary).forEach((summaryKey) => {
         summary[summaryKey] = {

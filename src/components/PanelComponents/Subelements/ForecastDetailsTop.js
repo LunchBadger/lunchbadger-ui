@@ -15,24 +15,23 @@ export default class ForecastDetailsTop extends Component {
   constructor(props) {
     super(props);
 
-    const date = new Date();
-
     this.state = {
-      statistics: {},
-      currentDate: `${date.getMonth() + 1}/${date.getFullYear()}`
+      statistics: {}
     };
   }
 
   componentDidMount() {
-    this._onUpdate(this.props.selectedDate, this.props.data);
+    this._onUpdate(this.props.selectedDate, this.props.data, this.props.incomeSummary);
   }
 
   componentWillReceiveProps(nextProps) {
-    this._onUpdate(nextProps.selectedDate, nextProps.data);
+    this._onUpdate(nextProps.selectedDate, nextProps.data, nextProps.incomeSummary);
   }
 
-  _onUpdate(selectedDate, data) {
+  _onUpdate(selectedDate, data, incomeSummary) {
     const summary = this._recalculateSummary(selectedDate, data);
+
+    summary['avgPerUser'] = this._calculateSummaries(incomeSummary);
 
     this.setState({statistics: summary});
   }
@@ -42,7 +41,6 @@ export default class ForecastDetailsTop extends Component {
       annualRecurring: 0,
       monthlyRecurring: 0,
       retention: 0,
-      avgPerUser: 0,
       payingUsers: 0,
       totalUsers: 0
     };
@@ -68,7 +66,6 @@ export default class ForecastDetailsTop extends Component {
         }
 
         summary['annualRecurring'] += statistic[month]['recurring'];
-        summary['avgPerUser'] += statistic[month]['avgPerUser'];
 
         if (selectedDate === month || (!selectedDate && this.state.currentDate === month)) {
           summary['monthlyRecurring'] += statistic[month]['recurring'];
@@ -80,7 +77,6 @@ export default class ForecastDetailsTop extends Component {
     });
 
     summary['retention'] = summary['retention'] / statistics.length;
-    summary['avgPerUser'] = summary['avgPerUser'] / (months.length * statistics.length);
 
     return summary;
   }
@@ -113,8 +109,6 @@ export default class ForecastDetailsTop extends Component {
 
         planStatistics[dateKey]['recurring'] = monthlyRecurring;
         planStatistics[dateKey]['retention'] = retention;
-        // TODO: this needs to be calculated according to Tiers available in each plan...
-        planStatistics[dateKey]['avgPerUser'] = 0;
         planStatistics[dateKey]['payingUsers'] = payingUsersInMonth;
         planStatistics[dateKey]['totalUsers'] = usersInMonth;
       });
@@ -123,6 +117,22 @@ export default class ForecastDetailsTop extends Component {
     });
 
     return statistics;
+  }
+
+  _calculateSummaries(incomeSummary) {
+    let sum = 0;
+    let users = 0;
+
+    incomeSummary.forEach((planSummary) => {
+      sum += planSummary['existing'].amount + planSummary['new'].amount + planSummary['upgrades'].amount;
+      users += planSummary['existing'].subscribers + planSummary['new'].subscribers + planSummary['upgrades'].subscribers;
+    });
+
+    if (users > 0) {
+      return sum / users;
+    }
+
+    return 0;
   }
 
   render() {

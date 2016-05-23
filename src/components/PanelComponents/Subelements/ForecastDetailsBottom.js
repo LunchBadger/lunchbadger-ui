@@ -61,10 +61,10 @@ export default class ForecastDetailsBottom extends Component {
     });
   }
 
-  _calculateSummaries() {
+  _calculateSummaries(incomeSummary) {
     const summary = Object.assign({}, this.state.summary);
 
-    this.props.incomeSummary.forEach((planSummary) => {
+    incomeSummary.forEach((planSummary) => {
       Object.keys(this.state.summary).forEach((summaryKey) => {
         summary[summaryKey] = {
           sum: summary[summaryKey].sum + planSummary[summaryKey].amount,

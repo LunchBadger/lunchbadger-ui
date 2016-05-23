@@ -17,8 +17,11 @@ export default class ForecastDetails extends Component {
   constructor(props) {
     super(props);
 
+    const date = new Date();
+    this.currentDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+
     this.state = {
-      selectedDate: null,
+      selectedDate: this.currentDate,
       incomeSummary: []
     };
 
@@ -26,23 +29,29 @@ export default class ForecastDetails extends Component {
       const currentForecast = AppState.getStateKey('currentForecast');
 
       if (currentForecast && currentForecast.forecast.id === this.props.entity.id) {
-        this.setState({
-          incomeSummary: ForecastDataParser.calculateMonthlyIncome(
-            this.props.entity.api.plans,
-            currentForecast.selectedDate
-          ),
-          selectedDate: currentForecast.selectedDate
-        });
+        this._updateForecast(currentForecast);
       }
     };
   }
 
   componentDidMount() {
     AppState.addChangeListener(this.forecastUpdated);
+
+    this._updateForecast();
   }
 
   componentWillUnmount() {
     AppState.removeChangeListener(this.forecastUpdated);
+  }
+
+  _updateForecast(forecast = null) {
+    this.setState({
+      incomeSummary: ForecastDataParser.calculateMonthlyIncome(
+        this.props.entity.api.plans,
+        forecast ? forecast.selectedDate : this.currentDate
+      ),
+      selectedDate: forecast ? forecast.selectedDate : this.currentDate
+    });
   }
 
   render() {

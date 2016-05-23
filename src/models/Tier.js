@@ -11,8 +11,18 @@ export default class Tier extends BaseModel {
    */
   _details = [];
 
-  constructor(id) {
+  _conditionFrom = null;
+  _conditionTo = null;
+  _type = null;
+  _value = null;
+
+  constructor(id, conditionFrom, conditionTo, type, value) {
     super(id);
+
+    this.conditionFrom = conditionFrom;
+    this.conditionTo = conditionTo;
+    this.type = type;
+    this.value = value;
   }
 
   toJSON() {
@@ -20,7 +30,11 @@ export default class Tier extends BaseModel {
       id: this.id,
       details: this.details.map((detail) => {
         return detail.toJSON()
-      })
+      }),
+      conditionFrom: this.conditionFrom,
+      conditionTo: this.conditionTo,
+      type: this.type,
+      value: this.value
     }
   }
 
@@ -42,5 +56,37 @@ export default class Tier extends BaseModel {
 
       return TierDetails.create(detail);
     });
+  }
+
+  get conditionFrom() {
+    return this._conditionFrom;
+  }
+
+  set conditionFrom(conditionFrom) {
+    this._conditionFrom = conditionFrom;
+  }
+
+  get conditionTo() {
+    return this._conditionTo;
+  }
+
+  set conditionTo(conditionTo) {
+    this._conditionTo = conditionTo;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  set type(type) {
+    this._type = type;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(value) {
+    this._value = value;
   }
 }

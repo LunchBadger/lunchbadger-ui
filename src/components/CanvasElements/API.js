@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import PublicEndpoint from './Subelements/PublicEndpoint';
+import Plan from './Subelements/Plan';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import bundleAPI from 'actions/CanvasElements/API/bundle';
 import unbundleAPI from 'actions/CanvasElements/API/unbundle';
@@ -53,8 +54,18 @@ class API extends Component {
     moveBetweenAPIs(item.parent, this.props.entity, item.entity);
   }
 
+  renderPlans() {
+    return this.props.entity.plans.map((plan) => {
+      return (
+        <div key={plan.id} className="canvas-element__sub-element">
+          <Plan entity={plan} />
+        </div>
+      )
+    });
+  }
+
   renderEndpoints() {
-    return this.props.entity.endpoints.map((endpoint) => {
+    return this.props.entity.publicEndpoints.map((endpoint) => {
       return (
         <div key={endpoint.id} className="canvas-element__sub-element">
           <PublicEndpoint
@@ -83,7 +94,7 @@ class API extends Component {
       this.onMoveEndpoint(item);
     }
 
-    if (!_.includes(this.props.entity.endpoints, item.entity)) {
+    if (!_.includes(this.props.entity.publicEndpoints, item.entity)) {
       this.onAddEndpoint(item.entity);
     }
 
@@ -101,7 +112,18 @@ class API extends Component {
     return (
       <div>
         {
-          this.props.entity.endpoints.length > 0 && (
+          this.props.entity.plans.length > 0 && (
+            <div className="canvas-element__sub-elements">
+              <div className="canvas-element__sub-elements__title">
+                Plans
+              </div>
+              <div ref="plans">{this.renderPlans()}</div>
+            </div>
+          )
+        }
+
+        {
+          this.props.entity.publicEndpoints.length > 0 && (
             <div className="canvas-element__sub-elements">
               <div className="canvas-element__sub-elements__title">
                 Endpoints

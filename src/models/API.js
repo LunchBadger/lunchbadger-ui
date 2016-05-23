@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import APIPlan from './APIPlan';
 
 const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -10,7 +11,13 @@ export default class API extends BaseModel {
    * @type {Endpoint[]}
    * @private
    */
-  _endpoints = [];
+  _publicEndpoints = [];
+
+  /**
+   * @type {APIPlan[]}
+   * @private
+   */
+  _plans = [];
 
   _accept = [PublicEndpoint.type];
 
@@ -24,33 +31,66 @@ export default class API extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      publicEndpoints: this.endpoints.map(endpoint => endpoint.toJSON())
+      publicEndpoints: this.publicEndpoints.map(endpoint => endpoint.toJSON()),
+      plans: this.plans.map(plan => plan.toJSON())
     }
   }
 
   /**
    * @param endpoints {Endpoint[]}
    */
-  set endpoints(endpoints) {
-    this._endpoints = endpoints;
+  set publicEndpoints(endpoints) {
+    this._publicEndpoints = endpoints.map((endpoint) => {
+      return PublicEndpoint.create(endpoint);
+    });
   }
 
   /**
    * @returns {Endpoint[]}
    */
-  get endpoints() {
-    return this._endpoints;
+  get publicEndpoints() {
+    return this._publicEndpoints;
+  }
+
+  /**
+   * @param plans {APIPlan[]}
+   */
+  set plans(plans) {
+    this._plans = plans.map((plan) => {
+      return APIPlan.create(plan);
+    });
+  }
+
+  /**
+   * @returns {APIPlan[]}
+   */
+  get plans() {
+    return this._plans;
   }
 
   /**
    * @param endpoint {Endpoint}
    */
   addEndpoint(endpoint) {
-    this._endpoints.push(endpoint);
+    this._publicEndpoints.push(endpoint);
   }
 
   removeEndpoint(endpoint) {
-    this._endpoints.splice(_.findIndex(this.endpoints, {id: endpoint.id}), 1);
+    this._publicEndpoints.splice(_.findIndex(this.publicEndpoints, {id: endpoint.id}), 1);
+  }
+
+  /**
+   * @param plan {APIPlan}
+   */
+  addPlan(plan) {
+    this._plans.push(plan);
+  }
+
+  /**
+   * @param plan {APIPlan}
+   */
+  removePlan(plan) {
+    this._plans.splice(_.findIndex(this.plans, {id: plan.id}), 1);
   }
 
   get accept() {

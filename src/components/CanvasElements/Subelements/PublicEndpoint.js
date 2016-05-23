@@ -72,10 +72,6 @@ export default class PublicEndpoint extends Component {
     });
   }
 
-  toggleOpenState() {
-    this.setState({opened: !this.state.opened});
-  }
-
   render() {
     const {connectDragSource} = this.props;
     return connectDragSource(

@@ -43,11 +43,11 @@
 
 .forecast__details-bottom__detail {
   display: inline-block;
-  padding-right: 5px;
+  padding-right: 4px;
   border-right: 2px solid;
 
   & + & {
-    margin-left: 15px;
+    margin-left: 10px;
   }
 
   &--new {

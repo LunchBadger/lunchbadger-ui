@@ -28,7 +28,7 @@ class ForecastDataParser {
     });
 
     return parsedData;
-  };
+  }
 
   parseDate(date) {
     if (date instanceof Date) {

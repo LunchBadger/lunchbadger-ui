@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral';
+import _ from 'lodash';
 
 export default class ForecastDetailsTop extends Component {
   static propTypes = {
@@ -91,7 +92,7 @@ export default class ForecastDetailsTop extends Component {
 
       Object.keys(plan).forEach((dateKey) => {
         const details = plan[dateKey];
-        const {date, parameters, subscribers} = details;
+        const {parameters, subscribers} = details;
         let payingUsersInMonth = 0;
 
         if (!planStatistics[dateKey]) {

@@ -1,22 +1,46 @@
+import TierDetails from './TierDetails';
+
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Tier extends BaseModel {
   static type = 'Tier';
 
-  constructor(id, name, totals, charge) {
-    super(id);
+	/**
+   * @type {TierDetails[]}
+   * @private
+   */
+  _details = [];
 
-    this.name = name;
-    this.totals = totals;
-    this.charge = charge;
+  constructor(id) {
+    super(id);
   }
 
   toJSON() {
     return {
       id: this.id,
-      name: this.name,
-      totals: this.totals,
-      charge: this.charge
+      details: this.details.map((detail) => {
+        return detail.toJSON()
+      })
     }
+  }
+
+	/**
+   * @returns {TierDetails[]}
+   */
+  get details() {
+    return this._details;
+  }
+
+	/**
+   * @param details {TierDetails[]}
+   */
+  set details(details) {
+    this._details = details.map((detail) => {
+      if (detail.constructor.type === TierDetails.type) {
+        return detail;
+      }
+
+      return TierDetails.create(detail);
+    });
   }
 }

@@ -222,6 +222,8 @@ export default class ForecastingChart extends Component {
         const timestamp = d.x.getTime() + '';
 
         if (timestamp === this.barSelector.attr('selected-date')) {
+          setForecast(this.props.forecast, null);
+
           return (
             this.barSelector
               .style('opacity', 0)

@@ -8,7 +8,7 @@ export default (forecast, date) => {
   dispatch('SetForecast', {
     forecastData: {
       forecast: forecast,
-      selectedDate: `${date.getMonth() + 1}/${date.getFullYear()}`
+      selectedDate: date ? `${date.getMonth() + 1}/${date.getFullYear()}` : null
     }
   });
 };

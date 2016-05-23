@@ -14,7 +14,7 @@ export default class ForecastingChart extends Component {
   constructor(props) {
     super(props);
 
-    this.color = d3.scale.ordinal().range(['#f29332', '#fad35c', '#8dad45', '#a8c667', '#ccdea8']);
+    this.color = d3.scale.ordinal().range(['#fad35c', '#f29332', '#8dad45', '#a8c667', '#ccdea8']);
 
     this.customOffset = (data) => {
       var j = -1,

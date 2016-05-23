@@ -52,19 +52,17 @@ export default class APIForecast extends Component {
   }
 
   addPlan() {
-    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
+    //addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
   }
 
   renderPlans() {
-    return this.props.entity.plans.map((plan, index) => {
+    return this.props.entity.api.plans.map((plan, index) => {
       return (
         <li key={`plan_${index}`}>
           <span>{plan.name}</span>
           <BasePlan key={plan.id}
                     parent={this.props.entity}
-                    entity={plan}
-                    name={plan.name}
-                    icon={plan.icon}/>
+                    entity={plan}/>
         </li>
       )
     })
@@ -126,7 +124,7 @@ export default class APIForecast extends Component {
               <DateSlider parent={this.props.entity}/>
             </div>
             <ul className="api-forecast__plans">
-              {/*this.renderPlans()*/}
+              {this.renderPlans()}
               <li>
                 <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
                   <i className="fa fa-plus"/>

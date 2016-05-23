@@ -23,7 +23,6 @@ const boxTarget = {
 }))
 export default class BasePlan extends Component {
   static propTypes = {
-    icon: PropTypes.string.isRequired,
     entity: PropTypes.object.isRequired,
     parent: PropTypes.object.isRequired
   };
@@ -44,22 +43,21 @@ export default class BasePlan extends Component {
   }
 
   addTier(event) {
-    addTier(this.props.entity, {
-      name: 'Tier x',
-      totals: 'sth',
-      charge: 0.0
-    });
+    // addTier(this.props.entity, {
+    //   name: 'Tier x',
+    //   totals: 'sth',
+    //   charge: 0.0
+    // });
 
     event.stopPropagation();
   }
 
   renderTiers() {
-    return this.props.entity.tiers.map((tier) => {
+    return this.props.entity.tiers.map((tier, index) => {
       return (
         <Tier key={tier.id}
-                      name={tier.name}
-                      totals={tier.totals}
-                      charge={tier.charge}/>
+              index={index + 1}
+              tier={tier}/>
       )
     })
   }
@@ -73,12 +71,16 @@ export default class BasePlan extends Component {
     return connectDropTarget(
       <div className={`base-plan ${elementClass}`}
            onClick={this.toggleExpanded.bind(this)}>
-        <PlanIcon icon={this.props.icon} entity={this.props.entity}/>
+        <PlanIcon entity={this.props.entity}/>
         <div className="base-plan__tiers">
           <table>
-            <caption>Tiers <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}><i className="fa fa-plus"></i></a></caption>
+            <caption>Tiers
+              <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}>
+                <i className="fa fa-plus"/>
+              </a>
+            </caption>
             <tbody>
-              {this.renderTiers()}
+            {this.renderTiers()}
             </tbody>
           </table>
         </div>

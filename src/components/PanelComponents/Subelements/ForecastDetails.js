@@ -2,13 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import ForecastDetailsTop from './ForecastDetailsTop';
 import ForecastDetailsBottom from './ForecastDetailsBottom';
 import ForecastingChart from 'components/Chart/ForecastingChart';
-import ForecastService from 'services/ForecastService';
-import {dataKeys} from 'components/Chart/ForecastingChart';
 import './ForecastDetails.scss';
+
+const AppState = LunchBadgerCore.stores.AppState;
 
 export default class ForecastDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
+    data: PropTypes.array.isRequired,
     className: PropTypes.string
   };
 
@@ -16,46 +17,32 @@ export default class ForecastDetails extends Component {
     super(props);
 
     this.state = {
-      data: []
+      selectedDate: null
     };
 
-    this.parseDate = d3.time.format('%m/%Y').parse;
+    this.forecastUpdated = () => {
+      const currentForecast = AppState.getStateKey('currentForecast');
 
-    this.prepareData = (data) => {
-      return data.map((dataRow) => {
-        dataRow.date = this.parseDate(dataRow.date);
-
-        delete dataRow.id;
-
-        Object.keys(dataKeys).forEach((dataKey) => {
-          dataRow[dataKey] = +dataRow[dataKey];
-        });
-
-        return dataRow;
-      });
+      if (currentForecast && currentForecast.forecast.id === this.props.entity.id) {
+        this.setState({selectedDate: currentForecast.selectedDate});
+      }
     };
   }
 
   componentDidMount() {
-    this._fetchForecastData();
+    AppState.addChangeListener(this.forecastUpdated);
   }
 
-  _fetchForecastData() {
-    ForecastService.get(this.props.entity.apiId).then((response) => {
-      const data = response.body[0].values;
-
-      this.setState({data: this.prepareData(data)});
-    }).catch((error) => {
-      return console.error(error);
-    });
+  componentWillUnmount() {
+    AppState.removeChangeListener(this.forecastUpdated);
   }
 
   render() {
-    return this.state.data.length > 0 && (
+    return (
       <div className={this.props.className || ''}>
-        <ForecastDetailsTop />
-        <ForecastingChart data={this.state.data}/>
-        <ForecastDetailsBottom />
+        <ForecastDetailsTop selectedDate={this.state.selectedDate} data={this.props.data}/>
+        <ForecastingChart forecast={this.props.entity} data={this.props.data}/>
+        <ForecastDetailsBottom selectedDate={this.state.selectedDate} data={this.props.data}/>
       </div>
     );
   }

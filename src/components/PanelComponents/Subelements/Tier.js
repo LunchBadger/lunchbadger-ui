@@ -3,9 +3,8 @@ import './Tier.scss';
 
 export default class Tier extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
-    totals: PropTypes.string.isRequired,
-    charge: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    tier: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -16,9 +15,7 @@ export default class Tier extends Component {
 
     return (
       <tr>
-        <td>{this.props.name}</td>
-        <td>{`${this.props.totals} 'calls / hour'`}</td>
-        <td>{`'Charge $'${this.props.charge}' per call'`}</td>
+        <td>Tier {this.props.index}</td>
       </tr>
     )
   }

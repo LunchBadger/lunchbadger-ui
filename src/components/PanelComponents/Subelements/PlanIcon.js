@@ -16,7 +16,6 @@ const boxSource = {
 }))
 export default class PlanIcon extends Component {
   static propTypes = {
-    icon: PropTypes.string.isRequired,
     entity: PropTypes.object.isRequired,
     connectDragSource: PropTypes.func.isRequired
   };
@@ -37,7 +36,7 @@ export default class PlanIcon extends Component {
 
     return connectDragSource((
       <div className={`base-plan__icon ${elementClass}`}>
-        <i className={`fa ${this.props.icon}`}/>
+        <i className={`fa ${this.props.entity.icon}`}/>
       </div>
     ))
   }

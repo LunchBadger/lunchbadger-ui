@@ -1,7 +1,4 @@
 import _ from 'lodash';
-import APIPlan from 'models/APIPlan';
-import Tier from 'models/Tier';
-import Upgrade from 'models/Upgrade';
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
@@ -25,15 +22,18 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddPlan':
-          this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
+          // TODO: add plan to api copy
+          //this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
           this.emitChange();
           break;
         case 'AddTier':
-          this.addTierToPlan(action.apiPlan, Tier.create(action.data));
+          // TODO: add tier to api copy play
+          //this.addTierToPlan(action.apiPlan, Tier.create(action.data));
           this.emitChange();
           break;
         case 'AddUpgrade':
-          this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
+          // TODO: add upgrade to api forecast
+          //this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
           this.emitChange();
           break;
       }
@@ -53,23 +53,37 @@ class Forecast extends BaseStore {
   findEntityByApiId(id) {
     id = this.formatId(id);
 
-    return _.find(Forecasts, {apiId: id});
+    return Forecasts.forEach((forecast) => {
+      return forecast.api.id === id;
+    });
   }
 
   addApiForecast(apiForecast) {
-    if (!this.findEntityByApiId(apiForecast.apiId)) {
+    if (!this.findEntityByApiId(apiForecast.api.id)) {
       Forecasts.push(apiForecast);
     }
   }
 
+  /**
+   * @param apiForecast {APIForecast}
+   * @param plan {APIPlan}
+   */
   addPlanToApi(apiForecast, plan) {
     apiForecast.addPlan(plan);
   }
 
+  /**
+   * @param apiForecast {APIForecast}
+   * @param upgrade {Upgrade}
+   */
   addUpgradeToApi(apiForecast, upgrade) {
     apiForecast.addUpgrade(upgrade);
   }
 
+  /**
+   * @param apiPlan {APIPlan}
+   * @param tier {Tier}
+   */
   addTierToPlan(apiPlan, tier) {
     apiPlan.addTier(tier);
   }

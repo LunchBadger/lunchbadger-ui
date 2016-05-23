@@ -2,12 +2,14 @@ import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
-import removeAPIForecast from 'actions/API/remove';
+import removeAPIForecast from 'actions/APIForecast/remove';
 import BasePlan from './Subelements/BasePlan';
-import addPlan from 'actions/API/addPlan';
+import addPlan from 'actions/APIForecast/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
+import ForecastService from 'services/ForecastService';
+import ForecastDataParser from 'services/ForecastDataParser';
 
 import 'rc-slider/assets/index.css';
 
@@ -32,8 +34,13 @@ export default class APIForecast extends Component {
     super(props);
 
     this.state = {
-      expanded: false
+      expanded: false,
+      data: []
     };
+  }
+
+  componentDidMount() {
+    this._fetchForecastData();
   }
 
   remove() {
@@ -45,19 +52,17 @@ export default class APIForecast extends Component {
   }
 
   addPlan() {
-    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
+    //addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
   }
 
   renderPlans() {
-    return this.props.entity.plans.map((plan, index) => {
+    return this.props.entity.api.plans.map((plan, index) => {
       return (
         <li key={`plan_${index}`}>
           <span>{plan.name}</span>
           <BasePlan key={plan.id}
                     parent={this.props.entity}
-                    entity={plan}
-                    name={plan.name}
-                    icon={plan.icon}/>
+                    entity={plan}/>
         </li>
       )
     })
@@ -76,6 +81,18 @@ export default class APIForecast extends Component {
     })
   }
 
+  _fetchForecastData() {
+    ForecastService.get(this.props.entity.api.id).then((response) => {
+      const data = response.body;
+
+      if (data.length) {
+        this.setState({data: ForecastDataParser.prepareData(data[0])});
+      }
+    }).catch((error) => {
+      return console.error(error);
+    });
+  }
+
   render() {
     const elementClass = classNames({
       expanded: this.state.expanded
@@ -87,7 +104,7 @@ export default class APIForecast extends Component {
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
-          {this.props.entity.name}
+          {this.props.entity.api.name}
           <ul className="api-forecast__header__nav">
             <li>
               <a onClick={this.remove.bind(this)}>
@@ -118,8 +135,11 @@ export default class APIForecast extends Component {
               {this.renderUpgrades()}
             </ul>
           </div>
-
-          <ForecastDetails className="api-forecast__details" entity={this.props.entity}/>
+          {
+            this.state.data.length > 0 && (
+              <ForecastDetails className="api-forecast__details" data={this.state.data} entity={this.props.entity}/>
+            )
+          }
         </div>
       </div>
     );

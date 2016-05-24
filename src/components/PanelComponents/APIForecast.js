@@ -10,6 +10,7 @@ import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from 'rc-slider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
+import DateRangeBar from './Subelements/DateRangeBar';
 
 import 'rc-slider/assets/index.css';
 
@@ -35,7 +36,9 @@ export default class APIForecast extends Component {
 
     this.state = {
       expanded: false,
-      data: []
+      data: [],
+      startDate: null,
+      endDate: null
     };
   }
 
@@ -86,7 +89,16 @@ export default class APIForecast extends Component {
       const data = response.body;
 
       if (data.length) {
-        this.setState({data: ForecastDataParser.prepareData(data[0])});
+        this.setState({data: ForecastDataParser.prepareData(data[0])}, () => {
+          if (this.state.data.length) {
+            const firstSetDateKeys = Object.keys(this.state.data[0]);
+
+            this.setState({
+              startDate: firstSetDateKeys[0],
+              endDate: firstSetDateKeys[firstSetDateKeys.length - 1]
+            });
+          }
+        });
       }
     }).catch((error) => {
       return console.error(error);
@@ -104,7 +116,11 @@ export default class APIForecast extends Component {
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
-          {this.props.entity.api.name}
+          {
+            !!this.state.startDate && (
+              <DateRangeBar startDate={this.state.startDate} endDate={this.state.endDate} />
+            )
+          }
           <ul className="api-forecast__header__nav">
             <li>
               <a onClick={this.remove.bind(this)}>

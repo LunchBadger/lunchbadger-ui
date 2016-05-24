@@ -52,18 +52,29 @@ export default class DateRangeBar extends Component {
     return (
       <div className="date-range-bar">
         <DatePicker
+          dateFormat="D MMM YYYY"
+          className="date-range-bar__picker date-range-bar__picker--from"
           selected={this.state.startDate}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           minDate={this.state.minStartDate}
           maxDate={this.state.maxStartDate}
+          readOnly={true}
+          popoverAttachment="top left"
+          popoverTargetAttachment="bottom center"
           onChange={this.handleChangeStart.bind(this)}/>
+        <span className="date-range-bar__between">to</span>
         <DatePicker
+          dateFormat="D MMM YYYY"
+          className="date-range-bar__picker date-range-bar__picker--to"
           selected={this.state.endDate}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           minDate={this.state.minEndDate}
           maxDate={this.state.maxEndDate}
+          readOnly={true}
+          popoverAttachment="top center"
+          popoverTargetAttachment="bottom center"
           onChange={this.handleChangeEnd.bind(this)}/>
       </div>
     )

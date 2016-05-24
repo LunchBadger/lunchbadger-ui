@@ -1,3 +1,31 @@
 .date-range-bar {
   display: inline-block;
 }
+
+.date-range-bar__picker {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 18px;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+  width: 190px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &--from {
+    text-align: right;
+  }
+
+  &--to {
+    text-align: left;
+  }
+}
+
+.date-range-bar__between {
+  padding: 0 10px;
+  display: inline-block;
+  color: #ccdea8;
+}

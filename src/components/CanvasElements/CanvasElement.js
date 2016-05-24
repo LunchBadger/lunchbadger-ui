@@ -189,6 +189,12 @@ export default (ComposedComponent) => {
     toggleHighlighted() {
       if (!this.state.highlighted) {
         toggleHighlight(this.props.entity);
+      } else {
+        setTimeout(() => {
+          if (!this.state.editable && !this.state.expanded) {
+            toggleHighlight(null);
+          }
+        });
       }
     }
 

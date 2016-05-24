@@ -7,7 +7,7 @@ import BasePlan from './Subelements/BasePlan';
 import addPlan from 'actions/APIForecast/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
-import DateSlider from 'rc-slider';
+import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';

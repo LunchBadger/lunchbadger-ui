@@ -11,7 +11,8 @@ export default class ForecastDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     data: PropTypes.array.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    dateRange: PropTypes.object
   };
 
   constructor(props) {
@@ -62,7 +63,9 @@ export default class ForecastDetails extends Component {
         <ForecastDetailsTop incomeSummary={this.state.incomeSummary}
                             selectedDate={this.state.selectedDate}
                             data={this.props.data}/>
-        <ForecastingChart forecast={this.props.entity} data={this.props.data}/>
+        <ForecastingChart forecast={this.props.entity}
+                          dateRange={this.props.dateRange}
+                          data={this.props.data}/>
         {
           this.state.incomeSummary.length > 0 && (
             <ForecastDetailsBottom selectedDate={this.state.selectedDate}

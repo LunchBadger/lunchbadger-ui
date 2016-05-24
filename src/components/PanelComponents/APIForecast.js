@@ -38,7 +38,8 @@ export default class APIForecast extends Component {
       expanded: false,
       data: [],
       startDate: null,
-      endDate: null
+      endDate: null,
+      selectedRange: null
     };
   }
 
@@ -105,20 +106,28 @@ export default class APIForecast extends Component {
     });
   }
 
+  _handleRangeUpdate(range) {
+    this.setState({selectedRange: range});
+  }
+
   render() {
     const elementClass = classNames({
       expanded: this.state.expanded
     });
     const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
+    
     if (isDragging && hideSourceOnDrag) {
       return null;
     }
+    
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
           {
             !!this.state.startDate && (
-              <DateRangeBar startDate={this.state.startDate} endDate={this.state.endDate} />
+              <DateRangeBar onRangeUpdate={this._handleRangeUpdate.bind(this)}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate} />
             )
           }
           <ul className="api-forecast__header__nav">
@@ -153,7 +162,11 @@ export default class APIForecast extends Component {
           </div>
           {
             this.state.data.length > 0 && (
-              <ForecastDetails className="api-forecast__details" data={this.state.data} entity={this.props.entity}/>
+              <ForecastDetails
+                dateRange={this.state.selectedRange}
+                className="api-forecast__details"
+                data={this.state.data}
+                entity={this.props.entity}/>
             )
           }
         </div>

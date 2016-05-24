@@ -83,6 +83,7 @@
     "keymirror": "^0.1.1",
     "lockr": "^0.8.4",
     "lodash": "^4.11.2",
+    "moment": "^2.13.0",
     "normalize.css": "^4.0.0",
     "react": "^15.0.0",
     "react-dnd": "^2.1.4",
@@ -90,7 +91,7 @@
     "react-dom": "^15.0.1",
     "react-modal-dialog": "^2.0.0",
     "react-notify-toast": "^0.1.1",
-    "request": "^2.65.0",
+    "request": "2.65.0",
     "slug": "^0.9.1",
     "uuid": "^2.0.2"
   }

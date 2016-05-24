@@ -4,11 +4,13 @@ import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
 import {dataKeys} from 'services/ForecastDataParser';
 import _ from 'lodash';
+import moment from 'moment';
 
 export default class ForecastingChart extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
-    forecast: PropTypes.object.isRequired
+    forecast: PropTypes.object.isRequired,
+    dateRange: PropTypes.object
   };
 
   constructor(props) {
@@ -30,7 +32,22 @@ export default class ForecastingChart extends Component {
   }
 
   componentDidMount() {
+    this._configureChart();
+    this._renderChart(this.props.data);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.dateRange && this.props.dateRange !== nextProps.dateRange) {
+      const filteredData = this._filterData(nextProps.dateRange, nextProps.data);
+
+      this._configureChart();
+      this._renderChart(filteredData);
+    }
+  }
+
+  _configureChart() {
     this.chart = findDOMNode(this.refs.chart);
+    this.chart.innerHTML = '';
     this.chartContainer = d3.select(this.chart);
 
     const chartBounds = this.chart.getBoundingClientRect();
@@ -82,8 +99,6 @@ export default class ForecastingChart extends Component {
       .attr('y1', this.y(0.17))
       .attr('x2', 500)
       .attr('y2', this.y(0.17));
-
-    return this._renderChart(this.props.data);
   }
 
   _prepareChartData(plans) {
@@ -251,6 +266,14 @@ export default class ForecastingChart extends Component {
     this.svg.append('g')
       .attr('class', 'axis axis--y')
       .call(this.yAxis);
+  }
+
+  _filterData(range, data) {
+    return data.map((plan) => {
+      return _.filter(plan, (planDetails) => {
+        return moment(planDetails.date).isBetween(range.startDate, range.endDate, 'month', '[]');
+      });
+    });
   }
 
   render() {

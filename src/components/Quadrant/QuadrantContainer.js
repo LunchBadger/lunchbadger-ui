@@ -4,7 +4,8 @@ export default class QuadrantContainer extends Component {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    paper: PropTypes.object
+    paper: PropTypes.object,
+    style: PropTypes.object
   };
 
   constructor(props) {
@@ -32,7 +33,7 @@ export default class QuadrantContainer extends Component {
 
   render() {
     return (
-      <div className={this.props.className} id={this.props.id}>
+      <div style={this.props.style} className={this.props.className} id={this.props.id}>
         {this.renderQuadrants()}
       </div>
     );

@@ -84,6 +84,8 @@
   height: 100%;
   pointer-events: none;
   z-index: $z-index-low;
+  min-height: 520px;
+  transition: all .5s ease;
 }
 
 .canvas__label {

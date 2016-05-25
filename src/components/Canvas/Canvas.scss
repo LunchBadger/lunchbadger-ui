@@ -65,7 +65,6 @@
 .canvas__wrapper {
   overflow: auto;
   height: calc(100vh - #{$header-height});
-  transition: all .5s ease;
 }
 
 .canvas__container {
@@ -75,7 +74,6 @@
   overflow: auto;
   display: flex;
   flex-wrap: nowrap;
-  transition: all .5s ease;
 }
 
 .canvas__legend {

@@ -197,7 +197,7 @@ export default class Canvas extends Component {
           <QuadrantContainer appState={this.props.appState}
                              plugins={this.props.plugins}
                              paper={this.paper}
-                             style={{'min-height': canvasHeight}}
+                             style={{minHeight: canvasHeight}}
                              className="canvas__container" id="canvas"/>
         </div>
       </section>

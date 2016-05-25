@@ -60,7 +60,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (this.state.opened === prevState.opened) {
+      if (this.state.opened === prevState.opened && this.state.height === prevState.height) {
         return;
       }
 

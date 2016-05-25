@@ -7,12 +7,14 @@ import BasePlan from './Subelements/BasePlan';
 import addPlan from 'actions/APIForecast/addPlan';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
-import DateSlider from 'rc-slider';
+import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
 
 import 'rc-slider/assets/index.css';
+
+const AppState = LunchBadgerCore.stores.AppState;
 
 const boxSource = {
   beginDrag(props) {
@@ -34,17 +36,36 @@ export default class APIForecast extends Component {
   constructor(props) {
     super(props);
 
+    const date = new Date();
+    this.currentDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
+
+    this.forecastUpdated = () => {
+      const currentForecast = AppState.getStateKey('currentForecast');
+
+      if (currentForecast && currentForecast.forecast.id === this.props.entity.id) {
+        this._updateForecast(currentForecast);
+      }
+    };
+
     this.state = {
       expanded: false,
       data: [],
       startDate: null,
       endDate: null,
-      selectedRange: null
+      selectedRange: null,
+      incomeSummary: [],
+      selectedDate: this.currentDate
     };
   }
 
   componentDidMount() {
-    this._fetchForecastData();
+    AppState.addChangeListener(this.forecastUpdated);
+
+    this._fetchForecastData().then(() => this._updateForecast());
+  }
+
+  componentWillUnmount() {
+    AppState.removeChangeListener(this.forecastUpdated);
   }
 
   remove() {
@@ -85,8 +106,19 @@ export default class APIForecast extends Component {
     })
   }
 
+  _updateForecast(forecast = null) {
+    const selectedDate = (forecast && forecast.selectedDate) ? forecast.selectedDate : this.currentDate;
+    this.setState({
+      incomeSummary: ForecastDataParser.calculateMonthlyIncome(
+        this.props.entity.api.plans,
+        selectedDate
+      ),
+      selectedDate: selectedDate
+    });
+  }
+
   _fetchForecastData() {
-    ForecastService.get(this.props.entity.api.id).then((response) => {
+    return ForecastService.get(this.props.entity.api.id).then((response) => {
       const data = response.body;
 
       if (data.length) {
@@ -115,11 +147,11 @@ export default class APIForecast extends Component {
       expanded: this.state.expanded
     });
     const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
-    
+
     if (isDragging && hideSourceOnDrag) {
       return null;
     }
-    
+
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
@@ -166,7 +198,9 @@ export default class APIForecast extends Component {
                 dateRange={this.state.selectedRange}
                 className="api-forecast__details"
                 data={this.state.data}
-                entity={this.props.entity}/>
+                entity={this.props.entity}
+                selectedDate={this.state.selectedDate}
+                incomeSummary={this.state.incomeSummary}/>
             )
           }
         </div>

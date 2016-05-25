@@ -3,6 +3,7 @@ import './Panel.scss';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
+import {findDOMNode} from 'react-dom';
 
 export default (ComposedComponent) => {
   return class Panel extends Component {
@@ -41,12 +42,13 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       setTimeout(() => {
-        const container = this.props.container();
-        const containerBBox = container.getBoundingClientRect();
+        this.canvas = this.props.canvas();
+        this.container = this.props.container();
+        this.containerBBox = this.container.getBoundingClientRect();
         let panelDefaultHeight = '50vh';
 
         if (lockr.get(this.storageKey)) {
-          panelDefaultHeight = `${parseInt(lockr.get(this.storageKey) / 100 * containerBBox.height)}px`;
+          panelDefaultHeight = `${parseInt(lockr.get(this.storageKey) / 100 * this.containerBBox.height)}px`;
         }
 
         this.setState({height: panelDefaultHeight});
@@ -57,13 +59,15 @@ export default (ComposedComponent) => {
       this.appStateUpdate();
     }
 
-    componentDidUpdate() {
-      const canvas = this.props.canvas();
+    componentDidUpdate(prevProps, prevState) {
+      if (this.state.opened === prevState.opened) {
+        return;
+      }
 
       if (this.state.opened) {
-        canvas.setState({disabled: true});
+        this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
       } else {
-        canvas.setState({disabled: false});
+        this.canvas.setState({canvasHeight: null});
       }
     }
 

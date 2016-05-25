@@ -14,7 +14,7 @@ export default class Canvas extends Component {
 
     this.state = {
       lastUpdate: new Date(),
-      disabled: false
+      canvasHeight: null
     };
 
     this.connectionStoreChanged = () => {
@@ -184,15 +184,12 @@ export default class Canvas extends Component {
   }
 
   render() {
-    const canvasClass = classNames({
-      canvas: true,
-      'canvas--disabled': this.state.disabled
-    });
+    const {canvasHeight} = this.state;
 
     return (
-      <section className={canvasClass} onClick={() => toggleHighlight(null)}>
-        <div className="canvas__wrapper">
-          <div className="canvas__legend">
+      <section className="canvas" onClick={() => toggleHighlight(null)}>
+        <div style={{height: canvasHeight}} className="canvas__wrapper">
+          <div style={{height: canvasHeight}} className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>
             <div className="canvas__label canvas__label--right">Consumers</div>
           </div>
@@ -200,6 +197,7 @@ export default class Canvas extends Component {
           <QuadrantContainer appState={this.props.appState}
                              plugins={this.props.plugins}
                              paper={this.paper}
+                             style={{'min-height': canvasHeight}}
                              className="canvas__container" id="canvas"/>
         </div>
       </section>

@@ -23,9 +23,10 @@ export default class DateSlider extends Component {
   getMarks() {
     let marks = {};
 
-    for (var i = 1; i < 25; i++) {
+    for (var i = 1; i < 13; i++) {
       marks[i] = moment.months(i - 1)[0];
     }
+    console.log(marks);
     return marks;
   }
 
@@ -39,7 +40,7 @@ export default class DateSlider extends Component {
         <DateSliderMark key={index}
                         position={index}
                         month={this.state.marks[mark]}
-                        count={24} />
+                        count={12} />
       )
     })
   }
@@ -49,7 +50,7 @@ export default class DateSlider extends Component {
     return (
       <div className="date-slider">
         <div className="date-slider__slider">
-          <Slider range defaultValue={[5, 12]} marks={this.state.marks} min={1} max={24} tipFormatter={this.formatToolTip.bind(this)}/>
+          <Slider range defaultValue={[5, 12]} marks={this.state.marks} min={1} max={12} tipFormatter={this.formatToolTip.bind(this)}/>
           <div className="date-slider__marks">
             {this.renderSliderMarks()}
           </div>

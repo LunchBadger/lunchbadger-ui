@@ -26,6 +26,7 @@ export default class ForecastDetails extends Component {
                             data={this.props.data}/>
         <ForecastingChart forecast={this.props.entity}
                           dateRange={this.props.dateRange}
+                          selectedDate={this.props.selectedDate}
                           data={this.props.data}/>
         {
           this.props.incomeSummary.length > 0 && (

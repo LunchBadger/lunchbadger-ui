@@ -10,13 +10,16 @@ export default class ForecastingChart extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     forecast: PropTypes.object.isRequired,
-    dateRange: PropTypes.object
+    dateRange: PropTypes.object,
+    selectedDate: PropTypes.string
   };
 
   constructor(props) {
     super(props);
 
     this.color = d3.scale.ordinal().range(['#fad35c', '#f29332', '#8dad45', '#a8c667', '#ccdea8']);
+
+    this.selectedDate = this.props.selectedDate;
 
     this.customOffset = (data) => {
       var j = -1,
@@ -34,14 +37,18 @@ export default class ForecastingChart extends Component {
   componentDidMount() {
     this._configureChart();
     this._renderChart(this.props.data);
+    this._selectLastAvailableMonth(this.props.data);
   }
 
   componentWillReceiveProps(nextProps) {
+    this.selectedDate = nextProps.selectedDate;
+
     if (nextProps.dateRange && this.props.dateRange !== nextProps.dateRange) {
       const filteredData = this._filterData(nextProps.dateRange, nextProps.data);
 
       this._configureChart();
       this._renderChart(filteredData);
+      this._selectLastAvailableMonth(filteredData);
     }
   }
 
@@ -213,6 +220,11 @@ export default class ForecastingChart extends Component {
         return this.y(d.y0) - this.y(Math.abs(d.y) + d.y0);
       })
       .attr('width', this.x.rangeBand() - 4)
+      .attr('class', (d) => {
+        const date = d.x;
+
+        return `date-${date.getMonth() + 1}-${date.getFullYear()}`;
+      })
       .style('fill', (d) => {
           return this.color(d.name);
         }
@@ -237,13 +249,7 @@ export default class ForecastingChart extends Component {
         const timestamp = d.x.getTime() + '';
 
         if (timestamp === this.barSelector.attr('selected-date')) {
-          setForecast(this.props.forecast, null);
-
-          return (
-            this.barSelector
-              .style('opacity', 0)
-              .attr('selected-date', '')
-          );
+          return;
         }
 
         setForecast(this.props.forecast, d.x);
@@ -274,6 +280,46 @@ export default class ForecastingChart extends Component {
         return moment(planDetails.date).isBetween(range.startDate, range.endDate, 'month', '[]');
       });
     });
+  }
+
+  _filterAvailableMonths(data) {
+    return data.reduce((months, plan) => {
+      let availableMonths;
+
+      if (plan instanceof Array) {
+        availableMonths = plan.map((planDetails) => {
+          const {date} = planDetails;
+
+          return `${date.getMonth() + 1}/${date.getFullYear()}`;
+        });
+      } else {
+        availableMonths = Object.keys(plan).map((planDetails) => {
+          const {date} = plan[planDetails];
+
+          return `${date.getMonth() + 1}/${date.getFullYear()}`;
+        });
+      }
+
+      return [].concat(months, availableMonths);
+    }, []);
+  }
+
+  _selectLastAvailableMonth(data) {
+    const months = this._filterAvailableMonths(data);
+
+    if (months.length) {
+      const latestDate = _.uniq(months).slice(-1)[0].replace('/', '-');
+      let currentBar;
+
+      if (moment(latestDate, 'M/YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+        currentBar = d3.select(`.date-${latestDate}`);
+      } else {
+        currentBar = d3.select(`.date-${this.selectedDate.replace('/', '-')}`);
+      }
+
+      currentBar && currentBar.on('click').apply(this, currentBar.data());
+      this.selectedDate = latestDate;
+    }
   }
 
   render() {

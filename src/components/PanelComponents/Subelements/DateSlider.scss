@@ -1,7 +1,12 @@
 .api-forecast__date-slider {
-  height: 20px;
+  height: 70px;
   margin: 1em 0 2em;
   padding: 0 1em;
+  width: 80%;
+  overflow-x: auto;
+  .date-slider {
+    margin-top: 20px;
+  }
   .rc-slider {
     border: 1px solid #999;
     border-bottom: none;

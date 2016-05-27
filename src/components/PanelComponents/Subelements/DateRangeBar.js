@@ -6,9 +6,16 @@ import './DateRangeBar.scss';
 
 export default class DateRangeBar extends Component {
   static propTypes = {
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-    onRangeUpdate: PropTypes.func
+    startDate: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object
+    ]),
+    endDate: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object
+    ]),
+    onRangeUpdate: PropTypes.func,
+    onInit: PropTypes.func
   };
 
   constructor(props) {
@@ -24,6 +31,20 @@ export default class DateRangeBar extends Component {
       minEndDate: props.startDate ? moment(props.startDate, format) : moment(),
       maxEndDate: props.endDate ? moment(props.endDate, format).endOf('month') : moment()
     }
+  }
+
+  componentDidMount() {
+    if (typeof this.props.onInit === 'function') {
+      this.props.onInit(this.state);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      startDate: nextProps.startDate,
+      endDate: nextProps.endDate,
+      maxEndDate: nextProps.endDate ? moment(nextProps.endDate, 'M/YYYY').endOf('month') : moment()
+    });
   }
 
   handleChangeStart(date) {

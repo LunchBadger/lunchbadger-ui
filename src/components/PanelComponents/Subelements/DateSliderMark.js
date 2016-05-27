@@ -17,11 +17,11 @@ export default class DateSliderMark extends Component {
   }
 
   getWidth() {
-    return 100 / this.props.count;
+    return 100 / (this.props.count - 1) * 0.9;
   }
 
   getPosition() {
-    return 100 / (this.props.count - 1) * this.props.position;
+    return (this.props.position - 1) / (this.props.count - 1) * 100;
   }
 
   toggleSelected() {
@@ -36,7 +36,8 @@ export default class DateSliderMark extends Component {
     });
     const style = {
       width: this.getWidth() + '%',
-      left: this.getPosition() + '%'
+      left: this.getPosition() + '%',
+      marginLeft: -this.getWidth() / 2 + '%'
     };
     return (
       <div onClick={this.toggleSelected.bind(this)}

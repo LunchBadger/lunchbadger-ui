@@ -139,7 +139,11 @@ export default class APIForecast extends Component {
   }
 
   _handleRangeUpdate(range) {
-    this.setState({selectedRange: range});
+    this.setState({
+      selectedRange: range,
+      startDate: range.startDate,
+      endDate: range.endDate
+    });
   }
 
   render() {
@@ -157,7 +161,8 @@ export default class APIForecast extends Component {
         <div className="api-forecast__header">
           {
             !!this.state.startDate && (
-              <DateRangeBar onRangeUpdate={this._handleRangeUpdate.bind(this)}
+              <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
+                            onRangeUpdate={this._handleRangeUpdate.bind(this)}
                             startDate={this.state.startDate}
                             endDate={this.state.endDate} />
             )
@@ -178,7 +183,14 @@ export default class APIForecast extends Component {
         <div className="api-forecast__content">
           <div className="expanded-only">
             <div className="api-forecast__date-slider">
-              <DateSlider parent={this.props.entity}/>
+              {
+                !!this.state.selectedRange && (
+                  <DateSlider parent={this.props.entity}
+                              range={this.state.selectedRange}
+                              onRangeUpdate={this._handleRangeUpdate.bind(this)}
+                              selectedDate={this.state.selectedDate}/>
+                )
+              }
             </div>
             <ul className="api-forecast__plans">
               {this.renderPlans()}

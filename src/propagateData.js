@@ -1,3 +1,4 @@
+/*eslint no-console:0 */
 import {notify} from 'react-notify-toast';
 
 console.info('Pre-fetching projects data...');

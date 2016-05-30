@@ -1,3 +1,4 @@
+/*eslint no-console:0 */
 // entry for app...
 import React from 'react';
 import ReactDOM from 'react-dom';

@@ -76,7 +76,9 @@ export default class ForecastingChart extends Component {
       .scale(this.x)
       .orient('bottom')
       .tickSize(0, 0)
-      .tickFormat(d3.time.format('%m'));
+      .tickFormat((d) => {
+        return moment(d).format('MMM')[0];
+      });
 
     this.yAxis = d3.svg.axis()
       .scale(this.y)
@@ -102,6 +104,9 @@ export default class ForecastingChart extends Component {
 
     this.chartContainer.append('div')
       .attr('class', 'chart__x-axis');
+
+    this.chartContainer.append('div')
+      .attr('class', 'chart__x-axis chart__x-axis--over');
 
     // TODO: this line should be calculated depending on the Y values
     // draw line on 0 for y

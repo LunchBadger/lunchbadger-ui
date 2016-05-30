@@ -5,8 +5,6 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import DateSliderMark from './DateSliderMark';
 
-
-
 export default class DateSlider extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
@@ -39,7 +37,6 @@ export default class DateSlider extends Component {
   }
 
   getRange(props) {
-    console.log(props);
     if (props.range) {
       const startYear = +props.range.startDate.format('YYYY');
       const endYear = +props.range.endDate.format('YYYY');
@@ -98,9 +95,7 @@ export default class DateSlider extends Component {
         }));
       }
     });
-    console.log(this.state);
   }
-
 
   render() {
     return (

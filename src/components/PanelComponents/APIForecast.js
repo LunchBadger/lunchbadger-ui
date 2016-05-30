@@ -1,3 +1,4 @@
+/*eslint no-console:0 */
 import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
@@ -11,7 +12,6 @@ import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
-
 import 'rc-slider/assets/index.css';
 
 const AppState = LunchBadgerCore.stores.AppState;

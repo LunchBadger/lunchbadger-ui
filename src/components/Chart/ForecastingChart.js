@@ -41,14 +41,19 @@ export default class ForecastingChart extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let filteredData = nextProps.data;
     this.selectedDate = nextProps.selectedDate;
 
     if (nextProps.dateRange && this.props.dateRange !== nextProps.dateRange) {
-      const filteredData = ForecastDataParser.filterData(nextProps.dateRange, nextProps.data);
+      filteredData = ForecastDataParser.filterData(nextProps.dateRange, nextProps.data);
 
       this._configureChart();
       this._renderChart(filteredData);
       this._selectLastAvailableMonth(filteredData);
+    }
+
+    if (nextProps.selectedDate !== this.props.selectedDate) {
+      this._selectMonth(nextProps.selectedDate, filteredData);
     }
   }
 
@@ -246,17 +251,17 @@ export default class ForecastingChart extends Component {
           .style('opacity', 0);
       })
       .on('click', (d) => {
-        const timestamp = d.x.getTime() + '';
+        const date = d.x;
+        const timestamp = date.getTime() + '';
 
-        if (timestamp === this.barSelector.attr('selected-date')) {
-          return;
+        if (timestamp !== this.barSelector.attr('selected-date')
+          && this.selectedDate !== `${date.getMonth() + 1}/${date.getFullYear()}`) {
+          setForecast(this.props.forecast, date);
         }
-
-        setForecast(this.props.forecast, d.x);
 
         this.barSelector
           .style('opacity', 1)
-          .style('left', `${this.x(d.x) + this.margin.left + 2}px`)
+          .style('left', `${this.x(date) + this.margin.left + 2}px`)
           .style('height', `${this.height + 20}px`)
           .style('width', `${this.x.rangeBand() - 4}px`)
           .attr('selected-date', timestamp);
@@ -311,6 +316,16 @@ export default class ForecastingChart extends Component {
 
       currentBar && currentBar.on('click').apply(this, currentBar.data());
       this.selectedDate = latestDate;
+    }
+  }
+
+  _selectMonth(month, data) {
+    const months = this._filterAvailableMonths(data);
+
+    if (months.length && months.indexOf(month) > -1) {
+      const barElement = d3.select(`.date-${month.replace('/', '-')}`);
+
+      barElement && barElement.on('click').apply(this, barElement.data());
     }
   }
 

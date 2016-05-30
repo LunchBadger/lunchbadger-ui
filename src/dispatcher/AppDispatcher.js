@@ -1,3 +1,4 @@
+/*eslint no-console:0 */
 import {Dispatcher} from 'flux';
 
 const flux = new Dispatcher();

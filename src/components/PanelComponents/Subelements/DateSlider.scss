@@ -44,7 +44,6 @@
   height: 50px;
   top: -20px;
   padding-top: 20px;
-  left: -8px;
 }
 .date-slider__mark {
   position: absolute;
@@ -57,4 +56,17 @@
     border: 1px solid #8ddfee;
     background: rgba(141, 223, 238, 0.25);
   }
+}
+.date-slider__year {
+  display: block;
+  text-align: right;
+  border-left: 1px solid #ccc;
+  position: absolute;
+  padding-top: 20px;
+  top: 20px;
+  width: 100%;
+}
+.fa.date-slider__mark-current {
+  display: block;
+  color: #ff8000;
 }

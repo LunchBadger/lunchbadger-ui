@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral';
 import _ from 'lodash';
+import ForecastDataParser from 'services/ForecastDataParser';
 
 export default class ForecastDetailsTop extends Component {
   static propTypes = {
@@ -8,6 +9,7 @@ export default class ForecastDetailsTop extends Component {
       PropTypes.string,
       PropTypes.object
     ]),
+    dateRange: PropTypes.object,
     data: PropTypes.array,
     incomeSummary: PropTypes.array
   };
@@ -21,15 +23,25 @@ export default class ForecastDetailsTop extends Component {
   }
 
   componentDidMount() {
-    this._onUpdate(this.props.selectedDate, this.props.data, this.props.incomeSummary);
+    this._onUpdate(this.props.selectedDate, this.props.data, this.props.dateRange, this.props.incomeSummary);
   }
 
   componentWillReceiveProps(nextProps) {
-    this._onUpdate(nextProps.selectedDate, nextProps.data, nextProps.incomeSummary);
+    this._onUpdate(nextProps.selectedDate, nextProps.data, nextProps.dateRange, nextProps.incomeSummary);
   }
 
-  _onUpdate(selectedDate, data, incomeSummary) {
-    const summary = this._recalculateSummary(selectedDate, data);
+  _onUpdate(selectedDate, data, dateRange, incomeSummary) {
+    let filteredData;
+
+    if (dateRange) {
+      filteredData = ForecastDataParser.filterData(dateRange, data);
+    } else {
+      filteredData = data;
+    }
+
+    debugger;
+
+    const summary = this._recalculateSummary(selectedDate, filteredData);
 
     summary['avgPerUser'] = this._calculateSummaries(incomeSummary);
 

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 
 export const dataKeys = {
   churn: '-',
@@ -119,6 +120,26 @@ class ForecastDataParser {
     });
 
     return income;
+  }
+
+  filterData(range, data) {
+    const filteredPlans = data.map((plan) => {
+      return _.filter(plan, (planDetails) => {
+        return moment(planDetails.date).isBetween(range.startDate, range.endDate, 'month', '[]');
+      });
+    });
+
+    return filteredPlans.map((plan) => {
+      const planDetails = {};
+
+      plan.forEach((planProperties) => {
+        const dateKey = `${planProperties.date.getMonth() + 1}/${planProperties.date.getFullYear()}`;
+
+        planDetails[dateKey] = planProperties;
+      });
+
+      return planDetails;
+    });
   }
 }
 

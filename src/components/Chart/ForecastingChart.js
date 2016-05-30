@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
-import {dataKeys} from 'services/ForecastDataParser';
+import ForecastDataParser, {dataKeys} from 'services/ForecastDataParser';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -44,7 +44,7 @@ export default class ForecastingChart extends Component {
     this.selectedDate = nextProps.selectedDate;
 
     if (nextProps.dateRange && this.props.dateRange !== nextProps.dateRange) {
-      const filteredData = this._filterData(nextProps.dateRange, nextProps.data);
+      const filteredData = ForecastDataParser.filterData(nextProps.dateRange, nextProps.data);
 
       this._configureChart();
       this._renderChart(filteredData);
@@ -272,14 +272,6 @@ export default class ForecastingChart extends Component {
     this.svg.append('g')
       .attr('class', 'axis axis--y')
       .call(this.yAxis);
-  }
-
-  _filterData(range, data) {
-    return data.map((plan) => {
-      return _.filter(plan, (planDetails) => {
-        return moment(planDetails.date).isBetween(range.startDate, range.endDate, 'month', '[]');
-      });
-    });
   }
 
   _filterAvailableMonths(data) {

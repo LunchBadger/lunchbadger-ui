@@ -38,9 +38,7 @@ export default class ForecastDetailsTop extends Component {
     } else {
       filteredData = data;
     }
-
-    debugger;
-
+    
     const summary = this._recalculateSummary(selectedDate, filteredData);
 
     summary['avgPerUser'] = this._calculateSummaries(incomeSummary);

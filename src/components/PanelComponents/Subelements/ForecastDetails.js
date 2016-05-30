@@ -23,6 +23,7 @@ export default class ForecastDetails extends Component {
       <div className={this.props.className || ''}>
         <ForecastDetailsTop incomeSummary={this.props.incomeSummary}
                             selectedDate={this.props.selectedDate}
+                            dateRange={this.props.dateRange}
                             data={this.props.data}/>
         <ForecastingChart forecast={this.props.entity}
                           dateRange={this.props.dateRange}

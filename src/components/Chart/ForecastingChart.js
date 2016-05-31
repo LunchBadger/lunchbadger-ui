@@ -40,20 +40,21 @@ export default class ForecastingChart extends Component {
     this._selectLastAvailableMonth(this.props.data);
   }
 
-  componentWillReceiveProps(nextProps) {
-    let filteredData = nextProps.data;
-    this.selectedDate = nextProps.selectedDate;
+  componentDidUpdate(prevProps) {
+    let filteredData = this.props.data;
+    this.selectedDate = this.props.selectedDate;
 
-    if (nextProps.dateRange && this.props.dateRange !== nextProps.dateRange) {
-      filteredData = ForecastDataParser.filterData(nextProps.dateRange, nextProps.data);
-
-      this._configureChart();
-      this._renderChart(filteredData);
-      this._selectLastAvailableMonth(filteredData);
+    if (this.props.dateRange) {
+      filteredData = ForecastDataParser.filterData(this.props.dateRange, this.props.data);
     }
 
-    if (nextProps.selectedDate !== this.props.selectedDate) {
-      this._selectMonth(nextProps.selectedDate, filteredData);
+    this._configureChart();
+    this._renderChart(filteredData);
+
+    if (prevProps.selectedDate !== this.props.selectedDate) {
+      this._selectMonth(this.props.selectedDate, filteredData);
+    } else {
+      this._selectLastAvailableMonth(filteredData);
     }
   }
 
@@ -64,7 +65,7 @@ export default class ForecastingChart extends Component {
 
     const chartBounds = this.chart.getBoundingClientRect();
 
-    this.margin = {top: 0, right: 0, bottom: 30, left: 50};
+    this.margin = {top: 10, right: 0, bottom: 30, left: 50};
     this.width = chartBounds.width - this.margin.left - this.margin.right;
     this.height = 240 - this.margin.top - this.margin.bottom;
 
@@ -267,7 +268,7 @@ export default class ForecastingChart extends Component {
         this.barSelector
           .style('opacity', 1)
           .style('left', `${this.x(date) + this.margin.left + 2}px`)
-          .style('height', `${this.height + 20}px`)
+          .style('height', `${this.height + 20 + this.margin.top}px`)
           .style('width', `${this.x.rangeBand() - 4}px`)
           .attr('selected-date', timestamp);
       });

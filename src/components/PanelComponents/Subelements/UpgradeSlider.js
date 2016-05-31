@@ -38,8 +38,10 @@ export default class UpgradeSlider extends Component {
     return (
       <div className="upgrade-slider">
         <div className="upgrade-slider__legend">
-          <span  className="upgrade-slider__value">{this.props.fromPlan.name}</span>
-          <span  className="upgrade-slider__value">{this.props.toPlan.name}</span>
+          <div class="upgrade-slider__legend__info">
+            {this.props.fromPlan.name}
+            {this.props.toPlan.name}
+          </div>
         </div>
         <div className="upgrade-slider__slider">
           <Slider

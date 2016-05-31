@@ -53,7 +53,7 @@ export default class DateSliderMark extends Component {
     } else if (this.props.month === 13) {
       return (<span className="date-slider__year">{+moment().format('YYYY') + 1}</span>);
     }
-}
+  }
 
   render() {
     const elementClass = classNames({
@@ -63,14 +63,20 @@ export default class DateSliderMark extends Component {
       width: this.getWidth() + '%',
       left: this.getPosition() + '%'
     };
+    const barClass = classNames({
+      'date-slider__mark__bar-fragment': true,
+      'date-slider__mark__bar-fragment--after': this.formatMonth(this.props.month).isAfter(moment(), 'month')
+    });
+
     return (
       <div onClick={this.toggleSelected.bind(this)}
            className={`date-slider__mark ${elementClass}`}
            style={style}>
+        <div className={barClass}></div>
         {this.props.monthName}
         {this.renderYear()}
         {moment().format('M') == this.props.month &&
-          (<i className="fa fa-caret-up date-slider__mark-current"/>)
+        (<i className="fa fa-caret-up date-slider__mark-current"/>)
         }
       </div>
     )

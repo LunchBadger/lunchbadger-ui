@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import './Canvas.scss';
-import classNames from 'classnames';
 import addConnection from 'actions/Connection/add';
 import removeConnection from 'actions/Connection/remove';
 import moveConnection from 'actions/Connection/move';

@@ -3,7 +3,6 @@ import './Panel.scss';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
-import {findDOMNode} from 'react-dom';
 
 export default (ComposedComponent) => {
   return class Panel extends Component {

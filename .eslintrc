@@ -15,6 +15,7 @@
     "LunchBadgerCompose": true,
     "LunchBadgerManage": true,
     "LunchBadgerMonetize": true,
+    "LunchBadgerOptimize": true,
     "d3": true,
     "jsPlumb": true,
     "console": true

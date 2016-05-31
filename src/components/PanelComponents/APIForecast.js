@@ -73,7 +73,7 @@ export default class APIForecast extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({data: ForecastDataParser.prepareData(nextProps.entity.toJSON())}, () => {
-      this._updateForecast();
+      this._updateForecast(AppState.getStateKey('currentForecast'));
     });
   }
 

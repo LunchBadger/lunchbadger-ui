@@ -20,6 +20,7 @@ export default class ForecastingChart extends Component {
     this.color = d3.scale.ordinal().range(['#fad35c', '#f29332', '#8dad45', '#a8c667', '#ccdea8']);
 
     this.selectedDate = this.props.selectedDate;
+    this.currentDate = moment();
 
     this.customOffset = (data) => {
       var j = -1,
@@ -106,17 +107,17 @@ export default class ForecastingChart extends Component {
     this.chartContainer.append('div')
       .attr('class', 'chart__x-axis');
 
-    this.chartContainer.append('div')
+    this.forecastAxis = this.chartContainer.append('div')
       .attr('class', 'chart__x-axis chart__x-axis--over');
 
     // TODO: this line should be calculated depending on the Y values
     // draw line on 0 for y
-    this.zeroLine = this.svg.append('line')
-      .style('stroke', 'black')
-      .attr('x1', 0)
-      .attr('y1', this.y(0.17))
-      .attr('x2', 500)
-      .attr('y2', this.y(0.17));
+    // this.zeroLine = this.svg.append('line')
+    //   .style('stroke', 'black')
+    //   .attr('x1', 0)
+    //   .attr('y1', this.y(0.17))
+    //   .attr('x2', 500)
+    //   .attr('y2', this.y(0.17));
   }
 
   _prepareChartData(plans) {
@@ -208,6 +209,8 @@ export default class ForecastingChart extends Component {
   }
 
   _drawBars(data, layers) {
+    let forecastAxisPositioned = false;
+
     const layer = this.svg.selectAll('.layer')
       .data(layers)
       .enter().append('g')
@@ -222,6 +225,13 @@ export default class ForecastingChart extends Component {
       })
       .enter().append('rect')
       .attr('x', (d) => {
+
+        // position forecast x-axis properly
+        if (!forecastAxisPositioned && moment(d.x).isAfter(this.currentDate, 'month')) {
+          this.forecastAxis.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + 2}px`);
+          forecastAxisPositioned = true;
+        }
+
         return this.x(d.x) + 2;
       })
       .attr('y', (d) => {
@@ -233,8 +243,10 @@ export default class ForecastingChart extends Component {
       .attr('width', this.x.rangeBand() - 4)
       .attr('class', (d) => {
         const date = d.x;
+        const currentDateClass = `date-${date.getMonth() + 1}-${date.getFullYear()}`;
+        const forecastedClass = moment(date).isAfter(this.currentDate, 'month') ? 'chart__bar-forecasted' : '';
 
-        return `date-${date.getMonth() + 1}-${date.getFullYear()}`;
+        return currentDateClass + ' ' + forecastedClass;
       })
       .style('fill', (d) => {
           return this.color(d.name);
@@ -312,10 +324,13 @@ export default class ForecastingChart extends Component {
 
     if (months.length) {
       const latestDate = _.uniq(months).slice(-1)[0].replace('/', '-');
+      const firstDate = _.uniq(months)[0].replace('/', '-');
       let currentBar;
 
-      if (moment(latestDate, 'M/YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+      if (moment(latestDate, 'M-YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
         currentBar = d3.select(`.date-${latestDate}`);
+      } else if(moment(firstDate, 'M-YYYY').isAfter(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+        currentBar = d3.select(`.date-${firstDate}`);
       } else {
         currentBar = d3.select(`.date-${this.selectedDate.replace('/', '-')}`);
       }

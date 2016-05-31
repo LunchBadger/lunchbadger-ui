@@ -11,9 +11,9 @@ const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     addUpgrade(component.props.parent, {
-      name: `Upgrade ${item.entity.name} to ${component.props.entity.name}`,
-      value: 5425,
-      percentage: 50
+      fromPlan: item.entity,
+      toPlan: component.props.entity,
+      value: 10
     });
   }
 };
@@ -25,6 +25,7 @@ export default class BasePlan extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     parent: PropTypes.object.isRequired,
+    date: PropTypes.string.isRequired,
     currentPlan: PropTypes.bool,
     setCurrent: PropTypes.func.isRequired
   };

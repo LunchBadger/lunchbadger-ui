@@ -2,16 +2,35 @@ import React, {Component, PropTypes} from 'react';
 import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import UpgradePlan from 'actions/APIForecast/upgradePlan';
+import _ from 'lodash';
+
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    toPlan: PropTypes.object.isRequired,
+    fromPlan: PropTypes.object.isRequired,
     value: PropTypes.number.isRequired,
-    percentage: PropTypes.number.isRequired
+    forecast: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
+  }
+
+  findPlanDetailsByDate(planDetails, date) {
+    return _.find(planDetails, function (details) {
+      return details.date === date;
+    });
+  }
+
+  _handleOnChange(e) {
+    UpgradePlan(this.props.forecast, {
+      toPlan: this.findPlanDetailsByDate(this.props.toPlan.details, this.props.date),
+      fromPlan: this.findPlanDetailsByDate(this.props.fromPlan.details, this.props.date),
+      value: e
+    });
   }
 
   render() {
@@ -19,11 +38,17 @@ export default class UpgradeSlider extends Component {
     return (
       <div className="upgrade-slider">
         <div className="upgrade-slider__legend">
-          <span  className="upgrade-slider__value">{this.props.value}</span>
-          <span  className="upgrade-slider__value">{this.props.name}</span>
+          <div class="upgrade-slider__legend__info">
+            {this.props.fromPlan.name}
+            {this.props.toPlan.name}
+          </div>
         </div>
         <div className="upgrade-slider__slider">
-          <Slider defaultValue={this.props.percentage} min={0} max={100}/>
+          <Slider
+            defaultValue={this.props.value}
+            onChange={this._handleOnChange.bind(this)}
+            min={0}
+            max={100}/>
         </div>
       </div>
     )

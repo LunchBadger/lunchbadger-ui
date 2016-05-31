@@ -24,30 +24,25 @@ const boxTarget = {
 export default class BasePlan extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    parent: PropTypes.object.isRequired
+    parent: PropTypes.object.isRequired,
+    currentPlan: PropTypes.bool,
+    setCurrent: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      hasDropped: false,
-      expanded: false
+      hasDropped: false
     }
   }
 
-  toggleExpanded() {
-    this.setState({
-      expanded: !this.state.expanded
-    })
-  }
-
   addTier(event) {
-    // addTier(this.props.entity, {
-    //   name: 'Tier x',
-    //   totals: 'sth',
-    //   charge: 0.0
-    // });
+    addTier(this.props.entity, {
+       name: 'Tier x',
+       totals: 'sth',
+       charge: 0.0
+     });
 
     event.stopPropagation();
   }
@@ -64,13 +59,13 @@ export default class BasePlan extends Component {
 
   render() {
     const elementClass = classNames({
-      expanded: this.state.expanded
+      expanded: this.props.currentPlan
     });
     const {connectDropTarget} = this.props;
 
     return connectDropTarget(
       <div className={`base-plan ${elementClass}`}
-           onClick={this.toggleExpanded.bind(this)}>
+           onClick={() => this.props.setCurrent()}>
         <PlanIcon entity={this.props.entity}/>
         <div className="base-plan__tiers">
           <table>

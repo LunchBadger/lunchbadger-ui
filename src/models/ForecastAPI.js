@@ -44,4 +44,8 @@ export default class ForecastAPI extends BaseModel {
   get plans() {
     return this._plans;
   }
+  
+  addPlan(plan) {
+    this._plans.push(plan);
+  }
 }

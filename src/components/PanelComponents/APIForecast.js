@@ -54,7 +54,8 @@ export default class APIForecast extends Component {
       endDate: null,
       selectedRange: null,
       incomeSummary: [],
-      selectedDate: this.currentDate
+      selectedDate: this.currentDate,
+      currentPlan: null
     };
   }
 
@@ -77,7 +78,19 @@ export default class APIForecast extends Component {
   }
 
   addPlan() {
-    //addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
+    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
+  }
+
+  setCurrentPlan(planId) {
+    if (this.state.currentPlan === planId) {
+      this.setState({
+        currentPlan: null
+      })
+    } else {
+      this.setState({
+        currentPlan: planId
+      })
+    }
   }
 
   renderPlans() {
@@ -87,7 +100,9 @@ export default class APIForecast extends Component {
           <span>{plan.name}</span>
           <BasePlan key={plan.id}
                     parent={this.props.entity}
-                    entity={plan}/>
+                    entity={plan}
+                    setCurrent={() => this.setCurrentPlan(plan.id)}
+                    currentPlan={this.state.currentPlan === plan.id}/>
         </li>
       )
     })

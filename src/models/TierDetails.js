@@ -2,7 +2,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class TierDetails extends BaseModel {
   static type = 'TierDetails';
-  
+
   _date = null;
   _conditionFrom = null;
   _conditionTo = null;
@@ -21,7 +21,6 @@ export default class TierDetails extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
       date: this.date,
       conditionFrom: this.conditionFrom,
       conditionTo: this.conditionTo,

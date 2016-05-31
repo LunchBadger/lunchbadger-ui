@@ -228,7 +228,6 @@ export default class ForecastingChart extends Component {
 
         // position forecast x-axis properly
         if (!forecastAxisPositioned && moment(d.x).isAfter(this.currentDate, 'month')) {
-          console.log(d.x);
           this.forecastAxis.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + 2}px`);
           forecastAxisPositioned = true;
         }
@@ -325,10 +324,13 @@ export default class ForecastingChart extends Component {
 
     if (months.length) {
       const latestDate = _.uniq(months).slice(-1)[0].replace('/', '-');
+      const firstDate = _.uniq(months)[0].replace('/', '-');
       let currentBar;
 
-      if (moment(latestDate, 'M/YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+      if (moment(latestDate, 'M-YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
         currentBar = d3.select(`.date-${latestDate}`);
+      } else if(moment(firstDate, 'M-YYYY').isAfter(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+        currentBar = d3.select(`.date-${firstDate}`);
       } else {
         currentBar = d3.select(`.date-${this.selectedDate.replace('/', '-')}`);
       }

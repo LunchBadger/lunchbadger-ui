@@ -1,3 +1,5 @@
+import ForecastAPI from './ForecastAPI';
+
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class APIForecast extends BaseModel {
@@ -15,10 +17,9 @@ export default class APIForecast extends BaseModel {
    */
   _upgrades = [];
 
-  constructor(id, name, api, left, top) {
+  constructor(id, api, left, top) {
     super(id);
 
-    this.name = name;
     this.api = api;
     this.left = left;
     this.top = top;
@@ -29,7 +30,6 @@ export default class APIForecast extends BaseModel {
   toJSON() {
     return {
       id: this.id,
-      name: this.name,
       api: this.api.toJSON()
     }
   }
@@ -38,7 +38,19 @@ export default class APIForecast extends BaseModel {
    * @param api {ForecastAPI}
    */
   set api(api) {
-    this._api = api;
+    if (!api) {
+      this._api = ForecastAPI.create({});
+
+      return;
+    }
+
+    if (api.constructor.type === ForecastAPI.type) {
+      this._api = api;
+
+      return;
+    }
+
+    this._api = ForecastAPI.create(api);
   }
 
 	/**

@@ -6,12 +6,14 @@ import './APIForecast.scss';
 import removeAPIForecast from 'actions/APIForecast/remove';
 import BasePlan from './Subelements/BasePlan';
 import addPlan from 'actions/APIForecast/addPlan';
+import updateForecast from 'actions/APIForecast/update';
 import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
+import {notify} from 'react-notify-toast';
 import 'rc-slider/assets/index.css';
 
 const AppState = LunchBadgerCore.stores.AppState;
@@ -62,11 +64,29 @@ export default class APIForecast extends Component {
   componentDidMount() {
     AppState.addChangeListener(this.forecastUpdated);
 
+    this.setState({data: ForecastDataParser.prepareData(this.props.entity.toJSON())}, () => {
+      this._updateForecast();
+    });
+
     this._fetchForecastData().then(() => this._updateForecast());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({data: ForecastDataParser.prepareData(nextProps.entity.toJSON())}, () => {
+      this._updateForecast();
+    });
   }
 
   componentWillUnmount() {
     AppState.removeChangeListener(this.forecastUpdated);
+  }
+
+  save() {
+    ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {
+      notify.show('Forecast has been successfully saved into local API', 'success');
+    }).catch(() => {
+      notify.show('There are problems with syncing data with local API, check console for more', 'error');
+    });
   }
 
   remove() {
@@ -137,7 +157,11 @@ export default class APIForecast extends Component {
       const data = response.body;
 
       if (data.length) {
-        this.setState({data: ForecastDataParser.prepareData(data[0])}, () => {
+        const forecastData = data[0];
+
+        updateForecast(this.props.entity.id, forecastData);
+
+        this.setState({data: ForecastDataParser.prepareData(forecastData)}, () => {
           if (this.state.data.length) {
             const firstSetDateKeys = Object.keys(this.state.data[0]);
 
@@ -179,10 +203,15 @@ export default class APIForecast extends Component {
               <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
                             onRangeUpdate={this._handleRangeUpdate.bind(this)}
                             startDate={this.state.startDate}
-                            endDate={this.state.endDate} />
+                            endDate={this.state.endDate}/>
             )
           }
           <ul className="api-forecast__header__nav">
+            <li>
+              <a onClick={this.save.bind(this)}>
+                <i className="fa fa-floppy-o"/>
+              </a>
+            </li>
             <li>
               <a onClick={this.remove.bind(this)}>
                 <i className="fa fa-remove"/>

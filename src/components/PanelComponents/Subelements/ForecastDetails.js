@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ForecastDetailsTop from './ForecastDetailsTop';
 import ForecastDetailsBottom from './ForecastDetailsBottom';
 import ForecastingChart from 'components/Chart/ForecastingChart';
+import createForecast from 'actions/APIForecast/createForecast';
 import './ForecastDetails.scss';
 
 export default class ForecastDetails extends Component {
@@ -16,6 +17,16 @@ export default class ForecastDetails extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.dateRange && this.props.dateRange
+      && nextProps.dateRange.endDate !== this.props.dateRange.endDate
+      && nextProps.entity.api.plans.length) {
+      if (!nextProps.entity.api.plans[0].checkPlanDetailsExistence(nextProps.dateRange.endDate)) {
+        createForecast(nextProps.entity, nextProps.dateRange.endDate);
+      }
+    }
   }
 
   render() {

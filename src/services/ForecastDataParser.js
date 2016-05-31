@@ -76,7 +76,7 @@ class ForecastDataParser {
 
         const {type, conditionFrom, conditionTo, value} = monthlyDetails;
         const totalCalls = parameters.callsPerSubscriber * netSubscribers;
-
+        
         switch (type) {
           case 'fixed':
             if (conditionFrom === 1 && conditionTo > 0) {

@@ -120,6 +120,7 @@ export default class APIForecast extends Component {
           <span>{plan.name}</span>
           <BasePlan key={plan.id}
                     parent={this.props.entity}
+                    date={this.state.selectedDate}
                     entity={plan}
                     setCurrent={() => this.setCurrentPlan(plan.id)}
                     currentPlan={this.state.currentPlan === plan.id}/>
@@ -134,8 +135,10 @@ export default class APIForecast extends Component {
         <li key={`upgrade_${index}`}>
           <UpgradeSlider key={upgrade.id}
                          value={upgrade.value}
-                         name={upgrade.name}
-                         percentage={upgrade.percentage}/>
+                         date={this.state.selectedDate}
+                         forecast={this.props.entity}
+                         toPlan={upgrade.toPlan}
+                         fromPlan={upgrade.fromPlan}/>
         </li>
       )
     })

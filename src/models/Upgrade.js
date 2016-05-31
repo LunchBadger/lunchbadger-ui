@@ -3,11 +3,11 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 export default class Upgrade extends BaseModel {
   static type = 'Upgrade';
 
-  constructor(id, name, value, percentage) {
+  constructor(id, fromPlan, toPlan, value) {
     super(id);
 
-    this.name = name;
+    this.fromPlan = fromPlan;
+    this.toPlan = toPlan;
     this.value = value;
-    this.percentage = percentage;
   }
 }

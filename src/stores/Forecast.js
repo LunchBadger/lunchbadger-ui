@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import Upgrade from 'models/Upgrade';
+import Tier from 'models/ForecastTier';
+import APIPlan from 'models/ForecastAPIPlan';
 
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Forecasts = [];
-const APIPlan = LunchBadgerMonetize.models.APIPlan;
-const Tier = LunchBadgerMonetize.models.Tier;
 
 class Forecast extends BaseStore {
   constructor() {
@@ -42,6 +42,10 @@ class Forecast extends BaseStore {
           break;
         case 'CreateForecast':
           this.createForecastForEachPlanInApi(action.forecast, action.details, action.tierDetails);
+          this.emitChange();
+          break;
+        case 'UpgradePlan':
+          this.upgradePlans(action.apiForecast, action.data.toPlan, action.data.fromPlan, action.data.value, action.data.date);
           this.emitChange();
           break;
       }
@@ -100,6 +104,27 @@ class Forecast extends BaseStore {
     _.remove(Forecasts, function (forecast) {
       return forecast.id === id;
     });
+  }
+
+  upgradePlans(forecast, fromPlan, toPlan, value) {
+    forecast.api.plans.forEach((plan) => {
+      const fromPlanDetails = _.find(plan.details, function (details) {
+        return details.id === fromPlan.id
+      })
+      if (fromPlanDetails) {
+        fromPlanDetails.subscribers.upgrades = value;
+      }
+
+
+      const toPlanDetails = _.find(plan.details, function (details) {
+        return details.id === fromPlan.id
+      })
+      if (toPlanDetails) {
+        toPlanDetails.subscribers.downgrades = value;
+      }
+
+    });
+    console.log(forecast.api.plans);
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

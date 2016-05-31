@@ -36,6 +36,10 @@ class Forecast extends BaseStore {
           //this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
           this.emitChange();
           break;
+        case 'CreateForecast':
+          this.createForecastForEachPlanInApi(action.forecast, action.details);
+          this.emitChange();
+          break;
       }
     });
   }
@@ -94,7 +98,13 @@ class Forecast extends BaseStore {
     });
   }
 
-
+  createForecastForEachPlanInApi(forecast, plansDetails) {
+    forecast.api.plans.forEach((plan) => {
+      if (plansDetails[plan.id]) {
+        plan.addPlanDetails(plansDetails[plan.id]);
+      }
+    });
+  }
 }
 
 export default new Forecast;

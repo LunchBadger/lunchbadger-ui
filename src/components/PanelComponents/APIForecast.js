@@ -61,7 +61,15 @@ export default class APIForecast extends Component {
   componentDidMount() {
     AppState.addChangeListener(this.forecastUpdated);
 
+    this.setState({data: ForecastDataParser.prepareData(this.props.entity.toJSON())}, () => {
+      this._updateForecast();
+    });
+
     this._fetchForecastData().then(() => this._updateForecast());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({data: ForecastDataParser.prepareData(nextProps.entity.toJSON())});
   }
 
   componentWillUnmount() {
@@ -164,7 +172,7 @@ export default class APIForecast extends Component {
               <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
                             onRangeUpdate={this._handleRangeUpdate.bind(this)}
                             startDate={this.state.startDate}
-                            endDate={this.state.endDate} />
+                            endDate={this.state.endDate}/>
             )
           }
           <ul className="api-forecast__header__nav">

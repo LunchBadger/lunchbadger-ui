@@ -18,4 +18,14 @@ export default class PlanSubscribers extends BaseModel {
     this.downgrades = Math.round(this.downgrades * scaleFactor);
     this.churn = Math.round(this.churn * scaleFactor);
   }
+  
+  toJSON() {
+    return {
+      existing: this.existing,
+      new: this.new,
+      upgrades: this.upgrades,
+      downgrades: this.downgrades,
+      churn: this.churn
+    }
+  }
 }

@@ -12,13 +12,13 @@ export default class PlanDetails extends BaseModel {
    * @type {PlanSubscribers}
    * @private
    */
-  _subscribers = [];
+  _subscribers = null;
 
   /**
    * @type {PlanParameters}
    * @private
    */
-  _parameters = [];
+  _parameters = null;
 
   constructor(id, date) {
     super(id);
@@ -28,10 +28,9 @@ export default class PlanDetails extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
       date: this.date,
-      subscribers: this.subscribers,
-      parameters: this.parameters
+      subscribers: this.subscribers.toJSON(),
+      parameters: this.parameters.toJSON()
     }
   }
 

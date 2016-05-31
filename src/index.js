@@ -7,6 +7,11 @@ import APIComponent from './components/CanvasElements/API';
 // models
 import API from './models/API';
 import APIPlan from './models/APIPlan';
+import PlanDetails from './models/PlanDetails';
+import PlanParameters from './models/PlanParameters';
+import PlanSubscribers from './models/PlanSubscribers';
+import Tier from './models/Tier';
+import TierDetails from './models/TierDetails';
 
 // actions
 import initializePublic from './actions/Stores/Public/initialize';
@@ -20,7 +25,12 @@ let LunchBadgerMonetize = {
   },
   models: {
     API: API,
-    APIPlan: APIPlan
+    APIPlan: APIPlan,
+    PlanDetails: PlanDetails,
+    PlanParameters: PlanParameters,
+    PlanSubscribers: PlanSubscribers,
+    Tier: Tier,
+    TierDetails: TierDetails
   },
   actions: {
     Stores: {

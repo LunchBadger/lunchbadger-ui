@@ -1,4 +1,5 @@
 const APIInterceptor = LunchBadgerCore.utils.APIInterceptor;
+const {bindParams} = LunchBadgerCore.utils.URLParams;
 
 class ForecastService {
   constructor() {
@@ -16,6 +17,14 @@ class ForecastService {
           }
         })
       }
+    });
+  }
+
+  save(forecastId, data) {
+    delete data.id;
+
+    return this._APIHandle.put(bindParams('Forecasts/:id', {id: forecastId}), {
+      body: data
     });
   }
 }

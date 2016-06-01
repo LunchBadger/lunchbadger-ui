@@ -2,6 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import BasePlan from './BasePlan';
 import UpgradeSlider from './UpgradeSlider';
 import addPlan from 'actions/APIForecast/addPlan';
+import './ForecastPlans.scss';
+import numeral from 'numeral';
 
 export default class ForecastPlans extends Component {
   static propTypes = {
@@ -36,15 +38,18 @@ export default class ForecastPlans extends Component {
   renderPlans() {
     return this.props.entity.api.plans.map((plan, index) => {
       return (
-        <li key={`plan_${index}`}>
-          <span>{plan.name}</span>
+        <div className="forecast-plans__plan" key={`plan_${index}`}>
+          <span className="forecast-plans__plan__name">{plan.name}</span>
           <BasePlan key={plan.id}
                     parent={this.props.entity}
                     date={this.props.selectedDate}
                     entity={plan}
                     setCurrent={() => this._setCurrentPlan(plan.id)}
                     currentPlan={this.state.currentPlan === plan.id}/>
-        </li>
+          <span className="forecast-plans__plan__users">
+            {numeral(plan.getUsersCountAtDate(this.props.selectedDate)).format('0,0')} users
+          </span>
+        </div>
       )
     })
   }
@@ -66,16 +71,17 @@ export default class ForecastPlans extends Component {
 
   render() {
     return (
-      <div>
+      <div className="forecast-plans">
         <div className="forecast-plans__list">
           {this.renderPlans()}
-
-          <div className="forecast-plans__action">
-            <a className="api-forecast__add-plan" onClick={this._handleAddPlan.bind(this)}>
-              <i className="fa fa-plus"/>
-            </a>
-          </div>
         </div>
+
+        <div className="forecast-plans__action">
+          <a className="api-forecast__add-plan" onClick={this._handleAddPlan.bind(this)}>
+            <i className="fa fa-plus"/>
+          </a>
+        </div>
+
         <ul className="api-forecast__upgrade-sliders">
           {this.renderUpgrades()}
         </ul>

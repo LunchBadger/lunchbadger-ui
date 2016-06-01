@@ -71,11 +71,5 @@
   position: relative;
   z-index: 2;
   min-height: 150px;
-  li {
-    margin: 1em;
-    float: left;
-    &.first-of-type {
-      margin-right: 2em;
-    }
-  }
+  padding-left: 2em;
 }

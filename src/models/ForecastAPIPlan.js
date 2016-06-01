@@ -55,4 +55,20 @@ export default class ForecastAPIPlan extends APIPlan {
       return detail.date === date.format('M/YYYY');
     }).length;
   }
+
+	/**
+   * @param date {String} - date in string type with format M/YYYY
+   * @returns {Array}
+   */
+  getUsersCountAtDate(date) {
+    const details = _.find(this.details, (detail) => {
+      return detail.date === date;
+    });
+
+    if (details) {
+      return details.subscribers.sum;
+    }
+
+    return 0;
+  }
 }

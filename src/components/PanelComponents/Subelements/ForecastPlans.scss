@@ -1,0 +1,45 @@
+.forecast-plans {
+
+}
+
+.forecast-plans__list {
+  overflow: hidden;
+  font-size: 0;
+  text-align: center;
+  padding: 0 120px;
+}
+
+.forecast-plans__plan {
+  width: 100px;
+  display: inline-block;
+  vertical-align: top;
+
+  & + & {
+    margin-left: 20px;
+  }
+}
+
+.forecast-plans__plan__name {
+  display: block;
+  padding: 0 5px 15px;
+  font-size: 17px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: pre;
+}
+
+.forecast-plans__plan__users {
+  font-size: 13px;
+  display: block;
+  width: 100%;
+  padding-top: 12px;
+  color: #666;
+}
+
+.forecast-plans__action {
+  width: 80px;
+  display: inline-block;
+  margin-left: 20px;
+}

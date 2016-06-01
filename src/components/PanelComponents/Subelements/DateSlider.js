@@ -19,7 +19,7 @@ export default class DateSlider extends Component {
     this.state = {
       marks: this.getMarks(),
       range: this.getRange(props),
-      count: 12
+      count: 24
     }
   }
 
@@ -48,7 +48,7 @@ export default class DateSlider extends Component {
     }
   }
 
-  getMarks(count = 12) {
+  getMarks(count = 24) {
     let marks = {};
     for (var i = 1; i < count + 1; i++) {
       marks[i] = moment.months(i - 1)[0];
@@ -76,12 +76,6 @@ export default class DateSlider extends Component {
   }
 
   _handleOnChange(e) {
-    if (e[1] === 12) {
-      this.setState({
-        count: 24,
-        marks: this.getMarks(24)
-      });
-    }
     const year = +this.props.range.startDate.format('YYYY');
     const startDate = e[0] > 12 ? moment(year + 1 + '/' + (e[0] - 12), 'YYYY/M') : moment(year + '/' + e[0], 'YYYY/M');
     const endDate = e[1] > 12 ? moment(year + 1 + '/' + (e[1] - 12), 'YYYY/M') : moment(year + '/' + e[1], 'YYYY/M');
@@ -100,7 +94,7 @@ export default class DateSlider extends Component {
 
   render() {
     return (
-      <div className="date-slider" style={{width: this.state.count === 12 ? '100%' : '200%'}}>
+      <div className="date-slider" style={{width: '150%'}}>
         <div className="date-slider__slider">
           <Slider range
                   defaultValue={this.state.range}

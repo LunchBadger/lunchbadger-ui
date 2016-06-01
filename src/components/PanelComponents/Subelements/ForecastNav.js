@@ -8,6 +8,10 @@ export default class ForecastNav extends Component {
     entity: PropTypes.object.isRequired,
     onExpand: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+  }
   
   save() {
     ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {

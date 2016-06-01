@@ -3,16 +3,14 @@ import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
-import BasePlan from './Subelements/BasePlan';
-import addPlan from 'actions/APIForecast/addPlan';
 import updateForecast from 'actions/APIForecast/update';
-import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
 import ForecastNav from './Subelements/ForecastNav';
+import ForecastPlans from './Subelements/ForecastPlans';
 
 const AppState = LunchBadgerCore.stores.AppState;
 
@@ -54,8 +52,7 @@ export default class APIForecast extends Component {
       endDate: null,
       selectedRange: null,
       incomeSummary: [],
-      selectedDate: this.currentDate,
-      currentPlan: null
+      selectedDate: this.currentDate
     };
   }
 
@@ -76,53 +73,6 @@ export default class APIForecast extends Component {
 
   componentWillUnmount() {
     AppState.removeChangeListener(this.forecastUpdated);
-  }
-
-  addPlan() {
-    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
-  }
-
-  setCurrentPlan(planId) {
-    if (this.state.currentPlan === planId) {
-      this.setState({
-        currentPlan: null
-      })
-    } else {
-      this.setState({
-        currentPlan: planId
-      })
-    }
-  }
-
-  renderPlans() {
-    return this.props.entity.api.plans.map((plan, index) => {
-      return (
-        <li key={`plan_${index}`}>
-          <span>{plan.name}</span>
-          <BasePlan key={plan.id}
-                    parent={this.props.entity}
-                    date={this.state.selectedDate}
-                    entity={plan}
-                    setCurrent={() => this.setCurrentPlan(plan.id)}
-                    currentPlan={this.state.currentPlan === plan.id}/>
-        </li>
-      )
-    })
-  }
-
-  renderUpgrades() {
-    return this.props.entity.upgrades.map((upgrade, index) => {
-      return (
-        <li key={`upgrade_${index}`}>
-          <UpgradeSlider key={upgrade.id}
-                         value={upgrade.value}
-                         date={this.state.selectedDate}
-                         forecast={this.props.entity}
-                         toPlan={upgrade.toPlan}
-                         fromPlan={upgrade.fromPlan}/>
-        </li>
-      )
-    })
   }
 
   _updateForecast(forecast = null) {
@@ -190,7 +140,7 @@ export default class APIForecast extends Component {
                             endDate={this.state.endDate}/>
             )
           }
-          <ForecastNav entity={this.props.entity} onExpand={() => this.setState({expanded: !this.state.expanded})} />
+          <ForecastNav entity={this.props.entity} onExpand={() => this.setState({expanded: !this.state.expanded})}/>
         </div>
         <div className="api-forecast__content">
           <div className="expanded-only">
@@ -204,17 +154,9 @@ export default class APIForecast extends Component {
                 )
               }
             </div>
-            <ul className="api-forecast__plans">
-              {this.renderPlans()}
-              <li>
-                <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
-                  <i className="fa fa-plus"/>
-                </a>
-              </li>
-            </ul>
-            <ul className="api-forecast__upgrade-sliders">
-              {this.renderUpgrades()}
-            </ul>
+            <div className="api-forecast__plans">
+              <ForecastPlans selectedDate={this.state.selectedDate} entity={this.props.entity} />
+            </div>
           </div>
           {
             this.state.data.length > 0 && (

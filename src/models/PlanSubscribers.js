@@ -10,7 +10,7 @@ export default class PlanSubscribers extends BaseModel {
     this.downgrades = downgrades || 0;
     this.churn = churn || 0;
   }
-  
+
   upgrade(scaleFactor) {
     this.existing = Math.round(this.existing * scaleFactor);
     this.new = Math.round(this.new * scaleFactor);
@@ -18,7 +18,7 @@ export default class PlanSubscribers extends BaseModel {
     this.downgrades = Math.round(this.downgrades * scaleFactor);
     this.churn = Math.round(this.churn * scaleFactor);
   }
-  
+
   toJSON() {
     return {
       existing: this.existing,
@@ -27,5 +27,9 @@ export default class PlanSubscribers extends BaseModel {
       downgrades: this.downgrades,
       churn: this.churn
     }
+  }
+
+  get sum() {
+    return this.existing + this.new + this.upgrades - this.downgrades - this.churn;
   }
 }

@@ -50,8 +50,8 @@ export default class ForecastPlans extends Component {
             {numeral(plan.getUsersCountAtDate(this.props.selectedDate)).format('0,0')} users
           </span>
         </div>
-      )
-    })
+      );
+    });
   }
 
   renderUpgrades() {
@@ -65,8 +65,8 @@ export default class ForecastPlans extends Component {
                          toPlan={upgrade.toPlan}
                          fromPlan={upgrade.fromPlan}/>
         </li>
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -77,7 +77,7 @@ export default class ForecastPlans extends Component {
         </div>
 
         <div className="forecast-plans__action">
-          <a className="api-forecast__add-plan" onClick={this._handleAddPlan.bind(this)}>
+          <a className="forecast-plans__action__add" onClick={this._handleAddPlan.bind(this)}>
             <i className="fa fa-plus"/>
           </a>
         </div>
@@ -86,6 +86,6 @@ export default class ForecastPlans extends Component {
           {this.renderUpgrades()}
         </ul>
       </div>
-    )
+    );
   }
 }

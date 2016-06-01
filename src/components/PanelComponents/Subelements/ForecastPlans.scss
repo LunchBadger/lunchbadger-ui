@@ -1,5 +1,5 @@
 .forecast-plans {
-
+  position: relative;
 }
 
 .forecast-plans__list {
@@ -13,6 +13,7 @@
   width: 100px;
   display: inline-block;
   vertical-align: top;
+  margin-bottom: 10px;
 
   & + & {
     margin-left: 20px;
@@ -39,7 +40,13 @@
 }
 
 .forecast-plans__action {
-  width: 80px;
-  display: inline-block;
-  margin-left: 20px;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  color: #ff8000;
+  font-size: 26px;
+}
+
+.forecast-plans__action__add {
+  cursor: pointer;
 }

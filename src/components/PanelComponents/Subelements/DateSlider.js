@@ -65,6 +65,7 @@ export default class DateSlider extends Component {
       return (
         <DateSliderMark key={index}
                         position={index}
+                        range={this.state.range}
                         selectedDate={this.props.selectedDate}
                         forecast={this.props.parent}
                         month={+mark}

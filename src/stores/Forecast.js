@@ -110,21 +110,20 @@ class Forecast extends BaseStore {
     forecast.api.plans.forEach((plan) => {
       const fromPlanDetails = _.find(plan.details, function (details) {
         return details.id === fromPlan.id
-      })
+      });
+
       if (fromPlanDetails) {
         fromPlanDetails.subscribers.upgrades = value;
       }
 
-
       const toPlanDetails = _.find(plan.details, function (details) {
         return details.id === fromPlan.id
-      })
+      });
+
       if (toPlanDetails) {
         toPlanDetails.subscribers.downgrades = value;
       }
-
     });
-    console.log(forecast.api.plans);
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

@@ -65,10 +65,9 @@ export default class APIForecast extends Component {
     AppState.addChangeListener(this.forecastUpdated);
 
     this.setState({data: ForecastDataParser.prepareData(this.props.entity.toJSON())}, () => {
-      this._updateForecast();
+      this._updateForecast(AppState.getStateKey('currentForecast'));
+      this._fetchForecastData().then(() => this._updateForecast(AppState.getStateKey('currentForecast')));
     });
-
-    this._fetchForecastData().then(() => this._updateForecast());
   }
 
   componentWillReceiveProps(nextProps) {

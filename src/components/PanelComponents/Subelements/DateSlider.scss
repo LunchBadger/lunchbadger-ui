@@ -40,18 +40,22 @@
     }
   }
 }
+
 .rc-tooltip-arrow {
   display: none;
 }
+
 .rc-tooltip-inner {
 
 }
+
 .date-slider__marks {
   position: relative;
   height: 70px;
   top: -20px;
   padding-top: 20px;
 }
+
 .date-slider__mark {
   position: absolute;
   font-size: 0.6em;
@@ -59,7 +63,10 @@
   height: 60px;
   text-align: center;
   padding-top: 25px;
+
   &.selected {
+    color: #8ddfee;
+
     &:after {
       content: '';
       width: 100%;
@@ -67,12 +74,13 @@
       position: absolute;
       left: 0;
       top: 0;
-      border: 1px solid #8ddfee;
+      border: 2px solid #8ddfee;
       background: rgba(141, 223, 238, 0.25);
       z-index: 1;
     }
   }
 }
+
 .date-slider__year {
   display: block;
   text-align: right;
@@ -103,10 +111,13 @@
     left: 0;
   }
 }
+
 .fa.date-slider__mark-current {
   display: block;
   color: #ff8000;
+  font-size: 18px;
 }
+
 .date-slider__mark__bar-fragment {
   position: absolute;
   top: 4px;

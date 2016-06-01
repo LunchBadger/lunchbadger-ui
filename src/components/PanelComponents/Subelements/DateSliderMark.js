@@ -10,7 +10,8 @@ export default class DateSliderMark extends Component {
     count: PropTypes.number.isRequired,
     position: PropTypes.number.isRequired,
     selectedDate: PropTypes.string,
-    forecast: PropTypes.object.isRequired
+    forecast: PropTypes.object.isRequired,
+    range: PropTypes.array
   };
 
   constructor(props) {
@@ -21,10 +22,15 @@ export default class DateSliderMark extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.selectedDate !== this.props.selectedDate
+      || nextProps.range[0] !== this.props.range[0]
+      || nextProps.range[1] !== this.props.range[1]
+    );
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedDate === this.props.selectedDate) {
-      return;
-    }
     this.setState({
       selected: nextProps.selectedDate === this.formatMonth(nextProps.month).format('M/YYYY')
     })
@@ -72,12 +78,13 @@ export default class DateSliderMark extends Component {
       <div onClick={this.toggleSelected.bind(this)}
            className={`date-slider__mark ${elementClass}`}
            style={style}>
-        <div className={barClass}></div>
+
+        {this.props.month > this.props.range[0] && this.props.month <= this.props.range[1] && (
+          <div className={barClass}></div>
+        )}
         {this.props.monthName}
         {this.renderYear()}
-        {moment().format('M') == this.props.month &&
-        (<i className="fa fa-caret-up date-slider__mark-current"/>)
-        }
+        {moment().format('M') == this.props.month && (<i className="fa fa-caret-up date-slider__mark-current"/>)}
       </div>
     )
   }

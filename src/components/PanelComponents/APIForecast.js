@@ -3,7 +3,6 @@ import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
-import removeAPIForecast from 'actions/APIForecast/remove';
 import BasePlan from './Subelements/BasePlan';
 import addPlan from 'actions/APIForecast/addPlan';
 import updateForecast from 'actions/APIForecast/update';
@@ -13,8 +12,7 @@ import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
-import {notify} from 'react-notify-toast';
-import 'rc-slider/assets/index.css';
+import ForecastNav from './Subelements/ForecastNav';
 
 const AppState = LunchBadgerCore.stores.AppState;
 
@@ -78,22 +76,6 @@ export default class APIForecast extends Component {
 
   componentWillUnmount() {
     AppState.removeChangeListener(this.forecastUpdated);
-  }
-
-  save() {
-    ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {
-      notify.show('Forecast has been successfully saved into local API', 'success');
-    }).catch(() => {
-      notify.show('There are problems with syncing data with local API, check console for more', 'error');
-    });
-  }
-
-  remove() {
-    removeAPIForecast(this.props.entity.id);
-  }
-
-  toggleExpand() {
-    this.setState({expanded: !this.state.expanded})
   }
 
   addPlan() {
@@ -208,23 +190,7 @@ export default class APIForecast extends Component {
                             endDate={this.state.endDate}/>
             )
           }
-          <ul className="api-forecast__header__nav">
-            <li>
-              <a onClick={this.save.bind(this)}>
-                <i className="fa fa-floppy-o"/>
-              </a>
-            </li>
-            <li>
-              <a onClick={this.remove.bind(this)}>
-                <i className="fa fa-remove"/>
-              </a>
-            </li>
-            <li>
-              <a onClick={this.toggleExpand.bind(this)}>
-                <i className="fa fa-expand"/>
-              </a>
-            </li>
-          </ul>
+          <ForecastNav entity={this.props.entity} onExpand={() => this.setState({expanded: !this.state.expanded})} />
         </div>
         <div className="api-forecast__content">
           <div className="expanded-only">

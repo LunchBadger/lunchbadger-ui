@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import BasePlan from './BasePlan';
 import UpgradeSlider from './UpgradeSlider';
+import ForecastPlanDetails from './ForecastPlanDetails';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
@@ -19,15 +20,11 @@ export default class ForecastPlans extends Component {
     };
   }
 
-  _setCurrentPlan(planId) {
-    if (this.state.currentPlan === planId) {
-      this.setState({
-        currentPlan: null
-      });
+  _setCurrentPlan(plan) {
+    if (this.state.currentPlan && this.state.currentPlan.id === plan.id) {
+      this.setState({currentPlan: null});
     } else {
-      this.setState({
-        currentPlan: planId
-      });
+      this.setState({currentPlan: plan});
     }
   }
 
@@ -41,14 +38,19 @@ export default class ForecastPlans extends Component {
         <div className="forecast-plans__plan" key={`plan_${index}`}>
           <span className="forecast-plans__plan__name">{plan.name}</span>
           <BasePlan key={plan.id}
-                    parent={this.props.entity}
+                    forecast={this.props.entity}
                     date={this.props.selectedDate}
-                    entity={plan}
-                    setCurrent={() => this._setCurrentPlan(plan.id)}
-                    currentPlan={this.state.currentPlan === plan.id}/>
-          <span className="forecast-plans__plan__users">
-            {numeral(plan.getUsersCountAtDate(this.props.selectedDate)).format('0,0')} users
-          </span>
+                    plan={plan}
+                    isCurrent={this.state.currentPlan && this.state.currentPlan.id === plan.id}
+                    handleClick={() => this._setCurrentPlan(plan)}/>
+
+          {
+            !this.state.currentPlan && (
+              <span className="forecast-plans__plan__users">
+                {numeral(plan.getUsersCountAtDate(this.props.selectedDate)).format('0,0')} users
+              </span>
+            )
+          }
         </div>
       );
     });
@@ -81,6 +83,14 @@ export default class ForecastPlans extends Component {
             <i className="fa fa-plus"/>
           </a>
         </div>
+
+        {
+          !!this.state.currentPlan && (
+            <div className="forecast-plans__details">
+              <ForecastPlanDetails plan={this.state.currentPlan}/>
+            </div>
+          )
+        }
 
         <ul className="api-forecast__upgrade-sliders">
           {this.renderUpgrades()}

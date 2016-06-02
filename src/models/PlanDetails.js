@@ -20,18 +20,34 @@ export default class PlanDetails extends BaseModel {
    */
   _parameters = null;
 
-  constructor(id, date) {
+  /**
+   * @type {boolean}
+   * @private
+   */
+  _changed = false;
+
+  constructor(id, date, changed) {
     super(id);
 
     this.date = date;
+    this.changed = changed;
   }
 
   toJSON() {
     return {
       date: this.date,
+      changed: this.changed,
       subscribers: this.subscribers.toJSON(),
       parameters: this.parameters.toJSON()
     }
+  }
+
+  set changed(changed) {
+    this._changed = changed;
+  }
+
+  get changed() {
+    return this._changed;
   }
 
 	/**

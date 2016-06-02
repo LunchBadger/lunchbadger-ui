@@ -1,16 +1,14 @@
 import React, {Component, PropTypes} from 'react';
 import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
-import UpgradePlan from 'actions/APIForecast/upgradePlan';
+import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
+import _ from 'lodash';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
-    date: PropTypes.string.isRequired,
-    toPlanId: PropTypes.string.isRequired,
-    fromPlanId: PropTypes.string.isRequired,
-    value: PropTypes.number.isRequired,
-    forecast: PropTypes.object.isRequired
+    forecast: PropTypes.object.isRequired,
+    upgrade: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -22,20 +20,29 @@ export default class UpgradeSlider extends Component {
   }
 
   componentWillMount() {
-    const {forecast, fromPlanId, toPlanId} = this.props;
+    const {forecast, upgrade} = this.props;
 
-    this.fromPlan = forecast.api.findPlan({id: fromPlanId});
-    this.toPlan = forecast.api.findPlan({id: toPlanId});
+    this.fromPlan = forecast.api.findPlan({id: upgrade.fromPlanId});
+    this.toPlan = forecast.api.findPlan({id: upgrade.toPlanId});
+    this._recalculateUsers(upgrade.value);
+  }
+
+  _recalculateUsers(value) {
+    const planDetails = this.fromPlan.findDetail({date: this.props.upgrade.date});
+    this.setState({movedUsers: Math.round(planDetails.subscribers.sum * (value / 100))});
   }
 
   _handleOnChange(value) {
-    const planDetails = this.fromPlan.findDetail({date: this.props.date});
-    this.setState({movedUsers: Math.round(planDetails.subscribers.sum * (value / 100))});
-    // UpgradePlan(this.props.forecast, {
-    //   toPlan: this.findPlanDetailsByDate(this.props.toPlan.details, this.props.date),
-    //   fromPlan: this.findPlanDetailsByDate(this.props.fromPlan.details, this.props.date),
-    //   value: e
-    // });
+    const {forecast, upgrade} = this.props;
+
+    this._recalculateUsers(value);
+
+    upgradePlan(forecast, {
+      fromPlanId: upgrade.fromPlanId,
+      toPlanId: upgrade.toPlanId,
+      date: upgrade.date,
+      value: value
+    });
   }
 
   render() {
@@ -62,8 +69,8 @@ export default class UpgradeSlider extends Component {
           <Slider
             step={0.01}
             tipFormatter={percentFormatter}
-            defaultValue={this.props.value}
-            onChange={this._handleOnChange.bind(this)}
+            defaultValue={this.props.upgrade.value}
+            onChange={_.throttle(this._handleOnChange.bind(this), 600)}
             min={minPercentage}
             max={maxPercentage}/>
         </div>

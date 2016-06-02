@@ -84,6 +84,18 @@ export default class ForecastAPI extends BaseModel {
   }
 
   /**
+   * @param searchParams {Object}
+   * @param updateParams {Object}
+   */
+  updateUpgrade(searchParams, updateParams) {
+    const upgrade = this.findUpgrade(searchParams);
+
+    if (upgrade) {
+      upgrade.update(updateParams);
+    }
+  }
+
+  /**
    * @param date {string} - date in format M/YYYY
    */
   getUpgradesForDate(date) {
@@ -96,6 +108,16 @@ export default class ForecastAPI extends BaseModel {
    */
   findUpgrade(params) {
     return _.find(this._upgrades, params);
+  }
+
+	/**
+   * @param searchFunction {Function}
+   * @returns {Upgrade|undefined}
+   */
+  searchForUpgrade(searchFunction) {
+    return _.find(this._upgrades, (upgrade) => {
+      return searchFunction(upgrade);
+    });
   }
 
   /**

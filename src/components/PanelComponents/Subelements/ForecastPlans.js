@@ -57,14 +57,11 @@ export default class ForecastPlans extends Component {
   }
 
   renderUpgrades() {
-    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade, index) => {
+    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade) => {
       return (
         <UpgradeSlider key={upgrade.id}
-                       value={upgrade.value}
-                       date={upgrade.date}
-                       forecast={this.props.entity}
-                       toPlanId={upgrade.toPlanId}
-                       fromPlanId={upgrade.fromPlanId}/>
+                       upgrade={upgrade}
+                       forecast={this.props.entity}/>
       );
     });
   }

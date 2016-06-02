@@ -40,7 +40,7 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'UpgradePlan':
-          this.upgradePlans(action.apiForecast, action.data.toPlan, action.data.fromPlan, action.data.value, action.data.date);
+          this.changeUpgradeValue(action.apiForecast, action.data.fromPlanId, action.data.toPlanId, action.data.value, action.data.date);
           this.emitChange();
           break;
       }
@@ -80,11 +80,11 @@ class Forecast extends BaseStore {
   }
 
   /**
-   * @param apiForecast {APIForecast}
+   * @param forecast {APIForecast}
    * @param upgrade {Upgrade}
    */
-  addUpgradeToApi(apiForecast, upgrade) {
-    apiForecast.api.addUpgrade(upgrade);
+  addUpgradeToApi(forecast, upgrade) {
+    forecast.api.addUpgrade(upgrade);
   }
 
   /**
@@ -101,24 +101,14 @@ class Forecast extends BaseStore {
     });
   }
 
-  upgradePlans(forecast, fromPlan, toPlan, value) {
-    forecast.api.plans.forEach((plan) => {
-      const fromPlanDetails = _.find(plan.details, function (details) {
-        return details.id === fromPlan.id
-      });
+  changeUpgradeValue(forecast, fromPlanId, toPlanId, value, date) {
+    const {api} = forecast;
+    const fromPlan = api.findPlan({id: fromPlanId});
+    const toPlan = api.findPlan({id: toPlanId});
 
-      if (fromPlanDetails) {
-        fromPlanDetails.subscribers.upgrades = value;
-      }
-
-      const toPlanDetails = _.find(plan.details, function (details) {
-        return details.id === fromPlan.id
-      });
-
-      if (toPlanDetails) {
-        toPlanDetails.subscribers.downgrades = value;
-      }
-    });
+    api.updateUpgrade({fromPlanId: fromPlanId, toPlanId: toPlanId, date: date}, {value: value});
+    fromPlan.changed = true;
+    toPlan.changed = true;
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

@@ -47,12 +47,12 @@ export default class BasePlan extends Component {
       'base-plan': true,
       'base-plan--expanded': this.props.isCurrent
     });
-    const {connectDropTarget} = this.props;
+    const {plan, forecast, date, connectDropTarget} = this.props;
 
     return connectDropTarget(
       <div className={elementClass}
            onClick={() => this.props.handleClick()}>
-        <PlanIcon entity={this.props.plan}/>
+        <PlanIcon changed={this.props.plan.changed} entity={this.props.plan}/>
       </div>
     )
   }

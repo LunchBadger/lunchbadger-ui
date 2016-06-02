@@ -33,7 +33,11 @@ export default class ForecastPlans extends Component {
   }
 
   renderPlans() {
-    return this.props.entity.api.plans.map((plan, index) => {
+    const {entity, selectedDate} = this.props;
+
+    return entity.api.plans.map((plan, index) => {
+      let userCount = plan.getUsersCountAtDateIncludingUpgrades(selectedDate, entity.api);
+
       return (
         <div className="forecast-plans__plan" key={`plan_${index}`}>
           <span className="forecast-plans__plan__name">{plan.name}</span>
@@ -47,7 +51,7 @@ export default class ForecastPlans extends Component {
           {
             !this.state.currentPlan && (
               <span className="forecast-plans__plan__users">
-                {numeral(plan.getUsersCountAtDate(this.props.selectedDate)).format('0,0')} users
+                {numeral(userCount).format('0,0')} users
               </span>
             )
           }

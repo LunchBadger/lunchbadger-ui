@@ -107,8 +107,8 @@ class Forecast extends BaseStore {
     const toPlan = api.findPlan({id: toPlanId});
 
     api.updateUpgrade({fromPlanId: fromPlanId, toPlanId: toPlanId, date: date}, {value: value});
-    fromPlan.changed = true;
-    toPlan.changed = true;
+    fromPlan.findDetail({date: date}).changed = true;
+    toPlan.findDetail({date: date}).changed = true;
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

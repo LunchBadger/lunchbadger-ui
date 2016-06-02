@@ -23,6 +23,7 @@ class ForecastDataParser {
       plan.details.forEach((detail) => {
         const dateKey = this._checkDateKey(detail.date);
         detail.date = this.parseDate(dateKey);
+        detail.planId = plan.id;
 
         planDetails[dateKey] = detail;
       });
@@ -125,7 +126,23 @@ class ForecastDataParser {
     return income;
   }
 
-  filterData(range, data) {
+  getUpgradesAndDowngrades(api, planId, date) {
+    const plan = api.findPlan({id: planId});
+
+    if (plan) {
+      return {
+        upgrades: plan.getPlanUpgradedUsers(date, api),
+        downgrades: plan.getPlanDowngradedUsers(date, api)
+      }
+    }
+
+    return {
+      upgrades: 0,
+      downgrades: 0
+    }
+  }
+
+  filterData(range, data, api) {
     const filteredPlans = data.map((plan) => {
       return _.filter(plan, (planDetails) => {
         return moment(planDetails.date).isBetween(range.startDate, range.endDate, 'month', '[]');
@@ -137,6 +154,10 @@ class ForecastDataParser {
 
       plan.forEach((planProperties) => {
         const dateKey = `${planProperties.date.getMonth() + 1}/${planProperties.date.getFullYear()}`;
+        const changes = this.getUpgradesAndDowngrades(api, planProperties.planId, dateKey);
+
+        planProperties.subscribers.upgrades += changes.upgrades;
+        planProperties.subscribers.downgrades += changes.downgrades;
 
         planDetails[dateKey] = planProperties;
       });

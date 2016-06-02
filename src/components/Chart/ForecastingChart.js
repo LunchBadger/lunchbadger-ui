@@ -46,7 +46,7 @@ export default class ForecastingChart extends Component {
     this.selectedDate = this.props.selectedDate;
 
     if (this.props.dateRange) {
-      filteredData = ForecastDataParser.filterData(this.props.dateRange, this.props.data);
+      filteredData = ForecastDataParser.filterData(this.props.dateRange, this.props.data, this.props.forecast.api);
     }
 
     this._configureChart();

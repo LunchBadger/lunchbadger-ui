@@ -30,7 +30,7 @@ export default class PlanDetails extends BaseModel {
     super(id);
 
     this.date = date;
-    this.changed = changed;
+    this.changed = changed || false;
   }
 
   toJSON() {

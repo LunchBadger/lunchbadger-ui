@@ -78,10 +78,7 @@ export default class APIForecast extends Component {
   _updateForecast(forecast = null) {
     const selectedDate = (forecast && forecast.selectedDate) ? forecast.selectedDate : this.currentDate;
     this.setState({
-      incomeSummary: ForecastDataParser.calculateMonthlyIncome(
-        this.props.entity.api.plans,
-        selectedDate
-      ),
+      incomeSummary: ForecastDataParser.calculateMonthlyIncome(this.props.entity.api, selectedDate),
       selectedDate: selectedDate
     });
   }
@@ -155,7 +152,7 @@ export default class APIForecast extends Component {
               }
             </div>
             <div className="api-forecast__plans">
-              <ForecastPlans selectedDate={this.state.selectedDate} entity={this.props.entity} />
+              <ForecastPlans selectedDate={this.state.selectedDate} entity={this.props.entity}/>
             </div>
           </div>
           {

@@ -52,7 +52,7 @@ export default class BasePlan extends Component {
     return connectDropTarget(
       <div className={elementClass}
            onClick={() => this.props.handleClick()}>
-        <PlanIcon changed={plan.findDetail({date: date, changed: true})} entity={plan}/>
+        <PlanIcon changed={plan.findDetail({date: date, changed: true}) ? true : false} entity={plan}/>
       </div>
     )
   }

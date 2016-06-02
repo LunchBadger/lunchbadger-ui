@@ -49,14 +49,14 @@ class ForecastDataParser {
     return dateKey;
   }
 
-  calculateMonthlyIncome(plans, dateKey) {
+  calculateMonthlyIncome(api, dateKey) {
     if (!dateKey) {
       return [];
     }
 
     const income = [];
 
-    plans.forEach((plan) => {
+    api.plans.forEach((plan) => {
       const planDetails = _.find(plan.details, (planDetails) => {
         return planDetails.date === dateKey;
       });
@@ -65,9 +65,12 @@ class ForecastDataParser {
         return [];
       }
 
+      const upgrades = plan.getPlanUpgradedUsers(dateKey, api);
+      const downgrades = plan.getPlanDowngradedUsers(dateKey, api);
+
       let sum = 0;
       const {parameters, subscribers} = planDetails;
-      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing;
+      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades;
 
       plan.tiers.forEach((tier) => {
         const monthlyDetails = _.find(tier.details, (tierDetails) => {
@@ -76,7 +79,7 @@ class ForecastDataParser {
 
         const {type, conditionFrom, conditionTo, value} = monthlyDetails;
         const totalCalls = parameters.callsPerSubscriber * netSubscribers;
-        
+
         switch (type) {
           case 'fixed':
             if (conditionFrom === 1 && conditionTo > 0) {
@@ -101,16 +104,16 @@ class ForecastDataParser {
           subscribers: subscribers.new
         },
         upgrades: {
-          amount: sum * subscribers.upgrades / netSubscribers,
-          subscribers: subscribers.upgrades
+          amount: sum * (subscribers.upgrades + upgrades) / netSubscribers,
+          subscribers: subscribers.upgrades + upgrades
         },
         existing: {
           amount: sum * subscribers.existing / netSubscribers,
           subscribers: subscribers.existing
         },
         downgrades: {
-          amount: sum * subscribers.downgrades / netSubscribers,
-          subscribers: subscribers.downgrades
+          amount: sum * (subscribers.downgrades + downgrades) / netSubscribers,
+          subscribers: subscribers.downgrades + downgrades
         },
         churn: {
           amount: sum * subscribers.churn / netSubscribers,

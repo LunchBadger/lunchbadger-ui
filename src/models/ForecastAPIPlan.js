@@ -12,11 +12,41 @@ export default class ForecastAPIPlan extends APIPlan {
    */
   _tiers = [];
 
-  constructor(id, name, icon) {
+	/**
+   * @type {boolean}
+   * @private
+   */
+  _changed = false;
+
+  constructor(id, name, icon, changed) {
     super(id);
 
     this.name = name;
     this.icon = icon;
+    this.changed = changed || false;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      icon: this.icon,
+      changed: this.changed,
+      tiers: this.tiers.map((tier) => {
+        return tier.toJSON()
+      }),
+      details: this.details.map((detail) => {
+        return detail.toJSON()
+      })
+    }
+  }
+  
+  set changed(changed) {
+    this._changed = changed;
+  }
+  
+  get changed() {
+    return this._changed;
   }
 
   /**

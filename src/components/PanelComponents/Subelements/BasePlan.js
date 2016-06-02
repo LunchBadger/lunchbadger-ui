@@ -8,10 +8,16 @@ import addUpgrade from 'actions/APIForecast/addUpgrade';
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
+
+    if (item.entity.id === component.props.plan.id) {
+      return;
+    }
+
     addUpgrade(component.props.forecast, {
       fromPlan: item.entity,
       toPlan: component.props.plan,
-      value: 10
+      value: 0,
+      date: component.props.date
     });
   }
 };

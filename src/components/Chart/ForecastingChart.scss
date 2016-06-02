@@ -81,7 +81,7 @@
 
 .chart__x-axis--over {
   background: #b7b7b7;
-  left: -9999px;
+  left: 9999px;
 }
 
 .chart__current-month {
@@ -92,5 +92,5 @@
   border-color: transparent transparent #ff8000 transparent;
   position: absolute;
   bottom: 0;
-  left: -9999px;
+  left: 9999px;
 }

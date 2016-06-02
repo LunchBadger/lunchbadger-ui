@@ -1,5 +1,6 @@
 import ForecastAPIPlan from './ForecastAPIPlan';
 import Upgrade from './Upgrade';
+import _ from 'lodash';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -73,11 +74,21 @@ export default class ForecastAPI extends BaseModel {
     return this._upgrades;
   }
 
-	/**
+  /**
    * @param upgrade {Upgrade}
    */
   addUpgrade(upgrade) {
-    this._upgrades.push(upgrade);
+    if (!this.findUpgrade({fromPlanId: upgrade.fromPlanId, toPlanId: upgrade.toPlanId, date: upgrade.date})) {
+      this._upgrades.push(upgrade);
+    }
+  }
+
+  /**
+   * @param params {Object} - parameters from Upgrade object
+   * @returns {*}
+   */
+  findUpgrade(params) {
+    return _.find(this._upgrades, params);
   }
 
 	/**

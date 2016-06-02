@@ -1,8 +1,6 @@
 import _ from 'lodash';
-import Upgrade from 'models/Upgrade';
 import Tier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
-
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
@@ -26,18 +24,15 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddPlan':
-          // TODO: add plan to api copy
           this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
           this.emitChange();
           break;
         case 'AddTier':
-          // TODO: add tier to api copy play
           this.addTierToPlan(action.apiPlan, Tier.create(action.data));
           this.emitChange();
           break;
         case 'AddUpgrade':
-          // TODO: add upgrade to api forecast
-          this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
+          this.addUpgradeToApi(action.apiForecast, action.upgrade);
           this.emitChange();
           break;
         case 'CreateForecast':
@@ -89,7 +84,7 @@ class Forecast extends BaseStore {
    * @param upgrade {Upgrade}
    */
   addUpgradeToApi(apiForecast, upgrade) {
-    apiForecast.addUpgrade(upgrade);
+    apiForecast.api.addUpgrade(upgrade);
   }
 
   /**

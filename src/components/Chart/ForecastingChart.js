@@ -110,6 +110,9 @@ export default class ForecastingChart extends Component {
     this.forecastAxis = this.chartContainer.append('div')
       .attr('class', 'chart__x-axis chart__x-axis--over');
 
+    this.currentMonthMark = this.chartContainer.append('div')
+      .attr('class', 'chart__current-month');
+
     // TODO: this line should be calculated depending on the Y values
     // draw line on 0 for y
     // this.zeroLine = this.svg.append('line')
@@ -230,6 +233,11 @@ export default class ForecastingChart extends Component {
         if (!forecastAxisPositioned && moment(d.x).isAfter(this.currentDate, 'month')) {
           this.forecastAxis.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + 2}px`);
           forecastAxisPositioned = true;
+        }
+
+        // position current month mark
+        if (moment(d.x).isSame(this.currentDate, 'month')) {
+          this.currentMonthMark.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + this.x.rangeBand()/2 - 4}px`);
         }
 
         return this.x(d.x) + 2;

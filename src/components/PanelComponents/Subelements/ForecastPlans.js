@@ -57,16 +57,14 @@ export default class ForecastPlans extends Component {
   }
 
   renderUpgrades() {
-    return this.props.entity.upgrades.map((upgrade, index) => {
+    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade, index) => {
       return (
-        <li key={`upgrade_${index}`}>
-          <UpgradeSlider key={upgrade.id}
-                         value={upgrade.value}
-                         date={this.props.selectedDate}
-                         forecast={this.props.entity}
-                         toPlan={upgrade.toPlan}
-                         fromPlan={upgrade.fromPlan}/>
-        </li>
+        <UpgradeSlider key={upgrade.id}
+                       value={upgrade.value}
+                       date={upgrade.date}
+                       forecast={this.props.entity}
+                       toPlanId={upgrade.toPlanId}
+                       fromPlanId={upgrade.fromPlanId}/>
       );
     });
   }
@@ -92,9 +90,9 @@ export default class ForecastPlans extends Component {
           )
         }
 
-        <ul className="api-forecast__upgrade-sliders">
+        <div className="forecast-plans__upgrades">
           {this.renderUpgrades()}
-        </ul>
+        </div>
       </div>
     );
   }

@@ -40,11 +40,11 @@ export default class ForecastAPIPlan extends APIPlan {
       })
     }
   }
-  
+
   set changed(changed) {
     this._changed = changed;
   }
-  
+
   get changed() {
     return this._changed;
   }
@@ -84,6 +84,14 @@ export default class ForecastAPIPlan extends APIPlan {
     return _.filter(this.details, (detail) => {
       return detail.date === date.format('M/YYYY');
     }).length;
+  }
+
+	/**
+   * @param params - parameters from PlanDetails object
+   * @returns {PlanDetails|undefined}
+   */
+  findDetail(params) {
+    return _.find(this.details, params);
   }
 
 	/**

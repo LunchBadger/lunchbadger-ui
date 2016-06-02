@@ -13,7 +13,7 @@ export default class ForecastAPI extends BaseModel {
    */
   _plans = [];
 
-	/**
+  /**
    * @type {Upgrade[]}
    * @private
    */
@@ -84,17 +84,48 @@ export default class ForecastAPI extends BaseModel {
   }
 
   /**
+   * @param date {string} - date in format M/YYYY
+   */
+  getUpgradesForDate(date) {
+    return this.findUpgrades({date: date});
+  }
+
+  /**
    * @param params {Object} - parameters from Upgrade object
-   * @returns {*}
+   * @returns {Upgrade|undefined}
    */
   findUpgrade(params) {
     return _.find(this._upgrades, params);
   }
 
-	/**
+  /**
+   * @param params {Object} - parameters from Upgrade object
+   * @returns {Upgrade[]}
+   */
+  findUpgrades(params) {
+    return _.filter(this._upgrades, params);
+  }
+
+  /**
    * @param plan {ForecastAPIPlan}
    */
   addPlan(plan) {
     this._plans.push(plan);
+  }
+
+  /**
+   * @param params {Object} - parameters from ForecastAPIPlan object
+   * @returns {ForecastAPIPlan}
+   */
+  findPlan(params) {
+    return _.find(this._plans, params);
+  }
+
+  /**
+   * @param params {Object} - parameters from ForecastAPIPlan object
+   * @returns {ForecastAPIPlan[]}
+   */
+  findPlans(params) {
+    return _.filter(this._plans, params);
   }
 }

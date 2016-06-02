@@ -98,11 +98,24 @@ export default class ForecastAPIPlan extends APIPlan {
   getUsersCountAtDateIncludingUpgrades(date, api) {
     const detail = this.findDetail({date: date});
     const existingCount = detail.subscribers.sum;
-    const upgrades = api.findUpgrades({toPlanId: this.id, date: date});
-    const downgrades = api.findUpgrades({fromPlanId: this.id, date: date});
 
-    let totalUpgradesCount = 0;
+    return existingCount + this.getPlanUpgradedUsers(date, api) - this.getPlanDowngradedUsers(existingCount, date, api);
+  }
+
+  getPlanDowngradedUsers(existingCount, date, api) {
+    const downgrades = api.findUpgrades({fromPlanId: this.id, date: date});
     let totalDowngradesCount = 0;
+
+    downgrades.forEach((downgrade) => {
+      totalDowngradesCount += Math.round(existingCount * (downgrade.value / 100));
+    });
+
+    return totalDowngradesCount;
+  }
+
+  getPlanUpgradedUsers( date, api) {
+    const upgrades = api.findUpgrades({toPlanId: this.id, date: date});
+    let totalUpgradesCount = 0;
 
     upgrades.forEach((upgrade) => {
       const fromPlan = api.findPlan({id: upgrade.fromPlanId});
@@ -111,10 +124,6 @@ export default class ForecastAPIPlan extends APIPlan {
       totalUpgradesCount += Math.round(existingUsers * (upgrade.value / 100));
     });
 
-    downgrades.forEach((downgrade) => {
-      totalDowngradesCount += Math.round(existingCount * (downgrade.value / 100));
-    });
-
-    return existingCount + totalUpgradesCount - totalDowngradesCount;
+    return totalUpgradesCount;
   }
 }

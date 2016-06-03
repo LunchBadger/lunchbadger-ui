@@ -9,7 +9,8 @@ import numeral from 'numeral';
 export default class ForecastPlans extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    selectedDate: PropTypes.string.isRequired
+    selectedDate: PropTypes.string.isRequired,
+    handleUpgradeCreation: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -46,6 +47,7 @@ export default class ForecastPlans extends Component {
                     forecast={this.props.entity}
                     date={this.props.selectedDate}
                     plan={plan}
+                    handleUpgradeCreation={this.props.handleUpgradeCreation.bind(this)}
                     isCurrent={this.state.currentPlan && this.state.currentPlan.id === plan.id}
                     handleClick={() => this._setCurrentPlan(plan)}/>
 

@@ -122,6 +122,16 @@ export default class APIForecast extends Component {
     });
   }
 
+  _handleEndDateUpdate(endDate) {
+    const {selectedRange} = this.state;
+    const newRange = Object.assign({}, selectedRange, {endDate: endDate});
+
+    this.setState({
+      selectedRange: newRange,
+      endDate: newRange.endDate
+    });
+  }
+
   render() {
     const elementClass = classNames({
       expanded: this.props.isExpanded
@@ -160,7 +170,9 @@ export default class APIForecast extends Component {
               }
             </div>
             <div className="api-forecast__plans">
-              <ForecastPlans selectedDate={this.state.selectedDate} entity={this.props.entity}/>
+              <ForecastPlans selectedDate={this.state.selectedDate}
+                             handleUpgradeCreation={this._handleEndDateUpdate.bind(this)}
+                             entity={this.props.entity}/>
             </div>
           </div>
           {

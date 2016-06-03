@@ -24,9 +24,7 @@ export default class DateSlider extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      range: this.getRange(nextProps)
-    });
+    this.setState({range: this.getRange(nextProps)});
   }
 
   componentDidMount() {
@@ -42,6 +40,7 @@ export default class DateSlider extends Component {
       const endYear = +props.range.endDate.format('YYYY');
       const startDate = startYear > +moment().format('YYYY') ? +props.range.startDate.format('M') + 12 : +props.range.startDate.format('M');
       const endDate = endYear > +moment().format('YYYY') ? +props.range.endDate.format('M') + 12 : +props.range.endDate.format('M')
+
       return [startDate, endDate];
     } else {
       return [+props.selectedDate[0], +props.selectedDate[0] + 1];
@@ -50,9 +49,11 @@ export default class DateSlider extends Component {
 
   getMarks(count = 24) {
     let marks = {};
+
     for (var i = 1; i < count + 1; i++) {
       marks[i] = moment.months(i - 1)[0];
     }
+
     return marks;
   }
 
@@ -71,9 +72,9 @@ export default class DateSlider extends Component {
                         month={+mark}
                         selectedRange={this.props.range}
                         monthName={this.state.marks[mark]}
-                        count={this.state.count} />
-      )
-    })
+                        count={this.state.count}/>
+      );
+    });
   }
 
   _handleOnChange(e) {
@@ -87,7 +88,7 @@ export default class DateSlider extends Component {
         this.props.onRangeUpdate(Object.assign({}, this.props.range, {
           startDate: startDate,
           endDate: endDate,
-          maxEndDate: endDate.isAfter(this.props.range.maxEndDate) ? endDate: this.props.range.maxEndDate
+          maxEndDate: endDate.isAfter(this.props.range.maxEndDate) ? endDate : this.props.range.maxEndDate
         }));
       }
     });

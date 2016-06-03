@@ -24,7 +24,6 @@ export default class ForecastAPIPlan extends APIPlan {
       id: this.id,
       name: this.name,
       icon: this.icon,
-      changed: this.changed,
       tiers: this.tiers.map((tier) => {
         return tier.toJSON()
       }),

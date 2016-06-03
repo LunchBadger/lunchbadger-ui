@@ -39,7 +39,7 @@ export default class DateSlider extends Component {
       const startYear = +props.range.startDate.format('YYYY');
       const endYear = +props.range.endDate.format('YYYY');
       const startDate = startYear > +moment().format('YYYY') ? +props.range.startDate.format('M') + 12 : +props.range.startDate.format('M');
-      const endDate = endYear > +moment().format('YYYY') ? +props.range.endDate.format('M') + 12 : +props.range.endDate.format('M')
+      const endDate = endYear > +moment().format('YYYY') ? +props.range.endDate.format('M') + 12 : +props.range.endDate.format('M');
 
       return [startDate, endDate];
     } else {

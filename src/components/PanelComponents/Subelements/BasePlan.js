@@ -68,7 +68,8 @@ export default class BasePlan extends Component {
       'base-plan': true,
       'base-plan--expanded': this.props.isCurrent
     });
-    const {plan, date, connectDropTarget} = this.props;
+    const {plan, connectDropTarget} = this.props;
+    const date = moment(this.props.date, 'M/YYYY').add(1, 'months').format('M/YYYY');
 
     return connectDropTarget(
       <div className={elementClass}

@@ -5,6 +5,7 @@ import ForecastPlanDetails from './ForecastPlanDetails';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
+import moment from 'moment';
 
 export default class ForecastPlans extends Component {
   static propTypes = {
@@ -64,7 +65,9 @@ export default class ForecastPlans extends Component {
   }
 
   renderUpgrades() {
-    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade) => {
+    const date = moment(this.props.selectedDate, 'M/YYYY').add(1, 'months').format('M/YYYY');
+
+    return this.props.entity.api.getUpgradesForDate(date).map((upgrade) => {
       return (
         <UpgradeSlider key={upgrade.id}
                        upgrade={upgrade}

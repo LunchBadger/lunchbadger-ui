@@ -33,7 +33,8 @@ class ForecastsPanel extends Component {
 
     this.state = {
       hasDropped: false,
-      entities: Forecast.getData()
+      entities: Forecast.getData(),
+      expanded: null
     };
   }
 
@@ -47,9 +48,20 @@ class ForecastsPanel extends Component {
     });
   }
 
+  _handleExpand(forecastId) {
+    if (this.state.expanded === forecastId) {
+      this.setState({expanded: false});
+    } else {
+      this.setState({expanded: forecastId});
+    }
+  }
+
   renderEntities() {
     return this.state.entities.map((entity) => {
       return <APIForecast key={entity.id}
+                          onExpand={() => this._handleExpand(entity.id)}
+                          onClose={() => this.state.expanded === entity.id && this.setState({expanded: null})}
+                          isExpanded={this.state.expanded === entity.id}
                           entity={entity}
                           top={entity.top}
                           left={entity.left}/>;

@@ -6,13 +6,14 @@ import removeAPIForecast from 'actions/APIForecast/remove';
 export default class ForecastNav extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
     onExpand: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
   }
-  
+
   save() {
     ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {
       notify.show('Forecast has been successfully saved into local API', 'success');
@@ -22,13 +23,14 @@ export default class ForecastNav extends Component {
   }
 
   remove() {
+    this.props.onClose();
     removeAPIForecast(this.props.entity.id);
   }
 
   toggleExpand() {
     this.props.onExpand();
   }
-  
+
   render() {
     return (
       <ul className="api-forecast__header__nav">

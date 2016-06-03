@@ -18,6 +18,9 @@ const boxSource = {
   beginDrag(props) {
     const {entity, left, top} = props;
     return {entity, left, top};
+  },
+  canDrag: (props) => {
+    return !props.isExpanded;
   }
 };
 
@@ -28,7 +31,10 @@ export default class APIForecast extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     left: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired
+    top: PropTypes.number.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onExpand: PropTypes.func.isRequired,
+    isExpanded: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -46,7 +52,7 @@ export default class APIForecast extends Component {
     };
 
     this.state = {
-      expanded: false,
+      expanded: props.isExpanded,
       data: [],
       startDate: null,
       endDate: null,
@@ -118,7 +124,7 @@ export default class APIForecast extends Component {
 
   render() {
     const elementClass = classNames({
-      expanded: this.state.expanded
+      expanded: this.props.isExpanded
     });
     const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
 
@@ -137,7 +143,9 @@ export default class APIForecast extends Component {
                             endDate={this.state.endDate}/>
             )
           }
-          <ForecastNav entity={this.props.entity} onExpand={() => this.setState({expanded: !this.state.expanded})}/>
+          <ForecastNav entity={this.props.entity}
+                       onClose={() => this.props.onClose()}
+                       onExpand={() => this.props.onExpand()}/>
         </div>
         <div className="api-forecast__content">
           <div className="expanded-only">

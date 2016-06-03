@@ -4,6 +4,7 @@ import Slider from 'rc-slider';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
 import _ from 'lodash';
+import moment from 'moment';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
@@ -78,6 +79,7 @@ export default class UpgradeSlider extends Component {
         </div>
         <div className="upgrade-slider__slider">
           <Slider
+            disabled={moment(this.props.upgrade.date, 'M/YYYY').isSameOrBefore(moment(), 'month')}
             step={0.01}
             tipFormatter={percentFormatter}
             defaultValue={this.props.upgrade.value}

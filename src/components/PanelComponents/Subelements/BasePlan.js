@@ -4,21 +4,34 @@ import PlanIcon from './PlanIcon';
 import classNames from 'classnames';
 import {DropTarget} from 'react-dnd';
 import addUpgrade from 'actions/APIForecast/addUpgrade';
+import addDowngrade from 'actions/APIForecast/addDowngrade';
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
+    let upgradeDetails = {};
 
+    // prevent dropping over same element
     if (item.entity.id === component.props.plan.id) {
       return;
     }
 
-    addUpgrade(component.props.forecast, {
+    upgradeDetails = {
       fromPlan: item.entity,
       toPlan: component.props.plan,
       value: 0,
       date: component.props.date
-    });
+    };
+
+    if (item.index < component.props.index) {
+      addUpgrade(component.props.forecast, upgradeDetails);
+    } else {
+      addDowngrade(component.props.forecast, upgradeDetails);
+    }
+
+    if (typeof component.props.handleUpgradeCreate === 'function') {
+      component.props.handleUpgradeCreate(upgradeDetails);
+    }
   }
 };
 
@@ -31,7 +44,9 @@ export default class BasePlan extends Component {
     forecast: PropTypes.object.isRequired,
     date: PropTypes.string.isRequired,
     handleClick: PropTypes.func.isRequired,
-    isCurrent: PropTypes.bool
+    index: PropTypes.number.isRequired,
+    isCurrent: PropTypes.bool,
+    handleUpgradeCreate: PropTypes.func
   };
 
   constructor(props) {
@@ -52,7 +67,9 @@ export default class BasePlan extends Component {
     return connectDropTarget(
       <div className={elementClass}
            onClick={() => this.props.handleClick()}>
-        <PlanIcon changed={plan.findDetail({date: date, changed: true}) ? true : false} entity={plan}/>
+        <PlanIcon index={this.props.index}
+                  changed={plan.findDetail({date: date, changed: true}) ? true : false}
+                  entity={plan}/>
       </div>
     )
   }

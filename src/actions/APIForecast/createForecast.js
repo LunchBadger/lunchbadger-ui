@@ -11,6 +11,10 @@ export default (forecast, date) => {
   const newDetails = {};
   const newTierDetails = {};
 
+  if (forecast.api.isForecastCreated(date)) {
+    return;
+  }
+
   forecast.api.plans.forEach((plan) => {
     let details;
     let tiers = {};

@@ -42,6 +42,7 @@ export default class ForecastPlans extends Component {
         <div className="forecast-plans__plan" key={`plan_${index}`}>
           <span className="forecast-plans__plan__name">{plan.name}</span>
           <BasePlan key={plan.id}
+                    index={index}
                     forecast={this.props.entity}
                     date={this.props.selectedDate}
                     plan={plan}

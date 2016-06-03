@@ -32,6 +32,7 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddUpgrade':
+        case 'AddDowngrade':
           this.addUpgradeToApi(action.apiForecast, action.upgrade);
           this.emitChange();
           break;

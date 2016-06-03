@@ -15,7 +15,8 @@ export default class UpgradeSlider extends Component {
     super(props);
 
     this.state = {
-      movedUsers: 0
+      movedUsers: 0,
+      max: 10
     }
   }
 
@@ -25,6 +26,7 @@ export default class UpgradeSlider extends Component {
     this.fromPlan = forecast.api.findPlan({id: upgrade.fromPlanId});
     this.toPlan = forecast.api.findPlan({id: upgrade.toPlanId});
     this._recalculateUsers(upgrade.value);
+    this.setState({max: Math.ceil((upgrade.value || 1) / 10) * 10});
   }
 
   _recalculateUsers(value) {
@@ -34,6 +36,7 @@ export default class UpgradeSlider extends Component {
 
   _handleOnChange(value) {
     const {forecast, upgrade} = this.props;
+    const {max} = this.state;
 
     this._recalculateUsers(value);
 
@@ -43,11 +46,15 @@ export default class UpgradeSlider extends Component {
       date: upgrade.date,
       value: value
     });
+
+    if (value === max && max < 100) {
+      this.setState({max: max + 10});
+    }
   }
 
   render() {
     const minPercentage = 0;
-    const maxPercentage = 10;
+    const maxPercentage = this.state.max;
 
     const percentFormatter = (value) => {
       return value + ' %';

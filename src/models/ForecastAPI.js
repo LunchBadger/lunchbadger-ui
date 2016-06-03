@@ -150,4 +150,13 @@ export default class ForecastAPI extends BaseModel {
   findPlans(params) {
     return _.filter(this._plans, params);
   }
+
+	/**
+   * @param date {String} - date in format M/YYYY
+   */
+  isForecastCreated(date) {
+    return this.plans.some((plan) => {
+      return plan.findDetail({date: date});
+    });
+  }
 }

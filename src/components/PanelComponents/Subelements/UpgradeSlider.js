@@ -68,7 +68,11 @@ export default class UpgradeSlider extends Component {
           </div>
           <div className="upgrade-slider__legend__name">
             {this.fromPlan.name}
-            {' '} moved to {' '}
+            {' '}
+            {
+              this.props.upgrade.downgrade ? 'downgrade to' : 'upgrade to'
+            }
+            {' '}
             {this.toPlan.name}
           </div>
         </div>
@@ -80,6 +84,14 @@ export default class UpgradeSlider extends Component {
             onChange={_.throttle(this._handleOnChange.bind(this), 600)}
             min={minPercentage}
             max={maxPercentage}/>
+          <div className="upgrade-slider__slider-legend">
+            <div className="upgrade-slider__slider-legend__value upgrade-slider__slider-legend__value--left">
+              {minPercentage}%
+            </div>
+            <div className="upgrade-slider__slider-legend__value upgrade-slider__slider-legend__value--right">
+              {maxPercentage}%
+            </div>
+          </div>
         </div>
       </div>
     );

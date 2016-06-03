@@ -69,6 +69,7 @@ export default class DateSlider extends Component {
                         selectedDate={this.props.selectedDate}
                         forecast={this.props.parent}
                         month={+mark}
+                        selectedRange={this.props.range}
                         monthName={this.state.marks[mark]}
                         count={this.state.count} />
       )

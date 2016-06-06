@@ -11,12 +11,15 @@ export default class PlanSubscribers extends BaseModel {
     this.churn = churn || 0;
   }
 
-  upgrade(scaleFactor) {
-    this.existing = Math.round(this.existing * scaleFactor);
-    this.new = Math.round(this.new * scaleFactor);
-    this.upgrades = Math.round(this.upgrades * scaleFactor);
-    this.downgrades = Math.round(this.downgrades * scaleFactor);
-    this.churn = Math.round(this.churn * scaleFactor);
+  forecast(scaleFactor = 1) {
+    // existing users should be net value from previous month
+    this.existing = Math.round(this.sum * scaleFactor);
+
+    // reset other predictions...
+    this.new = 0;
+    this.upgrades = 0;
+    this.downgrades = 0;
+    this.churn = 0;
   }
 
   toJSON() {

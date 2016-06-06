@@ -8,11 +8,6 @@ export default class PlanParameters extends BaseModel {
     this.cashPerCall = cashPerCall || 0;
   }
 
-  upgrade(scaleFactor) {
-    this.callsPerSubscriber = Math.round(this.callsPerSubscriber * scaleFactor);
-    this.cashPerCall = this.cashPerCall * scaleFactor;
-  }
-
   toJSON() {
     return {
       callsPerSubscriber: this.callsPerSubscriber,

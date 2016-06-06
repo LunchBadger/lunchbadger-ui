@@ -5,7 +5,6 @@ import ForecastPlanDetails from './ForecastPlanDetails';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
-import moment from 'moment';
 
 export default class ForecastPlans extends Component {
   static propTypes = {

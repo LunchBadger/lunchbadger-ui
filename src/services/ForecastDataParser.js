@@ -66,12 +66,17 @@ class ForecastDataParser {
         return [];
       }
 
-      const upgrades = plan.getPlanUpgradedUsers(dateKey, api);
-      const downgrades = plan.getPlanDowngradedUsers(dateKey, api);
+      // check upgrades...
+      const upgrades = plan.getPlanUpgradedUsers(dateKey, api, false);
+      const existingFallByUpgrades = plan.getPlanDowngradedUsers(dateKey, api, false);
+
+      // check downgrades
+      const downgrades = plan.getPlanDowngradedUsers(dateKey, api, true);
+      const existingRaiseByDowngrades = plan.getPlanUpgradedUsers(dateKey, api, true);
 
       let sum = 0;
       const {parameters, subscribers} = planDetails;
-      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades;
+      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades + existingRaiseByDowngrades;
 
       plan.tiers.forEach((tier) => {
         const monthlyDetails = _.find(tier.details, (tierDetails) => {
@@ -109,8 +114,8 @@ class ForecastDataParser {
           subscribers: subscribers.upgrades + upgrades
         },
         existing: {
-          amount: sum * subscribers.existing / netSubscribers,
-          subscribers: subscribers.existing
+          amount: sum * (subscribers.existing + existingRaiseByDowngrades - existingFallByUpgrades) / netSubscribers,
+          subscribers: subscribers.existing + existingRaiseByDowngrades - existingFallByUpgrades
         },
         downgrades: {
           amount: sum * (subscribers.downgrades + downgrades) / netSubscribers,
@@ -131,14 +136,16 @@ class ForecastDataParser {
 
     if (plan) {
       return {
-        upgrades: plan.getPlanUpgradedUsers(date, api),
-        downgrades: plan.getPlanDowngradedUsers(date, api)
+        upgrades: plan.getPlanUpgradedUsers(date, api, false),
+        downgrades: plan.getPlanDowngradedUsers(date, api, true),
+        existing: plan.getPlanUpgradedUsers(date, api, true) - plan.getPlanDowngradedUsers(date, api, false)
       }
     }
 
     return {
       upgrades: 0,
-      downgrades: 0
+      downgrades: 0,
+      existing: 0
     }
   }
 
@@ -158,6 +165,7 @@ class ForecastDataParser {
 
         planProperties.subscribers.upgrades += changes.upgrades;
         planProperties.subscribers.downgrades += changes.downgrades;
+        planProperties.subscribers.existing += changes.existing;
 
         planDetails[dateKey] = planProperties;
       });

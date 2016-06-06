@@ -161,11 +161,17 @@ class ForecastDataParser {
 
       plan.forEach((planProperties) => {
         const dateKey = `${planProperties.date.getMonth() + 1}/${planProperties.date.getFullYear()}`;
+
+        if (planProperties.changed) {
+          return planDetails[dateKey] = planProperties;
+        }
+
         const changes = this.getUpgradesAndDowngrades(api, planProperties.planId, dateKey);
 
         planProperties.subscribers.upgrades += changes.upgrades;
         planProperties.subscribers.downgrades += changes.downgrades;
         planProperties.subscribers.existing += changes.existing;
+        planProperties.changed = true;
 
         planDetails[dateKey] = planProperties;
       });

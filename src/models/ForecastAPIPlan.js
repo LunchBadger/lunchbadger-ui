@@ -70,7 +70,7 @@ export default class ForecastAPIPlan extends APIPlan {
     }).length;
   }
 
-	/**
+  /**
    * @param params - parameters from PlanDetails object
    * @returns {PlanDetails|undefined}
    */
@@ -78,7 +78,7 @@ export default class ForecastAPIPlan extends APIPlan {
     return _.find(this.details, params);
   }
 
-	/**
+  /**
    * @param date {String} - date in string type with format M/YYYY
    * @returns {Array}
    */
@@ -96,9 +96,14 @@ export default class ForecastAPIPlan extends APIPlan {
 
   getUsersCountAtDateIncludingUpgrades(date, api) {
     const detail = this.findDetail({date: date});
-    const existingCount = detail.subscribers.sum;
 
-    return existingCount + this.getPlanUpgradedUsers(date, api) - this.getPlanDowngradedUsers(date, api);
+    if (detail) {
+      const existingCount = detail.subscribers.sum;
+
+      return existingCount + this.getPlanUpgradedUsers(date, api) - this.getPlanDowngradedUsers(date, api);
+    }
+
+    return 0;
   }
 
   getPlanDowngradedUsers(date, api) {

@@ -30,7 +30,7 @@ export default class ForecastAPI extends BaseModel {
       id: this.id,
       name: this.name,
       plans: this.plans.map(plan => plan.toJSON()),
-      upgrades: this.upgrades.map(upgrade => upgrade.toJSON())
+      upgrades: []
     }
   }
 

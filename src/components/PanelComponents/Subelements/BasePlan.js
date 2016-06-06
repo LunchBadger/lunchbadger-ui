@@ -18,7 +18,7 @@ const boxTarget = {
       return;
     }
 
-    const date = moment(component.props.date, 'M/YYYY').add(1, 'months');
+    const date = moment(component.props.date, 'M/YYYY');
 
     upgradeDetails = {
       fromPlan: item.entity,
@@ -68,8 +68,7 @@ export default class BasePlan extends Component {
       'base-plan': true,
       'base-plan--expanded': this.props.isCurrent
     });
-    const {plan, connectDropTarget} = this.props;
-    const date = moment(this.props.date, 'M/YYYY').add(1, 'months').format('M/YYYY');
+    const {date, plan, connectDropTarget} = this.props;
 
     return connectDropTarget(
       <div className={elementClass}

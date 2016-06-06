@@ -65,9 +65,7 @@ export default class ForecastPlans extends Component {
   }
 
   renderUpgrades() {
-    const date = moment(this.props.selectedDate, 'M/YYYY').add(1, 'months').format('M/YYYY');
-
-    return this.props.entity.api.getUpgradesForDate(date).map((upgrade) => {
+    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade) => {
       return (
         <UpgradeSlider key={upgrade.id}
                        upgrade={upgrade}

@@ -106,6 +106,18 @@ export default class ForecastAPIPlan extends APIPlan {
     return 0;
   }
 
+  getCountAfterDowngradesAtDate(date, api) {
+    const detail = this.findDetail({date: date});
+
+    if (detail) {
+      const existingCount = detail.subscribers.sum;
+
+      return existingCount - this.getPlanDowngradedUsers(date, api);
+    }
+
+    return 0;
+  }
+
   getPlanDowngradedUsers(date, api, downgrade = null) {
     const detail = this.findDetail({date: date});
     const existingUsersCount = detail.subscribers.sum;

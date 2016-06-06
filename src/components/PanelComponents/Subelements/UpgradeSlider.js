@@ -3,8 +3,8 @@ import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
-import _ from 'lodash';
 import moment from 'moment';
+import _ from 'lodash';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
@@ -17,7 +17,8 @@ export default class UpgradeSlider extends Component {
 
     this.state = {
       movedUsers: 0,
-      max: 10
+      max: 10,
+      value: props.upgrade.value
     }
   }
 
@@ -26,26 +27,45 @@ export default class UpgradeSlider extends Component {
 
     this.fromPlan = forecast.api.findPlan({id: upgrade.fromPlanId});
     this.toPlan = forecast.api.findPlan({id: upgrade.toPlanId});
-    this._recalculateUsers(upgrade.value);
-    this.setState({max: Math.ceil((upgrade.value || 1) / 10) * 10});
+
+    const recalculatedUsers = this._recalculateUsers(upgrade.value);
+
+    this.planUsers = this.fromPlan.findDetail({date: upgrade.date}).subscribers.sum;
+
+    this.setState({
+      movedUsers: recalculatedUsers,
+      max: Math.ceil((upgrade.value || 1) / 10) * 10
+    });
   }
 
   _recalculateUsers(value) {
     const planDetails = this.fromPlan.findDetail({date: this.props.upgrade.date});
-    this.setState({movedUsers: Math.round(planDetails.subscribers.sum * (value / 100))});
+
+    return Math.round(planDetails.subscribers.sum * (value / 100));
   }
 
   _handleOnChange(value) {
     const {forecast, upgrade} = this.props;
     const {max} = this.state;
+    const userCount = this.fromPlan.getCountAfterDowngradesAtDate(upgrade.date, forecast.api);
 
-    this._recalculateUsers(value);
+    // don't allow to change value to higher if no more users are available to transit between plans
+    if (userCount < 1 && value > this.state.value) {
+      value = this.state.value;
+    }
+
+    const recalculatedUsers = this._recalculateUsers(value);
 
     upgradePlan(forecast, {
       fromPlanId: upgrade.fromPlanId,
       toPlanId: upgrade.toPlanId,
       date: upgrade.date,
       value: value
+    });
+
+    this.setState({
+      value: value,
+      movedUsers: recalculatedUsers
     });
 
     if (value === max && max < 100) {
@@ -83,6 +103,7 @@ export default class UpgradeSlider extends Component {
             step={0.01}
             tipFormatter={percentFormatter}
             defaultValue={this.props.upgrade.value}
+            value={this.state.value}
             onChange={_.throttle(this._handleOnChange.bind(this), 600)}
             min={minPercentage}
             max={maxPercentage}/>

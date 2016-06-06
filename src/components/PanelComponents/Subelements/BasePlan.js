@@ -20,6 +20,10 @@ const boxTarget = {
 
     const date = moment(component.props.date, 'M/YYYY');
 
+    if (date.isSameOrBefore(moment(), 'month')) {
+      return;
+    }
+
     upgradeDetails = {
       fromPlan: item.entity,
       toPlan: component.props.plan,

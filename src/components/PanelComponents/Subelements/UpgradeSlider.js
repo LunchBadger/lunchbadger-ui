@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
+import PlanInfoTooltip from './PlanInfoTooltip';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -86,6 +87,7 @@ export default class UpgradeSlider extends Component {
         <div className="upgrade-slider__legend">
           <div className="upgarde-slider__legend__value">
             {numeral(this.state.movedUsers).format('0,0')}
+            <PlanInfoTooltip forecast={this.props.forecast} plan={this.fromPlan} date={this.props.upgrade.date}/>
           </div>
           <div className="upgrade-slider__legend__name">
             {this.fromPlan.name}

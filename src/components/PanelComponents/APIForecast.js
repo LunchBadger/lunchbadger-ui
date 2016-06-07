@@ -126,6 +126,10 @@ export default class APIForecast extends Component {
     const {selectedRange} = this.state;
     const newRange = Object.assign({}, selectedRange, {endDate: endDate});
 
+    if (selectedRange.endDate.isAfter(endDate)) {
+      return;
+    }
+
     this.setState({
       selectedRange: newRange,
       endDate: newRange.endDate

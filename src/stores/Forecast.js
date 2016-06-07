@@ -1,8 +1,6 @@
 import _ from 'lodash';
-import Upgrade from 'models/Upgrade';
 import Tier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
-
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
@@ -26,18 +24,16 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddPlan':
-          // TODO: add plan to api copy
           this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
           this.emitChange();
           break;
         case 'AddTier':
-          // TODO: add tier to api copy play
           this.addTierToPlan(action.apiPlan, Tier.create(action.data));
           this.emitChange();
           break;
         case 'AddUpgrade':
-          // TODO: add upgrade to api forecast
-          this.addUpgradeToApi(action.apiForecast, Upgrade.create(action.data));
+        case 'AddDowngrade':
+          this.addUpgradeToApi(action.apiForecast, action.upgrade);
           this.emitChange();
           break;
         case 'CreateForecast':
@@ -45,7 +41,7 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'UpgradePlan':
-          this.upgradePlans(action.apiForecast, action.data.toPlan, action.data.fromPlan, action.data.value, action.data.date);
+          this.changeUpgradeValue(action.apiForecast, action.data.fromPlanId, action.data.toPlanId, action.data.value, action.data.date);
           this.emitChange();
           break;
       }
@@ -85,11 +81,11 @@ class Forecast extends BaseStore {
   }
 
   /**
-   * @param apiForecast {APIForecast}
+   * @param forecast {APIForecast}
    * @param upgrade {Upgrade}
    */
-  addUpgradeToApi(apiForecast, upgrade) {
-    apiForecast.addUpgrade(upgrade);
+  addUpgradeToApi(forecast, upgrade) {
+    forecast.api.addUpgrade(upgrade);
   }
 
   /**
@@ -106,24 +102,14 @@ class Forecast extends BaseStore {
     });
   }
 
-  upgradePlans(forecast, fromPlan, toPlan, value) {
-    forecast.api.plans.forEach((plan) => {
-      const fromPlanDetails = _.find(plan.details, function (details) {
-        return details.id === fromPlan.id
-      });
+  changeUpgradeValue(forecast, fromPlanId, toPlanId, value, date) {
+    const {api} = forecast;
+    const fromPlan = api.findPlan({id: fromPlanId});
+    const toPlan = api.findPlan({id: toPlanId});
 
-      if (fromPlanDetails) {
-        fromPlanDetails.subscribers.upgrades = value;
-      }
-
-      const toPlanDetails = _.find(plan.details, function (details) {
-        return details.id === fromPlan.id
-      });
-
-      if (toPlanDetails) {
-        toPlanDetails.subscribers.downgrades = value;
-      }
-    });
+    api.updateUpgrade({fromPlanId: fromPlanId, toPlanId: toPlanId, date: date}, {value: value});
+    fromPlan.findDetail({date: date}).changed = true;
+    toPlan.findDetail({date: date}).changed = true;
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

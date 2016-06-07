@@ -1,20 +1,47 @@
 import React, {Component, PropTypes} from 'react';
 import './BasePlan.scss';
-import Tier from './Tier';
 import PlanIcon from './PlanIcon';
 import classNames from 'classnames';
-import addTier from 'actions/APIForecast/addTier';
 import {DropTarget} from 'react-dnd';
 import addUpgrade from 'actions/APIForecast/addUpgrade';
+import addDowngrade from 'actions/APIForecast/addDowngrade';
+import createForecast from 'actions/APIForecast/createForecast';
+import moment from 'moment';
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    addUpgrade(component.props.parent, {
+    let upgradeDetails = {};
+
+    // prevent dropping over same element
+    if (item.entity.id === component.props.plan.id) {
+      return;
+    }
+
+    const date = moment(component.props.date, 'M/YYYY');
+
+    if (date.isSameOrBefore(moment(), 'month')) {
+      return;
+    }
+
+    upgradeDetails = {
       fromPlan: item.entity,
-      toPlan: component.props.entity,
-      value: 10
-    });
+      toPlan: component.props.plan,
+      value: 0,
+      date: date.format('M/YYYY')
+    };
+
+    createForecast(component.props.forecast, date);
+
+    if (item.index < component.props.index) {
+      addUpgrade(component.props.forecast, upgradeDetails);
+    } else {
+      addDowngrade(component.props.forecast, upgradeDetails);
+    }
+
+    if (typeof component.props.handleUpgradeCreation === 'function') {
+      component.props.handleUpgradeCreation(date);
+    }
   }
 };
 
@@ -23,11 +50,13 @@ const boxTarget = {
 }))
 export default class BasePlan extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired,
-    parent: PropTypes.object.isRequired,
+    plan: PropTypes.object.isRequired,
+    forecast: PropTypes.object.isRequired,
     date: PropTypes.string.isRequired,
-    currentPlan: PropTypes.bool,
-    setCurrent: PropTypes.func.isRequired
+    handleClick: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
+    isCurrent: PropTypes.bool,
+    handleUpgradeCreation: PropTypes.func
   };
 
   constructor(props) {
@@ -38,48 +67,19 @@ export default class BasePlan extends Component {
     }
   }
 
-  addTier(event) {
-    addTier(this.props.entity, {
-       name: 'Tier x',
-       totals: 'sth',
-       charge: 0.0
-     });
-
-    event.stopPropagation();
-  }
-
-  renderTiers() {
-    return this.props.entity.tiers.map((tier, index) => {
-      return (
-        <Tier key={tier.id}
-              index={index + 1}
-              tier={tier}/>
-      )
-    })
-  }
-
   render() {
     const elementClass = classNames({
-      expanded: this.props.currentPlan
+      'base-plan': true,
+      'base-plan--expanded': this.props.isCurrent
     });
-    const {connectDropTarget} = this.props;
+    const {date, plan, connectDropTarget} = this.props;
 
     return connectDropTarget(
-      <div className={`base-plan ${elementClass}`}
-           onClick={() => this.props.setCurrent()}>
-        <PlanIcon entity={this.props.entity}/>
-        <div className="base-plan__tiers">
-          <table>
-            <caption>Tiers
-              <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}>
-                <i className="fa fa-plus"/>
-              </a>
-            </caption>
-            <tbody>
-            {this.renderTiers()}
-            </tbody>
-          </table>
-        </div>
+      <div className={elementClass}
+           onClick={() => this.props.handleClick()}>
+        <PlanIcon index={this.props.index}
+                  changed={plan.findDetail({date: date, changed: true}) ? true : false}
+                  entity={plan}/>
       </div>
     )
   }

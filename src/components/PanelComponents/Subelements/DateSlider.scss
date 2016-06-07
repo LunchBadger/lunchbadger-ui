@@ -1,58 +1,72 @@
 .api-forecast__date-slider {
-  height: 70px;
-  margin: 1em 0 2em 1em;
-  padding: 0 1em;
-  width: 80%;
-  overflow-x: auto;
+  height: 100px;
+  margin: 1em 1em 0.5em;
+  padding: 0 0 0 1em;
+  width: calc(100% - 1em);
+  overflow-x: scroll;
+
   .date-slider {
     margin-top: 20px;
+    padding: 0 15px;
   }
+
   .rc-slider {
-    border: 1px solid #999;
-    border-bottom: none;
+    border-top: 2px solid #c4c4c4;
+    border-right: 2px solid #c4c4c4;
     border-radius: 0;
+    height: 5px;
     background: none;
 
     .rc-slider-step {
       display: none;
     }
+
     .rc-slider-mark {
       display: none;
     }
+
     .rc-slider-track {
       background-color: transparent;
       top: -1px;
     }
+
     .rc-slider-handle {
       border: none;
-      background-color: #666666;
-      width: 16px;
-      height: 16px;
-      margin-top: -7px;
-      margin-left: -8px;
+      background-color: #898989;
+      width: 20px;
+      height: 20px;
+      margin-top: -10.5px;
+      margin-left: -10px;
     }
   }
 }
+
 .rc-tooltip-arrow {
   display: none;
 }
+
 .rc-tooltip-inner {
 
 }
+
 .date-slider__marks {
   position: relative;
-  height: 50px;
+  height: 70px;
   top: -20px;
   padding-top: 20px;
 }
+
 .date-slider__mark {
   position: absolute;
   font-size: 0.6em;
   top: 10px;
-  height: 50px;
+  height: 60px;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 25px;
+
   &.selected {
+    color: #8ddfee;
+
     &:after {
       content: '';
       width: 100%;
@@ -60,29 +74,55 @@
       position: absolute;
       left: 0;
       top: 0;
-      border: 1px solid #8ddfee;
+      border: 2px solid #8ddfee;
       background: rgba(141, 223, 238, 0.25);
       z-index: 1;
     }
   }
 }
+
 .date-slider__year {
   display: block;
-  text-align: right;
-  border-left: 1px solid #ccc;
+  text-align: left;
   position: absolute;
-  padding-top: 20px;
-  top: 20px;
+  padding-top: 40px;
+  top: 5px;
   width: 100%;
+  border-top: 2px solid #c4c4c4;
+  font-weight: 700;
+  padding-left: 40%;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    bottom: 6px;
+    width: 1px;
+    background: #c4c4c4;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 3px;
+    background: #c4c4c4;
+    width: 2px;
+    left: 0;
+  }
 }
+
 .fa.date-slider__mark-current {
   display: block;
   color: #ff8000;
+  font-size: 18px;
 }
+
 .date-slider__mark__bar-fragment {
   position: absolute;
-  top: 4px;
-  height: 5px;
+  top: 3px;
+  height: 6px;
   width: 100%;
   left: -50%;
   background: #222;
@@ -90,4 +130,5 @@
 
 .date-slider__mark__bar-fragment--after {
   background: #ccc;
+  box-shadow: inset 0 5px 1px -3px rgba(0,0,0,0.55);
 }

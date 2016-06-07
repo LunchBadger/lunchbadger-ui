@@ -55,7 +55,10 @@
 
 .api-forecast__header__nav {
   list-style: none;
-  float: right;
+  position: absolute;
+  top: -3px;
+  right: 20px;
+
   li {
     float: right;
     margin: .2em;
@@ -71,11 +74,6 @@
   position: relative;
   z-index: 2;
   min-height: 150px;
-  li {
-    margin: 1em;
-    float: left;
-    &.first-of-type {
-      margin-right: 2em;
-    }
-  }
+  padding-left: 2em;
+  padding-bottom: 30px;
 }

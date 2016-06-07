@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const PlanDetails = LunchBadgerMonetize.models.PlanDetails;
@@ -10,6 +11,10 @@ export default (forecast, date) => {
   const prevMonth = date.clone().subtract(1, 'months');
   const newDetails = {};
   const newTierDetails = {};
+
+  if (forecast.api.isForecastCreated(date)) {
+    return;
+  }
 
   forecast.api.plans.forEach((plan) => {
     let details;
@@ -52,10 +57,14 @@ export default (forecast, date) => {
     details.date = date.format(dateFormat);
 
     // add percentage values to each detail
-    const scaleFactor = 1.05;
+    let scaleFactor = 1;
 
-    details.parameters.upgrade(scaleFactor);
-    details.subscribers.upgrade(scaleFactor);
+    if (prevMonth.isAfter(moment(), 'month')) {
+      // 1% more if previous plan was forecast plan
+      scaleFactor = 1.01;
+    }
+
+    details.subscribers.forecast(scaleFactor);
 
     newDetails[plan.id] = details;
   });

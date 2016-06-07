@@ -10,6 +10,7 @@ export default class ForecastDetailsTop extends Component {
       PropTypes.object
     ]),
     dateRange: PropTypes.object,
+    forecast: PropTypes.object,
     data: PropTypes.array,
     incomeSummary: PropTypes.array
   };
@@ -23,18 +24,18 @@ export default class ForecastDetailsTop extends Component {
   }
 
   componentDidMount() {
-    this._onUpdate(this.props.selectedDate, this.props.data, this.props.dateRange, this.props.incomeSummary);
+    this._onUpdate(this.props.selectedDate, this.props.data, this.props.dateRange, this.props.incomeSummary, this.props.forecast.api);
   }
 
   componentWillReceiveProps(nextProps) {
-    this._onUpdate(nextProps.selectedDate, nextProps.data, nextProps.dateRange, nextProps.incomeSummary);
+    this._onUpdate(nextProps.selectedDate, nextProps.data, nextProps.dateRange, nextProps.incomeSummary, nextProps.forecast.api);
   }
 
-  _onUpdate(selectedDate, data, dateRange, incomeSummary) {
+  _onUpdate(selectedDate, data, dateRange, incomeSummary, api) {
     let filteredData;
 
     if (dateRange) {
-      filteredData = ForecastDataParser.filterData(dateRange, data);
+      filteredData = ForecastDataParser.filterData(dateRange, data, api);
     } else {
       filteredData = data;
     }
@@ -101,6 +102,7 @@ export default class ForecastDetailsTop extends Component {
         const details = plan[dateKey];
         const {parameters, subscribers} = details;
         let payingUsersInMonth = 0;
+        let retention = 0;
 
         if (!planStatistics[dateKey]) {
           planStatistics[dateKey] = {};
@@ -108,7 +110,10 @@ export default class ForecastDetailsTop extends Component {
 
         // users calculation
         const usersInMonth = subscribers.existing + subscribers.new + subscribers.upgrades - subscribers.downgrades - subscribers.churn;
-        const retention = 1 - ((subscribers.downgrades + subscribers.churn) / subscribers.existing);
+
+        if (subscribers.existing > 0) {
+          retention = 1 - ((subscribers.downgrades + subscribers.churn) / subscribers.existing);
+        }
 
         if (parameters.cashPerCall > 0) {
           payingUsersInMonth = usersInMonth;

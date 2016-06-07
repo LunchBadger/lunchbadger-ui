@@ -11,7 +11,8 @@ export default class DateSliderMark extends Component {
     position: PropTypes.number.isRequired,
     selectedDate: PropTypes.string,
     forecast: PropTypes.object.isRequired,
-    range: PropTypes.array
+    range: PropTypes.array,
+    selectedRange: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -33,7 +34,7 @@ export default class DateSliderMark extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       selected: nextProps.selectedDate === this.formatMonth(nextProps.month).format('M/YYYY')
-    })
+    });
   }
 
   getWidth() {
@@ -45,7 +46,13 @@ export default class DateSliderMark extends Component {
   }
 
   toggleSelected() {
-    setForecast(this.props.forecast, this.formatMonth(this.props.month).toDate());
+    const date = this.formatMonth(this.props.month);
+
+    if (date.isAfter(this.props.selectedRange.endDate, 'month') || date.isBefore(this.props.selectedRange.startDate, 'month')) {
+      return;
+    }
+
+    setForecast(this.props.forecast, date.toDate());
   }
 
   formatMonth(month) {

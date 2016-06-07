@@ -3,18 +3,14 @@ import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
-import removeAPIForecast from 'actions/APIForecast/remove';
-import BasePlan from './Subelements/BasePlan';
-import addPlan from 'actions/APIForecast/addPlan';
 import updateForecast from 'actions/APIForecast/update';
-import UpgradeSlider from 'components/PanelComponents/Subelements/UpgradeSlider';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
 import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
-import {notify} from 'react-notify-toast';
-import 'rc-slider/assets/index.css';
+import ForecastNav from './Subelements/ForecastNav';
+import ForecastPlans from './Subelements/ForecastPlans';
 
 const AppState = LunchBadgerCore.stores.AppState;
 
@@ -22,6 +18,9 @@ const boxSource = {
   beginDrag(props) {
     const {entity, left, top} = props;
     return {entity, left, top};
+  },
+  canDrag: (props) => {
+    return !props.isExpanded;
   }
 };
 
@@ -32,7 +31,10 @@ export default class APIForecast extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     left: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired
+    top: PropTypes.number.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onExpand: PropTypes.func.isRequired,
+    isExpanded: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -50,14 +52,13 @@ export default class APIForecast extends Component {
     };
 
     this.state = {
-      expanded: false,
+      expanded: props.isExpanded,
       data: [],
       startDate: null,
       endDate: null,
       selectedRange: null,
       incomeSummary: [],
-      selectedDate: this.currentDate,
-      currentPlan: null
+      selectedDate: this.currentDate
     };
   }
 
@@ -80,76 +81,10 @@ export default class APIForecast extends Component {
     AppState.removeChangeListener(this.forecastUpdated);
   }
 
-  save() {
-    ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {
-      notify.show('Forecast has been successfully saved into local API', 'success');
-    }).catch(() => {
-      notify.show('There are problems with syncing data with local API, check console for more', 'error');
-    });
-  }
-
-  remove() {
-    removeAPIForecast(this.props.entity.id);
-  }
-
-  toggleExpand() {
-    this.setState({expanded: !this.state.expanded})
-  }
-
-  addPlan() {
-    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'});
-  }
-
-  setCurrentPlan(planId) {
-    if (this.state.currentPlan === planId) {
-      this.setState({
-        currentPlan: null
-      })
-    } else {
-      this.setState({
-        currentPlan: planId
-      })
-    }
-  }
-
-  renderPlans() {
-    return this.props.entity.api.plans.map((plan, index) => {
-      return (
-        <li key={`plan_${index}`}>
-          <span>{plan.name}</span>
-          <BasePlan key={plan.id}
-                    parent={this.props.entity}
-                    date={this.state.selectedDate}
-                    entity={plan}
-                    setCurrent={() => this.setCurrentPlan(plan.id)}
-                    currentPlan={this.state.currentPlan === plan.id}/>
-        </li>
-      )
-    })
-  }
-
-  renderUpgrades() {
-    return this.props.entity.upgrades.map((upgrade, index) => {
-      return (
-        <li key={`upgrade_${index}`}>
-          <UpgradeSlider key={upgrade.id}
-                         value={upgrade.value}
-                         date={this.state.selectedDate}
-                         forecast={this.props.entity}
-                         toPlan={upgrade.toPlan}
-                         fromPlan={upgrade.fromPlan}/>
-        </li>
-      )
-    })
-  }
-
   _updateForecast(forecast = null) {
     const selectedDate = (forecast && forecast.selectedDate) ? forecast.selectedDate : this.currentDate;
     this.setState({
-      incomeSummary: ForecastDataParser.calculateMonthlyIncome(
-        this.props.entity.api.plans,
-        selectedDate
-      ),
+      incomeSummary: ForecastDataParser.calculateMonthlyIncome(this.props.entity.api, selectedDate),
       selectedDate: selectedDate
     });
   }
@@ -187,9 +122,23 @@ export default class APIForecast extends Component {
     });
   }
 
+  _handleEndDateUpdate(endDate) {
+    const {selectedRange} = this.state;
+    const newRange = Object.assign({}, selectedRange, {endDate: endDate});
+
+    if (selectedRange.endDate.isAfter(endDate)) {
+      return;
+    }
+
+    this.setState({
+      selectedRange: newRange,
+      endDate: newRange.endDate
+    });
+  }
+
   render() {
     const elementClass = classNames({
-      expanded: this.state.expanded
+      expanded: this.props.isExpanded
     });
     const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
 
@@ -208,23 +157,9 @@ export default class APIForecast extends Component {
                             endDate={this.state.endDate}/>
             )
           }
-          <ul className="api-forecast__header__nav">
-            <li>
-              <a onClick={this.save.bind(this)}>
-                <i className="fa fa-floppy-o"/>
-              </a>
-            </li>
-            <li>
-              <a onClick={this.remove.bind(this)}>
-                <i className="fa fa-remove"/>
-              </a>
-            </li>
-            <li>
-              <a onClick={this.toggleExpand.bind(this)}>
-                <i className="fa fa-expand"/>
-              </a>
-            </li>
-          </ul>
+          <ForecastNav entity={this.props.entity}
+                       onClose={() => this.props.onClose()}
+                       onExpand={() => this.props.onExpand()}/>
         </div>
         <div className="api-forecast__content">
           <div className="expanded-only">
@@ -238,17 +173,11 @@ export default class APIForecast extends Component {
                 )
               }
             </div>
-            <ul className="api-forecast__plans">
-              {this.renderPlans()}
-              <li>
-                <a className="api-forecast__add-plan" onClick={this.addPlan.bind(this)}>
-                  <i className="fa fa-plus"/>
-                </a>
-              </li>
-            </ul>
-            <ul className="api-forecast__upgrade-sliders">
-              {this.renderUpgrades()}
-            </ul>
+            <div className="api-forecast__plans">
+              <ForecastPlans selectedDate={this.state.selectedDate}
+                             handleUpgradeCreation={this._handleEndDateUpdate.bind(this)}
+                             entity={this.props.entity}/>
+            </div>
           </div>
           {
             this.state.data.length > 0 && (

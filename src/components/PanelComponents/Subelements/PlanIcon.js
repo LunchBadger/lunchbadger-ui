@@ -5,8 +5,9 @@ import classNames from 'classnames';
 
 const boxSource = {
   beginDrag(props) {
-    const {entity, left, top} = props;
-    return {entity, left, top};
+    const {entity, left, top, index} = props;
+    
+    return {entity, left, top, index};
   }
 };
 
@@ -17,25 +18,24 @@ const boxSource = {
 export default class PlanIcon extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    connectDragSource: PropTypes.func.isRequired
+    connectDragSource: PropTypes.func.isRequired,
+    changed: PropTypes.bool,
+    index: PropTypes.number
   };
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      moved: false
-    }
   }
 
   render() {
     const {connectDragSource} = this.props;
     const elementClass = classNames({
-      moved: this.state.moved
+      'base-plan__icon': true,
+      'base-plan__icon--changed': this.props.changed
     });
 
     return connectDragSource((
-      <div className={`base-plan__icon ${elementClass}`}>
+      <div className={elementClass}>
         <i className={`fa ${this.props.entity.icon}`}/>
       </div>
     ))

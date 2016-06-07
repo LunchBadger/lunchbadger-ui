@@ -5,13 +5,14 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 export default (apiForecast, props) => {
   const {fromPlan, toPlan, value, date} = props;
 
-  dispatch('AddUpgrade', {
+  dispatch('AddDowngrade', {
     apiForecast,
     upgrade: Upgrade.create({
       fromPlanId: fromPlan.id,
       toPlanId: toPlan.id,
       value,
-      date
+      date,
+      downgrade: true
     })
   });
 };

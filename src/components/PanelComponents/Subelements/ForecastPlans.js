@@ -1,7 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import BasePlan from './BasePlan';
 import UpgradeSlider from './UpgradeSlider';
+import UserPoolSlider from './UserPoolSlider';
 import ForecastPlanDetails from './ForecastPlanDetails';
+import UserPool from './UserPool';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
@@ -70,6 +72,14 @@ export default class ForecastPlans extends Component {
 
   renderUpgrades() {
     return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade) => {
+      if (upgrade.fromPlanId === null || upgrade.toPlanId === null) {
+        return (
+          <UserPoolSlider key={upgrade.id}
+                          upgrade={upgrade}
+                          forecast={this.props.entity}/>
+        );
+      }
+
       return (
         <UpgradeSlider key={upgrade.id}
                        upgrade={upgrade}
@@ -81,6 +91,10 @@ export default class ForecastPlans extends Component {
   render() {
     return (
       <div className="forecast-plans">
+        <div className="forecast-plans__pool">
+          <UserPool />
+        </div>
+
         <div className="forecast-plans__list">
           {this.renderPlans()}
         </div>

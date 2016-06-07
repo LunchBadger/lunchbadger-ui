@@ -160,11 +160,22 @@ export default class ForecastAPIPlan extends APIPlan {
 
     upgrades.forEach((upgrade) => {
       const fromPlan = api.findPlan({id: upgrade.fromPlanId});
-      const existingUsers = fromPlan.findDetail({date: date}).subscribers.sum;
 
-      totalUpgradesCount += Math.round(existingUsers * (upgrade.value / 100));
+      if (fromPlan) {
+        const existingUsers = fromPlan.findDetail({date: date}).subscribers.sum;
+
+        totalUpgradesCount += Math.round(existingUsers * (upgrade.value / 100));
+      }
     });
 
     return totalUpgradesCount;
+  }
+
+  getPlanNewUsers(date, api) {
+
+  }
+
+  getPlanChurnUsers(date, api) {
+
   }
 }

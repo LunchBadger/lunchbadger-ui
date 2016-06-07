@@ -6,34 +6,43 @@ import {DropTarget} from 'react-dnd';
 import addUpgrade from 'actions/APIForecast/addUpgrade';
 import addDowngrade from 'actions/APIForecast/addDowngrade';
 import moment from 'moment';
+import {USER_POOL} from './UserPoolIcon';
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    let upgradeDetails = {};
-
-    // prevent dropping over same element
-    if (item.entity.id === component.props.plan.id) {
-      return;
-    }
-
     const date = moment(component.props.date, 'M/YYYY');
 
     if (date.isSameOrBefore(moment(), 'month')) {
       return;
     }
 
-    upgradeDetails = {
-      fromPlan: item.entity,
-      toPlan: component.props.plan,
-      value: 0,
-      date: date.format('M/YYYY')
-    };
-
-    if (item.index < component.props.index) {
-      addUpgrade(component.props.forecast, upgradeDetails);
+    // handle user pool drop
+    if (item.type === USER_POOL) {
+      addUpgrade(component.props.forecast, {
+        fromPlan: null,
+        toPlan: component.props.plan,
+        value: 0,
+        date: date.format('M/YYYY')
+      });
     } else {
-      addDowngrade(component.props.forecast, upgradeDetails);
+      // prevent dropping over same element
+      if (item.entity.id === component.props.plan.id) {
+        return;
+      }
+
+      const upgradeDetails = {
+        fromPlan: item.entity,
+        toPlan: component.props.plan,
+        value: 0,
+        date: date.format('M/YYYY')
+      };
+
+      if (item.index < component.props.index) {
+        addUpgrade(component.props.forecast, upgradeDetails);
+      } else {
+        addDowngrade(component.props.forecast, upgradeDetails);
+      }
     }
 
     if (typeof component.props.handleUpgradeCreation === 'function') {

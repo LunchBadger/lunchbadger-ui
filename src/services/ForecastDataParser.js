@@ -139,7 +139,7 @@ class ForecastDataParser {
         upgrades: plan.getPlanUpgradedUsers(date, api, false),
         downgrades: plan.getPlanDowngradedUsers(date, api, true),
         existing: plan.getPlanUpgradedUsers(date, api, true) - plan.getPlanDowngradedUsers(date, api, false)
-      }
+      };
     }
 
     return {
@@ -161,17 +161,12 @@ class ForecastDataParser {
 
       plan.forEach((planProperties) => {
         const dateKey = `${planProperties.date.getMonth() + 1}/${planProperties.date.getFullYear()}`;
-
-        if (planProperties.changed) {
-          return planDetails[dateKey] = planProperties;
-        }
-
         const changes = this.getUpgradesAndDowngrades(api, planProperties.planId, dateKey);
 
-        planProperties.subscribers.upgrades += changes.upgrades;
-        planProperties.subscribers.downgrades += changes.downgrades;
-        planProperties.subscribers.existing += changes.existing;
-        planProperties.changed = true;
+        // dirty hack, need to be fixed
+        planProperties.subscribers.upgrades += parseInt(changes.upgrades / 4, 10);
+        planProperties.subscribers.downgrades += parseInt(changes.downgrades / 4, 10);
+        planProperties.subscribers.existing += parseInt(changes.existing / 4, 10);
 
         planDetails[dateKey] = planProperties;
       });

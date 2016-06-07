@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import ForecastTier from './ForecastTier';
 
 const APIPlan = LunchBadgerMonetize.models.APIPlan;
@@ -58,6 +59,16 @@ export default class ForecastAPIPlan extends APIPlan {
    */
   addPlanDetails(details) {
     this.details.push(details);
+  }
+
+	/**
+   * @param fromDate {String} - date in string type with format M/YYYY
+   * @returns {Array}
+   */
+  findFutureDetails(fromDate) {
+    return _.filter(this.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isAfter(moment(fromDate, 'M/YYYY'));
+    });
   }
 
   /**

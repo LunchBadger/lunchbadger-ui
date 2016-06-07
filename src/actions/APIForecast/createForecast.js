@@ -12,7 +12,7 @@ export default (forecast, date) => {
   const newDetails = {};
   const newTierDetails = {};
 
-  if (forecast.api.isForecastCreated(date)) {
+  if (forecast.api.isForecastCreated(date.format(dateFormat))) {
     return;
   }
 
@@ -55,6 +55,7 @@ export default (forecast, date) => {
     }
 
     details.date = date.format(dateFormat);
+    details.changed = false;
 
     // add percentage values to each detail
     let scaleFactor = 1;
@@ -64,7 +65,7 @@ export default (forecast, date) => {
       scaleFactor = 1.01;
     }
 
-    details.subscribers.forecast(scaleFactor);
+    details.subscribers.forecast(plan.getUsersCountAtDateIncludingUpgrades(prevMonth.format(dateFormat), forecast.api), scaleFactor);
 
     newDetails[plan.id] = details;
   });

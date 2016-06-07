@@ -185,7 +185,14 @@ export default class ForecastAPIPlan extends APIPlan {
   }
 
   getPlanChurnUsers(date, api) {
+    const params = {fromPlanId: this.id, date: date, toPlanId: null};
+    const downgrades = api.findUpgrades(params);
+    
     let totalChurnUsers = 0;
+
+    downgrades.forEach((upgrade) => {
+      totalChurnUsers += upgrade.value;
+    });
 
     return totalChurnUsers;
   }

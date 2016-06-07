@@ -5,7 +5,6 @@ import PlanInfoTooltip from './PlanInfoTooltip';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
 import moment from 'moment';
-import _ from 'lodash';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
@@ -89,7 +88,7 @@ export default class UpgradeSlider extends Component {
         <div className="upgrade-slider__slider">
           <Slider
             disabled={moment(this.props.upgrade.date, 'M/YYYY').isSameOrBefore(moment(), 'month')}
-            step={1}
+            step={4}
             defaultValue={this.props.upgrade.value}
             value={this.state.value}
             onChange={this._handleOnChange.bind(this)}

@@ -4,14 +4,12 @@ import {DropTarget} from 'react-dnd';
 import './UserPool.scss';
 
 const boxTarget = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     const item = monitor.getItem();
 
     if (item.type === USER_POOL) {
       return;
     }
-
-    console.log(item);
   }
 };
 

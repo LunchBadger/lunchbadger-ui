@@ -172,15 +172,17 @@ class ForecastDataParser {
       plan.forEach((planProperties) => {
         const dateKey = `${planProperties.date.getMonth() + 1}/${planProperties.date.getFullYear()}`;
         const changes = this.getUpgradesAndDowngrades(api, planProperties.planId, dateKey);
+        const {subscribers} = planProperties;
 
-        // dirty hack, need to be fixed
-        planProperties.subscribers.new += parseInt(changes.new / 4, 10);
-        planProperties.subscribers.churn += parseInt(changes.churn / 4, 10);
-        planProperties.subscribers.upgrades += parseInt(changes.upgrades / 4, 10);
-        planProperties.subscribers.downgrades += parseInt(changes.downgrades / 4, 10);
-        planProperties.subscribers.existing += parseInt(changes.existing / 4, 10);
-
-        planDetails[dateKey] = planProperties;
+        planDetails[dateKey] = Object.assign({}, planProperties, {
+          subscribers: {
+            new: subscribers.new + changes.new,
+            churn: subscribers.churn + changes.churn,
+            upgrades: subscribers.upgrades + changes.upgrades,
+            downgrades: subscribers.downgrades + changes.downgrades,
+            existing: subscribers.existing + changes.existing
+          }
+        });
       });
 
       return planDetails;

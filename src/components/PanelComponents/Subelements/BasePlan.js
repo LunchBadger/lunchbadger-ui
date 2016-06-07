@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import {DropTarget} from 'react-dnd';
 import addUpgrade from 'actions/APIForecast/addUpgrade';
 import addDowngrade from 'actions/APIForecast/addDowngrade';
-import createForecast from 'actions/APIForecast/createForecast';
 import moment from 'moment';
 
 const boxTarget = {

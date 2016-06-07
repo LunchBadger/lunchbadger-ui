@@ -11,9 +11,9 @@ export default class PlanSubscribers extends BaseModel {
     this.churn = churn || 0;
   }
 
-  forecast(scaleFactor = 1) {
+  forecast(amount = this.sum, scaleFactor = 1) {
     // existing users should be net value from previous month
-    this.existing = Math.round(this.sum * scaleFactor);
+    this.existing = Math.round(amount * scaleFactor);
 
     // reset other predictions...
     this.new = 0;

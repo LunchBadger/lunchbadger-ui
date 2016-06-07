@@ -70,13 +70,19 @@ class ForecastDataParser {
       const upgrades = plan.getPlanUpgradedUsers(dateKey, api, false);
       const existingFallByUpgrades = plan.getPlanDowngradedUsers(dateKey, api, false);
 
-      // check downgrades
+      // check downgrades...
       const downgrades = plan.getPlanDowngradedUsers(dateKey, api, true);
       const existingRaiseByDowngrades = plan.getPlanUpgradedUsers(dateKey, api, true);
 
+      // check new...
+      const newUsers = plan.getPlanNewUsers(dateKey, api);
+
+      // check churn...
+      const churnUsers = plan.getPlanChurnUsers(dateKey, api);
+
       let sum = 0;
       const {parameters, subscribers} = planDetails;
-      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades + existingRaiseByDowngrades;
+      const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades + existingRaiseByDowngrades + newUsers - churnUsers;
 
       plan.tiers.forEach((tier) => {
         const monthlyDetails = _.find(tier.details, (tierDetails) => {
@@ -106,8 +112,8 @@ class ForecastDataParser {
 
       income.push({
         new: {
-          amount: sum * subscribers.new / netSubscribers,
-          subscribers: subscribers.new
+          amount: sum * (subscribers.new + newUsers) / netSubscribers,
+          subscribers: subscribers.new + newUsers
         },
         upgrades: {
           amount: sum * (subscribers.upgrades + upgrades) / netSubscribers,
@@ -122,8 +128,8 @@ class ForecastDataParser {
           subscribers: subscribers.downgrades + downgrades
         },
         churn: {
-          amount: sum * subscribers.churn / netSubscribers,
-          subscribers: subscribers.churn
+          amount: sum * (subscribers.churn + churnUsers) / netSubscribers,
+          subscribers: subscribers.churn + churnUsers
         }
       });
     });
@@ -136,6 +142,8 @@ class ForecastDataParser {
 
     if (plan) {
       return {
+        new: plan.getPlanNewUsers(date, api),
+        churn: plan.getPlanChurnUsers(date, api),
         upgrades: plan.getPlanUpgradedUsers(date, api, false),
         downgrades: plan.getPlanDowngradedUsers(date, api, true),
         existing: plan.getPlanUpgradedUsers(date, api, true) - plan.getPlanDowngradedUsers(date, api, false)
@@ -143,6 +151,8 @@ class ForecastDataParser {
     }
 
     return {
+      new: 0,
+      churn: 0,
       upgrades: 0,
       downgrades: 0,
       existing: 0
@@ -164,6 +174,8 @@ class ForecastDataParser {
         const changes = this.getUpgradesAndDowngrades(api, planProperties.planId, dateKey);
 
         // dirty hack, need to be fixed
+        planProperties.subscribers.new += parseInt(changes.new / 4, 10);
+        planProperties.subscribers.churn += parseInt(changes.churn / 4, 10);
         planProperties.subscribers.upgrades += parseInt(changes.upgrades / 4, 10);
         planProperties.subscribers.downgrades += parseInt(changes.downgrades / 4, 10);
         planProperties.subscribers.existing += parseInt(changes.existing / 4, 10);

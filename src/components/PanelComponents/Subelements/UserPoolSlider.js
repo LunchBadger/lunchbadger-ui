@@ -26,13 +26,13 @@ export default class UpgradeSlider extends Component {
   componentWillMount() {
     const {forecast, upgrade} = this.props;
 
-    this.plan = upgrade.fromPlanId ? forecast.api.findPlan({id: upgrade.fromPlanId}) : forecast.api.findPlan({id: upgrade.toPlanId})
+    this.plan = upgrade.fromPlanId ? forecast.api.findPlan({id: upgrade.fromPlanId}) : forecast.api.findPlan({id: upgrade.toPlanId});
 
     this.planUsers = this.plan.findDetail({date: upgrade.date}).subscribers.sum;
 
     this.setState({
       movedUsers: upgrade.value,
-      max: Math.ceil((upgrade.value || this.state.max))
+      max: Math.ceil((upgrade.value || this.state.max) / 10000) * 10000
     });
   }
 
@@ -52,7 +52,7 @@ export default class UpgradeSlider extends Component {
       movedUsers: value
     });
 
-    if (value === max && max < 10000) {
+    if (value === max) {
       this.setState({max: max + 10000});
     }
   }
@@ -92,7 +92,8 @@ export default class UpgradeSlider extends Component {
             step={1}
             defaultValue={this.props.upgrade.value}
             value={this.state.value}
-            onChange={_.throttle(this._handleOnChange.bind(this), 600)}
+            onChange={this._handleOnChange.bind(this)}
+            onAfterChange={this._handleOnChange.bind(this)}
             min={minValue}
             max={maxValue}/>
           <div className="upgrade-slider__slider-legend">

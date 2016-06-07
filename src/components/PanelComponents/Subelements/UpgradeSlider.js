@@ -90,11 +90,13 @@ export default class UpgradeSlider extends Component {
             <PlanInfoTooltip forecast={this.props.forecast} plan={this.fromPlan} date={this.props.upgrade.date}/>
           </div>
           <div className="upgrade-slider__legend__name">
+            Users
+            {' '}
+            {this.props.upgrade.downgrade ? 'downgraded from' : 'upgraded from'}
+            {' '}
             {this.fromPlan.name}
             {' '}
-            {
-              this.props.upgrade.downgrade ? 'downgrade to' : 'upgrade to'
-            }
+            to
             {' '}
             {this.toPlan.name}
           </div>

@@ -49,8 +49,8 @@ export default class ForecastPlans extends Component {
           <span className="forecast-plans__plan__name">{plan.name}</span>
           <BasePlan key={plan.id}
                     index={index}
-                    forecast={this.props.entity}
-                    date={this.props.selectedDate}
+                    forecast={entity}
+                    date={selectedDate}
                     plan={plan}
                     handleUpgradeCreation={this.props.handleUpgradeCreation.bind(this)}
                     isCurrent={this.state.currentPlan && this.state.currentPlan.id === plan.id}

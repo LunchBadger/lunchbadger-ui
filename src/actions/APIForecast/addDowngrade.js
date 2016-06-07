@@ -9,7 +9,7 @@ export default (apiForecast, props) => {
     apiForecast,
     upgrade: Upgrade.create({
       fromPlanId: fromPlan.id,
-      toPlanId: toPlan.id,
+      toPlanId: toPlan ? toPlan.id : null,
       value,
       date,
       downgrade: true

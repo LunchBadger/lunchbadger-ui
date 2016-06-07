@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import Tier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
 
@@ -42,6 +43,7 @@ class Forecast extends BaseStore {
           break;
         case 'UpgradePlan':
           this.changeUpgradeValue(action.apiForecast, action.data.fromPlanId, action.data.toPlanId, action.data.value, action.data.date);
+          this.recalculateNextForecastsBase(action.apiForecast, action.data.date);
           this.emitChange();
           break;
       }
@@ -110,6 +112,21 @@ class Forecast extends BaseStore {
     api.updateUpgrade({fromPlanId: fromPlanId, toPlanId: toPlanId, date: date}, {value: value});
     fromPlan.findDetail({date: date}).changed = true;
     toPlan.findDetail({date: date}).changed = true;
+  }
+
+  recalculateNextForecastsBase(forecast, fromDate) {
+    const {api} = forecast;
+    const scaleFactor = 1.01;
+
+    api.plans.forEach((plan) => {
+      const details = plan.findFutureDetails(fromDate);
+
+      details.forEach((detail) => {
+        const prevMonth = moment(detail.date, 'M/YYYY').subtract(1, 'months').format('M/YYYY');
+
+        detail.subscribers.forecast(plan.getUsersCountAtDateIncludingUpgrades(prevMonth, api), scaleFactor);
+      });
+    });
   }
 
   createForecastForEachPlanInApi(forecast, plansDetails, tiersDetails) {

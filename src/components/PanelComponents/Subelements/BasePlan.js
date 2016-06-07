@@ -31,8 +31,6 @@ const boxTarget = {
       date: date.format('M/YYYY')
     };
 
-    createForecast(component.props.forecast, date);
-
     if (item.index < component.props.index) {
       addUpgrade(component.props.forecast, upgradeDetails);
     } else {

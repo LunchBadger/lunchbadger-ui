@@ -11,7 +11,8 @@ export default (apiForecast, props) => {
       fromPlanId: fromPlan.id,
       toPlanId: toPlan.id,
       value,
-      date
+      date,
+      downgrade: false
     })
   });
 };

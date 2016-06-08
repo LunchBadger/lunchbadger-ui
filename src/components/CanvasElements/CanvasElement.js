@@ -136,15 +136,18 @@ export default (ComposedComponent) => {
 
     update(model) {
       const element = this.element.decoratedComponentInstance || this.element;
+      let updated;
 
       if (typeof element.update === 'function') {
-        element.update(model);
+        updated = element.update(model);
       }
 
-      this.setState({
-        editable: false,
-        expanded: false
-      });
+      if (typeof updated === 'undefined' || updated) {
+        this.setState({
+          editable: false,
+          expanded: false
+        });
+      }
     }
 
     updateName(evt) {

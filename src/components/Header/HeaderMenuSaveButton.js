@@ -99,7 +99,7 @@ export default class HeaderMenuSaveButton extends Component {
         value: states['currentElement']
       });
     }
-    
+
     if (states['currentForecast']) {
       const currentForecast = states['currentForecast'];
 
@@ -107,7 +107,9 @@ export default class HeaderMenuSaveButton extends Component {
         key: 'currentForecast',
         value: {
           id: currentForecast['forecast']['id'],
-          expanded: currentForecast['expanded'] || false,
+          expanded: currentForecast['expanded'] || true,
+          left: currentForecast['forecast']['left'] || 0,
+          top: currentForecast['forecast']['top'] || 0,
           selectedDate: currentForecast['selectedDate']
         }
       });

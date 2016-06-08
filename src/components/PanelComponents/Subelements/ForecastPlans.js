@@ -70,8 +70,8 @@ export default class ForecastPlans extends Component {
     });
   }
 
-  renderUpgrades() {
-    return this.props.entity.api.getUpgradesForDate(this.props.selectedDate).map((upgrade) => {
+  renderUpgrades(upgrades) {
+    return upgrades.map((upgrade) => {
       if (upgrade.fromPlanId === null || upgrade.toPlanId === null) {
         return (
           <UserPoolSlider key={upgrade.id}
@@ -90,6 +90,7 @@ export default class ForecastPlans extends Component {
 
   render() {
     const {entity, selectedDate} = this.props;
+    const upgrades = entity.api.getUpgradesForDate(this.props.selectedDate);
 
     return (
       <div className="forecast-plans">
@@ -116,9 +117,13 @@ export default class ForecastPlans extends Component {
           )
         }
 
-        <div className="forecast-plans__upgrades">
-          {this.renderUpgrades()}
-        </div>
+        {
+          upgrades.length > 0 && (
+            <div className="forecast-plans__upgrades">
+              {this.renderUpgrades(upgrades)}
+            </div>
+          )
+        }
       </div>
     );
   }

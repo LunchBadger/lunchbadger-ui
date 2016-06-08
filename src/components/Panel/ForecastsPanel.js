@@ -72,9 +72,7 @@ class ForecastsPanel extends Component {
     const {connectDropTarget} = this.props;
     return connectDropTarget(
       <div className="panel__body">
-        <div className="panel__title">
-          {this.renderEntities()}
-        </div>
+        {this.renderEntities()}
       </div>
     );
   }

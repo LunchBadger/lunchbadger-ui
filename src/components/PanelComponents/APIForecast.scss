@@ -21,18 +21,18 @@
     width: 50%;
     position: relative;
     float: left;
+    padding-right: 30px;
   }
 
   &.expanded {
     box-shadow: none;
-    position: static;
-    width: calc(100% + 60px);
-    height: 100%;
+    position: relative;
+    width: calc(100% + 30px);
     min-height: 350px;
     z-index: 2;
-    left: 0;
-    top: 0;
-    margin: -35px -100px -30px -30px;
+    left: 0 !important;
+    top: 0 !important;
+    margin: -15px -15px 0 -15px;
 
     .api-forecast__details {
       float: left;
@@ -41,6 +41,16 @@
 
     .expanded-only {
       display: block;
+    }
+
+    &:before {
+      content: '';
+      left: 50%;
+      top: 80px;
+      bottom: 30px;
+      width: 1px;
+      background: #ccc;
+      position: absolute;
     }
   }
 }

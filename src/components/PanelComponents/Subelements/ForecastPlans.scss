@@ -52,9 +52,11 @@
 }
 
 .forecast-plans__upgrades {
-  padding-top: 20px;
+  padding-top: 15px;
   display: table;
   width: 100%;
+  border-top: 1px solid #ccc;
+  margin-top: 15px;
 }
 
 .forecast-plans__pool {

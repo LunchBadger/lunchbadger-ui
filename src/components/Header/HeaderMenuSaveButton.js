@@ -107,7 +107,7 @@ export default class HeaderMenuSaveButton extends Component {
         key: 'currentForecast',
         value: {
           id: currentForecast['forecast']['id'],
-          expanded: currentForecast['expanded'] || true,
+          expanded: currentForecast['expanded'] || false,
           left: currentForecast['forecast']['left'] || 0,
           top: currentForecast['forecast']['top'] || 0,
           selectedDate: currentForecast['selectedDate']

@@ -49,6 +49,12 @@ class AppState extends BaseStore {
 
       case 'SetForecast':
         this.setStateKey('currentForecast', action.forecastData);
+        this.setStateKey('currentForecastInformation', {
+          id: action.forecastData.forecast.id,
+          expanded: action.forecastData.expanded || false,
+          selectedDate: action.selectedDate
+        });
+
         break;
 
       case 'InitializeAppState':

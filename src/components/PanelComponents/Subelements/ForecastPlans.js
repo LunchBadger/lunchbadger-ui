@@ -89,10 +89,13 @@ export default class ForecastPlans extends Component {
   }
 
   render() {
+    const {entity, selectedDate} = this.props;
+
     return (
       <div className="forecast-plans">
         <div className="forecast-plans__pool">
-          <UserPool />
+          <UserPool forecast={entity}
+                    date={selectedDate}/>
         </div>
 
         <div className="forecast-plans__list">

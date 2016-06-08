@@ -3,12 +3,14 @@
 .canvas-element {
   max-width: 80%;
   min-width: 200px;
-  color: $font-base;
+  color: $font-light;
   position: relative;
   display: block;
   background: $ui-light;
-  border-radius: 10px;
-  border: 2px solid $ui-base-border;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background-color: #01667D;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   padding: 15px 20px;
   margin: 20px 10%;
 
@@ -35,6 +37,7 @@
   }
 
   &.expanded {
+      padding-bottom: 0;
     .expanded-only {
       display: block;
     }
@@ -56,8 +59,8 @@
   }
 
   &.highlighted {
-    border-colotr: #fbb;
-    background: #fbb;
+    border-color: $ui-active;
+    //background: #fbb;
   }
 }
 
@@ -71,6 +74,7 @@
 
 .canvas-element__actions {
   text-align: right;
+  background-color: $ui-light;
 }
 
 .canvas-element__inside {
@@ -128,10 +132,15 @@
 .canvas-element__sub-element {
   padding-top: 10px;
   padding-bottom: 5px;
+  color: $font-base;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background-color: $ui-light;
 }
 
 .canvas-element__sub-elements {
   padding-top: 8px;
+  background-color: $ui-light;
 
   .canvas-element {
     padding: 0 20px;
@@ -151,7 +160,9 @@
   font-weight: 700;
   font-size: 14px;
   padding-left: 30px;
-  color: $ui-dark-background;
+  color: $font-light-title;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 
   &:hover {
     .canvas-element__add {
@@ -183,28 +194,37 @@
   border: none;
   cursor: pointer;
 
-  &:hover {
+  /*&:hover {
     background: #ccc;
-  }
+  }*/
 }
 
 .canvas-element__input {
   font-size: 17px;
   width: 100%;
+  color: #fff;
+  background-color: #01667D;
+  border: 1px solid $ui-base-border;
+  padding: 2px 4px;
 }
 
 .canvas-element__input--property {
-  font-size: 16px;
+  font-size: 14px;
+  background-color: $ui-active;
+  border: 1px solid $ui-active;
 }
 
 .canvas-element__properties {
-  padding: 10px 30px 0;
+  padding: 10px 30px 15px;
+  background-color: $ui-light;
 }
 
 .canvas-element__properties__title {
   font-weight: 700;
-  font-size: 14px;
-  color: $ui-dark-background;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: $font-light-title;
+  text-transform: uppercase;
 }
 
 .canvas-element__properties__table {
@@ -215,12 +235,16 @@
 .canvas-element__properties__property {
   display: block;
   width: 100%;
+  color: $font-base;
 }
 
 .canvas-element__properties__property-title {
   display: block;
   font-size: 13px;
   padding-top: 10px;
+  color: $font-light-title;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .canvas-element__properties__property-value {

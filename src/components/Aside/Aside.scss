@@ -6,7 +6,11 @@
   top: $header-height;
   width: $aside-width;
   height: 100%;
-  background: $ui-base;
-  border-right: 2px solid $ui-base-border;
+  background: $ui-light;
+  border-right: 1px solid $ui-base-border;
   z-index: $z-index-medium;
+  hr {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 }

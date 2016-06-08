@@ -149,6 +149,10 @@ export default class APIForecast extends Component {
     return connectDragSource(
       <div className={`api-forecast ${elementClass}`} style={{left, top}}>
         <div className="api-forecast__header">
+          <div className="api-forecast__header__title">
+            {this.props.entity.api.name}
+            <span className="api-forecast__header__subtitle">Revenue Forecast</span>
+          </div>
           {
             !!this.state.startDate && (
               <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}

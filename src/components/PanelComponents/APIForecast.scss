@@ -77,3 +77,20 @@
   padding-left: 2em;
   padding-bottom: 30px;
 }
+
+.api-forecast__header__title {
+  position: absolute;
+  left: 30px;
+  font-size: 20px;
+  top: 0;
+  display: none;
+
+  .expanded & {
+    display: block;
+  }
+}
+
+.api-forecast__header__subtitle {
+  font-size: 16px;
+  padding-left: 10px;
+}

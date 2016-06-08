@@ -1,0 +1,12 @@
+.model-property__add {
+  display: none;
+  float: right;
+  font-size: 14px;
+  cursor: pointer;
+  padding: .2em 0;
+  color: #ccc;
+
+  .editable & {
+    display: block;
+  }
+}

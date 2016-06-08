@@ -1,9 +1,11 @@
 import React, {Component, PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from 'actions/CanvasElements/Model/update';
 import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import _ from 'lodash';
+import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -30,11 +32,17 @@ class Model extends Component {
       properties: []
     };
 
-    model.properties && model.properties.forEach((property) => {
-      data.properties.push(ModelPropertyFactory.create(property));
-    });
+    if (this.validateProperties()) {
+      model.properties && model.properties.forEach((property) => {
+        data.properties.push(ModelPropertyFactory.create(property));
+      });
 
-    updateModel(this.props.entity.id, _.merge(model, data));
+      updateModel(this.props.entity.id, _.merge(model, data));
+
+      return true;
+    }
+
+    return false;
   }
 
   updateName(event) {
@@ -81,6 +89,26 @@ class Model extends Component {
     this.setState({contextPathDirty: true});
   }
 
+  validateProperties() {
+    const propertiesForm = findDOMNode(this.refs.properties);
+    const formFields = propertiesForm.querySelectorAll('input[type="text"]');
+    const emptyFields = [];
+
+    [].forEach.call(formFields, (field) => {
+      if (field.value.trim() === '') {
+        emptyFields.push(field);
+      }
+    });
+
+    if (emptyFields.length) {
+      emptyFields[0].focus();
+
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
     return (
       <div>
@@ -93,7 +121,6 @@ class Model extends Component {
         <div className="canvas-element__properties expanded-only">
           <div className="canvas-element__properties__title">
             Properties
-            <i onClick={() => this.onAddProperty()} className="canvas-element__add fa fa-plus"/>
           </div>
 
           <div className="canvas-element__properties__table">
@@ -113,8 +140,11 @@ class Model extends Component {
             {
               this.props.entity.properties.length > 0 && (
                 <div className="canvas-element__properties__property">
-                  <div className="canvas-element__properties__property-title">Model properties</div>
-                  <div className="canvas-element__properties__property-value">
+                  <div className="canvas-element__properties__property-title">
+                    Model properties
+                    <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>
+                  </div>
+                  <div ref="properties" className="canvas-element__properties__property-value">
                     {this.renderProperties()}
                   </div>
                 </div>

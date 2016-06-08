@@ -19,6 +19,8 @@ export default class HeaderMenuSaveButton extends Component {
       Connection
     ];
 
+    const saveableServices = [];
+
     const project = AppState.getStateKey('currentProject');
     const data = {
       name: project.name,
@@ -80,7 +82,19 @@ export default class HeaderMenuSaveButton extends Component {
       });
     });
 
-    ProjectService.save(project.id, data).then(() => {
+    saveableServices.push(ProjectService.save(project.id, data));
+
+    // save api forecasts
+    if (LunchBadgerOptimize) {
+      const forecasts = LunchBadgerOptimize.stores.Forecast.getData();
+      const ForecastService = LunchBadgerOptimize.services.ForecastService;
+
+      forecasts.forEach((forecast) => {
+        saveableServices.push(ForecastService.save(forecast.id, forecast.toJSON()));
+      });
+    }
+
+    Promise.all(saveableServices).then(() => {
       notify.show('All data has been synced with API', 'success');
     }).catch(() => {
       notify.show('Cannot save data to local API', 'error');

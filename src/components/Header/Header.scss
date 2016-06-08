@@ -2,12 +2,12 @@
 
 .header {
   background: $ui-base;
-  position: relative;
+  position: absolute;
   width: 100%;
   top: 0;
   left: 0;
   height: $header-height;
-  border-bottom: 2px solid $ui-base-border;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
   display: table;
   z-index: $z-index-high;
   padding-left: $aside-width;
@@ -45,10 +45,11 @@
 
   &:hover {
     text-decoration: none;
-    color: lighten($font-base, 35%);
+    background: rgba(0, 0, 0, 0.06);
   }
 }
 
 .header__menu__link--pressed {
-  background: darken($ui-base-border, 5%);
+  color: $font-light;
+  background: rgb(68, 103, 151);
 }

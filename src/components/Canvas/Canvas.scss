@@ -3,7 +3,7 @@
 .canvas {
   min-width: 100%;
   min-height: calc(100vh - #{$header-height});
-  background: $ui-dark-background;
+  background: $ui-light;
   position: relative;
   overflow: hidden;
   transition: all .3s ease;
@@ -94,10 +94,10 @@
   color: $font-light;
   text-align: center;
   font-size: 16px;
-  width: 350px;
-  background: $ui-dark;
+  width: 325px;
+  background: #888888;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 10px;
   transform-origin: bottom;
   margin-top: -100px;
 }

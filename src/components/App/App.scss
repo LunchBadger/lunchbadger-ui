@@ -9,6 +9,8 @@
 body {
   overflow: hidden;
   font-family: 'Lato', sans-serif;
+  font: 400 1.125em/1.38 'Open Sans';
+  color: rgb(75, 75, 75);
 }
 
 .app {
@@ -25,4 +27,5 @@ body {
   width: 100%;
   position: relative;
   min-height: 4px;
+  padding-top: $header-height;
 }

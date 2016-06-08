@@ -6,9 +6,7 @@
 	width: $aside-width - 10;
 	height: $aside-width - 10;
 	margin: 5px;
-	border: 1px solid $ui-base-border;
 	border-radius: 5px;
-	background: darken($ui-base, 5%);
 	cursor: pointer;
 	transition: all .5s ease-in-out;
 	overflow: hidden;
@@ -21,7 +19,7 @@
 	}
 	&:hover {
 		overflow: visible;
-		background: lighten($ui-base, 5%);
+		background: lighten($ui-light, 5%);
 		> .tool__tooltip {
 			opacity: 1;
 			transform: translateX($aside-width);
@@ -30,7 +28,11 @@
 			opacity: 1;
 			display: block;
 		}
+		> i.tool__icon {
+			color: $ui-active;
+		}
 	}
+
 }
 i.tool__extend {
 	line-height: 1em;
@@ -39,6 +41,7 @@ i.tool__extend {
 	right: 0;
 }
 i.tool__icon {
+	color: #4B4B4B;
 	font-size: 30px;
 	line-height: 50px;
 }
@@ -72,8 +75,9 @@ i.over {
 	width: 200px;
 	top: -56px;
 	margin: 5px;
-	border: 1px solid $ui-base-border;
-	background: lighten($ui-base, 5%);
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: lighten($ui-light, 5%);
 	border-left: none;
 	cursor: pointer;
 	overflow: hidden;
@@ -84,7 +88,11 @@ i.over {
 		line-height: 50px;
 		cursor: pointer;
 		&:hover {
-			background: darken($ui-base, 5%);
+			background: darken($ui-active, 5%);
+			color: $font-light;
+			i {
+				color: $font-light;
+			}
 		}
 		i {
 			float: left;

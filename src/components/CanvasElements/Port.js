@@ -27,9 +27,9 @@ export default class Port extends Component {
       },
       connectorStyle: {
         lineWidth: 4,
-        strokeStyle: '#ffffff',
+        strokeStyle: '#e15f36',
         joinstyle: 'round',
-        outlineColor: '#c1c1c1',
+        outlineColor: '#e15f36',
         outlineWidth: 2
       },
       connectorHoverStyle: {

@@ -3,7 +3,7 @@ import moment from 'moment';
 import Tier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
 
-const {BaseStore} = LunchBadgerCore.stores;
+const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Forecasts = [];
 
@@ -22,6 +22,11 @@ class Forecast extends BaseStore {
           break;
         case 'RemoveAPIForecast':
           this.removeEntity(action.id);
+
+          if (AppState.getStateKey('currentForecast') && AppState.getStateKey('currentForecast').forecast.id === action.id) {
+            AppState.setStateKey('currentForecast', null);
+          }
+
           this.emitChange();
           break;
         case 'AddPlan':
@@ -68,7 +73,7 @@ class Forecast extends BaseStore {
   findEntityByApiId(id) {
     id = this.formatId(id);
 
-    return Forecasts.forEach((forecast) => {
+    return _.find(Forecasts, (forecast) => {
       return forecast.api.id === id;
     });
   }

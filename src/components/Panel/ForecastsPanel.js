@@ -7,15 +7,17 @@ import Forecast from 'stores/Forecast';
 
 export const FORECASTS_PANEL = 'FORECASTS_PANEL';
 
+const AppState = LunchBadgerCore.stores.AppState;
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     if (item.entity.constructor.type === 'API') {
       const delta = monitor.getSourceClientOffset();
-      addAPIForecast(item.entity, delta.x, delta.y - 30);
-      component.setState({
-        hasDropped: true
-      });
+
+      if (!Forecast.findEntityByApiId(item.entity.id)) {
+        addAPIForecast(item.entity, delta.x, delta.y - 30);
+        component.setState({hasDropped: true});
+      }
     } else if (item.entity.constructor.type === 'APIForecast') {
       const delta = monitor.getDifferenceFromInitialOffset();
       const left = Math.round(item.entity.left + delta.x);
@@ -45,6 +47,14 @@ class ForecastsPanel extends Component {
   componentDidMount() {
     Forecast.addChangeListener(() => {
       this.setState({entities: Forecast.getData()});
+    });
+
+    AppState.addChangeListener(() => {
+      const currentForecastInformation = AppState.getStateKey('currentForecastInformation');
+
+      if (currentForecastInformation && currentForecastInformation.expanded) {
+        this.setState({expanded: currentForecastInformation.id});
+      }
     });
   }
 

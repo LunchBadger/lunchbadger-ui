@@ -27,10 +27,14 @@ waitForStores([AppState], () => {
     if (apiForecastInformation) {
       ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
         if (data.body) {
-          const forecast = APIForecast.create(Object.assign({}, data.body, {left: 0, top: 0}));
+          const forecast = APIForecast.create(Object.assign({}, data.body, {
+              left: apiForecastInformation.left || 0,
+              top: apiForecastInformation.top || 0
+            }
+          ));
 
           initialize(forecast);
-          setForecast(forecast, apiForecastInformation.selectedDate);
+          setForecast(forecast, apiForecastInformation.selectedDate, apiForecastInformation.expanded);
         }
       });
     }

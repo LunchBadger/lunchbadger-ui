@@ -4,6 +4,7 @@ import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
 import './APIForecast.scss';
 import updateForecast from 'actions/APIForecast/update';
+import setForecast from 'actions/AppState/setForecast';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from './Subelements/DateSlider';
 import ForecastService from 'services/ForecastService';
@@ -71,10 +72,14 @@ export default class APIForecast extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextState) {
     this.setState({data: ForecastDataParser.prepareData(nextProps.entity.toJSON())}, () => {
       this._updateForecast(AppState.getStateKey('currentForecast'));
     });
+
+    if (nextProps.isExpanded !== this.props.isExpanded) {
+      setForecast(nextProps.entity, nextState.selectedDate || this.currentDate, nextProps.isExpanded);
+    }
   }
 
   componentWillUnmount() {
@@ -106,6 +111,8 @@ export default class APIForecast extends Component {
               startDate: firstSetDateKeys[0],
               endDate: firstSetDateKeys[firstSetDateKeys.length - 1]
             });
+
+            setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
           }
         });
       }

@@ -237,7 +237,7 @@ export default class ForecastingChart extends Component {
 
         // position current month mark
         if (moment(d.x).isSame(this.currentDate, 'month')) {
-          this.currentMonthMark.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + this.x.rangeBand()/2 - 4}px`);
+          this.currentMonthMark.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + this.x.rangeBand() / 2 - 4}px`);
         }
 
         return this.x(d.x) + 2;
@@ -295,10 +295,18 @@ export default class ForecastingChart extends Component {
   }
 
   _drawAxises() {
-    this.svg.append('g')
+    const gx = this.svg.append('g')
       .attr('class', 'axis axis--x')
       .attr('transform', 'translate(0,' + this.height + ')')
       .call(this.xAxis);
+
+    gx.selectAll('g').attr('class', (d) => {
+      if (moment(d).isSameOrBefore(moment())) {
+        return 'current';
+      }
+
+      return null;
+    });
 
     this.svg.append('g')
       .attr('class', 'axis axis--y')
@@ -337,7 +345,7 @@ export default class ForecastingChart extends Component {
 
       if (moment(latestDate, 'M-YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
         currentBar = d3.select(`.date-${latestDate}`);
-      } else if(moment(firstDate, 'M-YYYY').isAfter(moment(this.selectedDate, 'M/YYYY'), 'month')) {
+      } else if (moment(firstDate, 'M-YYYY').isAfter(moment(this.selectedDate, 'M/YYYY'), 'month')) {
         currentBar = d3.select(`.date-${firstDate}`);
       } else {
         currentBar = d3.select(`.date-${this.selectedDate.replace('/', '-')}`);

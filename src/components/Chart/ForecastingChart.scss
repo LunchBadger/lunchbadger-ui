@@ -32,6 +32,12 @@
     position: relative;
     z-index: 5;
 
+    .current {
+      text {
+        fill: #fff;
+      }
+    }
+
     path {
       display: none;
     }
@@ -69,18 +75,18 @@
 
 .chart__x-axis {
   position: absolute;
-  background: #dededf;
+  background: #222;
   border-radius: 10px;
   height: 15px;
   left: 50px;
-  bottom: 20px;
+  bottom: 21px;
   width: auto;
   right: 0;
   z-index: 1;
 }
 
 .chart__x-axis--over {
-  background: #b7b7b7;
+  background: #dededf;
   left: 9999px;
 }
 

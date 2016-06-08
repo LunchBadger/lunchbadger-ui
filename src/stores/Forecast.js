@@ -46,6 +46,11 @@ class Forecast extends BaseStore {
           this.recalculateNextForecastsBase(action.apiForecast, action.data.date);
           this.emitChange();
           break;
+        case 'InitializeAPIForecast':
+          this.addApiForecast(action.forecast);
+          this.emitChange();
+          this.emitInit();
+          break;
       }
     });
   }

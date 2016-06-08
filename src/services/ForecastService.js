@@ -20,6 +20,10 @@ class ForecastService {
     });
   }
 
+  getByForecast(forecastId) {
+    return this._APIHandle.get(bindParams('Forecasts/:id', {id: forecastId}));
+  }
+
   save(forecastId, data) {
     delete data.id;
 

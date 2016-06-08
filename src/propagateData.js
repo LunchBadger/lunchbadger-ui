@@ -40,6 +40,10 @@ projectData.then((response) => {
         }));
       });
 
+      setTimeout(() => {
+        LunchBadgerCore.actions.Stores.AppState.initialize(data.states);
+      });
+
       notify.show('All data has been synced with API', 'success');
     });
 

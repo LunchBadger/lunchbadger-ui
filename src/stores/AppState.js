@@ -50,7 +50,30 @@ class AppState extends BaseStore {
       case 'SetForecast':
         this.setStateKey('currentForecast', action.forecastData);
         break;
+
+      case 'InitializeAppState':
+        const {serializedState} = action;
+
+        if (serializedState['currentlyOpenedPanel']) {
+          this.setStateKey('currentlyOpenedPanel', serializedState['currentlyOpenedPanel']);
+          this.setStateKey('isPanelOpened', true);
+        }
+
+        if (serializedState['currentElement']) {
+          this.setStateKey('currentElement', serializedState['currentElement']);
+        }
+
+        if (serializedState['currentForecast']) {
+          this.setStateKey('currentForecastInformation', serializedState['currentForecast']);
+        }
+
+        this.emitInit();
+        break;
     }
+  }
+
+  getData() {
+    return state;
   }
 }
 

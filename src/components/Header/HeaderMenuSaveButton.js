@@ -24,7 +24,8 @@ export default class HeaderMenuSaveButton extends Component {
     const project = AppState.getStateKey('currentProject');
     const data = {
       name: project.name,
-      connections: []
+      connections: [],
+      states: []
     };
 
     if (LunchBadgerManage) {
@@ -81,6 +82,36 @@ export default class HeaderMenuSaveButton extends Component {
         }
       });
     });
+
+    const states = AppState.getData();
+
+    // prepare appState
+    if (states['currentlyOpenedPanel']) {
+      data.states.push({
+        key: 'currentlyOpenedPanel',
+        value: states['currentlyOpenedPanel']
+      });
+    }
+
+    if (states['currentElement']) {
+      data.states.push({
+        key: 'currentElement',
+        value: states['currentElement']
+      });
+    }
+    
+    if (states['currentForecast']) {
+      const currentForecast = states['currentForecast'];
+
+      data.states.push({
+        key: 'currentForecast',
+        value: {
+          id: currentForecast['forecast']['id'],
+          expanded: currentForecast['expanded'] || false,
+          selectedDate: currentForecast['selectedDate']
+        }
+      });
+    }
 
     saveableServices.push(ProjectService.save(project.id, data));
 

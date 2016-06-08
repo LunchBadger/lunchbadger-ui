@@ -4,12 +4,18 @@ import ForecastsPanel from './plugs/ForecastsPanel';
 // stores
 import Forecast from './stores/Forecast';
 
+// services
+import ForecastService from './services/ForecastService';
+
 LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 
 // export
 let LunchBadgerOptimize = {
   stores: {
     Forecast: Forecast
+  },
+  services: {
+    ForecastService: ForecastService
   }
 };
 

@@ -1,6 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {notify} from 'react-notify-toast';
-import ForecastService from 'services/ForecastService';
 import removeAPIForecast from 'actions/APIForecast/remove';
 
 export default class ForecastNav extends Component {
@@ -12,14 +10,6 @@ export default class ForecastNav extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  save() {
-    ForecastService.save(this.props.entity.id, this.props.entity.toJSON()).then(() => {
-      notify.show('Forecast has been successfully saved into local API', 'success');
-    }).catch(() => {
-      notify.show('There are problems with syncing data with local API, check console for more', 'error');
-    });
   }
 
   remove() {
@@ -34,11 +24,6 @@ export default class ForecastNav extends Component {
   render() {
     return (
       <ul className="api-forecast__header__nav">
-        <li>
-          <a onClick={this.save.bind(this)}>
-            <i className="fa fa-floppy-o"/>
-          </a>
-        </li>
         <li>
           <a onClick={this.remove.bind(this)}>
             <i className="fa fa-remove"/>

@@ -5,11 +5,13 @@ import PlanInfoTooltip from './PlanInfoTooltip';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
 import numeral from 'numeral';
 import moment from 'moment';
+import _ from 'lodash';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
     forecast: PropTypes.object.isRequired,
-    upgrade: PropTypes.object.isRequired
+    upgrade: PropTypes.object.isRequired,
+    upgrades: PropTypes.array.isRequired
   };
 
   constructor(props) {
@@ -18,7 +20,9 @@ export default class UpgradeSlider extends Component {
     this.state = {
       movedUsers: 0,
       max: 10000,
-      value: props.upgrade.value
+      value: props.upgrade.value,
+      maxChange: 0,
+      scaleStep: 10000
     }
   }
 
@@ -31,13 +35,47 @@ export default class UpgradeSlider extends Component {
 
     this.setState({
       movedUsers: upgrade.value,
+      maxChange: this.planUsers,
       max: Math.ceil((upgrade.value || this.state.max) / 10000) * 10000
     });
+
+    this._calculateChangeLimit(this.props.upgrades);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this._calculateChangeLimit(nextProps.upgrades);
+  }
+
+  _calculateChangeLimit(upgrades) {
+    let maxChange = this.planUsers;
+
+    const filteredDowngrades = _.filter(upgrades, (upgrade) => {
+      return upgrade.fromPlanId === this.plan.id && upgrade.downgrade && upgrade.id !== this.props.upgrade.id && upgrade.toPlanId !== null;
+    });
+
+    const filteredUpgrades = _.filter(upgrades, (upgrade) => {
+      return upgrade.fromPlanId === this.plan.id && !upgrade.downgrade && upgrade.id !== this.props.upgrade.id;
+    });
+
+    filteredDowngrades.forEach((downgrade) => {
+      maxChange -= Math.round(downgrade.value / 100 * this.planUsers);
+    });
+
+    filteredUpgrades.forEach((upgrade) => {
+      maxChange -= Math.round(upgrade.value / 100 * this.planUsers);
+    });
+
+    this.setState({maxChange: maxChange});
   }
 
   _handleOnChange(value) {
     const {forecast, upgrade} = this.props;
-    const {max} = this.state;
+    const {max, scaleStep} = this.state;
+
+    // don't allow to change value to higher if no more users are available to transit between plans
+    if (value >= this.state.maxChange && value > this.state.value) {
+      value = this.state.maxChange;
+    }
 
     upgradePlan(forecast, {
       fromPlanId: upgrade.fromPlanId,
@@ -52,7 +90,7 @@ export default class UpgradeSlider extends Component {
     });
 
     if (value === max) {
-      this.setState({max: max + 10000});
+      this.setState({max: max + scaleStep});
     }
   }
 
@@ -88,10 +126,10 @@ export default class UpgradeSlider extends Component {
         <div className="upgrade-slider__slider">
           <Slider
             disabled={moment(this.props.upgrade.date, 'M/YYYY').isSameOrBefore(moment(), 'month')}
-            step={4}
+            step={1}
             defaultValue={this.props.upgrade.value}
             value={this.state.value}
-            onChange={this._handleOnChange.bind(this)}
+            onChange={_.throttle(this._handleOnChange.bind(this), 600)}
             onAfterChange={this._handleOnChange.bind(this)}
             min={minValue}
             max={maxValue}/>

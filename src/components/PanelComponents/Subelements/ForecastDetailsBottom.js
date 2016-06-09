@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral';
+import _ from 'lodash';
 
 export default class ForecastDetailsBottom extends Component {
   static propTypes = {
@@ -77,6 +78,14 @@ export default class ForecastDetailsBottom extends Component {
         summary[summaryKey] = {
           sum: summary[summaryKey].sum + planSummary[summaryKey].amount,
           users: summary[summaryKey].users + planSummary[summaryKey].subscribers
+        };
+
+        if (!_.isFinite(summary[summaryKey]['sum'])) {
+          summary[summaryKey]['sum'] = 0;
+        }
+
+        if (!_.isFinite(summary[summaryKey]['users'])) {
+          summary[summaryKey]['users'] = 0;
         }
       });
     });

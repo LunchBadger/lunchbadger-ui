@@ -8,26 +8,20 @@ let defaultSettings = require('./defaults');
 const infoFile = require('./load');
 
 // Add needed plugins here
-let BowerWebpackPlugin = require('bower-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
   entry: {
     start: [
       'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
-      'webpack/hot/only-dev-server',
       './src/index'
     ],
     core: './plugins/lunchbadger-core/index',
     plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
   },
   cache: true,
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new BowerWebpackPlugin({
-      searchResolveModulesDirectories: false
-    })
+    new webpack.NoErrorsPlugin()
   ],
   module: defaultSettings.getDefaultModules()
 });
@@ -35,7 +29,7 @@ let config = Object.assign({}, baseConfig, {
 // Add needed loaders to the defaults here
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
-  loader: 'react-hot!babel-loader',
+  loader: 'babel-loader?cacheDirectory',
   include: [].concat(
     config.additionalPaths,
     [path.join(__dirname, '/../src')]

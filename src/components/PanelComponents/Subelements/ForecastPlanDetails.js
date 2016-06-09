@@ -18,11 +18,11 @@ export default class ForecastPlanDetails extends Component {
   }
 
   addTier(event) {
-    addTier(this.props.plan, {
-      name: 'Tier x',
-      totals: 'sth',
-      charge: 0.0
-    });
+    // addTier(this.props.plan, {
+    //   name: 'Tier x',
+    //   totals: 'sth',
+    //   charge: 0.0
+    // });
 
     event.stopPropagation();
   }
@@ -30,14 +30,14 @@ export default class ForecastPlanDetails extends Component {
   render() {
     return (
       <div className="base-plan__tiers">
-        <table>
-          <caption>
-            Tiers
+        <div className="base-plan__tiers__caption">
+          Tiers
 
-            <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}>
-              <i className="fa fa-plus"/>
-            </a>
-          </caption>
+          <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}>
+            <i className="fa fa-plus"/>
+          </a>
+        </div>
+        <table className="base-plan__tiers__table">
           <tbody>
           {this.renderTiers()}
           </tbody>

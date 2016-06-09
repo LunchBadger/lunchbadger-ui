@@ -3,11 +3,8 @@ const Tier = LunchBadgerMonetize.models.Tier;
 export default class ForecastTier extends Tier {
   static type = 'ForecastTier';
 
-  constructor(id, name, icon) {
+  constructor(id) {
     super(id);
-
-    this.name = name;
-    this.icon = icon;
   }
 
   /**

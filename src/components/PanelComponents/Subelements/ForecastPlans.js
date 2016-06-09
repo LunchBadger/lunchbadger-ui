@@ -76,6 +76,7 @@ export default class ForecastPlans extends Component {
         return (
           <UserPoolSlider key={upgrade.id}
                           upgrade={upgrade}
+                          upgrades={upgrades}
                           forecast={this.props.entity}/>
         );
       }

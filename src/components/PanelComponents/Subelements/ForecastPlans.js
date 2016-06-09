@@ -82,6 +82,7 @@ export default class ForecastPlans extends Component {
 
       return (
         <UpgradeSlider key={upgrade.id}
+                       upgrades={upgrades}
                        upgrade={upgrade}
                        forecast={this.props.entity}/>
       );

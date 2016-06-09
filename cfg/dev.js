@@ -11,6 +11,10 @@ const infoFile = require('./load');
 
 let config = Object.assign({}, baseConfig, {
   entry: {
+    vendor: [
+      'moment',
+      'lodash'
+    ],
     start: [
       'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
       './src/index'
@@ -21,7 +25,11 @@ let config = Object.assign({}, baseConfig, {
   cache: true,
   devtool: 'eval',
   plugins: [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor'],
+      minChunks: Infinity
+    })
   ],
   module: defaultSettings.getDefaultModules()
 });

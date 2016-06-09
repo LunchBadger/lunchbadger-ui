@@ -10,7 +10,7 @@ module.exports = {
   devtool: 'eval',
   output: {
     path: path.join(__dirname, '/../dist'),
-    filename: 'base.js',
+    filename: 'compose.js',
     libraryTarget: 'umd',
     library: 'LunchBadgerCompose',
     publicPath: `.${defaultSettings.publicPath}`
@@ -18,7 +18,7 @@ module.exports = {
   devServer: {
     contentBase: './src/',
     historyApiFallback: true,
-    hot: true,
+    hot: false,
     port: defaultSettings.port,
     publicPath: defaultSettings.publicPath,
     noInfo: false

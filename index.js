@@ -1,1 +1,1 @@
-require('./dist/base');
+require('./dist/compose');

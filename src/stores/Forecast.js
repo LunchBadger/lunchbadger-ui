@@ -117,7 +117,13 @@ class Forecast extends BaseStore {
    * @param fromDate {String} - date in format 'M/YYYY'
    */
   removeTierFromPlan(tier, fromDate) {
-    tier.removeTierDetail({date: fromDate});
+    const details = _.filter(tier.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      tier.removeTierDetail({date: detail.date});
+    });
   }
 
   removeEntity(id) {

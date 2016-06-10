@@ -9,7 +9,12 @@ export default class TierDetails extends BaseModel {
   _type = null;
   _value = null;
 
-  constructor(id, date, conditionFrom, conditionTo, type, value) {
+  _conditionFromChanged = false;
+  _conditionToChanged = false;
+  _typeChanged = false;
+  _valueChanged = false;
+
+  constructor(id, date, conditionFrom, conditionTo, type, value, conditionFromChanged, conditionToChanged, typeChanged, valueChanged) {
     super(id);
 
     this.date = date;
@@ -17,6 +22,11 @@ export default class TierDetails extends BaseModel {
     this.conditionTo = conditionTo;
     this.type = type;
     this.value = value;
+
+    this.conditionFromChanged = conditionFromChanged || false;
+    this.conditionToChanged = conditionToChanged || false;
+    this.typeChanged = typeChanged || false;
+    this.valueChanged = valueChanged || false;
   }
 
   toJSON() {
@@ -67,5 +77,37 @@ export default class TierDetails extends BaseModel {
 
   set value(value) {
     this._value = value;
+  }
+
+  get conditionFromChanged() {
+    return this._conditionFromChanged;
+  }
+
+  set conditionFromChanged(conditionFromChanged) {
+    this._conditionFromChanged = conditionFromChanged;
+  }
+
+  get conditionToChanged() {
+    return this._conditionToChanged;
+  }
+
+  set conditionToChanged(conditionToChanged) {
+    this._conditionToChanged = conditionToChanged;
+  }
+
+  get typeChanged() {
+    return this._typeChanged;
+  }
+
+  set typeChanged(typeChanged) {
+    this._typeChanged = typeChanged;
+  }
+
+  get valueChanged() {
+    return this._valueChanged;
+  }
+
+  set valueChanged(valueChanged) {
+    this._valueChanged = valueChanged;
   }
 }

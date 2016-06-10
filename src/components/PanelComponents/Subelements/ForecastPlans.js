@@ -109,8 +109,7 @@ export default class ForecastPlans extends Component {
         {
           date.isAfter(moment(), 'month') && (
             <div className="forecast-plans__pool">
-              <UserPool forecast={entity}
-                        date={selectedDate}/>
+              <UserPool forecast={entity} date={selectedDate}/>
             </div>
           )
         }
@@ -130,7 +129,7 @@ export default class ForecastPlans extends Component {
         }
 
         <div className="forecast-plans__details">
-          <ForecastPlanDetails plan={this.state.currentPlan}/>
+          <ForecastPlanDetails date={selectedDate} plan={this.state.currentPlan}/>
         </div>
 
         {

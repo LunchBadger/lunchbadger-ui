@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const Tier = LunchBadgerMonetize.models.Tier;
 
 export default class ForecastTier extends Tier {
@@ -12,5 +14,12 @@ export default class ForecastTier extends Tier {
    */
   addTierDetails(details) {
     this.details.push(details);
+  }
+
+	/**
+   * @param params {Object} - Tier details parameters
+   */
+  removeTierDetail(params) {
+    return _.remove(this.details, params);
   }
 }

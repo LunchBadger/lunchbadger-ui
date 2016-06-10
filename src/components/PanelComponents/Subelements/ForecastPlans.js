@@ -7,6 +7,7 @@ import UserPool from './UserPool';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
+import moment from 'moment';
 import classNames from 'classnames';
 
 export default class ForecastPlans extends Component {
@@ -101,23 +102,32 @@ export default class ForecastPlans extends Component {
   render() {
     const {entity, selectedDate} = this.props;
     const upgrades = entity.api.getUpgradesForDate(this.props.selectedDate);
+    const date = moment(selectedDate, 'M/YYYY');
 
     return (
       <div className="forecast-plans">
-        <div className="forecast-plans__pool">
-          <UserPool forecast={entity}
-                    date={selectedDate}/>
-        </div>
+        {
+          date.isAfter(moment(), 'month') && (
+            <div className="forecast-plans__pool">
+              <UserPool forecast={entity}
+                        date={selectedDate}/>
+            </div>
+          )
+        }
 
         <div className="forecast-plans__list">
           {this.renderPlans()}
         </div>
 
-        <div className="forecast-plans__action">
-          <a className="forecast-plans__action__add" onClick={this._handleAddPlan.bind(this)}>
-            <i className="fa fa-plus"/>
-          </a>
-        </div>
+        {
+          date.isAfter(moment(), 'month') && (
+            <div className="forecast-plans__action">
+              <a className="forecast-plans__action__add" onClick={this._handleAddPlan.bind(this)}>
+                <i className="fa fa-plus"/>
+              </a>
+            </div>
+          )
+        }
 
         <div className="forecast-plans__details">
           <ForecastPlanDetails plan={this.state.currentPlan}/>

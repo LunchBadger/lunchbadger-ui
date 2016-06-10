@@ -32,6 +32,7 @@ export default class ForecastPlanDetails extends Component {
 
         return (
           <Tier key={tier.id}
+                plan={this.state.plan}
                 date={this.props.date}
                 index={index}
                 detail={tierDetail}

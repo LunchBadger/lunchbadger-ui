@@ -9,7 +9,8 @@ export default class Tier extends Component {
     index: PropTypes.number.isRequired,
     tier: PropTypes.object.isRequired,
     date: PropTypes.string.isRequired,
-    detail: PropTypes.object.isRequired
+    detail: PropTypes.object.isRequired,
+    plan: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -65,7 +66,7 @@ export default class Tier extends Component {
   }
 
   _handleRemove() {
-    removeTier(this.props.tier, this.props.date);
+    removeTier(this.props.plan, this.props.tier, this.props.date);
   }
 
   render() {

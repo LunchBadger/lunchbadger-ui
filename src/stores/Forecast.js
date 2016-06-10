@@ -39,7 +39,7 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'RemoveTier':
-          this.removeTierFromPlan(action.tier, action.fromDate);
+          this.removeTierFromPlan(action.plan, action.tier, action.fromDate);
           this.emitChange();
           break;
         case 'AddUpgrade':
@@ -134,16 +134,22 @@ class Forecast extends BaseStore {
   }
 
   /**
+   * @param plan {ForecastAPIPlan}
    * @param tier {ForecastTier}
    * @param fromDate {String} - date in format 'M/YYYY'
    */
-  removeTierFromPlan(tier, fromDate) {
+  removeTierFromPlan(plan, tier, fromDate) {
     const details = _.filter(tier.details, (detail) => {
       return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
     });
 
     details.forEach((detail) => {
+      const planDetail = plan.findDetail({date: detail.date});
       tier.removeTierDetail({date: detail.date});
+
+      if (planDetail) {
+        planDetail.changed = true;
+      }
     });
   }
 

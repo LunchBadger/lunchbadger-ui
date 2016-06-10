@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import removeTier from 'actions/APIForecast/removeTier';
 import './Tier.scss';
 import numeral from 'numeral';
+import moment from 'moment';
 
 export default class Tier extends Component {
   static propTypes = {
@@ -68,6 +69,8 @@ export default class Tier extends Component {
   }
 
   render() {
+    const date = moment(this.props.date, 'M/YYYY');
+
     return (
       <tr>
         <td className="tier__cell">
@@ -80,9 +83,13 @@ export default class Tier extends Component {
           {this.renderCharge()}
         </td>
         <td className="tier__action">
-          <a className="tier__action__remove" onClick={this._handleRemove.bind(this)}>
-            <i className="fa fa-times"/>
-          </a>
+          {
+            date.isAfter(moment(), 'month') && (
+              <a className="tier__action__remove" onClick={this._handleRemove.bind(this)}>
+                <i className="fa fa-times"/>
+              </a>
+            )
+          }
         </td>
       </tr>
     )

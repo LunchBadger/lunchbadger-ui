@@ -19,6 +19,12 @@
   }
 }
 
+.forecast-plans__plan--expanded {
+  .forecast-plans__plan__users {
+    height: 0;
+  }
+}
+
 .forecast-plans__plan__name {
   display: block;
   padding: 0 5px 15px;
@@ -34,9 +40,11 @@
   font-size: 13px;
   display: block;
   width: 100%;
-  padding-top: 12px;
   color: #666;
-  margin-bottom: 10px;
+  height: 29px;
+  overflow: hidden;
+  line-height: 35px;
+  transition: all 0.3s ease;
 }
 
 .forecast-plans__action {
@@ -56,7 +64,7 @@
   display: table;
   width: 100%;
   border-top: 1px solid #ccc;
-  margin-top: 15px;
+  margin-top: 25px;
 }
 
 .forecast-plans__pool {

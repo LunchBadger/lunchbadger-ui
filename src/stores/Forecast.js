@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
-import Tier from 'models/ForecastTier';
+import ForecastTier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
 
 const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
+const TierDetails = LunchBadgerMonetize.models.TierDetails;
 const Forecasts = [];
 
 class Forecast extends BaseStore {
@@ -34,7 +35,7 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddTier':
-          this.addTierToPlan(action.apiPlan, Tier.create(action.data));
+          this.addTierToPlan(action.plan, action.fromDate);
           this.emitChange();
           break;
         case 'RemoveTier':
@@ -105,14 +106,33 @@ class Forecast extends BaseStore {
   }
 
   /**
-   * @param apiPlan {APIPlan}
-   * @param tier {Tier}
+   * @param plan {ForecastAPIPlan}
+   * @param fromDate {String} - date in format 'M/YYYY'
    */
-  addTierToPlan(apiPlan, tier) {
-    apiPlan.addTier(tier);
+  addTierToPlan(plan, fromDate) {
+    const tierParameters = {
+      conditionFrom: 1,
+      conditionTo: 5000,
+      value: 0.01,
+      type: 'fixed'
+    };
+
+    const tier = ForecastTier.create(tierParameters);
+
+    plan.addTier(tier);
+
+    const details = _.filter(plan.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      const parameters = Object.assign({}, tierParameters, {date: detail.date});
+      const tierDetails = TierDetails.create(parameters);
+      tier.addTierDetails(tierDetails);
+    });
   }
 
-	/**
+  /**
    * @param tier {ForecastTier}
    * @param fromDate {String} - date in format 'M/YYYY'
    */

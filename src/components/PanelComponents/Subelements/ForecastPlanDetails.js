@@ -44,11 +44,7 @@ export default class ForecastPlanDetails extends Component {
   }
 
   addTier(event) {
-    // addTier(this.props.plan, {
-    //   name: 'Tier x',
-    //   totals: 'sth',
-    //   charge: 0.0
-    // });
+    addTier(this.props.plan, this.props.date);
 
     event.stopPropagation();
   }
@@ -69,7 +65,7 @@ export default class ForecastPlanDetails extends Component {
       'base-plan__tiers': true,
       'base-plan__tiers--opened': this.props.plan !== null
     });
-    
+
     return (
       <div className={tiersClass}>
         <div className="base-plan__tiers__inside">

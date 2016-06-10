@@ -97,8 +97,7 @@ export default class ForecastPlans extends Component {
     return (
       <div className="forecast-plans">
         <div className="forecast-plans__pool">
-          <UserPool forecast={entity}
-                    date={selectedDate}/>
+          <UserPool forecast={entity} date={selectedDate}/>
         </div>
 
         <div className="forecast-plans__list">
@@ -114,7 +113,7 @@ export default class ForecastPlans extends Component {
         {
           !!this.state.currentPlan && (
             <div className="forecast-plans__details">
-              <ForecastPlanDetails plan={this.state.currentPlan}/>
+              <ForecastPlanDetails date={selectedDate} plan={this.state.currentPlan}/>
             </div>
           )
         }

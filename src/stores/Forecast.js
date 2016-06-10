@@ -37,6 +37,10 @@ class Forecast extends BaseStore {
           this.addTierToPlan(action.apiPlan, Tier.create(action.data));
           this.emitChange();
           break;
+        case 'RemoveTier':
+          this.removeTierFromPlan(action.tier, action.fromDate);
+          this.emitChange();
+          break;
         case 'AddUpgrade':
         case 'AddDowngrade':
           this.addUpgradeToApi(action.apiForecast, action.upgrade);
@@ -106,6 +110,20 @@ class Forecast extends BaseStore {
    */
   addTierToPlan(apiPlan, tier) {
     apiPlan.addTier(tier);
+  }
+
+	/**
+   * @param tier {ForecastTier}
+   * @param fromDate {String} - date in format 'M/YYYY'
+   */
+  removeTierFromPlan(tier, fromDate) {
+    const details = _.filter(tier.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      tier.removeTierDetail({date: detail.date});
+    });
   }
 
   removeEntity(id) {

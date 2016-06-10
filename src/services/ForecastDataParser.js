@@ -89,6 +89,10 @@ class ForecastDataParser {
           return tierDetails.date === dateKey;
         });
 
+        if (!monthlyDetails) {
+          return;
+        }
+
         const {type, conditionFrom, conditionTo, value} = monthlyDetails;
         const totalCalls = parameters.callsPerSubscriber * netSubscribers;
 

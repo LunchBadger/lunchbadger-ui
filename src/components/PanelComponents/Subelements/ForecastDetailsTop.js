@@ -143,7 +143,7 @@ export default class ForecastDetailsTop extends Component {
       users += planSummary['existing'].subscribers + planSummary['new'].subscribers + planSummary['upgrades'].subscribers;
     });
 
-    if (users > 0) {
+    if (users > 0 && sum > 0) {
       return sum / users;
     }
 

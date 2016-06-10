@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
-import Tier from 'models/ForecastTier';
+import ForecastTier from 'models/ForecastTier';
 import APIPlan from 'models/ForecastAPIPlan';
 
 const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
+const TierDetails = LunchBadgerMonetize.models.TierDetails;
 const Forecasts = [];
 
 class Forecast extends BaseStore {
@@ -34,7 +35,15 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddTier':
-          this.addTierToPlan(action.apiPlan, Tier.create(action.data));
+          this.addTierToPlan(action.plan, action.fromDate);
+          this.emitChange();
+          break;
+        case 'RemoveTier':
+          this.removeTierFromPlan(action.plan, action.tier, action.fromDate);
+          this.emitChange();
+          break;
+        case 'SaveTier':
+          this.updateTierDetails(action.plan, action.tier, action.fromDate, action.params);
           this.emitChange();
           break;
         case 'AddUpgrade':
@@ -101,11 +110,87 @@ class Forecast extends BaseStore {
   }
 
   /**
-   * @param apiPlan {APIPlan}
-   * @param tier {Tier}
+   * @param plan {ForecastAPIPlan}
+   * @param fromDate {String} - date in format 'M/YYYY'
    */
-  addTierToPlan(apiPlan, tier) {
-    apiPlan.addTier(tier);
+  addTierToPlan(plan, fromDate) {
+    const tierParameters = {
+      conditionFrom: 1,
+      conditionTo: 5000,
+      value: 0.01,
+      type: 'fixed'
+    };
+
+    const tier = ForecastTier.create(tierParameters);
+
+    plan.addTier(tier);
+
+    const details = _.filter(plan.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      const parameters = Object.assign({}, tierParameters, {date: detail.date, new: true});
+      const tierDetails = TierDetails.create(parameters);
+      detail.changed = true;
+      tier.addTierDetails(tierDetails);
+    });
+  }
+
+  /**
+   * @param plan {ForecastAPIPlan}
+   * @param tier {ForecastTier}
+   * @param fromDate {String} - date in format 'M/YYYY'
+   */
+  removeTierFromPlan(plan, tier, fromDate) {
+    const details = _.filter(tier.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      const planDetail = plan.findDetail({date: detail.date});
+      tier.removeTierDetail({date: detail.date});
+
+      if (planDetail) {
+        planDetail.changed = true;
+      }
+    });
+  }
+
+  updateTierDetails(plan, tier, fromDate, params) {
+    const details = _.filter(tier.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      const planDetail = plan.findDetail({date: detail.date});
+
+      if (detail.conditionFrom !== params.conditionFrom) {
+        detail.conditionFrom = params.conditionFrom;
+        detail.conditionFromChanged = true;
+      }
+
+      if (detail.conditionTo !== params.conditionTo) {
+        detail.conditionTo = params.conditionTo;
+        detail.conditionToChanged = true;
+      }
+
+      if (detail.value !== params.value) {
+        detail.value = params.value;
+        detail.valueChanged = true;
+      }
+
+      if (detail.type !== params.type) {
+        detail.type = params.type;
+        detail.typeChanged = true;
+      }
+
+      detail.new = false;
+
+      if (planDetail) {
+        planDetail.changed = true;
+      }
+    });
   }
 
   removeEntity(id) {

@@ -126,7 +126,7 @@ class Forecast extends BaseStore {
     });
 
     details.forEach((detail) => {
-      const parameters = Object.assign({}, tierParameters, {date: detail.date});
+      const parameters = Object.assign({}, tierParameters, {date: detail.date, new: true});
       const tierDetails = TierDetails.create(parameters);
       detail.changed = true;
       tier.addTierDetails(tierDetails);

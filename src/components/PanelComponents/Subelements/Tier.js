@@ -3,6 +3,7 @@ import removeTier from 'actions/APIForecast/removeTier';
 import './Tier.scss';
 import numeral from 'numeral';
 import moment from 'moment';
+import classNames from 'classnames';
 
 export default class Tier extends Component {
   static propTypes = {
@@ -71,9 +72,13 @@ export default class Tier extends Component {
 
   render() {
     const date = moment(this.props.date, 'M/YYYY');
+    const tierRowClass = classNames({
+      'tier__row': true,
+      'tier__row--new': this.props.detail.new
+    });
 
     return (
-      <tr>
+      <tr className={tierRowClass}>
         <td className="tier__cell">
           Tier {this.props.index}
         </td>

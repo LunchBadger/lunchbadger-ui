@@ -12,11 +12,18 @@
   vertical-align: middle;
 }
 
+.tier__action__edit,
+.tier__action__save,
 .tier__action__remove {
   display: inline-block;
   font-size: 12px;
   cursor: pointer;
   color: #ff8000;
+}
+
+.tier__action__edit,
+.tier__action__save {
+  margin-right: 6px;
 }
 
 .tier__row {

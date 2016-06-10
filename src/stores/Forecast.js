@@ -42,6 +42,10 @@ class Forecast extends BaseStore {
           this.removeTierFromPlan(action.plan, action.tier, action.fromDate);
           this.emitChange();
           break;
+        case 'SaveTier':
+          this.updateTierDetails(action.plan, action.tier, action.fromDate, action.params);
+          this.emitChange();
+          break;
         case 'AddUpgrade':
         case 'AddDowngrade':
           this.addUpgradeToApi(action.apiForecast, action.upgrade);
@@ -146,6 +150,42 @@ class Forecast extends BaseStore {
     details.forEach((detail) => {
       const planDetail = plan.findDetail({date: detail.date});
       tier.removeTierDetail({date: detail.date});
+
+      if (planDetail) {
+        planDetail.changed = true;
+      }
+    });
+  }
+
+  updateTierDetails(plan, tier, fromDate, params) {
+    const details = _.filter(tier.details, (detail) => {
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
+    });
+
+    details.forEach((detail) => {
+      const planDetail = plan.findDetail({date: detail.date});
+
+      if (detail.conditionFrom !== params.conditionFrom) {
+        detail.conditionFrom = params.conditionFrom;
+        detail.conditionFromChanged = true;
+      }
+
+      if (detail.conditionTo !== params.conditionTo) {
+        detail.conditionTo = params.conditionTo;
+        detail.conditionToChanged = true;
+      }
+
+      if (detail.value !== params.value) {
+        detail.value = params.value;
+        detail.valueChanged = true;
+      }
+
+      if (detail.type !== params.type) {
+        detail.type = params.type;
+        detail.typeChanged = true;
+      }
+
+      detail.new = false;
 
       if (planDetail) {
         planDetail.changed = true;

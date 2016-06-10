@@ -1,19 +1,31 @@
 import React, {Component, PropTypes} from 'react';
 import addTier from 'actions/APIForecast/addTier';
 import Tier from './Tier';
+import _ from 'lodash';
 
 export default class ForecastPlanDetails extends Component {
   static propTypes = {
-    plan: PropTypes.object.isRequired
+    plan: PropTypes.object.isRequired,
+    date: PropTypes.string.isRequired
   };
 
   renderTiers() {
     return this.props.plan.tiers.map((tier, index) => {
-      return (
-        <Tier key={tier.id}
-              index={index + 1}
-              tier={tier}/>
-      );
+      const tierDetail = _.find(tier.details, (details) => {
+        return details.date === this.props.date;
+      });
+      
+      if (tierDetail) {
+        return (
+          <Tier key={tier.id}
+                date={this.props.date}
+                index={index + 1}
+                detail={tierDetail}
+                tier={tier}/>
+        );  
+      }
+      
+      return null;
     });
   }
 

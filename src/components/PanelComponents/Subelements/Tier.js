@@ -1,23 +1,26 @@
 import React, {Component, PropTypes} from 'react';
+import removeTier from 'actions/APIForecast/removeTier';
 import './Tier.scss';
 import numeral from 'numeral';
 
 export default class Tier extends Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
-    tier: PropTypes.object.isRequired
+    tier: PropTypes.object.isRequired,
+    date: PropTypes.string.isRequired,
+    detail: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
 
-    const {tier} = props;
+    const {detail} = props;
 
     this.state = {
-      type: tier.type,
-      conditionFrom: tier.conditionFrom,
-      conditionTo: tier.conditionTo,
-      value: tier.value
+      type: detail.type,
+      conditionFrom: detail.conditionFrom,
+      conditionTo: detail.conditionTo,
+      value: detail.value
     }
   }
 
@@ -38,9 +41,7 @@ export default class Tier extends Component {
         condition = `${conditionUsers} total calls / hour`
     }
 
-    return (
-      <span>{condition}</span>
-    );
+    return condition;
   }
 
   renderCharge() {
@@ -59,22 +60,29 @@ export default class Tier extends Component {
         charge = `Charge ${numeral(value).format('$0.[0000]')} per call`
     }
 
-    return (
-      <span>{charge}</span>
-    );
+    return charge;
+  }
+
+  _handleRemove() {
+    removeTier(this.props.tier, this.props.date);
   }
 
   render() {
     return (
       <tr>
-        <td>
+        <td className="tier__cell">
           Tier {this.props.index}
         </td>
-        <td>
+        <td className="tier__cell">
           {this.renderCondition()}
         </td>
-        <td>
+        <td className="tier__cell">
           {this.renderCharge()}
+        </td>
+        <td className="tier__action">
+          <a className="tier__action__remove" onClick={this._handleRemove.bind(this)}>
+            <i className="fa fa-times"/>
+          </a>
         </td>
       </tr>
     )

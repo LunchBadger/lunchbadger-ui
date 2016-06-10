@@ -91,16 +91,27 @@
 .api-forecast__header__title {
   position: absolute;
   left: 30px;
-  font-size: 20px;
+  font-size: 18px;
   top: 0;
-  display: none;
+  display: block;
+  max-width: 150px;
+  text-align: left;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   .expanded & {
-    display: block;
+    max-width: 100%;
+    font-size: 20px;
   }
 }
 
 .api-forecast__header__subtitle {
   font-size: 16px;
   padding-left: 10px;
+  display: none;
+
+  .expanded & {
+    display: inline-block;
+  }
 }

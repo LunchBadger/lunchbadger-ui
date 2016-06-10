@@ -122,7 +122,7 @@ class Forecast extends BaseStore {
     plan.addTier(tier);
 
     const details = _.filter(plan.details, (detail) => {
-      return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
     });
 
     details.forEach((detail) => {
@@ -140,7 +140,7 @@ class Forecast extends BaseStore {
    */
   removeTierFromPlan(plan, tier, fromDate) {
     const details = _.filter(tier.details, (detail) => {
-      return moment(detail.date, 'M/YYYY').isSameOrAfter(moment(fromDate, 'M/YYYY'), 'month');
+      return moment(detail.date, 'M/YYYY').isSame(moment(fromDate, 'M/YYYY'), 'month');
     });
 
     details.forEach((detail) => {

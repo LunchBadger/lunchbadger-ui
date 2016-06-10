@@ -12,6 +12,10 @@ let BowerWebpackPlugin = require('bower-webpack-plugin');
 
 let config = Object.assign({}, baseConfig, {
   entry: {
+    vendor: [
+      'moment',
+      'lodash'
+    ],
     start: './src/index',
     core: './plugins/lunchbadger-core/index',
     plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
@@ -34,7 +38,11 @@ let config = Object.assign({}, baseConfig, {
     // }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor'],
+      minChunks: Infinity
+    })
   ],
   module: defaultSettings.getDefaultModules()
 });

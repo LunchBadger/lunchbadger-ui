@@ -33,6 +33,12 @@ class Connection extends BaseStore {
       case 'MoveConnection':
         this._handleConnectionReplace(action);
         break;
+
+      case 'RemoveEntity':
+        this._handleConnectionRemoval({from: action.entity.id});
+        this._handleConnectionRemoval({to: action.entity.id});
+        this.emitChange();
+        break;
     }
   }
 

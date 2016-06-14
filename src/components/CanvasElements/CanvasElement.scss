@@ -129,6 +129,20 @@
   overflow: hidden;
 }
 
+.canvas-element__remove {
+  position: relative;
+  width: 100%;
+}
+
+.canvas-element__remove__action {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  color: #34A9C4;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 .canvas-element__sub-element {
   padding-top: 10px;
   padding-bottom: 5px;

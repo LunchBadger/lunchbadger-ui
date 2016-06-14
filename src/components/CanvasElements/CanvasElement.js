@@ -262,6 +262,12 @@ export default (ComposedComponent) => {
               </div>
             </div>
             <div className="canvas-element__extra">
+              <div className="canvas-element__remove">
+                <a className="canvas-element__remove__action">
+                  <i className="fa fa-trash"/>
+                </a>
+              </div>
+
               <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
             </div>
             <div className="canvas-element__actions editable-only">

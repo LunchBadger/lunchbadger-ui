@@ -169,25 +169,10 @@ class Forecast extends BaseStore {
     details.forEach((detail) => {
       const planDetail = plan.findDetail({date: detail.date});
 
-      if (detail.conditionFrom !== params.conditionFrom) {
-        detail.conditionFrom = params.conditionFrom;
-        detail.conditionFromChanged = true;
-      }
-
-      if (detail.conditionTo !== params.conditionTo) {
-        detail.conditionTo = params.conditionTo;
-        detail.conditionToChanged = true;
-      }
-
-      if (detail.value !== params.value) {
-        detail.value = params.value;
-        detail.valueChanged = true;
-      }
-
-      if (detail.type !== params.type) {
-        detail.type = params.type;
-        detail.typeChanged = true;
-      }
+      detail.conditionFrom = params.conditionFrom;
+      detail.conditionTo = params.conditionTo;
+      detail.value = params.value;
+      detail.type = params.type;
 
       detail.new = false;
 

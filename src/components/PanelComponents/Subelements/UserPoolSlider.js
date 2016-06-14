@@ -34,10 +34,21 @@ export default class UpgradeSlider extends Component {
 
     this.planUsers = this.plan.findDetail({date: upgrade.date}).subscribers.sum;
 
+    let max = 10;
+
+    if (this.planUsers > 100) {
+      max = 100;
+    } else if (this.planUsers > 1000) {
+      max = 1000;
+    } else if (this.planUsers > 10000) {
+      max = 10000;
+    }
+
     this.setState({
       movedUsers: upgrade.value,
       maxChange: this.planUsers,
-      max: Math.ceil((upgrade.value || this.state.max) / 10000) * 10000
+      max: max,
+      scaleStep: max
     });
 
     this._calculateChangeLimit(this.props.upgrades);
@@ -94,7 +105,7 @@ export default class UpgradeSlider extends Component {
       this.setState({max: max + scaleStep});
     }
   }
-  
+
   _handleRemove() {
     removeUpgrade(this.props.forecast, this.props.upgrade);
   }

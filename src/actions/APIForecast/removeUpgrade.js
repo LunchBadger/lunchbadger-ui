@@ -1,7 +1,8 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default () => {
+export default (forecast, upgrade) => {
   dispatch('RemoveUpgrade', {
-    
+    forecast,
+    upgrade
   });
 }

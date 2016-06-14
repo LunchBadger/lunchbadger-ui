@@ -35,7 +35,11 @@ export default class TierDetails extends BaseModel {
       conditionFrom: this.conditionFrom,
       conditionTo: this.conditionTo,
       type: this.type,
-      value: this.value
+      value: this.value,
+      conditionFromChanged: this.conditionFromChanged,
+      conditionToChanged: this.conditionToChanged,
+      typeChanged: this.typeChanged,
+      valueChanged: this.valueChanged
     }
   }
 

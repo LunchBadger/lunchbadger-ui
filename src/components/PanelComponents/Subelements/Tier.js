@@ -202,7 +202,7 @@ export default class Tier extends Component {
                         name="value"
                         value={value}
                         className="tier__charge__input"
-                        onChange={(event) => this.setState({value: parseFloat(event.target.value)})}/> per hour
+                        onChange={(event) => this.setState({value: event.target.value})}/> per hour
             </div>
           )
         }
@@ -214,7 +214,7 @@ export default class Tier extends Component {
                      name="value"
                      value={value}
                      className="tier__charge__input"
-                     onChange={(event) => this.setState({value: parseFloat(event.target.value)})}/> of total $
+                     onChange={(event) => this.setState({value: event.target.value})}/> of total $
             </div>
           )
         }
@@ -226,7 +226,7 @@ export default class Tier extends Component {
                      name="value"
                      value={value}
                      className="tier__charge__input"
-                     onChange={(event) => this.setState({value: parseFloat(event.target.value)})}/> per call
+                     onChange={(event) => this.setState({value: event.target.value})}/> per call
             </div>
           )
         }

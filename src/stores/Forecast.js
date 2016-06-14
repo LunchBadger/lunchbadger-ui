@@ -171,7 +171,7 @@ class Forecast extends BaseStore {
 
       detail.conditionFrom = params.conditionFrom;
       detail.conditionTo = params.conditionTo;
-      detail.value = params.value;
+      detail.value = parseFloat(params.value);
       detail.type = params.type;
 
       detail.new = false;

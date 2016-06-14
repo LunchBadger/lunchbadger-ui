@@ -194,7 +194,7 @@ export default class Canvas extends Component {
     const {canvasHeight} = this.state;
 
     return (
-      <section className="canvas" onClick={() => toggleHighlight(null)}>
+      <section className="canvas" onClick={() => this.props.appState.getStateKey('currentElement') && toggleHighlight(null)}>
         <div style={{height: canvasHeight}} className="canvas__wrapper">
           <div style={{height: canvasHeight}} className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>

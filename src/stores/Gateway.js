@@ -45,6 +45,10 @@ class Gateway extends BaseStore {
             this.emitChange();
           }
           break;
+        case 'RemoveEntity':
+          _.remove(Gateways, {id: action.entity.id});
+          this.emitChange();
+          break;
       }
     });
   }

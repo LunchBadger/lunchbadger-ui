@@ -77,6 +77,10 @@ class Public extends BaseStore {
           this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
+        case 'RemoveEntity':
+          _.remove(Publics, {id: action.entity.id});
+          this.emitChange();
+          break;
       }
     });
   }

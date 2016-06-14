@@ -51,6 +51,10 @@ class Forecast extends BaseStore {
           this.addUpgradeToApi(action.apiForecast, action.upgrade);
           this.emitChange();
           break;
+        case 'RemoveUpgrade':
+          _.remove(action.forecast.api.upgrades, {id: action.upgrade.id});
+          this.emitChange();
+          break;
         case 'CreateForecast':
           this.createForecastForEachPlanInApi(action.forecast, action.details, action.tierDetails);
           this.emitChange();

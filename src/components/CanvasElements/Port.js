@@ -56,6 +56,23 @@ export default class Port extends Component {
     }, endpointOptions);
   }
 
+  componentWillUnmount() {
+    const connectionsOut = this.props.paper.select({source: `port_out_${this.props.elementId}`});
+    const connectionsIn = this.props.paper.select({target: `port_in_${this.props.elementId}`});
+
+    connectionsIn.each((connection) => {
+      this.props.paper.detach(connection, {
+        fireEvent: false
+      });
+    });
+
+    connectionsOut.each((connection) => {
+      this.props.paper.detach(connection, {
+        fireEvent: false
+      });
+    });
+  }
+
   render() {
     const portClass = classNames({
       'canvas-element__port--out': this.props.way === 'out',

@@ -9,6 +9,7 @@ import _ from 'lodash';
 import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';
 import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
+import removeEntity from 'actions/CanvasElements/removeEntity';
 
 const boxSource = {
   beginDrag(props) {
@@ -231,7 +232,7 @@ export default (ComposedComponent) => {
     }
 
     _handleRemove() {
-
+      removeEntity(this.props.entity);
     }
 
     render() {

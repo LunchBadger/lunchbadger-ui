@@ -27,9 +27,45 @@
 }
 
 .tier__row {
-
+  font-size: 13px;
 }
 
 .tier__row--new {
+  color: #ff8000;
+}
+
+.tier__condition__between {
+  display: inline-block;
+  margin: 0 6px;
+  font-size: 16px;
+}
+
+.tier__condition__edit {
+
+}
+
+.tier__condition__input {
+  width: 60px;
+  font-size: 13px;
+}
+
+.tier__charge__select {
+  font-size: 13px;
+}
+
+.tier__charge__edit {
+
+}
+
+.tier__charge__value {
+  display: inline-block;
+}
+
+.tier__charge__input {
+  font-size: 13px;
+  width: 70px;
+}
+
+.tier__detail-changed {
   color: #ff8000;
 }

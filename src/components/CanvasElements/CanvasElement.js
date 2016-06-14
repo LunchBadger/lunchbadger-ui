@@ -8,6 +8,7 @@ import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
 import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';
+import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
 
 const boxSource = {
   beginDrag(props) {
@@ -94,7 +95,8 @@ export default (ComposedComponent) => {
       this.state = {
         editable: true,
         expanded: true,
-        highlighted: false
+        highlighted: false,
+        showRemovingModal: false
       };
 
       this.checkHighlightAndEditableState = (props) => {
@@ -228,6 +230,10 @@ export default (ComposedComponent) => {
       }
     }
 
+    _handleRemove() {
+
+    }
+
     render() {
       const {ready} = this.props.entity;
       const elementClass = classNames({
@@ -263,7 +269,7 @@ export default (ComposedComponent) => {
             </div>
             <div className="canvas-element__extra">
               <div className="canvas-element__remove">
-                <a className="canvas-element__remove__action">
+                <a className="canvas-element__remove__action" onClick={() => this.setState({showRemovingModal: true})}>
                   <i className="fa fa-trash"/>
                 </a>
               </div>
@@ -274,6 +280,18 @@ export default (ComposedComponent) => {
               <button type="submit" className="canvas-element__button">OK</button>
             </div>
           </Form>
+
+          {
+            this.state.showRemovingModal &&
+            <TwoOptionModal onClose={() => this.setState({showRemovingModal: false})}
+                            onSave={this._handleRemove.bind(this)}
+                            onCancel={() => this.setState({showRemovingModal: false})}
+                            title="Remove entity"
+                            confirmText="Remove"
+                            discardText="Cancel">
+              <span>Do you really want to remove that entity?</span>
+            </TwoOptionModal>
+          }
         </div>
       ));
     }

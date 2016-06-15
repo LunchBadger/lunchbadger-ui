@@ -110,13 +110,26 @@ export default class ForecastingChart extends Component {
     const barPaths = d3.selectAll('.bars').selectAll('path');
 
     this.tickvals.forEach((tick, index) => {
+      let tickForecasted = false;
+      let tickCurrent = false;
+
       if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
-        barPaths.forEach((paths) => {
-          if (paths[index]) {
+        tickForecasted = true;
+      }
+
+      if (moment(tick, 'M/YYYY').isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
+        tickCurrent = true;
+      }
+
+      barPaths.forEach((paths) => {
+        if (paths[index]) {
+          if (tickCurrent) {
+            paths[index].classList.add('chart__bar-current');
+          } else if (tickForecasted) {
             paths[index].classList.add('chart__bar-forecasted');
           }
-        });
-      }
+        }
+      });
     });
   }
 

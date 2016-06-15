@@ -18,7 +18,8 @@
     "LunchBadgerOptimize": true,
     "d3": true,
     "jsPlumb": true,
-    "console": true
+    "console": true,
+    "Plotly": true
   },
   "env": {
     "browser": true,

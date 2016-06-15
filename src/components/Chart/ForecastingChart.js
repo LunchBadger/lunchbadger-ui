@@ -2,9 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
 import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
-import ForecastDataParser, {dataKeys} from 'services/ForecastDataParser';
+import ForecastDataParser from 'services/ForecastDataParser';
 import _ from 'lodash';
 import moment from 'moment';
+import Forecast from 'stores/Forecast';
 
 export default class ForecastingChart extends Component {
   static propTypes = {
@@ -17,353 +18,235 @@ export default class ForecastingChart extends Component {
   constructor(props) {
     super(props);
 
-    this.color = d3.scale.ordinal().range(['#fad35c', '#f29332', '#8dad45', '#a8c667', '#ccdea8']);
+    this.state = {
+      lastUpdate: new Date()
+    };
 
-    this.selectedDate = this.props.selectedDate;
-    this.currentDate = moment();
-
-    this.customOffset = (data) => {
-      var j = -1,
-        m = data[0].length,
-        y0 = [];
-
-      while (++j < m) {
-        y0[j] = -(data[0][j][1] + data[1][j][1]);
-      }
-
-      return y0;
-    }
+    this.forecastChanged = () => {
+      setTimeout(() => this.setState({lastUpdate: new Date()}));
+    };
   }
 
   componentDidMount() {
-    this._configureChart();
-    this._renderChart(this.props.data);
-    this._selectLastAvailableMonth(this.props.data);
+    this._renderChart();
+
+    Forecast.addChangeListener(this.forecastChanged);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
+    this._renderChart();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const newData = nextProps.data;
+    const oldData = this.props.data;
+
+    if (nextProps.dateRange && this.props.dateRange && !_.isEqual(nextProps.dateRange, this.props.dateRange)) {
+      return true;
+    }
+
+    if (nextProps.selectedDate !== this.props.selectedDate) {
+      return true;
+    }
+
+    if (this.state.lastUpdate.toTimeString() !== nextState.lastUpdate.toTimeString()) {
+      return true;
+    }
+
+    return !_.isEqual(Object.keys(newData), Object.keys(oldData));
+  }
+
+  componentWillUnmount() {
+    Forecast.removeChangeListener(this.forecastChanged);
+  }
+
+  _renderChart() {
+    const data = this._formatData();
+
+    if (data.length > 0) {
+      this.tickvals = data[0].x;
+      const ticktext = data[0].x.map((date) => {
+        return this._formatDate(date);
+      });
+
+      const layout = {
+        barmode: 'relative',
+        showlegend: false,
+        xaxis: {
+          tickvals: this.tickvals,
+          ticktext: ticktext
+        },
+        yaxis: {
+          tickformat: '.2s'
+        }
+      };
+
+      const chart = findDOMNode(this.refs.chart);
+
+      Plotly.newPlot(chart, data, layout, {displayModeBar: false}).then((chart) => {
+        // const xticks = d3.selectAll('.xtick');
+
+        this._markForecastedMonths();
+
+        chart.on('plotly_click', (data) => {
+          const {points} = data;
+
+          if (points.length) {
+            const {x} = points[0];
+
+            this._markForecastedMonths();
+            setForecast(this.props.forecast, x);
+          }
+        });
+
+        chart.on('plotly_relayout', () => {
+          this._markForecastedMonths();
+        });
+      });
+    }
+  }
+
+  _markForecastedMonths() {
+    const barPaths = d3.selectAll('.bars').selectAll('path');
+
+    this.tickvals.forEach((tick, index) => {
+      let tickForecasted = false;
+      let tickCurrent = false;
+
+      if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
+        tickForecasted = true;
+      }
+
+      if (moment(tick, 'M/YYYY').isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
+        tickCurrent = true;
+      }
+
+      barPaths.forEach((paths) => {
+        if (paths[index]) {
+          if (tickCurrent) {
+            paths[index].classList.add('chart__bar-current');
+          } else if (tickForecasted) {
+            paths[index].classList.add('chart__bar-forecasted');
+          }
+        }
+      });
+    });
+  }
+
+  _formatData() {
+    let data = [];
     let filteredData = this.props.data;
-    this.selectedDate = this.props.selectedDate;
+
+    const newTrace = {
+      x: [],
+      y: [],
+      name: 'New',
+      type: 'bar',
+      marker: {
+        color: '#ccdea8'
+      }
+    };
+    const upgradesTrace = {
+      x: [],
+      y: [],
+      name: 'Upgrades',
+      type: 'bar',
+      marker: {
+        color: '#a8c667'
+      }
+    };
+    const existingTrace = {
+      x: [],
+      y: [],
+      name: 'Existing',
+      type: 'bar',
+      marker: {
+        color: '#8dad45'
+      }
+    };
+    const downgradesTrace = {
+      x: [],
+      y: [],
+      name: 'Downgrades',
+      type: 'bar',
+      marker: {
+        color: '#fad35c'
+      }
+    };
+    const churnTrace = {
+      x: [],
+      y: [],
+      name: 'Churn',
+      type: 'bar',
+      marker: {
+        color: '#f29332'
+      }
+    };
 
     if (this.props.dateRange) {
       filteredData = ForecastDataParser.filterData(this.props.dateRange, this.props.data, this.props.forecast.api);
     }
 
-    this._configureChart();
-    this._renderChart(filteredData);
+    const newUsers = {};
+    const upgradedUsers = {};
+    const existingUsers = {};
+    const downgradedUsers = {};
+    const churnUsers = {};
 
-    if (prevProps.selectedDate !== this.props.selectedDate) {
-      this._selectMonth(this.props.selectedDate, filteredData);
-    } else {
-      this._selectLastAvailableMonth(filteredData);
-    }
-  }
+    filteredData.forEach((plan) => {
+      Object.keys(plan).forEach((planDetails) => {
+        const {subscribers} = plan[planDetails];
 
-  _configureChart() {
-    this.chart = findDOMNode(this.refs.chart);
-    this.chart.innerHTML = '';
-    this.chartContainer = d3.select(this.chart);
-
-    const chartBounds = this.chart.getBoundingClientRect();
-
-    this.margin = {top: 10, right: 0, bottom: 30, left: 50};
-    this.width = chartBounds.width - this.margin.left - this.margin.right;
-    this.height = 240 - this.margin.top - this.margin.bottom;
-
-    this.x = d3.scale.ordinal().rangeRoundBands([0, this.width]);
-    this.y = d3.scale.linear().rangeRound([this.height, 0]);
-    this.z = d3.scale.category10();
-
-    this.xAxis = d3.svg.axis()
-      .scale(this.x)
-      .orient('bottom')
-      .tickSize(0, 0)
-      .tickFormat((d) => {
-        return moment(d).format('MMM')[0];
-      });
-
-    this.yAxis = d3.svg.axis()
-      .scale(this.y)
-      .orient('left')
-      .ticks(6)
-      .tickSize(2, 0)
-      .tickFormat(d3.format('.2s'));
-
-    this.svg = this.chartContainer.append('svg')
-      .attr('width', this.width + this.margin.left + this.margin.right)
-      .attr('height', this.height + this.margin.top + this.margin.bottom)
-      .attr('id', 'chart')
-      .append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
-
-    this.tooltip = this.chartContainer.append('div')
-      .attr('class', 'chart__tooltip')
-      .style('opacity', 0);
-
-    this.barSelector = this.chartContainer.append('div')
-      .attr('class', 'chart__bar-selector')
-      .style('opacity', 0);
-
-    this.chartContainer.append('div')
-      .attr('class', 'chart__x-axis');
-
-    this.forecastAxis = this.chartContainer.append('div')
-      .attr('class', 'chart__x-axis chart__x-axis--over');
-
-    this.currentMonthMark = this.chartContainer.append('div')
-      .attr('class', 'chart__current-month');
-
-    // TODO: this line should be calculated depending on the Y values
-    // draw line on 0 for y
-    // this.zeroLine = this.svg.append('line')
-    //   .style('stroke', 'black')
-    //   .attr('x1', 0)
-    //   .attr('y1', this.y(0.17))
-    //   .attr('x2', 500)
-    //   .attr('y2', this.y(0.17));
-  }
-
-  _prepareChartData(plans) {
-    const parsedData = {};
-
-    plans.forEach((plan) => {
-      Object.keys(plan).forEach((planKey) => {
-        if (!parsedData[planKey]) {
-          parsedData[planKey] = {
-            date: plan[planKey].date
-          };
-        }
-
-        Object.keys(dataKeys).forEach((dataKey) => {
-          if (parsedData[planKey][dataKey]) {
-            parsedData[planKey][dataKey] += plan[planKey].subscribers[dataKey];
-          } else {
-            parsedData[planKey][dataKey] = plan[planKey].subscribers[dataKey];
-          }
-        });
-      });
-    });
-
-    return _.sortBy(parsedData, (row) => row.date);
-  }
-
-  _renderChart(data) {
-    data = this._prepareChartData(data);
-
-    this.color.domain(d3.keys(data[0]).filter((key) => {
-      return key !== 'date';
-    }));
-
-    const layers = this._formatData(data);
-    this._formatAxis(data, layers);
-
-    this._drawBars(data, layers);
-    this._drawAxises();
-  }
-
-  _formatData(data) {
-    return d3.layout.stack().offset(this.customOffset)(Object.keys(dataKeys).map((dataKey) => {
-      return data.map(function (d) {
-        return {
-          x: d.date,
-          y: d[dataKey],
-          name: dataKey
-        };
-      });
-    }));
-  }
-
-  _formatAxis(data, layers) {
-    this.x.domain(layers[0].map((d) => {
-      return d.x;
-    }));
-
-    let maxValue = 0;
-    let minValue = 0;
-
-    data.forEach((d) => {
-      let minSum = 0;
-      let maxSum = 0;
-
-      Object.keys(dataKeys).forEach((key) => {
-        if (dataKeys[key] === '-') {
-          minSum -= d[key];
+        if (!newUsers.hasOwnProperty(planDetails)) {
+          newUsers[planDetails] = subscribers.new;
+          upgradedUsers[planDetails] = subscribers.upgrades;
+          existingUsers[planDetails] = subscribers.existing;
+          downgradedUsers[planDetails] = -subscribers.downgrades;
+          churnUsers[planDetails] = -subscribers.churn;
         } else {
-          maxSum += d[key];
+          newUsers[planDetails] += subscribers.new;
+          upgradedUsers[planDetails] += subscribers.upgrades;
+          existingUsers[planDetails] += subscribers.existing;
+          downgradedUsers[planDetails] -= subscribers.downgrades;
+          churnUsers[planDetails] -= subscribers.churn;
         }
       });
-
-      if (minSum < minValue) {
-        minValue = minSum;
-      }
-
-      if (maxSum > maxValue) {
-        maxValue = maxSum;
-      }
     });
 
-    const offsetFactor = 0.2;
-    const yAxisOffset = (Math.abs(minValue) > maxValue) ? Math.abs(minValue) * offsetFactor : maxValue * offsetFactor;
-
-    this.y.domain([
-      minValue - yAxisOffset,
-      maxValue + yAxisOffset
-    ]);
-  }
-
-  _drawBars(data, layers) {
-    let forecastAxisPositioned = false;
-
-    const layer = this.svg.selectAll('.layer')
-      .data(layers)
-      .enter().append('g')
-      .attr('class', 'layer')
-      .style('fill', (d, i) => {
-        return this.z(i);
-      });
-
-    layer.selectAll('rect')
-      .data((d) => {
-        return d;
-      })
-      .enter().append('rect')
-      .attr('x', (d) => {
-
-        // position forecast x-axis properly
-        if (!forecastAxisPositioned && moment(d.x).isAfter(this.currentDate, 'month')) {
-          this.forecastAxis.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + 2}px`);
-          forecastAxisPositioned = true;
-        }
-
-        // position current month mark
-        if (moment(d.x).isSame(this.currentDate, 'month')) {
-          this.currentMonthMark.style('left', `${this.x(d.x) + this.margin.left + this.margin.right + this.x.rangeBand() / 2 - 4}px`);
-        }
-
-        return this.x(d.x) + 2;
-      })
-      .attr('y', (d) => {
-        return this.y(d.y + d.y0);
-      })
-      .attr('height', (d) => {
-        return this.y(d.y0) - this.y(Math.abs(d.y) + d.y0);
-      })
-      .attr('width', this.x.rangeBand() - 4)
-      .attr('class', (d) => {
-        const date = d.x;
-        const currentDateClass = `date-${date.getMonth() + 1}-${date.getFullYear()}`;
-        const forecastedClass = moment(date).isAfter(this.currentDate, 'month') ? 'chart__bar-forecasted' : '';
-
-        return currentDateClass + ' ' + forecastedClass;
-      })
-      .style('fill', (d) => {
-          return this.color(d.name);
-        }
-      )
-      .on('mouseover', (d) => {
-        this.tooltip
-          .transition()
-          .duration(200);
-
-        this.tooltip
-          .style('opacity', 1)
-          .html(d.name.charAt(0).toUpperCase() + d.name.slice(1) + ': ' + '<br />' + d.y)
-          .style('left', `${d3.event.pageX}px`)
-          .style('top', `${d3.event.pageY}px`);
-      })
-      .on('mouseout', () => {
-        this.tooltip.transition()
-          .duration(100)
-          .style('opacity', 0);
-      })
-      .on('click', (d) => {
-        const date = d.x;
-        const timestamp = date.getTime() + '';
-
-        if (timestamp !== this.barSelector.attr('selected-date')
-          && this.selectedDate !== `${date.getMonth() + 1}/${date.getFullYear()}`) {
-          setForecast(this.props.forecast, date);
-        }
-
-        this.barSelector
-          .style('opacity', 1)
-          .style('left', `${this.x(date) + this.margin.left + 2}px`)
-          .style('height', `${this.height + 20 + this.margin.top}px`)
-          .style('width', `${this.x.rangeBand() - 4}px`)
-          .attr('selected-date', timestamp);
-      });
-  }
-
-  _drawAxises() {
-    const gx = this.svg.append('g')
-      .attr('class', 'axis axis--x')
-      .attr('transform', 'translate(0,' + this.height + ')')
-      .call(this.xAxis);
-
-    gx.selectAll('g').attr('class', (d) => {
-      if (moment(d).isSameOrBefore(moment())) {
-        return 'current';
-      }
-
-      return null;
+    Object.keys(newUsers).forEach((date) => {
+      newTrace.x.push(date);
+      newTrace.y.push(newUsers[date]);
     });
 
-    this.svg.append('g')
-      .attr('class', 'axis axis--y')
-      .call(this.yAxis);
+    Object.keys(upgradedUsers).forEach((date) => {
+      upgradesTrace.x.push(date);
+      upgradesTrace.y.push(upgradedUsers[date]);
+    });
+
+    Object.keys(existingUsers).forEach((date) => {
+      existingTrace.x.push(date);
+      existingTrace.y.push(existingUsers[date]);
+    });
+
+    Object.keys(downgradedUsers).forEach((date) => {
+      downgradesTrace.x.push(date);
+      downgradesTrace.y.push(downgradedUsers[date]);
+    });
+
+    Object.keys(churnUsers).forEach((date) => {
+      churnTrace.x.push(date);
+      churnTrace.y.push(churnUsers[date]);
+    });
+
+    data = [churnTrace, downgradesTrace, existingTrace, upgradesTrace, newTrace];
+
+    return data;
   }
 
-  _filterAvailableMonths(data) {
-    return data.reduce((months, plan) => {
-      let availableMonths;
+  _formatDate(date) {
+    const momentDate = moment(date, 'M/YYYY');
 
-      if (plan instanceof Array) {
-        availableMonths = plan.map((planDetails) => {
-          const {date} = planDetails;
-
-          return `${date.getMonth() + 1}/${date.getFullYear()}`;
-        });
-      } else {
-        availableMonths = Object.keys(plan).map((planDetails) => {
-          const {date} = plan[planDetails];
-
-          return `${date.getMonth() + 1}/${date.getFullYear()}`;
-        });
-      }
-
-      return [].concat(months, availableMonths);
-    }, []);
-  }
-
-  _selectLastAvailableMonth(data) {
-    const months = this._filterAvailableMonths(data);
-
-    if (months.length) {
-      const latestDate = _.uniq(months).slice(-1)[0].replace('/', '-');
-      const firstDate = _.uniq(months)[0].replace('/', '-');
-      let currentBar;
-
-      if (moment(latestDate, 'M-YYYY').isBefore(moment(this.selectedDate, 'M/YYYY'), 'month')) {
-        currentBar = d3.select(`.date-${latestDate}`);
-      } else if (moment(firstDate, 'M-YYYY').isAfter(moment(this.selectedDate, 'M/YYYY'), 'month')) {
-        currentBar = d3.select(`.date-${firstDate}`);
-      } else {
-        currentBar = d3.select(`.date-${this.selectedDate.replace('/', '-')}`);
-      }
-
-      currentBar && currentBar.on('click').apply(this, currentBar.data());
-      this.selectedDate = latestDate;
-    }
-  }
-
-  _selectMonth(month, data) {
-    const months = this._filterAvailableMonths(data);
-
-    if (months.length && months.indexOf(month) > -1) {
-      const barElement = d3.select(`.date-${month.replace('/', '-')}`);
-
-      barElement && barElement.on('click').apply(this, barElement.data());
-    }
+    return momentDate.format('MMMM')[0];
   }
 
   render() {

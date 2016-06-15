@@ -1,11 +1,15 @@
 .chart {
-  padding: 15px 60px 10px 50px;
+  padding: 15px 60px 10px;
+  overflow: hidden;
 }
 
 .chart__container {
   position: relative;
   max-width: 450px;
   margin: 0 auto;
+  height: 380px;
+  margin-top: -100px;
+  margin-bottom: -55px;
 
   & > svg {
     z-index: 2;
@@ -71,6 +75,11 @@
 
 .chart__bar-forecasted {
   opacity: 0.65;
+}
+
+.chart__bar-current {
+  fill: #8ddfee !important;
+  fill-opacity: 0.8 !important;
 }
 
 .chart__x-axis {

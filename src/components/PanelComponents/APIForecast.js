@@ -72,7 +72,7 @@ export default class APIForecast extends Component {
 
     this.setState({data: ForecastDataParser.prepareData(this.props.entity.toJSON())}, () => {
       this._updateForecast(AppState.getStateKey('currentForecast'));
-      this._fetchForecastData().then(() => this._updateForecast(AppState.getStateKey('currentForecast')));
+      this._fetchForecastData().finally(() => this._updateForecast(AppState.getStateKey('currentForecast')));
     });
   }
 
@@ -101,25 +101,28 @@ export default class APIForecast extends Component {
   _fetchForecastData() {
     return ForecastService.get(this.props.entity.api.id).then((response) => {
       const data = response.body;
+      let forecastData;
 
       if (data.length) {
-        const forecastData = data[0];
-
-        updateForecast(this.props.entity.id, forecastData);
-
-        this.setState({data: ForecastDataParser.prepareData(forecastData)}, () => {
-          if (this.state.data.length) {
-            const firstSetDateKeys = Object.keys(this.state.data[0]);
-
-            this.setState({
-              startDate: firstSetDateKeys[0],
-              endDate: firstSetDateKeys[firstSetDateKeys.length - 1]
-            });
-
-            setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
-          }
-        });
+        forecastData = data[0];
+      } else {
+        forecastData = this.props.entity.toJSON();
       }
+
+      updateForecast(this.props.entity.id, forecastData);
+
+      this.setState({data: ForecastDataParser.prepareData(forecastData)}, () => {
+        if (this.state.data.length) {
+          const firstSetDateKeys = Object.keys(this.state.data[0]);
+
+          this.setState({
+            startDate: firstSetDateKeys[0],
+            endDate: firstSetDateKeys[firstSetDateKeys.length - 1]
+          });
+
+          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+        }
+      });
     }).catch((error) => {
       return console.error(error);
     });

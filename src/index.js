@@ -1,3 +1,4 @@
+/*eslint no-console:0 */
 // Let's register plugins inside the Core, yay!
 import ForecastsPanel from './plugs/ForecastsPanel';
 
@@ -36,6 +37,8 @@ waitForStores([AppState], () => {
           initialize(forecast);
           setForecast(forecast, apiForecastInformation.selectedDate, apiForecastInformation.expanded);
         }
+      }).catch((error) => {
+        return console.warn(error);
       });
     }
   });

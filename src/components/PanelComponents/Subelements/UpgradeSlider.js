@@ -3,6 +3,7 @@ import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
 import PlanInfoTooltip from './PlanInfoTooltip';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
+import removeUpgrade from 'actions/APIForecast/removeUpgrade';
 import numeral from 'numeral';
 import moment from 'moment';
 import _ from 'lodash';
@@ -105,6 +106,10 @@ export default class UpgradeSlider extends Component {
     }
   }
 
+  _handleRemove() {
+    removeUpgrade(this.props.forecast, this.props.upgrade);
+  }
+
   render() {
     const minPercentage = 0;
     const maxPercentage = this.state.max;
@@ -151,6 +156,11 @@ export default class UpgradeSlider extends Component {
               {maxPercentage}%
             </div>
           </div>
+        </div>
+        <div className="upgrade-slider__action">
+          <a onClick={this._handleRemove.bind(this)} className="upgrade-slider__action__remove">
+            <i className="fa fa-times" />
+          </a>
         </div>
       </div>
     );

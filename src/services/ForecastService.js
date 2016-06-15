@@ -25,9 +25,7 @@ class ForecastService {
   }
 
   save(forecastId, data) {
-    delete data.id;
-
-    return this._APIHandle.put(bindParams('Forecasts/:id', {id: forecastId}), {
+    return this._APIHandle.put('Forecasts', {
       body: data
     });
   }

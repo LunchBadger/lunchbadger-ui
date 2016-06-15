@@ -3,6 +3,7 @@ import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
 import PlanInfoTooltip from './PlanInfoTooltip';
 import upgradePlan from 'actions/APIForecast/upgradePlan';
+import removeUpgrade from 'actions/APIForecast/removeUpgrade';
 import numeral from 'numeral';
 import moment from 'moment';
 import _ from 'lodash';
@@ -33,10 +34,21 @@ export default class UpgradeSlider extends Component {
 
     this.planUsers = this.plan.findDetail({date: upgrade.date}).subscribers.sum;
 
+    let max = 10;
+
+    if (this.planUsers > 100) {
+      max = 100;
+    } else if (this.planUsers > 1000) {
+      max = 1000;
+    } else if (this.planUsers > 10000) {
+      max = 10000;
+    }
+
     this.setState({
       movedUsers: upgrade.value,
       maxChange: this.planUsers,
-      max: Math.ceil((upgrade.value || this.state.max) / 10000) * 10000
+      max: max,
+      scaleStep: max
     });
 
     this._calculateChangeLimit(this.props.upgrades);
@@ -94,6 +106,10 @@ export default class UpgradeSlider extends Component {
     }
   }
 
+  _handleRemove() {
+    removeUpgrade(this.props.forecast, this.props.upgrade);
+  }
+
   render() {
     const minValue = 0;
     const maxValue = this.state.max;
@@ -141,6 +157,11 @@ export default class UpgradeSlider extends Component {
               {maxValue}
             </div>
           </div>
+        </div>
+        <div className="upgrade-slider__action">
+          <a onClick={this._handleRemove.bind(this)} className="upgrade-slider__action__remove">
+            <i className="fa fa-times" />
+          </a>
         </div>
       </div>
     );

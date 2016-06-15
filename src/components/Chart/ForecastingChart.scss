@@ -77,6 +77,11 @@
   opacity: 0.65;
 }
 
+.chart__bar-current {
+  fill: #8ddfee !important;
+  fill-opacity: 0.8 !important;
+}
+
 .chart__x-axis {
   position: absolute;
   background: #222;

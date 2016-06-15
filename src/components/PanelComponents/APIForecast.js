@@ -13,7 +13,7 @@ import DateRangeBar from './Subelements/DateRangeBar';
 import ForecastNav from './Subelements/ForecastNav';
 import ForecastPlans from './Subelements/ForecastPlans';
 import ForecastResizeHandle from './Subelements/ForecastResizeHandle';
-import lockr from 'lockr';
+import moment from 'moment';
 
 const AppState = LunchBadgerCore.stores.AppState;
 
@@ -134,6 +134,18 @@ export default class APIForecast extends Component {
       selectedRange: range,
       startDate: range.startDate,
       endDate: range.endDate
+    }, () => {
+      const selectedDate = moment(this.state.selectedDate, 'M/YYYY');
+
+      if (this.state.startDate.isAfter(selectedDate, 'month')) {
+        this.setState({selectedDate: this.state.startDate.format('M/YYYY')}, () => {
+          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+        });
+      } else if (this.state.endDate.isBefore(selectedDate, 'month')) {
+        this.setState({selectedDate: this.state.endDate.format('M/YYYY')}, () => {
+          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+        });
+      }
     });
   }
 

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
-// import setForecast from 'actions/AppState/setForecast';
+import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
 import ForecastDataParser from 'services/ForecastDataParser';
 import _ from 'lodash';
@@ -64,16 +64,16 @@ export default class ForecastingChart extends Component {
     const data = this._formatData();
 
     if (data.length > 0) {
-      const tickvals = data[0].x;
+      this.tickvals = data[0].x;
       const ticktext = data[0].x.map((date) => {
         return this._formatDate(date);
       });
 
       const layout = {
-        barmode: 'stack',
+        barmode: 'relative',
         showlegend: false,
         xaxis: {
-          tickvals: tickvals,
+          tickvals: this.tickvals,
           ticktext: ticktext
         },
         yaxis: {
@@ -83,11 +83,54 @@ export default class ForecastingChart extends Component {
 
       const chart = findDOMNode(this.refs.chart);
 
-      Plotly.newPlot(chart, data, layout, {displayModeBar: false});
+      Plotly.newPlot(chart, data, layout, {displayModeBar: false}).then((chart) => {
+        // const xticks = d3.selectAll('.xtick');
 
-      chart.on('plotly_click', function () {
+        this._markForecastedMonths();
+
+        chart.on('plotly_click', (data) => {
+          const {points} = data;
+
+          if (points.length) {
+            const {x} = points[0];
+
+            this._markForecastedMonths();
+            setForecast(this.props.forecast, x);
+          }
+        });
+
+        chart.on('plotly_relayout', () => {
+          this._markForecastedMonths();
+        });
       });
     }
+  }
+
+  _markForecastedMonths() {
+    const barPaths = d3.selectAll('.bars').selectAll('path');
+
+    this.tickvals.forEach((tick, index) => {
+      let tickForecasted = false;
+      let tickCurrent = false;
+
+      if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
+        tickForecasted = true;
+      }
+
+      if (moment(tick, 'M/YYYY').isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
+        tickCurrent = true;
+      }
+
+      barPaths.forEach((paths) => {
+        if (paths[index]) {
+          if (tickCurrent) {
+            paths[index].classList.add('chart__bar-current');
+          } else if (tickForecasted) {
+            paths[index].classList.add('chart__bar-forecasted');
+          }
+        }
+      });
+    });
   }
 
   _formatData() {
@@ -158,14 +201,14 @@ export default class ForecastingChart extends Component {
           newUsers[planDetails] = subscribers.new;
           upgradedUsers[planDetails] = subscribers.upgrades;
           existingUsers[planDetails] = subscribers.existing;
-          downgradedUsers[planDetails] = subscribers.downgrades;
-          churnUsers[planDetails] = subscribers.churn;
+          downgradedUsers[planDetails] = -subscribers.downgrades;
+          churnUsers[planDetails] = -subscribers.churn;
         } else {
           newUsers[planDetails] += subscribers.new;
           upgradedUsers[planDetails] += subscribers.upgrades;
           existingUsers[planDetails] += subscribers.existing;
-          downgradedUsers[planDetails] += subscribers.downgrades;
-          churnUsers[planDetails] += subscribers.churn;
+          downgradedUsers[planDetails] -= subscribers.downgrades;
+          churnUsers[planDetails] -= subscribers.churn;
         }
       });
     });

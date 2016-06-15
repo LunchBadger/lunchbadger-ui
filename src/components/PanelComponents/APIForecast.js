@@ -12,6 +12,7 @@ import ForecastDataParser from 'services/ForecastDataParser';
 import DateRangeBar from './Subelements/DateRangeBar';
 import ForecastNav from './Subelements/ForecastNav';
 import ForecastPlans from './Subelements/ForecastPlans';
+import ForecastResizeHandle from './Subelements/ForecastResizeHandle';
 import moment from 'moment';
 
 const AppState = LunchBadgerCore.stores.AppState;
@@ -27,7 +28,8 @@ const boxSource = {
 };
 
 @DragSource('forecastElement', boxSource, (connect) => ({
-  connectDragSource: connect.dragSource()
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview()
 }))
 export default class APIForecast extends Component {
   static propTypes = {
@@ -54,13 +56,15 @@ export default class APIForecast extends Component {
     };
 
     this.state = {
+      dragging: false,
       expanded: props.isExpanded,
       data: [],
       startDate: null,
       endDate: null,
       selectedRange: null,
       incomeSummary: [],
-      selectedDate: this.currentDate
+      selectedDate: this.currentDate,
+      scale: 1
     };
   }
 
@@ -159,35 +163,64 @@ export default class APIForecast extends Component {
     });
   }
 
+  handlePanelResize(event) {
+    const container = this.forecast;
+    const containerBBox = container.getBoundingClientRect();
+
+    // we need to store percentage value
+    let newPixelHeight = event.clientY - containerBBox.top;
+
+    const newScale = parseInt(newPixelHeight / containerBBox.height * this.state.scale * 100, 10) / 100;
+    
+    this.setState({
+      dragging: true,
+      scale: newScale
+    });
+  }
+
+  handlePanelResizeEnd() {
+    this.setState({dragging: false});
+  }
+
   render() {
     const elementClass = classNames({
       expanded: this.props.isExpanded
     });
-    const {hideSourceOnDrag, left, top, connectDragSource, isDragging} = this.props;
+    const {hideSourceOnDrag, left, top, connectDragSource, connectDragPreview, isDragging} = this.props;
 
     if (isDragging && hideSourceOnDrag) {
       return null;
     }
 
-    return connectDragSource(
-      <div className={`api-forecast ${elementClass}`} style={{left, top}}>
-        <div className="api-forecast__header">
-          <div className="api-forecast__header__title">
-            {this.props.entity.api.name}
-            <span className="api-forecast__header__subtitle">Revenue Forecast</span>
+    const forecastStyle = {
+      left,
+      top,
+      transform: `scale(${this.state.scale})`
+    }
+
+    return connectDragPreview(
+      <div className={`api-forecast ${elementClass}`}
+           style={forecastStyle}
+           ref={(instance) => this.forecast = instance}>
+        {connectDragSource(
+          <div className="api-forecast__header">
+            <div className="api-forecast__header__title">
+              {this.props.entity.api.name}
+              <span className="api-forecast__header__subtitle">Revenue Forecast</span>
+            </div>
+            {
+              !!this.state.startDate && (
+                <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
+                              onRangeUpdate={this._handleRangeUpdate.bind(this)}
+                              startDate={this.state.startDate}
+                              endDate={this.state.endDate}/>
+              )
+            }
+            <ForecastNav entity={this.props.entity}
+                         onClose={() => this.props.onClose()}
+                         onExpand={() => this.props.onExpand()}/>
           </div>
-          {
-            !!this.state.startDate && (
-              <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
-                            onRangeUpdate={this._handleRangeUpdate.bind(this)}
-                            startDate={this.state.startDate}
-                            endDate={this.state.endDate}/>
-            )
-          }
-          <ForecastNav entity={this.props.entity}
-                       onClose={() => this.props.onClose()}
-                       onExpand={() => this.props.onExpand()}/>
-        </div>
+        )}
         <div className="api-forecast__content">
           <div className="expanded-only">
             <div className="api-forecast__date-slider">
@@ -218,6 +251,9 @@ export default class APIForecast extends Component {
             )
           }
         </div>
+        <ForecastResizeHandle resizable={!this.props.isExpanded}
+                           onDragEnd={this.handlePanelResizeEnd.bind(this)}
+                           onDrag={this.handlePanelResize.bind(this)}/>
       </div>
     );
   }

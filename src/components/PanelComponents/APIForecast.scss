@@ -34,6 +34,7 @@
     left: 0 !important;
     top: 0 !important;
     margin: -15px -15px 0 -15px;
+    transform: scale(1) !important;
 
     .api-forecast__details {
       float: left;
@@ -52,6 +53,9 @@
       width: 1px;
       background: #ccc;
       position: absolute;
+    }
+    .panel__handle {
+      display: none;
     }
   }
 }

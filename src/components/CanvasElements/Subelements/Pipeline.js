@@ -127,11 +127,14 @@ export default class Pipeline extends Component {
     return (
       <div className={pipelineClass}>
         <div className="pipeline__info">
-          <div className="pipeline__icon">
-            <i className="fa fa-inbox" onClick={this.toggleOpenState.bind(this)}/>
-          </div>
-          <div className="pipeline__name">
-            {this.props.entity.name}
+          <div onClick={this.toggleOpenState.bind(this)}>
+            <div className="pipeline__toggle"></div>
+            <div className="pipeline__icon">
+              <i className="fa fa-inbox"/>
+            </div>
+            <div className="pipeline__name">
+              {this.props.entity.name}
+            </div>
           </div>
 
           {this.renderPorts()}

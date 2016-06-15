@@ -18,29 +18,26 @@
 
 .pipeline__info {
   cursor: pointer;
-  padding-left: 18px;
-
-  &:before {
-    content: '';
-    border-style: solid;
-    border-width: 5px 0 5px 9px;
-    border-color: transparent transparent transparent $font-base;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-    margin-right: 7px;
-  }
-
-  .pipeline--opened & {
-    &:before {
-      border-width: 10px 5px 0 5px;
-      border-color: $font-base transparent transparent transparent;
-    }
-  }
 }
 
 .pipeline__name {
   display: inline-block;
+}
+
+.pipeline__toggle {
+  border-style: solid;
+  border-width: 5px 0 5px 9px;
+  border-color: transparent transparent transparent #000000;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 7px;
+  margin-left: 18px;
+  transition: all .5s ease;
+
+  .pipeline--opened & {
+    transform: rotate(90deg);
+  }
 }
 
 .pipeline__icon {
@@ -49,10 +46,13 @@
 }
 
 .pipeline__details {
-  display: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: all .7s ease;
 
   .pipeline--opened & {
-    display: block;
+    max-height: 300px;
+    overflow: auto;
   }
 }
 

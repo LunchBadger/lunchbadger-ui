@@ -3,10 +3,10 @@
 .port {
   display: inline-block;
   border-radius: 50%;
-  border: 2px solid $ui-base-border;
+  border: 2px solid $ui-light;
   width: 22px;
   height: 22px;
-  background: $ui-light;
+  background: #DF5F37;
   z-index: $z-index-medium;
 
   &.active {

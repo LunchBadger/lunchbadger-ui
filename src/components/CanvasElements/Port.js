@@ -23,17 +23,17 @@ export default class Port extends Component {
     const endpointOptions = {
       maxConnections: -1,
       paintStyle: {
-        fillStyle: '#c1c1c1'
+        fillStyle: '#DF5F37'
       },
       connectorStyle: {
         lineWidth: 4,
-        strokeStyle: '#e15f36',
+        strokeStyle: '#DF5F37',
         joinstyle: 'round',
-        outlineColor: '#e15f36',
-        outlineWidth: 2
+        outlineColor: '#DF5F37',
+        outlineWidth: 1
       },
       connectorHoverStyle: {
-        outlineColor: '#919191'
+        outlineColor: '#FFFFFF'
       },
       anchor: [
         [0.5, 0, 0, -1, 0, 0, 'top'],
@@ -45,12 +45,12 @@ export default class Port extends Component {
     };
 
     this.props.paper.makeSource(portDOM, {
-      endpoint: ['Dot', {radius: 5}],
+      endpoint: ['Dot', {radius: 4}],
       allowLoopback: false
     }, endpointOptions);
 
     this.props.paper.makeTarget(portDOM, {
-      endpoint: ['Dot', {radius: 5}],
+      endpoint: ['Dot', {radius: 4}],
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);

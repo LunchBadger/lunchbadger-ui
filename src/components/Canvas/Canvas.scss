@@ -3,10 +3,9 @@
 .canvas {
   min-width: 100%;
   min-height: calc(100vh - #{$header-height});
-  background: $ui-light;
+  background: url('canvas-texture.png') rgb(222, 222, 222);
   position: relative;
   overflow: hidden;
-  transition: all .3s ease;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;

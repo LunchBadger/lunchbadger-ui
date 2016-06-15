@@ -70,7 +70,7 @@ export default class ForecastingChart extends Component {
       });
 
       const layout = {
-        barmode: 'stack',
+        barmode: 'relative',
         showlegend: false,
         xaxis: {
           tickvals: tickvals,
@@ -158,14 +158,14 @@ export default class ForecastingChart extends Component {
           newUsers[planDetails] = subscribers.new;
           upgradedUsers[planDetails] = subscribers.upgrades;
           existingUsers[planDetails] = subscribers.existing;
-          downgradedUsers[planDetails] = subscribers.downgrades;
-          churnUsers[planDetails] = subscribers.churn;
+          downgradedUsers[planDetails] = -subscribers.downgrades;
+          churnUsers[planDetails] = -subscribers.churn;
         } else {
           newUsers[planDetails] += subscribers.new;
           upgradedUsers[planDetails] += subscribers.upgrades;
           existingUsers[planDetails] += subscribers.existing;
-          downgradedUsers[planDetails] += subscribers.downgrades;
-          churnUsers[planDetails] += subscribers.churn;
+          downgradedUsers[planDetails] -= subscribers.downgrades;
+          churnUsers[planDetails] -= subscribers.churn;
         }
       });
     });

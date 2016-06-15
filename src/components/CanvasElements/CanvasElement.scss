@@ -11,7 +11,7 @@
   border-top-right-radius: 3px;
   background-color: #01667D;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  padding: 15px 20px;
+  padding: 15px 20px 0 20px;
   margin: 20px 10%;
 
   &.mouse-over {
@@ -75,12 +75,17 @@
 .canvas-element__actions {
   text-align: right;
   background-color: $ui-light;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
 }
 
 .canvas-element__inside {
   overflow: hidden;
   width: 100%;
   display: table;
+  padding-bottom: 15px;
 }
 
 .canvas-element__icon {

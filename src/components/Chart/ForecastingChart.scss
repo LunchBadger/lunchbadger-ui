@@ -1,11 +1,15 @@
 .chart {
-  padding: 15px 60px 10px 50px;
+  padding: 15px 60px 10px;
+  overflow: hidden;
 }
 
 .chart__container {
   position: relative;
   max-width: 450px;
   margin: 0 auto;
+  height: 380px;
+  margin-top: -100px;
+  margin-bottom: -55px;
 
   & > svg {
     z-index: 2;

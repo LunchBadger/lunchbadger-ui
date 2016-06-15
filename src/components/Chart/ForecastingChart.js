@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
-// import setForecast from 'actions/AppState/setForecast';
+import setForecast from 'actions/AppState/setForecast';
 import './ForecastingChart.scss';
 import ForecastDataParser from 'services/ForecastDataParser';
 import _ from 'lodash';
@@ -85,7 +85,14 @@ export default class ForecastingChart extends Component {
 
       Plotly.newPlot(chart, data, layout, {displayModeBar: false});
 
-      chart.on('plotly_click', function () {
+      chart.on('plotly_click', (data) => {
+        const {points} = data;
+
+        if (points.length) {
+          const {x} = points[0];
+
+          setForecast(this.props.forecast, x);
+        }
       });
     }
   }

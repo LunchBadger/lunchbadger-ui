@@ -113,9 +113,6 @@ class Model extends Component {
     return (
       <div>
         <div>
-          <div className="canvas-element__model-endpoint">
-            <i className="canvas-element__model-endpoint-icon fa fa-compass"/>
-          </div>
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties expanded-only">

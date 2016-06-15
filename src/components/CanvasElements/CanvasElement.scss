@@ -97,6 +97,7 @@
   font-size: 17px;
   display: table-cell;
   vertical-align: middle;
+  padding-right: 25px;
 
   .editing {
     font-size: 17px;
@@ -130,16 +131,16 @@
 }
 
 .canvas-element__remove {
-  position: relative;
-  width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  width: 30px;
+  text-align: right;
+  padding-right: 5px;
 }
 
 .canvas-element__remove__action {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-  color: #34A9C4;
-  font-size: 20px;
+  color: #fff;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -271,10 +272,6 @@
 }
 
 .canvas-element.Model {
-  .canvas-element__inside {
-    width: 66%;
-    min-width: 150px;
-  }
   .canvas-element__properties__property-value {
     padding-left: 0;
   }

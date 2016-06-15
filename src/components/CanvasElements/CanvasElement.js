@@ -267,14 +267,17 @@ export default (ComposedComponent) => {
                        value={this.props.entity.name}
                        handleChange={this.updateName.bind(this)}/>
               </div>
+              <div className="canvas-element__remove">
+                {
+                  this.state.editable && (
+                    <a className="canvas-element__remove__action" onClick={() => this.setState({showRemovingModal: true})}>
+                      <i className="fa fa-times"/>
+                    </a>
+                  )
+                }
+              </div>
             </div>
             <div className="canvas-element__extra">
-              <div className="canvas-element__remove">
-                <a className="canvas-element__remove__action" onClick={() => this.setState({showRemovingModal: true})}>
-                  <i className="fa fa-trash"/>
-                </a>
-              </div>
-
               <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
             </div>
             <div className="canvas-element__actions editable-only">

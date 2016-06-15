@@ -36,12 +36,12 @@ export default class UpgradeSlider extends Component {
 
     let max = 10;
 
-    if (this.planUsers > 100) {
-      max = 100;
+    if (this.planUsers > 10000) {
+      max = 10000;
     } else if (this.planUsers > 1000) {
       max = 1000;
-    } else if (this.planUsers > 10000) {
-      max = 10000;
+    } else if (this.planUsers > 100) {
+      max = 100;
     }
 
     this.setState({
@@ -85,7 +85,7 @@ export default class UpgradeSlider extends Component {
     const {max, scaleStep} = this.state;
 
     // don't allow to change value to higher if no more users are available to transit between plans
-    if (value >= this.state.maxChange && value > this.state.value) {
+    if (value >= this.state.maxChange && value > this.state.value && upgrade.toPlanId === null) {
       value = this.state.maxChange;
     }
 

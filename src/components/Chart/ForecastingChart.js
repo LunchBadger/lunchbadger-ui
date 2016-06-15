@@ -23,7 +23,7 @@ export default class ForecastingChart extends Component {
     };
 
     this.forecastChanged = () => {
-      this.setState({lastUpdate: new Date()});
+      setTimeout(() => this.setState({lastUpdate: new Date()}));
     };
   }
 

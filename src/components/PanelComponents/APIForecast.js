@@ -63,7 +63,8 @@ export default class APIForecast extends Component {
       endDate: null,
       selectedRange: null,
       incomeSummary: [],
-      selectedDate: this.currentDate
+      selectedDate: this.currentDate,
+      scale: 1
     };
   }
 
@@ -157,13 +158,11 @@ export default class APIForecast extends Component {
     // we need to store percentage value
     let newPixelHeight = event.clientY - containerBBox.top;
 
-    const newScale = parseInt(newPixelHeight / containerBBox.height * 100, 10) / 100;
-
-    console.log(this.state.scale);
-
+    const newScale = parseInt(newPixelHeight / containerBBox.height * this.state.scale * 100, 10) / 100;
+    
     this.setState({
       dragging: true,
-      scale: `scale(${newScale})`
+      scale: newScale
     });
   }
 
@@ -181,9 +180,15 @@ export default class APIForecast extends Component {
       return null;
     }
 
+    const forecastStyle = {
+      left,
+      top,
+      transform: `scale(${this.state.scale})`
+    }
+
     return connectDragPreview(
       <div className={`api-forecast ${elementClass}`}
-           style={{left, top, transform: this.state.scale}}
+           style={forecastStyle}
            ref={(instance) => this.forecast = instance}>
         {connectDragSource(
           <div className="api-forecast__header">

@@ -64,7 +64,7 @@ export default class ForecastingChart extends Component {
     const data = this._formatData();
 
     if (data.length > 0) {
-      const tickvals = data[0].x;
+      this.tickvals = data[0].x;
       const ticktext = data[0].x.map((date) => {
         return this._formatDate(date);
       });
@@ -73,7 +73,7 @@ export default class ForecastingChart extends Component {
         barmode: 'relative',
         showlegend: false,
         xaxis: {
-          tickvals: tickvals,
+          tickvals: this.tickvals,
           ticktext: ticktext
         },
         yaxis: {
@@ -83,18 +83,41 @@ export default class ForecastingChart extends Component {
 
       const chart = findDOMNode(this.refs.chart);
 
-      Plotly.newPlot(chart, data, layout, {displayModeBar: false});
+      Plotly.newPlot(chart, data, layout, {displayModeBar: false}).then((chart) => {
+        // const xticks = d3.selectAll('.xtick');
 
-      chart.on('plotly_click', (data) => {
-        const {points} = data;
+        this._markForecastedMonths();
 
-        if (points.length) {
-          const {x} = points[0];
+        chart.on('plotly_click', (data) => {
+          const {points} = data;
 
-          setForecast(this.props.forecast, x);
-        }
+          if (points.length) {
+            const {x} = points[0];
+
+            this._markForecastedMonths();
+            setForecast(this.props.forecast, x);
+          }
+        });
+
+        chart.on('plotly_relayout', () => {
+          this._markForecastedMonths();
+        });
       });
     }
+  }
+
+  _markForecastedMonths() {
+    const barPaths = d3.selectAll('.bars').selectAll('path');
+
+    this.tickvals.forEach((tick, index) => {
+      if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
+        barPaths.forEach((paths) => {
+          if (paths[index]) {
+            paths[index].classList.add('chart__bar-forecasted');
+          }
+        });
+      }
+    });
   }
 
   _formatData() {

@@ -1,18 +1,18 @@
 @import '../../config';
 
 .canvas-element {
-  max-width: 80%;
+  max-width: 100%;
   min-width: 200px;
   color: $font-light;
   position: relative;
   display: block;
   background: $ui-light;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+  border-radius: 3px;
   background-color: #01667D;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  padding: 15px 20px 0 20px;
-  margin: 20px 10%;
+  padding: 0;
+  margin: 20px 0;
+  //transition: all .3s ease;
 
   &.mouse-over {
     z-index: 1;
@@ -75,9 +75,6 @@
 .canvas-element__actions {
   text-align: right;
   background-color: $ui-light;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-right: 20px;
   padding-bottom: 10px;
 }
 
@@ -85,16 +82,20 @@
   overflow: hidden;
   width: 100%;
   display: table;
-  padding-bottom: 15px;
+  vertical-align: middle;
 }
 
 .canvas-element__icon {
   text-align: center;
-  padding-right: 10px;
-  width: 50px;
+  width: 57px;
   display: table-cell;
   vertical-align: middle;
   cursor: pointer;
+  font-size: 36px;
+  padding: 5px 12px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.19);
+  }
 }
 
 .canvas-element__title {
@@ -103,20 +104,17 @@
   display: table-cell;
   vertical-align: middle;
   padding-right: 25px;
-
+  padding-left: 10px;
   .editing {
     font-size: 17px;
     margin-left: -2px;
   }
 }
 
-.canvas-element__icon {
-  font-size: 26px;
-}
 
 .canvas-element__port {
   position: absolute;
-  margin-top: 20px;
+  margin-top: 15px;
   top: 0;
 }
 
@@ -129,7 +127,7 @@
 }
 
 .canvas-element__extra {
-  margin: 0 -40px;
+  margin: 0 -20px;
   padding: 0 20px;
   max-height: 0;
   overflow: hidden;
@@ -274,6 +272,9 @@
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+  &:hover {
+    color: #00ABFF;
+  }
 }
 
 .canvas-element.Model {

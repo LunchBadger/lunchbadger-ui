@@ -10,12 +10,13 @@
 
 .quadrant__title {
   color: $font-light;
+  height: 30px;
   background: #888888;
   padding-top: 6px;
+  padding-bottom: 5px;
   font-weight: 300;
-  font-size: 0.889em;
+  font-size: 0.778em;
   text-align: center;
-  //border-bottom: 1px solid $ui-base-border;
   border-right: 1px solid $ui-base-border;
 }
 

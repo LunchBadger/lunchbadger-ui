@@ -92,23 +92,24 @@
   top: 50%;
   color: $font-light;
   text-align: center;
-  font-size: 16px;
-  width: 325px;
-  background: #888888;
-  height: 100px;
-  border-radius: 10px;
+  font-size: 0.889em;
+  width: 136px;
+  background: #848485;
+  height: 22px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   transform-origin: bottom;
-  margin-top: -100px;
+  margin-top: -22px;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .canvas__label--left {
-  left: -125px;
-  padding-top: 65px;
-  transform: rotate(-90deg);
+  left: -68px;
+  transform: rotate(90deg);
 }
 
 .canvas__label--right {
-  right: -125px;
-  padding-top: 65px;
-  transform: rotate(90deg);
+  right: -68px;
+  transform: rotate(-90deg);
 }

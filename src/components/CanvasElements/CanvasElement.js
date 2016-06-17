@@ -107,7 +107,7 @@ export default (ComposedComponent) => {
 
         if (currentElement && currentElement.id === this.props.entity.id) {
           this.setState({highlighted: true});
-          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL && this.state.editable) {
             this.setState({editable: false});
           }
         } else {
@@ -194,6 +194,8 @@ export default (ComposedComponent) => {
         this.setState({editable: true}, () => {
           this._focusClosestInput(target);
         });
+      } else if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+        toggleEdit(null);
       }
     }
 

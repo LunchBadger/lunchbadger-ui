@@ -9,6 +9,7 @@ export default class Header extends Component {
     return (
       <header className="header">
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
+        <p className="logotype" >LunchBadger</p>
         <Breadcrumbs />
         <HeaderMenu plugins={this.props.plugins} />
       </header>

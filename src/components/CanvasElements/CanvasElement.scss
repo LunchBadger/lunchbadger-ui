@@ -7,7 +7,7 @@
   position: relative;
   display: block;
   background: $ui-light;
-  border-radius: 3px;
+  border-radius: 5px;
   background-color: #01667D;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   padding: 0;
@@ -101,7 +101,7 @@
 
 .canvas-element__title {
   text-align: left;
-  font-size: 17px;
+  font-size: 1.111em;
   display: table-cell;
   vertical-align: middle;
   padding-right: 25px;
@@ -110,8 +110,19 @@
     font-size: 17px;
     margin-left: -2px;
   }
+  .canvas-element__input {
+    color: #fff;
+  }
+  input[type=text].canvas-element__input.editable-only {
+    &::selection {
+      background-color: #B3B037;
+      color: $ui-light;
+    }
+    &:focus {
+      outline-color: #B3B037;
+    }
+  }
 }
-
 
 .canvas-element__port {
   position: absolute;
@@ -212,6 +223,7 @@
   background: #fff;
   border: none;
   cursor: pointer;
+  color: #446899;
 
   /*&:hover {
     background: #ccc;
@@ -221,16 +233,16 @@
 .canvas-element__input {
   font-size: 17px;
   width: 100%;
-  color: #fff;
+  color: #5B5A5A;
   background-color: #01667D;
   border: 1px solid $ui-base-border;
-  padding: 2px 4px;
+  //padding: 2px 4px;
 }
 
 .canvas-element__input--property {
   font-size: 14px;
-  background-color: $ui-active;
-  border: 1px solid $ui-active;
+  background-color: $ui-light;
+  border: 1px solid #ECECED;
 }
 
 .canvas-element__properties {

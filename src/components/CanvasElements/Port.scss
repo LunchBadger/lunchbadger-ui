@@ -6,11 +6,12 @@
   border: 2px solid $ui-light;
   width: 22px;
   height: 22px;
-  background: #DF5F37;
+  background: #fff;
   z-index: $z-index-medium;
 
-  &.active {
-    border-color: #7ed241;
+  .collapsed .has-connection &,
+  &.jsplumb-connected {
+    background: #DF5F37;
   }
 
   &.hover {

@@ -3,7 +3,9 @@ import Pipeline from './Subelements/Pipeline';
 import updateGateway from 'actions/CanvasElements/Gateway/update';
 import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
+import classNames from 'classnames';
 
+const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
 
@@ -16,11 +18,27 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      hasConnection: null
+    };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextState) {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
+    }
+
+    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+      const hasConnection = nextProps.entity.pipelines.some((publicEndpoint) => {
+        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+      });
+
+      if (hasConnection) {
+        this.setState({hasConnection: true});
+      } else {
+        this.setState({hasConnection: false});
+      }
     }
   }
 
@@ -48,8 +66,12 @@ class Gateway extends Component {
   }
 
   render() {
+    const elementClass = classNames({
+      'has-connection': this.state.hasConnection
+    });
+
     return (
-      <div>
+      <div className={elementClass}>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__title">Properties</div>
 

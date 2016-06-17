@@ -32,6 +32,10 @@ class AppState extends BaseStore {
           panel = null;
         }
 
+        if (panel !== null) {
+          this.setStateKey('currentEditElement', null);
+        }
+
         this.setStateKey('currentlyOpenedPanel', panel);
         this.setStateKey('isPanelOpened', panel ? true : false);
         this.emitChange();

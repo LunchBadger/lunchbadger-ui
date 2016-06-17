@@ -105,9 +105,10 @@ export default (ComposedComponent) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
 
-        if (currentElement && currentElement.id === this.props.entity.id) {
+        if (currentElement && currentElement.id === this.props.entity.id && !this.state.highlighted) {
           this.setState({highlighted: true});
-          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL && this.state.editable) {
+
+          if (this.currentOpenedPanel && this.state.editable) {
             this.setState({editable: false});
           }
         } else {
@@ -188,13 +189,12 @@ export default (ComposedComponent) => {
         return;
       }
 
-      toggleEdit(this.props.entity);
-
-      if (this.currentOpenedPanel !== panelKeys.DETAILS_PANEL) {
+      if (!this.currentOpenedPanel) {
+        toggleEdit(this.props.entity);
         this.setState({editable: true}, () => {
           this._focusClosestInput(target);
         });
-      } else if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+      } else if (this.currentOpenedPanel) {
         toggleEdit(null);
       }
     }

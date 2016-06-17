@@ -4,7 +4,7 @@ import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
-import panelKeys from 'constants/panelKeys';
+import toggleEdit from 'actions/CanvasElements/toggleEdit';
 import _ from 'lodash';
 import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';
@@ -104,9 +104,10 @@ export default (ComposedComponent) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
 
-        if (currentElement && currentElement.id === this.props.entity.id) {
+        if (currentElement && currentElement.id === this.props.entity.id && !this.state.highlighted) {
           this.setState({highlighted: true});
-          if (this.currentOpenedPanel === panelKeys.DETAILS_PANEL) {
+
+          if (this.currentOpenedPanel && this.state.editable) {
             this.setState({editable: false});
           }
         } else {
@@ -150,6 +151,8 @@ export default (ComposedComponent) => {
           editable: false,
           expanded: false
         });
+
+        toggleEdit(null);
       }
     }
 
@@ -185,10 +188,13 @@ export default (ComposedComponent) => {
         return;
       }
 
-      if (this.currentOpenedPanel !== panelKeys.DETAILS_PANEL) {
+      if (!this.currentOpenedPanel) {
+        toggleEdit(this.props.entity);
         this.setState({editable: true}, () => {
           this._focusClosestInput(target);
         });
+      } else if (this.currentOpenedPanel) {
+        toggleEdit(null);
       }
     }
 

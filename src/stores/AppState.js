@@ -32,6 +32,10 @@ class AppState extends BaseStore {
           panel = null;
         }
 
+        if (panel !== null) {
+          this.setStateKey('currentEditElement', null);
+        }
+
         this.setStateKey('currentlyOpenedPanel', panel);
         this.setStateKey('isPanelOpened', panel ? true : false);
         this.emitChange();
@@ -40,6 +44,11 @@ class AppState extends BaseStore {
 
       case 'ToggleHighlight':
         this.setStateKey('currentElement', action.element);
+        this.emitChange();
+        break;
+
+      case 'ToggleEdit':
+        this.setStateKey('currentEditElement', action.element);
         this.emitChange();
         break;
 

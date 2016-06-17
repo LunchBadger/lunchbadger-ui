@@ -35,7 +35,7 @@ class GatewaysQuadrant extends Component {
 
   render() {
     return (
-      <div>
+      <div className="quadrant__body">
         {this.renderEntities()}
       </div>
     );

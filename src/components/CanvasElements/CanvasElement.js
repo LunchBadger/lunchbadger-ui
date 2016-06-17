@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
 import toggleEdit from 'actions/CanvasElements/toggleEdit';
-import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
 import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';

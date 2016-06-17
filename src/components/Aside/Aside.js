@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Aside.scss';
+import classNames from 'classnames';
 
 export default class Aside extends Component {
   constructor(props) {
@@ -20,8 +21,13 @@ export default class Aside extends Component {
   }
 
   render() {
+    const asideClass = classNames({
+      aside: true,
+      'aside--editing': this.props.appState.getStateKey('currentEditElement')
+    });
+
     return (
-      <aside className="aside">
+      <aside className={asideClass}>
         {this._renderToolGroups()}
       </aside>
     );

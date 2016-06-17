@@ -6,7 +6,9 @@ import bundleAPI from 'actions/CanvasElements/API/bundle';
 import unbundleAPI from 'actions/CanvasElements/API/unbundle';
 import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import _ from 'lodash';
+import classNames from 'classnames';
 
+const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
@@ -23,7 +25,8 @@ class API extends Component {
 
     this.state = {
       showingModal: false,
-      bundledItem: null
+      bundledItem: null,
+      hasConnection: null
     }
   }
 
@@ -31,6 +34,20 @@ class API extends Component {
     this.props.paper.bind('connectionDetached', (info) => {
       this.previousConnection = info;
     });
+  }
+
+  componentWillReceiveProps(nextProps, nextState) {
+    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
+        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+      });
+      
+      if (hasConnection) {
+        this.setState({hasConnection: true});
+      } else {
+        this.setState({hasConnection: false});
+      }
+    }
   }
 
   update(model) {
@@ -58,7 +75,7 @@ class API extends Component {
     return this.props.entity.plans.map((plan) => {
       return (
         <div key={plan.id} className="canvas-element__sub-element">
-          <Plan entity={plan} />
+          <Plan entity={plan}/>
         </div>
       )
     });
@@ -109,8 +126,12 @@ class API extends Component {
   }
 
   render() {
+    const elementClass = classNames({
+      'has-connection': this.state.hasConnection
+    });
+
     return (
-      <div>
+      <div className={elementClass}>
         {
           this.props.entity.plans.length > 0 && (
             <div className="canvas-element__sub-elements">

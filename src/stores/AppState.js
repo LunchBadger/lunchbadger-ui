@@ -43,6 +43,11 @@ class AppState extends BaseStore {
         this.emitChange();
         break;
 
+      case 'ToggleEdit':
+        this.setStateKey('currentEditElement', action.element);
+        this.emitChange();
+        break;
+
       case 'SetProject':
         this.setStateKey('currentProject', action.project);
         break;

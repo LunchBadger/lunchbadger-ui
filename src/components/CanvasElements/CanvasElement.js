@@ -4,6 +4,7 @@ import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
+import toggleEdit from 'actions/CanvasElements/toggleEdit';
 import panelKeys from 'constants/panelKeys';
 import _ from 'lodash';
 import {Form} from 'formsy-react';
@@ -150,6 +151,8 @@ export default (ComposedComponent) => {
           editable: false,
           expanded: false
         });
+
+        toggleEdit(null);
       }
     }
 
@@ -184,6 +187,8 @@ export default (ComposedComponent) => {
       if (this.state.editable) {
         return;
       }
+
+      toggleEdit(this.props.entity);
 
       if (this.currentOpenedPanel !== panelKeys.DETAILS_PANEL) {
         this.setState({editable: true}, () => {

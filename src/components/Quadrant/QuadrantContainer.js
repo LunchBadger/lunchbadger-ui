@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import classNames from 'classnames';
 
 export default class QuadrantContainer extends Component {
   static propTypes = {
@@ -32,8 +33,12 @@ export default class QuadrantContainer extends Component {
   }
 
   render() {
+    const containerClass = classNames({
+      'canvas__container--editing': this.props.appState.getStateKey('currentEditElement')
+    });
+
     return (
-      <div style={this.props.style} className={this.props.className} id={this.props.id}>
+      <div style={this.props.style} className={`${this.props.className} ${containerClass}`} id={this.props.id}>
         {this.renderQuadrants()}
       </div>
     );

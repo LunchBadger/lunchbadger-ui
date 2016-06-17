@@ -20,6 +20,7 @@
 
   &.editable {
     border-radius: 0;
+    z-index: 15;
 
     .model-property:hover {
       .model-property__remove.fa {

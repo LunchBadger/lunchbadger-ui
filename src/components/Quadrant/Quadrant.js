@@ -95,9 +95,7 @@ export default (ComposedComponent) => {
              ref={(ref) => this.quadrantDOM = ref}
              style={{width: this.state.quadrantWidth, minWidth: `${this.props.initialPercentageWidth}%`}}>
           <div className="quadrant__title">{this.props.title}</div>
-          <div className="quadrant__body">
-            <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
-          </div>
+          <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
           {(() => {
             if (this.props.resizable) {
               return <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth.bind(this)}/>;

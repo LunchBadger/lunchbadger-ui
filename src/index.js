@@ -4,6 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
+import './fonts/trench100free.css';
+import './fonts/lunchbadger.css';
 
 const App = LunchBadgerCore.components.App;
 

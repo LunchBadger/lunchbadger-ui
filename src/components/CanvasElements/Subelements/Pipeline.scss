@@ -22,7 +22,7 @@
 .pipeline__info {
   cursor: pointer;
   &:hover {
-    
+    color: #00ABFF;
   }
 }
 
@@ -33,21 +33,23 @@
 .pipeline__toggle {
   border-style: solid;
   border-width: 5px 0 5px 9px;
-  border-color: transparent transparent transparent #000000;
+  border-color: transparent transparent transparent #034757;
   width: 10px;
   height: 10px;
   display: inline-block;
   margin-right: 7px;
   margin-left: 18px;
   transition: all .5s ease;
-
+  &:hover {
+    border-color: transparent transparent transparent #00ABFF;
+  }
   .pipeline--opened & {
     transform: rotate(90deg);
   }
 }
 
 .pipeline__icon {
-  display: inline-block;
+  display: none;
   margin-right: 7px;
 }
 

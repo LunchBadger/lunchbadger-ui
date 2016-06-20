@@ -37,10 +37,22 @@
 .model-property__input {
   width: 100%;
   font-size: 14px;
+  .editable-only {
+    border-color: #B3B037;
+  }
+}
+input[type=text].model-property__input.editable-only {
+  &::selection {
+  background-color: #B3B037;
+  color: $ui-light;
+  }
+  &:focus {
+    outline-color: #B3B037;
+  }
 }
 .model-property__remove.fa {
   display: none;
-  color: #999;
+  color: #B3B037;
   cursor: pointer;
   position: absolute;
   top: 50%;

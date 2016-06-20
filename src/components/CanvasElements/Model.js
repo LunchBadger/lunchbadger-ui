@@ -91,19 +91,22 @@ class Model extends Component {
 
   validateProperties() {
     const propertiesForm = findDOMNode(this.refs.properties);
-    const formFields = propertiesForm.querySelectorAll('input[type="text"]');
-    const emptyFields = [];
 
-    [].forEach.call(formFields, (field) => {
-      if (field.value.trim() === '') {
-        emptyFields.push(field);
+    if (propertiesForm) {
+      const formFields = propertiesForm.querySelectorAll('input[type="text"]');
+      const emptyFields = [];
+
+      [].forEach.call(formFields, (field) => {
+        if (field.value.trim() === '') {
+          emptyFields.push(field);
+        }
+      });
+
+      if (emptyFields.length) {
+        emptyFields[0].focus();
+
+        return false;
       }
-    });
-
-    if (emptyFields.length) {
-      emptyFields[0].focus();
-
-      return false;
     }
 
     return true;

@@ -1,0 +1,64 @@
+@font-face {
+  font-family: "lunchbadger";
+  src: url("./lunchbadger.eot");
+  src: url("./lunchbadger.eot?#iefix") format("embedded-opentype"),
+  url("./lunchbadger.woff") format("woff"),
+  url("./lunchbadger.ttf") format("truetype"),
+  url("./lunchbadger.svg#lunchbadger") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-icon]:before {
+  font-family: "lunchbadger" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "lunchbadger" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrowhead-dark:before {
+  content: "\61";
+}
+
+.icon-icon-forecaster-white:before {
+  content: "\62";
+}
+
+.icon-icon-metrics-dark:before {
+  content: "\63";
+}
+
+.icon-icon-details-dark:before {
+  content: "\64";
+}
+
+.icon-icon-minus-blue:before {
+  content: "\65";
+}
+
+.icon-icon-plus-blue:before {
+  content: "\66";
+}
+
+.icon-icon-settings-dark:before {
+  content: "\67";
+}

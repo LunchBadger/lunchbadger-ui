@@ -93,12 +93,21 @@ class Model extends Component {
     const propertiesForm = findDOMNode(this.refs.properties);
 
     if (propertiesForm) {
-      const formFields = propertiesForm.querySelectorAll('input[type="text"]');
+      const formFieldGroups = propertiesForm.querySelectorAll('.model-property');
       const emptyFields = [];
 
-      [].forEach.call(formFields, (field) => {
-        if (field.value.trim() === '') {
-          emptyFields.push(field);
+      [].forEach.call(formFieldGroups, (group) => {
+        const formFields = group.querySelectorAll('input[type="text"]');
+
+        [].forEach.call(formFields, (formField) => {
+          if (formField.value.trim() === '') {
+            emptyFields.push(formField);
+          }
+        });
+
+        if ([].every.call(formFields, (formField) => formField.value.trim() === '')) {
+          emptyFields.splice(-2, 2);
+          group.remove();
         }
       });
 

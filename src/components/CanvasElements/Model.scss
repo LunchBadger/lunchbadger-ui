@@ -8,6 +8,9 @@
 
   .editable & {
     display: block;
-    color: #B3B037;
+    color: #8BD6EF;
+    &:hover {
+      color: #2E92A3;
+    }
   }
 }

@@ -1,10 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './PublicEndpoint.scss';
 import {DragSource} from 'react-dnd';
-import {findDOMNode} from 'react-dom';
-import _ from 'lodash';
 
-const Connection = LunchBadgerCore.stores.Connection;
 const Port = LunchBadgerCore.components.Port;
 
 const boxSource = {
@@ -37,25 +34,6 @@ export default class PublicEndpoint extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this._checkAndReconnectElementIfRequired();
-  }
-
-  _checkAndReconnectElementIfRequired() {
-    const connections = Connection.getConnectionsForTarget(this.props.entity.id);
-
-    _.forEach(connections, (connection) => {
-      if (connection.info && connection.info.target) {
-        this.props.paper.remove(connection.info.target);
-      }
-
-      connection.info = this.props.paper.connect({
-        source: connection.info.source,
-        target: findDOMNode(this.refs['port-in'])
-      });
-    });
   }
 
   renderPorts() {

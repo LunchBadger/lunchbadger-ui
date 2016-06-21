@@ -3,6 +3,7 @@ import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import removeConnection from 'actions/Connection/remove';
+import uuid from 'uuid';
 
 export default class Port extends Component {
   static propTypes = {
@@ -16,6 +17,10 @@ export default class Port extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    this.tempId = uuid.v4();
   }
 
   componentDidMount() {
@@ -58,8 +63,9 @@ export default class Port extends Component {
   }
 
   componentWillUnmount() {
-    const connectionsOut = this.props.paper.select({source: `port_out_${this.props.elementId}`});
-    const connectionsIn = this.props.paper.select({target: `port_in_${this.props.elementId}`});
+    const portDOM = findDOMNode(this.refs.port);
+    const connectionsOut = this.props.paper.select({source: portDOM});
+    const connectionsIn = this.props.paper.select({target: portDOM});
 
     connectionsIn.each((connection) => {
       removeConnection(connection.sourceId, connection.targetId);
@@ -72,7 +78,7 @@ export default class Port extends Component {
 
     connectionsOut.each((connection) => {
       removeConnection(connection.sourceId, connection.targetId);
-      
+
       this.props.paper.detach(connection, {
         fireEvent: false,
         forceDetach: false
@@ -90,9 +96,11 @@ export default class Port extends Component {
     });
 
     return (
-      <div ref="port" id={`port_${this.props.way}_${this.props.elementId}`}
+      <div id={`port_${this.props.way}_${this.props.elementId}`}
            className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}>
-        <div className="port__inside">
+        <div className="port__anchor" ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
+          <div className="port__inside">
+          </div>
         </div>
       </div>
     );

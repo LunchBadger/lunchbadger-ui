@@ -9,14 +9,25 @@
   background: #fff;
   z-index: $z-index-medium;
 
-  .collapsed .has-connection &,
-  &.jsplumb-connected {
-    background: #DF5F37;
-  }
-
   &.hover {
     border-style: solid;
     border-color: $ui-dark-border;
+  }
+}
+
+.port__anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  z-index: $z-index-medium;
+  border-radius: 50%;
+
+  .collapsed .has-connection &,
+  &.jsplumb-connected {
+    background: #DF5F37;
   }
 }
 

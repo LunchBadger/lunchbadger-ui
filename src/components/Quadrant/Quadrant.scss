@@ -15,7 +15,7 @@
     top: 30px;
     transition: all 0.3s ease;
     position: absolute;
-    width: 100%;
+    width: calc(100% + 1px);
     background: #000;
   }
 

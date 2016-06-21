@@ -4,6 +4,8 @@ import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import removeConnection from 'actions/Connection/remove';
 import uuid from 'uuid';
+import Connection from 'stores/Connection';
+import _ from 'lodash';
 
 export default class Port extends Component {
   static propTypes = {
@@ -60,6 +62,10 @@ export default class Port extends Component {
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);
+
+    if (this.props.way === 'in') {
+      this._checkAndReattachConnections();
+    }
   }
 
   componentWillUnmount() {
@@ -68,8 +74,6 @@ export default class Port extends Component {
     const connectionsIn = this.props.paper.select({target: portDOM});
 
     connectionsIn.each((connection) => {
-      removeConnection(connection.sourceId, connection.targetId);
-
       this.props.paper.detach(connection, {
         fireEvent: false,
         forceDetach: false
@@ -77,11 +81,24 @@ export default class Port extends Component {
     });
 
     connectionsOut.each((connection) => {
-      removeConnection(connection.sourceId, connection.targetId);
-
       this.props.paper.detach(connection, {
         fireEvent: false,
         forceDetach: false
+      });
+    });
+  }
+
+  _checkAndReattachConnections() {
+    const connections = Connection.getConnectionsForTarget(this.props.elementId);
+
+    _.forEach(connections, (connection) => {
+      if (connection.info.target) {
+        removeConnection(connection.fromId, connection.toId);
+      }
+
+      this.props.paper.connect({
+        source: connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor'),
+        target: findDOMNode(this.refs.port)
       });
     });
   }

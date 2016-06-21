@@ -3,18 +3,18 @@
 .model-property {
   display: block;
   width: 100%;
-  border-bottom: 1px solid $ui-base-border;
+  //border-bottom: 1px solid $ui-base-border;
   position: relative;
-  &:first-child {
-    border-top: 1px solid $ui-base-border;
-  }
+  //&:first-child {
+  //  border-top: 1px solid $ui-base-border;
+  //}
 }
 
 .model-property__key-cell {
   float: left;
   width: 50%;
   padding: 5px 10px 5px 5px;
-  border-right: 1px solid $ui-base-border;
+  border: 1px solid $ui-base-border;
 }
 
 .model-property__value-cell {
@@ -37,22 +37,25 @@
 .model-property__input {
   width: 100%;
   font-size: 14px;
+  &:hover {
+    border-color: #8BD6EF;
+  }
   .editable-only {
-    border-color: #B3B037;
+    border-color: #7ABFD6;
   }
 }
 input[type=text].model-property__input.editable-only {
   &::selection {
-  background-color: #B3B037;
+  background-color: #8BD6EF;
   color: $ui-light;
   }
   &:focus {
-    outline-color: #B3B037;
+    border-color: #8BD6EF;
   }
 }
 .model-property__remove.fa {
   display: none;
-  color: #B3B037;
+  color: #8BD6EF;
   cursor: pointer;
   position: absolute;
   top: 50%;

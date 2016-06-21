@@ -15,17 +15,12 @@ export default class Canvas extends Component {
       lastUpdate: new Date(),
       canvasHeight: null
     };
-
-    this.connectionStoreChanged = () => {
-    };
-
-    setInterval(() => {
-      this.paper.repaintEverything();
-    }, 50);
   }
 
   componentWillMount() {
-    Connection.addChangeListener(this.connectionStoreChanged);
+    this.repaint = setInterval(() => {
+      this.paper.repaintEverything();
+    }, 50);
   }
 
   componentDidMount() {
@@ -58,9 +53,7 @@ export default class Canvas extends Component {
   }
 
   componentWillUnmount() {
-    Connection.removeChangeListener(this.connectionStoreChanged);
-
-    window.removeEventListener('resize', this.windowResized);
+    clearInterval(this.repaint);
   }
 
   _disconnect(connection) {

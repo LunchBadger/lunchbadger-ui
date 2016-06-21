@@ -19,23 +19,16 @@ export default (ComposedComponent) => {
         opened: false
       };
 
-      let animationTime = (this.props.appState.getStateKey('isPanelOpened')) ? 500 : 0;
       this.storageKey = null;
 
       this.appStateUpdate = () => {
         const currentPanel = this.props.appState.getStateKey('currentlyOpenedPanel');
 
         if (this.storageKey === currentPanel && !this.state.opened) {
-          // keep the timeout equal to css animation time...
-
-          setTimeout(() => {
-            this.setState({opened: true});
-          }, animationTime);
+          this.setState({opened: true});
         } else if (this.storageKey !== currentPanel) {
           this.setState({opened: false});
         }
-
-        animationTime = (this.props.appState.getStateKey('isPanelOpened')) ? 500 : 0;
       }
     }
 
@@ -54,8 +47,10 @@ export default (ComposedComponent) => {
       });
     }
 
-    componentWillReceiveProps() {
-      this.appStateUpdate();
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.appState.getStateKey('currentlyOpenedPanel') !== this.props.appState.getStateKey) {
+        this.appStateUpdate();
+      }
     }
 
     componentDidUpdate(prevProps, prevState) {

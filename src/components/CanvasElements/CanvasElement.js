@@ -179,9 +179,7 @@ export default (ComposedComponent) => {
     }
 
     toggleExpandedState() {
-      this.setState({expanded: !this.state.expanded}, () => {
-        this.props.paper.repaintEverything();
-      });
+      this.setState({expanded: !this.state.expanded});
     }
 
     toggleEditableState(event) {

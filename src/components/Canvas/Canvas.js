@@ -6,7 +6,6 @@ import removeConnection from 'actions/Connection/remove';
 import moveConnection from 'actions/Connection/move';
 import Connection from 'stores/Connection';
 import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
-import _ from 'lodash';
 
 export default class Canvas extends Component {
   constructor(props) {
@@ -20,9 +19,9 @@ export default class Canvas extends Component {
     this.connectionStoreChanged = () => {
     };
 
-    this.windowResized = _.debounce(() => {
+    setInterval(() => {
       this.paper.repaintEverything();
-    }, 100);
+    }, 50);
   }
 
   componentWillMount() {
@@ -54,8 +53,6 @@ export default class Canvas extends Component {
 
     this._attachPaperEvents();
     this._registerConnectionTypes();
-
-    window.addEventListener('resize', this.windowResized);
 
     jsPlumb.fire('canvasLoaded', this.paper);
   }
@@ -170,16 +167,10 @@ export default class Canvas extends Component {
     });
 
     this.paper.bind('beforeDrag', () => {
-      this.paper.repaintEverything();
-
       return true;
     });
 
     this.paper.bind('connectionAborted', () => {
-      setTimeout(() => {
-        this.paper.repaintEverything();
-      });
-
       return true;
     });
 

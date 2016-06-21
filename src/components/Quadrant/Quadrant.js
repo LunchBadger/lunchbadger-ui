@@ -63,12 +63,6 @@ export default (ComposedComponent) => {
       this.props.data.addInitListener(this.dataStoreUpdate);
     }
 
-    componentDidUpdate() {
-      if (this.props.paper) {
-        this.props.paper.repaintEverything();
-      }
-    }
-
     componentWillUnmount() {
       this.props.data.removeChangeListener(this.dataStoreUpdate);
       this.props.data.removeInitListener(this.dataStoreUpdate);
@@ -79,7 +73,6 @@ export default (ComposedComponent) => {
       const newWidth = event.clientX - quadrantBounds.left;
 
       this.setState({quadrantWidth: `${newWidth}px`});
-      this.props.paper.repaintEverything();
     }
 
     moveEntity(...props) {

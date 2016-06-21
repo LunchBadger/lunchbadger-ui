@@ -44,7 +44,7 @@
     }
 
     .canvas-element__extra {
-      max-height: 9999px;
+      max-height: 450px;
       overflow: hidden;
     }
   }
@@ -144,6 +144,7 @@
   padding: 0 20px;
   max-height: 0;
   overflow: hidden;
+  transition: all .7s ease;
 }
 
 .canvas-element__remove {

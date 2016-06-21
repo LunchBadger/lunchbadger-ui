@@ -104,11 +104,13 @@ export default (ComposedComponent) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
 
-        if (currentElement && currentElement.id === this.props.entity.id && !this.state.highlighted) {
-          this.setState({highlighted: true});
-
-          if (this.currentOpenedPanel && this.state.editable) {
-            this.setState({editable: false});
+        if (currentElement && currentElement.id === this.props.entity.id) {
+          if (!this.state.highlighted) {
+            this.setState({highlighted: true});
+          } else {
+            if (this.currentOpenedPanel && this.state.editable) {
+              this.setState({editable: false});
+            }
           }
         } else {
           this.setState({highlighted: false});
@@ -248,7 +250,7 @@ export default (ComposedComponent) => {
         editable: this.state.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        highlighted: this.state.highlighted,
+        highlighted: this.state.highlighted && !this.state.editable,
         wip: !ready
       });
       const {connectDragSource, connectDropTarget, isDragging} = this.props;

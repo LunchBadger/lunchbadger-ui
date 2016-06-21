@@ -128,10 +128,6 @@ class Model extends Component {
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties expanded-only">
-          <div className="canvas-element__properties__title">
-            Properties
-          </div>
-
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Context path</div>
@@ -150,7 +146,7 @@ class Model extends Component {
               this.props.entity.properties.length > 0 && (
                 <div className="canvas-element__properties__property">
                   <div className="canvas-element__properties__property-title">
-                    Model properties
+                    Properties
                     <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>
                   </div>
                   <div ref="properties" className="canvas-element__properties__property-value">

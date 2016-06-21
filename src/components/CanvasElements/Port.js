@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
+import removeConnection from 'actions/Connection/remove';
 
 export default class Port extends Component {
   static propTypes = {
@@ -61,14 +62,20 @@ export default class Port extends Component {
     const connectionsIn = this.props.paper.select({target: `port_in_${this.props.elementId}`});
 
     connectionsIn.each((connection) => {
+      removeConnection(connection.sourceId, connection.targetId);
+
       this.props.paper.detach(connection, {
-        fireEvent: false
+        fireEvent: false,
+        forceDetach: false
       });
     });
 
     connectionsOut.each((connection) => {
+      removeConnection(connection.sourceId, connection.targetId);
+      
       this.props.paper.detach(connection, {
-        fireEvent: false
+        fireEvent: false,
+        forceDetach: false
       });
     });
   }

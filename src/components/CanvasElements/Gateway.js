@@ -73,8 +73,6 @@ class Gateway extends Component {
     return (
       <div className={elementClass}>
         <div className="canvas-element__properties">
-          <div className="canvas-element__properties__title">Properties</div>
-
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Root path</div>

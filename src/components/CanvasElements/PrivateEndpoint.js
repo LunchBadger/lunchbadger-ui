@@ -55,8 +55,6 @@ class PrivateEndpoint extends Component {
           {this.renderPorts()}
         </div>
         <div className="canvas-element__properties">
-          <div className="canvas-element__properties__title">Properties</div>
-
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Context path</div>

@@ -129,6 +129,7 @@ export default (ComposedComponent) => {
         this.setState({editable: false, expanded: false});
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
+        toggleEdit(this.props.entity);
       }
 
       this.checkHighlightAndEditableState(this.props);

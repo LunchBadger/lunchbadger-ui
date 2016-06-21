@@ -240,6 +240,7 @@ export default (ComposedComponent) => {
 
     _handleRemove() {
       removeEntity(this.props.entity);
+      toggleEdit(null);
     }
 
     render() {

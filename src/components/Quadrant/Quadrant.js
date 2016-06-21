@@ -73,6 +73,7 @@ export default (ComposedComponent) => {
       const newWidth = event.clientX - quadrantBounds.left;
 
       this.setState({quadrantWidth: `${newWidth}px`});
+      this.props.paper.repaintEverything();
     }
 
     moveEntity(...props) {

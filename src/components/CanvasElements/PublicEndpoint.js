@@ -1,12 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
-import {findDOMNode} from 'react-dom';
-import _ from 'lodash';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
 const Port = LunchBadgerCore.components.Port;
-const Connection = LunchBadgerCore.stores.Connection;
 
 class PublicEndpoint extends Component {
   static propTypes = {
@@ -16,25 +13,6 @@ class PublicEndpoint extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    this._checkAndReconnectElementIfRequired();
-  }
-
-  _checkAndReconnectElementIfRequired() {
-    const connections = Connection.getConnectionsForTarget(this.props.entity.id);
-
-    _.forEach(connections, (connection) => {
-      if (connection.info && connection.info.connection) {
-        this.props.paper.detach(connection.info.connection);
-      }
-
-      this.props.paper.connect({
-        source: connection.info.source,
-        target: findDOMNode(this.refs['port-in'])
-      });
-    });
   }
 
   update(model) {

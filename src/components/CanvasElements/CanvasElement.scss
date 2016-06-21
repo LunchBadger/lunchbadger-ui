@@ -112,14 +112,15 @@
   }
   .canvas-element__input {
     color: #fff;
+    padding: 2px 6px;
   }
   input[type=text].canvas-element__input.editable-only {
     &::selection {
-      background-color: #B3B037;
+      background-color: #8BD6EF;
       color: $ui-light;
     }
     &:focus {
-      outline-color: #B3B037;
+      outline-color: #8BD6EF;
     }
   }
 }
@@ -150,7 +151,7 @@
   vertical-align: middle;
   width: 30px;
   text-align: right;
-  padding-right: 5px;
+  padding-right: 15px;
 }
 
 .canvas-element__remove__action {
@@ -223,11 +224,10 @@
   background: #fff;
   border: none;
   cursor: pointer;
-  color: #446899;
-
-  /*&:hover {
-    background: #ccc;
-  }*/
+  color: #8BD6EF;
+  &:hover {
+    color: #2E92A3;
+  }
 }
 
 .canvas-element__input {
@@ -236,13 +236,16 @@
   color: #5B5A5A;
   background-color: #01667D;
   border: 1px solid $ui-base-border;
-  //padding: 2px 4px;
+  padding: 2px 4px;
 }
 
 .canvas-element__input--property {
   font-size: 14px;
   background-color: $ui-light;
   border: 1px solid #ECECED;
+  &:hover {
+    border: 1px solid #8BD6EF;
+  }
 }
 
 .canvas-element__properties {

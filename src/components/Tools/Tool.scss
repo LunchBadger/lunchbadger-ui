@@ -41,7 +41,7 @@ i.tool__extend {
 	right: 0;
 }
 i.tool__icon {
-	color: #4B4B4B;
+	color: #034757;
 	font-size: 30px;
 	line-height: 50px;
 }
@@ -88,10 +88,9 @@ i.over {
 		line-height: 50px;
 		cursor: pointer;
 		&:hover {
-			background: darken($ui-active, 5%);
-			color: $font-light;
+			color: $ui-active;
 			i {
-				color: $font-light;
+				color: $ui-active;
 			}
 		}
 		i {

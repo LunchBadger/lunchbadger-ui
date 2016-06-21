@@ -23,8 +23,12 @@ export default class ForecastDetails extends Component {
     if (nextProps.dateRange && this.props.dateRange
       && nextProps.dateRange.endDate !== this.props.dateRange.endDate
       && nextProps.entity.api.plans.length) {
-      if (!nextProps.entity.api.plans[0].checkPlanDetailsExistence(nextProps.dateRange.endDate)) {
-        createForecast(nextProps.entity, nextProps.dateRange.endDate);
+      const monthsDifference = nextProps.dateRange.endDate.clone().endOf('month').diff(this.props.dateRange.endDate, 'months');
+
+      if (monthsDifference > 0) {
+        for (let i = 1; i <= monthsDifference; i++) {
+          createForecast(nextProps.entity, this.props.dateRange.endDate.clone().add(i, 'months'));
+        }
       }
     }
   }

@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nightwatch": "^0.9.4"
+    "chromedriver": "^2.21.2",
+    "nightwatch": "^0.9.4",
+    "selenium-server-standalone-jar": "^2.53.0"
   }
 }

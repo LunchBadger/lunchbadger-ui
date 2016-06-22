@@ -1,0 +1,57 @@
+{
+  "src_folders": [
+    "tests"
+  ],
+  "output_folder": "reports",
+  "custom_commands_path": "",
+  "custom_assertions_path": "",
+  "page_objects_path": "",
+  "globals_path": "",
+  "selenium": {
+    "start_process": true,
+    "server_path": "./node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.43.1.jar",
+    "log_path": "",
+    "host": "127.0.0.1",
+    "port": 4444,
+    "cli_args": {
+      "webdriver.chrome.driver": "./node_modules/chromedriver/bin/chromedriver"
+    }
+  },
+  "test_settings": {
+    "default": {
+      "launch_url": "http://localhost:8000",
+      "selenium_port": 4444,
+      "selenium_host": "localhost",
+      "silent": true,
+      "screenshots": {
+        "enabled": false,
+        "path": ""
+      },
+      "desiredCapabilities": {
+        "browserName": "phantomjs",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true,
+        "phantomjs.binary.path": "./node_modules/phantomjs/bin/phantomjs",
+        "phantomjs.cli.args": "--webdriver=5558 --webdriver-selenium-grid-hub=http://localhost:4444"
+      }
+    },
+    "chrome": {
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
+    },
+    "dist": {
+      "launch_url": "http://lunchbadger.ntrc.eu"
+    },
+    "chrome_dist": {
+      "launch_url": "http://lunchbadger.ntrc.eu",
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
+    }
+  }
+}

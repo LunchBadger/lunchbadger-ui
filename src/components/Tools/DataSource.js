@@ -11,8 +11,8 @@ class DataSource extends Component {
   render() {
     return (
       <div className="dataSource tool context">
-        <i className="tool__extend fa fa-caret-down"/>
-        <i className="tool__icon fa fa-database"/>
+        <i className="tool__extend icon-arrowhead"/>
+        <i className="tool__icon icon-icon-datasource"/>
         <ul className="tool__context">
           <li>
             <Memory />

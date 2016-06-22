@@ -7,8 +7,7 @@ export default class SQL extends Component {
   render() {
     return (
       <div className="sql tool__context__item" onClick={() => AddDataSource('SQL', 'sql')}>
-      	<i className="tool__icon fa fa-database"/>
-      	<i className="tool__icon fa fa-sql"/>
+      	<i className="tool__icon icon-icon-datasource"/>
       	<span className="tool__name">SQL</span>
       </div>
     );

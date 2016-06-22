@@ -7,8 +7,7 @@ export default class Oracle extends Component {
   render() {
     return (
       <div className="oracle tool__context__item" onClick={() => AddDataSource('Oracle', 'oracle')}>
-      	<i className="tool__icon fa fa-database"/>
-      	<i className="tool__icon fa fa-oracle"/>
+      	<i className="tool__icon icon-icon-datasource"/>
       	<span className="tool__name">Oracle</span>
       </div>
     );

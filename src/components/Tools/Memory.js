@@ -7,7 +7,7 @@ class Memory extends Component {
   render() {
     return (
       <div className="memory tool__context__item" onClick={() => AddDataSource('Memory', 'memory')}>
-      	<i className="tool__icon fa fa-database"/>
+      	<i className="tool__icon icon-icon-datasource"/>
       	<span className="tool__name">Memory</span>
       </div>
     );

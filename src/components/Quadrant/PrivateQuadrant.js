@@ -24,7 +24,7 @@ class PrivateQuadrant extends Component {
             <Model paper={this.props.paper}
                    appState={this.props.appState}
                    key={entity.id}
-                   icon="fa-car"
+                   icon="icon-icon-model"
                    hideSourceOnDrag={true}
                    itemOrder={entity.itemOrder}
                    moveEntity={this.moveEntity}
@@ -36,7 +36,7 @@ class PrivateQuadrant extends Component {
               paper={this.props.paper}
               appState={this.props.appState}
               key={entity.id}
-              icon="fa-user-secret"
+              icon="icon-icon-endpoint"
               hideSourceOnDrag={true}
               itemOrder={entity.itemOrder}
               moveEntity={this.moveEntity}

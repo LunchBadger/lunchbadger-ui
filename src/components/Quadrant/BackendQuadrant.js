@@ -20,7 +20,7 @@ class BackendQuadrant extends Component {
       return <DataSource paper={this.props.paper}
                          appState={this.props.appState}
                          key={entity.id}
-                         icon="fa-database"
+                         icon="icon-icon-datasource"
                          hideSourceOnDrag={true}
                          itemOrder={entity.itemOrder}
                          moveEntity={this.moveEntity}

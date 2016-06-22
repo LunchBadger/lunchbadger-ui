@@ -1,0 +1,15 @@
+{
+  "name": "lunchbadger-e2e-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.neoteric.eu:LunchBadger/lunchbadger-e2e-tests.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

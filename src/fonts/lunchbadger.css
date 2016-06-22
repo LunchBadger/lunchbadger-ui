@@ -35,30 +35,65 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-arrowhead-dark:before {
-  content: "\61";
+.icon-icon-minus:before {
+    content: "\e900";
 }
-
-.icon-icon-forecaster-white:before {
-  content: "\62";
+.icon-icon-product:before {
+    content: "\e901";
 }
-
-.icon-icon-metrics-dark:before {
-  content: "\63";
+.icon-icon-settings:before {
+    content: "\e902";
 }
-
-.icon-icon-details-dark:before {
-  content: "\64";
+.icon-icon-plus:before {
+    content: "\e903";
 }
-
-.icon-icon-minus-blue:before {
-  content: "\65";
+.icon-icon-model:before {
+    content: "\e904";
 }
-
-.icon-icon-plus-blue:before {
-  content: "\66";
+.icon-icon-metrics .path1:before {
+    content: "\e905";
+    color: rgb(2, 56, 69);
 }
-
-.icon-icon-settings-dark:before {
-  content: "\67";
+.icon-icon-metrics .path2:before {
+    content: "\e906";
+    margin-left: -1em;
+    color: rgb(2, 56, 69);
+}
+.icon-icon-metrics .path3:before {
+    content: "\e907";
+    margin-left: -1em;
+    color: rgb(2, 56, 69);
+}
+.icon-icon-metrics .path4:before {
+    content: "\e908";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-icon-metrics .path5:before {
+    content: "\e909";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-icon-metrics .path6:before {
+    content: "\e90a";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+}
+.icon-icon-gateway:before {
+    content: "\e90b";
+}
+.icon-icon-forecaster:before {
+    content: "\e90c";
+}
+.icon-icon-endpoint:before {
+    content: "\e90d";
+}
+.icon-icon-details:before {
+    content: "\e90e";
+}
+.icon-arrowhead:before {
+    content: "\e90f";
+}
+.icon-icon-datasource:before {
+    content: "\e910";
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/nightwatch/bin/nightwatch"
   },
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
   "dependencies": {
     "chromedriver": "^2.21.2",
     "nightwatch": "^0.9.4",
-    "selenium-server-standalone-jar": "^2.53.0"
+    "phantomjs": "^1.9.8",
+    "selenium-server-standalone-jar": "2.43.1"
   }
 }

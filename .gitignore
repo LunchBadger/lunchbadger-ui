@@ -1,0 +1,11 @@
+# env
+.idea/
+node_modules/
+
+# reports
+reports/*
+!reports/.keep
+
+# single files
+.DS_Store
+selenium-debug.log

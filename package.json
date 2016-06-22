@@ -11,5 +11,8 @@
     "url": "git@gitlab.neoteric.eu:LunchBadger/lunchbadger-e2e-tests.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nightwatch": "^0.9.4"
+  }
 }

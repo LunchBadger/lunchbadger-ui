@@ -24,7 +24,7 @@ class PublicQuadrant extends Component {
                  paper={this.props.paper}
                  appState={this.props.appState}
                  id={entity.id}
-                 icon="fa-archive"
+                 icon="icon-icon-product"
                  hideSourceOnDrag={true}
                  itemOrder={entity.itemOrder}
                  moveEntity={this.moveEntity}
@@ -36,7 +36,7 @@ class PublicQuadrant extends Component {
                             paper={this.props.paper}
                             appState={this.props.appState}
                             id={entity.id}
-                            icon="fa-user"
+                            icon="icon-icon-endpoint"
                             hideSourceOnDrag={true}
                             itemOrder={entity.itemOrder}
                             moveEntity={this.moveEntity}

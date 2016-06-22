@@ -7,7 +7,7 @@ class API extends Component {
   render() {
     return (
       <div className="api tool" onClick={() => AddAPI('API')}>
-        <i className="tool__icon fa fa-archive"/>
+        <i className="tool__icon icon-icon-product"/>
         <span className="tool__tooltip">API</span>
       </div>
     );

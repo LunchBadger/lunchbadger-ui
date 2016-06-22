@@ -7,7 +7,7 @@ class PrivateEndpoint extends Component {
   render() {
     return (
       <div className="publicendpoint tool__context__item" onClick={() => AddPublicEndpoint('Public Endpoint')}>
-      	<i className="tool__icon fa fa-globe"/>
+      	<i className="tool__icon icon-icon-endpoint"/>
       	<span className="tool__name">Public Endpoint</span>
       </div>
     );

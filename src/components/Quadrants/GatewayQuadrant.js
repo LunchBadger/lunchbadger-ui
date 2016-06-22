@@ -18,7 +18,7 @@ class GatewaysQuadrant extends Component {
   renderEntities() {
     return this.props.entities.map((entity) => {
       return <Gateway key={entity.id}
-                      icon="fa-exchange"
+                      icon="icon-icon-gateway"
                       paper={this.props.paper}
                       appState={this.props.appState}
                       hideSourceOnDrag={true}

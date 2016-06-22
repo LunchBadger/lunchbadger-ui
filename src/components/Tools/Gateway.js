@@ -7,7 +7,7 @@ class Gateway extends Component {
   render() {
     return (
       <div className="gateway tool" onClick={() => DeployGateway()}>
-      	<i className="tool__icon fa fa-cloud"/>
+      	<i className="tool__icon icon-icon-gateway"/>
       	<span className="tool__tooltip">Gateway</span>
       </div>
     );

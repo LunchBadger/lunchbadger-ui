@@ -8,7 +8,7 @@
   height: 100%;
   background: $ui-light;
   border-right: 1px solid $ui-base-border;
-  z-index: $z-index-medium;
+  z-index: ($z-index-high +1);
 
   hr {
     margin-left: 5%;
@@ -30,7 +30,10 @@
    &--editing {
     &:before {
       z-index: 10;
-      opacity: 0.6;
+      opacity: 0.34;
     }
   }
+}
+.tool__extend.icon-arrowhead {
+  font-size: x-small;
 }

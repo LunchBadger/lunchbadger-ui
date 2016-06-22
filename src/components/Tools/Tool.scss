@@ -3,23 +3,28 @@
 .tool {
 	display: block;
 	position: relative;
-	width: $aside-width - 10;
-	height: $aside-width - 10;
-	margin: 5px;
+	width: $aside-width;
+	height: ($aside-width + 3);
 	border-radius: 5px;
 	cursor: pointer;
 	transition: all .5s ease-in-out;
 	overflow: hidden;
 	text-align: center;
+	padding: 8px 0;
 	&.context {
 		&:hover {
 			border-top-right-radius: 0;
 			border-bottom-right-radius: 0;
 		}
+		&.tool__context{
+			> i.tool__icon {
+				color: $ui-active;
+			}
+		}
 	}
 	&:hover {
 		overflow: visible;
-		background: lighten($ui-light, 5%);
+		background-color: rgba(0, 0, 0, 0.06);
 		> .tool__tooltip {
 			opacity: 1;
 			transform: translateX($aside-width);
@@ -28,17 +33,14 @@
 			opacity: 1;
 			display: block;
 		}
-		> i.tool__icon {
-			color: $ui-active;
-		}
 	}
 
 }
 i.tool__extend {
 	line-height: 1em;
 	position: absolute;
-	bottom: 0;
-	right: 0;
+	bottom: 11px;
+	right: 2px;
 }
 i.tool__icon {
 	color: #034757;
@@ -75,17 +77,18 @@ i.over {
 	width: 200px;
 	top: -56px;
 	margin: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 	background: lighten($ui-light, 5%);
 	border-left: none;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 	cursor: pointer;
 	overflow: hidden;
 	text-align: center;
 	left: $aside-width - 17;
 	list-style: none;
 	li {
-		line-height: 50px;
+		line-height: 33px;
 		cursor: pointer;
 		&:hover {
 			color: $ui-active;
@@ -98,6 +101,10 @@ i.over {
 			margin-left: .5em;
 		}
 
+	}
+	i.tool__icon {
+		line-height: 33px;
+		font-size: 26px;
 	}
 }
 .tool__context__item {

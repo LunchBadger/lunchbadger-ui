@@ -28,11 +28,11 @@ export default class HeaderMenu extends Component {
             <HeaderMenuSaveButton/>
           </li>
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="icon-icon-details-dark"/>
+            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="icon-icon-details"/>
           </li>
           {this.renderButtons()}
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={null} icon="icon-icon-settings-dark"/>
+            <HeaderMenuLink togglePanel={null} icon="icon-icon-settings"/>
           </li>
         </ul>
       </nav>

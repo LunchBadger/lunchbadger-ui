@@ -5,6 +5,7 @@ node_modules/
 # reports
 reports/*
 !reports/.keep
+!reports/screenshots/.keep
 
 # single files
 .DS_Store

@@ -24,33 +24,44 @@
       "selenium_host": "localhost",
       "silent": true,
       "screenshots": {
-        "enabled": false,
-        "path": ""
+        "enabled": true,
+        "on_failure" : true,
+        "on_error" : false,
+        "path": "reports/screenshots"
       },
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true
+      }
+    },
+    "phantom": {
       "desiredCapabilities": {
         "browserName": "phantomjs",
         "javascriptEnabled": true,
         "acceptSslCerts": true,
         "phantomjs.binary.path": "./node_modules/phantomjs/bin/phantomjs",
-        "phantomjs.cli.args": "--webdriver=5558 --webdriver-selenium-grid-hub=http://localhost:4444"
-      }
-    },
-    "chrome": {
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "javascriptEnabled": true,
-        "acceptSslCerts": true
+        "phantomjs.cli.args": "--webdriver=5558 --webdriver-selenium-grid-hub=http://localhost:4444",
+        "phantomjs.page.settings.userAgent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"
       }
     },
     "dist": {
-      "launch_url": "http://lunchbadger.ntrc.eu"
-    },
-    "chrome_dist": {
       "launch_url": "http://lunchbadger.ntrc.eu",
       "desiredCapabilities": {
         "browserName": "chrome",
         "javascriptEnabled": true,
         "acceptSslCerts": true
+      }
+    },
+    "dist_phantom": {
+      "launch_url": "http://lunchbadger.ntrc.eu",
+      "desiredCapabilities": {
+        "browserName": "phantomjs",
+        "javascriptEnabled": true,
+        "acceptSslCerts": true,
+        "phantomjs.binary.path": "./node_modules/phantomjs/bin/phantomjs",
+        "phantomjs.cli.args": "--webdriver=5558 --webdriver-selenium-grid-hub=http://localhost:4444",
+        "phantomjs.page.settings.userAgent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"
       }
     }
   }

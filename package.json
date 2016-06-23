@@ -15,7 +15,7 @@
   "dependencies": {
     "chromedriver": "^2.21.2",
     "nightwatch": "^0.9.4",
-    "phantomjs": "^1.9.8",
+    "phantomjs": "^2.1.7",
     "selenium-server-standalone-jar": "2.43.1"
   }
 }

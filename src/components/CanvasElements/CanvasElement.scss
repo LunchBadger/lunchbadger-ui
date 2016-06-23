@@ -189,8 +189,8 @@
 }
 
 .canvas-element__sub-elements__title {
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 0.833em;
   padding-left: 30px;
   color: $font-light-title;
   letter-spacing: 1px;
@@ -257,7 +257,7 @@
 
 .canvas-element__properties__title {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 0.833em;
   letter-spacing: 1px;
   color: $font-light-title;
   text-transform: uppercase;
@@ -276,7 +276,7 @@
 
 .canvas-element__properties__property-title {
   display: block;
-  font-size: 13px;
+  font-size: 0.833em;
   padding-top: 10px;
   color: $font-light-title;
   letter-spacing: 1px;
@@ -344,6 +344,10 @@
   .model-property {
     overflow-y: visible;
   }
+}
+.icon-icon-minus {
+  font-size: medium;
+  vertical-align: -webkit-baseline-middle;
 }
 
 .clearfix {

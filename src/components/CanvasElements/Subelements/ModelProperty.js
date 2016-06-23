@@ -56,7 +56,7 @@ export default class ModelProperty extends Component {
         <Input value={property.id}
                type="hidden"
                name={`properties[${index}][id]`}/>
-        <i className="model-property__remove fa fa-remove" onClick={() => this.onRemove(this.props.entity, property)}></i>
+        <i className="model-property__remove icon-icon-minus" onClick={() => this.onRemove(this.props.entity, property)}></i>
         <div className="clearfix"></div>
       </div>
     );

@@ -4,7 +4,8 @@ import DetailsPanel from './DetailsPanel';
 export default class PanelContainer extends Component {
   static propTypes = {
     container: PropTypes.func.isRequired,
-    canvas: PropTypes.func.isRequired
+    canvas: PropTypes.func.isRequired,
+    header: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -20,6 +21,7 @@ export default class PanelContainer extends Component {
                         appState={this.props.appState}
                         plugins={this.props.plugins}
                         canvas={this.props.canvas}
+                        header={this.props.header}
                         container={this.props.container} />
       );
     });
@@ -30,6 +32,7 @@ export default class PanelContainer extends Component {
       <div>
         <DetailsPanel canvas={this.props.canvas}
                       plugins={this.props.plugins}
+                      header={this.props.header}
                       appState={this.props.appState}
                       container={this.props.container}/>
         {this.renderPanels()}

@@ -8,7 +8,8 @@ export default (ComposedComponent) => {
   return class Panel extends Component {
     static propTypes = {
       canvas: PropTypes.func.isRequired,
-      container: PropTypes.func.isRequired
+      container: PropTypes.func.isRequired,
+      header: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -34,6 +35,7 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       setTimeout(() => {
+        this.header = this.props.header().refs.headerContainer;
         this.canvas = this.props.canvas();
         this.container = this.props.container();
         this.containerBBox = this.container.getBoundingClientRect();
@@ -68,9 +70,10 @@ export default (ComposedComponent) => {
     handlePanelResize(event) {
       const container = this.props.container();
       const containerBBox = container.getBoundingClientRect();
+      const headerBBox = this.header.getBoundingClientRect();
 
       // we need to store percentage value
-      let newPixelHeight = event.clientY - containerBBox.top;
+      let newPixelHeight = event.clientY - headerBBox.height;
 
       if (newPixelHeight > containerBBox.height - 100) {
         newPixelHeight = containerBBox.height - 100;

@@ -13,11 +13,6 @@ const boxTarget = {
         if (typeof item.handleEndDrag === 'function') {
           item.handleEndDrag(item);
         }
-      } else {
-        const delta = monitor.getDifferenceFromInitialOffset();
-        const left = Math.round(item.left + delta.x);
-        const top = Math.round(item.top + delta.y);
-        component.moveEntity(item.entity, left, top);
       }
     }
 

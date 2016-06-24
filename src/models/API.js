@@ -32,7 +32,8 @@ export default class API extends BaseModel {
       id: this.id,
       name: this.name,
       publicEndpoints: this.publicEndpoints.map(endpoint => endpoint.toJSON()),
-      plans: this.plans.map(plan => plan.toJSON())
+      plans: this.plans.map(plan => plan.toJSON()),
+      itemOrder: this.itemOrder
     }
   }
 

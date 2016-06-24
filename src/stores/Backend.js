@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
-const Backends = [];
+
+let Backends = [];
 
 class Backend extends BaseStore {
   constructor() {
@@ -11,6 +12,7 @@ class Backend extends BaseStore {
       switch (action.type) {
         case 'InitializeBackend':
           Backends.push.apply(Backends, action.data);
+          Backends = this.sortItems(Backends);
           this.emitInit();
           break;
         case 'UpdateBackendOrder':

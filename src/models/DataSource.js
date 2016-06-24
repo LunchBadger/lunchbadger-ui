@@ -65,7 +65,8 @@ export default class DataSource extends BaseModel {
       url: this.url,
       schema: this.schema,
       username: this.username,
-      password: this.password
+      password: this.password,
+      itemOrder: this.itemOrder
     }
   }
 

@@ -63,6 +63,12 @@ export default class BaseStore extends EventEmitter {
     });
   }
 
+  sortItems(items) {
+    return _.sortBy(items, (item) => {
+      return item.itemOrder;
+    });
+  }
+
   formatId(id) {
     const idSplit = id.split('_');
 

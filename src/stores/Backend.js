@@ -16,8 +16,9 @@ class Backend extends BaseStore {
           this.emitInit();
           break;
         case 'UpdateBackendOrder':
-          Backends.splice(action.itemOrder, 0, Backends.splice(action.hoverOrder, 1)[0]);
-          this.setEntitiesOrder(Backends);
+          _.remove(Backends, action.entity);
+          Backends.splice(action.hoverOrder, 0, action.entity);
+          Backends = this.sortItems(this.setEntitiesOrder(Backends));
           this.emitChange();
           break;
         case 'AddDataSource':

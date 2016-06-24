@@ -4,6 +4,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  user-select: none;
 }
 
 body {
@@ -12,6 +13,9 @@ body {
   color: rgb(75, 75, 75);
 }
 
+input {
+  user-select: text;
+}
 
 .app {
 }

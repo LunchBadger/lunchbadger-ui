@@ -17,8 +17,9 @@ class Gateway extends BaseStore {
           this.emitInit();
           break;
         case 'UpdateGatewayOrder':
-          Gateways.splice(action.itemOrder, 0, Gateways.splice(action.hoverOrder, 1)[0]);
-          this.setEntitiesOrder(Gateways);
+          _.remove(Gateways, action.entity);
+          Gateways.splice(action.hoverOrder, 0, action.entity);
+          Gateways = this.sortItems(this.setEntitiesOrder(Gateways));
           this.emitChange();
           break;
         case 'AddGateway':

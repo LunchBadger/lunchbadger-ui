@@ -26,8 +26,9 @@ class Public extends BaseStore {
 
           break;
         case 'UpdatePublicOrder':
-          Publics.splice(action.itemOrder, 0, Publics.splice(action.hoverOrder, 1)[0]);
-          this.setEntitiesOrder(Publics);
+          _.remove(Publics, action.entity);
+          Publics.splice(action.hoverOrder, 0, action.entity);
+          Publics = this.sortItems(this.setEntitiesOrder(Publics));
           this.emitChange();
           break;
         case 'AddPublicEndpoint':

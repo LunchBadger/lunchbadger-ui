@@ -26,8 +26,9 @@ class Private extends BaseStore {
 
           break;
         case 'UpdatePrivateOrder':
-          Privates.splice(action.itemOrder, 0, Privates.splice(action.hoverOrder, 1)[0]);
-          this.setEntitiesOrder(Privates);
+          _.remove(Privates, action.entity);
+          Privates.splice(action.hoverOrder, 0, action.entity);
+          Privates = this.sortItems(this.setEntitiesOrder(Privates));
           this.emitChange();
           break;
         case 'AddPrivateEndpoint':

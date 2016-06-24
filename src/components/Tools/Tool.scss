@@ -1,117 +1,129 @@
 @import '../../config';
 
 .tool {
-	display: block;
-	position: relative;
-	width: $aside-width;
-	height: ($aside-width + 3);
-	border-radius: 5px;
-	cursor: pointer;
-	transition: all .5s ease-in-out;
-	overflow: hidden;
-	text-align: center;
-	padding: 8px 0;
-	&.context {
-		&:hover {
-			border-top-right-radius: 0;
-			border-bottom-right-radius: 0;
-		}
-		&.tool__context{
-			> i.tool__icon {
-				color: $ui-active;
-			}
-		}
-	}
-	&:hover {
-		overflow: visible;
-		background-color: rgba(0, 0, 0, 0.06);
-		> .tool__tooltip {
-			opacity: 1;
-			transform: translateX($aside-width);
-		}
-		> .tool__context {
-			opacity: 1;
-			display: block;
-		}
-	}
+  display: block;
+  position: relative;
+  width: $aside-width;
+  height: ($aside-width + 3);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+  overflow: hidden;
+  text-align: center;
+  padding: 8px 0;
+  &.context {
+    &:hover {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &.tool__context {
+      > i.tool__icon {
+        color: $ui-active;
+      }
+    }
+  }
+  &:hover {
+    overflow: visible;
+    background-color: rgba(0, 0, 0, 0.06);
+    > .tool__tooltip {
+      opacity: 1;
+      transform: translateX($aside-width);
+    }
+    > .tool__context {
+      opacity: 1;
+      display: block;
+    }
+  }
 
 }
+
 i.tool__extend {
-	line-height: 1em;
-	position: absolute;
-	bottom: 11px;
-	right: 2px;
+  line-height: 1em;
+  position: absolute;
+  bottom: 11px;
+  right: 2px;
 }
-i.tool__icon {
-	color: #034757;
-	font-size: 30px;
-	line-height: 50px;
-}
-i.over {
-	position: absolute;
-	left: 0;
-	top: 0;
-	color: #fff;
-}
-.tool__tooltip {
-	position: absolute;
-	display: block;
-	line-height: 20px;
-	background: rgba(0, 0, 0, .75);
-	color: #fff;
-	font-size: .8em;
-	padding: .2em .8em;
-	white-space: nowrap;
-	opacity: 0;
-	left: 0;
-	border-radius: .5em;
-	transform: translateX($aside-width - 10);
-	transition: all .2s ease-in-out;
-	top: 50%;
-	margin-top: -10px;
-	box-sizing: border-box;
-}
-.tool__context {
-	display: none;
-	position: relative;
-	width: 200px;
-	top: -56px;
-	margin: 5px;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	background: lighten($ui-light, 5%);
-	border-left: none;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-	cursor: pointer;
-	overflow: hidden;
-	text-align: center;
-	left: $aside-width - 17;
-	list-style: none;
-	li {
-		line-height: 33px;
-		cursor: pointer;
-		&:hover {
-			color: $ui-active;
-			i {
-				color: $ui-active;
-			}
-		}
-		i {
-			float: left;
-			margin-left: .5em;
-		}
 
-	}
-	i.tool__icon {
-		line-height: 33px;
-		font-size: 26px;
-	}
+i.tool__icon {
+  color: #034757;
+  font-size: 30px;
+  line-height: 50px;
 }
+
+i.over {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #fff;
+}
+
+.tool__tooltip {
+  position: absolute;
+  display: block;
+  line-height: 20px;
+  background: rgba(0, 0, 0, .75);
+  color: #fff;
+  font-size: .8em;
+  padding: .2em .8em;
+  white-space: nowrap;
+  opacity: 0;
+  left: 0;
+  border-radius: .5em;
+  transform: translateX($aside-width - 10);
+  transition: all .2s ease-in-out;
+  top: 50%;
+  margin-top: -10px;
+  box-sizing: border-box;
+}
+
+.tool__context {
+  display: none;
+  position: relative;
+  width: 200px;
+  top: -56px;
+  margin: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: lighten($ui-light, 5%);
+  border-left: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: center;
+  left: $aside-width - 17;
+  list-style: none;
+  li {
+    line-height: 33px;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+      color: $ui-active;
+
+      i {
+        color: $ui-active;
+      }
+    }
+
+    i {
+      float: left;
+      margin-left: .5em;
+    }
+  }
+
+  i.tool__icon {
+    line-height: 33px;
+    font-size: 26px;
+  }
+}
+
 .tool__context__item {
-	min-width: 200px;
-	position: relative;
-	text-align: left;
-	span {
-		margin-left: 1em;
-	}
+  min-width: 200px;
+  position: relative;
+  text-align: left;
+}
+
+.tool__name {
+  float: left;
+  margin-left: 10px;
 }

@@ -27,7 +27,8 @@ export default class PrivateEndpoint extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      contextPath: this.contextPath
+      contextPath: this.contextPath,
+      itemOrder: this.itemOrder
     }
   }
 

@@ -3,8 +3,8 @@ import _ from 'lodash';
 const ConnectionFactory = LunchBadgerCore.models.Connection;
 const {BaseStore, Connection} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
-const Publics = [];
 
+let Publics = [];
 let initCalls = 2;
 
 class Public extends BaseStore {
@@ -15,6 +15,8 @@ class Public extends BaseStore {
         case 'InitializePublic':
           initCalls--;
           Publics.push.apply(Publics, action.data);
+
+          Publics = this.sortItems(Publics);
 
           if (initCalls === 0) {
             this.emitInit();

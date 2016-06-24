@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 const BaseStore = LunchBadgerCore.stores.BaseStore;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
-const Privates = [];
 
+let Privates = [];
 let initCalls = 2;
 
 class Private extends BaseStore {
@@ -15,13 +15,15 @@ class Private extends BaseStore {
         case 'InitializePrivate':
           initCalls--;
           Privates.push.apply(Privates, action.data);
-          
+
+          Privates = this.sortItems(Privates);
+
           if (initCalls === 0) {
             this.emitInit();
           } else {
             this.emitChange();
           }
-          
+
           break;
         case 'UpdatePrivateOrder':
           Privates.splice(action.itemOrder, 0, Privates.splice(action.hoverOrder, 1)[0]);

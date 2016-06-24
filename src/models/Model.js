@@ -34,7 +34,8 @@ export default class Model extends BaseModel {
       id: this.id,
       name: this.name,
       contextPath: this.contextPath,
-      privateModelProperties: this.properties.map(property => property.toJSON())
+      privateModelProperties: this.properties.map(property => property.toJSON()),
+      itemOrder: this.itemOrder
     }
   }
 

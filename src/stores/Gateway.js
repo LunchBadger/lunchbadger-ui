@@ -3,7 +3,8 @@ import _ from 'lodash';
 
 const {BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
-const Gateways = [];
+
+let Gateways = [];
 
 class Gateway extends BaseStore {
   constructor() {
@@ -12,6 +13,7 @@ class Gateway extends BaseStore {
       switch (action.type) {
         case 'InitializeGateway':
           Gateways.push.apply(Gateways, action.data);
+          Gateways = this.sortItems(Gateways);
           this.emitInit();
           break;
         case 'UpdateGatewayOrder':

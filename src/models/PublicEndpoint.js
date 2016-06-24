@@ -25,7 +25,8 @@ export default class PublicEndpoint extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      url: this.url
+      url: this.url,
+      itemOrder: this.itemOrder
     }
   }
 

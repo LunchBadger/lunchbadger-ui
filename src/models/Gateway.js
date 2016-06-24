@@ -22,7 +22,8 @@ export default class Gateway extends BaseModel {
       id: this.id,
       name: this.name,
       rootPath: this.rootPath,
-      pipelines: this.pipelines.map(pipeline => pipeline.toJSON())
+      pipelines: this.pipelines.map(pipeline => pipeline.toJSON()),
+      itemOrder: this.itemOrder
     }
   }
 

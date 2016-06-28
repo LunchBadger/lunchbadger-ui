@@ -18,7 +18,7 @@ var distUrl = 'http://lunchbadger.ntrc.eu';
 
 module.exports = {
 	"src_folders": [
-		"tests"
+		"specs"
 	],
 	"output_folder": "reports",
 	"custom_commands_path": "",

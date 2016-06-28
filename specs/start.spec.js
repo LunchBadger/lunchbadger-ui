@@ -19,5 +19,8 @@ module.exports = {
 	},
 	'Panel resize': function (browser) {
 		require('../tests/resize-panel')(browser);
+	},
+	'Datasource actions': function (browser) {
+		require('../tests/datasource/add')(browser);
 	}
 };

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai": "^3.5.0",
     "chromedriver": "^2.21.2",
     "nightwatch": "^0.9.4",
     "phantomjs": "^2.1.7",

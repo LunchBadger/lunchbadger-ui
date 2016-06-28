@@ -8,7 +8,13 @@ module.exports = {
 	after: function (browser) {
 		browser.end();
 	},
+	beforeEach: function (browser) {
+		browser.pause(1500);
+	},
 	'Demo test': function (browser) {
 		require('../tests/demo')(browser);
+	},
+	'Panel open/switch/close': function (browser) {
+		require('../tests/panel')(browser);
 	}
 };

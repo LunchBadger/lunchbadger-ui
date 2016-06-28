@@ -16,5 +16,8 @@ module.exports = {
 	},
 	'Panel open/switch/close': function (browser) {
 		require('../tests/panel')(browser);
+	},
+	'Panel resize': function (browser) {
+		require('../tests/resize-panel')(browser);
 	}
 };

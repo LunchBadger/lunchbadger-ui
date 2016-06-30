@@ -1,6 +1,12 @@
 .chart {
   padding: 15px 60px 10px;
   overflow: hidden;
+
+  .hoverlayer {
+    .axistext {
+      display: none !important;
+    }
+  }
 }
 
 .chart__container {
@@ -77,9 +83,8 @@
   opacity: 0.65;
 }
 
-.chart__bar-current {
-  fill: #8ddfee !important;
-  fill-opacity: 0.8 !important;
+.chart__tick-forecasted {
+  fill: #bbb !important;
 }
 
 .chart__x-axis {

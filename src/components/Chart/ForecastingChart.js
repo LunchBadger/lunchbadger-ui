@@ -74,12 +74,16 @@ export default class ForecastingChart extends Component {
         showlegend: false,
         xaxis: {
           tickvals: this.tickvals,
-          ticktext: ticktext
+          ticktext: ticktext,
+          tickfont: {
+            color: '#000'
+          }
         },
         yaxis: {
           tickformat: '.2s'
         },
         shapes: [
+          // selected bar
           {
             type: 'rect',
             xref: 'x',
@@ -95,6 +99,22 @@ export default class ForecastingChart extends Component {
               width: 1
             }
           }
+          // x axis all
+          // {
+          //   layer: 'below',
+          //   type: 'rect',
+          //   xref: 'paper',
+          //   yref: 'paper',
+          //   x0: 0,
+          //   y0: -0.1,
+          //   x1: 1,
+          //   y1: 0,
+          //   fillcolor: '#dededd',
+          //   opacity: 1,
+          //   line: {
+          //     width: 0
+          //   }
+          // }
         ]
       };
 
@@ -103,6 +123,12 @@ export default class ForecastingChart extends Component {
       Plotly.newPlot(this.chart, data, layout, {displayModeBar: false}).then((chart) => {
         this._markCurrentMonth();
         this._markForecastedMonths();
+
+        const xTicks = d3.selectAll('.xtick').selectAll('text');
+
+        xTicks.forEach((tick, index) => {
+          tick[0].setAttribute('data', this.tickvals[index]);
+        });
 
         chart.on('plotly_click', (data) => {
           const {points} = data;
@@ -141,13 +167,21 @@ export default class ForecastingChart extends Component {
 
   _markForecastedMonths() {
     const barPaths = d3.selectAll('.bars').selectAll('path');
+    const xTicks = d3.selectAll('.xtick').selectAll('text');
 
     this.tickvals.forEach((tick, index) => {
       let tickForecasted = false;
+      const currentTick = moment(tick, 'M/YYYY');
 
-      if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
+      if (currentTick.isAfter(moment(), 'month')) {
         tickForecasted = true;
       }
+
+      xTicks.forEach((xTick) => {
+        if (xTick[0].getAttribute('data') === tick && tickForecasted) {
+          xTick[0].classList.add('chart__tick-forecasted');
+        }
+      });
 
       barPaths.forEach((paths) => {
         if (paths[index] && tickForecasted) {

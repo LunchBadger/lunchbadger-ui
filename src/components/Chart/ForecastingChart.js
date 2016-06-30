@@ -78,14 +78,30 @@ export default class ForecastingChart extends Component {
         },
         yaxis: {
           tickformat: '.2s'
-        }
+        },
+        shapes: [
+          {
+            type: 'rect',
+            xref: 'x',
+            yref: 'paper',
+            x0: 0,
+            y0: -0.15,
+            x1: 0,
+            y1: 1.02,
+            fillcolor: 'rgba(0, 171, 255, 0.15)',
+            opacity: 0,
+            line: {
+              color: '#00abff',
+              width: 1
+            }
+          }
+        ]
       };
 
-      const chart = findDOMNode(this.refs.chart);
+      this.chart = findDOMNode(this.refs.chart);
 
-      Plotly.newPlot(chart, data, layout, {displayModeBar: false}).then((chart) => {
-        // const xticks = d3.selectAll('.xtick');
-
+      Plotly.newPlot(this.chart, data, layout, {displayModeBar: false}).then((chart) => {
+        this._markCurrentMonth();
         this._markForecastedMonths();
 
         chart.on('plotly_click', (data) => {
@@ -94,8 +110,9 @@ export default class ForecastingChart extends Component {
           if (points.length) {
             const {x} = points[0];
 
-            this._markForecastedMonths();
             setForecast(this.props.forecast, x);
+            this._markCurrentMonth();
+            this._markForecastedMonths();
           }
         });
 
@@ -106,28 +123,35 @@ export default class ForecastingChart extends Component {
     }
   }
 
+  _markCurrentMonth() {
+    this.tickvals.forEach((tick) => {
+      const currentTick = moment(tick, 'M/YYYY');
+
+      if (currentTick.isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
+        const currentMonthNumber = parseInt(currentTick.format('M'), 10) + ((parseInt(currentTick.format('Y'), 10) - parseInt(moment().format('Y'), 10)) * 12);
+
+        Plotly.relayout(this.chart, {
+          'shapes[0].x0': currentMonthNumber - 1.5,
+          'shapes[0].x1': currentMonthNumber - 0.5,
+          'shapes[0].opacity': 1
+        });
+      }
+    });
+  }
+
   _markForecastedMonths() {
     const barPaths = d3.selectAll('.bars').selectAll('path');
 
     this.tickvals.forEach((tick, index) => {
       let tickForecasted = false;
-      let tickCurrent = false;
 
       if (moment(tick, 'M/YYYY').isAfter(moment(), 'month')) {
         tickForecasted = true;
       }
 
-      if (moment(tick, 'M/YYYY').isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
-        tickCurrent = true;
-      }
-
       barPaths.forEach((paths) => {
-        if (paths[index]) {
-          if (tickCurrent) {
-            paths[index].classList.add('chart__bar-current');
-          } else if (tickForecasted) {
-            paths[index].classList.add('chart__bar-forecasted');
-          }
+        if (paths[index] && tickForecasted) {
+          paths[index].classList.add('chart__bar-forecasted');
         }
       });
     });

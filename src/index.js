@@ -46,6 +46,7 @@ import Strategy from './models/Plugin/Strategy';
 import registerPlugin from './actions/registerPlugin';
 import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
+import toggleEdit from './actions/CanvasElements/toggleEdit';
 import attachConnection from './actions/Connection/attach';
 import reattachConnection from './actions/Connection/reattach';
 import setProject from './actions/Stores/AppState/setProject';
@@ -71,6 +72,7 @@ let LunchBadgerCore = {
     registerPlugin: registerPlugin,
     togglePanel: togglePanel,
     toggleHighlight: toggleHighlight,
+    toggleEdit: toggleEdit,
     Connection: {
       attachConnection: attachConnection,
       reattachConnection: reattachConnection

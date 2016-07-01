@@ -17,6 +17,10 @@ var pageCommands = {
 			this.waitForElementVisible(element + ' .tool__context li:first-child .tool__context__item', 500);
 			this.click(element + ' .tool__context li:first-child .tool__context__item');
 		});
+	},
+
+	addElement: function (element) {
+		this.click(element);
 	}
 };
 

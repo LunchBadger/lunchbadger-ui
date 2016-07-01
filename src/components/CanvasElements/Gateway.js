@@ -8,6 +8,7 @@ import classNames from 'classnames';
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
+const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 
 class Gateway extends Component {
   static propTypes = {
@@ -63,6 +64,7 @@ class Gateway extends Component {
   _onDeploy() {
     notify.show('Gateway successfully deployed', 'success');
     this.props.parent.triggerElementAutofocus();
+    toggleEdit(this.props.entity);
   }
 
   render() {

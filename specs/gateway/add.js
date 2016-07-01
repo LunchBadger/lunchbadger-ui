@@ -25,6 +25,8 @@ module.exports = {
 		page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-title').text.to.equal('ROOT PATH');
 		page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('https://gateway.root');
 
+		browser.pause(500);
+		
 		page.close();
 	}
 };

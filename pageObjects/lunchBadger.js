@@ -12,10 +12,12 @@ var pageCommands = {
 		this.api.end();
 	},
 	
-	addElementFromTooltip: function (element) {
+	addElementFromTooltip: function (element, option) {
+		option = option || 1;
+
 		this.moveToElement(element, 5, 5, function () {
-			this.waitForElementVisible(element + ' .tool__context li:first-child .tool__context__item', 500);
-			this.click(element + ' .tool__context li:first-child .tool__context__item');
+			this.waitForElementVisible(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item', 500);
+			this.click(element + ' .tool__context li:nth-child(' + option +') .tool__context__item');
 		});
 	},
 

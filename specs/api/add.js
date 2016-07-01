@@ -20,6 +20,8 @@ module.exports = {
 		page.expect.element(elementSelector + ' .canvas-element__sub-elements .canvas-element__sub-elements__title').text.to.equal('ENDPOINTS');
 		page.expect.element(elementSelector + ' .canvas-element__sub-element').to.not.be.present;
 
+		browser.pause(500);
+
 		page.close();
 	}
 };

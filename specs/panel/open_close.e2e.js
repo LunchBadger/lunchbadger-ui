@@ -1,5 +1,5 @@
 module.exports = {
-	'@disabled': true,
+	// '@disabled': true,
 	'Panel: open/close': function (browser) {
 		var page = browser.page.lunchBadger();
 

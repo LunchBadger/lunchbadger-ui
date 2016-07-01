@@ -1,5 +1,5 @@
 module.exports = {
-	'@disabled': true,
+	// '@disabled': true,
 	'Datasource: add': function (browser) {
 		var page = browser.page.lunchBadger();
 

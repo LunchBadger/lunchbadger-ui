@@ -20,6 +20,7 @@ module.exports = {
 		page.expect.element(elementSelector + '.wip').to.be.not.present;
 		page.expect.element('.aside--editing').to.be.present;
 		page.expect.element('.canvas__container--editing').to.be.present;
+		page.expect.element(elementSelector + '.editable').to.be.present;
 
 		page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Gateway');
 		page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-title').text.to.equal('ROOT PATH');

@@ -15,6 +15,7 @@ module.exports = {
 
 		page.expect.element('.aside--editing').to.be.present;
 		page.expect.element('.canvas__container--editing').to.be.present;
+		page.expect.element(elementSelector + '.editable').to.be.present;
 
 		page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('API');
 		page.expect.element(elementSelector + ' .canvas-element__sub-elements .canvas-element__sub-elements__title').text.to.equal('ENDPOINTS');

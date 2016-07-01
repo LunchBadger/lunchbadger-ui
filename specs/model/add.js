@@ -17,6 +17,7 @@ module.exports = {
 
 		page.expect.element('.aside--editing').to.be.present;
 		page.expect.element('.canvas__container--editing').to.be.present;
+		page.expect.element(elementSelector + '.editable').to.be.present;
 
 		page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Model');
 		page.expect.element(elementSelector + ' .canvas-element__properties__property:first-child .canvas-element__properties__property-title').text.to.equal('CONTEXT PATH');

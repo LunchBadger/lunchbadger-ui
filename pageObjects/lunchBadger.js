@@ -11,18 +11,24 @@ var pageCommands = {
 	close: function () {
 		this.api.end();
 	},
-	
+
 	addElementFromTooltip: function (element, option) {
 		option = option || 1;
 
 		this.moveToElement(element, 5, 5, function () {
 			this.waitForElementVisible(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item', 500);
-			this.click(element + ' .tool__context li:nth-child(' + option +') .tool__context__item');
+			this.click(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item');
 		});
 	},
 
 	addElement: function (element) {
 		this.click(element);
+	},
+
+	dragDropElement: function (dragTarget, dropTarget) {
+		this.api.drag(dragTarget, dropTarget);
+
+		return this;
 	}
 };
 

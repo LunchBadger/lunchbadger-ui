@@ -154,7 +154,11 @@ export default class ForecastingChart extends Component {
       const currentTick = moment(tick, 'M/YYYY');
 
       if (currentTick.isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
-        const currentMonthNumber = parseInt(currentTick.format('M'), 10) + ((parseInt(currentTick.format('Y'), 10) - parseInt(moment().format('Y'), 10)) * 12);
+        let currentMonthNumber = parseInt(currentTick.format('M'), 10) + ((parseInt(currentTick.format('Y'), 10) - parseInt(moment().format('Y'), 10)) * 12);
+
+        if (this.props.dateRange) {
+          currentMonthNumber -= parseInt(this.props.dateRange.startDate.format('M'), 10) - 1;
+        }
 
         Plotly.relayout(this.chart, {
           'shapes[0].x0': currentMonthNumber - 1.5,

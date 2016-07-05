@@ -35,6 +35,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-icon-collapse:before {
+    content: "\e90d";
+}
+.icon-icon-expand:before {
+    content: "\e90e";
+}
 .icon-icon-minus:before {
     content: "\e907";
 }

@@ -6,7 +6,7 @@ import APIPlan from 'models/ForecastAPIPlan';
 const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const TierDetails = LunchBadgerMonetize.models.TierDetails;
-const Forecasts = [];
+let Forecasts = [];
 
 class Forecast extends BaseStore {
   constructor() {
@@ -71,6 +71,10 @@ class Forecast extends BaseStore {
           break;
       }
     });
+  }
+
+  empty() {
+    Forecasts = [];
   }
 
   getData() {

@@ -12,7 +12,9 @@
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
-    "start": "webpack --env=dev --watch --progress"
+    "start": "webpack --env=dev --watch --progress",
+    "test": "karma start",
+    "test:watch": "karma start --autoWatch=true --singleRun=false"
   },
   "repository": "",
   "keywords": [],

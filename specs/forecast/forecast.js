@@ -99,6 +99,37 @@ module.exports = {
 	},
 
 	'Forecast: change date range': function (browser) {
+		var startDate;
+		var endDate;
+
+		var startEndDiff = 2;
+
+		// start date
+		browser.click(apiForecastSelector + ' .react-datepicker__input-container:first-child > input');
+		browser.click('.react-datepicker__navigation--next');
+		browser.click('.react-datepicker__month .react-datepicker__week:nth-child(3) .react-datepicker__day:first-child');
+
+		browser.getValue(apiForecastSelector + ' .react-datepicker__input-container:first-child > input', function(result) {
+			startDate = moment(result.value, 'D MMM YYYY');
+		});
+
+		// end date
+		browser.click(apiForecastSelector + ' .react-datepicker__input-container:nth-child(3) > input');
+		browser.click('.react-datepicker__navigation--previous');
+		browser.click('.react-datepicker__navigation--previous');
+		browser.click('.react-datepicker__month .react-datepicker__week:nth-child(3) .react-datepicker__day:first-child');
+
+		browser.getValue(apiForecastSelector + ' .react-datepicker__input-container:nth-child(3) > input', function(result) {
+			endDate = moment(result.value, 'D MMM YYYY');
+		});
+
+		browser.elements('css selector', apiForecastSelector + ' .barlayer .trace:nth-child(3) .points path', function (result) {
+			browser.assert.equal(result.value.length, endDate.diff(startDate, 'months') + startEndDiff);
+		});
+
+		browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.equal(moment().subtract(1, 'months').format('MMM')[0]);
+
+		browser.pause(2000);
 	},
 
 	'Forecast: remove': function (browser) {

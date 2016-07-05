@@ -59,12 +59,26 @@
     }
   }
 }
+.api-forecast.expanded {
+
+  .date-range-bar__picker {
+  color: #546978;
+  }
+  .api-forecast__header {
+  background-color: inherit;
+  color: #546978;
+  }
+}
+
 .api-forecast__header {
-  color: #3F596C;
+  color: #fff;
+  background-color: #8CAC43;
   height: 50px;
   line-height: 50px;
   font-size: 16px;
   text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .api-forecast__header__nav {
@@ -96,6 +110,7 @@
   position: absolute;
   left: 30px;
   font-size: 18px;
+  font-weight: normal;
   top: 0;
   display: block;
   max-width: 150px;
@@ -106,7 +121,7 @@
 
   .expanded & {
     max-width: 100%;
-    font-size: 20px;
+    font-size: 23px;
   }
 }
 
@@ -114,7 +129,7 @@
   font-size: 16px;
   padding-left: 10px;
   display: none;
-
+  color: #888888;
   .expanded & {
     display: inline-block;
   }

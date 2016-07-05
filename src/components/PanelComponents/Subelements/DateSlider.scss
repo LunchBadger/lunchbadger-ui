@@ -4,6 +4,7 @@
   padding: 0 0 0 1em;
   width: calc(100% - 1em);
   overflow-x: scroll;
+  overflow-y: hidden;
 
   .date-slider {
     margin-top: 20px;
@@ -32,11 +33,14 @@
 
     .rc-slider-handle {
       border: none;
-      background-color: #898989;
+      background-color: #888888;
       width: 20px;
       height: 20px;
       margin-top: -10.5px;
       margin-left: -10px;
+      &:hover {
+        background-color: #727171;
+      }
     }
   }
 }
@@ -59,13 +63,14 @@
 .date-slider__mark {
   position: absolute;
   font-size: 0.6em;
+  font-weight: normal;
   top: 10px;
   height: 60px;
   text-align: center;
   padding-top: 25px;
 
   &.selected {
-    color: #8ddfee;
+    //color: #8ddfee;
 
     &:after {
       content: '';

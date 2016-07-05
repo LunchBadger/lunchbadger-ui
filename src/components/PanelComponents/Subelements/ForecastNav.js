@@ -31,7 +31,7 @@ export default class ForecastNav extends Component {
         </li>
         <li>
           <a onClick={this.toggleExpand.bind(this)}>
-            <i className="fa fa-expand"/>
+            <i className="icon-icon-expand"/>
           </a>
         </li>
       </ul>

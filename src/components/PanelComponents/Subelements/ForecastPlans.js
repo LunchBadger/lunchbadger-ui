@@ -122,7 +122,7 @@ export default class ForecastPlans extends Component {
           date.isAfter(moment(), 'month') && (
             <div className="forecast-plans__action">
               <a className="forecast-plans__action__add" onClick={this._handleAddPlan.bind(this)}>
-                <i className="fa fa-plus"/>
+                <i className="icon-icon-plus"/>
               </a>
             </div>
           )

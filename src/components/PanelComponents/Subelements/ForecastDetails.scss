@@ -23,7 +23,13 @@
 }
 
 .forecast__details-top__detail__value {
-  font-size: 16px;
+  color: #231F20;
+  padding-left: 6px;
+  font-size: 13px;
+  font-weight: normal;
+  text-align: right;
+  word-break: break-all;
+  word-wrap: break-word;
   display: block;
   line-height: 1.2;
   width: 100%;
@@ -37,7 +43,12 @@
 .forecast__details-bottom__date {
   display: inline-block;
   text-align: center;
+  color: #231F20;
+  padding-left: 6px;
   font-size: 13px;
+  font-weight: normal;
+  word-break: break-all;
+  word-wrap: break-word;
   padding-right: 30px;
 }
 
@@ -81,7 +92,13 @@
 }
 
 .forecast__details-bottom__detail__value {
-  font-size: 16px;
+  color: #231F20;
+  padding-left: 6px;
+  font-size: 13px;
+  font-weight: normal;
+  text-align: right;
+  word-break: break-all;
+  word-wrap: break-word;
   display: block;
   line-height: 1.2;
   width: 100%;

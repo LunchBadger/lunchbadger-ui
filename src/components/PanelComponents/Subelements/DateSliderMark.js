@@ -70,7 +70,8 @@ export default class DateSliderMark extends Component {
 
   render() {
     const elementClass = classNames({
-      selected: this.state.selected
+      selected: this.state.selected,
+      current: moment().format('M') === this.props.month.toString()
     });
     const style = {
       width: this.getWidth() + '%',
@@ -91,7 +92,7 @@ export default class DateSliderMark extends Component {
         )}
         {this.props.monthName}
         {this.renderYear()}
-        {moment().format('M') == this.props.month && (<i className="fa fa-caret-up date-slider__mark-current"/>)}
+        {moment().format('M') === this.props.month.toString() && (<i className="fa fa-caret-up date-slider__mark-current"/>)}
       </div>
     )
   }

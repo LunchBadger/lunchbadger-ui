@@ -18,5 +18,8 @@
     "nightwatch": "^0.9.4",
     "phantomjs": "^2.1.7",
     "selenium-server-standalone-jar": "2.43.1"
+  },
+  "devDependencies": {
+    "moment": "^2.14.1"
   }
 }

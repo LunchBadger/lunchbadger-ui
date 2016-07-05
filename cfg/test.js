@@ -2,6 +2,7 @@
 
 let path = require('path');
 let srcPath = path.join(__dirname, '/../src/');
+let defaultSettings = require('./defaults');
 
 let baseConfig = require('./base');
 
@@ -22,7 +23,7 @@ module.exports = {
     ],
     loaders: [
       {
-        test: /\.(png|jpg|gif|woff|woff2|css|sass|scss|less|styl)$/,
+        test: /\.(png|jpg|gif|svg|ttf|woff|woff2|css|sass|scss|less|styl)$/,
         loader: 'null-loader'
       },
       {
@@ -41,13 +42,13 @@ module.exports = {
   resolve: {
     extensions: [ '', '.js', '.jsx' ],
     alias: {
-      actions: srcPath + 'actions/',
-      helpers: path.join(__dirname, '/../test/helpers'),
-      components: srcPath + 'components/',
-      sources: srcPath + 'sources/',
-      stores: srcPath + 'stores/',
-      styles: srcPath + 'styles/',
-      config: srcPath + 'config/' + process.env.REACT_WEBPACK_ENV
+      actions: `${defaultSettings.srcPath}/actions`,
+      dispatcher: `${defaultSettings.srcPath}/dispatcher`,
+      components: `${defaultSettings.srcPath}/components`,
+      models: `${defaultSettings.srcPath}/models`,
+      constants: `${defaultSettings.srcPath}/constants`,
+      services: `${defaultSettings.srcPath}/services`,
+      stores: `${defaultSettings.srcPath}/stores`
     }
   },
   plugins: [

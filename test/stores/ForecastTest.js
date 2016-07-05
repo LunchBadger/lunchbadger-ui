@@ -1,0 +1,2 @@
+describe('Forecast Store', () => {
+});

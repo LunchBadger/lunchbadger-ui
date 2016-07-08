@@ -49,6 +49,14 @@
   }
 }
 
+.header__menu__link--hidden {
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .header__menu__link--pressed {
   color: $font-light;
   background: #023845;

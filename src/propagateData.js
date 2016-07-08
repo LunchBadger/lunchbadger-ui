@@ -34,10 +34,12 @@ projectData.then((response) => {
     waitForStores(storesList, () => {
       // attach connections ;-)
       data.connections.forEach((connection) => {
-        setTimeout(() => LunchBadgerCore.utils.paper.connect({
-          source: document.getElementById(`port_out_${connection.fromId}`).querySelector('.port__anchor'),
-          target: document.getElementById(`port_in_${connection.toId}`).querySelector('.port__anchor')
-        }));
+        if (document.getElementById(`port_out_${connection.fromId}`) && document.getElementById(`port_in_${connection.toId}`)) {
+          setTimeout(() => LunchBadgerCore.utils.paper.connect({
+            source: document.getElementById(`port_out_${connection.fromId}`).querySelector('.port__anchor'),
+            target: document.getElementById(`port_in_${connection.toId}`).querySelector('.port__anchor')
+          }));
+        }
       });
 
       setTimeout(() => {

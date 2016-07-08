@@ -19,7 +19,7 @@ const tools = [
   new LunchBadgerCore.models.ToolComponent(Model)
 ];
 const toolGroup = [
-  new LunchBadgerCore.models.ToolGroupComponent('compose', toolGroupComponent, tools, 5)
+  new LunchBadgerCore.models.ToolGroupComponent('compose', toolGroupComponent, tools, 1)
 ];
 
 const quadrants = [

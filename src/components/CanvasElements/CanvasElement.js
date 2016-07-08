@@ -150,10 +150,7 @@ export default (ComposedComponent) => {
       }
 
       if (typeof updated === 'undefined' || updated) {
-        this.setState({
-          editable: false,
-          expanded: false
-        });
+        this.setState({editable: false});
 
         toggleEdit(null);
       }

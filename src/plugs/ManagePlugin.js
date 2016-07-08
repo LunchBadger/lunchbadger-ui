@@ -16,15 +16,13 @@ import GatewayFactory from '../models/Gateway';
 const managePlugin = new LunchBadgerCore.models.Plugin('ManagePlugin');
 const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 
-const endpointTools = [
-  new LunchBadgerCore.models.ToolComponent(Endpoint)
-];
-const gatewayTools = [
+const tools = [
+  new LunchBadgerCore.models.ToolComponent(Endpoint),
   new LunchBadgerCore.models.ToolComponent(Gateway)
 ];
+
 const toolGroup = [
-  new LunchBadgerCore.models.ToolGroupComponent('manageEndpoint', toolGroupComponent, endpointTools, 3),
-  new LunchBadgerCore.models.ToolGroupComponent('manageGateway', toolGroupComponent, gatewayTools, 4)
+  new LunchBadgerCore.models.ToolGroupComponent('manage', toolGroupComponent, tools, 2)
 ];
 
 const quadrants = [

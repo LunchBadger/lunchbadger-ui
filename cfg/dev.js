@@ -6,8 +6,20 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 const infoFile = require('./load');
+const args = process.argv.slice(2);
 
-// Add needed plugins here
+let startEntry;
+
+if (args.indexOf('--no-server') === -1) {
+  startEntry = [
+    'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
+    './src/index'
+  ];
+} else {
+  startEntry = ['./src/index'];
+}
+
+console.log(startEntry);
 
 let config = Object.assign({}, baseConfig, {
   entry: {
@@ -15,10 +27,7 @@ let config = Object.assign({}, baseConfig, {
       'moment',
       'lodash'
     ],
-    start: [
-      'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
-      './src/index'
-    ],
+    start: startEntry,
     core: './plugins/lunchbadger-core/index',
     plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
   },

@@ -28,6 +28,8 @@ class Gateway extends Component {
   componentWillReceiveProps(nextProps, nextState) {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
+    } else if (!nextProps.ready && !nextProps.appState.getStateKey('currentEditElement')) {
+      toggleEdit(nextProps.entity);
     }
 
     if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
@@ -63,8 +65,8 @@ class Gateway extends Component {
 
   _onDeploy() {
     notify.show('Gateway successfully deployed', 'success');
+
     this.props.parent.triggerElementAutofocus();
-    toggleEdit(this.props.entity);
   }
 
   render() {

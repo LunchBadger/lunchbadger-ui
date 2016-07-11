@@ -49,6 +49,7 @@ export default class API extends BaseModel {
    */
   set publicEndpoints(endpoints) {
     this._publicEndpoints = endpoints.map((endpoint) => {
+      endpoint.wasBundled = true;
       return PublicEndpoint.create(endpoint);
     });
   }
@@ -80,6 +81,7 @@ export default class API extends BaseModel {
    * @param endpoint {Endpoint}
    */
   addEndpoint(endpoint) {
+    endpoint.wasBundled = true;
     this._publicEndpoints.push(endpoint);
   }
 

@@ -31,6 +31,10 @@ const boxTarget = {
       return;
     }
 
+    if (props.appState.getStateKey('isPanelOpened')) {
+      return;
+    }
+
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
     const clientOffset = monitor.getClientOffset();
@@ -63,6 +67,10 @@ const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     const element = component.element.decoratedComponentInstance || component.element;
+
+    if (props.appState.getStateKey('isPanelOpened')) {
+      return;
+    }
 
     if (typeof element.onDrop === 'function') {
       setTimeout(() => element.onDrop(item));

@@ -129,6 +129,12 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      if (this.props.entity.wasBundled) {
+        this.setState({editable: false, expanded: false});
+
+        return;
+      }
+
       if (this.props.entity.loaded) {
         this.setState({editable: false, expanded: false});
       } else if (this.props.entity.ready) {
@@ -279,7 +285,8 @@ export default (ComposedComponent) => {
               <div className="canvas-element__remove">
                 {
                   this.state.editable && (
-                    <a className="canvas-element__remove__action" onClick={() => this.setState({showRemovingModal: true})}>
+                    <a className="canvas-element__remove__action"
+                       onClick={() => this.setState({showRemovingModal: true})}>
                       <i className="fa fa-times"/>
                     </a>
                   )

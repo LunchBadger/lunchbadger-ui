@@ -18,7 +18,7 @@ const boxSource = {
   },
 
   canDrag(props) {
-    return !(props.appState.getStateKey('currentEditElement') || props.appState.getStateKey('isPanelOpened'));
+    return !props.appState.getStateKey('currentEditElement');
   }
 };
 

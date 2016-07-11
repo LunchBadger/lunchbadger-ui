@@ -52,6 +52,7 @@
   &.wip {
     opacity: .4 !important;
     pointer-events: none !important;
+    z-index: 15;
 
     .canvas-element__extra {
       max-height: 0;

@@ -5,6 +5,7 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 export default class PublicEndpoint extends BaseModel {
   static type = 'PublicEndpoint';
   _ports = [];
+  wasBundled = false;
   url = 'https://root/endpoint';
 
   constructor(id, name) {

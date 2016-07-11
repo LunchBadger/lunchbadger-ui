@@ -45,7 +45,7 @@
 
     .canvas-element__extra {
       max-height: 450px;
-      overflow: hidden;
+      overflow: visible;
     }
   }
 
@@ -140,8 +140,6 @@
 }
 
 .canvas-element__extra {
-  margin: 0 -20px;
-  padding: 0 20px;
   max-height: 0;
   overflow: hidden;
   transition: all .7s ease;

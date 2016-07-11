@@ -15,6 +15,10 @@ const boxSource = {
   beginDrag(props) {
     const {entity, itemOrder} = props;
     return {entity, itemOrder};
+  },
+
+  canDrag(props) {
+    return !props.appState.getStateKey('currentEditElement');
   }
 };
 

@@ -19,6 +19,10 @@ const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
 
+    if (props.appState.getStateKey('isPanelOpened')) {
+      return;
+    }
+
     component.onDrop(item);
   }
 };

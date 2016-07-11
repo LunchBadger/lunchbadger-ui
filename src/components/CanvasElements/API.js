@@ -127,7 +127,7 @@ class API extends Component {
           </div>
           <div ref="endpoints">{this.renderEndpoints()}</div>
           <div className="canvas-element__drop">
-            <APIDrop parent={this.props.parent} entity={this.props.entity} />
+            <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity} />
           </div>
         </div>
 

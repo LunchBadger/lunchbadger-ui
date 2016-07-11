@@ -23,7 +23,7 @@ export default class App extends Component {
     this.reloadPlugins = () => {
       this.setState({pluginsStore: Pluggable});
     };
-    
+
     this.appStateChange = () => {
       this.setState({appState: AppState});
     };
@@ -42,7 +42,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <Header ref="header" plugins={this.state.pluginsStore}/>
+        <Header ref="header" appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">

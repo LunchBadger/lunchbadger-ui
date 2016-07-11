@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
 import HeaderMenuSaveButton from './HeaderMenuSaveButton';
 import panelKeys from 'constants/panelKeys';
+import classNames from 'classnames';
 
 export default class HeaderMenu extends Component {
   constructor(props) {
@@ -21,8 +22,13 @@ export default class HeaderMenu extends Component {
   }
 
   render() {
+    const headerClass = classNames({
+      header__menu: true,
+      'header__menu--disabled': this.props.appState.getStateKey('currentEditElement')
+    });
+
     return (
-      <nav className="header__menu">
+      <nav className={headerClass}>
         <ul className="header__menu__list">
           <li className="header__menu__element">
             <HeaderMenuSaveButton/>

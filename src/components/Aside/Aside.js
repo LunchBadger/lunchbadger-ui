@@ -23,7 +23,7 @@ export default class Aside extends Component {
   render() {
     const asideClass = classNames({
       aside: true,
-      'aside--editing': this.props.appState.getStateKey('currentEditElement')
+      'aside--editing': this.props.appState.getStateKey('currentEditElement') || this.props.appState.getStateKey('isPanelOpened')
     });
 
     return (

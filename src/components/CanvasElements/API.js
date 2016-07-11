@@ -7,6 +7,7 @@ import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
 import './API.scss';
 
+const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 
@@ -23,7 +24,9 @@ class API extends Component {
     this.previousConnection = null;
 
     this.state = {
-      hasConnection: null
+      hasConnection: null,
+      isShowingModal: false,
+      bundledItem: null
     }
   }
 
@@ -66,6 +69,7 @@ class API extends Component {
       return (
         <div key={endpoint.id} className="canvas-element__sub-element">
           <PublicEndpoint
+            {...this.props}
             parent={this.props.entity}
             key={endpoint.id}
             id={endpoint.id}
@@ -73,11 +77,30 @@ class API extends Component {
             paper={this.props.paper}
             left={endpoint.left}
             top={endpoint.top}
-            handleEndDrag={(item) => unbundleAPI(item.parent, item.entity)}
+            handleEndDrag={(item) => this._handleEndDrag(item)}
             hideSourceOnDrag={true}/>
         </div>
       );
     });
+  }
+
+  _handleEndDrag(item) {
+    if (item) {
+      this.setState({
+        isShowingModal: true,
+        bundledItem: item
+      });
+    }
+  }
+
+  _handleModalConfirm() {
+    const item = this.state.bundledItem;
+
+    unbundleAPI(item.parent, item.entity);
+  }
+
+  _handleClose() {
+    this.setState({isShowingModal: false});
   }
 
   render() {
@@ -107,6 +130,19 @@ class API extends Component {
             <APIDrop parent={this.props.parent} entity={this.props.entity} />
           </div>
         </div>
+
+        {
+          this.state.isShowingModal &&
+          <TwoOptionModal title="Unbundle API"
+                          confirmText="Yes"
+                          discardText="No"
+                          onClose={this._handleClose.bind(this)}
+                          onSave={this._handleModalConfirm.bind(this)}>
+            <span>
+              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" endpoint from "{this.props.entity.name}"?
+            </span>
+          </TwoOptionModal>
+        }
       </div>
     );
   }

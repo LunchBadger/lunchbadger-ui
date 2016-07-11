@@ -1,8 +1,9 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (apiForecast, props) => {
+export default (apiForecast, props, date) => {
   dispatch('AddPlan', {
     apiForecast,
-    data: {...props}
+    data: {...props},
+    date
   });
 };

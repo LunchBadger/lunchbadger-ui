@@ -6,6 +6,7 @@ import APIPlan from 'models/ForecastAPIPlan';
 const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 const TierDetails = LunchBadgerMonetize.models.TierDetails;
+const {PlanParameters, PlanSubscribers, PlanDetails} = LunchBadgerMonetize.models;
 let Forecasts = [];
 
 class Forecast extends BaseStore {
@@ -31,7 +32,26 @@ class Forecast extends BaseStore {
           this.emitChange();
           break;
         case 'AddPlan':
-          this.addPlanToApi(action.apiForecast, APIPlan.create(action.data));
+          const plan = APIPlan.create(action.data);
+
+          const planDetails = PlanDetails.create({
+            date: action.date,
+            parameters: PlanParameters.create({
+              callsPerSubscriber: 0,
+              cashPerCall: 0
+            }),
+            subscribers: PlanSubscribers.create({
+              existing: 0,
+              new: 0,
+              upgrades: 0,
+              downgrades: 0,
+              churn: 0
+            })
+          });
+
+          plan.addPlanDetails(planDetails);
+
+          this.addPlanToApi(action.apiForecast, plan);
           this.emitChange();
           break;
         case 'AddTier':

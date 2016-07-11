@@ -14,3 +14,23 @@
     }
   }
 }
+
+.model-property__remove {
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .3s ease;
+  position: absolute;
+  right: -18px;
+  top: 5px;
+
+  .editable & {
+    visibility: visible;
+    pointer-events: all;
+  }
+
+  .editable .model-property:hover & {
+    opacity: 1;
+  }
+}

@@ -142,19 +142,19 @@ class Model extends Component {
                        handleChange={this.updateContextPath.bind(this)}/>
               </div>
             </div>
-            {
-              this.props.entity.properties.length > 0 && (
-                <div className="canvas-element__properties__property">
-                  <div className="canvas-element__properties__property-title">
-                    Properties
-                    <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>
-                  </div>
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">
+                Properties
+                <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>
+              </div>
+              {
+                this.props.entity.properties.length > 0 && (
                   <div ref="properties" className="canvas-element__properties__property-value">
                     {this.renderProperties()}
                   </div>
-                </div>
-              )
-            }
+                )
+              }
+            </div>
           </div>
         </div>
       </div>

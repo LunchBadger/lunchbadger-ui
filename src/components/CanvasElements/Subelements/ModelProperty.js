@@ -28,7 +28,7 @@ export default class ModelProperty extends Component {
           <span className="model-property__value key hide-while-edit">
             {property.propertyKey}
           </span>
-          <Input className="model-property__input editable-only"
+          <Input className="model-property__input canvas-element__input editable-only"
                  value={property.propertyKey}
                  name={`properties[${index}][propertyKey]`}/>
         </div>
@@ -36,7 +36,7 @@ export default class ModelProperty extends Component {
           <span className="model-property__value value hide-while-edit">
             {property.propertyValue}
           </span>
-          <Input className="model-property__input editable-only"
+          <Input className="model-property__input canvas-element__input editable-only"
                  value={property.propertyValue}
                  name={`properties[${index}][propertyValue]`}/>
         </div>

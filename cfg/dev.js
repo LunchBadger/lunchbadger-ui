@@ -19,8 +19,6 @@ if (args.indexOf('--no-server') === -1) {
   startEntry = ['./src/index'];
 }
 
-console.log(startEntry);
-
 let config = Object.assign({}, baseConfig, {
   entry: {
     vendor: [

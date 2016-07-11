@@ -3,6 +3,7 @@ import BasePlan from './BasePlan';
 import UpgradeSlider from './UpgradeSlider';
 import UserPoolSlider from './UserPoolSlider';
 import ForecastPlanDetails from './ForecastPlanDetails';
+import PlanInstructions from './PlanInstructions';
 import UserPool from './UserPool';
 import addPlan from 'actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
@@ -136,6 +137,14 @@ export default class ForecastPlans extends Component {
           upgrades.length > 0 && (
             <div className="forecast-plans__upgrades">
               {this.renderUpgrades(upgrades)}
+            </div>
+          )
+        }
+
+        {
+          upgrades.length === 0 && date.isAfter(moment(), 'month') && (
+            <div className="forecast-plans__instructions">
+              <PlanInstructions />
             </div>
           )
         }

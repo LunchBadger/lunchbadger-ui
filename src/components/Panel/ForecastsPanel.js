@@ -4,6 +4,8 @@ import APIForecast from '../PanelComponents/APIForecast';
 import addAPIForecast from 'actions/APIForecast/add';
 import updateAPIForecast from 'actions/APIForecast/update';
 import Forecast from 'stores/Forecast';
+import './ForecastsPanel.scss';
+import classNames from 'classnames';
 
 export const FORECASTS_PANEL = 'FORECASTS_PANEL';
 
@@ -79,15 +81,34 @@ class ForecastsPanel extends Component {
   }
 
   render() {
-    const {connectDropTarget} = this.props;
-    return connectDropTarget(
+    const {connectDropTarget, isOver} = this.props;
+    const panelClass = classNames({
+      'panel__forecast-drop': true,
+      'panel__forecast-drop--over': isOver
+    });
+
+    return (
       <div className="panel__body">
-        {this.renderEntities()}
+        {
+          this.state.entities.length === 0 && (
+            connectDropTarget(
+              <div className={panelClass}>
+                <div className="panel__forecast-drop__inside">
+                  Drag objects here to forecast them
+                </div>
+              </div>
+            )
+          )
+        }
+
+        {this.state.entities.length > 0 && this.renderEntities()}
       </div>
     );
   }
 }
 
-export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'forecastElement'], boxTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
+export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'forecastElement'], boxTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  isOverCurrent: monitor.isOver({shallow: true})
 }))(ForecastsPanel));

@@ -17,10 +17,6 @@ module.exports = {
 
 		browser.pause(1000);
 
-		browser.click(elementSelector + ' .canvas-element__icon');
-
-		browser.pause(200);
-
 		browser.expect.element('.quadrant:first-child .canvas-element.expanded.highlighted.DataSource:last-child').to.be.present;
 
 		browser.expect.element(propertySelector + ':first-child .canvas-element__properties__property-title').text.to.equal('URL');
@@ -36,9 +32,16 @@ module.exports = {
 		browser.expect.element(propertySelector + ':last-child .hide-while-edit').text.to.equal('');
 
 		browser.moveTo(elementSelector + ' .canvas-element__title', null, null, function () {
+			browser.click(elementSelector + ' .canvas-element__icon');
+			browser.pause(1000);
+			browser.click(elementSelector + ' .canvas-element__icon');
+			browser.pause(1000);
 			browser.doubleClick();
+			browser.pause(200);
 			browser.click(elementSelector + ' .canvas-element__icon');
 		});
+
+		browser.pause(1000);
 
 		browser.expect.element('.quadrant:first-child .canvas-element.expanded.editable.DataSource:last-child').to.be.present;
 

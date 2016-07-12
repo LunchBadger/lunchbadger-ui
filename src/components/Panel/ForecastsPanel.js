@@ -26,6 +26,12 @@ const boxTarget = {
       const top = Math.round(item.entity.top + delta.y);
       component.moveEntity(item.entity, left, top);
     }
+  },
+
+  canDrop(props, monitor) {
+    const item = monitor.getItem();
+
+    return item.entity.constructor.type === 'API' || item.entity.constructor.type === 'APIForecast';
   }
 };
 
@@ -81,23 +87,21 @@ class ForecastsPanel extends Component {
   }
 
   render() {
-    const {connectDropTarget, isOver} = this.props;
+    const {connectDropTarget, isOver, canDrop} = this.props;
     const panelClass = classNames({
       'panel__forecast-drop': true,
-      'panel__forecast-drop--over': isOver
+      'panel__forecast-drop--over': isOver && canDrop
     });
 
-    return (
+    return connectDropTarget(
       <div className="panel__body">
         {
           this.state.entities.length === 0 && (
-            connectDropTarget(
-              <div className={panelClass}>
-                <div className="panel__forecast-drop__inside">
-                  Drag objects here to forecast them
-                </div>
+            <div className={panelClass}>
+              <div className="panel__forecast-drop__inside">
+                Drag objects here to forecast them
               </div>
-            )
+            </div>
           )
         }
 
@@ -110,5 +114,6 @@ class ForecastsPanel extends Component {
 export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'forecastElement'], boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
-  isOverCurrent: monitor.isOver({shallow: true})
+  isOverCurrent: monitor.isOver({shallow: true}),
+  canDrop: monitor.canDrop()
 }))(ForecastsPanel));

@@ -51,8 +51,10 @@ const boxTarget = {
   }
 };
 
-@DropTarget('planElement', boxTarget, (connect) => ({
-  connectDropTarget: connect.dropTarget()
+@DropTarget('planElement', boxTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  isOverCurrent: monitor.isOver({shallow: true})
 }))
 export default class BasePlan extends Component {
   static propTypes = {
@@ -62,6 +64,7 @@ export default class BasePlan extends Component {
     handleClick: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     isCurrent: PropTypes.bool,
+    isOver: PropTypes.bool.isRequired,
     handleUpgradeCreation: PropTypes.func
   };
 
@@ -76,6 +79,7 @@ export default class BasePlan extends Component {
   render() {
     const elementClass = classNames({
       'base-plan': true,
+      'base-plan--over': this.props.isOver,
       'base-plan--expanded': this.props.isCurrent
     });
     const {date, plan, connectDropTarget} = this.props;

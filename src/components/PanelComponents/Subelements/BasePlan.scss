@@ -9,6 +9,10 @@
   &--expanded {
     height: 65px;
   }
+
+  &--over {
+    opacity: 0.5;
+  }
 }
 
 .base-plan__tiers {

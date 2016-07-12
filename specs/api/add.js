@@ -18,8 +18,9 @@ module.exports = {
 		page.expect.element(elementSelector + '.editable').to.be.present;
 
 		page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('API');
-		page.expect.element(elementSelector + ' .canvas-element__sub-elements .canvas-element__sub-elements__title').text.to.equal('ENDPOINTS');
-		page.expect.element(elementSelector + ' .canvas-element__sub-element').to.not.be.present;
+		page.expect.element(elementSelector + ' .canvas-element__sub-elements:first-child .canvas-element__sub-elements__title').text.to.equal('PLANS');
+		page.expect.element(elementSelector + ' .canvas-element__sub-elements:nth-child(2) .canvas-element__sub-elements__title').text.to.equal('ENDPOINTS');
+		page.expect.element(elementSelector + ' .canvas-element__sub-elements:nth-child(2) .canvas-element__sub-element').to.not.be.present;
 
 		browser.pause(500);
 

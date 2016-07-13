@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 
-const Input = LunchBadgerCore.components.Input;
-const Checkbox = LunchBadgerCore.components.Checkbox;
+const {Checkbox, Input, Select} = LunchBadgerCore.components;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
@@ -33,10 +32,18 @@ export default class ModelPropertyDetails extends Component {
           />
         </td>
         <td>
-          <Input className="details-panel__input"
-                 value={property.propertyType}
-                 name={`properties[${index}][propertyType]`}
-          />
+          <Select className="details-panel__input details-panel__select"
+                  value={property.propertyType || 'String'}
+                  name={`properties[${index}][propertyType]`}>
+            <option value="String">String</option>
+            <option value="Number">Number</option>
+            <option value="Date">Date</option>
+            <option value="Boolean">Boolean</option>
+            <option value="GeoPoint">GeoPoint</option>
+            <option value="Array">Array</option>
+            <option value="Object">Object</option>
+            <option value="Buffer">Buffer</option>
+          </Select>
         </td>
         <td>
           <Input className="details-panel__input"

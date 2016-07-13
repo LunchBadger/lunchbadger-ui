@@ -10,6 +10,7 @@ import './ForecastPlans.scss';
 import numeral from 'numeral';
 import moment from 'moment';
 import classNames from 'classnames';
+import ForecastPlanInput from './ForecastPlanInput';
 
 export default class ForecastPlans extends Component {
   static propTypes = {
@@ -63,7 +64,18 @@ export default class ForecastPlans extends Component {
 
       return (
         <div className={planClass} key={`plan_${index}`}>
-          <span className="forecast-plans__plan__name">{plan.name}</span>
+          {
+            plan.new && (
+              <ForecastPlanInput className="forecast-plans__plan__input" plan={plan} forecast={entity} value={plan.name} />
+            )
+          }
+
+          {
+            !plan.new && (
+              <span className="forecast-plans__plan__name">{plan.name}</span>
+            )
+          }
+          
           <BasePlan key={plan.id}
                     index={index}
                     forecast={entity}

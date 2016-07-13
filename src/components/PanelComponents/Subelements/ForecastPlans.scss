@@ -6,7 +6,7 @@
   overflow: hidden;
   font-size: 0;
   text-align: center;
-  padding: 0 120px;
+  padding: 3px 120px 0;
 }
 
 .forecast-plans__plan {
@@ -27,7 +27,8 @@
 
 .forecast-plans__plan__name {
   display: block;
-  padding: 0 5px 15px;
+  height: 25px;
+  padding: 0 5px;
   font-size: 17px;
   width: 100%;
   overflow: hidden;
@@ -71,4 +72,25 @@
   position: absolute;
   left: 0;
   top: 0;
+}
+
+.forecast-plans__plan__input {
+  height: 25px;
+  font-size: 15px;
+  padding: 0 4px;
+  width: 100%;
+  border: 1px solid #ECECED;
+
+  &:hover {
+    border: 1px solid #8BD6EF;
+  }
+
+  &::selection {
+    background-color: #8BD6EF;
+    color: #fff;
+  }
+
+  &:focus {
+    outline-color: #8BD6EF;
+  }
 }

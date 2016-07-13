@@ -89,6 +89,17 @@ class Forecast extends BaseStore {
           this.emitChange();
           this.emitInit();
           break;
+        case 'UpdatePlan':
+          const planToUpdate = action.forecast.api.findPlan({id: action.plan.id});
+
+          if (planToUpdate) {
+            planToUpdate.name = action.planName;
+            planToUpdate.new = false;
+
+            this.emitChange();
+          }
+
+          break;
       }
     });
   }

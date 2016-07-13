@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
 import removeProperty from 'actions/CanvasElements/Model/removeProperty';
 
-const Input = LunchBadgerCore.components.Input;
+const {Select, Input} = LunchBadgerCore.components;
 
 export default class ModelProperty extends Component {
   static propTypes = {
@@ -34,11 +34,20 @@ export default class ModelProperty extends Component {
         </div>
         <div className="model-property__value-cell">
           <span className="model-property__value value hide-while-edit">
-            {property.propertyValue}
+            {property.propertyType}
           </span>
-          <Input className="model-property__input canvas-element__input editable-only"
-                 value={property.propertyValue}
-                 name={`properties[${index}][propertyValue]`}/>
+          <Select className="model-property__input model-property__select canvas-element__input editable-only"
+                  value={property.propertyType || 'String'}
+                  name={`properties[${index}][propertyType]`}>
+            <option value="String">String</option>
+            <option value="Number">Number</option>
+            <option value="Date">Date</option>
+            <option value="Boolean">Boolean</option>
+            <option value="GeoPoint">GeoPoint</option>
+            <option value="Array">Array</option>
+            <option value="Object">Object</option>
+            <option value="Buffer">Buffer</option>
+          </Select>
         </div>
 
         <Input value={property.propertyIsIndex}
@@ -50,13 +59,14 @@ export default class ModelProperty extends Component {
         <Input value={property.propertyNotes}
                type="hidden"
                name={`properties[${index}][propertyNotes]`}/>
-        <Input value={property.propertyType}
+        <Input value={property.propertyValue}
                type="hidden"
-               name={`properties[${index}][propertyType]`}/>
+               name={`properties[${index}][propertyValue]`}/>
         <Input value={property.id}
                type="hidden"
                name={`properties[${index}][id]`}/>
-        <i className="model-property__remove icon-icon-minus" onClick={() => this.onRemove(this.props.entity, property)}></i>
+        <i className="model-property__remove icon-icon-minus"
+           onClick={() => this.onRemove(this.props.entity, property)}></i>
         <div className="clearfix"></div>
       </div>
     );

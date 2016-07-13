@@ -57,7 +57,7 @@ i.over {
   color: #fff;
 }
 
-.tool__tooltip {
+.tool__tooltip, .tool__context__tooltip {
   position: absolute;
   display: block;
   line-height: 20px;
@@ -79,7 +79,7 @@ i.over {
 .tool__context {
   display: none;
   position: relative;
-  width: 200px;
+  width: 150px;
   top: -56px;
   margin: 5px;
   padding-top: 8px;
@@ -88,14 +88,13 @@ i.over {
   border-left: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  overflow: hidden;
   text-align: center;
   left: $aside-width - 17;
   list-style: none;
+  z-index: $z-index-high;
   li {
     line-height: 33px;
     cursor: pointer;
-    overflow: hidden;
 
     &:hover {
       color: $ui-active;
@@ -103,10 +102,13 @@ i.over {
       i {
         color: $ui-active;
       }
+      .tool__context__tooltip {
+        opacity: 1;
+        transform: translateX($aside-width + 90);
+      }
     }
 
     i {
-      float: left;
       margin-left: .5em;
     }
   }
@@ -124,6 +126,5 @@ i.over {
 }
 
 .tool__name {
-  float: left;
   margin-left: 10px;
 }

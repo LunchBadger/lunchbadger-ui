@@ -38,14 +38,15 @@
   }
 
   &.expanded {
-      padding-bottom: 0;
+    padding-bottom: 0;
+
     .expanded-only {
       display: block;
     }
 
     .canvas-element__extra {
       max-height: 450px;
-      overflow: visible;
+      overflow: hidden;
     }
   }
 
@@ -143,7 +144,9 @@
 .canvas-element__extra {
   max-height: 0;
   overflow: hidden;
-  transition: all .7s ease;
+  transition: all 1.2s ease;
+  padding: 0 20px;
+  margin: 0 -20px;
 }
 
 .canvas-element__remove {
@@ -289,6 +292,7 @@
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+
   &:hover {
     color: #00ABFF;
   }
@@ -344,9 +348,10 @@
     overflow-y: visible;
   }
 }
+
 .icon-icon-minus {
   font-size: medium;
-  vertical-align: -webkit-baseline-middle;
+  vertical-align: middle;
 }
 
 .clearfix {

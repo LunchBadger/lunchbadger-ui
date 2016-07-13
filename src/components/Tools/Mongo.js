@@ -9,6 +9,7 @@ export default class Mongo extends Component {
       <div className="mongo tool__context__item" onClick={() => AddDataSource('Mongo', 'mongo')}>
       	<i className="tool__icon icon-icon-datasource"/>
       	<span className="tool__name">Mongo</span>
+        <span className="tool__context__tooltip">Data Source</span>
       </div>
     );
   }

@@ -9,6 +9,7 @@ export default class SQL extends Component {
       <div className="sql tool__context__item" onClick={() => AddDataSource('SQL', 'sql')}>
       	<i className="tool__icon icon-icon-datasource"/>
       	<span className="tool__name">SQL</span>
+        <span className="tool__context__tooltip">Data Source</span>
       </div>
     );
   }

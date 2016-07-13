@@ -8,7 +8,8 @@ class PrivateEndpoint extends Component {
     return (
       <div className="privateendpoint tool__context__item" onClick={() => AddPrivateEndpoint('Private Endpoint')}>
       	<i className="tool__icon icon-icon-endpoint"/>
-      	<span className="tool__name">Private Endpoint</span>
+      	<span className="tool__name">Private</span>
+        <span className="tool__context__tooltip">Endpoint</span>
       </div>
     );
   }

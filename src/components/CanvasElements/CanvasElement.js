@@ -119,10 +119,6 @@ export default (ComposedComponent) => {
         if (currentElement && currentElement.id === this.props.entity.id) {
           if (!this.state.highlighted) {
             this.setState({highlighted: true});
-          } else {
-            if (this.currentOpenedPanel && this.state.editable) {
-              this.setState({editable: false});
-            }
           }
         } else {
           this.setState({highlighted: false});
@@ -204,14 +200,10 @@ export default (ComposedComponent) => {
         return;
       }
 
-      if (!this.currentOpenedPanel) {
-        toggleEdit(this.props.entity);
-        this.setState({editable: true}, () => {
-          this._focusClosestInput(target);
-        });
-      } else if (this.currentOpenedPanel) {
-        toggleEdit(null);
-      }
+      toggleEdit(this.props.entity);
+      this.setState({editable: true}, () => {
+        this._focusClosestInput(target);
+      });
     }
 
     toggleHighlighted() {

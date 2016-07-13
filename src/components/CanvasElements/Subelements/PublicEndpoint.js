@@ -14,7 +14,7 @@ const boxSource = {
     return {entity, left, top, parent, handleEndDrag, subelement: true};
   },
   canDrag(props) {
-    return !(props.appState.getStateKey('currentEditElement') || props.appState.getStateKey('isPanelOpened'));
+    return !props.appState.getStateKey('currentEditElement');
   }
 };
 

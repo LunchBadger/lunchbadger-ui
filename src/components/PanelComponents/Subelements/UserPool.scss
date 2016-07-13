@@ -1,6 +1,7 @@
 .user-pool {
   display: inline-block;
   text-align: center;
+
 }
 
 .user-pool__title {
@@ -16,6 +17,7 @@
 
 .user-pool__icon {
   background: #ff8000;
+  border: 1px solid #ff8000;
   font-size: 26px;
   color: #fff;
   border-radius: 25px;
@@ -24,4 +26,8 @@
   display: inline-block;
   vertical-align: middle;
   line-height: 54px;
+  &:hover {
+    background-color: #CB7B28;
+    border: 1px solid #CB7B28;
+  }
 }

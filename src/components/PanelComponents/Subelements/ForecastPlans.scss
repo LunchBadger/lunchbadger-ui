@@ -57,6 +57,15 @@
 
 .forecast-plans__action__add {
   cursor: pointer;
+  > i {
+    border-radius: 3px;
+    padding-left: 4px;
+    padding-right: 4px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+
+    }
+  }
 }
 
 .forecast-plans__upgrades {
@@ -72,3 +81,4 @@
   left: 0;
   top: 0;
 }
+

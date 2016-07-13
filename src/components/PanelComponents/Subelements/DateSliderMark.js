@@ -56,7 +56,7 @@ export default class DateSliderMark extends Component {
   }
 
   formatMonth(month) {
-    const year = +moment(this.props.selectedDate, 'M/YYYY').format('YYYY');
+    const year = parseInt(moment().format('YYYY'), 10);
     return month > 12 ? moment(month - 12 + '/' + (year + 1), 'M/YYYY') : moment(month + '/' + year, 'M/YYYY');
   }
 

@@ -19,6 +19,7 @@ import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
 import Input from './components/Generics/Form/Input';
 import Checkbox from './components/Generics/Form/Checkbox';
+import Select from './components/Generics/Form/Select';
 import CloseButton from './components/Panel/CloseButton';
 import SaveButton from './components/Panel/SaveButton';
 import Draggable from './components/Draggable/Draggable';
@@ -91,6 +92,7 @@ let LunchBadgerCore = {
     BaseDetails: BaseDetails,
     Input: Input,
     Checkbox: Checkbox,
+    Select: Select,
     CloseButton: CloseButton,
     SaveButton: SaveButton,
     Draggable: Draggable,

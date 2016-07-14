@@ -8,6 +8,7 @@
   text-align: center;
   display: block;
   font-size: 30px;
+
   &:hover {
     background-color: #CB7B28;
     border: 1px solid #CB7B28;
@@ -15,6 +16,6 @@
 
   &--changed {
     background: lighten(#ff8000, 20%);
-    border: 1px solid #028EE2;
+    border: 1px solid lighten(#ff8000, 20%);
   }
 }

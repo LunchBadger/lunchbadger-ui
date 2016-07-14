@@ -23,7 +23,12 @@ export default class ForecastDetails extends Component {
     if (nextProps.dateRange && this.props.dateRange
       && nextProps.dateRange.endDate !== this.props.dateRange.endDate
       && nextProps.entity.api.plans.length) {
-      const monthsDifference = nextProps.dateRange.endDate.clone().endOf('month').diff(this.props.dateRange.endDate, 'months');
+      const monthsDifference = Math.round(
+        nextProps.dateRange.endDate
+          .clone()
+          .endOf('month')
+          .diff(this.props.dateRange.endDate.clone().endOf('month'), 'months', true)
+      );
 
       if (monthsDifference > 0) {
         for (let i = 1; i <= monthsDifference; i++) {

@@ -25,16 +25,60 @@
   }
 }
 
+.forecast-plans__plan__name-holder {
+  position: relative;
+
+  &:hover {
+    .forecast-plans__plan__name-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
 .forecast-plans__plan__name {
   display: block;
   height: 25px;
   padding: 0 5px;
-  font-size: 17px;
+  font-size: 16px;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
   white-space: pre;
+}
+
+.forecast-plans__plan__name-tooltip {
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 13px;
+  opacity: 0;
+  padding: 8px 10px 10px;
+  position: absolute;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out , margin-top 0.3s ease-out, margin-left 0.3s ease-out;
+  visibility: hidden;
+  z-index: 999;
+  color: #fff;
+  background-color: #222;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50.01%);
+  white-space: nowrap;
+  margin-top: 10px;
+
+  &:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #222 transparent;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -10px;
+  }
 }
 
 .forecast-plans__plan__users {

@@ -66,16 +66,25 @@ export default class ForecastPlans extends Component {
         <div className={planClass} key={`plan_${index}`}>
           {
             plan.new && (
-              <ForecastPlanInput className="forecast-plans__plan__input" plan={plan} forecast={entity} value={plan.name} />
+              <ForecastPlanInput className="forecast-plans__plan__input" plan={plan} forecast={entity}
+                                 value={plan.name}/>
             )
           }
 
           {
             !plan.new && (
-              <span className="forecast-plans__plan__name">{plan.name}</span>
+              <div className="forecast-plans__plan__name-holder">
+                <div className="forecast-plans__plan__name">
+                  {plan.name}
+                </div>
+
+                <div className="forecast-plans__plan__name-tooltip">
+                  {plan.name}
+                </div>
+              </div>
             )
           }
-          
+
           <BasePlan key={plan.id}
                     index={index}
                     forecast={entity}
@@ -84,7 +93,7 @@ export default class ForecastPlans extends Component {
                     handleUpgradeCreation={this.props.handleUpgradeCreation.bind(this)}
                     isCurrent={this.state.currentPlan && this.state.currentPlan.id === plan.id}
                     handleClick={() => this._setCurrentPlan(plan)}/>
-            <span className="forecast-plans__plan__users">
+          <span className="forecast-plans__plan__users">
               {numeral(userCount).format('0,0')} users
             </span>
         </div>

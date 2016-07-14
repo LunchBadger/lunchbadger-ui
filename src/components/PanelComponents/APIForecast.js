@@ -171,7 +171,7 @@ export default class APIForecast extends Component {
     let newPixelHeight = event.clientY - containerBBox.top;
 
     const newScale = parseInt(newPixelHeight / containerBBox.height * this.state.scale * 100, 10) / 100;
-    
+
     this.setState({
       dragging: true,
       scale: newScale
@@ -203,7 +203,7 @@ export default class APIForecast extends Component {
            style={forecastStyle}
            ref={(instance) => this.forecast = instance}>
         {connectDragSource(
-          <div className="api-forecast__header">
+          <div className="">
             <div className="api-forecast__header__title">
               {this.props.entity.api.name}
               <span className="api-forecast__header__subtitle">Revenue Forecast</span>

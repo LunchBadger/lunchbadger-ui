@@ -115,7 +115,7 @@ export default class UpgradeSlider extends Component {
     const maxPercentage = this.state.max;
 
     const percentFormatter = (value) => {
-      return value + ' %';
+      return value.toFixed(2) + ' %';
     };
 
     return (

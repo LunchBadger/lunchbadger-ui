@@ -81,6 +81,7 @@ class ForecastsPanel extends Component {
                           onClose={() => this.state.expanded === entity.id && this.setState({expanded: null})}
                           isExpanded={this.state.expanded === entity.id}
                           entity={entity}
+                          panelHeight={this.props.height}
                           top={entity.top}
                           left={entity.left}/>;
     })

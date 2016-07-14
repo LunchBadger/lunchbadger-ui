@@ -242,6 +242,7 @@ export default class APIForecast extends Component {
           {
             this.state.data.length > 0 && (
               <ForecastDetails
+                panelHeight={this.props.panelHeight}
                 dateRange={this.state.selectedRange}
                 className="api-forecast__details"
                 data={this.state.data}

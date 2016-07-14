@@ -63,6 +63,10 @@ export default class ForecastingChart extends Component {
       return true;
     }
 
+    if (nextProps.panelHeight !== this.props.panelHeight) {
+      return true;
+    }
+
     if (this.state.lastUpdate.toTimeString() !== nextState.lastUpdate.toTimeString()) {
       return true;
     }
@@ -77,7 +81,25 @@ export default class ForecastingChart extends Component {
   _renderChart() {
     const data = this._formatData();
 
-    console.log('rerender chart');
+    let y0Factor = 0;
+
+    const panelHeight = parseInt(this.props.panelHeight, 10);
+
+    if (!this.props.expanded) {
+      y0Factor = -0.15;
+    } else if (panelHeight >= 850) {
+      y0Factor = -0.035;
+    } else if (panelHeight >= 650) {
+      y0Factor = -0.05;
+    } else if (panelHeight >= 550) {
+      y0Factor = -0.06;
+    } else if (panelHeight >= 480) {
+      y0Factor = -0.09;
+    } else if (panelHeight >= 400) {
+      y0Factor = -0.11;
+    } else {
+      y0Factor = -0.12;
+    }
 
     if (data.length > 0) {
       this.tickvals = data[0].x;
@@ -111,7 +133,7 @@ export default class ForecastingChart extends Component {
             xref: 'x',
             yref: 'paper',
             x0: 0,
-            y0: -0.15,
+            y0: y0Factor,
             x1: 0,
             y1: 1.02,
             fillcolor: 'rgba(0, 171, 255, 0.15)',
@@ -336,7 +358,7 @@ export default class ForecastingChart extends Component {
   render() {
     return (
       <div className="chart">
-        <div className="chart__container" ref="chart">
+        <div className="chart__container" ref="chart" style={{height: `${parseInt(this.props.panelHeight, 10) - 200}px`}}>
         </div>
       </div>
     );

@@ -247,6 +247,7 @@ export default class APIForecast extends Component {
                 data={this.state.data}
                 entity={this.props.entity}
                 selectedDate={this.state.selectedDate}
+                expanded={this.props.isExpanded}
                 incomeSummary={this.state.incomeSummary}/>
             )
           }

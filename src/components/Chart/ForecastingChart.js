@@ -12,6 +12,7 @@ export default class ForecastingChart extends Component {
     data: PropTypes.array.isRequired,
     forecast: PropTypes.object.isRequired,
     dateRange: PropTypes.object,
+    expanded: PropTypes.bool,
     selectedDate: PropTypes.string
   };
 
@@ -25,12 +26,21 @@ export default class ForecastingChart extends Component {
     this.forecastChanged = () => {
       setTimeout(() => this.setState({lastUpdate: new Date()}));
     };
+
+    this.onWindowResize = () => {
+      this._renderChart();
+    }
   }
 
   componentDidMount() {
     this._renderChart();
 
     Forecast.addChangeListener(this.forecastChanged);
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   componentDidUpdate() {
@@ -49,6 +59,10 @@ export default class ForecastingChart extends Component {
       return true;
     }
 
+    if (nextProps.expanded !== this.props.expanded) {
+      return true;
+    }
+
     if (this.state.lastUpdate.toTimeString() !== nextState.lastUpdate.toTimeString()) {
       return true;
     }
@@ -63,6 +77,8 @@ export default class ForecastingChart extends Component {
   _renderChart() {
     const data = this._formatData();
 
+    console.log('rerender chart');
+
     if (data.length > 0) {
       this.tickvals = data[0].x;
       const ticktext = data[0].x.map((date) => {
@@ -70,6 +86,12 @@ export default class ForecastingChart extends Component {
       });
 
       const layout = {
+        margin: {
+          l: 30,
+          r: 30,
+          b: 30,
+          t: 15
+        },
         barmode: 'relative',
         showlegend: false,
         xaxis: {

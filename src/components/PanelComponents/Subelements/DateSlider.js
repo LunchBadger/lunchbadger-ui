@@ -4,6 +4,7 @@ import './DateSlider.scss';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import DateSliderMark from './DateSliderMark';
+import setForecast from 'actions/AppState/setForecast';
 
 export default class DateSlider extends Component {
   static propTypes = {
@@ -19,7 +20,7 @@ export default class DateSlider extends Component {
     this.state = {
       marks: this.getMarks(),
       range: this.getRange(props),
-      count: 24
+      count: 12
     }
   }
 
@@ -31,6 +32,14 @@ export default class DateSlider extends Component {
     this.setState({
       marks: this.getMarks(),
       range: this.getRange(this.props)
+    }, () => {
+      this._rescale(this.state.range[1], () => {
+        setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().add(1, 'months').toDate());
+
+        setTimeout(() => {
+          setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().subtract(1, 'months').toDate());
+        });
+      });
     });
   }
 
@@ -47,7 +56,7 @@ export default class DateSlider extends Component {
     }
   }
 
-  getMarks(count = 24) {
+  getMarks(count = 12) {
     let marks = {};
 
     for (var i = 1; i < count + 1; i++) {
@@ -92,11 +101,22 @@ export default class DateSlider extends Component {
         }));
       }
     });
+
+    this._rescale(e[1]);
+  }
+
+  _rescale(value, cb = () => {}) {
+    if (value >= this.state.count && value < 24) {
+      this.setState({
+        count: value + 1,
+        marks: this.getMarks(value + 1)
+      }, cb);
+    }
   }
 
   render() {
     return (
-      <div className="date-slider" style={{width: '150%'}}>
+      <div className="date-slider" style={{width: '97%'}}>
         <div className="date-slider__slider">
           <Slider range
                   defaultValue={this.state.range}

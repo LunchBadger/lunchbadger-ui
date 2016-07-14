@@ -204,6 +204,9 @@ export default class APIForecast extends Component {
            ref={(instance) => this.forecast = instance}>
         {connectDragSource(
           <div className="api-forecast__header">
+            <div className="api-forecast__header__icon">
+              <i className="fa icon-icon-product" />
+            </div>
             <div className="api-forecast__header__title">
               {this.props.entity.api.name}
               <span className="api-forecast__header__subtitle">Revenue Forecast</span>

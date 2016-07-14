@@ -45,6 +45,9 @@
 
       }
     }
+    .api-forecast__header__icon {
+      display: none;
+    }
 
     .api-forecast__details {
       float: left;
@@ -95,11 +98,12 @@
   list-style: none;
   position: absolute;
   top: -3px;
-  right: 20px;
+  right: 0;
 
   li {
     float: right;
-    margin: .2em;
+    width: 35px;
+    margin-top: .2em;
     padding-left: 3px;
     padding-right: 3px;
     border-radius: 3px;
@@ -129,12 +133,11 @@
 }
 
 .api-forecast__header__title {
-  position: absolute;
-  left: 30px;
+  position: relative;
   font-size: 18px;
   font-weight: normal;
   top: 0;
-  display: block;
+  display: inline;
   max-width: 150px;
   text-align: left;
   white-space: pre;
@@ -142,8 +145,11 @@
   text-overflow: ellipsis;
 
   .expanded & {
+    left: 30px;
     max-width: 100%;
     font-size: 23px;
+    position: absolute;
+    display: block;
   }
 }
 
@@ -154,5 +160,20 @@
   color: #888888;
   .expanded & {
     display: inline-block;
+  }
+}
+
+.api-forecast__header__icon {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  width: 57px;
+  display: inline-block;
+  vertical-align: middle;
+  //cursor: pointer;
+  font-size: 36px;
+  padding: 0px 12px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.19);
   }
 }

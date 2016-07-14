@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
+import classNames from 'classnames';
+import './PanelContainer.scss';
 
 export default class PanelContainer extends Component {
   static propTypes = {
@@ -28,8 +30,13 @@ export default class PanelContainer extends Component {
   }
 
   render() {
+    const panelContainerClass = classNames({
+      'panel-container': true,
+      'panel-container--disabled': this.props.appState.getStateKey('currentEditElement')
+    });
+
     return (
-      <div>
+      <div className={panelContainerClass}>
         <DetailsPanel canvas={this.props.canvas}
                       plugins={this.props.plugins}
                       header={this.props.header}

@@ -41,5 +41,5 @@ module.exports = {
     ];
   },
   apiUrl: 'http://0.0.0.0:3000/api/',
-  gitBase: 'git@gitlab.neoteric.eu:LunchBadger/'
+  gitBase: 'git@github.com:LunchBadger/'
 };

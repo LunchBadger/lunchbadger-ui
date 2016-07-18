@@ -4,7 +4,6 @@ import {Form} from 'formsy-react';
 import Input from 'components/Generics/Form/Input';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
-import CollapsableDetails from './CollapsableDetails';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
@@ -75,15 +74,13 @@ export default (ComposedComponent) => {
             <CloseButton showConfirmation={!this.state.isPristine}
                          onSave={this.update.bind(this)}
                          onCancel={this.discardChanges.bind(this)}/>
-            <CollapsableDetails title="Details">
-              <div className="details-panel__fieldset">
-                <span className="details-panel__label">Name</span>
-                <Input className="details-panel__input"
-                       handleKeyPress={this._preventSubmit.bind(this)}
-                       value={this.props.entity.name}
-                       name="name"/>
-              </div>
-            </CollapsableDetails>
+            <div className="details-panel__fieldset">
+              <span className="details-panel__label">Name</span>
+              <Input className="details-panel__input"
+                     handleKeyPress={this._preventSubmit.bind(this)}
+                     value={this.props.entity.name}
+                     name="name"/>
+            </div>
 
             <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
 

@@ -3,8 +3,8 @@
   font-size: 14px;
 }
 
-.details-panel__details,
-.details-panel__properties {
+.details-panel__details {
+  overflow: auto;
   div.collapsed {
     display: none;
   }

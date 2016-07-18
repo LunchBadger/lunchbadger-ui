@@ -4,7 +4,8 @@ import ModelPropertyDetails from './ModelPropertyDetails';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const Input = LunchBadgerCore.components.Input;
+const InputField = LunchBadgerCore.components.InputField;
+const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
@@ -95,14 +96,19 @@ class ModelDetails extends Component {
     const {entity} = this.props;
 
     return (
-      <CollapsableDetails title="Properties">
-        <div className="details-panel__container details-panel__columns">
-          <div className="details-panel__fieldset">
-            <span className="details-panel__label">Context path</span>
-            <Input className="details-panel__input"
-                   value={entity.contextPath}
-                   name="contextPath"/>
+      <div>
+        <CollapsableDetails title="Details">
+          <div className="details-panel__container details-panel__columns">
+            <InputField label="Context path" propertyName="contextPath" entity={entity}/>
+            <InputField label="Plural" propertyName="plural" entity={entity}/>
+            <InputField label="Base model" propertyName="base" entity={entity}/>
+            <InputField label="Data source" propertyName="dataSource" entity={entity}/>
+            <CheckboxField label="Read only" propertyName="readOnly" entity={entity}/>
+            <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
+            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity}/>
           </div>
+        </CollapsableDetails>
+        <CollapsableDetails title="Properties">
           <table className="details-panel__table">
             <thead>
             <tr>
@@ -125,8 +131,8 @@ class ModelDetails extends Component {
             {this.renderProperties()}
             </tbody>
           </table>
-        </div>
-      </CollapsableDetails>
+        </CollapsableDetails>
+      </div>
     )
   }
 }

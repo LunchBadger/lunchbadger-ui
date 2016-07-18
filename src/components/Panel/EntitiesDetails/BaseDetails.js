@@ -85,9 +85,7 @@ export default (ComposedComponent) => {
               </div>
             </CollapsableDetails>
 
-            <CollapsableDetails title="Properties">
-              <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-            </CollapsableDetails>
+            <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
 
             <SaveButton enabled={!this.state.isPristine}
                         onSave={this.update.bind(this)}/>

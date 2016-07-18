@@ -3,6 +3,7 @@ import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
+const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class PublicEndpointDetails extends Component {
   static propTypes = {
@@ -21,14 +22,16 @@ class PublicEndpointDetails extends Component {
     const {entity} = this.props;
 
     return (
-      <div className="details-panel__container details-panel__columns">
-        <div className="details-panel__fieldset">
-          <span className="details-panel__label">URL</span>
-          <Input className="details-panel__input"
-                 value={entity.url}
-                 name="url"/>
+      <CollapsableDetails title="Properties">
+        <div className="details-panel__container details-panel__columns">
+          <div className="details-panel__fieldset">
+            <span className="details-panel__label">URL</span>
+            <Input className="details-panel__input"
+                   value={entity.url}
+                   name="url"/>
+          </div>
         </div>
-      </div>
+      </CollapsableDetails>
     )
   }
 }

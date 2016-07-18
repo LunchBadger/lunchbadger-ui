@@ -24,6 +24,7 @@ class Checkbox extends Component {
              value={this.props.getValue()}
              type="checkbox"
              checked={this.props.getValue() ? 'checked' : null}
+             id={this.props.name}
              onChange={this._handleChange.bind(this)}/>
     );
   }

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import './BaseDetails.scss';
 import {Form} from 'formsy-react';
-import Input from 'components/Generics/Form/Input';
+import InputField from 'components/Panel/EntitiesDetails/InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
 
@@ -74,13 +74,11 @@ export default (ComposedComponent) => {
             <CloseButton showConfirmation={!this.state.isPristine}
                          onSave={this.update.bind(this)}
                          onCancel={this.discardChanges.bind(this)}/>
-            <div className="details-panel__fieldset">
-              <span className="details-panel__label">Name</span>
-              <Input className="details-panel__input"
-                     handleKeyPress={this._preventSubmit.bind(this)}
-                     value={this.props.entity.name}
-                     name="name"/>
-            </div>
+
+            <InputField label="Name"
+                        propertyName="name"
+                        handleKeyPress={this._preventSubmit.bind(this)}
+                        entity={this.props.entity} />
 
             <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
 

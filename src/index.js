@@ -21,6 +21,8 @@ import CollapsableDetails from './components/Panel/EntitiesDetails/CollapsableDe
 import Input from './components/Generics/Form/Input';
 import Checkbox from './components/Generics/Form/Checkbox';
 import Select from './components/Generics/Form/Select';
+import InputField from './components/Panel/EntitiesDetails/InputField';
+import CheckboxField from './components/Panel/EntitiesDetails/CheckboxField';
 import CloseButton from './components/Panel/CloseButton';
 import SaveButton from './components/Panel/SaveButton';
 import Draggable from './components/Draggable/Draggable';
@@ -95,6 +97,8 @@ let LunchBadgerCore = {
     Input: Input,
     Checkbox: Checkbox,
     Select: Select,
+    InputField: InputField,
+    CheckboxField: CheckboxField,
     CloseButton: CloseButton,
     SaveButton: SaveButton,
     Draggable: Draggable,

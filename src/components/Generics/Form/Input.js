@@ -31,7 +31,8 @@ class Input extends Component {
              value={this.props.getValue()}
              type={this.props.type || 'text'}
              onKeyPress={this._handleKeyPress.bind(this)}
-             onChange={this._handleChange.bind(this)}/>
+             onChange={this._handleChange.bind(this)}
+             id={this.props.name}/>
     );
   }
 }

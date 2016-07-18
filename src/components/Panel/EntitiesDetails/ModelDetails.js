@@ -6,6 +6,7 @@ import _ from 'lodash';
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
+const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class ModelDetails extends Component {
   static propTypes = {
@@ -94,36 +95,38 @@ class ModelDetails extends Component {
     const {entity} = this.props;
 
     return (
-      <div className="details-panel__container details-panel__columns">
-        <div className="details-panel__fieldset">
-          <span className="details-panel__label">Context path</span>
-          <Input className="details-panel__input"
-                 value={entity.contextPath}
-                 name="contextPath"/>
+      <CollapsableDetails title="Properties">
+        <div className="details-panel__container details-panel__columns">
+          <div className="details-panel__fieldset">
+            <span className="details-panel__label">Context path</span>
+            <Input className="details-panel__input"
+                   value={entity.contextPath}
+                   name="contextPath"/>
+          </div>
+          <table className="details-panel__table">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Data type</th>
+              <th>Default Value</th>
+              <th>Required</th>
+              <th>Is index</th>
+              <th>
+                Notes
+                <a onClick={() => this.onAddProperty()} className="details-panel__add">
+                  <i className="fa fa-plus"/>
+                  Add property
+                </a>
+              </th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {this.renderProperties()}
+            </tbody>
+          </table>
         </div>
-        <table className="details-panel__table">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Data type</th>
-            <th>Default Value</th>
-            <th>Required</th>
-            <th>Is index</th>
-            <th>
-              Notes
-              <a onClick={() => this.onAddProperty()} className="details-panel__add">
-                <i className="fa fa-plus"/>
-                Add property
-              </a>
-            </th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          {this.renderProperties()}
-          </tbody>
-        </table>
-      </div>
+      </CollapsableDetails>
     )
   }
 }

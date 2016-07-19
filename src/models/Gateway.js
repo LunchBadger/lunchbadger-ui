@@ -1,3 +1,5 @@
+import Pipeline from './Pipeline';
+
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Gateway extends BaseModel {
@@ -8,7 +10,9 @@ export default class Gateway extends BaseModel {
    * @type {Pipeline[]}
    * @private
    */
-  _pipelines = [];
+  _pipelines = [
+    Pipeline.create({name: 'Pipeline'})
+  ];
 
   constructor(id, name) {
     super(id);

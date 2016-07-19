@@ -18,8 +18,8 @@ export default (data) => {
       ...gateway
     });
 
-    embeddedPipelines.forEach((pipeline) => {
-      gatewayEntity.addPipeline(Pipeline.create(pipeline));
+    gatewayEntity.pipelines = embeddedPipelines.map((pipeline) => {
+      return Pipeline.create(pipeline);
     });
 
     return gatewayEntity;

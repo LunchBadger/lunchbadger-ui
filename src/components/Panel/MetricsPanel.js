@@ -3,6 +3,8 @@ import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import Metric from 'stores/Metric';
 import create from 'actions/Metrics/create';
+import update from 'actions/Metrics/update';
+import MetricComponent from 'components/Metric/Metric';
 import './MetricsPanel.scss';
 
 export const METRICS_PANEL = 'METRICS_PANEL';
@@ -13,7 +15,9 @@ const boxTarget = {
     const delta = monitor.getSourceClientOffset();
 
     if (!Metric.findByEntityId(item.entity.id)) {
-      create(item.entity, delta.x, delta.y - 30);
+      create(item.entity, delta.x - 60, delta.y - 60);
+    } else {
+      update(item.metric, delta.x - 60, delta.y - 60);
     }
   }
 };
@@ -42,7 +46,9 @@ class MetricsPanel extends Component {
   }
 
   renderEntities() {
-
+    return this.state.entities.map((entity) => {
+      return <MetricComponent key={entity.id} metric={entity}/>;
+    });
   }
 
   render() {
@@ -70,7 +76,7 @@ class MetricsPanel extends Component {
   }
 }
 
-export default LunchBadgerCore.components.Panel(DropTarget('canvasElement', boxTarget, (connect, monitor) => ({
+export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'metric'], boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   isOverCurrent: monitor.isOver({shallow: true})

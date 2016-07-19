@@ -17,6 +17,15 @@ export default class Metric extends BaseModel {
     this.top = top;
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      entity: this.entity.toJSON(),
+      left: this.left,
+      top: this.top
+    }
+  }
+
   get entity() {
     return this._entity;
   }

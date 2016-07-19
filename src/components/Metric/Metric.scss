@@ -1,0 +1,55 @@
+.metric {
+  position: absolute;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  min-height: 150px;
+  background: #fff;
+  z-index: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  overflow: hidden;
+}
+
+.metric__title {
+  display: table;
+  width: 100%;
+  color: #fff;
+  background-color: #8CAC43;
+  height: 50px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.metric__title__icon {
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 45px;
+  text-align: center;
+  font-size: 28px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.19);
+  }
+}
+
+.metric__title__name {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 20px;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.metric__entity-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 80%;
+  display: block;
+  white-space: nowrap;
+}
+
+.metric__details {
+  background: #fff;
+}

@@ -13,6 +13,19 @@ class Metric extends BaseStore {
           Metrics.push(action.metric);
           this.emitChange();
           break;
+        case 'UpdateMetric':
+          const entity = this.findEntity(action.metric.id);
+
+          if (entity) {
+            entity.update({
+              left: action.left,
+              top: action.top
+            });
+
+            this.emitChange();
+          }
+
+          break;
       }
     });
   }

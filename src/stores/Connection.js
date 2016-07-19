@@ -37,6 +37,19 @@ class Connection extends BaseStore {
       case 'RemoveEntity':
         this._handleConnectionRemoval({from: action.entity.id});
         this._handleConnectionRemoval({to: action.entity.id});
+
+        if (action.entity.constructor.type === 'API') {
+          action.entity.publicEndpoints.forEach((endpoint) => {
+            this._handleConnectionRemoval({from: endpoint.id});
+            this._handleConnectionRemoval({to: endpoint.id});
+          });
+        } else if (action.entity.constructor.type === 'Gateway') {
+          action.entity.pipelines.forEach((pipeline) => {
+            this._handleConnectionRemoval({from: pipeline.id});
+            this._handleConnectionRemoval({to: pipeline.id});
+          });
+        }
+
         this.emitChange();
         break;
     }

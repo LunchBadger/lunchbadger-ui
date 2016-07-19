@@ -8,7 +8,13 @@ export default class Model extends BaseModel {
   static type = 'Model';
   _ports = [];
   _properties = [];
+  _relations = [];
   contextPath = 'model';
+  base = 'Model';
+  plural = null;
+  readOnly = false;
+  public = false;
+  strict = false;
 
   constructor(id, name) {
     super(id);
@@ -35,7 +41,13 @@ export default class Model extends BaseModel {
       name: this.name,
       contextPath: this.contextPath,
       privateModelProperties: this.properties.map(property => property.toJSON()),
-      itemOrder: this.itemOrder
+      privateModelRelations: this.relations.map(relation => relation.toJSON()),
+      itemOrder: this.itemOrder,
+      base: this.base,
+      plural: this.plural,
+      readOnly: this.readOnly,
+      public: this.public,
+      strict: this.strict
     }
   }
 
@@ -67,6 +79,34 @@ export default class Model extends BaseModel {
     _.remove(this._properties, function (prop) {
       return prop.id === property.id
     });
+  }
+
+  /**
+   * @param relations {Relations[]}
+   */
+  set relations(relations) {
+    this._relations = relations;
+  }
+
+  /**
+   * @returns {Relations[]}
+   */
+  get relations() {
+    return this._relations;
+  }
+
+  /**
+   * @param relation {Relation}
+   */
+  addRelation(relation) {
+    this._relations.push(relation);
+  }
+
+  /**
+   * @param relation {Relation}
+   */
+  removeRelation(relation) {
+    _.remove(this._relations, {id: relation.id});
   }
 
   get ports() {

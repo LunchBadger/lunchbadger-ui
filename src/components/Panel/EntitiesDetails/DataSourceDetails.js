@@ -19,7 +19,7 @@ class DataSourceDetails extends Component {
 
   render() {
     const {entity} = this.props;
-    
+
     return (
       <div className="details-panel__container details-panel__columns">
         <div className="details-panel__fieldset">
@@ -44,6 +44,7 @@ class DataSourceDetails extends Component {
           <span className="details-panel__label">Password</span>
           <Input className="details-panel__input"
                  value={entity.password}
+                 type="password"
                  name="password"/>
         </div>
       </div>

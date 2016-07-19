@@ -85,11 +85,12 @@ class DataSource extends Component {
               <div className="canvas-element__properties__property-title">Password</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
-                  {entity.password}
+                  {'*'.repeat(entity.password.length)}
                 </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={entity.password}
+                       type="password"
                        name="password"/>
               </div>
             </div>

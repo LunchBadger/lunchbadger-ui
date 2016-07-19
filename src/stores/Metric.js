@@ -26,6 +26,11 @@ class Metric extends BaseStore {
           }
 
           break;
+        case 'RemoveMetric':
+          _.remove(Metrics, {id: action.metric.id});
+
+          this.emitChange();
+          break;
       }
     });
   }

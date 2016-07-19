@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
+import MetricRemoveButton from './Subelements/MetricRemoveButton';
 import './Metric.scss';
 
 const boxSource = {
@@ -41,6 +42,7 @@ export default class Metric extends Component {
           <div className="metric__title__name">
             <span className="metric__entity-name">{entity.name}</span>
           </div>
+          <MetricRemoveButton metric={this.props.metric} />
         </div>)}
 
         <div className="metric__details">

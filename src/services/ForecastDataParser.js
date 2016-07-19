@@ -116,23 +116,23 @@ class ForecastDataParser {
 
       income.push({
         new: {
-          amount: sum * (subscribers.new + newUsers) / netSubscribers,
+          amount: sum * (subscribers.new + newUsers) / netSubscribers || 0,
           subscribers: subscribers.new + newUsers
         },
         upgrades: {
-          amount: sum * (subscribers.upgrades + upgrades) / netSubscribers,
+          amount: sum * (subscribers.upgrades + upgrades) / netSubscribers || 0,
           subscribers: subscribers.upgrades + upgrades
         },
         existing: {
-          amount: sum * (subscribers.existing + existingRaiseByDowngrades - existingFallByUpgrades) / netSubscribers,
+          amount: sum * (subscribers.existing + existingRaiseByDowngrades - existingFallByUpgrades) / netSubscribers || 0,
           subscribers: subscribers.existing + existingRaiseByDowngrades - existingFallByUpgrades
         },
         downgrades: {
-          amount: sum * (subscribers.downgrades + downgrades) / netSubscribers,
+          amount: sum * (subscribers.downgrades + downgrades) / netSubscribers || 0,
           subscribers: subscribers.downgrades + downgrades
         },
         churn: {
-          amount: sum * (subscribers.churn + churnUsers) / netSubscribers,
+          amount: sum * (subscribers.churn + churnUsers) / netSubscribers || 0,
           subscribers: subscribers.churn + churnUsers
         }
       });

@@ -1,0 +1,58 @@
+.metric-detail {
+  display: table-row;
+
+  &:hover {
+    background: #028ee2;
+    color: #fff;
+
+    .metric-detail__date-between {
+      color: #fff;
+    }
+  }
+}
+
+.metric-detail__cell {
+  display: table-cell;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  &:first-child {
+    padding-left: 25px;
+  }
+
+  &:last-child {
+    padding-right: 25px;
+  }
+}
+
+.metric-detail__title {
+  font-size: 17px;
+}
+
+.metric-detail__date {
+  font-size: 16px;
+}
+
+.metric-detail__date-between {
+  font-size: 14px;
+  margin: 0 5px;
+  color: #888;
+}
+
+.metric-detail__value {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.metric-detail__symbol {
+  font-weight: 400;
+  font-size: 18px;
+  position: relative;
+  top: -1px;
+}
+
+.metric-detail__symbol--avg {
+  top: -2px;
+}

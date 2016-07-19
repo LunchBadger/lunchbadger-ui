@@ -1,0 +1,46 @@
+.metric-details {
+
+}
+
+.metric-details__header {
+  display: table;
+  width: 100%;
+}
+
+.metric-details__header__title {
+  color: #29869C;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 16px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 25px;
+  width: 100%;
+}
+
+.metric-details__header__action {
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 25px;
+  padding-left: 10px;
+  text-align: center;
+  font-size: 16px;
+  width: 1px;
+  line-height: 0;
+}
+
+.metric-details__header__action__button {
+  cursor: pointer;
+  color: #8BD6EF;
+
+  &:hover {
+    color: #2E92A3;
+  }
+}
+
+.metric-details__list {
+  margin-top: 5px;
+  display: table;
+  width: 100%;
+}

@@ -80,8 +80,6 @@ class ForecastDataParser {
       // check churn...
       const churnUsers = plan.getPlanChurnUsers(dateKey, api);
 
-      debugger;
-
       let sum = 0;
       const {parameters, subscribers} = planDetails;
       const netSubscribers = subscribers.new + subscribers.upgrades + subscribers.existing + upgrades + existingRaiseByDowngrades + newUsers - churnUsers;

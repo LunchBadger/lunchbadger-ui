@@ -51,81 +51,59 @@ class ModelDetails extends Component {
     updateModel(this.props.entity.id, _.merge(model, data));
   }
 
-  onAddProperty() {
-    const {properties} = this.state;
+  onAddItem(collection, itemType, defaults={}) {
+    const items = this.state[collection];
 
-    properties.push(
-      ModelProperty.create({
-        propertyIsRequired: false,
-        propertyIsIndex: false
-      })
-    );
+    items.push(itemType.create(defaults));
 
     this.setState({
-      properties: properties
+      [collection]: items
     });
 
     this.setState({changed: true}, () => {
       this.props.parent.checkPristine();
+    });
+  }
+
+  onRemoveItem(collection, item) {
+    const items = this.state[collection];
+
+    _.remove(items, function (i) {
+      return i.id === item.id;
+    });
+
+    this.setState({
+      [collection]: items
+    });
+
+    if (!_.isEqual(items, this.props.entity[collection])) {
+      this.setState({changed: true});
+    } else {
+      this.setState({changed: false});
+    }
+
+    setTimeout(() => {
+      this.props.parent.checkPristine();
+    });
+  }
+
+  onAddProperty() {
+    this.onAddItem('properties', ModelProperty, {
+      propertyIsRequired: false,
+      propertyIsIndex: false
     });
   }
 
   onRemoveProperty(property) {
-    const {properties} = this.state;
-
-    _.remove(properties, function (prop) {
-      return prop.id === property.id;
-    });
-
-    this.setState({
-      properties: properties
-    });
-
-    if (!_.isEqual(properties, this.props.entity.properties)) {
-      this.setState({changed: true});
-    } else {
-      this.setState({changed: false});
-    }
-
-    setTimeout(() => {
-      this.props.parent.checkPristine();
-    });
+    this.onRemoveItem('properties', property);
   }
 
   onAddRelation() {
-    const {relations} = this.state;
-
-    relations.push(new ModelRelation());
-
-    this.setState({
-      relations: relations
-    });
-
-    this.setState({changed: true}, () => {
-      this.props.parent.checkPristine();
-    });
+    this.onAddItem('relations', ModelRelation);
   }
 
   onRemoveRelation(relation) {
-    const {relations} = this.state;
-
-    _.remove(relations, function (rel) {
-      return rel.id === relation.id;
-    });
-
-    this.setState({
-      relations: relations
-    });
-
-    if (!_.isEqual(relations, this.props.entity.relations)) {
-      this.setState({changed: true});
-    } else {
-      this.setState({changed: false});
-    }
-
-    setTimeout(() => {
-      this.props.parent.checkPristine();
-    });
+    this.onRemoveItem('relations', relation);
   }
 
   renderProperties() {

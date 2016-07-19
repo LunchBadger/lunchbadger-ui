@@ -28,11 +28,13 @@
   font-size: 16px;
   width: 1px;
   line-height: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .metric-details__header__action__button {
-  cursor: pointer;
   color: #8BD6EF;
+  cursor: pointer;
 
   &:hover {
     color: #2E92A3;
@@ -43,4 +45,40 @@
   margin-top: 5px;
   display: table;
   width: 100%;
+}
+
+.metric-details__tooltip {
+  position: absolute;
+  right: -30px;
+  top: 100%;
+  background: #fff;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  margin: 0;
+  width: 160px;
+  text-align: left;
+  padding: 15px 0;
+  display: none;
+  margin-top: 5px;
+  line-height: 1;
+}
+
+.metric-details__tooltip--visible {
+  display: block;
+}
+
+.metric-details__tooltip__option {
+  font-weight: 300;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  display: block;
+  padding: 5px 15px;
+  width: 100%;
+  color: #4b4b4b;
+  cursor: pointer;
+
+  &:hover {
+    background: #028ee2;
+    color: #fff;
+  }
 }

@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
-function getRandomInt(min, max) {
+export function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -27,14 +27,14 @@ export default class Metric extends BaseModel {
 
     const defaultDetails = [
       MetricDetails.create({
-        title: 'Total requests',
+        title: 'Total Requests',
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
         type: SUM,
         value: getRandomInt(1000, 200000)
       }),
       MetricDetails.create({
-        title: 'Total users',
+        title: 'Total Users',
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
         type: AVG,
@@ -71,5 +71,12 @@ export default class Metric extends BaseModel {
 
   set details(details) {
     this._details = details;
+  }
+
+	/**
+   * @param detail {MetricDetails}
+   */
+  addDetail(detail) {
+    this._details.push(detail);
   }
 }

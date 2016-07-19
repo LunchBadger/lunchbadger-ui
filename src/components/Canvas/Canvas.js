@@ -175,7 +175,11 @@ export default class Canvas extends Component {
   }
 
   render() {
-    const {canvasHeight} = this.state;
+    let {canvasHeight} = this.state;
+
+    if (!this.props.appState.getStateKey('currentlyOpenedPanel')) {
+      canvasHeight = null;
+    }
 
     return (
       <section className="canvas" onClick={() => this.props.appState.getStateKey('currentElement') && toggleHighlight(null)}>

@@ -1,12 +1,14 @@
 import React, {Component, PropTypes} from 'react';
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
+import ModelRelationDetails from './ModelRelationDetails';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
+const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class ModelDetails extends Component {
@@ -19,22 +21,31 @@ class ModelDetails extends Component {
 
     this.state = {
       properties: props.entity.properties.slice(),
+      relations: props.entity.relations.slice(),
       changed: false
     }
   }
 
   discardChanges() {
     // revert properties
-    this.setState({properties: this.props.entity.properties.slice()});
+    this.setState({
+      properties: this.props.entity.properties.slice(),
+      relations: this.props.entity.relations.slice()
+    });
   }
 
   update(model) {
     let data = {
-      properties: []
+      properties: [],
+      relations: []
     };
 
     model.properties && model.properties.forEach((property) => {
       data.properties.push(ModelProperty.create(property));
+    });
+
+    model.relations && model.relations.forEach((relation) => {
+      data.relations.push(ModelRelation.create(relation));
     });
 
     updateModel(this.props.entity.id, _.merge(model, data));
@@ -81,6 +92,42 @@ class ModelDetails extends Component {
     });
   }
 
+  onAddRelation() {
+    const {relations} = this.state;
+
+    relations.push(new ModelRelation());
+
+    this.setState({
+      relations: relations
+    });
+
+    this.setState({changed: true}, () => {
+      this.props.parent.checkPristine();
+    });
+  }
+
+  onRemoveRelation(relation) {
+    const {relations} = this.state;
+
+    _.remove(relations, function (rel) {
+      return rel.id === relation.id;
+    });
+
+    this.setState({
+      relations: relations
+    });
+
+    if (!_.isEqual(relations, this.props.entity.relations)) {
+      this.setState({changed: true});
+    } else {
+      this.setState({changed: false});
+    }
+
+    setTimeout(() => {
+      this.props.parent.checkPristine();
+    });
+  }
+
   renderProperties() {
     return this.state.properties.map((property, index) => {
       return (
@@ -88,6 +135,17 @@ class ModelDetails extends Component {
                               key={`property-${property.id}`}
                               onRemove={this.onRemoveProperty.bind(this)}
                               property={property}/>
+      );
+    });
+  }
+
+  renderRelations() {
+    return this.state.relations.map((relation, index) => {
+      return (
+        <ModelRelationDetails index={index}
+                              key={`relation-${relation.id}`}
+                              onRemove={this.onRemoveRelation.bind(this)}
+                              relation={relation}/>
       );
     });
   }
@@ -107,6 +165,27 @@ class ModelDetails extends Component {
             <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
             <CheckboxField label="Exposed as REST" propertyName="public" entity={entity}/>
           </div>
+        </CollapsableDetails>
+        <CollapsableDetails title="Relations">
+          <table className="details-panel__table">
+            <thead>
+              <tr>
+              <th>Model</th>
+              <th>Type</th>
+              <th>
+                Foreign Key
+                <a onClick={() => this.onAddRelation()} className="details-panel__add">
+                  <i className="fa fa-plus"/>
+                  Add relation
+                </a>
+              </th>
+              <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {this.renderRelations()}
+            </tbody>
+          </table>
         </CollapsableDetails>
         <CollapsableDetails title="Properties">
           <table className="details-panel__table">

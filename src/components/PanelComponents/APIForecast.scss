@@ -102,10 +102,10 @@
 
   li {
     float: right;
-    width: 35px;
+    width: 25px;
     margin-top: .2em;
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 2px;
+    padding-right: 2px;
     border-radius: 3px;
     &:hover {
       background-color: rgba(0, 0, 0, 0.06);
@@ -134,7 +134,7 @@
 
 .api-forecast__header__title {
   position: relative;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: normal;
   top: 0;
   display: inline;

@@ -119,6 +119,13 @@
   width: 100%;
   border-top: 1px solid #ccc;
   margin-top: 25px;
+
+  .upgrade-slider__slider .rc-slider-track {
+    height: 6px;
+    top: -4px;
+    background: #ccc;
+    box-shadow: inset 0 5px 1px -3px rgba(0, 0, 0, 0.55);
+  }
 }
 
 .forecast-plans__pool {

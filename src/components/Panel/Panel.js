@@ -60,6 +60,14 @@ export default (ComposedComponent) => {
         return;
       }
 
+      if (this.state.opened && !prevState.opened) {
+        setTimeout(() => {
+          this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
+        }, 1000);
+
+        return;
+      }
+
       if (this.state.opened) {
         this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
       } else {

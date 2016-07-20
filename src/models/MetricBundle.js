@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {APPS, USERS, REQUESTS, PORTALS} from './MetricDetail';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -11,10 +12,10 @@ export default class MetricBundle extends BaseModel {
    */
   _pairs = [];
 
-  constructor(id, metrics) {
+  constructor(id, pairs = []) {
     super(id);
 
-    this.metrics = metrics;
+    this.pairs = pairs;
   }
 
   toJSON() {
@@ -41,5 +42,24 @@ export default class MetricBundle extends BaseModel {
     if (!_.find(this.metrics, {id: pair.id})) {
       this._metrics.push(pair);
     }
+  }
+
+  getDetailsSummary() {
+    const summary = {
+      [APPS]: 0,
+      [USERS]: 0,
+      [REQUESTS]: 0,
+      [PORTALS]: 0
+    };
+
+    this.pairs.forEach((pair) => {
+      const pairSummary = pair.summarizePairDetails();
+
+      Object.keys(summary).forEach((key) => {
+        summary[key] += pairSummary[key];
+      });
+    });
+
+    return summary;
   }
 }

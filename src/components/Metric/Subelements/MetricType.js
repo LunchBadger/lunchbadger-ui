@@ -1,9 +1,11 @@
 import React, {Component, PropTypes} from 'react';
+import {AND, OR, NOT} from 'models/MetricPair';
+import classNames from 'classnames';
 import './MetricType.scss';
 
 export default class MetricType extends Component {
   static propTypes = {
-    metric: PropTypes.object.isRequired
+    pair: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -11,13 +13,21 @@ export default class MetricType extends Component {
   }
 
   render() {
+    const {pair} = this.props;
+    const typeClass = classNames({
+      'metric-type': true,
+      'metric-type--and': pair.type === AND,
+      'metric-type--not': pair.type === NOT,
+      'metric-type--or': pair.type === OR
+    });
+
     return (
-      <div className="metric-type metric-type--and">
+      <div className={typeClass}>
         <figure className="metric-type__circles">
-          <span className="metric-type__circle metric-type__circle--left" />
-          <span className="metric-type__circle metric-type__circle--right" />
+          <span className="metric-type__circle metric-type__circle--left"/>
+          <span className="metric-type__circle metric-type__circle--right"/>
         </figure>
-        <span className="metric-type__name">AND</span>
+        <span className="metric-type__name">{this.props.pair.type}</span>
       </div>
     );
   }

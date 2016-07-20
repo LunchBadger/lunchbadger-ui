@@ -3,22 +3,25 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 export const SUM = 'sum';
 export const AVG = 'avg';
 
+export const USERS = 'users';
+export const REQUESTS = 'requests';
+export const APPS = 'apps';
+export const PORTALS = 'portals';
+
 export default class MetricDetail extends BaseModel {
   static type = 'MetricDetail';
 
   _title = '';
   _dateFrom = null;
   _dateTo = null;
-  _type = null;
   _value = 0;
 
-  constructor(id, title, dateFrom, dateTo, type, value) {
+  constructor(id, title, dateFrom, dateTo, value) {
     super(id);
 
     this.title = title;
     this.dateFrom = dateFrom;
     this.dateTo = dateTo;
-    this.type = type;
     this.value = value;
   }
 
@@ -28,7 +31,6 @@ export default class MetricDetail extends BaseModel {
       title: this.title,
       dateFrom: this.dateFrom,
       dateTo: this.dateTo,
-      type: this.type,
       value: this.value
     }
   }
@@ -63,13 +65,5 @@ export default class MetricDetail extends BaseModel {
 
   get value() {
     return this._value;
-  }
-
-  set type(type) {
-    this._type = type;
-  }
-
-  get type() {
-    return this._type;
   }
 }

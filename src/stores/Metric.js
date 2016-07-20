@@ -31,12 +31,6 @@ class Metric extends BaseStore {
 
           this.emitChange();
           break;
-
-        case 'AddDetailToMetric':
-          action.metric.addDetail(action.detail);
-
-          this.emitChange();
-          break;
       }
     });
   }

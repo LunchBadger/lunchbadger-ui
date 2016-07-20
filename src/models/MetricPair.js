@@ -1,3 +1,5 @@
+import {APPS, USERS, REQUESTS, PORTALS} from './MetricDetail';
+
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export const AND = 'and';
@@ -49,5 +51,34 @@ export default class MetricPair extends BaseModel {
 
   set type(type) {
     this._type = type;
+  }
+
+  summarizePairDetails() {
+    const summary = {
+      [APPS]: 0,
+      [USERS]: 0,
+      [REQUESTS]: 0,
+      [PORTALS]: 0
+    };
+
+    Object.keys(summary).forEach((key) => {
+      if (this.metricOne) {
+        const metricDetails = this.metricOne.getDetail(key);
+
+        if (metricDetails) {
+          summary[key] += metricDetails.value;
+        }
+      }
+
+      if (this.metricTwo) {
+        const metricDetails = this.metricTwo.getDetail(key);
+
+        if (metricDetails) {
+          summary[key] += metricDetails.value;
+        }
+      }
+    });
+
+    return summary;
   }
 }

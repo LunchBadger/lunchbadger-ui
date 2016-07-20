@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import MetricDetail from './MetricDetail';
-import {SUM, AVG} from 'models/MetricDetail';
+import {USERS, REQUESTS, APPS, PORTALS} from 'models/MetricDetail';
 import classNames from 'classnames';
-import addDetailToMetric from 'actions/Metrics/addDetailToMetric';
 import './MetricDetails.scss';
 
 export default class MetricDetails extends Component {
@@ -14,19 +13,31 @@ export default class MetricDetails extends Component {
     super(props);
 
     this.state = {
-      showTooltip: false
+      showTooltip: false,
+      visibleDetails: [USERS, REQUESTS]
     };
   }
 
   renderDetails() {
-    return this.props.metric.details.map((detail) => {
-      return <MetricDetail detail={detail} key={detail.id}/>;
+    return this.state.visibleDetails.map((detail, index) => {
+      return <MetricDetail key={index} detail={detail} metric={this.props.metric}/>;
     });
   }
 
-  _handleNewDetail(title, type) {
-    addDetailToMetric(this.props.metric, title, type);
-    this.setState({showTooltip: false});
+  _toggleDetailVisibility(key) {
+    let visibleDetails = this.state.visibleDetails.slice();
+    const keyIndex = visibleDetails.findIndex(detail => detail === key);
+
+    if (keyIndex > -1) {
+      visibleDetails.splice(keyIndex, 1);
+    } else {
+      visibleDetails.push(key);
+    }
+
+    this.setState({
+      visibleDetails: visibleDetails,
+      showTooltip: false
+    });
   }
 
   render() {
@@ -46,19 +57,31 @@ export default class MetricDetails extends Component {
 
             <ul className={tooltipClass} onMouseLeave={() => this.setState({showTooltip: false})}>
               <li className="metric-details__tooltip__option"
-                  onClick={() => this._handleNewDetail('Total Apps', SUM)}>
+                  onClick={() => {
+                    this._toggleDetailVisibility(APPS);
+                  }}
+              >
                 Total Apps
               </li>
               <li className="metric-details__tooltip__option"
-                  onClick={() => this._handleNewDetail('Total Users', AVG)}>
+                  onClick={() => {
+                    this._toggleDetailVisibility(USERS);
+                  }}
+              >
                 Total Users
               </li>
               <li className="metric-details__tooltip__option"
-                  onClick={() => this._handleNewDetail('Total API Portals', SUM)}>
+                  onClick={() => {
+                    this._toggleDetailVisibility(PORTALS);
+                  }}
+              >
                 Total API Portals
               </li>
               <li className="metric-details__tooltip__option"
-                  onClick={() => this._handleNewDetail('Total Requests', AVG)}>
+                  onClick={() => {
+                    this._toggleDetailVisibility(REQUESTS);
+                  }}
+              >
                 Total Requests
               </li>
             </ul>

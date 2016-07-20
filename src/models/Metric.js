@@ -1,4 +1,4 @@
-import MetricDetail, {SUM, AVG} from './MetricDetail';
+import MetricDetail, {USERS, REQUESTS, APPS, PORTALS} from './MetricDetail';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -28,17 +28,27 @@ export default class Metric extends BaseModel {
 
     const defaultDetails = [
       MetricDetail.create({
-        title: 'Total Requests',
+        title: REQUESTS,
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
-        type: SUM,
         value: getRandomInt(1000, 200000)
       }),
       MetricDetail.create({
-        title: 'Total Users',
+        title: USERS,
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
-        type: AVG,
+        value: getRandomInt(1000, 200000)
+      }),
+      MetricDetail.create({
+        title: APPS,
+        dateFrom: moment(),
+        dateTo: moment().add(1, 'months'),
+        value: getRandomInt(1000, 200000)
+      }),
+      MetricDetail.create({
+        title: PORTALS,
+        dateFrom: moment(),
+        dateTo: moment().add(1, 'months'),
         value: getRandomInt(1000, 200000)
       })
     ];
@@ -78,5 +88,9 @@ export default class Metric extends BaseModel {
     if (!_.find(this.details, {title: detail.title})) {
       this._details.push(detail);
     }
+  }
+
+  getDetail(key) {
+    return _.find(this.details, {title: key});
   }
 }

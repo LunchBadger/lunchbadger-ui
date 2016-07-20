@@ -1,5 +1,6 @@
 import Gateway from 'models/Gateway';
 import Pipeline from 'models/Pipeline';
+import Policy from 'models/Policy';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
@@ -18,8 +19,14 @@ export default (data) => {
       ...gateway
     });
 
-    embeddedPipelines.forEach((pipeline) => {
-      gatewayEntity.addPipeline(Pipeline.create(pipeline));
+    gatewayEntity.pipelines = embeddedPipelines.map(pipeline => {
+      let policies = pipeline.policies || [];
+      delete pipeline.policies;
+
+      return Pipeline.create({
+        ...pipeline,
+        policies: policies.map(policy => Policy.create(policy))
+      });
     });
 
     return gatewayEntity;

@@ -31,6 +31,19 @@ class Metric extends BaseStore {
 
           this.emitChange();
           break;
+        case 'Aggregate':
+          const {bundleOne, bundleTwo} = action;
+
+          if (!bundleTwo.pairs[0].metricTwo) {
+            bundleOne.pairs[0].metricTwo = bundleTwo.pairs[0].metricOne;
+            _.remove(Metrics, {id: bundleTwo.id});
+          } else if (bundleTwo.pairs[0].metricTwo) {
+            bundleOne.addMetricPair(bundleTwo.pairs[0]);
+            _.remove(Metrics, {id: bundleTwo.id});
+          }
+
+          this.emitChange();
+          break;
       }
     });
   }

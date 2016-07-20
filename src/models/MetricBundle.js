@@ -40,7 +40,7 @@ export default class MetricBundle extends BaseModel {
    */
   addMetricPair(pair) {
     if (!_.find(this.metrics, {id: pair.id})) {
-      this._metrics.push(pair);
+      this._pairs.push(pair);
     }
   }
 

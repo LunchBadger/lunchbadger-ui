@@ -1,6 +1,6 @@
 import Metric from 'models/Metric';
 import MetricBundle from 'models/MetricBundle';
-import MetricPair, {AND} from 'models/MetricPair';
+import MetricPair, {OR} from 'models/MetricPair';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
@@ -10,7 +10,7 @@ export default (entity, left, top) => {
       pairs: [
         MetricPair.create({
           metricOne: Metric.create({entity}),
-          type: AND
+          type: OR
         })
       ],
       left: left || 0,

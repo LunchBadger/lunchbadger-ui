@@ -14,6 +14,10 @@ const boxTarget = {
     const item = monitor.getItem();
     const delta = monitor.getSourceClientOffset();
 
+    if (!delta) {
+      return;
+    }
+
     if (item.metric && Metric.findEntity(item.metric.id)) {
       update(item.metric, delta.x - 60, delta.y - 60);
     } else if (item.entity && !Metric.findByEntityId(item.entity.id)) {
@@ -33,7 +37,7 @@ class MetricsPanel extends Component {
     };
 
     this.onStoreUpdate = () => {
-      this.setState({entities: Metric.getData()});
+      setTimeout(() => this.setState({entities: Metric.getData()}));
     }
   }
 

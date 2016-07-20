@@ -3,6 +3,7 @@ import {DragSource, DropTarget} from 'react-dnd';
 import MetricHeader from './Subelements/MetricHeader';
 import MetricRemoveButton from './Subelements/MetricRemoveButton';
 import MetricDetails from './Subelements/MetricDetails';
+import MetricTypeTooltip from './Subelements/MetricTypeTooltip';
 import classNames from 'classnames';
 import aggregate from 'actions/Metrics/aggregate';
 import './Metric.scss';
@@ -71,6 +72,18 @@ export default class Metric extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      currentPairId: null
+    };
+  }
+
+  _handleMetricSelection(pair) {
+    this.setState({currentPairId: pair ? pair.id : null});
+  }
+
+  _handleMetricTypeChange() {
+    this.setState({currentPairId: null});
   }
 
   renderHeader() {
@@ -81,7 +94,9 @@ export default class Metric extends Component {
             return (
               <div key={pair.id}>
                 {index > 0 && <div className="metric__title__details__split">AND</div>}
-                <MetricHeader pair={pair}/>
+                <MetricHeader selectedPair={this.state.currentPairId}
+                              pair={pair}
+                              metricSelection={this._handleMetricSelection.bind(this)}/>
               </div>
             );
           })
@@ -103,6 +118,11 @@ export default class Metric extends Component {
       'metric--is-over': this.props.isOver && this.props.canDrop
     });
 
+    const tooltipClass = classNames({
+      metric__details__tooltip: true,
+      'metric__details__tooltip--visible': this.state.currentPairId
+    });
+
     return connectDropTarget(connectDragPreview(
       <div className={metricClass} style={metricStyle}>
         {
@@ -120,6 +140,11 @@ export default class Metric extends Component {
         }
 
         <div className="metric__details">
+          <div className={tooltipClass} onMouseLeave={() => this.setState({currentPairId: null})}>
+            <MetricTypeTooltip pairId={this.state.currentPairId}
+                               metric={metric}
+                               onChange={this._handleMetricTypeChange.bind(this)}/>
+          </div>
           <MetricDetails metric={metric}/>
         </div>
       </div>

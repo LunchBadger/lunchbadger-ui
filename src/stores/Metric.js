@@ -44,6 +44,16 @@ class Metric extends BaseStore {
 
           this.emitChange();
           break;
+        case 'ChangePairType':
+          const pair = action.metric.findPair(action.pairId);
+
+          if (pair) {
+            pair.type = action.pairType;
+
+            this.emitChange();
+          }
+
+          break;
       }
     });
   }

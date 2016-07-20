@@ -71,5 +71,22 @@
 
 .metric__details {
   background: #fff;
+  position: relative;
   padding: 15px 0;
+}
+
+.metric__details__tooltip {
+  position: absolute;
+  background: #fff;
+  top: 0;
+  left: 50%;
+  width: 140px;
+  margin-left: -70px;
+  z-index: 1;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.metric__details__tooltip--visible {
+  display: block;
 }

@@ -62,4 +62,8 @@ export default class MetricBundle extends BaseModel {
 
     return summary;
   }
+
+  findPair(id) {
+    return _.find(this.pairs, {id: id});
+  }
 }

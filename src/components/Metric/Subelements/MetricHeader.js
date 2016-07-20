@@ -4,11 +4,19 @@ import './MetricHeader.scss';
 
 export default class MetricHeader extends Component {
   static propTypes = {
-    pair: PropTypes.object.isRequired
+    pair: PropTypes.object.isRequired,
+    metricSelection: PropTypes.func,
+    selectedPair: PropTypes.string
   };
 
   constructor(props) {
     super(props);
+  }
+
+  _handleMetricSelection(pair) {
+    if (typeof this.props.metricSelection === 'function') {
+      this.props.metricSelection(pair);
+    }
   }
 
   render() {
@@ -21,7 +29,9 @@ export default class MetricHeader extends Component {
           <span className="metric-header__entity-name">{metricOne.entity.name}</span>
         </div>
         <div className="metric-header__title__type">
-          {!!metricTwo && <MetricType pair={pair}/>}
+          {!!metricTwo && <MetricType isCurrentPair={this.props.selectedPair === this.props.pair.id}
+                                      pair={pair}
+                                      circlesClick={this._handleMetricSelection.bind(this)}/>}
         </div>
         <div className="metric-header__title__name">
           {!!metricTwo && <span className="metric-header__entity-name">{metricTwo.entity.name}</span>}

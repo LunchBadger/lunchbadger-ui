@@ -3,8 +3,8 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 export const SUM = 'sum';
 export const AVG = 'avg';
 
-export default class MetricDetails extends BaseModel {
-  static type = 'MetricDetails';
+export default class MetricDetail extends BaseModel {
+  static type = 'MetricDetail';
 
   _title = '';
   _dateFrom = null;

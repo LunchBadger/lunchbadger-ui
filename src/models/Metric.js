@@ -1,5 +1,6 @@
-import MetricDetails, {SUM, AVG} from './MetricDetails';
+import MetricDetail, {SUM, AVG} from './MetricDetail';
 import moment from 'moment';
+import _ from 'lodash';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -17,7 +18,7 @@ export default class Metric extends BaseModel {
   _entity = null;
 
 	/**
-   * @type {MetricDetails[]}
+   * @type {MetricDetail[]}
    * @private
    */
   _details = [];
@@ -26,14 +27,14 @@ export default class Metric extends BaseModel {
     super(id);
 
     const defaultDetails = [
-      MetricDetails.create({
+      MetricDetail.create({
         title: 'Total Requests',
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
         type: SUM,
         value: getRandomInt(1000, 200000)
       }),
-      MetricDetails.create({
+      MetricDetail.create({
         title: 'Total Users',
         dateFrom: moment(),
         dateTo: moment().add(1, 'months'),
@@ -74,9 +75,11 @@ export default class Metric extends BaseModel {
   }
 
 	/**
-   * @param detail {MetricDetails}
+   * @param detail {MetricDetail}
    */
   addDetail(detail) {
-    this._details.push(detail);
+    if (!_.find(this.details, {title: detail.title})) {
+      this._details.push(detail);
+    }
   }
 }

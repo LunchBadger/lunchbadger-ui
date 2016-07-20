@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import MetricDetail from './MetricDetail';
-import {SUM, AVG} from 'models/MetricDetails';
+import {SUM, AVG} from 'models/MetricDetail';
 import classNames from 'classnames';
 import addDetailToMetric from 'actions/Metrics/addDetailToMetric';
 import './MetricDetails.scss';

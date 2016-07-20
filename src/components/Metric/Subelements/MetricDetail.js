@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './MetricDetail.scss';
-import {SUM, AVG} from 'models/MetricDetails';
+import {SUM, AVG} from 'models/MetricDetail';
 import numeral from 'numeral';
 
 export default class MetricDetail extends Component {

@@ -58,8 +58,10 @@ class Metric extends BaseStore {
   findByEntityId(id) {
     id = this.formatId(id);
 
-    return _.find(Metrics, (metric) => {
-      return metric.entity.id === id;
+    return _.find(Metrics, (bundle) => {
+      return _.find(bundle.pairs, (pair) => {
+        return (pair.metricOne && pair.metricOne.entity.id === id) || (pair.metricTwo && pair.metricTwo.entity.id === id);
+      });
     });
   }
 }

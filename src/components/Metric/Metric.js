@@ -1,14 +1,15 @@
 import React, {Component, PropTypes} from 'react';
 import {DragSource} from 'react-dnd';
 import MetricRemoveButton from './Subelements/MetricRemoveButton';
-import MetricDetails from './Subelements/MetricDetails';
+// import MetricDetails from './Subelements/MetricDetails';
+import MetricType from './Subelements/MetricType';
 import './Metric.scss';
 
 const boxSource = {
   beginDrag(props) {
     const {metric} = props;
 
-    return {metric, entity: metric.entity, left: metric.left, top: metric.top};
+    return {metric, left: metric.left, top: metric.top};
   }
 };
 
@@ -28,7 +29,7 @@ export default class Metric extends Component {
 
   render() {
     const {metric, connectDragSource, connectDragPreview} = this.props;
-    const {left, top, entity} = metric;
+    const {left, top} = metric;
     const metricStyle = {
       left,
       top
@@ -41,13 +42,19 @@ export default class Metric extends Component {
             <i className="icon-icon-metrics"/>
           </div>
           <div className="metric__title__name">
-            <span className="metric__entity-name">{entity.name}</span>
+            <span className="metric__entity-name">Private Endpoint 1</span>
+          </div>
+          <div className="metric__title__type">
+            <MetricType metric={metric}/>
+          </div>
+          <div className="metric__title__name">
+            <span className="metric__entity-name">Gateway 1</span>
           </div>
           <MetricRemoveButton metric={metric}/>
         </div>)}
 
         <div className="metric__details">
-          <MetricDetails metric={metric}/>
+          {/*<MetricDetails metric={metric}/>*/}
         </div>
       </div>
     );

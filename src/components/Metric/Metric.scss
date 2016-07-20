@@ -37,16 +37,23 @@
 .metric__title__name {
   display: table-cell;
   vertical-align: middle;
-  font-size: 20px;
+  font-size: 18px;
   text-align: left;
   padding-left: 15px;
-  width: 100%;
+  width: 187px;
+}
+
+.metric__title__type {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 45px;
 }
 
 .metric__entity-name {
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 80%;
+  max-width: 95%;
   display: block;
   white-space: nowrap;
 }

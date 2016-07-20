@@ -22,6 +22,17 @@ export default class MetricDetail extends BaseModel {
     this.value = value;
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      title: this.title,
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
+      type: this.type,
+      value: this.value
+    }
+  }
+
   set title(title) {
     this._title = title;
   }

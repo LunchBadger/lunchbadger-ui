@@ -14,10 +14,10 @@ const boxTarget = {
     const item = monitor.getItem();
     const delta = monitor.getSourceClientOffset();
 
-    if (!Metric.findByEntityId(item.entity.id)) {
-      create(item.entity, delta.x - 60, delta.y - 60);
-    } else {
+    if (item.metric && Metric.findEntity(item.metric.id)) {
       update(item.metric, delta.x - 60, delta.y - 60);
+    } else if (item.entity && !Metric.findByEntityId(item.entity.id)) {
+      create(item.entity, delta.x - 60, delta.y - 60);
     }
   }
 };

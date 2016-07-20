@@ -23,7 +23,7 @@ export default class Metric extends BaseModel {
    */
   _details = [];
 
-  constructor(id, entity, left, top) {
+  constructor(id, entity) {
     super(id);
 
     const defaultDetails = [
@@ -44,8 +44,6 @@ export default class Metric extends BaseModel {
     ];
 
     this.entity = entity;
-    this.left = left;
-    this.top = top;
     this.details = defaultDetails;
   }
 
@@ -53,8 +51,7 @@ export default class Metric extends BaseModel {
     return {
       id: this.id,
       entity: this.entity.toJSON(),
-      left: this.left,
-      top: this.top
+      details: this.details.map(detail => detail.toJSON())
     }
   }
 

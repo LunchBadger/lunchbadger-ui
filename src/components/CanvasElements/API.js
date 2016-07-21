@@ -10,6 +10,7 @@ import './API.scss';
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
 class API extends Component {
   static propTypes = {
@@ -125,9 +126,13 @@ class API extends Component {
           <div className="canvas-element__sub-elements__title">
             Endpoints
           </div>
-          <div className="canvas-element__endpoints" ref="endpoints">{this.renderEndpoints()}</div>
+          <div className="canvas-element__endpoints" ref="endpoints">
+            <DraggableGroup iconClass="icon-icon-product" entity={this.props.entity} appState={this.props.appState}>
+              {this.renderEndpoints()}
+            </DraggableGroup>
+          </div>
           <div className="canvas-element__drop">
-            <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity} />
+            <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity}/>
           </div>
         </div>
 

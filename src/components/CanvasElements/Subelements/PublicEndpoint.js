@@ -17,6 +17,12 @@ const boxSource = {
     return {entity, left, top, parent, handleEndDrag, subelement: true};
   },
   canDrag(props) {
+    const selectedParent = props.appState.getStateKey('currentlySelectedParent');
+
+    if (selectedParent && selectedParent.id === props.parent.id) {
+      return false;
+    }
+
     return !props.appState.getStateKey('currentEditElement');
   }
 };

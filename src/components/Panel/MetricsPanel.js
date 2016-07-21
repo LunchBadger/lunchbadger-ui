@@ -3,6 +3,7 @@ import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import Metric from 'stores/Metric';
 import create from 'actions/Metrics/create';
+import createBundle from 'actions/Metrics/createBundle';
 import update from 'actions/Metrics/update';
 import MetricComponent from 'components/Metric/Metric';
 import './MetricsPanel.scss';
@@ -12,10 +13,15 @@ export const METRICS_PANEL = 'METRICS_PANEL';
 const boxTarget = {
   drop(props, monitor) {
     const item = monitor.getItem();
+    const itemType = monitor.getItemType();
     const delta = monitor.getSourceClientOffset();
 
     if (!delta) {
       return;
+    }
+
+    if (itemType === 'elementsGroup') {
+      return createBundle(item.appState.getStateKey('currentlySelectedSubelements'), delta.x - 60, delta.y - 60);
     }
 
     if (item.metric && Metric.findEntity(item.metric.id)) {
@@ -23,6 +29,21 @@ const boxTarget = {
     } else if (item.entity && !Metric.findByEntityId(item.entity.id)) {
       create(item.entity, delta.x - 60, delta.y - 60);
     }
+  },
+
+  canDrop(props, monitor) {
+    const item = monitor.getItem();
+    const itemType = monitor.getItemType();
+
+    if (itemType === 'elementsGroup') {
+      const items = item.appState.getStateKey('currentlySelectedSubelements');
+
+      if (items.length === 3 || items.length > 4) {
+        return false;
+      }
+    }
+
+    return true;
   }
 };
 
@@ -56,10 +77,10 @@ class MetricsPanel extends Component {
   }
 
   render() {
-    const {connectDropTarget, isOver} = this.props;
+    const {connectDropTarget, isOver, canDrop} = this.props;
     const panelClass = classNames({
       'panel__metrics-drop': true,
-      'panel__metrics-drop--over': isOver
+      'panel__metrics-drop--over': isOver && canDrop
     });
 
     return connectDropTarget(
@@ -80,8 +101,9 @@ class MetricsPanel extends Component {
   }
 }
 
-export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'metric'], boxTarget, (connect, monitor) => ({
+export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'metric', 'elementsGroup'], boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
   isOverCurrent: monitor.isOver({shallow: true})
 }))(MetricsPanel));

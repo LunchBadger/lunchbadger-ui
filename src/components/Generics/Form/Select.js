@@ -7,6 +7,7 @@ class Select extends Component {
     setValue: PropTypes.func,
     handleBlur: PropTypes.func,
     handleChange: PropTypes.func,
+    handleKeyDown: PropTypes.func,
     className: PropTypes.string,
     type: PropTypes.string,
     multiple: PropTypes.bool,
@@ -16,6 +17,12 @@ class Select extends Component {
   _handleBlur(event) {
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
+    }
+  }
+
+  _handleKeyDown(event) {
+    if (typeof this.props.handleKeyDown === 'function') {
+      this.props.handleKeyDown(event);
     }
   }
 
@@ -32,6 +39,7 @@ class Select extends Component {
       <select className={this.props.className || ''}
               value={this.props.getValue()}
               multiple={this.props.multiple}
+              onKeyDown={this._handleKeyDown.bind(this)}
               onBlur={this._handleBlur.bind(this)}
               onChange={this._handleChange.bind(this)}>
         {this.props.children}

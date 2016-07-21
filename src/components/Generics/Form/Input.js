@@ -7,6 +7,8 @@ class Input extends Component {
     setValue: PropTypes.func,
     handleBlur: PropTypes.func,
     handleKeyPress: PropTypes.func,
+    handleKeyUp: PropTypes.func,
+    handleKeyDown: PropTypes.func,
     handleChange: PropTypes.func,
     className: PropTypes.string,
     type: PropTypes.string
@@ -15,6 +17,18 @@ class Input extends Component {
   _handleKeyPress(event) {
     if (typeof this.props.handleKeyPress === 'function') {
       this.props.handleKeyPress(event);
+    }
+  }
+
+  _handleKeyDown(event) {
+    if (typeof this.props.handleKeyDown === 'function') {
+      this.props.handleKeyDown(event);
+    }
+  }
+
+  _handleKeyUp(event) {
+    if (typeof this.props.handleKeyUp === 'function') {
+      this.props.handleKeyUp(event);
     }
   }
 
@@ -39,6 +53,8 @@ class Input extends Component {
              type={this.props.type || 'text'}
              onBlur={this._handleBlur.bind(this)}
              onKeyPress={this._handleKeyPress.bind(this)}
+             onKeyUp={this._handleKeyUp.bind(this)}
+             onKeyDown={this._handleKeyDown.bind(this)}
              onChange={this._handleChange.bind(this)}/>
     );
   }

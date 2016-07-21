@@ -29,6 +29,15 @@ export default class MetricPair extends BaseModel {
     }
   }
 
+  get metrics() {
+    const metrics = [];
+
+    this.metricOne && metrics.push(this.metricOne);
+    this.metricTwo && metrics.push(this.metricTwo);
+
+    return metrics;
+  }
+
   get metricOne() {
     return this._metricOne;
   }

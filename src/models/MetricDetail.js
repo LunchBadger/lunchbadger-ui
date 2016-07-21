@@ -1,3 +1,5 @@
+import {getRandomInt} from './Metric';
+
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export const SUM = 'sum';
@@ -16,6 +18,8 @@ export default class MetricDetail extends BaseModel {
   _dateTo = null;
   _value = 0;
 
+  simulationInterval = null;
+
   constructor(id, title, dateFrom, dateTo, value) {
     super(id);
 
@@ -23,6 +27,21 @@ export default class MetricDetail extends BaseModel {
     this.dateFrom = dateFrom;
     this.dateTo = dateTo;
     this.value = value;
+
+    this.simulateWebTraffic();
+  }
+
+  simulateWebTraffic() {
+    const timeout = getRandomInt(5, 10);
+
+    this.stopSimulation();
+    this.simulationInterval = setInterval(() => {
+      this.value += getRandomInt(0, 20);
+    }, timeout * 1000);
+  }
+
+  stopSimulation() {
+    clearInterval(this.simulationInterval);
   }
 
   toJSON() {

@@ -5,8 +5,14 @@ const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 let Metrics = [];
 
 class Metric extends BaseStore {
+  simulationInterval = null;
+
   constructor() {
     super();
+
+    this.stopSimulation();
+    this.simulationInterval = setInterval(this.simulateTraffic.bind(this), 2000);
+
     register((action) => {
       switch (action.type) {
         case 'CreateMetric':
@@ -56,6 +62,14 @@ class Metric extends BaseStore {
           break;
       }
     });
+  }
+
+  simulateTraffic() {
+    this.emitChange();
+  }
+
+  stopSimulation() {
+    clearInterval(this.simulationInterval);
   }
 
   empty() {

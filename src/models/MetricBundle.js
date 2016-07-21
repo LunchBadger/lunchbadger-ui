@@ -35,6 +35,16 @@ export default class MetricBundle extends BaseModel {
     this._pairs = pairs;
   }
 
+  get metrics() {
+    return this._pairs.reduce((metrics, pair) => {
+      if (pair.metrics.length > 0) {
+        return metrics.concat(pair.metrics);
+      }
+
+      return metrics;
+    }, []);
+  }
+
   /**
    * @param pair {MetricPair}
    */

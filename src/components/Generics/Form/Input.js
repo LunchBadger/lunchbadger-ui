@@ -55,7 +55,8 @@ class Input extends Component {
              onKeyPress={this._handleKeyPress.bind(this)}
              onKeyUp={this._handleKeyUp.bind(this)}
              onKeyDown={this._handleKeyDown.bind(this)}
-             onChange={this._handleChange.bind(this)}/>
+             onChange={this._handleChange.bind(this)}
+             id={this.props.name}/>
     );
   }
 }

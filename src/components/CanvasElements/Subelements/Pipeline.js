@@ -7,13 +7,16 @@ import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/a
 import PrivateEndpoint from 'models/PrivateEndpoint';
 import Model from 'models/Model';
 import Private from 'stores/Private';
+import _ from 'lodash';
 
+const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 const Connection = LunchBadgerCore.stores.Connection;
 const Port = LunchBadgerCore.components.Port;
 const AppState = LunchBadgerCore.stores.AppState;
 
 export default class Pipeline extends Component {
   static propTypes = {
+    parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
     rootPath: PropTypes.string.isRequired
@@ -86,12 +89,12 @@ export default class Pipeline extends Component {
    * @private
    */
   _handleElementCreation(connectionEntity, name) {
-      addPublicEndpointAndConnect(
-        name,
-        `${this.props.rootPath}/${connectionEntity.contextPath}`,
-        this.props.entity.id,
-        findDOMNode(this.refs['port-out'])
-      );
+    addPublicEndpointAndConnect(
+      name,
+      `${this.props.rootPath}/${connectionEntity.contextPath}`,
+      this.props.entity.id,
+      findDOMNode(this.refs['port-out'])
+    );
   }
 
   renderPolicies() {
@@ -119,22 +122,29 @@ export default class Pipeline extends Component {
   }
 
   render() {
+    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
+
     const pipelineClass = classNames({
       pipeline: true,
       'pipeline--opened': this.state.opened
     });
+    const pipelineInfoClass = classNames({
+      pipeline__info: true,
+      'pipeline__info--selected': _.find(selectedElements, {id: this.props.entity.id})
+    });
 
     return (
       <div className={pipelineClass}>
-        <div className="pipeline__info">
-          <div onClick={this.toggleOpenState.bind(this)}>
-            <div className="pipeline__toggle"></div>
-            <div className="pipeline__icon">
+        <div className={pipelineInfoClass}>
+          <span className="pipeline__action" onClick={this.toggleOpenState.bind(this)}>
+            <span className="pipeline__toggle"/>
+            <span className="pipeline__icon">
               <i className="fa fa-inbox"/>
-            </div>
-            <div className="pipeline__name">
-              {this.props.entity.name}
-            </div>
+            </span>
+          </span>
+
+          <div className="pipeline__name" onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
+            {this.props.entity.name}
           </div>
 
           {this.renderPorts()}

@@ -19,15 +19,39 @@
   }
 }
 
+.pipeline__action {
+}
+
 .pipeline__info {
   cursor: pointer;
+
   &:hover {
     color: #00ABFF;
   }
 }
 
+.pipeline__info--selected {
+  background: #00abff;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+
+  .pipeline__toggle {
+    border-color: transparent transparent transparent #fff;
+
+    &:hover {
+      border-color: transparent transparent transparent #fff;
+    }
+  }
+}
+
 .pipeline__name {
   display: inline-block;
+  width: 100%;
+  padding-left: 35px;
+  margin-left: -35px;
 }
 
 .pipeline__toggle {
@@ -40,9 +64,13 @@
   margin-right: 7px;
   margin-left: 18px;
   transition: all .5s ease;
+  top: -1px;
+  position: relative;
+
   &:hover {
     border-color: transparent transparent transparent #00ABFF;
   }
+
   .pipeline--opened & {
     transform: rotate(90deg);
   }

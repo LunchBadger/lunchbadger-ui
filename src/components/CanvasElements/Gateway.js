@@ -49,7 +49,11 @@ class Gateway extends Component {
     return this.props.entity.pipelines.map((pipeline) => {
       return (
         <div key={pipeline.id} className="canvas-element__sub-element">
-          <Pipeline paper={this.props.paper} rootPath={this.props.entity.rootPath} entity={pipeline}/>
+          <Pipeline {...this.props}
+                    parent={this.props.entity}
+                    paper={this.props.paper}
+                    rootPath={this.props.entity.rootPath}
+                    entity={pipeline}/>
         </div>
       );
     });

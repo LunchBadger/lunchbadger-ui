@@ -10,6 +10,7 @@ const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
+const PrivateStore = LunchBadgerManage.stores.Private;
 
 class ModelDetails extends Component {
   static propTypes = {
@@ -24,6 +25,22 @@ class ModelDetails extends Component {
       relations: props.entity.relations.slice(),
       changed: false
     }
+
+    this.onStoreUpdate = () => {
+      this.setState({
+        properties: this.props.entity.properties.slice(),
+        relations: this.props.entity.relations.slice(),
+        changed: false
+      });
+    };
+  }
+
+  componentDidMount() {
+    PrivateStore.addChangeListener(this.onStoreUpdate);
+  }
+
+  componentWillUnmount() {
+    PrivateStore.removeChangeListener(this.onStoreUpdate);
   }
 
   discardChanges() {

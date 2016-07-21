@@ -1,4 +1,5 @@
 import BaseStore from './BaseStore';
+import _ from 'lodash';
 
 const state = {};
 
@@ -49,6 +50,29 @@ class AppState extends BaseStore {
 
       case 'ToggleEdit':
         this.setStateKey('currentEditElement', action.element);
+        this.emitChange();
+        break;
+
+      case 'ToggleSubelement':
+        const {parent, subelement} = action;
+
+        const currentParent = this.getStateKey('currentlySelectedParent');
+        const currentSubelements = this.getStateKey('currentlySelectedSubelements') || [];
+
+        if (currentParent && parent.id === currentParent.id) {
+          if (_.find(currentSubelements, {id: subelement.id})) {
+            _.remove(currentSubelements, {id: subelement.id});
+          } else {
+            currentSubelements.push(subelement);
+          }
+        } else {
+          _.remove(currentSubelements, () => true);
+          this.setStateKey('currentlySelectedParent', parent);
+          currentSubelements.push(subelement);
+        }
+
+        this.setStateKey('currentlySelectedSubelements', currentSubelements);
+
         this.emitChange();
         break;
 

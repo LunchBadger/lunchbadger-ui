@@ -38,13 +38,18 @@ export default class ForecastPlanInput extends Component {
 
   _handleKeyPress(event) {
     if ((event.keyCode === 13 || event.which === 13) && event.target.value.trim().length > 0) {
-      updatePlan(this.props.forecast, this.props.plan, this.state.value);
+      this._update();
     }
+  }
+
+  _update() {
+    updatePlan(this.props.forecast, this.props.plan, this.state.value);
   }
 
   render() {
     return (
       <input value={this.state.value}
+             onBlur={this._update.bind(this)}
              ref="input"
              className={this.props.className || ''}
              onKeyDown={this._handleKeyPress.bind(this)}

@@ -40,9 +40,13 @@
   margin-right: 7px;
   margin-left: 18px;
   transition: all .5s ease;
+  top: -1px;
+  position: relative;
+
   &:hover {
     border-color: transparent transparent transparent #00ABFF;
   }
+  
   .pipeline--opened & {
     transform: rotate(90deg);
   }

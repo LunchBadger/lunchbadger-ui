@@ -86,12 +86,12 @@ export default class Pipeline extends Component {
    * @private
    */
   _handleElementCreation(connectionEntity, name) {
-      addPublicEndpointAndConnect(
-        name,
-        `${this.props.rootPath}/${connectionEntity.contextPath}`,
-        this.props.entity.id,
-        findDOMNode(this.refs['port-out'])
-      );
+    addPublicEndpointAndConnect(
+      name,
+      `${this.props.rootPath}/${connectionEntity.contextPath}`,
+      this.props.entity.id,
+      findDOMNode(this.refs['port-out'])
+    );
   }
 
   renderPolicies() {
@@ -127,14 +127,15 @@ export default class Pipeline extends Component {
     return (
       <div className={pipelineClass}>
         <div className="pipeline__info">
-          <div onClick={this.toggleOpenState.bind(this)}>
-            <div className="pipeline__toggle"></div>
-            <div className="pipeline__icon">
+          <span onClick={this.toggleOpenState.bind(this)}>
+            <span className="pipeline__toggle"/>
+            <span className="pipeline__icon">
               <i className="fa fa-inbox"/>
-            </div>
-            <div className="pipeline__name">
-              {this.props.entity.name}
-            </div>
+            </span>
+          </span>
+
+          <div className="pipeline__name">
+            {this.props.entity.name}
           </div>
 
           {this.renderPorts()}

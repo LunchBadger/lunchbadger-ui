@@ -29,6 +29,7 @@ import Quadrant from './components/Quadrant/Quadrant';
 import ToolGroup from './components/Tools/ToolGroup';
 import Tool from './components/Tools/Tool';
 import PortComponent from './components/CanvasElements/Port';
+import DraggableGroup from './components/Draggable/DraggableGroup';
 
 // models
 import BaseModel from './models/BaseModel';
@@ -98,6 +99,7 @@ let LunchBadgerCore = {
     CloseButton: CloseButton,
     SaveButton: SaveButton,
     Draggable: Draggable,
+    DraggableGroup: DraggableGroup,
     Modal: Modal,
     TwoOptionModal: TwoOptionModal,
     Quadrant: Quadrant,

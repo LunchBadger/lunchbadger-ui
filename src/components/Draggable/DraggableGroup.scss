@@ -1,0 +1,41 @@
+.draggable-group {
+
+}
+
+.draggable-group__preview {
+  position: absolute;
+  z-index: -1;
+  border-radius: 6px;
+  padding: 10px 15px;
+  bottom: 15%;
+  left: 0;
+  background: #01667D;
+  min-width: 300px;
+  display: table;
+  line-height: 1.65;
+}
+
+.draggable-group__preview__title {
+  font-size: 20px;
+  color: #fff;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.draggable-group__preview__icon {
+  display: table-cell;
+  vertical-align: top;
+  padding-right: 18px;
+  width: 40px;
+  font-size: 22px;
+  color: #fff;
+  text-align: center;
+  height: 0;
+}
+
+.draggable-group__preview__items {
+  display: table-cell;
+  vertical-align: top;
+}

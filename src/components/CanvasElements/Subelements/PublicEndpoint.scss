@@ -3,6 +3,7 @@
 .public-endpoint {
   position: relative;
   font-size: 16px;
+  padding: 4px 0;
 
   .collapsed & {
     position: static;
@@ -13,6 +14,17 @@
       top: auto;
     }
   }
+
+  .expanded & {
+    .port {
+      top: 4px;
+    }
+  }
+}
+
+.public-endpoint--selected {
+  background: #00abff;
+  color: #fff;
 }
 
 .public-endpoint__info {

@@ -67,7 +67,7 @@ class API extends Component {
   renderEndpoints() {
     return this.props.entity.publicEndpoints.map((endpoint) => {
       return (
-        <div key={endpoint.id} className="canvas-element__sub-element">
+        <div key={endpoint.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <PublicEndpoint
             {...this.props}
             parent={this.props.entity}
@@ -125,7 +125,7 @@ class API extends Component {
           <div className="canvas-element__sub-elements__title">
             Endpoints
           </div>
-          <div ref="endpoints">{this.renderEndpoints()}</div>
+          <div className="canvas-element__endpoints" ref="endpoints">{this.renderEndpoints()}</div>
           <div className="canvas-element__drop">
             <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity} />
           </div>

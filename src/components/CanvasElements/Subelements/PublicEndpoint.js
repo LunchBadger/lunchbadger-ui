@@ -1,8 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import './PublicEndpoint.scss';
 import {DragSource} from 'react-dnd';
+import _ from 'lodash';
+import classNames from 'classnames';
 
 const Port = LunchBadgerCore.components.Port;
+const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 
 const boxSource = {
   beginDrag(props) {
@@ -24,6 +27,7 @@ const boxSource = {
 }))
 export default class PublicEndpoint extends Component {
   static propTypes = {
+    parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
@@ -55,8 +59,15 @@ export default class PublicEndpoint extends Component {
 
   render() {
     const {connectDragSource} = this.props;
+    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
+
+    const elementClass = classNames({
+      'public-endpoint': true,
+      'public-endpoint--selected': _.find(selectedElements, {id: this.props.id})
+    });
+
     return connectDragSource(
-      <div className="public-endpoint">
+      <div className={elementClass} onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
         <div className="public-endpoint__info">
           <div className="public-endpoint__icon">
             <i className="fa fa-globe"/>

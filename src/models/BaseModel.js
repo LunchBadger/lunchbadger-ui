@@ -22,7 +22,7 @@ export default class BaseModel {
   }
 
   static create(data) {
-    const object = new this();
+    const object = new this(data.id);
 
     Object.keys(data).forEach((propertyName) => {
       if (data.hasOwnProperty(propertyName)) {

@@ -9,6 +9,7 @@ const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
 const toggleEdit = LunchBadgerCore.actions.toggleEdit;
+const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
 class Gateway extends Component {
   static propTypes = {
@@ -48,7 +49,7 @@ class Gateway extends Component {
   renderPipelines() {
     return this.props.entity.pipelines.map((pipeline) => {
       return (
-        <div key={pipeline.id} className="canvas-element__sub-element">
+        <div key={pipeline.id} className="canvas-element__sub-element canvas-element__sub-element--pipeline">
           <Pipeline {...this.props}
                     parent={this.props.entity}
                     paper={this.props.paper}
@@ -101,7 +102,9 @@ class Gateway extends Component {
             Pipelines
             <i onClick={() => this.onAddPipeline('Pipeline')} className="canvas-element__add fa fa-plus"/>
           </div>
-          <div>{this.renderPipelines()}</div>
+          <DraggableGroup iconClass="icon-icon-gateway" entity={this.props.entity} appState={this.props.appState}>
+            {this.renderPipelines()}
+          </DraggableGroup>
         </div>
       </div>
     );

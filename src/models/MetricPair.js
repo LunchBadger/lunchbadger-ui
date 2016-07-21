@@ -71,21 +71,19 @@ export default class MetricPair extends BaseModel {
     };
 
     Object.keys(summary).forEach((key) => {
-      if (this.metricOne) {
-        const metricDetails = this.metricOne.getDetail(key);
+      this.metrics.forEach(metric => {
+        const metricDetailsValue = metric.getDetail(key).value;
 
-        if (metricDetails) {
-          summary[key] += metricDetails.value;
+        if (this.metrics.length > 1) {
+          if (this.type === AND) {
+            return summary[key] += parseInt(0.25 * metricDetailsValue, 10);
+          } else if (this.type === NOT) {
+            return summary[key] += parseInt(0.75 * metricDetailsValue, 10);
+          }
         }
-      }
 
-      if (this.metricTwo) {
-        const metricDetails = this.metricTwo.getDetail(key);
-
-        if (metricDetails) {
-          summary[key] += metricDetails.value;
-        }
-      }
+        summary[key] += metricDetailsValue;
+      });
     });
 
     return summary;

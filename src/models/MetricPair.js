@@ -13,7 +13,7 @@ export default class MetricPair extends BaseModel {
   _metricTwo = null;
   _type = null;
 
-  constructor(id, metricOne, metricTwo, type) {
+  constructor(id, metricOne, metricTwo, type = OR) {
     super(id);
 
     this.metricOne = metricOne;

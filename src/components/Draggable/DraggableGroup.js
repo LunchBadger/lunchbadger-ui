@@ -47,7 +47,7 @@ export default class DraggableGroup extends Component {
         {connectDragPreview(
           <div className="draggable-group__preview">
             <div className="draggable-group__preview__icon">
-              <i className="icon-icon-gateway"/>
+              <i className={this.props.iconClass}/>
             </div>
             <div className="draggable-group__preview__items">
               {selectedElements.map(element => {

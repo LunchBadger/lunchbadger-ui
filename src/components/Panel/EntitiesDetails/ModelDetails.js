@@ -83,6 +83,8 @@ class ModelDetails extends Component {
     return this.state.properties.map((property, index) => {
       return (
         <ModelPropertyDetails index={index}
+                              addAction={() => this.onAddProperty()}
+                              propertiesCount={this.state.properties.length}
                               key={`property-${property.id}`}
                               onRemove={this.onRemoveProperty.bind(this)}
                               property={property}/>

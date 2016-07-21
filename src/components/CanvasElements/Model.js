@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {findDOMNode} from 'react-dom';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from 'actions/CanvasElements/Model/update';
 import addProperty from 'actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
-import _ from 'lodash';
 import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
@@ -32,17 +30,15 @@ class Model extends Component {
       properties: []
     };
 
-    if (this.validateProperties()) {
-      model.properties && model.properties.forEach((property) => {
+    model.properties && model.properties.forEach((property) => {
+      if (property.propertyKey.trim().length > 0) {
         data.properties.push(ModelPropertyFactory.create(property));
-      });
+      }
+    });
 
-      updateModel(this.props.entity.id, _.merge(model, data));
+    updateModel(this.props.entity.id, Object.assign(model, data));
 
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   updateName(event) {
@@ -69,6 +65,9 @@ class Model extends Component {
       return (
         <ModelProperty index={index} key={`property-${property.id}`}
                        property={property}
+                       propertiesForm={() => this.refs.properties}
+                       propertiesCount={this.props.entity.properties.length}
+                       addAction={() => this.onAddProperty()}
                        entity={this.props.entity}/>
       );
     });
@@ -76,8 +75,8 @@ class Model extends Component {
 
   onAddProperty() {
     addProperty(this.props.entity, {
-      key: ' ',
-      value: ' ',
+      key: '',
+      value: '',
       type: '',
       isRequired: false,
       isIndex: false,
@@ -87,38 +86,6 @@ class Model extends Component {
 
   updateContextPath() {
     this.setState({contextPathDirty: true});
-  }
-
-  validateProperties() {
-    const propertiesForm = findDOMNode(this.refs.properties);
-
-    if (propertiesForm) {
-      const formFieldGroups = propertiesForm.querySelectorAll('.model-property');
-      const emptyFields = [];
-
-      [].forEach.call(formFieldGroups, (group) => {
-        const formFields = group.querySelectorAll('input[type="text"]');
-
-        [].forEach.call(formFields, (formField) => {
-          if (formField.value.trim() === '') {
-            emptyFields.push(formField);
-          }
-        });
-
-        if ([].every.call(formFields, (formField) => formField.value.trim() === '')) {
-          emptyFields.splice(-2, 2);
-          group.remove();
-        }
-      });
-
-      if (emptyFields.length) {
-        emptyFields[0].focus();
-
-        return false;
-      }
-    }
-
-    return true;
   }
 
   render() {

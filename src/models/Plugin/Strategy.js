@@ -24,12 +24,16 @@ export default class Strategy {
   }
 
   checkAndFulfill(...params) {
-    if (this.checkAction(...params)) {
+    const checkAction = this.checkAction(...params);
+
+    if (checkAction) {
       this.fulfilledAction(...params);
 
       return true;
+    } else if (checkAction === false) {
+      return false;
     }
 
-    return false;
+    return null;
   }
 }

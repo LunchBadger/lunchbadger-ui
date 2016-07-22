@@ -122,8 +122,16 @@ export default class Canvas extends Component {
       this._handleExistingConnectionDetach(info);
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        const strategyFulfilled = this.props.plugins.getConnectionCreatedStrategies().some((strategy) => {
-          return strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+        let strategyFulfilled = null;
+
+        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
+          if (strategyFulfilled === null) {
+            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+
+            if (fulfilledStatus !== null) {
+              strategyFulfilled = fulfilledStatus;
+            }
+          }
         });
 
         if (strategyFulfilled === null) {
@@ -150,8 +158,16 @@ export default class Canvas extends Component {
         });
 
       } else {
-        const strategyFulfilled = this.props.plugins.getConnectionMovedStrategies().some((strategy) => {
-          return strategy.handleConnectionMoved.checkAndFulfill(info, this.paper);
+        let strategyFulfilled = null;
+
+        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
+          if (strategyFulfilled === null) {
+            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+
+            if (fulfilledStatus !== null) {
+              strategyFulfilled = fulfilledStatus;
+            }
+          }
         });
 
         if (strategyFulfilled === null) {

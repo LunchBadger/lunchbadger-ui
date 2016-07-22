@@ -86,8 +86,8 @@ export default class Canvas extends Component {
       return false;
     }
 
-    if ((source.classList.contains('port-in') && target.classList.contains('port-in')) ||
-      (source.classList.contains('port-out') && target.classList.contains('port-out'))) {
+    if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
+      (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       return false;
     }
 

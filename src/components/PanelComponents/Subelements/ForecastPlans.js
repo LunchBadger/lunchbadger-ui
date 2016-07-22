@@ -36,7 +36,7 @@ export default class ForecastPlans extends Component {
   }
 
   _handleAddPlan() {
-    addPlan(this.props.entity, {name: 'Super whale', icon: 'fa-space-shuttle'}, this.props.selectedDate);
+    addPlan(this.props.entity, {name: 'Enterprise', icon: 'fa-space-shuttle'}, this.props.selectedDate);
   }
 
   _handlePlanOpen(plan) {

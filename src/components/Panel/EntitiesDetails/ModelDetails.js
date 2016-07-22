@@ -32,10 +32,12 @@ class ModelDetails extends Component {
     };
 
     model.properties && model.properties.forEach((property) => {
-      data.properties.push(ModelProperty.create(property));
+      if (property.propertyKey.trim().length > 0) {
+        data.properties.push(ModelProperty.create(property));
+      }
     });
 
-    updateModel(this.props.entity.id, _.merge(model, data));
+    updateModel(this.props.entity.id, Object.assign(model, data));
   }
 
   onAddProperty() {

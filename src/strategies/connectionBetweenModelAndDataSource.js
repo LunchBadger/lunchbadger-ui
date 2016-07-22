@@ -6,8 +6,8 @@ const attachConnection = LunchBadgerCore.actions.Connection.attachConnection;
 const reattachConnection = LunchBadgerCore.actions.Connection.reattachConnection;
 
 const checkConnection = (connectionInfo) => {
-  const isBackend = Backend.findEntity(connectionInfo.sourceId);
-  const isPrivate = Private.findEntity(connectionInfo.targetId);
+  const isBackend = Backend.findEntity(connectionInfo.sourceId) || Backend.findEntity(connectionInfo.targetId);
+  const isPrivate = Private.findEntity(connectionInfo.targetId) || Private.findEntity(connectionInfo.sourceId);
 
   return isBackend && isPrivate;
 };

@@ -108,6 +108,14 @@ class AppState extends BaseStore {
 
         this.emitInit();
         break;
+
+      case 'ChangePanelStatus':
+        this.setStateKey('panelEditingStatus', action.status ? true : false);
+        this.setStateKey('panelEditingStatusSave', action.saveAction || null);
+        this.setStateKey('panelEditingStatusDiscard', action.discardAction || null);
+
+        this.emitChange();
+        break;
     }
   }
 

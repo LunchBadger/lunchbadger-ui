@@ -4,6 +4,7 @@ import {Form} from 'formsy-react';
 import InputField from 'components/Panel/EntitiesDetails/InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
+import changePanelStatus from 'actions/AppState/changePanelStatus';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
@@ -61,6 +62,12 @@ export default (ComposedComponent) => {
       if (keyCode === 13) {
         event.preventDefault();
         return false;
+      }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+      if (this.state.isPristine !== nextState.isPristine) {
+        changePanelStatus(!nextState.isPristine, this.update.bind(this), this.discardChanges.bind(this));
       }
     }
 

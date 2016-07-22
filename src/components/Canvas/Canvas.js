@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
+import CanvasOverlay from './CanvasOverlay';
 import './Canvas.scss';
 import addConnection from 'actions/Connection/add';
 import removeConnection from 'actions/Connection/remove';
@@ -181,8 +182,12 @@ export default class Canvas extends Component {
       canvasHeight = null;
     }
 
+    const panelEditingStatus = this.props.appState.getStateKey('panelEditingStatus');
+
     return (
-      <section className="canvas" onClick={() => this.props.appState.getStateKey('currentElement') && toggleHighlight(null)}>
+      <section className="canvas"
+               onClick={() => !panelEditingStatus && this.props.appState.getStateKey('currentElement') && toggleHighlight(null)}>
+        {panelEditingStatus && <CanvasOverlay appState={this.props.appState}/> }
         <div style={{height: canvasHeight}} className="canvas__wrapper">
           <div style={{height: canvasHeight}} className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>

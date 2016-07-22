@@ -10,13 +10,7 @@ module.exports = {
 
 		browser.pause(3500);
 
-		page.expect.element(elementSelector + ' .canvas-element__sub-element').to.not.be.present;
-
-		page.click(elementSelector + ' .canvas-element__sub-elements .canvas-element__add');
-
-		browser.pause(50);
-
-		page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child').to.be.present;
+		page.expect.element(elementSelector + ' .canvas-element__sub-element').to.be.present;
 
 		page.click(elementSelector + ' .canvas-element__sub-elements .canvas-element__add');
 
@@ -24,11 +18,17 @@ module.exports = {
 
 		page.expect.element(elementSelector + ' .canvas-element__sub-element:nth-child(2)').to.be.present;
 
+		page.click(elementSelector + ' .canvas-element__sub-elements .canvas-element__add');
+
 		browser.pause(50);
 
-		page.click(elementSelector + ' .canvas-element__sub-element:first-child');
+		page.expect.element(elementSelector + ' .canvas-element__sub-element:nth-child(3)').to.be.present;
 
-		browser.pause(300);
+		browser.pause(50);
+
+		page.click(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__toggle');
+
+		browser.pause(1500);
 
 		page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline.pipeline--opened').to.be.present;
 

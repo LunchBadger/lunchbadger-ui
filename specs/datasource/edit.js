@@ -61,7 +61,7 @@ module.exports = {
 		browser.expect.element(propertySelector + ':first-child .hide-while-edit').text.to.equal('test url');
 		browser.expect.element(propertySelector + ':nth-child(2) .hide-while-edit').text.to.equal('test schema');
 		browser.expect.element(propertySelector + ':nth-child(3) .hide-while-edit').text.to.equal('test username');
-		browser.expect.element(propertySelector + ':last-child .hide-while-edit').text.to.equal('test password');
+		browser.expect.element(propertySelector + ':last-child .hide-while-edit').text.to.equal('*************');
 
 		page.close();
 	}

@@ -7,7 +7,7 @@ module.exports = {
 		page.open();
 
 		page.click('@forecaster');
-		browser.pause(1500);
+		browser.pause(2000);
 
 		page.getElementSize('@forecasterPanel', function (result) {
 			page.assert.notEqual(result.value.height, 0);
@@ -29,21 +29,21 @@ module.exports = {
 		});
 
 		page.click('@forecaster');
-		browser.pause(1500);
+		browser.pause(2000);
 
 		page.getElementSize('@forecasterPanel', function (result) {
 			page.assert.equal(result.value.height, 0);
 		});
 
 		page.click('@forecaster');
-		browser.pause(1500);
+		browser.pause(2000);
 
 		page.getElementSize('@forecasterPanel', function (result) {
 			page.assert.equal(result.value.height, panelHeight);
 		});
 
 		page.click('@forecaster');
-		browser.pause(1500);
+		browser.pause(2000);
 
 		page.close();
 	}

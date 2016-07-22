@@ -43,8 +43,7 @@ module.exports = {
 	'API: bundle endpoint - accept': function (browser) {
 		browser.click('.modal__actions__button--confirm', function () {
 			page.expect.element(publicEndpointSelector + ':last-child').to.not.be.present;
-			page.expect.element(apiSelector + ':last-child .canvas-element__sub-element .public-endpoint').to.be.present;
-			page.expect.element(apiSelector + ':last-child .canvas-element__sub-element .public-endpoint__name').text.to.equal('PUBLIC ENDPOINT BUNDLED');
+			page.expect.element(apiSelector + ':last-child .canvas-element__sub-element--api .public-endpoint').to.be.present;
 
 			browser.pause(1000);
 		});
@@ -53,7 +52,7 @@ module.exports = {
 	'API: bundle endpoint - decline': function (browser) {
 		browser.click('.modal__actions__button--discard', function () {
 			page.expect.element(publicEndpointSelector + ':last-child').to.be.present;
-			page.expect.element(apiSelector + ':last-child .canvas-element__sub-element .public-endpoint').to.not.be.present;
+			page.expect.element(apiSelector + ':last-child .canvas-element__sub-element--api .public-endpoint').to.not.be.present;
 
 			browser.pause(1000);
 		});

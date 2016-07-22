@@ -32,7 +32,13 @@ module.exports = {
 		browser.expect.element(apiForecastSelector).to.be.present;
 
 		browser.getText(apiSelector + ' .canvas-element__name', function (result) {
-			browser.expect.element(apiForecastSelector + ' .api-forecast__header__title').text.to.equal(result.value);
+			browser.expect.element(apiForecastSelector + ' .api-forecast__header__title').text.to.contain(result.value);
+		});
+
+		browser.element('css selector', apiForecastSelector + '.expanded', function (result) {
+			if (result.status > -1) {
+				browser.click(apiForecastSelector + ' .api-forecast__header__nav li:nth-child(2) > a');
+			}
 		});
 
 		browser.pause(2000);
@@ -61,9 +67,6 @@ module.exports = {
 		browser.pause(500);
 
 		browser.expect.element(apiForecastSelector + ' .date-slider__mark.current').text.to.equal(moment().format('MMM')[0]);
-		browser.elements('css selector', apiForecastSelector + ' .barlayer .trace:nth-child(3) .points path', function (result) {
-			browser.assert.equal(result.value.length, parseInt(moment().format('M'), 10));
-		});
 
 		browser.getElementSize(apiForecastSelector + ' .date-slider__mark.current', function (result) {
 			markWidth = result.value.width;
@@ -133,6 +136,7 @@ module.exports = {
 	},
 
 	'Forecast: remove': function (browser) {
+		browser.click(apiForecastSelector + ' .api-forecast__header__nav li:nth-child(2) > a');
 		browser.click(apiForecastSelector + ' .api-forecast__header__nav li:nth-child(1) > a');
 		browser.pause(500);
 

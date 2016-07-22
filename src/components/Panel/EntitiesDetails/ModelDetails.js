@@ -118,7 +118,7 @@ class ModelDetails extends Component {
                 Add property
               </a>
             </th>
-            <th></th>
+            <th className="details-panel__table__cell details-panel__table__cell--empty"/>
           </tr>
           </thead>
           <tbody>

@@ -80,8 +80,8 @@ export default class ModelPropertyDetails extends Component {
                  handleKeyDown={this._checkTabButton.bind(this)}
           />
         </td>
-        <td>
-          <i className="fa fa-remove" onClick={() => this.onRemove(property)}/>
+        <td className="details-panel__table__cell details-panel__table__cell--empty">
+          <i className="fa fa-remove details-panel__table__action " onClick={() => this.onRemove(property)}/>
         </td>
       </tr>
     );

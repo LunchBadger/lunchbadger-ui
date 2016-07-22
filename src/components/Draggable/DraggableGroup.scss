@@ -10,9 +10,16 @@
   bottom: 15%;
   left: 0;
   background: #01667D;
-  min-width: 300px;
+  max-width: 300px;
+  width: 100%;
+  right: 0;
   display: table;
   line-height: 1.65;
+
+  .dragging &,
+  .editable & {
+    display: none;
+  }
 }
 
 .draggable-group__preview__title {

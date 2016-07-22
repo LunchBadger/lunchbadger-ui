@@ -252,15 +252,16 @@ export default (ComposedComponent) => {
 
     render() {
       const {ready} = this.props.entity;
+      const {connectDragSource, connectDropTarget, isDragging} = this.props;
       const elementClass = classNames({
         'canvas-element': true,
         editable: this.state.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
         highlighted: this.state.highlighted && !this.state.editable,
+        dragging: isDragging,
         wip: !ready
       });
-      const {connectDragSource, connectDropTarget, isDragging} = this.props;
       const opacity = isDragging ? 0.2 : 1;
 
       return connectDragSource(connectDropTarget(

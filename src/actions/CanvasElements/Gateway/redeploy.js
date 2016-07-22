@@ -1,15 +1,24 @@
-const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
+import _ from 'lodash';
 
-export default (id, props) => {
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
+const removeEntity = LunchBadgerCore.actions.removeEntity;
+
+export default (gateway, newProps) => {
   setTimeout(() => {
     dispatch('UpdateGateway', {
-      id: id,
-      data: {ready: true, ...props}
+      id: gateway.id,
+      data: {ready: true, ...newProps}
     });
   }, 1500);
 
+  _.differenceBy(gateway.pipelines, newProps.pipelines, pl => pl.id)
+    .forEach(pipeline => {
+      removeEntity(pipeline);
+    });
+
   dispatch('UpdateGateway', {
-    id: id,
-    data: {ready: false, ...props}
+    id: gateway.id,
+    data: {ready: false, ...newProps}
   });
+
 };

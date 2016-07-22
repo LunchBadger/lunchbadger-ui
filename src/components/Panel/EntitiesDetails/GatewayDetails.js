@@ -41,9 +41,9 @@ class GatewayDetails extends Component {
     GatewayStore.removeChangeListener(this.onStoreUpdate);
   }
 
-  update(gateway) {
+  update(model) {
     let data = {
-      pipelines: gateway.pipelines.map(pipeline => {
+      pipelines: (model.pipelines || []).map(pipeline => {
         let policies = pipeline.policies || [];
         delete pipeline.policies;
 
@@ -53,13 +53,26 @@ class GatewayDetails extends Component {
         });
       })
     }
-    redeployGateway(this.props.entity.id, _.merge(gateway, data));
+    redeployGateway(this.props.entity, _.merge(model, data));
   }
 
   onAddPipeline() {
     const pipelines = [...this.state.pipelines, Pipeline.create({
       name: 'Pipeline'
     })];
+
+    this.setState({
+      pipelines: pipelines,
+      changed: !_.isEqual(pipelines, this.props.entity.pipelines)
+    }, () => {
+      this.props.parent.checkPristine();
+    });
+  }
+
+  onRemovePipeline(pipeline) {
+    const pipelines = _.filter(this.state.pipelines, pl => {
+      return pl.id !== pipeline.id;
+    });
 
     this.setState({
       pipelines: pipelines,
@@ -87,6 +100,8 @@ class GatewayDetails extends Component {
             <Input className="details-panel__input"
                    value={pipeline.name}
                    name={`pipelines[${plIdx}][name]`}/>
+            <i className="fa fa-remove details-panel__table__action"
+               onClick={() => this.onRemovePipeline(pipeline)}/>
           </h3>
           <table className="details-panel__table">
             <thead>
@@ -115,11 +130,11 @@ class GatewayDetails extends Component {
           <InputField label="Root URL" propertyName="rootPath" entity={entity} />
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">
-          {this.renderPipelines()}
           <a onClick={() => this.onAddPipeline()} className="details-panel__add">
             <i className="fa fa-plus"/>
             Add pipeline
           </a>
+          {this.renderPipelines()}
         </CollapsableDetails>
       </div>
     )

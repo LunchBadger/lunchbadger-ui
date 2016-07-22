@@ -122,10 +122,10 @@ export default class Canvas extends Component {
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
         const strategyFulfilled = this.props.plugins.getConnectionCreatedStrategies().some((strategy) => {
-          return strategy.handleConnectionCreated.checkAndFulfill(info);
+          return strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
         });
 
-        if (!strategyFulfilled) {
+        if (strategyFulfilled === null) {
           addConnection(sourceId, targetId, info);
         }
       }
@@ -150,10 +150,10 @@ export default class Canvas extends Component {
 
       } else {
         const strategyFulfilled = this.props.plugins.getConnectionMovedStrategies().some((strategy) => {
-          return strategy.handleConnectionMoved.checkAndFulfill(info);
+          return strategy.handleConnectionMoved.checkAndFulfill(info, this.paper);
         });
 
-        if (!strategyFulfilled) {
+        if (strategyFulfilled === null) {
           moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
         }
       }

@@ -24,7 +24,7 @@ class ModelDetails extends Component {
       properties: props.entity.properties.slice(),
       relations: props.entity.relations.slice(),
       changed: false
-    }
+    };
 
     this.onStoreUpdate = () => {
       this.setState({
@@ -58,14 +58,16 @@ class ModelDetails extends Component {
     };
 
     model.properties && model.properties.forEach((property) => {
-      data.properties.push(ModelProperty.create(property));
+      if (property.propertyKey.trim().length > 0) {
+        data.properties.push(ModelProperty.create(property));
+      }
     });
 
     model.relations && model.relations.forEach((relation) => {
       data.relations.push(ModelRelation.create(relation));
     });
 
-    updateModel(this.props.entity.id, _.merge(model, data));
+    updateModel(this.props.entity.id, Object.assign(model, data));
   }
 
   onAddItem(collection, itemType, defaults={}) {
@@ -127,6 +129,8 @@ class ModelDetails extends Component {
     return this.state.properties.map((property, index) => {
       return (
         <ModelPropertyDetails index={index}
+                              addAction={() => this.onAddProperty()}
+                              propertiesCount={this.state.properties.length}
                               key={`property-${property.id}`}
                               onRemove={this.onRemoveProperty.bind(this)}
                               property={property}/>
@@ -174,7 +178,7 @@ class ModelDetails extends Component {
                   Add relation
                 </a>
               </th>
-              <th></th>
+                <th className="details-panel__table__cell details-panel__table__cell--empty"/>
               </tr>
             </thead>
             <tbody>
@@ -198,7 +202,7 @@ class ModelDetails extends Component {
                   Add property
                 </a>
               </th>
-              <th></th>
+              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
             </tr>
             </thead>
             <tbody>

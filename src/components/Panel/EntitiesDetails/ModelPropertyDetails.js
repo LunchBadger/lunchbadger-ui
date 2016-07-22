@@ -5,7 +5,10 @@ const {Checkbox, Input, Select} = LunchBadgerCore.components;
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
     property: PropTypes.object.isRequired,
-    onRemove: PropTypes.func.isRequired
+    onRemove: PropTypes.func.isRequired,
+    addAction: PropTypes.func.isRequired,
+    propertiesCount: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -14,6 +17,12 @@ export default class ModelPropertyDetails extends Component {
 
   onRemove(property) {
     this.props.onRemove(property);
+  }
+
+  _checkTabButton(event) {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
+      this.props.addAction();
+    }
   }
 
   render() {
@@ -68,9 +77,12 @@ export default class ModelPropertyDetails extends Component {
                  value={property.propertyNotes}
                  name={`properties[${index}][propertyNotes]`}
                  type="text"
+                 handleKeyDown={this._checkTabButton.bind(this)}
           />
         </td>
-        <td><i className="fa fa-remove" onClick={() => this.onRemove(property)}></i></td>
+        <td className="details-panel__table__cell details-panel__table__cell--empty">
+          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(property)}/>
+        </td>
       </tr>
     );
   }

@@ -8,8 +8,8 @@ export default (data) => {
 
   const privateModelObjects = privateModels.map((privateModel, index) => {
     // remove properties before de-serializing data but first save it somewhere
-    const embeddedProperties = privateModel.privateModelProperties;
-    const embeddedRelations = privateModel.privateModelRelations;
+    const embeddedProperties = privateModel.privateModelProperties || [];
+    const embeddedRelations = privateModel.privateModelRelations || [];
     delete privateModel.privateModelProperties;
     delete privateModel.privateModelRelations;
 

@@ -31,13 +31,16 @@ class DetailsPanel extends Component {
   }
 
   renderDetails() {
-    if (this.state.element) {
-      const panel = this.props.plugins.getDetailsPanel(this.state.element.constructor.type);
+    const {element} = this.state;
+
+    if (element) {
+      const type = element.constructor.name === 'Object' ? element.type : element.constructor.type;
+      const panel = this.props.plugins.getDetailsPanel(type);
 
       if (panel.length) {
         const DetailsPanelComponent = panel[0].component;
 
-        return <DetailsPanelComponent entity={this.state.element}/>;
+        return <DetailsPanelComponent entity={element}/>;
       }
     }
   }

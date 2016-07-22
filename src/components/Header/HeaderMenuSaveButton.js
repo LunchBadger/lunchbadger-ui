@@ -94,9 +94,14 @@ export default class HeaderMenuSaveButton extends Component {
     }
 
     if (states['currentElement']) {
+      const {currentElement} = states;
+
       data.states.push({
         key: 'currentElement',
-        value: states['currentElement']
+        value: {
+          ...currentElement.toJSON(),
+          type: currentElement.constructor.type
+        }
       });
     }
 

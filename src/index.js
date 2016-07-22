@@ -57,6 +57,7 @@ import reattachConnection from './actions/Connection/reattach';
 import setProject from './actions/Stores/AppState/setProject';
 import initializeAppState from './actions/Stores/AppState/initialize';
 import toggleSubelement from './actions/CanvasElements/toggleSubelement';
+import removeEntity from './actions/CanvasElements/removeEntity';
 
 // constants
 import panelKeys from './constants/panelKeys';
@@ -80,6 +81,7 @@ let LunchBadgerCore = {
     toggleHighlight: toggleHighlight,
     toggleEdit: toggleEdit,
     toggleSubelement: toggleSubelement,
+    removeEntity: removeEntity,
     Connection: {
       attachConnection: attachConnection,
       reattachConnection: reattachConnection

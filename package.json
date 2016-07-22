@@ -93,7 +93,7 @@
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
     "react-modal-dialog": "^2.0.0",
-    "react-notify-toast": "^0.1.1",
+    "react-notify-toast": "^0.1.2",
     "react-tooltip": "^2.0.3",
     "request": "2.65.0",
     "slug": "^0.9.1",

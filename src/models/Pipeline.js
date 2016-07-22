@@ -6,13 +6,16 @@ const Port = LunchBadgerCore.models.Port;
 
 const defaultPolicies = [
   Policy.create({
-    name: 'Auth 01'
+    name: 'Auth 01',
+    type: 'OAuth2'
   }),
   Policy.create({
-    name: 'Rate limiter'
+    name: 'Rate limiter',
+    type: 'Rate limit'
   }),
   Policy.create({
-    name: 'Reverse Proxy'
+    name: 'Logger',
+    type: 'Logging'
   })
 ];
 
@@ -49,7 +52,8 @@ export default class Pipeline extends BaseModel {
   toJSON() {
     return {
       id: this.id,
-      name: this.name
+      name: this.name,
+      policies: this.policies.map(policy => policy.toJSON())
     }
   }
 

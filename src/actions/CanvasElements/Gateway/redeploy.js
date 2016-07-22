@@ -7,11 +7,9 @@ export default (id, props) => {
       data: {ready: true, ...props}
     });
   }, 1500);
-  
+
   dispatch('UpdateGateway', {
     id: id,
-    data: {
-      ready: false
-    }
+    data: {ready: false, ...props}
   });
 };

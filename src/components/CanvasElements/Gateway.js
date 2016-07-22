@@ -8,7 +8,6 @@ import classNames from 'classnames';
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
-const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
 class Gateway extends Component {
@@ -29,8 +28,6 @@ class Gateway extends Component {
   componentWillReceiveProps(nextProps, nextState) {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
-    } else if (!nextProps.ready && !nextProps.appState.getStateKey('currentEditElement')) {
-      toggleEdit(nextProps.entity);
     }
 
     if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {

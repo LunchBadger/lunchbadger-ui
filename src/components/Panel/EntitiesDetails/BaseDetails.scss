@@ -105,10 +105,12 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 1em;
+
   th, td {
     border: 1px solid #999;
     padding: .2em .5em;
   }
+
   th {
     background: #ddd;
     padding: .5em .5em;
@@ -116,6 +118,13 @@
     font-weight: normal;
     text-transform: uppercase;
     min-width: 100px;
+  }
+
+  .details-panel__table__cell--empty {
+    border: 0;
+    background: transparent;
+    min-width: 0;
+    width: 36px;
   }
 }
 
@@ -131,4 +140,8 @@
   i {
     margin-right: .5em;
   }
+}
+
+.details-panel__table__action {
+  cursor: pointer;
 }

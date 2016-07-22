@@ -3,12 +3,13 @@ import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
 import Pipeline from 'models/Pipeline';
 import Policy from 'models/Policy';
 import GatewayStore from 'stores/Gateway';
+import GatewayPolicyDetails from './GatewayPolicyDetails';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const Input = LunchBadgerCore.components.Input;
-const Select = LunchBadgerCore.components.Select;
+
 const InputField = LunchBadgerCore.components.InputField;
 
 class GatewayDetails extends Component {
@@ -71,30 +72,10 @@ class GatewayDetails extends Component {
   renderPipelines() {
     return this.state.pipelines.map((pipeline, plIdx) => {
       const policies = pipeline.policies.map((policy, index) => {
-        return (
-          <tr key={`pipeline-${pipeline.id}-policy-${policy.id}`}>
-            <td>
-              <Input value={policy.id}
-                     type="hidden"
-                     name={`pipelines[${plIdx}][policies][${index}][id]`}/>
-              <Input className="details-panel__input"
-                     value={policy.name}
-                     name={`pipelines[${plIdx}][policies][${index}][name]`}/>
-            </td>
-            <td>
-              <Select className="details-panel__input details-panel__select"
-                      value={policy.type}
-                      name={`pipelines[${plIdx}][policies][${index}][type]`}>
-                <option value="OAuth2">OAuth2</option>
-                <option value="Rate limit">Throttling</option>
-                <option value="Logging">Logging</option>
-                <option value="Redirect">Redirect</option>
-                <option value="Reverse proxy">Reverse proxy</option>
-              </Select>
-            </td>
-            <td>...</td>
-          </tr>
-        );
+        return <GatewayPolicyDetails pipelineId={pipeline.id}
+                                     pipelineIndex={plIdx}
+                                     policy={policy}
+                                     index={index} />;
       });
 
       return (

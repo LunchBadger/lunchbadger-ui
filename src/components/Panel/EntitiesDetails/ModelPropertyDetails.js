@@ -81,7 +81,7 @@ export default class ModelPropertyDetails extends Component {
           />
         </td>
         <td className="details-panel__table__cell details-panel__table__cell--empty">
-          <i className="fa fa-remove details-panel__table__action " onClick={() => this.onRemove(property)}/>
+          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(property)}/>
         </td>
       </tr>
     );

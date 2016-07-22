@@ -1,11 +1,16 @@
 import React, {Component, PropTypes} from 'react';
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
+import ModelRelationDetails from './ModelRelationDetails';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const Input = LunchBadgerCore.components.Input;
+const InputField = LunchBadgerCore.components.InputField;
+const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
+const ModelRelation = LunchBadgerManage.models.ModelRelation;
+const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
+const PrivateStore = LunchBadgerManage.stores.Private;
 
 class ModelDetails extends Component {
   static propTypes = {
@@ -17,18 +22,39 @@ class ModelDetails extends Component {
 
     this.state = {
       properties: props.entity.properties.slice(),
+      relations: props.entity.relations.slice(),
       changed: false
-    }
+    };
+
+    this.onStoreUpdate = () => {
+      this.setState({
+        properties: this.props.entity.properties.slice(),
+        relations: this.props.entity.relations.slice(),
+        changed: false
+      });
+    };
+  }
+
+  componentDidMount() {
+    PrivateStore.addChangeListener(this.onStoreUpdate);
+  }
+
+  componentWillUnmount() {
+    PrivateStore.removeChangeListener(this.onStoreUpdate);
   }
 
   discardChanges() {
     // revert properties
-    this.setState({properties: this.props.entity.properties.slice()});
+    this.setState({
+      properties: this.props.entity.properties.slice(),
+      relations: this.props.entity.relations.slice()
+    });
   }
 
   update(model) {
     let data = {
-      properties: []
+      properties: [],
+      relations: []
     };
 
     model.properties && model.properties.forEach((property) => {
@@ -37,21 +63,20 @@ class ModelDetails extends Component {
       }
     });
 
+    model.relations && model.relations.forEach((relation) => {
+      data.relations.push(ModelRelation.create(relation));
+    });
+
     updateModel(this.props.entity.id, Object.assign(model, data));
   }
 
-  onAddProperty() {
-    const {properties} = this.state;
+  onAddItem(collection, itemType, defaults={}) {
+    const items = this.state[collection];
 
-    properties.push(
-      ModelProperty.create({
-        propertyIsRequired: false,
-        propertyIsIndex: false
-      })
-    );
+    items.push(itemType.create(defaults));
 
     this.setState({
-      properties: properties
+      [collection]: items
     });
 
     this.setState({changed: true}, () => {
@@ -59,18 +84,18 @@ class ModelDetails extends Component {
     });
   }
 
-  onRemoveProperty(property) {
-    const {properties} = this.state;
+  onRemoveItem(collection, item) {
+    const items = this.state[collection];
 
-    _.remove(properties, function (prop) {
-      return prop.id === property.id;
+    _.remove(items, function (i) {
+      return i.id === item.id;
     });
 
     this.setState({
-      properties: properties
+      [collection]: items
     });
 
-    if (!_.isEqual(properties, this.props.entity.properties)) {
+    if (!_.isEqual(items, this.props.entity[collection])) {
       this.setState({changed: true});
     } else {
       this.setState({changed: false});
@@ -79,6 +104,25 @@ class ModelDetails extends Component {
     setTimeout(() => {
       this.props.parent.checkPristine();
     });
+  }
+
+  onAddProperty() {
+    this.onAddItem('properties', ModelProperty, {
+      propertyIsRequired: false,
+      propertyIsIndex: false
+    });
+  }
+
+  onRemoveProperty(property) {
+    this.onRemoveItem('properties', property);
+  }
+
+  onAddRelation() {
+    this.onAddItem('relations', ModelRelation);
+  }
+
+  onRemoveRelation(relation) {
+    this.onRemoveItem('relations', relation);
   }
 
   renderProperties() {
@@ -94,39 +138,78 @@ class ModelDetails extends Component {
     });
   }
 
+  renderRelations() {
+    return this.state.relations.map((relation, index) => {
+      return (
+        <ModelRelationDetails index={index}
+                              key={`relation-${relation.id}`}
+                              onRemove={this.onRemoveRelation.bind(this)}
+                              relation={relation}/>
+      );
+    });
+  }
+
   render() {
     const {entity} = this.props;
 
     return (
-      <div className="details-panel__container details-panel__columns">
-        <div className="details-panel__fieldset">
-          <span className="details-panel__label">Context path</span>
-          <Input className="details-panel__input"
-                 value={entity.contextPath}
-                 name="contextPath"/>
-        </div>
-        <table className="details-panel__table">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Data type</th>
-            <th>Default Value</th>
-            <th>Required</th>
-            <th>Is index</th>
-            <th>
-              Notes
-              <a onClick={() => this.onAddProperty()} className="details-panel__add">
-                <i className="fa fa-plus"/>
-                Add property
-              </a>
-            </th>
-            <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-          </tr>
-          </thead>
-          <tbody>
-          {this.renderProperties()}
-          </tbody>
-        </table>
+      <div>
+        <CollapsableDetails title="Details">
+          <div className="details-panel__container details-panel__columns">
+            <InputField label="Context path" propertyName="contextPath" entity={entity}/>
+            <InputField label="Plural" propertyName="plural" entity={entity}/>
+            <InputField label="Base model" propertyName="base" entity={entity}/>
+            <InputField label="Data source" propertyName="dataSource" entity={entity}/>
+            <CheckboxField label="Read only" propertyName="readOnly" entity={entity}/>
+            <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
+            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity}/>
+          </div>
+        </CollapsableDetails>
+        <CollapsableDetails title="Relations">
+          <table className="details-panel__table">
+            <thead>
+              <tr>
+              <th>Model</th>
+              <th>Type</th>
+              <th>
+                Foreign Key
+                <a onClick={() => this.onAddRelation()} className="details-panel__add">
+                  <i className="fa fa-plus"/>
+                  Add relation
+                </a>
+              </th>
+                <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+              </tr>
+            </thead>
+            <tbody>
+            {this.renderRelations()}
+            </tbody>
+          </table>
+        </CollapsableDetails>
+        <CollapsableDetails title="Properties">
+          <table className="details-panel__table">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Data type</th>
+              <th>Default Value</th>
+              <th>Required</th>
+              <th>Is index</th>
+              <th>
+                Notes
+                <a onClick={() => this.onAddProperty()} className="details-panel__add">
+                  <i className="fa fa-plus"/>
+                  Add property
+                </a>
+              </th>
+              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+            </tr>
+            </thead>
+            <tbody>
+            {this.renderProperties()}
+            </tbody>
+          </table>
+        </CollapsableDetails>
       </div>
     )
   }

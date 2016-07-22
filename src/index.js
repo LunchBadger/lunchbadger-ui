@@ -5,6 +5,7 @@ import ManagePlugin from './plugs/ManagePlugin';
 import PublicEndpoint from './models/PublicEndpoint';
 import Model from './models/Model';
 import ModelProperty from './models/ModelProperty';
+import ModelRelation from './models/ModelRelation';
 
 // components
 import PublicEndpointComponent from './components/CanvasElements/PublicEndpoint';
@@ -29,7 +30,8 @@ let LunchBadgerManage = {
   models: {
     PublicEndpoint: PublicEndpoint,
     Model: Model,
-    ModelProperty: ModelProperty
+    ModelProperty: ModelProperty,
+    ModelRelation: ModelRelation
   },
   components: {
     PublicEndpoint: PublicEndpointComponent,

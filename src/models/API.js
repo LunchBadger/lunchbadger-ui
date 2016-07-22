@@ -5,9 +5,9 @@ const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 const defaultPlans = [
-  APIPlan.create({name: 'Minnows', icon: 'fa-paper-plane'}),
-  APIPlan.create({name: 'Dolphins', icon: 'fa-plane'}),
-  APIPlan.create({name: 'Whales', icon: 'fa-fighter-jet'})
+  APIPlan.create({name: 'Free', icon: 'fa-paper-plane'}),
+  APIPlan.create({name: 'Developer', icon: 'fa-plane'}),
+  APIPlan.create({name: 'Professional', icon: 'fa-fighter-jet'})
 ];
 
 export default class API extends BaseModel {

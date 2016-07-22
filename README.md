@@ -7,30 +7,17 @@ It mixes core and plugins to produce final application
 ## Development
 
 Clone container repository. After that go to plugin directory and clone required plugins:
-* `lunch-badger-core` - core for whole application - it provides dispatcher and plugin registry
-* `lunch-badger-plugin-base` - base plugin providing canvas and basic elements for drawing
+* `lunchbadger-core` - core for whole application - it provides dispatcher and plugin store
+* `lunchbadger-compose` - compose plugin providing API for managing data sources and models
+* `lunchbadger-manage` - manage plugin which adds options to manipulate gateways and endpoints
+* `lunchbadger-monetize` - monetize plugin provides methods to create and manage APIs and plans
+* `lunchbadger-monitor` - plugin that adds monitor panel to track API usage
+* `lunchbadger-optimize` - plugin that adds panel to forecast future API usage
 
-Other plugins can be installed just by using git clone (they need to reside inside `plugins` directory)
+###Important thing while building: 
 
-Important thing while building: 
+You can set which plugins should be installed during bundling container to main app
+There are two places where you can set list of plugins that should be installed:
 
-* open `cfg/dev` file and find config entry to select which plugins should be bundled:
-
-``` 
- entry: {
-    start: [
-      'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
-      'webpack/hot/only-dev-server',
-      './src/index'
-    ],
-    core: './plugins/lunch-badger-core/index',
-    plugins: [
-      './plugins/lunch-badger-plugin-monitor/index',
-      './plugins/lunch-badger-plugin-base/index'
-      
-      // here you can type which plugins should be bundled to final release
-    ]
-  },
-```
-
-Same thing should be done with `cfg/dist` file to provide proper config for dist builds
+* if using client app from **lunchbadger** repository, list of plugins can be found at **./server/info.json** file
+* if using separate container, list of plugins can be set in **./bin/info.json** file

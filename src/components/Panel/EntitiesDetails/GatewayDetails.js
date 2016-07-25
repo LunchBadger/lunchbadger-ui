@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import update from 'react-addons-update';
 import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
 import Pipeline from 'models/Pipeline';
 import Policy from 'models/Policy';
@@ -56,11 +57,7 @@ class GatewayDetails extends Component {
     redeployGateway(this.props.entity, _.merge(model, data));
   }
 
-  onAddPipeline() {
-    const pipelines = [...this.state.pipelines, Pipeline.create({
-      name: 'Pipeline'
-    })];
-
+  _setPipelineState(pipelines) {
     this.setState({
       pipelines: pipelines,
       changed: !_.isEqual(pipelines, this.props.entity.pipelines)
@@ -69,26 +66,47 @@ class GatewayDetails extends Component {
     });
   }
 
-  onRemovePipeline(pipeline) {
-    const pipelines = _.filter(this.state.pipelines, pl => {
-      return pl.id !== pipeline.id;
-    });
+  onAddPipeline() {
+    this._setPipelineState([...this.state.pipelines, Pipeline.create({
+      name: 'Pipeline'
+    })]);
+  }
 
-    this.setState({
-      pipelines: pipelines,
-      changed: !_.isEqual(pipelines, this.props.entity.pipelines)
-    }, () => {
-      this.props.parent.checkPristine();
-    });
+  onRemovePipeline(pipeline, plIdx) {
+    this._setPipelineState(update(this.state.pipelines, {
+      $splice: [[plIdx, 1]]
+    }));
+  }
+
+  onAddPolicy(pipeline, plIdx) {
+    this._setPipelineState(update(this.state.pipelines, {
+      [plIdx]: {
+        policies: {
+          $push: [Policy.create({
+            name: 'New policy',
+            type: 'Rate limit'
+          })]
+        }
+      }
+    }));
+  }
+
+  onRemovePolicy(pipeline, plIdx, policy, policyIdx) {
+    this._setPipelineState(update(this.state.pipelines, {
+      [plIdx]: {
+        policies: {$splice: [[policyIdx, 1]]}
+      }
+    }));
   }
 
   renderPipelines() {
     return this.state.pipelines.map((pipeline, plIdx) => {
       const policies = pipeline.policies.map((policy, index) => {
-        return <GatewayPolicyDetails pipelineId={pipeline.id}
+        return <GatewayPolicyDetails key={`pipeline-${pipeline.id}-policy-${policy.id}`}
                                      pipelineIndex={plIdx}
                                      policy={policy}
-                                     index={index} />;
+                                     index={index}
+                                     onRemove={this.onRemovePolicy.bind(this, pipeline, plIdx)} />;
       });
 
       return (
@@ -101,14 +119,21 @@ class GatewayDetails extends Component {
                    value={pipeline.name}
                    name={`pipelines[${plIdx}][name]`}/>
             <i className="fa fa-remove details-panel__table__action"
-               onClick={() => this.onRemovePipeline(pipeline)}/>
+               onClick={() => this.onRemovePipeline(pipeline, plIdx)}/>
           </h3>
           <table className="details-panel__table">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Type</th>
-                <th>Details</th>
+                <th>
+                  Details
+                  <a onClick={() => this.onAddPolicy(pipeline, plIdx)} className="details-panel__add">
+                    <i className="fa fa-plus"/>
+                    Add policy
+                  </a>
+                </th>
+                <th className="details-panel__table__cell details-panel__table__cell--empty"/>
               </tr>
             </thead>
             <tbody>

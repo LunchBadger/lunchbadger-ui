@@ -29,10 +29,10 @@ const POLICY_DUMMY_CONFIG = {
 
 export default class GatewayPolicyDetails extends Component {
   static propTypes = {
-    pipelineId: PropTypes.string.isRequired,
     pipelineIndex: PropTypes.number.isRequired,
     policy: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    onRemove: PropTypes.func
   };
 
   constructor(props) {
@@ -44,11 +44,15 @@ export default class GatewayPolicyDetails extends Component {
     this.setState({type: ev.target.value});
   }
 
+  onRemove(property, index) {
+    this.props.onRemove(property, index);
+  }
+
   render() {
-    const {pipelineId, pipelineIndex, policy, index} = this.props;
+    const {pipelineIndex, policy, index} = this.props;
 
     return (
-      <tr key={`pipeline-${pipelineId}-policy-${policy.id}`}>
+      <tr>
         <td>
           <Input value={policy.id}
                  type="hidden"
@@ -69,6 +73,9 @@ export default class GatewayPolicyDetails extends Component {
           </Select>
         </td>
         {POLICY_DUMMY_CONFIG[this.state.type]}
+        <td className="details-panel__table__cell details-panel__table__cell--empty">
+          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(policy, index)}/>
+        </td>
       </tr>
     );
   }

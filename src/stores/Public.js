@@ -84,6 +84,19 @@ class Public extends BaseStore {
           _.remove(Publics, {id: action.entity.id});
           this.emitChange();
           break;
+        case 'AddPortal':
+          Publics.push(action.portal);
+          action.portal.itemOrder = Publics.length - 1;
+          this.emitChange();
+          break;
+        case 'DeployPortalSuccess':
+          const portal = this.findEntity(action.portal.id);
+
+          if (portal) {
+            portal.ready = true;
+            this.emitChange();
+          }
+          break;
       }
     });
   }

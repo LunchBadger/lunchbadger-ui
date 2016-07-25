@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import API from '../CanvasElements/API';
+import Portal from '../CanvasElements/Portal';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 const PublicEndpoint = LunchBadgerManage.components.PublicEndpoint;
@@ -25,6 +26,18 @@ class PublicQuadrant extends Component {
                  appState={this.props.appState}
                  id={entity.id}
                  icon="icon-icon-product"
+                 hideSourceOnDrag={true}
+                 itemOrder={entity.itemOrder}
+                 moveEntity={this.moveEntity}
+                 entity={entity}/>
+          );
+        case 'Portal':
+          return (
+            <Portal key={entity.id}
+                 paper={this.props.paper}
+                 appState={this.props.appState}
+                 id={entity.id}
+                 icon="icon-icon-portal"
                  hideSourceOnDrag={true}
                  itemOrder={entity.itemOrder}
                  moveEntity={this.moveEntity}

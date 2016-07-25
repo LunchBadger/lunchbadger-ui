@@ -1,4 +1,5 @@
 import API from '../components/Tools/API';
+import Portal from '../components/Tools/Portal';
 import PublicQuadrant from '../components/Quadrants/PublicQuadrant';
 import APIFactory from '../models/API';
 import APIDetails from '../components/Panel/EntitiesDetails/APIDetails';
@@ -8,7 +9,8 @@ const toolGroupComponent = LunchBadgerCore.components.ToolGroup;
 const Public = LunchBadgerManage.stores.Public;
 
 const tools = [
-  new LunchBadgerCore.models.ToolComponent(API)
+  new LunchBadgerCore.models.ToolComponent(API),
+  new LunchBadgerCore.models.ToolComponent(Portal)
 ];
 const toolGroup = [
   new LunchBadgerCore.models.ToolGroupComponent('monetize', toolGroupComponent, tools, 10)

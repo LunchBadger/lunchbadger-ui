@@ -1,0 +1,26 @@
+@import '/../../../../../lunchbadger-core/src/config';
+
+.api {
+  position: relative;
+  font-size: 16px;
+  padding: 4px 0;
+}
+
+.api--selected {
+  background: #00abff;
+  color: #fff;
+}
+
+.api__info {
+  cursor: pointer;
+  padding-left: 18px;
+}
+
+.api__name {
+  display: inline-block;
+}
+
+.api__icon {
+  display: inline-block;
+  margin-right: 7px;
+}

@@ -3,8 +3,11 @@ import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import unbundleAPI from 'actions/CanvasElements/API/unbundle';
+import bundleAPI from 'actions/CanvasElements/API/bundle';
+import moveBetweenAPIs from 'actions/CanvasElements/API/rebundle';
 import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
+import _ from 'lodash';
 import './API.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
@@ -66,18 +69,18 @@ class API extends Component {
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((endpoint) => {
+    return this.props.entity.publicEndpoints.map((api) => {
       return (
-        <div key={endpoint.id} className="canvas-element__sub-element canvas-element__sub-element--api">
+        <div key={api.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <PublicEndpoint
             {...this.props}
             parent={this.props.entity}
-            key={endpoint.id}
-            id={endpoint.id}
-            entity={endpoint}
+            key={api.id}
+            id={api.id}
+            entity={api}
             paper={this.props.paper}
-            left={endpoint.left}
-            top={endpoint.top}
+            left={api.left}
+            top={api.top}
             handleEndDrag={(item) => this._handleEndDrag(item)}
             hideSourceOnDrag={true}/>
         </div>
@@ -132,7 +135,16 @@ class API extends Component {
             </DraggableGroup>
           </div>
           <div className="canvas-element__drop">
-            <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity}/>
+            <APIDrop {...this.props}
+                     canDropCheck={
+                       (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+                       && !_.includes(this.props.entity.publicEndpoints, item.entity)
+                     }
+                     onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
+                     onAdd={bundleAPI}
+                     onMove={moveBetweenAPIs}
+                     parent={this.props.parent}
+                     entity={this.props.entity}/>
           </div>
         </div>
 
@@ -144,7 +156,7 @@ class API extends Component {
                           onClose={this._handleClose.bind(this)}
                           onSave={this._handleModalConfirm.bind(this)}>
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" endpoint from "{this.props.entity.name}"?
+              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
         }

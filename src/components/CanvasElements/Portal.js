@@ -1,10 +1,14 @@
 import React, {Component, PropTypes} from 'react';
-import updateAPI from '../../actions/CanvasElements/API/update';
-import unbundleAPI from 'actions/CanvasElements/API/unbundle';
+import updatePortal from '../../actions/CanvasElements/Portal/update';
+import unbundlePortal from 'actions/CanvasElements/Portal/unbundle';
+import moveBetweenPortals from 'actions/CanvasElements/Portal/rebundle';
 import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
 import {notify} from 'react-notify-toast';
+import bundlePortal from 'actions/CanvasElements/Portal/bundle';
+import _ from 'lodash';
 import './API.scss';
+import API from './Subelements/API';
 
 const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
@@ -64,21 +68,46 @@ class Portal extends Component {
   }
 
   update(model) {
-    updateAPI(this.props.entity.id, model);
+    updatePortal(this.props.entity.id, model);
   }
 
   renderAPIs() {
-    return null;
+    return this.props.entity.apis.map((endpoint) => {
+      return (
+        <div key={endpoint.id} className="canvas-element__sub-element canvas-element__sub-element--api">
+          <API
+            {...this.props}
+            parent={this.props.entity}
+            key={endpoint.id}
+            id={endpoint.id}
+            entity={endpoint}
+            paper={this.props.paper}
+            left={endpoint.left}
+            top={endpoint.top}
+            handleEndDrag={(item) => this._handleEndDrag(item)}
+            hideSourceOnDrag={true}/>
+        </div>
+      );
+    });
   }
 
   _handleModalConfirm() {
     const item = this.state.bundledItem;
 
-    unbundleAPI(item.parent, item.entity);
+    unbundlePortal(item.parent, item.entity);
   }
 
   _handleClose() {
     this.setState({isShowingModal: false});
+  }
+
+  _handleEndDrag(item) {
+    if (item) {
+      this.setState({
+        isShowingModal: true,
+        bundledItem: item
+      });
+    }
   }
 
   render() {
@@ -92,13 +121,23 @@ class Portal extends Component {
           <div className="canvas-element__sub-elements__title">
             APIs
           </div>
-          <div className="canvas-element__endpoints" ref="endpoints">
+          <div className="canvas-element__endpoints" ref="apis">
             <DraggableGroup iconClass="icon-icon-portal" entity={this.props.entity} appState={this.props.appState}>
               {this.renderAPIs()}
             </DraggableGroup>
           </div>
           <div className="canvas-element__drop">
-            <APIDrop {...this.props} parent={this.props.parent} entity={this.props.entity}/>
+            <APIDrop {...this.props}
+                     canDropCheck={
+                       (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+                       && !_.includes(this.props.entity.apis, item.entity)
+                     }
+                     onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
+                     onAdd={bundlePortal}
+                     onMove={moveBetweenPortals}
+                     dropText={'Drag APIs here'}
+                     parent={this.props.parent}
+                     entity={this.props.entity}/>
           </div>
         </div>
 
@@ -110,7 +149,7 @@ class Portal extends Component {
                           onClose={this._handleClose.bind(this)}
                           onSave={this._handleModalConfirm.bind(this)}>
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" API from "{this.props.entity.name}"?
+              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
         }

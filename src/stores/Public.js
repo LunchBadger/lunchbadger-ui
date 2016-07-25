@@ -72,8 +72,7 @@ class Public extends BaseStore {
           this.emitChange();
           break;
         case 'AddAPI':
-          Publics.push(action.API);
-          action.API.itemOrder = Publics.length - 1;
+          this._insertAPI(action.API);
           this.emitChange();
           break;
         case 'UpdateAPI':
@@ -97,6 +96,25 @@ class Public extends BaseStore {
             this.emitChange();
           }
           break;
+        case 'BundlePortal':
+          Publics.splice(this.findEntityIndex(action.api.id), 1);
+          action.portal.addAPI(action.api);
+          this.emitChange();
+          break;
+        case 'UnbundlePortal':
+          this._insertAPI(action.api);
+          action.portal.removeAPI(action.api);
+          this.emitChange();
+          break;
+        case 'UpdatePortal':
+          this.updateEntity(action.id, action.data);
+          this.emitChange();
+          break;
+        case 'RebundlePortal':
+          action.fromPortal.removeAPI(action.api);
+          action.toPortal.addAPI(action.api);
+          this.emitChange();
+          break;
       }
     });
   }
@@ -113,8 +131,13 @@ class Public extends BaseStore {
     return _.findIndex(Publics, {id: id});
   }
 
+  _insertAPI(api) {
+    api.itemOrder = Publics.length - 1;
+    Publics.push(api);
+  }
+
   _insertPublicEndpoint(endpoint) {
-    endpoint.itemOrder = Publics.length;
+    endpoint.itemOrder = Publics.length - 1;
     Publics.push(endpoint);
   }
 }

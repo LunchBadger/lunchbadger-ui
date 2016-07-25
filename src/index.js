@@ -23,6 +23,7 @@ import Checkbox from './components/Generics/Form/Checkbox';
 import Select from './components/Generics/Form/Select';
 import InputField from './components/Panel/EntitiesDetails/InputField';
 import CheckboxField from './components/Panel/EntitiesDetails/CheckboxField';
+import SelectField from './components/Panel/EntitiesDetails/SelectField';
 import CloseButton from './components/Panel/CloseButton';
 import SaveButton from './components/Panel/SaveButton';
 import Draggable from './components/Draggable/Draggable';
@@ -54,6 +55,7 @@ import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import toggleEdit from './actions/CanvasElements/toggleEdit';
 import attachConnection from './actions/Connection/attach';
 import reattachConnection from './actions/Connection/reattach';
+import removeConnection from './actions/Connection/remove';
 import setProject from './actions/Stores/AppState/setProject';
 import initializeAppState from './actions/Stores/AppState/initialize';
 import toggleSubelement from './actions/CanvasElements/toggleSubelement';
@@ -84,7 +86,8 @@ let LunchBadgerCore = {
     removeEntity: removeEntity,
     Connection: {
       attachConnection: attachConnection,
-      reattachConnection: reattachConnection
+      reattachConnection: reattachConnection,
+      removeConnection: removeConnection
     },
     Stores: {
       AppState: {
@@ -104,6 +107,7 @@ let LunchBadgerCore = {
     Select: Select,
     InputField: InputField,
     CheckboxField: CheckboxField,
+    SelectField: SelectField,
     CloseButton: CloseButton,
     SaveButton: SaveButton,
     Draggable: Draggable,

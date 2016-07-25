@@ -34,14 +34,15 @@ class PublicQuadrant extends Component {
         case 'Portal':
           return (
             <Portal key={entity.id}
-                 paper={this.props.paper}
-                 appState={this.props.appState}
-                 id={entity.id}
-                 icon="icon-icon-portal"
-                 hideSourceOnDrag={true}
-                 itemOrder={entity.itemOrder}
-                 moveEntity={this.moveEntity}
-                 entity={entity}/>
+                    paper={this.props.paper}
+                    appState={this.props.appState}
+                    id={entity.id}
+                    icon="icon-icon-portal"
+                    hideSourceOnDrag={true}
+                    itemOrder={entity.itemOrder}
+                    ready={entity.ready}
+                    moveEntity={this.moveEntity}
+                    entity={entity}/>
           );
         case 'PublicEndpoint':
           return (

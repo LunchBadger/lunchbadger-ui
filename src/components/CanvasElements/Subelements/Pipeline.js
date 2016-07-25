@@ -13,13 +13,15 @@ const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 const Connection = LunchBadgerCore.stores.Connection;
 const Port = LunchBadgerCore.components.Port;
 const AppState = LunchBadgerCore.stores.AppState;
+const Input = LunchBadgerCore.components.Input;
 
 export default class Pipeline extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
-    rootPath: PropTypes.string.isRequired
+    rootPath: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -98,8 +100,8 @@ export default class Pipeline extends Component {
   }
 
   renderPolicies() {
-    return this.props.entity.policies.map((policy) => {
-      return <Policy key={policy.id} policy={policy}/>;
+    return this.props.entity.policies.map((policy, index) => {
+      return <Policy key={policy.id} index={index} pipelineIndex={this.props.index} policy={policy}/>;
     });
   }
 
@@ -132,6 +134,7 @@ export default class Pipeline extends Component {
       pipeline__info: true,
       'pipeline__info--selected': _.find(selectedElements, {id: this.props.entity.id})
     });
+    const {index} = this.props;
 
     return (
       <div className={pipelineClass}>
@@ -144,7 +147,16 @@ export default class Pipeline extends Component {
           </span>
 
           <div className="pipeline__name" onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
-            {this.props.entity.name}
+            <span className="hide-while-edit">{this.props.entity.name}</span>
+
+            <Input value={this.props.entity.id}
+                   type="hidden"
+                   name={`pipelines[${index}][id]`}/>
+            <span onClick={event => event.stopPropagation()}>
+              <Input className="canvas-element__input canvas-element__input--property editable-only"
+                     value={this.props.entity.name}
+                     name={`pipelines[${index}][name]`}/>
+            </span>
           </div>
 
           {this.renderPorts()}

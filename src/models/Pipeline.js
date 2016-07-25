@@ -4,21 +4,6 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
 
-const defaultPolicies = [
-  Policy.create({
-    name: 'Auth 01',
-    type: 'OAuth2'
-  }),
-  Policy.create({
-    name: 'Rate limiter',
-    type: 'Rate limit'
-  }),
-  Policy.create({
-    name: 'Logger',
-    type: 'Logging'
-  })
-];
-
 export default class Pipeline extends BaseModel {
   static type = 'Pipeline';
   _ports = [];
@@ -33,7 +18,20 @@ export default class Pipeline extends BaseModel {
     super(id);
 
     this.name = name;
-    this.policies = defaultPolicies;
+    this.policies = [
+      Policy.create({
+        name: 'Auth 01',
+        type: 'OAuth2'
+      }),
+      Policy.create({
+        name: 'Rate limiter',
+        type: 'Rate limit'
+      }),
+      Policy.create({
+        name: 'Logger',
+        type: 'Logging'
+      })
+    ];
 
     this.ports = [
       Port.create({

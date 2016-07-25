@@ -23,10 +23,13 @@ export default (data) => {
       let policies = pipeline.policies || [];
       delete pipeline.policies;
 
-      return Pipeline.create({
-        ...pipeline,
-        policies: policies.map(policy => Policy.create(policy))
-      });
+      const pipelineOptions = {...pipeline};
+
+      if (policies.length > 0) {
+        pipelineOptions.policies = policies.map(policy => Policy.create(policy));
+      }
+
+      return Pipeline.create(pipelineOptions);
     });
 
     return gatewayEntity;

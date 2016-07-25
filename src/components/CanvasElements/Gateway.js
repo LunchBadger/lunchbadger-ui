@@ -1,9 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import Pipeline from './Subelements/Pipeline';
-import updateGateway from 'actions/CanvasElements/Gateway/update';
+import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
 import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
 import classNames from 'classnames';
+import Policy from 'models/Policy';
+import PipelineFactory from 'models/Pipeline';
+import _ from 'lodash';
 
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -44,10 +47,11 @@ class Gateway extends Component {
   }
 
   renderPipelines() {
-    return this.props.entity.pipelines.map((pipeline) => {
+    return this.props.entity.pipelines.map((pipeline, index) => {
       return (
         <div key={pipeline.id} className="canvas-element__sub-element canvas-element__sub-element--pipeline">
           <Pipeline {...this.props}
+                    index={index}
                     parent={this.props.entity}
                     paper={this.props.paper}
                     rootPath={this.props.entity.rootPath}
@@ -58,7 +62,19 @@ class Gateway extends Component {
   }
 
   update(model) {
-    updateGateway(this.props.entity.id, model);
+    let data = {
+      pipelines: (model.pipelines || []).map(pipeline => {
+        let policies = pipeline.policies || [];
+        delete pipeline.policies;
+
+        return PipelineFactory.create({
+          ...pipeline,
+          policies: policies.map(policy => Policy.create(policy))
+        });
+      })
+    };
+
+    redeployGateway(this.props.entity, _.merge(model, data));
   }
 
   onAddPipeline(name) {

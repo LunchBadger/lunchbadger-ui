@@ -52,6 +52,12 @@
   width: 100%;
   padding-left: 35px;
   margin-left: -35px;
+  padding-right: 30px;
+
+  .editable & {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 }
 
 .pipeline__toggle {
@@ -89,6 +95,10 @@
   .pipeline--opened & {
     max-height: 300px;
     overflow: auto;
+
+    .editable & {
+      padding-bottom: 5px;
+    }
   }
 }
 

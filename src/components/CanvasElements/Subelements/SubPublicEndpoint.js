@@ -31,7 +31,7 @@ export default class PublicEndpoint extends Component {
 
   render() {
     return (
-      <div className="public-endpoint">
+      <div className="public-endpoint public-endpoint--bundled">
         <div className="public-endpoint__info">
           <div className="public-endpoint__icon">
             <i className="fa fa-globe"/>

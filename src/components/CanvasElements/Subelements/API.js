@@ -48,6 +48,10 @@ export default class API extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      opened: false
+    };
   }
 
   renderEndpoints() {
@@ -66,33 +70,43 @@ export default class API extends Component {
     });
   }
 
+  toggleOpenState() {
+    this.setState({opened: !this.state.opened});
+  }
+
   render() {
     const {connectDragSource} = this.props;
     const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
 
     const elementClass = classNames({
-      'api': true,
-      'api--selected': _.find(selectedElements, {id: this.props.id})
+      subapi: true,
+      'subapi--opened': this.state.opened,
+      'subapi--closed': !this.state.opened
+    });
+
+    const apiInfoClass = classNames({
+      'subapi__info': true,
+      'subapi__info--selected': _.find(selectedElements, {id: this.props.id})
     });
 
     return connectDragSource(
-      <div className={elementClass} onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
-        <div className="api__info">
-          <div className="api__icon">
-            <i className="icon-icon-product"/>
-          </div>
-          <div className="api__name">
+      <div className={elementClass}>
+        <div className={apiInfoClass}>
+          <span className="subapi__action" onClick={this.toggleOpenState.bind(this)}>
+            <span className="subapi__toggle"/>
+            <span className="subapi__icon">
+              <i className="icon-icon-product"/>
+            </span>
+          </span>
+
+          <div className="subapi__name" onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
             {this.props.entity.name}
           </div>
         </div>
 
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            Endpoints
-          </div>
-          <div className="canvas-element__endpoints" ref="endpoints">
-            {this.renderEndpoints()}
-          </div>
+        <div className="subapi__details">
+          <div className="subapi__details__title">Endpoints</div>
+          {this.renderEndpoints()}
         </div>
       </div>
     );

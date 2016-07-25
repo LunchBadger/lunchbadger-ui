@@ -8,6 +8,7 @@ import _ from 'lodash';
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
 const Select = LunchBadgerCore.components.Select;
+const SelectField = LunchBadgerCore.components.SelectField;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
@@ -201,7 +202,10 @@ class ModelDetails extends Component {
           <div className="details-panel__container details-panel__columns">
             <InputField label="Context path" propertyName="contextPath" entity={entity}/>
             <InputField label="Plural" propertyName="plural" entity={entity}/>
-            <InputField label="Base model" propertyName="base" entity={entity}/>
+            <SelectField label="Base model" propertyName="base" entity={entity}>
+              <option value="Model">Model</option>
+              <option value="PersistedModel">PersistedModel</option>
+            </SelectField>
             <div className="details-panel__fieldset">
               <label className="details-panel__label"
                      htmlFor="dataSource">Data source</label>

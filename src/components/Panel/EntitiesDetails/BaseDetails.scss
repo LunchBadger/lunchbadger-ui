@@ -96,7 +96,8 @@
 
 .details-panel__columns {
   .details-panel__fieldset {
-    width: 50%;
+    width: 25%;
+    min-width: 320px;
     float: left;
   }
 }

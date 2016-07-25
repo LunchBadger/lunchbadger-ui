@@ -2,15 +2,19 @@ import React, {Component, PropTypes} from 'react';
 import updateModel from 'actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelRelationDetails from './ModelRelationDetails';
+import BackendStore from 'stores/Backend';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
+const Select = LunchBadgerCore.components.Select;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
+const ConnectionStore = LunchBadgerCore.stores.Connection;
+const removeConnection = LunchBadgerCore.actions.Connection.removeConnection;
 
 class ModelDetails extends Component {
   static propTypes = {
@@ -20,19 +24,34 @@ class ModelDetails extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      properties: props.entity.properties.slice(),
-      relations: props.entity.relations.slice(),
-      changed: false
-    };
+    const stateFromStores = (newProps) => {
+      return {
+        properties: newProps.entity.properties.slice(),
+        relations: newProps.entity.relations.slice(),
+        changed: false
+      };
+    }
+
+    this.state = Object.assign({}, stateFromStores(props));
 
     this.onStoreUpdate = () => {
-      this.setState({
-        properties: this.props.entity.properties.slice(),
-        relations: this.props.entity.relations.slice(),
-        changed: false
-      });
-    };
+      this.setState(stateFromStores(this.props));
+    }
+  }
+
+  _getBackendConnection() {
+    const entity = this.props.entity;
+    const connections = ConnectionStore.getConnectionsForTarget(entity.id);
+    return connections.length ? connections[0] : null;
+  }
+
+  _getCurrentBackend() {
+    const connection = this._getBackendConnection();
+    if (connection) {
+      return BackendStore.findEntity(connection.fromId).id;
+    } else {
+      return 'none';
+    }
   }
 
   componentDidMount() {
@@ -67,7 +86,28 @@ class ModelDetails extends Component {
       data.relations.push(ModelRelation.create(relation));
     });
 
-    updateModel(this.props.entity.id, Object.assign(model, data));
+    const currDsConn = this._getBackendConnection();
+    const currDsId = currDsConn ? currDsConn.fromId : null;
+    const dsId = model.dataSource === 'none' ? null : model.dataSource;
+
+    if (dsId !== currDsId) {
+      if (currDsConn) {
+        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection, {
+          fireEvent: false
+        });
+        removeConnection(currDsConn.fromId, currDsConn.toId);
+      }
+      if (dsId) {
+        LunchBadgerCore.utils.paper.connect({
+          source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+          target: document.getElementById(`port_in_${this.props.entity.id}`).querySelector('.port__anchor')
+        });
+      }
+    }
+
+    let updateData = Object.assign({}, model, data);
+    delete updateData.dataSource;
+    updateModel(this.props.entity.id, updateData);
   }
 
   onAddItem(collection, itemType, defaults={}) {
@@ -151,6 +191,9 @@ class ModelDetails extends Component {
 
   render() {
     const {entity} = this.props;
+    const dataSources = BackendStore.getData().map(ds => {
+      return <option value={ds.id}>{ds.name}</option>
+    });
 
     return (
       <div>
@@ -159,7 +202,16 @@ class ModelDetails extends Component {
             <InputField label="Context path" propertyName="contextPath" entity={entity}/>
             <InputField label="Plural" propertyName="plural" entity={entity}/>
             <InputField label="Base model" propertyName="base" entity={entity}/>
-            <InputField label="Data source" propertyName="dataSource" entity={entity}/>
+            <div className="details-panel__fieldset">
+              <label className="details-panel__label"
+                     htmlFor="dataSource">Data source</label>
+              <Select className="details-panel__input"
+                      name="dataSource"
+                      value={this._getCurrentBackend()}>
+                <option value="none">[None]</option>
+                {dataSources}
+              </Select>
+            </div>
             <CheckboxField label="Read only" propertyName="readOnly" entity={entity}/>
             <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
             <CheckboxField label="Exposed as REST" propertyName="public" entity={entity}/>

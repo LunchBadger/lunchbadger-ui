@@ -15,7 +15,9 @@
   right: 0;
   display: table;
   line-height: 1.65;
+  transition: all 1s ease;
 
+  .wip &,
   .dragging &,
   .editable & {
     display: none;

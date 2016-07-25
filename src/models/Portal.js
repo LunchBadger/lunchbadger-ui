@@ -51,8 +51,8 @@ export default class Portal extends BaseModel {
    * @param api {API}
    */
   addAPI(api) {
-    endpoint.wasBundled = true;
-    this._publicEndpoints.push(endpoint);
+    api.wasBundled = true;
+    this._apis.push(api);
   }
 
   removeAPI(api) {

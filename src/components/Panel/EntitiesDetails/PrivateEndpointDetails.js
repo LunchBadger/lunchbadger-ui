@@ -25,10 +25,10 @@ class PrivateEndpointDetails extends Component {
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
           <div className="details-panel__fieldset">
-            <span className="details-panel__label">Context path</span>
+            <span className="details-panel__label">URL</span>
             <Input className="details-panel__input"
-                   value={entity.contextPath}
-                   name="contextPath"/>
+                   value={entity.url}
+                   name="url"/>
           </div>
         </div>
       </CollapsableDetails>

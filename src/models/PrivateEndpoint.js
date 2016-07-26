@@ -2,12 +2,10 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
 
-
-
 export default class PrivateEndpoint extends BaseModel {
   static type = 'PrivateEndpoint';
   _ports = [];
-  contextPath = 'private-endpoint';
+  url = 'https://private/endpoint';
 
   constructor(id, name) {
     super(id);
@@ -27,7 +25,7 @@ export default class PrivateEndpoint extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      contextPath: this.contextPath,
+      url: this.url,
       itemOrder: this.itemOrder
     }
   }

@@ -27,7 +27,6 @@ class PublicEndpoint extends Component {
               way={port.portType}
               elementId={this.props.entity.id}
               className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              ref={`port-${port.portType}`}
               scope={port.portGroup}/>
       );
     });
@@ -44,9 +43,9 @@ class PublicEndpoint extends Component {
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">URL</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.url}
-              </span>
+                <span className="hide-while-edit">
+                  {this.props.entity.url}
+                </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.props.entity.url}

@@ -153,6 +153,8 @@ export default class Canvas extends Component {
 
         if (strategyFulfilled === false && connection.suspendedElement) {
           this._rollbackConnection(connection, source, target);
+        } else if (strategyFulfilled === false) {
+          this._disconnect(connection);
         }
 
         if (strategyFulfilled === null) {

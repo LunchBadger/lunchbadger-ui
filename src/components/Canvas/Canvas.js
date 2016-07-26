@@ -121,15 +121,41 @@ export default class Canvas extends Component {
     }
   }
 
+  _checkStrategyOnMove(info) {
+    let strategyFulfilled = null;
+
+    this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
+      if (strategyFulfilled === null) {
+        const fulfilledStatus = strategy.handleConnectionMoved.checkAndFulfill(info, this.paper);
+
+        if (fulfilledStatus !== null) {
+          strategyFulfilled = fulfilledStatus;
+        }
+      }
+    });
+
+    return strategyFulfilled;
+  }
+
+  _checkStrategyOnCreate(info) {
+    let strategyFulfilled = null;
+
+    this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
+      if (strategyFulfilled === null) {
+        const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+
+        if (fulfilledStatus !== null) {
+          strategyFulfilled = fulfilledStatus;
+        }
+      }
+    });
+
+    return strategyFulfilled;
+  }
+
   _attachPaperEvents() {
     this.paper.bind('connection', (info) => {
-      const {source, sourceId, target, targetId, connection} = info;
-
-      if (!this._isConnectionValid(source, sourceId, target, targetId)) {
-        this._disconnect(connection);
-
-        return;
-      }
+      const {source, sourceId, targetId, connection} = info;
 
       if (source.parentElement.classList.contains('port-in')) {
         this._flipConnection(connection);
@@ -139,27 +165,7 @@ export default class Canvas extends Component {
       }
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        let strategyFulfilled = null;
-
-        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
-          if (strategyFulfilled === null) {
-            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
-
-            if (fulfilledStatus !== null) {
-              strategyFulfilled = fulfilledStatus;
-            }
-          }
-        });
-
-        if (strategyFulfilled === false && connection.suspendedElement) {
-          this._rollbackConnection(connection, source, target);
-        } else if (strategyFulfilled === false) {
-          this._disconnect(connection);
-        }
-
-        if (strategyFulfilled === null) {
-          addConnection(sourceId, targetId, info);
-        }
+        addConnection(sourceId, targetId, info);
       }
     });
 
@@ -168,6 +174,24 @@ export default class Canvas extends Component {
         source: info.source,
         target: info.target
       });
+    });
+
+    this.paper.bind('beforeDrop', (info) => {
+      const {sourceId, targetId, connection} = info;
+
+      const sourceElement = document.querySelector(`#${sourceId}`);
+      const targetElement = document.querySelector(`#${targetId}`);
+
+      if (!this._isConnectionValid(sourceElement, sourceId, targetElement, targetId)) {
+        return false;
+      }
+
+      // connection is being moved...
+      if (connection.suspendedElement) {
+        return this._checkStrategyOnMove(info) !== false;
+      } else {
+        return this._checkStrategyOnCreate(info) !== false;
+      }
     });
 
     this.paper.bind('beforeDrag', () => {

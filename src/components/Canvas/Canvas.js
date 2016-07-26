@@ -18,6 +18,8 @@ export default class Canvas extends Component {
       connections: []
     };
 
+    this.fulfilledAction = null;
+
     this.connectionsChanged = () => {
       this.setState({connections: Connection.getData()});
     }
@@ -103,24 +105,6 @@ export default class Canvas extends Component {
     });
   }
 
-  _rollbackConnection(connection, source, target) {
-    if (connection.suspendedElementType === 'target') {
-      this.paper.connect({
-        source: source,
-        target: connection.suspendedElement
-      }, {
-        fireEvent: false
-      });
-    } else if (connection.suspendedElementType === 'source') {
-      this.paper.connect({
-        source: connection.suspendedElement,
-        target: target
-      }, {
-        fireEvent: false
-      });
-    }
-  }
-
   _checkStrategyOnMove(info) {
     let strategyFulfilled = null;
 
@@ -137,15 +121,18 @@ export default class Canvas extends Component {
     return strategyFulfilled;
   }
 
-  _checkStrategyOnCreate(info) {
+  _checkStrategyOnCreate(sourceId, targetId) {
+    this.fulfilledAction = null;
     let strategyFulfilled = null;
 
     this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
       if (strategyFulfilled === null) {
-        const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+        const fulfilledStatus = strategy.handleConnectionCreated.checkAction(sourceId, targetId);
 
         if (fulfilledStatus !== null) {
           strategyFulfilled = fulfilledStatus;
+
+          this.fulfilledAction = strategy.handleConnectionCreated.fulfilledAction;
         }
       }
     });
@@ -158,14 +145,18 @@ export default class Canvas extends Component {
       const {source, sourceId, targetId, connection} = info;
 
       if (source.parentElement.classList.contains('port-in')) {
-        this._flipConnection(connection);
+        this._flipConnection(info);
         this._disconnect(connection);
 
         return;
       }
 
       if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        addConnection(sourceId, targetId, info);
+        if (!this.fulfilledAction) {
+          addConnection(sourceId, targetId, info);
+        } else {
+          this.fulfilledAction(info);
+        }
       }
     });
 
@@ -190,7 +181,11 @@ export default class Canvas extends Component {
       if (connection.suspendedElement) {
         return this._checkStrategyOnMove(info) !== false;
       } else {
-        return this._checkStrategyOnCreate(info) !== false;
+        if (sourceElement.parentElement.classList.contains('port-in')) {
+          return this._checkStrategyOnCreate(targetId, sourceId) !== false;
+        } else {
+          return this._checkStrategyOnCreate(sourceId, targetId) !== false;
+        }
       }
     });
 

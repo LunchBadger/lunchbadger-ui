@@ -4,12 +4,6 @@ import APIPlan from './APIPlan';
 const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
-const defaultPlans = [
-  APIPlan.create({name: 'Free', icon: 'fa-paper-plane'}),
-  APIPlan.create({name: 'Developer', icon: 'fa-plane'}),
-  APIPlan.create({name: 'Professional', icon: 'fa-fighter-jet'})
-];
-
 export default class API extends BaseModel {
   static type = 'API';
 
@@ -30,6 +24,12 @@ export default class API extends BaseModel {
   constructor(id, name) {
     super(id);
 
+    const defaultPlans = [
+      APIPlan.create({name: 'Free', icon: 'fa-paper-plane'}),
+      APIPlan.create({name: 'Developer', icon: 'fa-plane'}),
+      APIPlan.create({name: 'Professional', icon: 'fa-fighter-jet'})
+    ];
+
     this.name = name;
     this.plans = defaultPlans.slice();
   }
@@ -40,7 +40,8 @@ export default class API extends BaseModel {
       name: this.name,
       publicEndpoints: this.publicEndpoints.map(endpoint => endpoint.toJSON()),
       plans: this.plans.map(plan => plan.toJSON()),
-      itemOrder: this.itemOrder
+      itemOrder: this.itemOrder,
+      portalId: this.portalId
     }
   }
 

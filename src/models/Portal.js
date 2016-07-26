@@ -12,13 +12,20 @@ export default class Portal extends BaseModel {
    */
   _apis = [];
 
+	/**
+   * @type {string}
+   * @private
+   */
+  _rootUrl = '';
+
   _accept = [API.type];
 
-  constructor(id, name) {
+  constructor(id, name, url = 'http://') {
     super(id);
 
     this.name = name;
     this.ready = false;
+    this.rootUrl = url;
   }
 
   toJSON() {
@@ -26,6 +33,7 @@ export default class Portal extends BaseModel {
       id: this.id,
       name: this.name,
       apis: this.apis.map(api => api.toJSON()),
+      rootUrl: this.rootUrl,
       itemOrder: this.itemOrder
     }
   }
@@ -65,5 +73,13 @@ export default class Portal extends BaseModel {
 
   get publicEndpoints() {
     return this._apis.reduce((endpoints, api) => endpoints.concat(api.publicEndpoints), []);
+  }
+
+  get rootUrl() {
+    return this._rootUrl;
+  }
+
+  set rootUrl(url) {
+    this._rootUrl = url;
   }
 }

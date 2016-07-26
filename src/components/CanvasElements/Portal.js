@@ -15,6 +15,7 @@ const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
+const Input = LunchBadgerCore.components.Input;
 
 class Portal extends Component {
   static propTypes = {
@@ -40,7 +41,9 @@ class Portal extends Component {
       this.previousConnection = info;
     });
 
-    toggleEdit(this.props.entity);
+    if (!this.props.ready) {
+      toggleEdit(this.props.entity);
+    }
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -117,6 +120,23 @@ class Portal extends Component {
 
     return (
       <div className={elementClass}>
+        <div className="canvas-element__properties">
+          <div className="canvas-element__properties__table">
+            <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">Root URL</div>
+              <div className="canvas-element__properties__property-value">
+              <span className="hide-while-edit">
+                {this.props.entity.rootUrl}
+              </span>
+
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       value={this.props.entity.rootUrl}
+                       name="rootUrl"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="canvas-element__sub-elements">
           <div className="canvas-element__sub-elements__title">
             APIs

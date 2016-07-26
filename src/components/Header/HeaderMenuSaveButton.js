@@ -51,6 +51,7 @@ export default class HeaderMenuSaveButton extends Component {
 
     if (LunchBadgerMonetize) {
       data.apis = [];
+      data.portals = [];
     }
 
     storesList.forEach((store) => {
@@ -79,6 +80,9 @@ export default class HeaderMenuSaveButton extends Component {
           case 'API':
             data.apis.push(entity.toJSON());
             break;
+          case 'Portal':
+            data.portals.push(entity.toJSON());
+            break;
         }
       });
     });
@@ -96,13 +100,15 @@ export default class HeaderMenuSaveButton extends Component {
     if (states['currentElement']) {
       const {currentElement} = states;
 
-      data.states.push({
-        key: 'currentElement',
-        value: {
-          ...currentElement.toJSON(),
-          type: currentElement.constructor.type
-        }
-      });
+      if (typeof currentElement.toJSON === 'function') {
+        data.states.push({
+          key: 'currentElement',
+          value: {
+            ...currentElement.toJSON(),
+            type: currentElement.constructor.type
+          }
+        });
+      }
     }
 
     if (states['currentForecast']) {

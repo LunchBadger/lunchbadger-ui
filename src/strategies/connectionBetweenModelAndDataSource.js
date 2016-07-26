@@ -6,12 +6,12 @@ const Strategy = LunchBadgerCore.models.Strategy;
 const attachConnection = LunchBadgerCore.actions.Connection.attachConnection;
 const reattachConnection = LunchBadgerCore.actions.Connection.reattachConnection;
 
-const checkConnection = (connectionInfo) => {
-  const isBackend = Backend.findEntity(connectionInfo.sourceId) || Backend.findEntity(connectionInfo.targetId);
-  const isPrivate = Private.findEntity(connectionInfo.targetId) || Private.findEntity(connectionInfo.sourceId);
+const checkConnection = (sourceId, targetId) => {
+  const isBackend = Backend.findEntity(sourceId);
+  const isPrivate = Private.findEntity(targetId);
 
   if (isBackend && isPrivate) {
-    return !(Connection.search({toId: Connection.formatId(connectionInfo.targetId)}).length || Connection.search({toId: Connection.formatId(connectionInfo.sourceId)}).length);
+    return !Connection.search({toId: Connection.formatId(targetId)}).length;
   }
 
   return null;

@@ -7,11 +7,22 @@ const attachConnection = LunchBadgerCore.actions.Connection.attachConnection;
 const reattachConnection = LunchBadgerCore.actions.Connection.reattachConnection;
 
 const checkConnection = (connectionInfo) => {
-  const isBackend = Backend.findEntity(connectionInfo.sourceId);
-  const isPrivate = Private.findEntity(connectionInfo.targetId);
+  const isBackend = Backend.findEntity(connectionInfo.sourceId) || Backend.findEntity(connectionInfo.targetId);
+  const isPrivate = Private.findEntity(connectionInfo.targetId) || Private.findEntity(connectionInfo.sourceId);
 
   if (isBackend && isPrivate) {
-    return !Connection.search({toId: Connection.formatId(connectionInfo.targetId)}).length;
+    return !(Connection.search({toId: Connection.formatId(connectionInfo.targetId)}).length || Connection.search({toId: Connection.formatId(connectionInfo.sourceId)}).length);
+  }
+
+  return null;
+};
+
+const checkMovedConnection = (connectionInfo) => {
+  const isBackend = Backend.findEntity(connectionInfo.newSourceId);
+  const isPrivate = Private.findEntity(connectionInfo.newTargetId);
+
+  if (isBackend && isPrivate) {
+    return !Connection.search({toId: Connection.formatId(connectionInfo.newTargetId)}).length;
   }
 
   return null;

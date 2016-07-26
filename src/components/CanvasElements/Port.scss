@@ -26,9 +26,8 @@
   z-index: $z-index-medium;
   border-radius: 50%;
 
-  .collapsed .has-connection &,
-  &.jsplumb-connected {
-    //background: #DF5F37;
+  .collapsed .has-connection & {
+    background: #DF5F37;
   }
 
   &--connected {

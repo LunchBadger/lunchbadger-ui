@@ -16,12 +16,18 @@ export default class Canvas extends Component {
       lastUpdate: new Date(),
       canvasHeight: null
     };
+
+    this.connectionsChanged = () => {
+      console.log(Connection.getData());
+    }
   }
 
   componentWillMount() {
     this.repaint = setInterval(() => {
       this.paper.repaintEverything();
     }, 50);
+
+    Connection.addChangeListener(this.connectionsChanged);
   }
 
   componentDidMount() {
@@ -55,6 +61,8 @@ export default class Canvas extends Component {
 
   componentWillUnmount() {
     clearInterval(this.repaint);
+
+    Connection.removeChangeListener(this.connectionsChanged);
   }
 
   _disconnect(connection) {
@@ -63,16 +71,6 @@ export default class Canvas extends Component {
     });
 
     removeConnection(connection.sourceId, connection.targetId);
-  }
-
-  _handleExistingConnectionDetach(info) {
-    const {connection} = info;
-    const existingConnections = this.paper.select({source: connection.sourceId, target: connection.targetId});
-    const existingReverseConnections = this.paper.select({source: connection.targetId, target: connection.sourceId});
-
-    if ((existingConnections.length + existingReverseConnections.length) > 1) {
-      this._disconnect(connection);
-    }
   }
 
   _flipConnection(info) {
@@ -109,35 +107,19 @@ export default class Canvas extends Component {
       const {source, sourceId, target, targetId, connection} = info;
 
       if (!this._isConnectionValid(source, sourceId, target, targetId)) {
-        return this._disconnect(connection);
-      }
-
-      if (source.classList.contains('port-in')) {
         this._disconnect(connection);
-        this._flipConnection(info);
 
         return;
       }
 
-      this._handleExistingConnectionDetach(info);
+      if (source.parentElement.classList.contains('port-in')) {
+        this._flipConnection(connection);
+        this._disconnect(connection);
 
-      if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
-        let strategyFulfilled = null;
-
-        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
-          if (strategyFulfilled === null) {
-            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
-
-            if (fulfilledStatus !== null) {
-              strategyFulfilled = fulfilledStatus;
-            }
-          }
-        });
-
-        if (strategyFulfilled === null) {
-          addConnection(sourceId, targetId, info);
-        }
+        return;
       }
+
+      addConnection(sourceId, targetId, connection);
     });
 
     this.paper.bind('connectionDetached', (info) => {
@@ -145,35 +127,6 @@ export default class Canvas extends Component {
         source: info.source,
         target: info.target
       });
-    });
-
-    this.paper.bind('connectionMoved', (info) => {
-      if (Connection.findEntityIndexBySourceAndTarget(info.newSourceId, info.newTargetId) > -1
-        || !this._isConnectionValid(info.newSourceEndpoint.element, info.newSourceId, info.newTargetEndpoint.element, info.newTargetId)) {
-        setTimeout(() => {
-          this.paper.connect({
-            source: info.originalSourceEndpoint.element,
-            target: info.originalTargetEndpoint.element
-          });
-        });
-
-      } else {
-        let strategyFulfilled = null;
-
-        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
-          if (strategyFulfilled === null) {
-            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
-
-            if (fulfilledStatus !== null) {
-              strategyFulfilled = fulfilledStatus;
-            }
-          }
-        });
-
-        if (strategyFulfilled === null) {
-          moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
-        }
-      }
     });
 
     this.paper.bind('beforeDrag', () => {

@@ -28,10 +28,12 @@ class Connection extends BaseStore {
         break;
       case 'RemoveConnection':
         this._handleConnectionRemoval(action);
+        this.emitChange();
         break;
 
       case 'MoveConnection':
         this._handleConnectionReplace(action);
+        this.emitChange();
         break;
 
       case 'RemoveEntity':

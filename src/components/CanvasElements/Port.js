@@ -92,12 +92,18 @@ export default class Port extends Component {
     const connections = Connection.getConnectionsForTarget(this.props.elementId);
 
     _.forEach(connections, (connection) => {
-      if (connection.info.target) {
-        removeConnection(connection.fromId, connection.toId);
+      let source = null;
+
+      if (connection.info.source) {
+        source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
+      } else {
+        source = document.querySelector(`#${connection.info.sourceId}`);
       }
 
+      removeConnection(connection.fromId, connection.toId);
+
       this.props.paper.connect({
-        source: connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor'),
+        source: source,
         target: findDOMNode(this.refs.port)
       });
     });

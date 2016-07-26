@@ -119,7 +119,23 @@ export default class Canvas extends Component {
         return;
       }
 
-      addConnection(sourceId, targetId, connection);
+      if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
+        let strategyFulfilled = null;
+
+        this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
+          if (strategyFulfilled === null) {
+            const fulfilledStatus = strategy.handleConnectionCreated.checkAndFulfill(info, this.paper);
+
+            if (fulfilledStatus !== null) {
+              strategyFulfilled = fulfilledStatus;
+            }
+          }
+        });
+
+        if (strategyFulfilled === null) {
+          addConnection(sourceId, targetId, info);
+        }
+      }
     });
 
     this.paper.bind('connectionDetached', (info) => {

@@ -118,10 +118,23 @@ export default class Port extends Component {
       'port__middle': this.props.middle
     });
 
+    let isConnected = false;
+
+    if (this.props.way === 'out') {
+      isConnected = Connection.search({fromId: this.props.elementId}).length;
+    } else if (this.props.way === 'in') {
+      isConnected = Connection.search({toId: this.props.elementId}).length;
+    }
+
+    const portAnchorClass = classNames({
+      port__anchor: true,
+      'port__anchor--connected': isConnected
+    });
+
     return (
       <div id={`port_${this.props.way}_${this.props.elementId}`}
            className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}>
-        <div className="port__anchor" ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
+        <div className={portAnchorClass} ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
           <div className="port__inside">
           </div>
         </div>

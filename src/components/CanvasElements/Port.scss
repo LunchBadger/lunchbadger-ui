@@ -28,7 +28,12 @@
 
   .collapsed .has-connection &,
   &.jsplumb-connected {
+    //background: #DF5F37;
+  }
+
+  &--connected {
     background: #DF5F37;
+    z-index: $z-index-high;
   }
 }
 

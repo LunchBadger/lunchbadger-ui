@@ -14,11 +14,12 @@ export default class Canvas extends Component {
 
     this.state = {
       lastUpdate: new Date(),
-      canvasHeight: null
+      canvasHeight: null,
+      connections: []
     };
 
     this.connectionsChanged = () => {
-      console.log(Connection.getData());
+      this.setState({connections: Connection.getData()});
     }
   }
 
@@ -102,6 +103,24 @@ export default class Canvas extends Component {
     });
   }
 
+  _rollbackConnection(connection, source, target) {
+    if (connection.suspendedElementType === 'target') {
+      this.paper.connect({
+        source: source,
+        target: connection.suspendedElement
+      }, {
+        fireEvent: false
+      });
+    } else if (connection.suspendedElementType === 'source') {
+      this.paper.connect({
+        source: connection.suspendedElement,
+        target: target
+      }, {
+        fireEvent: false
+      });
+    }
+  }
+
   _attachPaperEvents() {
     this.paper.bind('connection', (info) => {
       const {source, sourceId, target, targetId, connection} = info;
@@ -131,6 +150,10 @@ export default class Canvas extends Component {
             }
           }
         });
+
+        if (strategyFulfilled === false && connection.suspendedElement) {
+          this._rollbackConnection(connection, source, target);
+        }
 
         if (strategyFulfilled === null) {
           addConnection(sourceId, targetId, info);
@@ -182,6 +205,7 @@ export default class Canvas extends Component {
           <QuadrantContainer appState={this.props.appState}
                              plugins={this.props.plugins}
                              paper={this.paper}
+                             connections={this.state.connections}
                              style={{minHeight: canvasHeight}}
                              className="canvas__container" id="canvas"/>
         </div>

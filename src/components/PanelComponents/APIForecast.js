@@ -82,8 +82,10 @@ export default class APIForecast extends Component {
       this._updateForecast(AppState.getStateKey('currentForecast'));
     });
 
+    const currentForecastInformation = AppState.getStateKey('currentForecastInformation');
+
     if (nextProps.isExpanded !== this.props.isExpanded) {
-      setForecast(nextProps.entity, nextState.selectedDate || this.currentDate, nextProps.isExpanded);
+      setForecast(nextProps.entity, currentForecastInformation.selectedDate || nextState.selectedDate || this.currentDate, nextProps.isExpanded);
     }
   }
 

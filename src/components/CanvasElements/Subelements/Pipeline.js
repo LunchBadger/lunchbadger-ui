@@ -32,6 +32,19 @@ export default class Pipeline extends Component {
       proxiedBy: []
     };
 
+    this.initializeProxyConnections = () => {
+      const inConnections = Connection.getConnectionsForTarget(this.props.entity.id);
+      const {proxiedBy} = this.state;
+
+      inConnections.forEach(connection => {
+        if (this.state.proxiedBy.indexOf(connection.fromId) < 0) {
+          proxiedBy.push(connection.fromId);
+        }
+      });
+
+      this.setState({proxiedBy: proxiedBy});
+    };
+
     this.newConnectionListener = () => {
       const connection = Connection.getLastConnection();
 
@@ -55,7 +68,8 @@ export default class Pipeline extends Component {
       this.removeNewConnectionListener = null;
     };
 
-    this.appStateUpdate = () => {
+    this.appStateReady = () => {
+      this.initializeProxyConnections();
     }
   }
 
@@ -64,15 +78,13 @@ export default class Pipeline extends Component {
   }
 
   componentWillMount() {
-    AppState.addChangeListener(this.appStateUpdate);
+    AppState.addInitListener(this.appStateReady);
   }
 
   componentWillUnmount() {
     if (typeof this.removeNewConnectionListener === 'function') {
       this.removeNewConnectionListener();
     }
-
-    AppState.removeChangeListener(this.appStateUpdate);
   }
 
   _handleReverseProxyConnection(connection) {

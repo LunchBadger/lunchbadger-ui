@@ -20,6 +20,7 @@ export default class Canvas extends Component {
 
     this.fulfilledAction = null;
     this.fulfilledActionOnMove = null;
+    this.fulfilledActionOnMoveStatus = null;
 
     this.connectionsChanged = () => {
       this.setState({connections: Connection.getData()});
@@ -108,6 +109,8 @@ export default class Canvas extends Component {
 
   _checkStrategyOnMove(oldsourceId, oldTargetId, sourceId, targetId) {
     this.fulfilledActionOnMove = null;
+    this.fulfilledActionOnMoveStatus = null;
+
     let strategyFulfilled = null;
 
     this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
@@ -123,6 +126,8 @@ export default class Canvas extends Component {
         }
       }
     });
+
+    this.fulfilledActionOnMoveStatus = strategyFulfilled;
 
     return strategyFulfilled;
   }
@@ -165,7 +170,7 @@ export default class Canvas extends Component {
         } else {
           this.fulfilledAction(info);
         }
-      } else if (connection.suspendedElement && !this.fulfilledActionOnMove) {
+      } else if (connection.suspendedElement && !this.fulfilledActionOnMove && this.fulfilledActionOnMoveStatus !== null) {
         this._disconnect(connection);
 
         if (connection.suspendedElementType === 'target') {
@@ -191,6 +196,7 @@ export default class Canvas extends Component {
 
       this.fulfilledAction = null;
       this.fulfilledActionOnMove = null;
+      this.fulfilledActionOnMoveStatus = null;
     });
 
     this.paper.bind('connectionMoved', (info) => {

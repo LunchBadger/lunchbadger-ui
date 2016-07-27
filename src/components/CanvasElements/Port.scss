@@ -26,6 +26,7 @@
   z-index: $z-index-medium;
   border-radius: 50%;
 
+  .expanded.Portal .has-connection .subapi--closed &,
   .collapsed .has-connection & {
     background: #DF5F37;
   }

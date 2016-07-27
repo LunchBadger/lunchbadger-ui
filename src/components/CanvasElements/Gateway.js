@@ -24,7 +24,8 @@ class Gateway extends Component {
     super(props);
 
     this.state = {
-      hasConnection: null
+      hasInConnection: null,
+      hasOutConnection: null
     };
   }
 
@@ -33,15 +34,27 @@ class Gateway extends Component {
       this._onDeploy();
     }
 
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.pipelines.some((publicEndpoint) => {
-        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+    if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
+      const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
+        return Connection.getConnectionsForTarget(pipeline.id).length;
       });
 
-      if (hasConnection) {
-        this.setState({hasConnection: true});
+      if (hasInConnection) {
+        this.setState({hasInConnection: true});
       } else {
-        this.setState({hasConnection: false});
+        this.setState({hasInConnection: false});
+      }
+    }
+
+    if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
+      const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
+        return Connection.getConnectionsForSource(pipeline.id).length;
+      });
+
+      if (hasOutConnection) {
+        this.setState({hasOutConnection: true});
+      } else {
+        this.setState({hasOutConnection: false});
       }
     }
   }
@@ -89,7 +102,8 @@ class Gateway extends Component {
 
   render() {
     const elementClass = classNames({
-      'has-connection': this.state.hasConnection
+      'has-connection-in': this.state.hasInConnection,
+      'has-connection-out': this.state.hasOutConnection
     });
 
     return (

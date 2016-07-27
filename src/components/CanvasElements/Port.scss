@@ -27,6 +27,8 @@
   border-radius: 50%;
 
   .expanded.Portal .has-connection .subapi--closed &,
+  .collapsed .has-connection-in .port-in &,
+  .collapsed .has-connection-out .port-out &,
   .collapsed .has-connection & {
     background: #DF5F37;
   }

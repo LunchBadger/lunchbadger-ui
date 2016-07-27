@@ -62,7 +62,7 @@ export default (ComposedComponent) => {
 
       clearTimeout(this.openTimeout);
 
-      if (this.state.opened && !prevState.opened) {
+      if (this.state.opened) {
         this.openTimeout = setTimeout(() => {
           this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
         }, 1500);

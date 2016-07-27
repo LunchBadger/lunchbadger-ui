@@ -39,6 +39,10 @@ export default class Pipeline extends Component {
         && this.state.proxiedBy.indexOf(connection.fromId) < 0) {
         const {proxiedBy} = this.state;
 
+        if (connection.info.connection.getParameter('existing')) {
+          return;
+        }
+
         this._handleReverseProxyConnection(connection);
 
         proxiedBy.push(connection.fromId);

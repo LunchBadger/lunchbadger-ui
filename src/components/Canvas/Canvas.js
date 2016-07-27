@@ -19,6 +19,7 @@ export default class Canvas extends Component {
     };
 
     this.fulfilledAction = null;
+    this.fulfilledActionOnMove = null;
 
     this.connectionsChanged = () => {
       this.setState({connections: Connection.getData()});
@@ -105,15 +106,20 @@ export default class Canvas extends Component {
     });
   }
 
-  _checkStrategyOnMove(info) {
+  _checkStrategyOnMove(oldsourceId, oldTargetId, sourceId, targetId) {
+    this.fulfilledActionOnMove = null;
     let strategyFulfilled = null;
 
     this.props.plugins.getConnectionCreatedStrategies().forEach((strategy) => {
       if (strategyFulfilled === null) {
-        const fulfilledStatus = strategy.handleConnectionMoved.checkAndFulfill(info, this.paper);
+        const fulfilledStatus = strategy.handleConnectionMoved.checkAction(oldsourceId, oldTargetId, sourceId, targetId);
 
         if (fulfilledStatus !== null) {
           strategyFulfilled = fulfilledStatus;
+        }
+
+        if (fulfilledStatus) {
+          this.fulfilledActionOnMove = strategy.handleConnectionMoved.fulfilledAction;
         }
       }
     });
@@ -131,7 +137,9 @@ export default class Canvas extends Component {
 
         if (fulfilledStatus !== null) {
           strategyFulfilled = fulfilledStatus;
+        }
 
+        if (fulfilledStatus) {
           this.fulfilledAction = strategy.handleConnectionCreated.fulfilledAction;
         }
       }
@@ -142,7 +150,7 @@ export default class Canvas extends Component {
 
   _attachPaperEvents() {
     this.paper.bind('connection', (info) => {
-      const {source, sourceId, targetId, connection} = info;
+      const {source, target, sourceId, targetId, connection} = info;
 
       if (source.parentElement.classList.contains('port-in')) {
         this._flipConnection(info);
@@ -151,12 +159,47 @@ export default class Canvas extends Component {
         return;
       }
 
-      if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0) {
+      if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) < 0 && !connection.suspendedElement) {
         if (!this.fulfilledAction) {
           addConnection(sourceId, targetId, info);
         } else {
           this.fulfilledAction(info);
         }
+      } else if (connection.suspendedElement && !this.fulfilledActionOnMove) {
+        this._disconnect(connection);
+
+        if (connection.suspendedElementType === 'target') {
+          this.paper.connect({
+            source: source,
+            target: connection.suspendedElement
+          }, {
+            fireEvent: false
+          });
+        } else {
+          this.paper.connect({
+            source: connection.suspendedElement,
+            target: target
+          }, {
+            fireEvent: false
+          });
+        }
+
+        setTimeout(() => {
+          this.paper.repaintEverything();
+        }, 1000);
+      }
+
+      this.fulfilledAction = null;
+      this.fulfilledActionOnMove = null;
+    });
+
+    this.paper.bind('connectionMoved', (info) => {
+      const check = this._checkStrategyOnMove(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId);
+
+      if (!this.fulfilledActionOnMove && check === null) {
+        moveConnection(info.originalSourceId, info.originalTargetId, info.newSourceId, info.newTargetId, info);
+      } else if (check) {
+        this.fulfilledActionOnMove(info);
       }
     });
 
@@ -179,7 +222,7 @@ export default class Canvas extends Component {
 
       // connection is being moved...
       if (connection.suspendedElement) {
-        return this._checkStrategyOnMove(info) !== false;
+        return true;
       } else {
         if (sourceElement.parentElement.classList.contains('port-in')) {
           return this._checkStrategyOnCreate(targetId, sourceId) !== false;

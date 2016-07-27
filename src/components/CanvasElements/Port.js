@@ -54,7 +54,8 @@ export default class Port extends Component {
 
     this.props.paper.makeSource(portDOM, {
       endpoint: ['Dot', {radius: 4}],
-      allowLoopback: false
+      allowLoopback: false,
+      deleteEndpointsOnDetach: true
     }, endpointOptions);
 
     this.props.paper.makeTarget(portDOM, {

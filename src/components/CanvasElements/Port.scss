@@ -26,9 +26,14 @@
   z-index: $z-index-medium;
   border-radius: 50%;
 
-  .collapsed .has-connection &,
-  &.jsplumb-connected {
+  .expanded.Portal .has-connection .subapi--closed &,
+  .collapsed .has-connection & {
     background: #DF5F37;
+  }
+
+  &--connected {
+    background: #DF5F37;
+    z-index: $z-index-high;
   }
 }
 

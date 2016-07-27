@@ -54,7 +54,8 @@ export default class Port extends Component {
 
     this.props.paper.makeSource(portDOM, {
       endpoint: ['Dot', {radius: 4}],
-      allowLoopback: false
+      allowLoopback: false,
+      deleteEndpointsOnDetach: true
     }, endpointOptions);
 
     this.props.paper.makeTarget(portDOM, {
@@ -92,12 +93,18 @@ export default class Port extends Component {
     const connections = Connection.getConnectionsForTarget(this.props.elementId);
 
     _.forEach(connections, (connection) => {
-      if (connection.info.target) {
-        removeConnection(connection.fromId, connection.toId);
+      let source = null;
+
+      if (connection.info.source) {
+        source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
+      } else {
+        source = document.querySelector(`#${connection.info.sourceId}`);
       }
 
+      removeConnection(connection.fromId, connection.toId);
+
       this.props.paper.connect({
-        source: connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor'),
+        source: source,
         target: findDOMNode(this.refs.port)
       });
     });
@@ -112,10 +119,23 @@ export default class Port extends Component {
       'port__middle': this.props.middle
     });
 
+    let isConnected = false;
+
+    if (this.props.way === 'out') {
+      isConnected = Connection.search({fromId: this.props.elementId}).length;
+    } else if (this.props.way === 'in') {
+      isConnected = Connection.search({toId: this.props.elementId}).length;
+    }
+
+    const portAnchorClass = classNames({
+      port__anchor: true,
+      'port__anchor--connected': isConnected
+    });
+
     return (
       <div id={`port_${this.props.way}_${this.props.elementId}`}
            className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}>
-        <div className="port__anchor" ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
+        <div className={portAnchorClass} ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
           <div className="port__inside">
           </div>
         </div>

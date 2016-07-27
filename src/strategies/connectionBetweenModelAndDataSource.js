@@ -17,18 +17,31 @@ const checkConnection = (sourceId, targetId) => {
   return null;
 };
 
-const checkMovedConnection = (connectionInfo) => {
-  const isBackend = Backend.findEntity(connectionInfo.newSourceId);
-  const isPrivate = Private.findEntity(connectionInfo.newTargetId);
+const checkMovedConnection = (oldSourceId, oldTargetId, sourceId, targetId) => {
+  const isBackend = Backend.findEntity(sourceId);
+  const isPrivate = Private.findEntity(targetId);
 
   if (isBackend && isPrivate) {
-    return !Connection.search({toId: Connection.formatId(connectionInfo.newTargetId)}).length;
+    const previousTargetConnections = Connection.search({toId: Connection.formatId(targetId)});
+    const previousSourceConnections = Connection.search({fromId: Connection.formatId(sourceId)});
+
+    if (previousSourceConnections.length) {
+      return false;
+    }
+
+    if (previousTargetConnections.length < 1) {
+      return true;
+    } else if (previousTargetConnections.length > 0 && previousTargetConnections[0].fromId === Connection.formatId(oldSourceId)) {
+      return true;
+    }
+
+    return false;
   }
 
   return null;
 };
 
 const handleConnectionCreate = new Strategy(checkConnection, attachConnection);
-const handleConnectionMove = new Strategy(checkConnection, reattachConnection);
+const handleConnectionMove = new Strategy(checkMovedConnection, reattachConnection);
 
 export {handleConnectionCreate, handleConnectionMove};

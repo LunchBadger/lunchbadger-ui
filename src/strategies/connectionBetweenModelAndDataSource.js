@@ -25,11 +25,9 @@ const checkMovedConnection = (oldSourceId, oldTargetId, sourceId, targetId) => {
     const previousTargetConnections = Connection.search({toId: Connection.formatId(targetId)});
     const previousSourceConnections = Connection.search({fromId: Connection.formatId(sourceId)});
 
-    if (previousSourceConnections.length) {
+    if (previousSourceConnections.length && previousTargetConnections.length) {
       return false;
-    }
-
-    if (previousTargetConnections.length < 1) {
+    } else if (previousTargetConnections.length < 1) {
       return true;
     } else if (previousTargetConnections.length > 0 && previousTargetConnections[0].fromId === Connection.formatId(oldSourceId)) {
       return true;

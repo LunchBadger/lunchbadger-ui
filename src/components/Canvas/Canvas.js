@@ -188,10 +188,6 @@ export default class Canvas extends Component {
             fireEvent: false
           });
         }
-
-        setTimeout(() => {
-          this.paper.repaintEverything();
-        }, 1000);
       }
 
       this.fulfilledAction = null;

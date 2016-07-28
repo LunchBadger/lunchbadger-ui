@@ -111,16 +111,16 @@ class GatewayDetails extends Component {
 
       return (
         <div key={`pipeline-${pipeline.id}`}>
-          <h3 className="details-panel__subtitle">
+          <div className="details-panel__section-name">
             <Input value={pipeline.id}
                    type="hidden"
                    name={`pipelines[${plIdx}][id]`}/>
             <Input className="details-panel__input"
                    value={pipeline.name}
                    name={`pipelines[${plIdx}][name]`}/>
-            <i className="fa fa-remove details-panel__table__action"
+            <i className="fa fa-remove details-panel__action"
                onClick={() => this.onRemovePipeline(pipeline, plIdx)}/>
-          </h3>
+          </div>
           <table className="details-panel__table">
             <thead>
               <tr>
@@ -155,11 +155,11 @@ class GatewayDetails extends Component {
           <InputField label="Root URL" propertyName="rootPath" entity={entity} />
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">
-          <a onClick={() => this.onAddPipeline()} className="details-panel__add">
+          {this.renderPipelines()}
+          <a onClick={() => this.onAddPipeline()} className="details-panel__add-section">
             <i className="fa fa-plus"/>
             Add pipeline
           </a>
-          {this.renderPipelines()}
         </CollapsableDetails>
       </div>
     )

@@ -22,7 +22,7 @@ input {
 
 .app__container {
   width: 100%;
-  height: calc(100vh - #{$header-height});
+  height: 100vh;
   padding-left: $aside-width;
 }
 

@@ -56,21 +56,20 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate(prevProps, prevState) {
-      if (this.state.opened === prevState.opened && this.state.height === prevState.height) {
-        return;
+
+      if (this.state.opened !== prevState.opened) {
+        clearTimeout(this.openTimeout);
+
+        if (this.state.opened) {
+          this.openTimeout = setTimeout(() => {
+            this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
+          }, 1500);
+
+          return;
+        }
       }
 
-      clearTimeout(this.openTimeout);
-
-      if (this.state.opened) {
-        this.openTimeout = setTimeout(() => {
-          this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
-        }, 1500);
-
-        return;
-      }
-
-      if (this.state.opened) {
+      if (this.state.opened && this.state.height !== prevState.height) {
         this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(this.state.height, 10)});
       } else {
         this.canvas.setState({canvasHeight: null});

@@ -8,6 +8,7 @@ import Policy from 'models/Policy';
 import PipelineFactory from 'models/Pipeline';
 import _ from 'lodash';
 
+const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -27,6 +28,12 @@ class Gateway extends Component {
       hasInConnection: null,
       hasOutConnection: null
     };
+  }
+
+  componentDidMount() {
+    if (!this.props.ready) {
+      toggleEdit(this.props.entity);
+    }
   }
 
   componentWillReceiveProps(nextProps, nextState) {

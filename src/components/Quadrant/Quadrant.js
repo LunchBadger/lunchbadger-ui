@@ -53,6 +53,14 @@ export default (ComposedComponent) => {
       };
     }
 
+    componentDidMount() {
+      const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
+
+      this.setState({quadrantWidth: `${quadrantBounds.width}px`});
+
+      this.initialWidth = `${quadrantBounds.width}px`;
+    }
+
     componentWillMount() {
       this.props.data.addChangeListener(this.dataStoreUpdate);
       this.props.data.addInitListener(this.dataStoreUpdate);
@@ -83,7 +91,10 @@ export default (ComposedComponent) => {
         <div className="quadrant"
              ref={(ref) => this.quadrantDOM = ref}
              style={{width: this.state.quadrantWidth, minWidth: `${this.props.initialPercentageWidth}%`}}>
-          <div className="quadrant__title">{this.props.title}</div>
+          <div className="quadrant__title"
+               style={{width: this.state.quadrantWidth, minWidth: this.initialWidth}}>
+            {this.props.title}
+          </div>
           <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
           {(() => {
             if (this.props.resizable) {

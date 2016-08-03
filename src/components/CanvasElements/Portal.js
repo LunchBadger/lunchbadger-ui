@@ -32,7 +32,9 @@ class Portal extends Component {
     this.state = {
       hasConnection: null,
       isShowingModal: false,
-      bundledItem: null
+      isShowingModalMultiple: false,
+      bundledItem: null,
+      bundledItems: []
     }
   }
 
@@ -101,7 +103,10 @@ class Portal extends Component {
   }
 
   _handleClose() {
-    this.setState({isShowingModal: false});
+    this.setState({
+      isShowingModal: false,
+      isShowingModalMultiple: false
+    });
   }
 
   _handleEndDrag(item) {
@@ -111,6 +116,17 @@ class Portal extends Component {
         bundledItem: item
       });
     }
+  }
+
+  _handleMultipleUnbundle() {
+    this.setState({
+      isShowingModalMultiple: true,
+      bundledItems: this.props.appState.getStateKey('currentlySelectedSubelements')
+    });
+  }
+
+  _handleModalConfirmMultiple() {
+    this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
   }
 
   render() {
@@ -142,7 +158,10 @@ class Portal extends Component {
             APIs
           </div>
           <div className="canvas-element__endpoints" ref="apis">
-            <DraggableGroup iconClass="icon-icon-portal" entity={this.props.entity} appState={this.props.appState}>
+            <DraggableGroup iconClass="icon-icon-portal"
+                            entity={this.props.entity}
+                            groupEndDrag={() => this._handleMultipleUnbundle()}
+                            appState={this.props.appState}>
               {this.renderAPIs()}
             </DraggableGroup>
           </div>
@@ -170,6 +189,19 @@ class Portal extends Component {
                           onSave={this._handleModalConfirm.bind(this)}>
             <span>
               Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
+            </span>
+          </TwoOptionModal>
+        }
+
+        {
+          this.state.isShowingModalMultiple &&
+          <TwoOptionModal title="Unbundle Portal"
+                          confirmText="Yes"
+                          discardText="No"
+                          onClose={this._handleClose.bind(this)}
+                          onSave={this._handleModalConfirmMultiple.bind(this)}>
+            <span>
+              Are you sure you want to unbundle "{this.state.bundledItems.map(entity => entity.name).join(', ')}" from "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
         }

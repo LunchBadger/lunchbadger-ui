@@ -48,6 +48,16 @@ class AppState extends BaseStore {
         this.emitChange();
         break;
 
+      case 'RemoveEntity':
+        const currentlyHighlighted = this.getStateKey('currentElement');
+
+        if (currentlyHighlighted && currentlyHighlighted.id === action.entity.id) {
+          this.setStateKey('currentElement', null);
+          this.emitChange();
+        }
+
+        break;
+
       case 'ToggleEdit':
         this.setStateKey('currentEditElement', action.element);
         this.emitChange();

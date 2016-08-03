@@ -40,11 +40,11 @@ const boxTarget = {
     const clientOffset = monitor.getClientOffset();
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+    if (dragIndex < hoverIndex && clientOffset.y < hoverBoundingRect.bottom - 15) {
       return;
     }
 
-    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+    if (dragIndex > hoverIndex && clientOffset.y > hoverBoundingRect.top + 15) {
       return;
     }
 

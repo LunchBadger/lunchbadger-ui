@@ -6,12 +6,16 @@ import {DropTarget} from 'react-dnd';
 const boxTarget = {
   drop(props, monitor, component) {
     const hasDroppedOnChild = monitor.didDrop();
+    const item = monitor.getItem();
 
     if (!hasDroppedOnChild) {
-      const item = monitor.getItem();
       if (item.subelement) {
         if (typeof item.handleEndDrag === 'function') {
           item.handleEndDrag(item);
+        }
+      } else if (item.appState) {
+        if (typeof item.groupEndDrag === 'function') {
+          item.groupEndDrag();
         }
       }
     }
@@ -23,7 +27,7 @@ const boxTarget = {
   }
 };
 
-@DropTarget('canvasElement', boxTarget, connect => ({
+@DropTarget(['canvasElement', 'elementsGroup'], boxTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
 export default (ComposedComponent) => {

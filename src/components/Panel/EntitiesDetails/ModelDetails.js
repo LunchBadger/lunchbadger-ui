@@ -27,11 +27,11 @@ class ModelDetails extends Component {
 
     const stateFromStores = (newProps) => {
       return {
-        properties: newProps.entity.properties.slice(),
-        relations: newProps.entity.relations.slice(),
+        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : newProps.entity.properties.slice(),
+        relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
         changed: false
       };
-    }
+    };
 
     this.state = Object.assign({}, stateFromStores(props));
 
@@ -65,10 +65,7 @@ class ModelDetails extends Component {
 
   discardChanges() {
     // revert properties
-    this.setState({
-      properties: this.props.entity.properties.slice(),
-      relations: this.props.entity.relations.slice()
-    });
+    this.onStoreUpdate();
   }
 
   update(model) {
@@ -192,8 +189,8 @@ class ModelDetails extends Component {
 
   render() {
     const {entity} = this.props;
-    const dataSources = BackendStore.getData().map(ds => {
-      return <option value={ds.id}>{ds.name}</option>
+    const dataSources = BackendStore.getData().map((ds, index) => {
+      return <option key={`${ds.id}-${index}`} value={ds.id}>{ds.name}</option>
     });
 
     return (

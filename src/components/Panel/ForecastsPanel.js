@@ -25,13 +25,25 @@ const boxTarget = {
       const left = Math.round(item.entity.left + delta.x);
       const top = Math.round(item.entity.top + delta.y);
       component.moveEntity(item.entity, left, top);
+    } else if (item.entity.constructor.type === 'Portal') {
+      const delta = monitor.getSourceClientOffset();
+      const {appState} = item;
+      const draggedSubelements = appState.getStateKey('currentlySelectedSubelements');
+
+      if (!Forecast.findEntityByApiId(draggedSubelements[0].id)) {
+        addAPIForecast(draggedSubelements[0], delta.x, delta.y - 30);
+        component.setState({hasDropped: true});
+      }
     }
   },
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
+    const {appState} = item;
 
-    return item.entity.constructor.type === 'API' || item.entity.constructor.type === 'APIForecast';
+    return item.entity.constructor.type === 'API' ||
+      item.entity.constructor.type === 'APIForecast' ||
+      item.entity.constructor.type === 'Portal' && appState && appState.getStateKey('currentlySelectedSubelements').length === 1;
   }
 };
 
@@ -112,7 +124,7 @@ class ForecastsPanel extends Component {
   }
 }
 
-export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'forecastElement'], boxTarget, (connect, monitor) => ({
+export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'elementsGroup', 'forecastElement'], boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   isOverCurrent: monitor.isOver({shallow: true}),

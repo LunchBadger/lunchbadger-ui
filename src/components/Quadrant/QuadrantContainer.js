@@ -11,6 +11,18 @@ export default class QuadrantContainer extends Component {
 
   constructor(props) {
     super(props);
+
+    this.onWindowResize = () => {
+      this.forceUpdate();
+    };
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.onWindowResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener(this.onWindowResize);
   }
 
   renderQuadrants() {

@@ -53,16 +53,18 @@ export default (ComposedComponent) => {
         quadrantWidth: `${props.initialPercentageWidth}%`,
         entities: this.props.data.getData(),
         hasDroppedOnChild: false,
-        hasDropped: false
+        hasDropped: false,
+        initialWidth: 0
       };
     }
 
     componentDidMount() {
       const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
 
-      this.setState({quadrantWidth: `${quadrantBounds.width}px`});
-
-      this.initialWidth = `${quadrantBounds.width}px`;
+      this.setState({
+        quadrantWidth: `${quadrantBounds.width}px`,
+        initialWidth: `${quadrantBounds.width}px`
+      });
     }
 
     componentWillMount() {
@@ -96,7 +98,7 @@ export default (ComposedComponent) => {
              ref={(ref) => this.quadrantDOM = ref}
              style={{width: this.state.quadrantWidth, minWidth: `${this.props.initialPercentageWidth}%`}}>
           <div className="quadrant__title"
-               style={{width: this.state.quadrantWidth, minWidth: this.initialWidth}}>
+               style={{width: this.state.quadrantWidth}}>
             {this.props.title}
           </div>
           <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>

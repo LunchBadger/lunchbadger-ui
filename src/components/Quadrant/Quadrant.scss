@@ -39,6 +39,7 @@
   position: fixed;
   z-index: 16;
   border-right: 1px solid $ui-base-border;
+  min-width: calc(25% - 15px);
 }
 
 .quadrant__body {

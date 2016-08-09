@@ -44,7 +44,17 @@ class AppState extends BaseStore {
         break;
 
       case 'ToggleHighlight':
+        const currentSubelementsParent = this.getStateKey('currentlySelectedParent');
+
         this.setStateKey('currentElement', action.element);
+
+        if (action.element && currentSubelementsParent && currentSubelementsParent.id !== action.element.id) {
+          this.setStateKey('currentlySelectedSubelements', []);
+        } else if (action.element === null) {
+          this.setStateKey('currentlySelectedSubelements', []);
+          this.setStateKey('currentlySelectedParent', null);
+        }
+
         this.emitChange();
         break;
 

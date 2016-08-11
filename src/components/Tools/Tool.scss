@@ -32,6 +32,10 @@
     > .tool__context {
       opacity: 1;
       display: block;
+
+      .aside--editing & {
+        display: none;
+      }
     }
   }
 

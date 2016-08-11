@@ -82,6 +82,14 @@ class Model extends Component {
       isIndex: false,
       notes: ''
     });
+
+    setTimeout(() => this._focusLastInput());
+  }
+
+  _focusLastInput() {
+    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0];
+
+    input && input.focus();
   }
 
   updateContextPath() {

@@ -149,6 +149,14 @@ class ModelDetails extends Component {
       propertyIsRequired: false,
       propertyIsIndex: false
     });
+
+    setTimeout(() => this._focusLastDetailsRowInput());
+  }
+
+  _focusLastDetailsRowInput() {
+    const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
+
+    input && input.focus();
   }
 
   onRemoveProperty(property) {
@@ -240,7 +248,7 @@ class ModelDetails extends Component {
           </table>
         </CollapsableDetails>
         <CollapsableDetails title="Properties">
-          <table className="details-panel__table">
+          <table className="details-panel__table" ref="properties">
             <thead>
             <tr>
               <th>Name</th>

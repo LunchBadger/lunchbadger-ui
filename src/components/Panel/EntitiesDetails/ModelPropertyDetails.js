@@ -35,7 +35,7 @@ export default class ModelPropertyDetails extends Component {
                  type="hidden"
                  name={`properties[${index}][id]`}/>
 
-          <Input className="details-panel__input"
+          <Input className="details-panel__input details-key"
                  value={property.propertyKey}
                  name={`properties[${index}][propertyKey]`}
           />

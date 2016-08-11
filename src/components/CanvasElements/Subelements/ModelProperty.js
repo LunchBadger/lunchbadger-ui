@@ -48,6 +48,7 @@ export default class ModelProperty extends Component {
             {property.propertyKey}
           </span>
           <Input className="model-property__input canvas-element__input editable-only"
+                 ref="keyInput"
                  value={property.propertyKey}
                  name={`properties[${index}][propertyKey]`}/>
         </div>

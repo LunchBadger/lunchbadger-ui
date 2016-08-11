@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Memory from './Memory';
-import Mongo from './Mongo';
+import REST from './REST';
+import MongoDB from './MongoDB';
 import Oracle from './Oracle';
-import SQL from './SQL';
+import MySQL from './MySQL';
 import Salesforce from './Salesforce';
 
 const Tool = LunchBadgerCore.components.Tool;
@@ -15,16 +15,16 @@ class DataSource extends Component {
         <i className="tool__icon icon-icon-datasource"/>
         <ul className="tool__context">
           <li>
-            <Memory />
+            <REST />
           </li>
           <li>
             <Oracle />
           </li>
           <li>
-            <Mongo />
+            <MongoDB />
           </li>
           <li>
-            <SQL />
+            <MySQL />
           </li>
           <li>
             <Salesforce />

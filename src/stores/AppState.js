@@ -2,6 +2,7 @@ import BaseStore from './BaseStore';
 import _ from 'lodash';
 
 const state = {};
+let projectRevision = null;
 
 class AppState extends BaseStore {
   constructor() {
@@ -17,6 +18,15 @@ class AppState extends BaseStore {
 
   getStateKey(key) {
     return state[key];
+  }
+
+  setProjectRevision(rev) {
+    projectRevision = rev;
+    this.emitChange();
+  }
+
+  getProjectRevision() {
+    return projectRevision;
   }
 
   _registerActions(action) {
@@ -96,8 +106,8 @@ class AppState extends BaseStore {
         this.emitChange();
         break;
 
-      case 'SetProject':
-        this.setStateKey('currentProject', action.project);
+      case 'SetProjectRevision':
+        this.setProjectRevision(action.revision);
         break;
 
       case 'SetForecast':

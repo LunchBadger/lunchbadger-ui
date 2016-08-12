@@ -21,9 +21,7 @@ export default class HeaderMenuSaveButton extends Component {
 
     const saveableServices = [];
 
-    const project = AppState.getStateKey('currentProject');
-    const data = {
-      name: project.name,
+    const project = {
       connections: [],
       states: []
     };
@@ -35,9 +33,9 @@ export default class HeaderMenuSaveButton extends Component {
         LunchBadgerManage.stores.Public
       );
 
-      data.privateEndpoints = [];
-      data.gateways = [];
-      data.publicEndpoints = [];
+      project.privateEndpoints = [];
+      project.gateways = [];
+      project.publicEndpoints = [];
     }
 
     if (LunchBadgerCompose) {
@@ -45,13 +43,13 @@ export default class HeaderMenuSaveButton extends Component {
         LunchBadgerCompose.stores.Backend
       );
 
-      data.dataSources = [];
-      data.privateModels = [];
+      project.dataSources = [];
+      project.privateModels = [];
     }
 
     if (LunchBadgerMonetize) {
-      data.apis = [];
-      data.portals = [];
+      project.apis = [];
+      project.portals = [];
     }
 
     storesList.forEach((store) => {
@@ -60,38 +58,39 @@ export default class HeaderMenuSaveButton extends Component {
       entities.forEach((entity) => {
         switch (entity.constructor.type) {
           case 'Connection':
-            data.connections.push(entity.toJSON());
+            project.connections.push(entity.toJSON());
             break;
           case 'DataSource':
-            data.dataSources.push(entity.toJSON());
+            project.dataSources.push(entity.toJSON());
             break;
           case 'Model':
-            data.privateModels.push(entity.toJSON());
+            project.privateModels.push(entity.toJSON());
             break;
           case 'PrivateEndpoint':
-            data.privateEndpoints.push(entity.toJSON());
+            project.privateEndpoints.push(entity.toJSON());
             break;
           case 'Gateway':
-            data.gateways.push(entity.toJSON());
+            project.gateways.push(entity.toJSON());
             break;
           case 'PublicEndpoint':
-            data.publicEndpoints.push(entity.toJSON());
+            project.publicEndpoints.push(entity.toJSON());
             break;
           case 'API':
-            data.apis.push(entity.toJSON());
+            project.apis.push(entity.toJSON());
             break;
           case 'Portal':
-            data.portals.push(entity.toJSON());
+            project.portals.push(entity.toJSON());
             break;
         }
       });
     });
 
     const states = AppState.getData();
+    const rev = AppState.getProjectRevision();
 
     // prepare appState
     if (states['currentlyOpenedPanel']) {
-      data.states.push({
+      project.states.push({
         key: 'currentlyOpenedPanel',
         value: states['currentlyOpenedPanel']
       });
@@ -101,7 +100,7 @@ export default class HeaderMenuSaveButton extends Component {
       const {currentElement} = states;
 
       if (typeof currentElement.toJSON === 'function') {
-        data.states.push({
+        project.states.push({
           key: 'currentElement',
           value: {
             ...currentElement.toJSON(),
@@ -114,7 +113,7 @@ export default class HeaderMenuSaveButton extends Component {
     if (states['currentForecast']) {
       const currentForecast = states['currentForecast'];
 
-      data.states.push({
+      project.states.push({
         key: 'currentForecast',
         value: {
           id: currentForecast['forecast']['id'],
@@ -126,7 +125,14 @@ export default class HeaderMenuSaveButton extends Component {
       });
     }
 
-    saveableServices.push(ProjectService.save(project.id, data));
+    let projSave = ProjectService
+      .save('roman', 'dev', project, rev)
+      .then(res => {
+        let newRev = res.response.headers['etag'];
+        LunchBadgerCore.actions.Stores.AppState.setProjectRevision(newRev);
+      });
+
+    saveableServices.push(projSave);
 
     // save api forecasts
     if (LunchBadgerOptimize) {

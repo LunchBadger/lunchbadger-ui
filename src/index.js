@@ -56,7 +56,7 @@ import toggleEdit from './actions/CanvasElements/toggleEdit';
 import attachConnection from './actions/Connection/attach';
 import reattachConnection from './actions/Connection/reattach';
 import removeConnection from './actions/Connection/remove';
-import setProject from './actions/Stores/AppState/setProject';
+import setProjectRevision from './actions/Stores/AppState/setProjectRevision';
 import initializeAppState from './actions/Stores/AppState/initialize';
 import toggleSubelement from './actions/CanvasElements/toggleSubelement';
 import removeEntity from './actions/CanvasElements/removeEntity';
@@ -91,8 +91,8 @@ let LunchBadgerCore = {
     },
     Stores: {
       AppState: {
-        setProject: setProject,
-        initialize: initializeAppState
+        initialize: initializeAppState,
+        setProjectRevision: setProjectRevision
       }
     }
   },

@@ -15,14 +15,15 @@ class APIInterceptor {
 
   _callAPI(method, url, options) {
     return new Bluebird((resolve, reject) => {
-      request(_.extend({
+      const req = _.extend({
         method: method,
         url: url,
         baseUrl: config.apiUrl,
         json: true,
         headers: _.extend(this._getHeaders(), {}),
         withCredentials: false
-      }, options), (error, response, body) => {
+      }, options);
+      request(req, (error, response, body) => {
         if (error) {
           return reject(error);
         }

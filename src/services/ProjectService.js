@@ -6,18 +6,23 @@ class ProjectService {
     this._APIHandle = new APIInterceptor();
   }
 
-  getAll() {
-    return this._APIHandle.get('Projects');
+  get(producerId, envId) {
+    return this._APIHandle.get(bindParams(
+      'producers/:producerId/envs/:envId/files/:envId/project.json', {producerId, envId}));
   }
 
-  get(projectId) {
-    return this._APIHandle.get(bindParams('Projects', {id: projectId}));
-  }
-
-  save(projectId, data) {
-    return this._APIHandle.put(bindParams('Projects/:id', {id: projectId}), {
-      body: data
-    });
+  save(producerId, envId, data, rev) {
+    return this._APIHandle.patch(bindParams(
+        'producers/:producerId/envs/:envId/files', {producerId, envId}),
+      {
+        body: {
+          [envId + '/project.json']: JSON.stringify(data, null, '  ')
+        },
+        headers: {
+          'If-Match': rev
+        }
+      }
+    );
   }
 }
 

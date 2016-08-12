@@ -12,17 +12,19 @@ class ProjectService {
   }
 
   save(producerId, envId, data, rev) {
-    return this._APIHandle.patch(bindParams(
-        'producers/:producerId/envs/:envId/files', {producerId, envId}),
-      {
-        body: {
-          [envId + '/project.json']: JSON.stringify(data, null, '  ')
-        },
-        headers: {
-          'If-Match': rev
-        }
+    let req = {
+      body: {
+        [envId + '/project.json']: JSON.stringify(data, null, '  ')
       }
-    );
+    };
+
+    if (rev) {
+      req.headers = {
+        'If-Match': rev
+      };
+    }
+    return this._APIHandle.patch(bindParams(
+        'producers/:producerId/envs/:envId/files', {producerId, envId}), req);
   }
 }
 

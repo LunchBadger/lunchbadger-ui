@@ -32,7 +32,8 @@ module.exports = {
       models: `${defaultSettings.srcPath}/models`,
       constants: `${defaultSettings.srcPath}/constants`,
       services: `${defaultSettings.srcPath}/services`,
-      stores: `${defaultSettings.srcPath}/stores`
+      stores: `${defaultSettings.srcPath}/stores`,
+      config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
     }
   },
   externals: {

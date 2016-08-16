@@ -1,10 +1,10 @@
 import request from 'request';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
-import config from 'config';
 
 class APIInterceptor {
-  constructor() {
+  constructor(url) {
+    this.url = url;
   }
 
   _getHeaders() {
@@ -18,7 +18,7 @@ class APIInterceptor {
       const req = _.extend({
         method: method,
         url: url,
-        baseUrl: config.apiUrl,
+        baseUrl: this.url,
         json: true,
         headers: _.extend(this._getHeaders(), {}),
         withCredentials: false

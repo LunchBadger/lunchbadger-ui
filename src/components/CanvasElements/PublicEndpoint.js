@@ -41,15 +41,15 @@ class PublicEndpoint extends Component {
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
+              <div className="canvas-element__properties__property-title">Path</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
-                  {this.props.entity.url}
+                  {this.props.entity.path}
                 </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.props.entity.url}
-                       name="url"/>
+                       value={this.props.entity.path}
+                       name="path"/>
               </div>
             </div>
           </div>

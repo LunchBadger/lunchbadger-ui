@@ -6,7 +6,7 @@ export default class PublicEndpoint extends BaseModel {
   static type = 'PublicEndpoint';
   _ports = [];
   wasBundled = false;
-  url = 'https://root/endpoint';
+  path = '/endpoint';
 
   constructor(id, name) {
     super(id);
@@ -26,7 +26,7 @@ export default class PublicEndpoint extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      url: this.url,
+      path: this.path,
       itemOrder: this.itemOrder
     }
   }

@@ -25,10 +25,10 @@ class PublicEndpointDetails extends Component {
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
           <div className="details-panel__fieldset">
-            <span className="details-panel__label">URL</span>
+            <span className="details-panel__label">Path</span>
             <Input className="details-panel__input"
-                   value={entity.url}
-                   name="url"/>
+                   value={entity.path}
+                   name="path"/>
           </div>
         </div>
       </CollapsableDetails>

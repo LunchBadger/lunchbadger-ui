@@ -118,6 +118,12 @@ class Gateway extends Component {
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">Root URL</div>
+              <div className="canvas-element__properties__property-value">
+                http://{this.props.entity.dnsPrefix}.customer.lunchbadger.com
+              </div>
+            </div>
+            <div className="canvas-element__properties__property editable-only">
               <div className="canvas-element__properties__property-title">DNS Prefix</div>
               <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">

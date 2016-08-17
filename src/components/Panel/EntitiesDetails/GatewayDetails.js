@@ -151,8 +151,14 @@ class GatewayDetails extends Component {
 
     return (
       <div>
-        <CollapsableDetails title="Details">
+        <CollapsableDetails title="Details" class="details-panel__columns">
           <InputField label="DNS prefix" propertyName="dnsPrefix" entity={entity} />
+          <div className="details-panel__fieldset">
+            <label className="details-panel__label">
+              Root URL
+            </label>
+            <div>http://{this.props.entity.dnsPrefix}.customer.lunchbadger.com</div>
+          </div>
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">
           {this.renderPipelines()}

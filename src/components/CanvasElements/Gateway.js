@@ -26,7 +26,8 @@ class Gateway extends Component {
 
     this.state = {
       hasInConnection: null,
-      hasOutConnection: null
+      hasOutConnection: null,
+      dnsPrefix: props.entity.dnsPrefix
     };
   }
 
@@ -63,6 +64,10 @@ class Gateway extends Component {
       } else {
         this.setState({hasOutConnection: false});
       }
+    }
+
+    if (!this.props.parent.state.editable) {
+      this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
     }
   }
 
@@ -107,6 +112,10 @@ class Gateway extends Component {
     this.props.parent.triggerElementAutofocus();
   }
 
+  onPrefixChange(event) {
+    this.setState({dnsPrefix: event.target.value});
+  }
+
   render() {
     const elementClass = classNames({
       'has-connection-in': this.state.hasInConnection,
@@ -120,7 +129,7 @@ class Gateway extends Component {
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Root URL</div>
               <div className="canvas-element__properties__property-value">
-                http://{this.props.entity.dnsPrefix}.customer.lunchbadger.com
+                http://{this.state.dnsPrefix}.customer.lunchbadger.com
               </div>
             </div>
             <div className="canvas-element__properties__property editable-only">
@@ -132,7 +141,8 @@ class Gateway extends Component {
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        name="dnsPrefix"
-                       value={this.props.entity.dnsPrefix}/>
+                       value={this.props.entity.dnsPrefix}
+                       handleChange={this.onPrefixChange.bind(this)}/>
               </div>
             </div>
           </div>

@@ -22,12 +22,14 @@ class GatewayDetails extends Component {
     super(props);
 
     this.state = {
+      dnsPrefix: props.entity.dnsPrefix,
       pipelines: props.entity.pipelines.slice(),
       changed: false
     };
 
     this.onStoreUpdate = () => {
       this.setState({
+        dnsPrefix: this.props.entity.dnsPrefix,
         pipelines: this.props.entity.pipelines.slice(),
         changed: false
       });
@@ -99,6 +101,12 @@ class GatewayDetails extends Component {
     }));
   }
 
+  onPrefixChange(event) {
+    this.setState({
+      dnsPrefix: event.target.value
+    });
+  }
+
   renderPipelines() {
     return this.state.pipelines.map((pipeline, plIdx) => {
       const policies = pipeline.policies.map((policy, index) => {
@@ -152,12 +160,15 @@ class GatewayDetails extends Component {
     return (
       <div>
         <CollapsableDetails title="Details" class="details-panel__columns">
-          <InputField label="DNS prefix" propertyName="dnsPrefix" entity={entity} />
+          <InputField label="DNS prefix"
+                      propertyName="dnsPrefix"
+                      entity={entity}
+                      handleChange={this.onPrefixChange.bind(this)}/>
           <div className="details-panel__fieldset">
             <label className="details-panel__label">
               Root URL
             </label>
-            <div>http://{this.props.entity.dnsPrefix}.customer.lunchbadger.com</div>
+            <div>http://{this.state.dnsPrefix}.customer.lunchbadger.com</div>
           </div>
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">

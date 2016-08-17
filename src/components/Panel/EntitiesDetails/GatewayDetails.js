@@ -152,7 +152,7 @@ class GatewayDetails extends Component {
     return (
       <div>
         <CollapsableDetails title="Details">
-          <InputField label="Root URL" propertyName="rootPath" entity={entity} />
+          <InputField label="DNS prefix" propertyName="dnsPrefix" entity={entity} />
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">
           {this.renderPipelines()}

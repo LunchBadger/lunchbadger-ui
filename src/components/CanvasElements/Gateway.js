@@ -118,15 +118,15 @@ class Gateway extends Component {
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Root path</div>
+              <div className="canvas-element__properties__property-title">DNS Prefix</div>
               <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">
-                {this.props.entity.rootPath}
+                {this.props.entity.dnsPrefix}
               </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       name="rootPath"
-                       value={this.props.entity.rootPath}/>
+                       name="dnsPrefix"
+                       value={this.props.entity.dnsPrefix}/>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
-  rootPath = 'https://gateway.root';
+  dnsPrefix = 'gateway';
 
   /**
    * @type {Pipeline[]}
@@ -25,7 +25,7 @@ export default class Gateway extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      rootPath: this.rootPath,
+      dnsPrefix: this.dnsPrefix,
       pipelines: this.pipelines.map(pipeline => pipeline.toJSON()),
       itemOrder: this.itemOrder
     }

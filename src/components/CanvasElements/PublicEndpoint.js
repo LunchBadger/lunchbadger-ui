@@ -14,10 +14,24 @@ class PublicEndpoint extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      path: props.entity.path
+    };
   }
 
   update(model) {
     updatePublicEndpoint(this.props.entity.id, model);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.parent.state.editable) {
+      this.setState({path: nextProps.entity.path});
+    }
+  }
+
+  onPathChange(event) {
+    this.setState({path: event.target.value});
   }
 
   renderPorts() {
@@ -44,7 +58,7 @@ class PublicEndpoint extends Component {
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">URL</div>
               <div className="canvas-element__properties__property-value">
-                {getPublicEndpointUrl(this.props.entity.id, this.props.entity.path)}
+                {getPublicEndpointUrl(this.props.entity.id, this.state.path)}
               </div>
             </div>
             <div className="canvas-element__properties__property editable-only">
@@ -52,7 +66,8 @@ class PublicEndpoint extends Component {
               <div className="canvas-element__properties__property-value">
                 <Input className="canvas-element__input canvas-element__input--property"
                        value={this.props.entity.path}
-                       name="path"/>
+                       name="path"
+                       handleChange={this.onPathChange.bind(this)}/>
               </div>
             </div>
           </div>

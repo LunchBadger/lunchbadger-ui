@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import getPublicEndpointUrl from '../../../utils/getPublicEndpointUrl';
 import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -20,6 +21,7 @@ class PublicEndpointDetails extends Component {
 
   render() {
     const {entity} = this.props;
+    const url = getPublicEndpointUrl(entity.id, entity.path);
 
     return (
       <CollapsableDetails title="Properties">
@@ -29,6 +31,10 @@ class PublicEndpointDetails extends Component {
             <Input className="details-panel__input"
                    value={entity.path}
                    name="path"/>
+          </div>
+          <div className="details-panel__fieldset">
+            <span className="details-panel__label">URL</span>
+            <a href={url} target="_blank">{url}</a>
           </div>
         </div>
       </CollapsableDetails>

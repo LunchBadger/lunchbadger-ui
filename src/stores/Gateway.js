@@ -76,6 +76,12 @@ class Gateway extends BaseStore {
 
     return this.findEntity(id);
   }
+
+  findEntityByPipelineId(pipelineId) {
+    return _.find(Gateways, (gateway) => {
+      return !!_.find(gateway.pipelines, {id: pipelineId});
+    });
+  }
 }
 
 export default new Gateway;

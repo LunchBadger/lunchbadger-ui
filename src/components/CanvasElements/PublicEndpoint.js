@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -41,13 +42,15 @@ class PublicEndpoint extends Component {
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
+              <div className="canvas-element__properties__property-title">URL</div>
+              <div className="canvas-element__properties__property-value">
+                {getPublicEndpointUrl(this.props.entity.id, this.props.entity.path)}
+              </div>
+            </div>
+            <div className="canvas-element__properties__property editable-only">
               <div className="canvas-element__properties__property-title">Path</div>
               <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.path}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                <Input className="canvas-element__input canvas-element__input--property"
                        value={this.props.entity.path}
                        name="path"/>
               </div>

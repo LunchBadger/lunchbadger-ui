@@ -12,7 +12,7 @@ export default function getPublicEndpointUrl(publicEndpointId, path) {
     return path;
   }
 
-  const rootPath = gateway.rootPath.replace(/^\//g, '');
+  const rootPath = 'http://' + gateway.dnsPrefix + '.customer.lunchbadger.com';
   const subPath = path.replace(/^\//g, '');
   return rootPath + '/' + subPath;
 }

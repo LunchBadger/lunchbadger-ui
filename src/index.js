@@ -1,4 +1,5 @@
 /*eslint no-console:0 */
+/*global LUNCHBADGER_CONFIG */
 // Let's register plugins inside the Core, yay!
 import ForecastsPanel from './plugs/ForecastsPanel';
 
@@ -23,10 +24,12 @@ const waitForStores = LunchBadgerCore.utils.waitForStores;
 
 waitForStores([AppState], () => {
   setTimeout(() => {
+
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
+    const forecastService = new ForecastService(LUNCHBADGER_CONFIG.forecastApiUrl);
 
     if (apiForecastInformation) {
-      ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
+      forecastService.getByForecast(apiForecastInformation.id).then((data) => {
         if (data.body) {
           const forecast = APIForecast.create(Object.assign({}, data.body, {
               left: apiForecastInformation.left || 0,

@@ -41,6 +41,10 @@ export default class APIForecast extends Component {
     isExpanded: PropTypes.bool.isRequired
   };
 
+  static contextTypes = {
+    lunchbadgerConfig: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
 
@@ -102,7 +106,8 @@ export default class APIForecast extends Component {
   }
 
   _fetchForecastData() {
-    return ForecastService.get(this.props.entity.api.id).then((response) => {
+    return new ForecastService(this.context.lunchbadgerConfig.forecastApiUrl)
+        .get(this.props.entity.api.id).then((response) => {
       const data = response.body;
       let forecastData;
 

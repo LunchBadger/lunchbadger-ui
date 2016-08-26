@@ -1,11 +1,9 @@
-import config from 'config';
-
 const APIInterceptor = LunchBadgerCore.utils.APIInterceptor;
 const {bindParams} = LunchBadgerCore.utils.URLParams;
 
-class ForecastService {
-  constructor() {
-    this._APIHandle = new APIInterceptor(config.apiUrl);
+export default class ForecastService {
+  constructor(apiUrl) {
+    this._APIHandle = new APIInterceptor(apiUrl);
   }
 
   get(apiId) {
@@ -34,4 +32,3 @@ class ForecastService {
   }
 }
 
-export default new ForecastService();

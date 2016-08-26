@@ -4,6 +4,27 @@ It mixes core and plugins to produce final application
 
 * `plugins/` - directory for core module and each plugin
 
+## Quick start
+
+  # First, install all dependencies
+  npm install
+
+  # Now clone and build each repo
+  cd plugins
+  for plugin in core compose manage monetize monitor optimize; do
+    git clone git@github.com:LunchBadger/lunchbadger-${plugin}.git
+    pushd lunchbadger-${plugin}
+    npm install
+    npm run dist
+    popd
+  done
+
+  # Run dev server
+  npm start
+
+  # Package a distribution
+  npm run dist
+
 ## Development
 
 Clone container repository. After that go to plugin directory and clone required plugins:

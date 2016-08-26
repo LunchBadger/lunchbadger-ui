@@ -1,10 +1,9 @@
 import APIInterceptor from '../utils/APIInterceptor';
 import {bindParams} from '../utils/URLParamsBind';
-import config from 'config';
 
-class ProjectService {
-  constructor() {
-    this._APIHandle = new APIInterceptor(config.apiUrl);
+export default class ProjectService {
+  constructor(apiUrl) {
+    this._APIHandle = new APIInterceptor(apiUrl);
   }
 
   get(producerId, envId) {
@@ -28,5 +27,3 @@ class ProjectService {
         'producers/:producerId/envs/:envId/files', {producerId, envId}), req);
   }
 }
-
-export default new ProjectService();

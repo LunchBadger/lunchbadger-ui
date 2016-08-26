@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
@@ -12,6 +12,14 @@ import AppState from 'stores/AppState';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
+  static childContextTypes = {
+    lunchbadgerConfig: PropTypes.object
+  }
+
+  static propTypes = {
+    config: PropTypes.object
+  }
+
   constructor(props) {
     super(props);
 
@@ -26,6 +34,12 @@ export default class App extends Component {
 
     this.appStateChange = () => {
       this.setState({appState: AppState});
+    };
+  }
+
+  getChildContext() {
+    return {
+      lunchbadgerConfig: this.props.config
     };
   }
 

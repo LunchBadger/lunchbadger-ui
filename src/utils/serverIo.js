@@ -2,16 +2,16 @@
 import {notify} from 'react-notify-toast';
 
 import AppState from 'stores/AppState';
-import config from 'config';
 import Connection from 'stores/Connection';
 import ProjectService from 'services/ProjectService';
 import setProjectRevision from 'actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from 'utils/waitForStores';
 
-export function loadFromServer() {
+export function loadFromServer(config) {
   console.info('Pre-fetching projects data...', config);
 
-  const projectData = ProjectService.get(config.producerId, config.envId);
+  const projectService = new ProjectService(config.projectApiUrl)
+  const projectData = projectService.get(config.producerId, config.envId);
 
   let storesList = [];
 
@@ -77,7 +77,7 @@ export function loadFromServer() {
 
 }
 
-export function saveToServer() {
+export function saveToServer(config) {
   let storesList = [
     Connection
   ];
@@ -188,7 +188,7 @@ export function saveToServer() {
     });
   }
 
-  let projSave = ProjectService
+  let projSave = new ProjectService(config.projectApiUrl)
     .save(config.producerId, config.envId, project, rev)
     .then(res => {
       let newRev = res.response.headers['etag'];
@@ -200,10 +200,11 @@ export function saveToServer() {
   // save api forecasts
   if (LunchBadgerOptimize) {
     const forecasts = LunchBadgerOptimize.stores.Forecast.getData();
-    const ForecastService = LunchBadgerOptimize.services.ForecastService;
+    const forecastService = new LunchBadgerOptimize.services.ForecastService(
+      config.forecastApiUrl);
 
     forecasts.forEach((forecast) => {
-      saveableServices.push(ForecastService.save(forecast.id, forecast.toJSON()));
+      saveableServices.push(forecastService.save(forecast.id, forecast.toJSON()));
     });
   }
 

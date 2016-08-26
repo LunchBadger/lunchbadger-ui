@@ -41,6 +41,8 @@ let config = Object.assign({}, baseConfig, {
   module: defaultSettings.getDefaultModules()
 });
 
+config.resolve.alias['config'] = `${defaultSettings.srcPath}/config/dev`;
+
 // Add needed loaders to the defaults here
 config.module.loaders.push({
   test: /\.(js|jsx)$/,

@@ -1,0 +1,8 @@
+{
+  "generator-react-webpack": {
+    "appName": "lunchbadger-monetize",
+    "style": "scss",
+    "postcss": true,
+    "generatedWithVersion": 3
+  }
+}

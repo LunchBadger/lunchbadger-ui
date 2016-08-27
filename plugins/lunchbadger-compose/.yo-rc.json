@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "lunchbadger-compose",
+    "style": "scss",
+    "postcss": true
+  }
+}

@@ -1,0 +1,89 @@
+@import '../../../config';
+
+.model-property {
+  display: block;
+  width: 100%;
+  //border-bottom: 1px solid $ui-base-border;
+  position: relative;
+  //&:first-child {
+  //  border-top: 1px solid $ui-base-border;
+  //}
+}
+
+.model-property__key-cell {
+  float: left;
+  width: 50%;
+  padding: 5px 10px 5px 0;
+}
+
+.model-property__value-cell {
+  float: left;
+  width: 50%;
+  padding: 5px 10px 5px;
+}
+
+.model-property__key-cell,
+.model-property__value-cell {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .editable & {
+    overflow: visible;
+  }
+}
+
+.model-property__value {
+
+}
+
+.model-property__input {
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #ECECED;
+
+  &:hover {
+    border: 1px solid #8BD6EF;
+  }
+
+  .editable-only {
+    border: 1px solid #7ABFD6;
+  }
+}
+
+input[type=text].model-property__input.editable-only {
+  &::selection {
+    background-color: #8BD6EF;
+    color: $ui-light;
+  }
+
+  &:focus {
+    border-color: #8BD6EF;
+  }
+}
+
+.model-property__remove.fa {
+  display: none;
+  color: #8BD6EF;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  right: -20px;
+  line-height: 20px;
+  text-align: center;
+  transform: translateY(-50%);
+  &:hover {
+    color: #000;
+  }
+}
+
+.model-property__select {
+  -webkit-appearance: none;
+  border-radius: 0;
+  background: url('./dropdown.svg');
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  height: 23px;
+}

@@ -1,0 +1,59 @@
+@import '../../config';
+
+.quadrant {
+  vertical-align: top;
+  min-width: 25%;
+  position: relative;
+  border-right: 1px solid $ui-base-border;
+  flex: 0 0 auto;
+
+  &:before {
+    content: '';
+    opacity: 0;
+    bottom: 0;
+    left: 0;
+    top: 30px;
+    transition: all 0.3s ease;
+    position: absolute;
+    width: calc(100% + 1px);
+    background: #000;
+  }
+
+  .canvas__container--editing & {
+    &:before {
+      z-index: 10;
+      opacity: 0.34;
+    }
+  }
+}
+
+.quadrant__title {
+  color: $font-light;
+  height: 30px;
+  background: #888888;
+  padding-top: 6px;
+  padding-bottom: 5px;
+  font-weight: 300;
+  font-size: 0.778em;
+  text-align: center;
+  position: fixed;
+  z-index: 16;
+  border-right: 1px solid $ui-base-border;
+  min-width: calc(25% - 15px);
+}
+
+.quadrant__body {
+  padding: 50px 20px 20px;
+  position: relative;
+}
+
+.quadrant__resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: transparent;
+  cursor: ew-resize;
+  z-index: 1;
+}

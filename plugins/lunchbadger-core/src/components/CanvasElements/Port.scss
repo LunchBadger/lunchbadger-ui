@@ -1,0 +1,61 @@
+@import '../../config';
+
+.port {
+  display: inline-block;
+  border-radius: 50%;
+  border: 2px solid $ui-light;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  z-index: $z-index-medium;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+  &.hover {
+    border-style: solid;
+    border-color: $ui-dark-border;
+  }
+}
+
+.port__anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  z-index: $z-index-medium;
+  border-radius: 50%;
+
+  .expanded.Portal .has-connection .subapi--closed &,
+  .collapsed .has-connection-in .port-in &,
+  .collapsed .has-connection-out .port-out &,
+  .collapsed .has-connection & {
+    background: #DF5F37;
+  }
+
+  &--connected {
+    background: #DF5F37;
+    z-index: $z-index-high;
+  }
+}
+
+.port__middle {
+  top: 0;
+  margin-top: 0;
+}
+
+.port__inside {
+  color: $font-base;
+  text-align: center;
+  line-height: 16px;
+  vertical-align: middle;
+  width: 12px;
+  height: 12px;
+  margin-left: 5px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+
+.port__icon {
+  font-size: 14px;
+}

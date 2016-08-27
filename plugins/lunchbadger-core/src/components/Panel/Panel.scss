@@ -1,0 +1,58 @@
+@import '../../config';
+
+.panel {
+  width: 100%;
+}
+
+.panel__container {
+  background: $font-light;
+  position: relative;
+  transition: all 1s ease-out;
+  height: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.panel__container--dragging {
+  transition: none;
+}
+
+.panel__body {
+  position: relative;
+  padding: 15px;
+  height: 100%;
+}
+
+.panel__handle {
+  width: 100%;
+  height: 3px;
+  background: $ui-base-border;
+  position: absolute;
+  pointer-events: none;
+  bottom: 0;
+  left: 0;
+  z-index: $z-index-high;
+
+  &:after {
+    content: '...';
+    font-size: 12px;
+    font-weight: 700;
+    color: $font-base;
+    position: absolute;
+    right: 5px;
+    top: -7px;
+    vertical-align: middle;
+    line-height: 1;
+  }
+}
+
+.panel__handle--resizable {
+  pointer-events: all;
+  cursor: ns-resize;
+}
+
+.panel__title {
+  text-align: center;
+  padding: 20px 15px;
+  font-size: 20px;
+}

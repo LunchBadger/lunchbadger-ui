@@ -21,12 +21,14 @@ module.exports = {
     publicPath: defaultSettings.publicPath,
     noInfo: false
   },
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    alias: {
-      plugins: `${defaultSettings.srcPath}/../plugins`,
-      core: `${defaultSettings.srcPath}/../core`
-    }
+    extensions: ['', '.js', '.jsx']
   },
   externals: {
     'react': 'React',

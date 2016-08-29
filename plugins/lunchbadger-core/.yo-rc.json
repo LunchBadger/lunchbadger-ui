@@ -1,8 +1,0 @@
-{
-  "generator-react-webpack": {
-    "appName": "lunchbadger-core",
-    "style": "scss",
-    "postcss": true,
-    "generatedWithVersion": 3
-  }
-}

@@ -19,6 +19,9 @@ if (args.indexOf('--no-server') === -1) {
   startEntry = ['./src/index'];
 }
 
+let pluginDirs = infoFile.plugins.map(plugin => path.resolve(`./plugins/lunchbadger-${plugin}/src`));
+let coreDir = path.resolve('./plugins/lunchbadger-core/src');
+
 let config = Object.assign({}, baseConfig, {
   entry: {
     vendor: [
@@ -26,8 +29,8 @@ let config = Object.assign({}, baseConfig, {
       'lodash'
     ],
     start: startEntry,
-    core: './plugins/lunchbadger-core/index',
-    plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
+    core: './plugins/lunchbadger-core/src/index',
+    plugins: pluginDirs
   },
   cache: true,
   devtool: 'eval',
@@ -38,10 +41,15 @@ let config = Object.assign({}, baseConfig, {
       minChunks: Infinity
     })
   ],
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    fallback: [coreDir, ...pluginDirs],
+    alias: {
+      config: `${defaultSettings.srcPath}/config/dev`
+    }
+  },
   module: defaultSettings.getDefaultModules()
 });
-
-config.resolve.alias['config'] = `${defaultSettings.srcPath}/config/dev`;
 
 // Add needed loaders to the defaults here
 config.module.loaders.push({
@@ -49,7 +57,7 @@ config.module.loaders.push({
   loader: 'babel-loader?cacheDirectory',
   include: [].concat(
     config.additionalPaths,
-    [path.join(__dirname, '/../src')]
+    [path.join(__dirname, '/../src'), path.join(__dirname, '../plugins')]
   )
 });
 

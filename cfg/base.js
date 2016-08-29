@@ -3,11 +3,25 @@ let path = require('path');
 let defaultSettings = require('./defaults');
 let additionalPaths = [];
 
+const infoFile = require('./load');
+
+let pluginDirs = infoFile.plugins.map(plugin => path.resolve(`./plugins/lunchbadger-${plugin}/src`));
+let coreDir = path.resolve('./plugins/lunchbadger-core/src');
+
 module.exports = {
   additionalPaths: additionalPaths,
   port: defaultSettings.port,
   debug: true,
   devtool: 'eval',
+  entry: {
+    vendor: [
+      'moment',
+      'lodash'
+    ],
+    start: ['./src/index'],
+    core: './plugins/lunchbadger-core/src/index',
+    plugins: pluginDirs
+  },
   output: {
     path: path.join(__dirname, '/../dist'),
     filename: '[name].js',
@@ -28,13 +42,14 @@ module.exports = {
     tls: 'empty'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    fallback: [coreDir, ...pluginDirs]
   },
   externals: {
     'react': 'React',
     'react-dom': 'ReactDOM'
   },
-  module: {},
+  module: defaultSettings.getDefaultModules(),
   postcss: function () {
     return [
       require('autoprefixer')({

@@ -1,25 +1,15 @@
 'use strict';
 
+let _ = require('lodash');
 let path = require('path');
 let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
-const infoFile = require('./load');
-
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 
-let config = Object.assign({}, baseConfig, {
-  entry: {
-    vendor: [
-      'moment',
-      'lodash'
-    ],
-    start: './src/index',
-    core: './plugins/lunchbadger-core/index',
-    plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
-  },
+let config = _.merge({}, baseConfig, {
   cache: false,
   devtool: 'sourcemap',
   plugins: [
@@ -44,10 +34,12 @@ let config = Object.assign({}, baseConfig, {
       minChunks: Infinity
     })
   ],
-  module: defaultSettings.getDefaultModules()
+  resolve: {
+    alias: {
+      config: `${defaultSettings.srcPath}/config/dist`
+    }
+  }
 });
-
-config.resolve.alias['config'] = `${defaultSettings.srcPath}/config/dist`;
 
 // Add needed loaders to the defaults here
 config.module.loaders.push({
@@ -55,7 +47,7 @@ config.module.loaders.push({
   loader: 'babel',
   include: [].concat(
     config.additionalPaths,
-    [path.join(__dirname, '/../src')]
+    [path.join(__dirname, '/../src'), path.join(__dirname, '/../plugins')]
   )
 });
 

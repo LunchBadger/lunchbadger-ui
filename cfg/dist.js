@@ -6,9 +6,6 @@ let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
-// Add needed plugins here
-let BowerWebpackPlugin = require('bower-webpack-plugin');
-
 let config = _.merge({}, baseConfig, {
   cache: false,
   devtool: 'sourcemap',
@@ -16,9 +13,6 @@ let config = _.merge({}, baseConfig, {
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
-    }),
-    new BowerWebpackPlugin({
-      searchResolveModulesDirectories: false
     }),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {

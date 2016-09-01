@@ -79,7 +79,6 @@ class Gateway extends Component {
                     index={index}
                     parent={this.props.entity}
                     paper={this.props.paper}
-                    rootPath={'http://' + this.props.entity.dnsPrefix + '.customer.lunchbadger.com'}
                     entity={pipeline}/>
         </div>
       );

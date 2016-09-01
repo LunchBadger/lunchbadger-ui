@@ -37,4 +37,10 @@ export default class PrivateEndpoint extends BaseModel {
   set ports(ports) {
     this._ports = ports;
   }
+
+  // The default/initial REST path to be used when auto-creating a public
+  // endpoint associated with this.
+  get contextPath() {
+    return this.name.toLowerCase().replace(/ /g, '-');
+  }
 }

@@ -56,7 +56,9 @@ class PublicEndpointDetails extends Component {
           </div>
           <div className="details-panel__fieldset">
             <span className="details-panel__label">URL</span>
-            <a href={url} target="_blank">{url}</a>
+            <div className="details-panel__static-field">
+              <a href={url} target="_blank">{url}</a>
+            </div>
           </div>
         </div>
       </CollapsableDetails>

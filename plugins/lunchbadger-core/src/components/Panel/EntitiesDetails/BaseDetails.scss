@@ -165,6 +165,16 @@
   margin-top: 1em;
 }
 
+.details-panel__static-field {
+  font-weight: normal;
+  font-size: 1.2em;
+  line-height: 2em;
+  padding: 2px 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .tag {
   background: #047C99;
   color: white;

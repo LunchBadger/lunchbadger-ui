@@ -156,6 +156,7 @@ class GatewayDetails extends Component {
 
   render() {
     const entity = this.props.entity;
+    const url = `http://${this.state.dnsPrefix}.customer.lunchbadger.com`;
 
     return (
       <div>
@@ -168,7 +169,9 @@ class GatewayDetails extends Component {
             <label className="details-panel__label">
               Root URL
             </label>
-            <div>http://{this.state.dnsPrefix}.customer.lunchbadger.com</div>
+            <div className="details-panel__static-field">
+              <a href="{url}" target="_blank">{url}</a>
+            </div>
           </div>
         </CollapsableDetails>
         <CollapsableDetails title="Pipelines">

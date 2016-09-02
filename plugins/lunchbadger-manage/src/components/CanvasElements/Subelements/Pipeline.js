@@ -20,7 +20,6 @@ export default class Pipeline extends Component {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
-    rootPath: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired
   };
 
@@ -94,22 +93,9 @@ export default class Pipeline extends Component {
       return;
     }
 
-    if (connectionEntity.constructor.type === Model.type) {
-      this._handleElementCreation(connectionEntity, 'Public Model Endpoint');
-    } else if (connectionEntity.constructor.type === PrivateEndpoint.type) {
-      this._handleElementCreation(connectionEntity, 'Public Endpoint');
-    }
-  }
-
-  /**
-   * @param connectionEntity {Model|PrivateEndpoint}
-   * @param name {String}
-   * @private
-   */
-  _handleElementCreation(connectionEntity, name) {
     addPublicEndpointAndConnect(
-      name,
-      `${this.props.rootPath}/${connectionEntity.contextPath}`,
+      connectionEntity.name + ' Public Endpoint',
+      connectionEntity.contextPath,
       this.props.entity.id,
       findDOMNode(this.refs['port-out'])
     );

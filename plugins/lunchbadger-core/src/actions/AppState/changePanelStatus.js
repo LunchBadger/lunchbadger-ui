@@ -1,4 +1,4 @@
-import {dispatch} from 'dispatcher/AppDispatcher';
+import {dispatch} from '../../dispatcher/AppDispatcher';
 
 export default (status, saveAction, discardAction) => {
   dispatch('ChangePanelStatus', {

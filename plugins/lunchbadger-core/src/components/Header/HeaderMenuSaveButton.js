@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
-import {saveToServer} from 'utils/serverIo';
+import {saveToServer} from '../../utils/serverIo';
 
 export default class HeaderMenuSaveButton extends Component {
   static contextTypes = {

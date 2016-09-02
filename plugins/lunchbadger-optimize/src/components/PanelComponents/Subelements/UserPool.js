@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import UserPoolIcon, {USER_POOL} from './UserPoolIcon';
 import {DropTarget} from 'react-dnd';
-import addDowngrade from 'actions/APIForecast/addDowngrade';
+import addDowngrade from '../../../actions/APIForecast/addDowngrade';
 import './UserPool.scss';
 import moment from 'moment';
 

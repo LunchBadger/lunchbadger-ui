@@ -1,5 +1,5 @@
 import {notify} from 'react-notify-toast';
-import {dispatch} from 'dispatcher/AppDispatcher';
+import {dispatch} from '../../dispatcher/AppDispatcher';
 
 export default (connectionInfo) => {
   connectionInfo.connection.setType('wip');

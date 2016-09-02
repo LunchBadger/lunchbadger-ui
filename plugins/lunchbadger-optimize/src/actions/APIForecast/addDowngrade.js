@@ -1,4 +1,4 @@
-import Upgrade from 'models/Upgrade';
+import Upgrade from '../../models/Upgrade';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

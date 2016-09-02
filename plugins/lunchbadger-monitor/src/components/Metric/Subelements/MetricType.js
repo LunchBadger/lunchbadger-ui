@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {AND, OR, NOT} from 'models/MetricPair';
+import {AND, OR, NOT} from '../../../models/MetricPair';
 import classNames from 'classnames';
 import './MetricType.scss';
 

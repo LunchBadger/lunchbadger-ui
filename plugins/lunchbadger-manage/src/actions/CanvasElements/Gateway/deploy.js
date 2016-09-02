@@ -1,4 +1,4 @@
-import Gateway from 'models/Gateway';
+import Gateway from '../../../models/Gateway';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

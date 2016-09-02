@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import getPublicEndpointUrl from '../../../utils/getPublicEndpointUrl';
-import updatePublicEndpoint from 'actions/CanvasElements/PublicEndpoint/update';
-import PublicStore from 'stores/Public';
+import updatePublicEndpoint from '../../../actions/CanvasElements/PublicEndpoint/update';
+import PublicStore from '../../../stores/Public';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;

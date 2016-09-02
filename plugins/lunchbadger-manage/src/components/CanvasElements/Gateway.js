@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import Pipeline from './Subelements/Pipeline';
-import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
-import addPipeline from 'actions/CanvasElements/Gateway/addPipeline';
+import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
+import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
 import {notify} from 'react-notify-toast';
 import classNames from 'classnames';
-import Policy from 'models/Policy';
-import PipelineFactory from 'models/Pipeline';
+import Policy from '../../models/Policy';
+import PipelineFactory from '../../models/Pipeline';
 import _ from 'lodash';
 
 const toggleEdit = LunchBadgerCore.actions.toggleEdit;

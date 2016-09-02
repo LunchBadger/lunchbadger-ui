@@ -3,10 +3,8 @@ import Policy from './Policy';
 import classNames from 'classnames';
 import './Pipeline.scss';
 import {findDOMNode} from 'react-dom';
-import addPublicEndpointAndConnect from 'actions/CanvasElements/PublicEndpoint/addAndConnect';
-import PrivateEndpoint from 'models/PrivateEndpoint';
-import Model from 'models/Model';
-import Private from 'stores/Private';
+import addPublicEndpointAndConnect from '../../../actions/CanvasElements/PublicEndpoint/addAndConnect';
+import Private from '../../../stores/Private';
 import _ from 'lodash';
 
 const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;

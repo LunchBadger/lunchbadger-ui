@@ -4,7 +4,7 @@ import './DateSlider.scss';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import DateSliderMark from './DateSliderMark';
-import setForecast from 'actions/AppState/setForecast';
+import setForecast from '../../../actions/AppState/setForecast';
 
 export default class DateSlider extends Component {
   static propTypes = {

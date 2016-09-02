@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
 import './Canvas.scss';
-import addConnection from 'actions/Connection/add';
-import removeConnection from 'actions/Connection/remove';
-import moveConnection from 'actions/Connection/move';
-import Connection from 'stores/Connection';
-import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
+import addConnection from '../../actions/Connection/add';
+import removeConnection from '../../actions/Connection/remove';
+import moveConnection from '../../actions/Connection/move';
+import Connection from '../../stores/Connection';
+import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 
 export default class Canvas extends Component {
   constructor(props) {

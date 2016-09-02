@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
-import updatePlan from 'actions/APIForecast/updatePlan';
+import updatePlan from '../../../actions/APIForecast/updatePlan';
 
 export default class ForecastPlanInput extends Component {
   static propTypes = {

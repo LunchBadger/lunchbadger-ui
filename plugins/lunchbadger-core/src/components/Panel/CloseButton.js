@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
-import togglePanel from 'actions/togglePanel';
+import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import togglePanel from '../../actions/togglePanel';
 
 export default class CloseButton extends Component {
   static propTypes = {

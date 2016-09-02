@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import addTier from 'actions/APIForecast/addTier';
+import addTier from '../../../actions/APIForecast/addTier';
 import Tier from './Tier';
 import _ from 'lodash';
 import moment from 'moment';

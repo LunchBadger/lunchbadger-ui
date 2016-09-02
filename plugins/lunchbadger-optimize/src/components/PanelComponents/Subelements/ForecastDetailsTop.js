@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import numeral from 'numeral';
 import _ from 'lodash';
-import ForecastDataParser from 'services/ForecastDataParser';
+import ForecastDataParser from '../../../services/ForecastDataParser';
 
 export default class ForecastDetailsTop extends Component {
   static propTypes = {

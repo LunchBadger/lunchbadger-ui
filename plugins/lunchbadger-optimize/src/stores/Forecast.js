@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
-import ForecastTier from 'models/ForecastTier';
-import APIPlan from 'models/ForecastAPIPlan';
+import ForecastTier from '../models/ForecastTier';
+import APIPlan from '../models/ForecastAPIPlan';
 
 const {AppState, BaseStore} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;

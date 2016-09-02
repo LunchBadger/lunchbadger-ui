@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import {findDOMNode} from 'react-dom';
-import setForecast from 'actions/AppState/setForecast';
+import setForecast from '../../actions/AppState/setForecast';
 import './ForecastingChart.scss';
-import ForecastDataParser from 'services/ForecastDataParser';
+import ForecastDataParser from '../../services/ForecastDataParser';
 import _ from 'lodash';
 import moment from 'moment';
-import Forecast from 'stores/Forecast';
+import Forecast from '../../stores/Forecast';
 
 export default class ForecastingChart extends Component {
   static propTypes = {

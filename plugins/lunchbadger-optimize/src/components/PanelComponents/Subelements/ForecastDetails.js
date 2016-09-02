@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import ForecastDetailsTop from './ForecastDetailsTop';
 import ForecastDetailsBottom from './ForecastDetailsBottom';
-import ForecastingChart from 'components/Chart/ForecastingChart';
-import createForecast from 'actions/APIForecast/createForecast';
+import ForecastingChart from '../../Chart/ForecastingChart';
+import createForecast from '../../../actions/APIForecast/createForecast';
 import './ForecastDetails.scss';
 
 export default class ForecastDetails extends Component {

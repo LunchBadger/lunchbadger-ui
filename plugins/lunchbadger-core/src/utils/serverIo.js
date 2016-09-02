@@ -1,11 +1,11 @@
 /*eslint no-console:0 */
 import {notify} from 'react-notify-toast';
 
-import AppState from 'stores/AppState';
-import Connection from 'stores/Connection';
-import ProjectService from 'services/ProjectService';
-import setProjectRevision from 'actions/Stores/AppState/setProjectRevision';
-import {waitForStores} from 'utils/waitForStores';
+import AppState from '../stores/AppState';
+import Connection from '../stores/Connection';
+import ProjectService from '../services/ProjectService';
+import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
+import {waitForStores} from '../utils/waitForStores';
 
 export function loadFromServer(config) {
   console.info('Pre-fetching projects data...', config);

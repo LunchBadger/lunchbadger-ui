@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import MetricDetail from './MetricDetail';
-import {USERS, REQUESTS, APPS, PORTALS} from 'models/MetricDetail';
+import {USERS, REQUESTS, APPS, PORTALS} from '../../../models/MetricDetail';
 import classNames from 'classnames';
 import './MetricDetails.scss';
 

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './MetricDetail.scss';
-import {APPS, PORTALS, USERS, REQUESTS} from 'models/MetricDetail';
+import {APPS, PORTALS, USERS, REQUESTS} from '../../../models/MetricDetail';
 import numeral from 'numeral';
 import moment from 'moment';
 

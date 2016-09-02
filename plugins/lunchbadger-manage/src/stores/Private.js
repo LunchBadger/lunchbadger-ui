@@ -1,4 +1,4 @@
-import ModelProperty from 'models/ModelProperty';
+import ModelProperty from '../models/ModelProperty';
 import _ from 'lodash';
 
 const BaseStore = LunchBadgerCore.stores.BaseStore;

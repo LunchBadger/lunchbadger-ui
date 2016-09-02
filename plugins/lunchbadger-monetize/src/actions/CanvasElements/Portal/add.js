@@ -1,4 +1,4 @@
-import Portal from 'models/Portal';
+import Portal from '../../../models/Portal';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

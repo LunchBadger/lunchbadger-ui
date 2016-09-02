@@ -3,8 +3,8 @@ import './BasePlan.scss';
 import PlanIcon from './PlanIcon';
 import classNames from 'classnames';
 import {DropTarget} from 'react-dnd';
-import addUpgrade from 'actions/APIForecast/addUpgrade';
-import addDowngrade from 'actions/APIForecast/addDowngrade';
+import addUpgrade from '../../../actions/APIForecast/addUpgrade';
+import addDowngrade from '../../../actions/APIForecast/addDowngrade';
 import moment from 'moment';
 import {USER_POOL} from './UserPoolIcon';
 

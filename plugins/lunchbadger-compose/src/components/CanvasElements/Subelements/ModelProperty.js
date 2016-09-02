@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './ModelProperty.scss';
-import removeProperty from 'actions/CanvasElements/Model/removeProperty';
+import removeProperty from '../../../actions/CanvasElements/Model/removeProperty';
 
 const {Select, Input} = LunchBadgerCore.components;
 

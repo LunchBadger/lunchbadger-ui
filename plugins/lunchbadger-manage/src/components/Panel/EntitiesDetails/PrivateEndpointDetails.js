@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import updatePrivateEndpoint from 'actions/CanvasElements/PrivateEndpoint/update';
+import updatePrivateEndpoint from '../../../actions/CanvasElements/PrivateEndpoint/update';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;

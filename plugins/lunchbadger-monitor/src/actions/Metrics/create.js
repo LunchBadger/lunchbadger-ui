@@ -1,6 +1,6 @@
-import Metric from 'models/Metric';
-import MetricBundle from 'models/MetricBundle';
-import MetricPair, {OR} from 'models/MetricPair';
+import Metric from '../../models/Metric';
+import MetricBundle from '../../models/MetricBundle';
+import MetricPair, {OR} from '../../models/MetricPair';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

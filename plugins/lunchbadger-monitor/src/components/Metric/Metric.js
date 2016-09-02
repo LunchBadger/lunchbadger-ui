@@ -5,7 +5,7 @@ import MetricRemoveButton from './Subelements/MetricRemoveButton';
 import MetricDetails from './Subelements/MetricDetails';
 import MetricTypeTooltip from './Subelements/MetricTypeTooltip';
 import classNames from 'classnames';
-import aggregate from 'actions/Metrics/aggregate';
+import aggregate from '../../actions/Metrics/aggregate';
 import './Metric.scss';
 
 const boxSource = {

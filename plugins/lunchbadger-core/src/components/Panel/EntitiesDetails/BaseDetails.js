@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import './BaseDetails.scss';
 import {Form} from 'formsy-react';
-import InputField from 'components/Panel/EntitiesDetails/InputField';
+import InputField from './InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
-import changePanelStatus from 'actions/AppState/changePanelStatus';
+import changePanelStatus from '../../../actions/AppState/changePanelStatus';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {

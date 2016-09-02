@@ -14,7 +14,7 @@ import initialize from './actions/APIForecast/initialize';
 import setForecast from './actions/AppState/setForecast';
 
 // models
-import APIForecast from 'models/APIForecast';
+import APIForecast from './models/APIForecast';
 
 LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 

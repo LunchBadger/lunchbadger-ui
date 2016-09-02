@@ -3,13 +3,13 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import toggleHighlight from 'actions/CanvasElements/toggleHighlight';
-import toggleEdit from 'actions/CanvasElements/toggleEdit';
+import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
+import toggleEdit from '../../actions/CanvasElements/toggleEdit';
 import _ from 'lodash';
 import {Form} from 'formsy-react';
-import Input from 'components/Generics/Form/Input';
-import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
-import removeEntity from 'actions/CanvasElements/removeEntity';
+import Input from '../Generics/Form/Input';
+import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import removeEntity from '../../actions/CanvasElements/removeEntity';
 
 const boxSource = {
   beginDrag(props) {

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {DropTarget} from 'react-dnd';
 import APIForecast from '../PanelComponents/APIForecast';
-import addAPIForecast from 'actions/APIForecast/add';
-import updateAPIForecast from 'actions/APIForecast/update';
-import Forecast from 'stores/Forecast';
+import addAPIForecast from '../../actions/APIForecast/add';
+import updateAPIForecast from '../../actions/APIForecast/update';
+import Forecast from '../../stores/Forecast';
 import './ForecastsPanel.scss';
 import classNames from 'classnames';
 

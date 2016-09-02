@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
-import updateOrder from 'actions/Quadrants/Private/updateOrder';
-import PrivateEndpointFactory from 'models/PrivateEndpoint';
+import updateOrder from '../../actions/Quadrants/Private/updateOrder';
+import PrivateEndpointFactory from '../../models/PrivateEndpoint';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 

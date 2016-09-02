@@ -1,6 +1,6 @@
-import Gateway from 'models/Gateway';
-import Pipeline from 'models/Pipeline';
-import Policy from 'models/Policy';
+import Gateway from '../../../models/Gateway';
+import Pipeline from '../../../models/Pipeline';
+import Policy from '../../../models/Policy';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

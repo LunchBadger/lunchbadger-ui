@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
 import HeaderMenuSaveButton from './HeaderMenuSaveButton';
-import panelKeys from 'constants/panelKeys';
+import panelKeys from '../../constants/panelKeys';
 import classNames from 'classnames';
 
 export default class HeaderMenu extends Component {

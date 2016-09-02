@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
-import AppState from 'stores/AppState';
-import togglePanel from 'actions/togglePanel';
+import AppState from '../../stores/AppState';
+import togglePanel from '../../actions/togglePanel';
 
 export default class HeaderMenuLink extends Component {
   static propTypes = {

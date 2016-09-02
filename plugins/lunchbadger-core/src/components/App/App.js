@@ -7,8 +7,8 @@ import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Notifications from 'react-notify-toast';
 import PanelContainer from '../Panel/PanelContainer';
-import Pluggable from 'stores/Pluggable';
-import AppState from 'stores/AppState';
+import Pluggable from '../../stores/Pluggable';
+import AppState from '../../stores/AppState';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {

@@ -5,7 +5,7 @@ import UserPoolSlider from './UserPoolSlider';
 import ForecastPlanDetails from './ForecastPlanDetails';
 import PlanInstructions from './PlanInstructions';
 import UserPool from './UserPool';
-import addPlan from 'actions/APIForecast/addPlan';
+import addPlan from '../../../actions/APIForecast/addPlan';
 import './ForecastPlans.scss';
 import numeral from 'numeral';
 import moment from 'moment';

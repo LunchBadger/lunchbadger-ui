@@ -5,13 +5,13 @@ import ModelComponent from './components/CanvasElements/Model';
 import DataSourceComponent from './components/CanvasElements/DataSource';
 
 // stores
-import Backend from 'stores/Backend';
+import Backend from './stores/Backend';
 
 // models
 
 // actions
-import initializeBackend from 'actions/Stores/Backend/initialize';
-import initializePrivate from 'actions/Stores/Private/initialize';
+import initializeBackend from './actions/Stores/Backend/initialize';
+import initializePrivate from './actions/Stores/Private/initialize';
 
 LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 

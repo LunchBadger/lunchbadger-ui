@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import TwoOptionModal from 'components/Generics/Modal/TwoOptionModal';
+import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import './CanvasOverlay.scss';
 
 export default class CanvasOverlay extends Component {

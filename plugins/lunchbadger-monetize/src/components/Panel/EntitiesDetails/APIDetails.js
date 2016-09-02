@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import updateAPI from 'actions/CanvasElements/API/update';
+import updateAPI from '../../../actions/CanvasElements/API/update';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 

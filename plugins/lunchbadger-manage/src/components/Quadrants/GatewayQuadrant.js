@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import Gateway from 'components/CanvasElements/Gateway';
-import updateOrder from 'actions/Quadrants/Gateway/updateOrder';
+import Gateway from '../CanvasElements/Gateway';
+import updateOrder from '../../actions/Quadrants/Gateway/updateOrder';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 

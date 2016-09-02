@@ -1,4 +1,4 @@
-import ConnectionFactory from 'models/Connection';
+import ConnectionFactory from '../models/Connection';
 import _ from 'lodash';
 import BaseStore from './BaseStore';
 

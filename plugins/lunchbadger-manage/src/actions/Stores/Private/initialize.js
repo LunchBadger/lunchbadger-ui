@@ -1,4 +1,4 @@
-import PrivateEndpoint from 'models/PrivateEndpoint';
+import PrivateEndpoint from '../../../models/PrivateEndpoint';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

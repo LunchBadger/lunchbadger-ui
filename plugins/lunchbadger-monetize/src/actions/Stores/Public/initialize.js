@@ -1,5 +1,5 @@
-import API from 'models/API';
-import Portal from 'models/Portal';
+import API from '../../../models/API';
+import Portal from '../../../models/Portal';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

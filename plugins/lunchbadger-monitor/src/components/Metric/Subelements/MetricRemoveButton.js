@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import remove from 'actions/Metrics/remove';
+import remove from '../../../actions/Metrics/remove';
 import './MetricRemoveButton.scss';
 
 export default class MetricRemoveButton extends Component {

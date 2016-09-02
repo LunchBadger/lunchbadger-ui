@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import DeployPortal from 'actions/CanvasElements/Portal/deploy';
+import DeployPortal from '../../actions/CanvasElements/Portal/deploy';
 
 const Tool = LunchBadgerCore.components.Tool;
 

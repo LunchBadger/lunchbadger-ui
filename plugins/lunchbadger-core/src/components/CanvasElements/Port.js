@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
-import removeConnection from 'actions/Connection/remove';
+import removeConnection from '../../actions/Connection/remove';
 import uuid from 'uuid';
-import Connection from 'stores/Connection';
+import Connection from '../../stores/Connection';
 import _ from 'lodash';
 
 export default class Port extends Component {

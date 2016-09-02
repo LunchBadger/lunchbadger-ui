@@ -42,8 +42,7 @@ module.exports = {
     tls: 'empty'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    fallback: [coreDir, ...pluginDirs]
+    extensions: ['', '.js', '.jsx']
   },
   externals: {
     'react': 'React',

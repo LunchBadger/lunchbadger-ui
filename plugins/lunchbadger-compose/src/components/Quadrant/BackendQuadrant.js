@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import DataSource from '../CanvasElements/DataSource';
-import updateOrder from 'actions/Quadrants/Backend/updateOrder';
+import updateOrder from '../../actions/Quadrants/Backend/updateOrder';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 

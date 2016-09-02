@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import AppState from 'stores/AppState';
+import AppState from '../../stores/AppState';
 import Panel from './Panel';
-import panelKeys from 'constants/panelKeys';
+import panelKeys from '../../constants/panelKeys';
 
 class DetailsPanel extends Component {
   constructor(props) {

@@ -1,4 +1,4 @@
-import PublicEndpoint from 'models/PublicEndpoint';
+import PublicEndpoint from '../../../models/PublicEndpoint';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

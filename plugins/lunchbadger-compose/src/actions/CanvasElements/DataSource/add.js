@@ -1,4 +1,4 @@
-import DataSource from 'models/DataSource';
+import DataSource from '../../../models/DataSource';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

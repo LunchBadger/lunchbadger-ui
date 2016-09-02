@@ -1,5 +1,5 @@
-import APIForecast from 'models/APIForecast';
-import ForecastAPI from 'models/ForecastAPI';
+import APIForecast from '../../models/APIForecast';
+import ForecastAPI from '../../models/ForecastAPI';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 

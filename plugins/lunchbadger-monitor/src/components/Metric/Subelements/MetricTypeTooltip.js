@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import {AND, OR, NOT} from 'models/MetricPair';
-import changeType from 'actions/Metrics/changeType';
+import {AND, OR, NOT} from '../../../models/MetricPair';
+import changeType from '../../../actions/Metrics/changeType';
 import './MetricTypeTooltip.scss';
 
 export default class MetricTypeTooltip extends Component {

@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
-import unbundlePortal from 'actions/CanvasElements/Portal/unbundle';
-import moveBetweenPortals from 'actions/CanvasElements/Portal/rebundle';
+import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
+import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
 import {notify} from 'react-notify-toast';
-import bundlePortal from 'actions/CanvasElements/Portal/bundle';
+import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';

@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import updateModel from 'actions/CanvasElements/Model/update';
+import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelRelationDetails from './ModelRelationDetails';
-import BackendStore from 'stores/Backend';
+import BackendStore from '../../../stores/Backend';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;

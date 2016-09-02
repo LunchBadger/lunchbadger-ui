@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
-import setForecast from 'actions/AppState/setForecast';
+import setForecast from '../../../actions/AppState/setForecast';
 import moment from 'moment';
 
 export default class DateSliderMark extends Component {

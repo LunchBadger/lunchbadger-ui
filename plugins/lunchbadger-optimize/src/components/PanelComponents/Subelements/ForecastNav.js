@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import removeAPIForecast from 'actions/APIForecast/remove';
+import removeAPIForecast from '../../../actions/APIForecast/remove';
 
 export default class ForecastNav extends Component {
   static propTypes = {

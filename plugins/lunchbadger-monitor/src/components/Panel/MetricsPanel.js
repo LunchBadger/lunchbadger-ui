@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
-import Metric from 'stores/Metric';
-import create from 'actions/Metrics/create';
-import createBundle from 'actions/Metrics/createBundle';
-import update from 'actions/Metrics/update';
-import MetricComponent from 'components/Metric/Metric';
+import Metric from '../../stores/Metric';
+import create from '../../actions/Metrics/create';
+import createBundle from '../../actions/Metrics/createBundle';
+import update from '../../actions/Metrics/update';
+import MetricComponent from '../Metric/Metric';
 import './MetricsPanel.scss';
 
 export const METRICS_PANEL = 'METRICS_PANEL';

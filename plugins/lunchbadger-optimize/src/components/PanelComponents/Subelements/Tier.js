@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import removeTier from 'actions/APIForecast/removeTier';
-import saveTier from 'actions/APIForecast/saveTier';
+import removeTier from '../../../actions/APIForecast/removeTier';
+import saveTier from '../../../actions/APIForecast/saveTier';
 import './Tier.scss';
 import numeral from 'numeral';
 import moment from 'moment';

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
-import updateModel from 'actions/CanvasElements/Model/update';
-import addProperty from 'actions/CanvasElements/Model/addProperty';
+import updateModel from '../../actions/CanvasElements/Model/update';
+import addProperty from '../../actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import './Model.scss';
 

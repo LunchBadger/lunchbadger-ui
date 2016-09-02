@@ -1,9 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import update from 'react-addons-update';
-import redeployGateway from 'actions/CanvasElements/Gateway/redeploy';
-import Pipeline from 'models/Pipeline';
-import Policy from 'models/Policy';
-import GatewayStore from 'stores/Gateway';
+import redeployGateway from '../../../actions/CanvasElements/Gateway/redeploy';
+import Pipeline from '../../../models/Pipeline';
+import Policy from '../../../models/Policy';
+import GatewayStore from '../../../stores/Gateway';
 import GatewayPolicyDetails from './GatewayPolicyDetails';
 import _ from 'lodash';
 

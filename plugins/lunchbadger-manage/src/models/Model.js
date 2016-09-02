@@ -11,7 +11,7 @@ export default class Model extends BaseModel {
   _relations = [];
   contextPath = 'model';
   base = 'Model';
-  plural = null;
+  plural = '';
   readOnly = false;
   public = false;
   strict = false;

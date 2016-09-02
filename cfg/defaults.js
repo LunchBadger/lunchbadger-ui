@@ -35,6 +35,10 @@ function getDefaultModules() {
         loader: 'url-loader?limit=8192'
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url-loader?limit=10000&mimetype=application/font-woff"
       }, {

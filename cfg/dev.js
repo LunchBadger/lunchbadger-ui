@@ -1,34 +1,12 @@
 'use strict';
 
+let _ = require('lodash');
 let path = require('path');
 let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
-const infoFile = require('./load');
-const args = process.argv.slice(2);
-
-let startEntry;
-
-if (args.indexOf('--no-server') === -1) {
-  startEntry = [
-    'webpack-dev-server/client?http://127.0.0.1:' + defaultSettings.port,
-    './src/index'
-  ];
-} else {
-  startEntry = ['./src/index'];
-}
-
-let config = Object.assign({}, baseConfig, {
-  entry: {
-    vendor: [
-      'moment',
-      'lodash'
-    ],
-    start: startEntry,
-    core: './plugins/lunchbadger-core/index',
-    plugins: infoFile.plugins.map((plugin) => { return ('./plugins/lunchbadger-' + plugin); })
-  },
+let config = _.merge({}, baseConfig, {
   cache: true,
   devtool: 'eval',
   plugins: [
@@ -38,10 +16,12 @@ let config = Object.assign({}, baseConfig, {
       minChunks: Infinity
     })
   ],
-  module: defaultSettings.getDefaultModules()
+  resolve: {
+    alias: {
+      config: `${defaultSettings.srcPath}/config/dev`
+    }
+  }
 });
-
-config.resolve.alias['config'] = `${defaultSettings.srcPath}/config/dev`;
 
 // Add needed loaders to the defaults here
 config.module.loaders.push({
@@ -49,7 +29,7 @@ config.module.loaders.push({
   loader: 'babel-loader?cacheDirectory',
   include: [].concat(
     config.additionalPaths,
-    [path.join(__dirname, '/../src')]
+    [path.join(__dirname, '/../src'), path.join(__dirname, '../plugins')]
   )
 });
 

@@ -1,0 +1,29 @@
+.metric-header {
+  display: table;
+  width: 100%;
+  min-height: 50px;
+}
+
+.metric-header__title__name {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 18px;
+  text-align: left;
+  padding-left: 15px;
+  width: 187px;
+}
+
+.metric-header__title__type {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 45px;
+}
+
+.metric-header__entity-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 170px;
+  display: block;
+  white-space: nowrap;
+}

@@ -1,0 +1,39 @@
+@import '../../config';
+
+.aside {
+  position: fixed;
+  left: 0;
+  top: $header-height;
+  width: $aside-width;
+  height: 100%;
+  background: $ui-light;
+  border-right: 1px solid $ui-base-border;
+  z-index: ($z-index-high + 7);
+
+  hr {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  &:before {
+    content: '';
+    opacity: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    transition: all 0.3s ease;
+    position: absolute;
+    width: 100%;
+    background: #000;
+  }
+
+   &--editing {
+    &:before {
+      z-index: 10;
+      opacity: 0.34;
+    }
+  }
+}
+.tool__extend.icon-arrowhead {
+  font-size: x-small;
+}

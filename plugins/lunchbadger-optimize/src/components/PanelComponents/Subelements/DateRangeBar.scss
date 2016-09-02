@@ -1,0 +1,32 @@
+.date-range-bar {
+  display: inline-block;
+}
+
+.date-range-bar__picker {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  cursor: pointer;
+  width: 120px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &--from {
+    text-align: right;
+  }
+
+  &--to {
+    text-align: left;
+  }
+}
+
+.date-range-bar__between {
+  font-size: 16px;
+  padding: 0 10px;
+  display: inline-block;
+}

@@ -1,7 +1,7 @@
 'use strict';
 var fs = require('fs');
 
-const info = './bin/info.json';
+const info = './cfg/info.json';
 const infoAPI = './../../server/info.json';
 const jsonfile = require('jsonfile');
 let infoFile = {};

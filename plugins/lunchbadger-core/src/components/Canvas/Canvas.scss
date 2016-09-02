@@ -1,0 +1,113 @@
+@import '../../config';
+
+.canvas {
+  min-width: 100%;
+  min-height: calc(100vh - #{$header-height});
+  background: url('canvas-texture.png') rgb(222, 222, 222);
+  position: relative;
+  overflow: hidden;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  // jsplumbs overrides
+  .jsplumb-endpoint,
+  .jsplumb-connector {
+    z-index: 15;
+
+    &.jsplumb-hover {
+      z-index: 10;
+
+      & > svg {
+        circle {
+          fill: #919191;
+        }
+      }
+    }
+  }
+
+  .jsplumb-connector {
+    &.loading {
+      opacity: 0.4;
+
+      & + .remove-button {
+        display: none !important;
+      }
+    }
+  }
+
+  .remove-button {
+    color: $ui-light;
+    background: red;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    padding: 3px 6px;
+    font-size: 11px;
+    cursor: pointer;
+    display: none;
+    z-index: 15;
+
+    &.jsplumb-hover {
+      display: block;
+    }
+  }
+}
+
+.canvas--disabled {
+}
+
+.canvas__wrapper {
+  overflow: auto;
+  height: calc(100vh - #{$header-height});
+}
+
+.canvas__container {
+  min-width: 100%;
+  min-height: calc(100vh - #{$header-height});
+  position: relative;
+  overflow: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.canvas__legend {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: visible;
+  height: 100%;
+  pointer-events: none;
+  z-index: $z-index-low;
+  min-height: 520px;
+  transition: all .5s ease;
+}
+
+.canvas__label {
+  position: absolute;
+  top: 50%;
+  color: $font-light;
+  text-align: center;
+  font-size: 0.889em;
+  width: 136px;
+  background: #848485;
+  height: 22px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  transform-origin: bottom;
+  margin-top: -22px;
+}
+
+.canvas__label--left {
+  left: -68px;
+  transform: rotate(90deg);
+}
+
+.canvas__label--right {
+  right: -68px;
+  transform: rotate(-90deg);
+}

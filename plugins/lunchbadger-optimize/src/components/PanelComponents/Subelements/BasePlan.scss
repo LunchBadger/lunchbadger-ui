@@ -1,0 +1,62 @@
+.base-plan {
+  height: 60px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  margin-top: 15px;
+
+  .forecast-plans__plan--expanded & {
+    transition: none;
+  }
+
+  &--expanded {
+    height: 65px;
+  }
+
+  &--over {
+    border: 1px solid rgb(2, 142, 226);
+  }
+}
+
+.base-plan__tiers {
+  width: 100%;
+  position: relative;
+  background: #fff;
+  color: #000;
+  font-size: 16px;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.7s ease;
+}
+
+.base-plan__tiers--opened {
+  max-height: 300px;
+}
+
+.base-plan__tiers__inside {
+  padding: 15px 20px;
+  border: 1px solid #ff8000;
+  max-height: 270px;
+  overflow: auto;
+}
+
+.base-plan__add-tier {
+  float: right;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.base-plan__tiers__caption {
+  text-align: left;
+  text-transform: uppercase;
+  color: #ff8000;
+  padding: 0;
+  font-size: 15px;
+}
+
+.base-plan__tiers__table {
+  width: 100%;
+  border-collapse: collapse;
+  line-height: 1;
+  margin-top: 2px;
+  font-size: 14px;
+}

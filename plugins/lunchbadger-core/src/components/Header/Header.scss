@@ -1,0 +1,85 @@
+@import '../../config';
+
+.header {
+  background: $ui-base;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: $header-height;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+  display: table;
+  z-index: ($z-index-high + 1);
+}
+
+.header__menu {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  transition: all .3s ease;
+}
+
+.header__menu--disabled {
+  opacity: .3;
+  pointer-events: none;
+}
+
+.header__menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header__menu__element {
+  display: inline-block;
+  height: $header-height;
+  margin-right: 19px;
+}
+
+.header__menu__link {
+  display: block;
+  font-size: 33px;
+  color: #023845;
+  transition: all .3s ease;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+  height: 40px;
+  line-height: 40px;
+  padding: 0 7px;
+  border-radius: 10px;
+
+  &:hover {
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.06);
+  }
+}
+
+.header__menu__link--hidden {
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.header__menu__link--pressed {
+  color: $font-light;
+  background: #023845;
+}
+.Logo {
+  position: absolute;
+  width: 35px;
+  height: 31px;
+  margin: (($aside-width/2) - 17.5px) (($header-height/2) - 15.5px);
+}
+.logotype {
+  top: 8px;
+  left: 71px;
+  z-index: 82;
+  font-family: 'trench100free', serif;
+  font-size: 1.611em;
+  font-weight: normal;
+  position: absolute;
+  color: $font-light;
+}

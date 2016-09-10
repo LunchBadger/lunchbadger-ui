@@ -13,11 +13,13 @@ import AppState from '../../stores/AppState';
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
   static childContextTypes = {
-    lunchbadgerConfig: PropTypes.object
+    lunchbadgerConfig: PropTypes.object,
+    user: PropTypes.object
   }
 
   static propTypes = {
-    config: PropTypes.object
+    config: PropTypes.object,
+    user: PropTypes.object
   }
 
   constructor(props) {
@@ -39,7 +41,8 @@ export default class App extends Component {
 
   getChildContext() {
     return {
-      lunchbadgerConfig: this.props.config
+      lunchbadgerConfig: this.props.config,
+      user: this.props.user
     };
   }
 

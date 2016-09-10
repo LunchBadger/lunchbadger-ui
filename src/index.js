@@ -13,7 +13,12 @@ const App = LunchBadgerCore.components.App;
 
 console.info('Application started..!');
 
-LunchBadgerCore.utils.serverIo.loadFromServer(config);
+LunchBadgerCore.utils.checkAuth(config).then(user => {
+  if (!user) {
+    return;
+  }
+  LunchBadgerCore.utils.serverIo.loadFromServer(config, user);
 
-// Render the main component into the dom
-ReactDOM.render(<App config={config} />, document.getElementById('app'));
+  // Render the main component into the dom
+  ReactDOM.render(<App config={config} user={user}/>, document.getElementById('app'));
+});

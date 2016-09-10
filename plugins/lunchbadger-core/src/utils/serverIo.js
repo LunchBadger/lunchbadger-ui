@@ -7,10 +7,10 @@ import ProjectService from '../services/ProjectService';
 import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from '../utils/waitForStores';
 
-export function loadFromServer(config) {
+export function loadFromServer(config, user) {
   console.info('Pre-fetching projects data...', config);
 
-  const projectService = new ProjectService(config.projectApiUrl)
+  const projectService = new ProjectService(config.projectApiUrl, user.id_token);
   const projectData = projectService.get(config.producerId, config.envId);
 
   let storesList = [];

@@ -3,12 +3,15 @@ import Bluebird from 'bluebird';
 import _ from 'lodash';
 
 class APIInterceptor {
-  constructor(url) {
+  constructor(url, idToken) {
     this.url = url;
+    this.idToken = idToken;
   }
 
   _getHeaders() {
-    const headers = {};
+    const headers = {
+      Authorization: `JWT ${this.idToken}`
+    };
 
     return headers;
   }

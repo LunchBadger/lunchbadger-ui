@@ -4,7 +4,8 @@ import {saveToServer} from '../../utils/serverIo';
 
 export default class HeaderMenuSaveButton extends Component {
   static contextTypes = {
-    lunchbadgerConfig: PropTypes.object
+    lunchbadgerConfig: PropTypes.object,
+    user: PropTypes.object
   }
 
   constructor(props) {
@@ -16,7 +17,7 @@ export default class HeaderMenuSaveButton extends Component {
   }
 
   saveDetails() {
-    saveToServer(this.context.lunchbadgerConfig);
+    saveToServer(this.context.lunchbadgerConfig, this.context.user);
   }
 
   render() {

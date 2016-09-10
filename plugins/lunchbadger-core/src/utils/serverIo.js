@@ -77,7 +77,7 @@ export function loadFromServer(config, user) {
 
 }
 
-export function saveToServer(config) {
+export function saveToServer(config, user) {
   let storesList = [
     Connection
   ];
@@ -188,7 +188,7 @@ export function saveToServer(config) {
     });
   }
 
-  let projSave = new ProjectService(config.projectApiUrl)
+  let projSave = new ProjectService(config.projectApiUrl, user.id_token)
     .save(config.producerId, config.envId, project, rev)
     .then(res => {
       let newRev = res.response.headers['etag'];

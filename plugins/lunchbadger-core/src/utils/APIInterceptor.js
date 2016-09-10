@@ -18,13 +18,12 @@ class APIInterceptor {
 
   _callAPI(method, url, options) {
     return new Bluebird((resolve, reject) => {
-      const req = _.extend({
+      const req = _.merge({
         method: method,
         url: url,
         baseUrl: this.url,
         json: true,
-        headers: _.extend(this._getHeaders(), {}),
-        withCredentials: false
+        headers: _.extend(this._getHeaders(), {})
       }, options);
       request(req, (error, response, body) => {
         if (error) {

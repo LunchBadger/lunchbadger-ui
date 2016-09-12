@@ -37,6 +37,7 @@ export default function checkAuth(config) {
         return null;
       }
       console.log('logged in:', user);
+      window.location = '#';
       return user;
     })
     .catch(err => {

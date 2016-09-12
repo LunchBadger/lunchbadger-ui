@@ -20,6 +20,10 @@ export default {
       }
     ]
   },
+  // user: {
+  //   sub: 1,
+  //   email: 'foo@lunchbadger.com'
+  // },
   producerId: 'demo',
   envId: 'dev'
 };

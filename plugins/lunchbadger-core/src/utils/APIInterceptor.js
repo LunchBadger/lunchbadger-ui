@@ -9,10 +9,10 @@ class APIInterceptor {
   }
 
   _getHeaders() {
-    const headers = {
-      Authorization: `JWT ${this.idToken}`
-    };
-
+    const headers = {};
+    if (this.idToken) {
+      headers['Authorization'] = `JWT ${this.idToken}`;
+    }
     return headers;
   }
 

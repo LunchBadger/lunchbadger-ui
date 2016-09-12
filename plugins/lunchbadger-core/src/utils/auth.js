@@ -2,6 +2,11 @@
 import {UserManager} from 'oidc-client';
 
 export default function checkAuth(config) {
+  if (config.user) {
+    // We can skip authentication and use given user if configured
+    return Promise.resolve(config.user);
+  }
+
   const um = new UserManager(config.oauth);
 
   return um.getUser()

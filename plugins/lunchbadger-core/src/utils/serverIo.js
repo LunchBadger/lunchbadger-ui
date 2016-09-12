@@ -11,7 +11,29 @@ export function loadFromServer(config, user) {
   console.info('Pre-fetching projects data...', config);
 
   const projectService = new ProjectService(config.projectApiUrl, user.id_token);
-  const projectData = projectService.get(config.producerId, config.envId);
+  const projectData = projectService
+    .get(user.profile.sub, config.envId)
+    .catch(err => {
+      if (err.statusCode === 404) {
+        return {
+          body: {
+            connections: [],
+            states: [],
+            privateEndpoints: [],
+            gateways: [],
+            publicEndpoints: [],
+            dataSources: [],
+            privateModels: [],
+            apis: [],
+            portals: []
+          },
+          response: {
+            headers: {}
+          }
+        }
+      }
+      throw err;
+    });
 
   let storesList = [];
 
@@ -189,7 +211,7 @@ export function saveToServer(config, user) {
   }
 
   let projSave = new ProjectService(config.projectApiUrl, user.id_token)
-    .save(config.producerId, config.envId, project, rev)
+    .save(user.profile.sub, config.envId, project, rev)
     .then(res => {
       let newRev = res.response.headers['etag'];
       setProjectRevision(newRev);

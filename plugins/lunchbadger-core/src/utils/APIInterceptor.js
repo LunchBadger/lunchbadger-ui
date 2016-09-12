@@ -31,11 +31,12 @@ class APIInterceptor {
         }
 
         if (response.statusCode >= 400) {
-          return reject(body.errors);
+          return reject(new APIError(response.statusCode,
+                                     body.error ? body.error.message : body));
         }
 
         if (response.statusCode === 0) {
-          return reject(new Error('General API Error!'));
+          return reject(new APIError(0, 'General API Error!'));
         }
 
         const responseData = {
@@ -66,6 +67,13 @@ class APIInterceptor {
 
   delete(url, options) {
     return this._callAPI('DELETE', url, options);
+  }
+}
+
+class APIError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.statusCode = statusCode;
   }
 }
 

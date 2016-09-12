@@ -22,7 +22,8 @@ export default {
   },
   // user: {
   //   sub: 1,
-  //   email: 'foo@lunchbadger.com'
+  //   email: 'foo@lunchbadger.com',
+  //   preferred_username: 'User Userman'
   // },
   producerId: 'demo',
   envId: 'dev'

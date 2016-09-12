@@ -13,12 +13,15 @@ const App = LunchBadgerCore.components.App;
 
 console.info('Application started..!');
 
-LunchBadgerCore.utils.checkAuth(config).then(user => {
-  if (!user) {
+let loginManager = LunchBadgerCore.utils.createLoginManager(config);
+
+loginManager.checkAuth().then(loggedIn => {
+  if (!loggedIn) {
     return;
   }
-  LunchBadgerCore.utils.serverIo.loadFromServer(config, user);
+  LunchBadgerCore.utils.serverIo.loadFromServer(config, loginManager);
 
   // Render the main component into the dom
-  ReactDOM.render(<App config={config} user={user}/>, document.getElementById('app'));
+  ReactDOM.render(<App config={config} loginManager={loginManager}/>,
+                  document.getElementById('app'));
 });

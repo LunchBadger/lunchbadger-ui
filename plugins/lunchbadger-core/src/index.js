@@ -72,7 +72,7 @@ import ProjectService from './services/ProjectService';
 import APIInterceptor from './utils/APIInterceptor';
 import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
-import checkAuth from './utils/auth';
+import createLoginManager from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
 
 let LunchBadgerCore = {
@@ -155,7 +155,7 @@ let LunchBadgerCore = {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer
     },
-    checkAuth: checkAuth
+    createLoginManager: createLoginManager
   }
 };
 

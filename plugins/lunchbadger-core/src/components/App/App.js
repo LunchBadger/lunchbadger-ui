@@ -14,12 +14,12 @@ import AppState from '../../stores/AppState';
 export default class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
-    user: PropTypes.object
+    loginManager: PropTypes.object
   }
 
   static propTypes = {
     config: PropTypes.object,
-    user: PropTypes.object
+    loginManager: PropTypes.object
   }
 
   constructor(props) {
@@ -42,7 +42,7 @@ export default class App extends Component {
   getChildContext() {
     return {
       lunchbadgerConfig: this.props.config,
-      user: this.props.user
+      loginManager: this.props.loginManager
     };
   }
 

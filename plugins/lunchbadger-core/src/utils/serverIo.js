@@ -7,32 +7,38 @@ import ProjectService from '../services/ProjectService';
 import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from '../utils/waitForStores';
 
-export function loadFromServer(config, user) {
+export function loadFromServer(config, loginManager) {
   console.info('Pre-fetching projects data...', config);
 
+  const user = loginManager.user;
   const projectService = new ProjectService(config.projectApiUrl, user.id_token);
   const projectData = projectService
     .get(user.profile.sub, config.envId)
     .catch(err => {
-      if (err.statusCode === 404) {
-        return {
-          body: {
-            connections: [],
-            states: [],
-            privateEndpoints: [],
-            gateways: [],
-            publicEndpoints: [],
-            dataSources: [],
-            privateModels: [],
-            apis: [],
-            portals: []
-          },
-          response: {
-            headers: {}
+      switch (err.statusCode) {
+        case 404:
+          return {
+            body: {
+              connections: [],
+              states: [],
+              privateEndpoints: [],
+              gateways: [],
+              publicEndpoints: [],
+              dataSources: [],
+              privateModels: [],
+              apis: [],
+              portals: []
+            },
+            response: {
+              headers: {}
+            }
           }
-        }
+        case 401:
+          loginManager.refreshLogin();
+          throw err;
+        default:
+          throw err;
       }
-      throw err;
     });
 
   let storesList = [];
@@ -99,7 +105,9 @@ export function loadFromServer(config, user) {
 
 }
 
-export function saveToServer(config, user) {
+export function saveToServer(config, loginManager) {
+  const user = loginManager.user;
+
   let storesList = [
     Connection
   ];
@@ -215,7 +223,13 @@ export function saveToServer(config, user) {
     .then(res => {
       let newRev = res.response.headers['etag'];
       setProjectRevision(newRev);
-    });
+    })
+    .catch(err => {
+      if (err.statusCode === 401) {
+        loginManager.refreshLogin();
+      }
+      throw err;
+    })
 
   saveableServices.push(projSave);
 

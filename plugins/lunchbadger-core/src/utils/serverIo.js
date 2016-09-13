@@ -1,6 +1,4 @@
 /*eslint no-console:0 */
-import {notify} from 'react-notify-toast';
-
 import AppState from '../stores/AppState';
 import Connection from '../stores/Connection';
 import ProjectService from '../services/ProjectService';
@@ -32,7 +30,7 @@ export function loadFromServer(config, loginManager) {
             response: {
               headers: {}
             }
-          }
+          };
         case 401:
           loginManager.refreshLogin();
           throw err;
@@ -57,13 +55,13 @@ export function loadFromServer(config, loginManager) {
     );
   }
 
-  projectData.then((res) => {
+  return projectData.then(res => {
     const data = res.body;
     const rev = res.response.headers['etag'];
 
     setProjectRevision(rev);
 
-    waitForStores(storesList, () => {
+    let result = waitForStores(storesList).then(() => {
       // attach connections ;-)
       data.connections.forEach((connection) => {
         if (document.getElementById(`port_out_${connection.fromId}`) && document.getElementById(`port_in_${connection.toId}`)) {
@@ -80,8 +78,6 @@ export function loadFromServer(config, loginManager) {
       setTimeout(() => {
         LunchBadgerCore.actions.Stores.AppState.initialize(data.states);
       });
-
-      notify.show('All data has been synced with API', 'success');
     });
 
     if (LunchBadgerManage) {
@@ -98,11 +94,9 @@ export function loadFromServer(config, loginManager) {
     if (LunchBadgerMonetize) {
       LunchBadgerMonetize.actions.Stores.Public.initialize(data);
     }
-  }).catch((err) => {
-    console.error(err);
-    notify.show('Failed to sync data with API, working offline! Try to refresh page...', 'error');
-  });
 
+    return result;
+  });
 }
 
 export function saveToServer(config, loginManager) {
@@ -244,10 +238,5 @@ export function saveToServer(config, loginManager) {
     });
   }
 
-  Promise.all(saveableServices).then(() => {
-    notify.show('All data has been synced with API', 'success');
-  }).catch((err) => {
-    console.error(err);
-    notify.show('Cannot save data to local API', 'error');
-  });
+  return Promise.all(saveableServices);
 }

@@ -22,7 +22,7 @@ LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 const AppState = LunchBadgerCore.stores.AppState;
 const waitForStores = LunchBadgerCore.utils.waitForStores;
 
-waitForStores([AppState], () => {
+waitForStores([AppState]).then(() => {
   setTimeout(() => {
 
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');

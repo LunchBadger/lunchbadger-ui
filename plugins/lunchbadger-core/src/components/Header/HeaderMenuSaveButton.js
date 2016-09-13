@@ -1,13 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
-import {saveToServer} from '../../utils/serverIo';
 
 export default class HeaderMenuSaveButton extends Component {
-  static contextTypes = {
-    lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object
-  }
-
   constructor(props) {
     super(props);
 
@@ -17,7 +11,7 @@ export default class HeaderMenuSaveButton extends Component {
   }
 
   saveDetails() {
-    saveToServer(this.context.lunchbadgerConfig, this.context.loginManager);
+    this.props.saveToServer();
   }
 
   render() {

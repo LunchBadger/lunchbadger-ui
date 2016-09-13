@@ -11,7 +11,9 @@ export default class Header extends Component {
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
         <p className="logotype" >LunchBadger</p>
         <Breadcrumbs />
-        <HeaderMenu appState={this.props.appState} plugins={this.props.plugins} />
+        <HeaderMenu appState={this.props.appState}
+                    plugins={this.props.plugins}
+                    saveToServer={this.props.saveToServer} />
       </header>
     );
   }

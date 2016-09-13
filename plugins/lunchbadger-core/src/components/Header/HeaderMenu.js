@@ -31,7 +31,7 @@ export default class HeaderMenu extends Component {
       <nav className={headerClass}>
         <ul className="header__menu__list">
           <li className="header__menu__element">
-            <HeaderMenuSaveButton/>
+            <HeaderMenuSaveButton saveToServer={this.props.saveToServer} />
           </li>
           <li className="header__menu__element">
             <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="icon-icon-details"/>

@@ -19,7 +19,6 @@ loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) {
     return;
   }
-  LunchBadgerCore.utils.serverIo.loadFromServer(config, loginManager);
 
   // Render the main component into the dom
   ReactDOM.render(<App config={config} loginManager={loginManager}/>,

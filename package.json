@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/nightwatch/bin/nightwatch"
+    "test": "nightwatch"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "chromedriver": "^2.21.2",
     "nightwatch": "^0.9.4",
     "phantomjs": "^2.1.7",
-    "selenium-server-standalone-jar": "2.43.1"
+    "selenium-server-standalone-jar": "2.53.1"
   },
   "devDependencies": {
     "moment": "^2.14.1"

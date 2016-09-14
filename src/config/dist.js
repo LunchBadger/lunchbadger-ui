@@ -1,10 +1,10 @@
 export default {
-  projectApiUrl: 'http://api.lunchbadger.com/api',
+  projectApiUrl: 'https://api.lunchbadger.com/api',
   forecastApiUrl: 'http://localhost:3000/api',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',
-    redirect_uri: 'http://localhost:8000',
+    redirect_uri: 'https://canvas.lunchbadger.com',
     scope: 'openid profile email',
     metadata: {
       issuer: 'https://www.lunchbadger.com',

@@ -2,8 +2,7 @@ var phantomCapabilities = {
   "browserName": "phantomjs",
   "javascriptEnabled": true,
   "acceptSslCerts": true,
-  "phantomjs.binary.path": "./node_modules/phantomjs/bin/phantomjs",
-  "phantomjs.cli.args": "--webdriver=5558 --webdriver-selenium-grid-hub=http://localhost:4444",
+  "phantomjs.cli.args": ["--ignore-ssl-errors=true"],
   "phantomjs.page.settings.userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"
 };
 

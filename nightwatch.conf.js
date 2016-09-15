@@ -22,7 +22,7 @@ module.exports = {
   ],
   "output_folder": "reports",
   "custom_commands_path": "./commands",
-  "custom_assertions_path": "",
+  "custom_assertions_path": "./assertions",
   "page_objects_path": "./pageObjects",
   "globals_path": "",
   "selenium": {

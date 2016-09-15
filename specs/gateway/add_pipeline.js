@@ -33,9 +33,7 @@ module.exports = {
     page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline.pipeline--opened').to.be.present;
 
     page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__details .pipeline__details__title').text.to.equal('POLICIES');
-    page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__details .policy:nth-of-type(2) .policy__name').text.to.equal('AUTH 01');
-    page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__details .policy:nth-of-type(3) .policy__name').text.to.equal('RATE LIMITER');
-    page.expect.element(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__details .policy:nth-of-type(4) .policy__name').text.to.equal('REVERSE PROXY');
+    page.assert.elementsCount(elementSelector + ' .canvas-element__sub-element:first-child .pipeline__details .policy', 3)
 
     page.close();
   }

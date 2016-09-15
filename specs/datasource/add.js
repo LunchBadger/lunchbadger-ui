@@ -16,7 +16,7 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element('.canvas-element.editable.expanded.DataSource').to.be.present;
 
-    page.expect.element('.quadrant:first-child .canvas-element.editable.DataSource .canvas-element__title .canvas-element__input').to.have.value.that.equals('Memory');
+    page.expect.element('.quadrant:first-child .canvas-element.editable.DataSource .canvas-element__title .canvas-element__input').to.have.value.that.equals('REST');
 
     page.setValue('.quadrant:first-child .canvas-element.DataSource:last-child .canvas-element__input', 'Mem');
 

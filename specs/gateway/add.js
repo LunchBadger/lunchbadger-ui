@@ -23,8 +23,8 @@ module.exports = {
     page.expect.element(elementSelector + '.editable').to.be.present;
 
     page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Gateway');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-title').text.to.equal('ROOT PATH');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('https://gateway.root');
+    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-title').text.to.equal('ROOT URL');
+    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://gateway.customer.lunchbadger.com');
 
     browser.pause(500);
     

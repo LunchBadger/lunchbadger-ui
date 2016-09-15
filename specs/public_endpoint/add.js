@@ -20,8 +20,8 @@ module.exports = {
     page.expect.element(elementSelector + '.editable').to.be.present;
 
     page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Public Endpoint');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property:first-child .canvas-element__properties__property-title').text.to.equal('URL');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property:first-child .canvas-element__input').to.have.value.that.equals('https://root/endpoint');
+    page.expect.element(elementSelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__properties__property-title').text.to.equal('PATH');
+    page.expect.element(elementSelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__input').to.have.value.that.equals('/endpoint');
 
     browser.pause(500);
   },

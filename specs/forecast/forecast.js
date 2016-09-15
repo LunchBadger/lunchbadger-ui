@@ -18,6 +18,12 @@ module.exports = {
     });
 
     page.open();
+
+    // Create an API
+    page.addElement('.api.tool');
+    browser.click(apiSelector + ' .canvas-element__button');
+
+    browser.pause(500);
   },
 
   'Forecast: create': function (browser) {
@@ -105,7 +111,7 @@ module.exports = {
     var startDate;
     var endDate;
 
-    var startEndDiff = 2;
+    var startEndDiff = 1;
 
     // start date
     browser.click(apiForecastSelector + ' .react-datepicker__input-container:first-child > input');

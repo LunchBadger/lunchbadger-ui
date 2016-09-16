@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nightwatch"
+    "test": "nightwatch",
+    "test:xvfb": "xvfb-run --server-args=\"-screen 0, 1920x1080x24\" nightwatch"
   },
   "repository": {
     "type": "git",

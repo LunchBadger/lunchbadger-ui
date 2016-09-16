@@ -1,8 +1,7 @@
 var pageCommands = {
   open: function () {
     var page = this.api.page.lunchBadger().navigate();
-
-    this.api.maximizeWindow();
+    this.api.resizeWindow(1920, 1080);
     this.waitForElementVisible('.app', 5000);
 
     return page;

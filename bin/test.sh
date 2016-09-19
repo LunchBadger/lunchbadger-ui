@@ -8,6 +8,7 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-sleep 5
+bin/wait-for-it.sh 127.0.0.1:8000 -t 10 || exit 1
+bin/wait-for-it.sh 127.0.0.1:3000 -t 10 || exit 1
 
 ./node_modules/.bin/nightwatch $@

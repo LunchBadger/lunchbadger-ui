@@ -1,3 +1,5 @@
+const exec = require('child_process').exec;
+
 var phantomCapabilities = {
   "browserName": "phantomjs",
   "javascriptEnabled": true,
@@ -17,12 +19,12 @@ var distUrl = 'http://lunchbadger.ntrc.eu';
 
 module.exports = {
   "src_folders": [
-    "specs"
+    "test/specs"
   ],
-  "output_folder": "reports",
-  "custom_commands_path": "./commands",
-  "custom_assertions_path": "./assertions",
-  "page_objects_path": "./pageObjects",
+  "output_folder": "test/reports",
+  "custom_commands_path": "test/commands",
+  "custom_assertions_path": "test/assertions",
+  "page_objects_path": "test/pageObjects",
   "globals_path": "",
   "selenium": {
     "start_process": true,
@@ -44,7 +46,7 @@ module.exports = {
         "enabled": true,
         "on_failure": true,
         "on_error": false,
-        "path": "reports/screenshots"
+        "path": "test/reports/screenshots"
       },
       "desiredCapabilities": chromeCapabilities
     },

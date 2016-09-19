@@ -1,0 +1,11 @@
+version: '2'
+services:
+  lunchbadger-ui:
+    build: .
+    image: lunchbadger-ui:test
+    ports:
+      - 8000:8000
+  forecast-api:
+    image: localhost:5000/forecast-api
+    ports:
+      - 3000:3000

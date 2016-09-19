@@ -34,7 +34,7 @@ module.exports = {
       apiSelector,
       forecasterSelector
     );
-
+    browser.pause(1000);
     browser.expect.element(apiForecastSelector).to.be.present;
 
     browser.getText(apiSelector + ' .canvas-element__name', function (result) {

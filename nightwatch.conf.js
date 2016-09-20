@@ -11,10 +11,14 @@ var phantomCapabilities = {
 var chromeCapabilities = {
   "browserName": "chrome",
   "javascriptEnabled": true,
-  "acceptSslCerts": true
+  "acceptSslCerts": true,
+  "chromeOptions": {
+    // no-sandbox necessary to run inside Docker container
+    "args": ["no-sandbox"]
+  }
 };
 
-var testUrl = 'http://localhost:8000';
+var testUrl = 'http://' + (process.env['LBSERVER_HOST'] || 'localhost') + ':8000';
 var distUrl = 'http://lunchbadger.ntrc.eu';
 
 module.exports = {

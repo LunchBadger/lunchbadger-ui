@@ -1,8 +1,10 @@
 version: '2'
 services:
   lunchbadger-ui:
-    build: .
-    image: lunchbadger-ui:test
+    build:
+      context: .
+      dockerfile: containers/ui/Dockerfile
+    image: lunchbadger-ui:dev
     ports:
       - 8000:8000
   forecast-api:

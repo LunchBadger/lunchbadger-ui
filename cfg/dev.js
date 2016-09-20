@@ -14,6 +14,11 @@ let config = _.merge({}, baseConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor'],
       minChunks: Infinity
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'LBSERVER_HOST': JSON.stringify(process.env.LBSERVER_HOST || 'localhost')
+      }
     })
   ],
   resolve: {

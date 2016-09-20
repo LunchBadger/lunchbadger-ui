@@ -8,8 +8,7 @@
     "clean": "rimraf dist/",
     "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
     "dist": "npm run clean && npm run copy & webpack --env=dist --progress",
-    "dist:local": "npm run clean && npm run copy & webpack --env=dev --progress",
-    "dist:test": "npm run dist:local && docker-compose build",
+    "dist:local": "npm run clean && npm run copy && webpack --env=dev --progress",
     "lint": "eslint ./src",
     "deploy": "npm run dist && aws s3 sync dist/ s3://canvas.lunchbadger.com",
     "release:major": "npm version major && npm publish && git push --follow-tags",
@@ -19,7 +18,7 @@
     "serve:dist": "node server.js --env=dist",
     "start": "npm run clean && npm run serve",
     "test": "bin/test.sh",
-    "test:dist": "xvfb-run bin/test.sh",
+    "test:nodocker": "xvfb-run nightwatch",
     "posttest": "npm run lint"
   },
   "repository": "",

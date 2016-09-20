@@ -1,14 +1,26 @@
 #!/bin/bash
 
-docker-compose build || exit 1
-docker-compose up -d || exit 1
+set -e
 
+# compile UI
+LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ print $2 }') npm run dist:local
+
+# build containers
+docker-compose build
+docker build -t lunchbadger-ui:test -f containers/test/Dockerfile .
+
+# start environment
 function cleanup() {
+  echo "<------------- start of logs"
+  docker-compose logs
+  echo "<------------- end of logs"
   docker-compose down
 }
 trap cleanup EXIT
 
-bin/wait-for-it.sh 127.0.0.1:8000 -t 10 || exit 1
-bin/wait-for-it.sh 127.0.0.1:3000 -t 10 || exit 1
+docker-compose up -d
+bin/wait-for-it.sh 127.0.0.1:8000 -t 10
+bin/wait-for-it.sh 127.0.0.1:3000 -t 10
 
-./node_modules/.bin/nightwatch $@
+# run tests
+docker run -it --rm -v `pwd`:/opt/lunchbadger lunchbadger-ui:test npm run test:nodocker $@

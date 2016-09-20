@@ -8,11 +8,8 @@ RUN wget -qO- https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add
 RUN apt-get update && apt-get install -y \
   nodejs \
   xvfb \
-  python-pip \
   google-chrome-stable \
   default-jre
-
-RUN pip install docker-compose
 
 ADD containers/test/entrypoint.sh /opt
 

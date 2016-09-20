@@ -8,3 +8,7 @@ dependencies:
   post:
     - pip install docker-compose
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+
+test:
+  post:
+    - cp -r test/reports $CIRCLE_TEST_REPORTS/nightwatch

@@ -8,6 +8,6 @@ services:
     ports:
       - 8000:8000
   forecast-api:
-    image: localhost:5000/forecast-api
+    image: lunchbadger/forecast-api:0.0.1
     ports:
       - 3000:3000

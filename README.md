@@ -23,8 +23,4 @@ Plugins are located in the `plugins` directory.
 
 ###Important thing while building: 
 
-You can set which plugins should be installed during bundling container to main app
-There are two places where you can set list of plugins that should be installed:
-
-* if using client app from **lunchbadger** repository, list of plugins can be found at **./server/info.json** file
-* if using separate container, list of plugins can be set in **./cfg/info.json** file
+You can set which plugins should be installed during bundling container to main app in `cfg/info.json`

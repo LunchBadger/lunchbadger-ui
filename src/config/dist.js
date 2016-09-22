@@ -4,7 +4,7 @@ export default {
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',
-    redirect_uri: 'https://canvas.lunchbadger.com',
+    redirect_uri: 'https://app.lunchbadger.com',
     scope: 'openid profile email',
     metadata: {
       issuer: 'https://www.lunchbadger.com',

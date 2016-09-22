@@ -1,4 +1,6 @@
-## LunchBadger Container app
+## LunchBadger UI
+
+![Build status](https://circleci.com/gh/LunchBadger/lunchbadger-ui.svg?style=shield&circle-token=86cb8d9912528010b54ed16844810098887c48b6)
 
 ### Plugins
 
@@ -13,11 +15,11 @@ Plugins are located in the `plugins` directory.
 
 ## Quick start
 
-  # Run dev server
-  npm start
+    # Run dev server
+    npm start
 
-  # Package a distribution
-  npm run dist
+    # Package a distribution
+    npm run dist
 
 ###Important thing while building: 
 

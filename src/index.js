@@ -24,7 +24,8 @@ loginManager.checkAuth().then(loggedIn => {
   window.civchat = {
     apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
     name: loginManager.user.profile.preferred_username,
-    email: loginManager.user.profile.email
+    email: loginManager.user.profile.email,
+    state: 'simple'
   };
 
   // Render the main component into the dom

@@ -20,6 +20,13 @@ loginManager.checkAuth().then(loggedIn => {
     return;
   }
 
+  // userengage.io integration
+  window.civchat = {
+    apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
+    name: loginManager.user.profile.preferred_username,
+    email: loginManager.user.profile.email
+  };
+
   // Render the main component into the dom
   ReactDOM.render(<App config={config} loginManager={loginManager}/>,
                   document.getElementById('app'));

@@ -3,7 +3,7 @@ import AddDataSource from '../../actions/CanvasElements/DataSource/add';
 
 const Tool = LunchBadgerCore.components.Tool;
 
-export default class MongoDB extends Component {
+class MongoDB extends Component {
   render() {
     return (
       <div className="mongo tool__context__item" onClick={() => AddDataSource('MongoDB', 'mongodb')}>

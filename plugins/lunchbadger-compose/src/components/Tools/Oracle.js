@@ -3,7 +3,7 @@ import AddDataSource from '../../actions/CanvasElements/DataSource/add';
 
 const Tool = LunchBadgerCore.components.Tool;
 
-export default class Oracle extends Component {
+class Oracle extends Component {
   render() {
     return (
       <div className="oracle tool__context__item" onClick={() => AddDataSource('Oracle', 'oracle')}>

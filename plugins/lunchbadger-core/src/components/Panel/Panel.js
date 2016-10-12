@@ -34,19 +34,23 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      window.addEventListener('resize', this.handleWindowResize.bind(this));
       setTimeout(() => {
         this.header = this.props.header().refs.headerContainer;
         this.canvas = this.props.canvas();
         this.container = this.props.container();
-        this.containerBBox = this.container.getBoundingClientRect();
         let panelDefaultHeight = '50vh';
 
         if (lockr.get(this.storageKey)) {
-          panelDefaultHeight = `${parseInt(lockr.get(this.storageKey) / 100 * this.containerBBox.height)}px`;
+          panelDefaultHeight = `${parseInt(lockr.get(this.storageKey) / 100 * this.getContainerHeight())}px`;
         }
 
         this.setState({height: panelDefaultHeight});
       });
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('resize', this.handleWindowResize.bind(this));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -60,22 +64,36 @@ export default (ComposedComponent) => {
         return;
       }
 
-      const heightToCalculation = this.state.height === '50vh' ? this.containerBBox.height / 2 : this.state.height;
-
       clearTimeout(this.openTimeout);
 
       if (this.state.opened && !prevState.opened) {
         this.openTimeout = setTimeout(() => {
-          this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(heightToCalculation, 10)});
+          this.updateCanvasHeight();
         }, 1500);
 
         return;
       }
 
       if (this.state.opened) {
-        this.canvas.setState({canvasHeight: this.containerBBox.height - parseInt(heightToCalculation, 10)});
+        this.updateCanvasHeight();
       } else {
         this.canvas.setState({canvasHeight: null});
+      }
+    }
+
+    updateCanvasHeight() {
+      const containerHeight = this.getContainerHeight();
+      const heightToCalculation = this.state.height === '50vh' ? containerHeight / 2 : this.state.height;
+      this.canvas.setState({canvasHeight: containerHeight - parseInt(heightToCalculation, 10)});
+    }
+
+    getContainerHeight() {
+      return this.container.getBoundingClientRect().height;
+    }
+
+    handleWindowResize(event) {
+      if (this.state.opened) {
+        this.updateCanvasHeight();
       }
     }
 

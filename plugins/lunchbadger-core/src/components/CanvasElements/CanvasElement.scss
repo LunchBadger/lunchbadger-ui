@@ -13,6 +13,7 @@
   padding: 0;
   margin: 20px 0;
   transition: all .3s ease;
+  transform: translateZ(0);
 
   &.mouse-over {
     z-index: 1;

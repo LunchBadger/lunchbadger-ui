@@ -5,28 +5,29 @@ import ProjectService from '../services/ProjectService';
 import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from '../utils/waitForStores';
 
+const EMPTY_PROJECT = {
+  connections: [],
+  states: [],
+  privateEndpoints: [],
+  gateways: [],
+  publicEndpoints: [],
+  apis: [],
+  portals: []
+};
+
 export function loadFromServer(config, loginManager) {
   console.info('Pre-fetching projects data...', config);
 
   const user = loginManager.user;
-  const projectService = new ProjectService(config.projectApiUrl, user.id_token);
+  const projectService = new ProjectService(
+    config.projectApiUrl, config.workspaceApiUrl, user.id_token);
   const projectData = projectService
     .get(user.profile.sub, config.envId)
     .catch(err => {
       switch (err.statusCode) {
         case 404:
           return {
-            body: {
-              connections: [],
-              states: [],
-              privateEndpoints: [],
-              gateways: [],
-              publicEndpoints: [],
-              dataSources: [],
-              privateModels: [],
-              apis: [],
-              portals: []
-            },
+            body: EMPTY_PROJECT,
             response: {
               headers: {}
             }
@@ -56,14 +57,16 @@ export function loadFromServer(config, loginManager) {
   }
 
   return projectData.then(res => {
-    const data = res.body;
-    const rev = res.response.headers['etag'];
+    const project = res[0].body[0] || EMPTY_PROJECT;
+    const models = res[1].body;
+    const dataSources = res[2].body;
 
-    setProjectRevision(rev);
+    //const rev = res.response.headers['etag'];
+    //setProjectRevision(rev);
 
     let result = waitForStores(storesList).then(() => {
       // attach connections ;-)
-      data.connections.forEach((connection) => {
+      project.connections.forEach((connection) => {
         if (document.getElementById(`port_out_${connection.fromId}`) && document.getElementById(`port_in_${connection.toId}`)) {
           setTimeout(() => LunchBadgerCore.utils.paper.connect({
             source: document.getElementById(`port_out_${connection.fromId}`).querySelector('.port__anchor'),
@@ -76,23 +79,23 @@ export function loadFromServer(config, loginManager) {
       });
 
       setTimeout(() => {
-        LunchBadgerCore.actions.Stores.AppState.initialize(data.states);
+        LunchBadgerCore.actions.Stores.AppState.initialize(project.states);
       });
     });
 
     if (LunchBadgerManage) {
-      LunchBadgerManage.actions.Stores.Public.initialize(data);
-      LunchBadgerManage.actions.Stores.Private.initialize(data);
-      LunchBadgerManage.actions.Stores.Gateway.initialize(data);
+      LunchBadgerManage.actions.Stores.Public.initialize(project);
+      LunchBadgerManage.actions.Stores.Private.initialize(project);
+      LunchBadgerManage.actions.Stores.Gateway.initialize(project);
     }
 
     if (LunchBadgerCompose) {
-      LunchBadgerCompose.actions.Stores.Private.initialize(data);
-      LunchBadgerCompose.actions.Stores.Backend.initialize(data);
+      LunchBadgerCompose.actions.Stores.Private.initialize(models);
+      LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
     }
 
     if (LunchBadgerMonetize) {
-      LunchBadgerMonetize.actions.Stores.Public.initialize(data);
+      LunchBadgerMonetize.actions.Stores.Public.initialize(project);
     }
 
     return result;
@@ -212,7 +215,8 @@ export function saveToServer(config, loginManager) {
     });
   }
 
-  let projSave = new ProjectService(config.projectApiUrl, user.id_token)
+  let projSave = new ProjectService(
+      config.projectApiUrl, config.workspaceApiUrl, user.id_token)
     .save(user.profile.sub, config.envId, project, rev)
     .then(res => {
       let newRev = res.response.headers['etag'];

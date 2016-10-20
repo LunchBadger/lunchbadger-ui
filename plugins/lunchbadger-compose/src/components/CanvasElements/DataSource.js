@@ -56,15 +56,15 @@ class DataSource extends Component {
             </div>
 
             <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Schema</div>
+              <div className="canvas-element__properties__property-title">Database</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
-                  {entity.schema}
+                  {entity.database}
                 </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.schema}
-                       name="schema"/>
+                       value={entity.database}
+                       name="database"/>
               </div>
             </div>
 

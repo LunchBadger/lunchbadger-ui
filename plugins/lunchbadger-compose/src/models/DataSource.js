@@ -22,7 +22,7 @@ export default class DataSource extends BaseModel {
    * @type {String}
    * @private
    */
-  _schema = '';
+  _database = '';
 
   /**
    * @type {String}
@@ -42,11 +42,11 @@ export default class DataSource extends BaseModel {
    */
   _type = '';
 
-  constructor(id, name, type) {
+  constructor(id, name, connector) {
     super(id);
 
     this.name = name;
-    this.type = type;
+    this.connector = connector;
 
     this.ports = [
       Port.create({
@@ -61,9 +61,9 @@ export default class DataSource extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      type: this.type,
+      connector: this.connector,
       url: this.url,
-      schema: this.schema,
+      database: this.database,
       username: this.username,
       password: this.password,
       itemOrder: this.itemOrder
@@ -86,12 +86,12 @@ export default class DataSource extends BaseModel {
     this._url = url;
   }
 
-  get schema() {
-    return this._schema;
+  get database() {
+    return this._database;
   }
 
-  set schema(schema) {
-    this._schema = schema;
+  set database(database) {
+    this._database = database;
   }
 
   get username() {
@@ -110,11 +110,11 @@ export default class DataSource extends BaseModel {
     this._password = password;
   }
 
-  get type() {
-    return this._type;
+  get connector() {
+    return this._connector;
   }
 
-  set type(type) {
-    this._type = type;
+  set connector(connector) {
+    this._connector = connector;
   }
 }

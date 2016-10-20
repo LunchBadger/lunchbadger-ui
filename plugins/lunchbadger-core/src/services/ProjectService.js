@@ -1,14 +1,19 @@
 import ApiClient from '../utils/ApiClient';
 import {bindParams} from '../utils/URLParamsBind';
 
+
 export default class ProjectService {
-  constructor(apiUrl, idToken) {
-    this._APIHandle = new ApiClient(apiUrl, idToken);
+  constructor(projectUrl, workspaceUrl, idToken) {
+    this._projectClient = new ApiClient(projectUrl, idToken);
+    this._workspaceClient = new ApiClient(workspaceUrl, idToken);
   }
 
   get(producerId, envId) {
-    return this._APIHandle.get(bindParams(
-      'producers/:producerId/envs/:envId/files/:envId/project.json', {producerId, envId}));
+    return Promise.all([
+      this._projectClient.get('Projects'),
+      this._workspaceClient.get('Facets/main/models'),
+      this._workspaceClient.get('Facets/main/datasources')
+    ]);
   }
 
   save(producerId, envId, data, rev) {
@@ -23,7 +28,7 @@ export default class ProjectService {
         'If-Match': rev
       };
     }
-    return this._APIHandle.patch(bindParams(
+    return this._projectClient.patch(bindParams(
         'producers/:producerId/envs/:envId/files', {producerId, envId}), req);
   }
 }

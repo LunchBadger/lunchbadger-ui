@@ -2,7 +2,7 @@ import request from 'request';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
 
-class APIInterceptor {
+class ApiClient {
   constructor(url, idToken) {
     this.url = url;
     this.idToken = idToken;
@@ -31,12 +31,12 @@ class APIInterceptor {
         }
 
         if (response.statusCode >= 400) {
-          return reject(new APIError(response.statusCode,
+          return reject(new ApiError(response.statusCode,
                                      body.error ? body.error.message : body));
         }
 
         if (response.statusCode === 0) {
-          return reject(new APIError(0, 'General API Error!'));
+          return reject(new ApiError(0, 'General API Error!'));
         }
 
         const responseData = {
@@ -70,11 +70,11 @@ class APIInterceptor {
   }
 }
 
-class APIError extends Error {
+class ApiError extends Error {
   constructor(statusCode, message) {
     super(message);
     this.statusCode = statusCode;
   }
 }
 
-export default APIInterceptor;
+export default ApiClient;

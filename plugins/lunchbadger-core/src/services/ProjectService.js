@@ -1,9 +1,9 @@
-import APIInterceptor from '../utils/APIInterceptor';
+import ApiClient from '../utils/ApiClient';
 import {bindParams} from '../utils/URLParamsBind';
 
 export default class ProjectService {
   constructor(apiUrl, idToken) {
-    this._APIHandle = new APIInterceptor(apiUrl, idToken);
+    this._APIHandle = new ApiClient(apiUrl, idToken);
   }
 
   get(producerId, envId) {

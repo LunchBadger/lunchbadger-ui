@@ -69,7 +69,7 @@ import portGroups from './constants/portGroups';
 import ProjectService from './services/ProjectService';
 
 // utils
-import APIInterceptor from './utils/APIInterceptor';
+import ApiClient from './utils/ApiClient';
 import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
 import createLoginManager from './utils/auth';
@@ -148,7 +148,7 @@ let LunchBadgerCore = {
     ProjectService: ProjectService
   },
   utils: {
-    APIInterceptor: APIInterceptor,
+    ApiClient: ApiClient,
     URLParams: URLParams,
     waitForStores: waitForStores,
     serverIo: {

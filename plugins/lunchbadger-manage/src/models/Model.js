@@ -25,7 +25,7 @@ export default class Model extends BaseModel {
   };
 
   constructor(id, name) {
-    super(id);
+    super('<model>.' + id);
 
     this.name = name;
 
@@ -45,7 +45,7 @@ export default class Model extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
+      id: this.id.slice(8),
       name: this.name,
       http: {
         path: this.contextPath

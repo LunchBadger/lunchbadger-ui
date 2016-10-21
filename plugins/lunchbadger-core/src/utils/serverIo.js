@@ -95,8 +95,8 @@ export function loadFromServer(config, loginManager) {
       for (let config of modelConfigs) {
         if (config.dataSource) {
           project.connections.push({
-            fromId: `${config.facetName}.${config.dataSource}`,
-            toId: config.id
+            fromId: `<datasource>.${config.facetName}.${config.dataSource}`,
+            toId: `<model>.${config.id}`
           });
         }
       }

@@ -43,7 +43,7 @@ export default class DataSource extends BaseModel {
   _type = '';
 
   constructor(id, name, connector) {
-    super(id);
+    super('<datasource>.' + id);
 
     this.name = name;
     this.connector = connector;
@@ -59,7 +59,7 @@ export default class DataSource extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
+      id: this.id.slice(13),
       name: this.name,
       connector: this.connector,
       url: this.url,

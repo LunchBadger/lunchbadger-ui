@@ -27,6 +27,9 @@ export default class BaseModel {
     const object = new this(data.id);
 
     Object.keys(data).forEach((propertyName) => {
+      if (propertyName === 'id') {
+        return;
+      }
       if (data.hasOwnProperty(propertyName)) {
         if (this.deserializers[propertyName]) {
           this.deserializers[propertyName](object, data[propertyName]);

@@ -13,6 +13,8 @@ export default class BaseModel {
   top = 0;
   itemOrder = 0;
 
+  static deserializers = {};
+
   constructor(id) {
     if (id) {
       this.id = id;
@@ -26,7 +28,11 @@ export default class BaseModel {
 
     Object.keys(data).forEach((propertyName) => {
       if (data.hasOwnProperty(propertyName)) {
-        object[propertyName] = data[propertyName];
+        if (this.deserializers[propertyName]) {
+          this.deserializers[propertyName](object, data[propertyName]);
+        } else {
+          object[propertyName] = data[propertyName];
+        }
       }
     });
 
@@ -40,7 +46,11 @@ export default class BaseModel {
   update(data) {
     Object.keys(data).forEach((propertyName) => {
       if (data.hasOwnProperty(propertyName)) {
-        this[propertyName] = data[propertyName];
+        if (this.constructor.deserializers[propertyName]) {
+          this.constructor.deserializers[propertyName](this, data[propertyName]);
+        } else {
+          this[propertyName] = data[propertyName];
+        }
       }
     });
   }

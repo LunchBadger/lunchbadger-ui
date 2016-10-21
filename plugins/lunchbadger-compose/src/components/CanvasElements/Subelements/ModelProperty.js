@@ -45,44 +45,44 @@ export default class ModelProperty extends Component {
       <div className="model-property">
         <div className="model-property__key-cell">
           <span className="model-property__value key hide-while-edit">
-            {property.propertyKey}
+            {property.name}
           </span>
           <Input className="model-property__input canvas-element__input editable-only"
                  ref="keyInput"
-                 value={property.propertyKey}
-                 name={`properties[${index}][propertyKey]`}/>
+                 value={property.name}
+                 name={`properties[${index}][name]`}/>
         </div>
         <div className="model-property__value-cell">
           <span className="model-property__value value hide-while-edit">
-            {property.propertyType}
+            {property.type}
           </span>
           <Select className="model-property__input model-property__select canvas-element__input editable-only"
-                  value={property.propertyType || 'String'}
+                  value={property.type || 'string'}
                   handleKeyDown={this._checkTabButton.bind(this)}
-                  name={`properties[${index}][propertyType]`}>
-            <option value="String">String</option>
-            <option value="Number">Number</option>
-            <option value="Date">Date</option>
-            <option value="Boolean">Boolean</option>
-            <option value="GeoPoint">GeoPoint</option>
-            <option value="Array">Array</option>
-            <option value="Object">Object</option>
-            <option value="Buffer">Buffer</option>
+                  name={`properties[${index}][type]`}>
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            <option value="boolean">Boolean</option>
+            <option value="geopoint">GeoPoint</option>
+            <option value="array">Array</option>
+            <option value="object">Object</option>
+            <option value="buffer">Buffer</option>
           </Select>
         </div>
 
-        <Input value={property.propertyIsIndex}
+        <Input value={property.index}
                type="hidden"
-               name={`properties[${index}][propertyIsIndex]`}/>
-        <Input value={property.propertyIsRequired}
+               name={`properties[${index}][index]`}/>
+        <Input value={property.required}
                type="hidden"
-               name={`properties[${index}][propertyIsRequired]`}/>
-        <Input value={property.propertyNotes}
+               name={`properties[${index}][required]`}/>
+        <Input value={property.description}
                type="hidden"
-               name={`properties[${index}][propertyNotes]`}/>
-        <Input value={property.propertyValue}
+               name={`properties[${index}][description]`}/>
+        <Input value={property.default_}
                type="hidden"
-               name={`properties[${index}][propertyValue]`}/>
+               name={`properties[${index}][default_]`}/>
         <Input value={property.id}
                type="hidden"
                className="property-id"

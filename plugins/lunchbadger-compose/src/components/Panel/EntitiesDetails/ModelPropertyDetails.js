@@ -36,46 +36,46 @@ export default class ModelPropertyDetails extends Component {
                  name={`properties[${index}][id]`}/>
 
           <Input className="details-panel__input details-key"
-                 value={property.propertyKey}
-                 name={`properties[${index}][propertyKey]`}
+                 value={property.name}
+                 name={`properties[${index}][name]`}
           />
         </td>
         <td>
           <Select className="details-panel__input details-panel__select"
-                  value={property.propertyType || 'String'}
-                  name={`properties[${index}][propertyType]`}>
-            <option value="String">String</option>
-            <option value="Number">Number</option>
-            <option value="Date">Date</option>
-            <option value="Boolean">Boolean</option>
-            <option value="GeoPoint">GeoPoint</option>
-            <option value="Array">Array</option>
-            <option value="Object">Object</option>
-            <option value="Buffer">Buffer</option>
+                  value={property.type || 'string'}
+                  name={`properties[${index}][type]`}>
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            <option value="boolean">Boolean</option>
+            <option value="geopoint">GeoPoint</option>
+            <option value="array">Array</option>
+            <option value="object">Object</option>
+            <option value="buffer">Buffer</option>
           </Select>
         </td>
         <td>
           <Input className="details-panel__input"
-                 value={property.propertyValue}
-                 name={`properties[${index}][propertyValue]`}
+                 value={property.default_}
+                 name={`properties[${index}][default_]`}
           />
         </td>
         <td>
           <Checkbox className="model-property__input"
-                 value={property.propertyIsRequired}
-                 name={`properties[${index}][propertyIsRequired]`}
+                 value={property.required}
+                 name={`properties[${index}][required]`}
           />
         </td>
         <td>
           <Checkbox className="model-property__input"
-                 value={property.propertyIsIndex}
-                 name={`properties[${index}][propertyIsIndex]`}
+                 value={property.index}
+                 name={`properties[${index}][index]`}
           />
         </td>
         <td>
           <Input className="details-panel__input"
-                 value={property.propertyNotes}
-                 name={`properties[${index}][propertyNotes]`}
+                 value={property.description}
+                 name={`properties[${index}][description]`}
                  type="text"
                  handleKeyDown={this._checkTabButton.bind(this)}
           />

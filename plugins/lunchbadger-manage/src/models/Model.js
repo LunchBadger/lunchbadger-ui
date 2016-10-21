@@ -12,9 +12,17 @@ export default class Model extends BaseModel {
   contextPath = 'model';
   base = 'Model';
   plural = '';
-  readOnly = false;
+  readonly = false;
   public = false;
   strict = false;
+
+  static deserializers = {
+    http: (obj, val) => {
+      if (val.path) {
+        obj.contextPath = val.path;
+      }
+    }
+  };
 
   constructor(id, name) {
     super(id);
@@ -39,13 +47,15 @@ export default class Model extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      contextPath: this.contextPath,
-      privateModelProperties: this.properties.map(property => property.toJSON()),
-      privateModelRelations: this.relations.map(relation => relation.toJSON()),
+      http: {
+        path: this.contextPath
+      },
+      properties: this.properties.map(property => property.toJSON()),
+      relations: this.relations.map(relation => relation.toJSON()),
       itemOrder: this.itemOrder,
       base: this.base,
       plural: this.plural,
-      readOnly: this.readOnly,
+      readonly: this.readonly,
       public: this.public,
       strict: this.strict
     }

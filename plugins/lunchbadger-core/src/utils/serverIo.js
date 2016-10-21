@@ -123,6 +123,7 @@ export function saveToServer(config, loginManager) {
   const saveableServices = [];
 
   const project = {
+    name: 'main',
     connections: [],
     states: []
   };
@@ -139,15 +140,6 @@ export function saveToServer(config, loginManager) {
     project.publicEndpoints = [];
   }
 
-  if (LunchBadgerCompose) {
-    storesList.push(
-      LunchBadgerCompose.stores.Backend
-    );
-
-    project.dataSources = [];
-    project.privateModels = [];
-  }
-
   if (LunchBadgerMonetize) {
     project.apis = [];
     project.portals = [];
@@ -159,13 +151,10 @@ export function saveToServer(config, loginManager) {
     entities.forEach((entity) => {
       switch (entity.constructor.type) {
         case 'Connection':
-          project.connections.push(entity.toJSON());
-          break;
-        case 'DataSource':
-          project.dataSources.push(entity.toJSON());
-          break;
-        case 'Model':
-          project.privateModels.push(entity.toJSON());
+          if (!(entity.fromId.startsWith('<datasource>') &&
+                entity.toId.startsWith('<model>'))) {
+            project.connections.push(entity.toJSON());
+          }
           break;
         case 'PrivateEndpoint':
           project.privateEndpoints.push(entity.toJSON());
@@ -187,7 +176,6 @@ export function saveToServer(config, loginManager) {
   });
 
   const states = AppState.getData();
-  const rev = AppState.getProjectRevision();
 
   // prepare appState
   if (states['currentlyOpenedPanel']) {
@@ -228,11 +216,7 @@ export function saveToServer(config, loginManager) {
 
   let projSave = new ProjectService(
       config.projectApiUrl, config.workspaceApiUrl, user.id_token)
-    .save(user.profile.sub, config.envId, project, rev)
-    .then(res => {
-      let newRev = res.response.headers['etag'];
-      setProjectRevision(newRev);
-    })
+    .save('main', project)
     .catch(err => {
       if (err.statusCode === 401) {
         loginManager.refreshLogin();

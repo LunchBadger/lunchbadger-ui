@@ -8,7 +8,7 @@ export default class ProjectService {
     this._workspaceClient = new ApiClient(workspaceUrl, idToken);
   }
 
-  get(producerId, envId) {
+  get() {
     return Promise.all([
       this._projectClient.get('Projects'),
       this._workspaceClient.get('Facets/main/models?filter[include]=properties&filter[include]=relations'),
@@ -17,19 +17,9 @@ export default class ProjectService {
     ]);
   }
 
-  save(producerId, envId, data, rev) {
-    let req = {
-      body: {
-        [envId + '/project.json']: JSON.stringify(data, null, '  ')
-      }
-    };
-
-    if (rev) {
-      req.headers = {
-        'If-Match': rev
-      };
-    }
-    return this._projectClient.patch(bindParams(
-        'producers/:producerId/envs/:envId/files', {producerId, envId}), req);
+  save(projectId, data) {
+    return this._projectClient.put('Projects', {
+      body: data
+    });
   }
 }

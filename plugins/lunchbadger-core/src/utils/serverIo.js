@@ -1,6 +1,7 @@
 /*eslint no-console:0 */
 import AppState from '../stores/AppState';
-import Connection from '../stores/Connection';
+import ConnectionStore from '../stores/Connection';
+import Connection from '../models/Connection';
 import ProjectService from '../services/ProjectService';
 import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from '../utils/waitForStores';
@@ -60,6 +61,7 @@ export function loadFromServer(config, loginManager) {
     const project = res[0].body[0] || EMPTY_PROJECT;
     const models = res[1].body;
     const dataSources = res[2].body;
+    const modelConfigs = res[3].body;
 
     //const rev = res.response.headers['etag'];
     //setProjectRevision(rev);
@@ -90,6 +92,15 @@ export function loadFromServer(config, loginManager) {
     }
 
     if (LunchBadgerCompose) {
+      for (let config of modelConfigs) {
+        if (config.dataSource) {
+          project.connections.push({
+            fromId: `${config.facetName}.${config.dataSource}`,
+            toId: config.id
+          });
+        }
+      }
+
       LunchBadgerCompose.actions.Stores.Private.initialize(models);
       LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
     }
@@ -106,7 +117,7 @@ export function saveToServer(config, loginManager) {
   const user = loginManager.user;
 
   let storesList = [
-    Connection
+    ConnectionStore
   ];
 
   const saveableServices = [];

@@ -1,9 +1,7 @@
 /*eslint no-console:0 */
 import AppState from '../stores/AppState';
 import ConnectionStore from '../stores/Connection';
-import Connection from '../models/Connection';
 import ProjectService from '../services/ProjectService';
-import setProjectRevision from '../actions/Stores/AppState/setProjectRevision';
 import {waitForStores} from '../utils/waitForStores';
 
 const EMPTY_PROJECT = {
@@ -95,8 +93,8 @@ export function loadFromServer(config, loginManager) {
       for (let config of modelConfigs) {
         if (config.dataSource) {
           project.connections.push({
-            fromId: `<datasource>.${config.facetName}.${config.dataSource}`,
-            toId: `<model>.${config.id}`
+            fromId: `DataSource.${config.facetName}.${config.dataSource}`,
+            toId: `Model.${config.id}`
           });
         }
       }
@@ -216,7 +214,7 @@ export function saveToServer(config, loginManager) {
 
   let projSave = new ProjectService(
       config.projectApiUrl, config.workspaceApiUrl, user.id_token)
-    .save('main', project)
+    .save(project)
     .catch(err => {
       if (err.statusCode === 401) {
         loginManager.refreshLogin();

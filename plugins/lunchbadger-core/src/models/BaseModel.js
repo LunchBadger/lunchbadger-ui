@@ -17,9 +17,9 @@ export default class BaseModel {
 
   constructor(id) {
     if (id) {
-      this.id = id;
+      this.id = `${this.constructor.name}.${id}`;
     } else {
-      this.id = uuid.v4();
+      this.id = `${this.constructor.name}.${uuid.v4()}`;
     }
   }
 

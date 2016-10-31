@@ -17,9 +17,11 @@ export default class ProjectService {
     ]);
   }
 
-  save(projectId, data) {
-    return this._projectClient.put('Projects', {
-      body: data
-    });
+  putDataSource(data) {
+    return this._workspaceClient.put('DataSourceDefinitions', { body: data });
+  }
+
+  save(data) {
+    return this._projectClient.put('Projects', { body: data });
   }
 }

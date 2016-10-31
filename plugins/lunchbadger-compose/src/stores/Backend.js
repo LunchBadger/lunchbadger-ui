@@ -26,8 +26,12 @@ class Backend extends BaseStore {
           action.dataSource.itemOrder = Backends.length - 1;
           this.emitChange();
           break;
-        case 'UpdateDataSource':
-          this.updateEntity(action.id, action.data);
+        case 'UpdateDataSourceStart':
+          this.updateEntity(action.id, { ready: false });
+          this.emitChange();
+          break;
+        case 'UpdateDataSourceEnd':
+          this.updateEntity(action.id, _.merge(action.data, { ready: true }));
           this.emitChange();
           break;
         case 'RemoveEntity':

@@ -14,6 +14,7 @@ const App = LunchBadgerCore.components.App;
 console.info('Application started..!');
 
 let loginManager = LunchBadgerCore.utils.createLoginManager(config);
+global.loginManager = loginManager;
 
 loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) {

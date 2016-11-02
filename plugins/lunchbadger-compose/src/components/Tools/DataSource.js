@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import REST from './REST';
 import MongoDB from './MongoDB';
-import Oracle from './Oracle';
+import Redis from './Redis';
 import MySQL from './MySQL';
-import Salesforce from './Salesforce';
+import Blockchain from './blockchain';
 
 const Tool = LunchBadgerCore.components.Tool;
 
@@ -18,7 +18,7 @@ class DataSource extends Component {
             <REST />
           </li>
           <li>
-            <Oracle />
+            <Redis />
           </li>
           <li>
             <MongoDB />
@@ -27,7 +27,7 @@ class DataSource extends Component {
             <MySQL />
           </li>
           <li>
-            <Salesforce />
+            <Blockchain />
           </li>
         </ul>
       </div>

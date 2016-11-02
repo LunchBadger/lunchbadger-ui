@@ -3,7 +3,7 @@ import REST from './REST';
 import MongoDB from './MongoDB';
 import Redis from './Redis';
 import MySQL from './MySQL';
-import Blockchain from './blockchain';
+import Blockchain from './Blockchain';
 
 const Tool = LunchBadgerCore.components.Tool;
 

@@ -1,5 +1,4 @@
 import ApiClient from '../utils/ApiClient';
-import {bindParams} from '../utils/URLParamsBind';
 
 
 export default class ProjectService {
@@ -19,6 +18,10 @@ export default class ProjectService {
 
   putDataSource(data) {
     return this._workspaceClient.put('DataSourceDefinitions', { body: data });
+  }
+
+  putModel(data) {
+    return this._workspaceClient.put('ModelDefinitions', { body: data });
   }
 
   save(data) {

@@ -46,6 +46,7 @@ export default class Model extends BaseModel {
   toJSON() {
     return {
       id: this.id,
+      facetName: 'main',
       name: this.name,
       http: {
         path: this.contextPath

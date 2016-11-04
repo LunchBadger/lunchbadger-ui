@@ -5,36 +5,14 @@ const {BaseStore, Connection} = LunchBadgerCore.stores;
 const {register} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 let Publics = [];
-let initCalls = 2;
 
 class Public extends BaseStore {
   constructor() {
-    super();
+    super(2);
     register((action) => {
+      this.handleBaseActions('Public', ['PublicEndpoint', 'API', 'Portal'], action);
+
       switch (action.type) {
-        case 'InitializePublic':
-          initCalls--;
-          Publics.push.apply(Publics, action.data);
-
-          Publics = this.sortItems(Publics);
-
-          if (initCalls === 0) {
-            this.emitInit();
-          } else {
-            this.emitChange();
-          }
-
-          break;
-        case 'UpdatePublicOrder':
-          _.remove(Publics, action.entity);
-          Publics.splice(action.hoverOrder, 0, action.entity);
-          Publics = this.sortItems(this.setEntitiesOrder(Publics));
-          this.emitChange();
-          break;
-        case 'AddPublicEndpoint':
-          this._insertPublicEndpoint(action.endpoint);
-          this.emitChange();
-          break;
         case 'AddPublicEndpointAndConnect':
           const {endpoint} = action;
           this._insertPublicEndpoint(endpoint);
@@ -45,15 +23,6 @@ class Public extends BaseStore {
               source: action.outPort
             }
           }));
-          this.emitChange();
-          break;
-        case 'RemovePublicEndpoint':
-          Publics.splice(this.findEntityIndex(action.endpoint.id), 1);
-          action.endpoint.remove();
-          this.emitChange();
-          break;
-        case 'UpdatePublicEndpoint':
-          this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
         case 'BundleAPI':
@@ -69,23 +38,6 @@ class Public extends BaseStore {
         case 'RebundleAPI':
           action.fromAPI.removeEndpoint(action.endpoint);
           action.toAPI.addEndpoint(action.endpoint);
-          this.emitChange();
-          break;
-        case 'AddAPI':
-          this._insertAPI(action.API);
-          this.emitChange();
-          break;
-        case 'UpdateAPI':
-          this.updateEntity(action.id, action.data);
-          this.emitChange();
-          break;
-        case 'RemoveEntity':
-          _.remove(Publics, {id: action.entity.id});
-          this.emitChange();
-          break;
-        case 'AddPortal':
-          Publics.push(action.portal);
-          action.portal.itemOrder = Publics.length - 1;
           this.emitChange();
           break;
         case 'DeployPortalSuccess':
@@ -104,10 +56,6 @@ class Public extends BaseStore {
         case 'UnbundlePortal':
           this._insertAPI(action.api);
           action.portal.removeAPI(action.api);
-          this.emitChange();
-          break;
-        case 'UpdatePortal':
-          this.updateEntity(action.id, action.data);
           this.emitChange();
           break;
         case 'RebundlePortal':

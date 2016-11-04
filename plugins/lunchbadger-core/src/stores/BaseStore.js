@@ -55,6 +55,46 @@ export default class BaseStore extends EventEmitter {
     }
   }
 
+  handleBaseActions(name, types, action) {
+    let type = action.type.replace(new RegExp(types.join('|'), 'g'), name);
+    let storeObj = this.getData();
+
+    switch (type) {
+      case `Initialize${name}`:
+        storeObj.push.apply(storeObj, action.data);
+        storeObj = this.sortItems(storeObj);
+        this.emitInit();
+        break;
+      case `Update${name}Order`:
+        _.remove(storeObj, action.entity);
+        storeObj.splice(action.hoverOrder, 0, action.entity);
+        storeObj = this.sortItems(this.setEntitiesOrder(storeObj));
+        this.emitChange();
+        break;
+      case `Add${name}`:
+        storeObj.push(action.entity);
+        action.entity.itemOrder = storeObj.length - 1;
+        this.emitChange();
+        break;
+      case `Update${name}`:
+        this.updateEntity(action.id, action.data);
+        this.emitChange();
+        break;
+      case `Update${name}Start`:
+        this.updateEntity(action.id, { ready: false });
+        this.emitChange();
+        break;
+      case `Update${name}End`:
+        this.updateEntity(action.id, _.merge(action.data, { ready: true }));
+        this.emitChange();
+        break;
+      case 'RemoveEntity':
+        _.remove(storeObj, {id: action.entity.id});
+        this.emitChange();
+        break;
+    }
+  }
+
   setEntitiesOrder(store) {
     return _.each(store, function (entity, index) {
       if (entity) {

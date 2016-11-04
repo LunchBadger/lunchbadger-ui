@@ -4,7 +4,7 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (name) => {
   dispatch('AddGateway', {
-  	gateway: Gateway.create({
+  	entity: Gateway.create({
   		name: name || 'Gateway'
   	})
   });

@@ -3,7 +3,7 @@ const Model = LunchBadgerManage.models.Model;
 
 export default (name) => {
   dispatch('AddModel', {
-    model: Model.create({
+    entity: Model.create({
       name: name || 'Model'
     })
   });

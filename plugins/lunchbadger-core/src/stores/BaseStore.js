@@ -3,9 +3,10 @@ import {register} from '../dispatcher/AppDispatcher';
 import _ from 'lodash';
 
 export default class BaseStore extends EventEmitter {
-  constructor() {
+  constructor(initCalls) {
     super();
 
+    this.initCalls = initCalls || 1;
     this.setMaxListeners(400);
   }
 
@@ -63,7 +64,13 @@ export default class BaseStore extends EventEmitter {
       case `Initialize${name}`:
         storeObj.push.apply(storeObj, action.data);
         storeObj = this.sortItems(storeObj);
-        this.emitInit();
+
+        this.initCalls--;
+        if (this.initCalls <= 0) {
+          this.emitInit();
+        } else {
+          this.emitChange();
+        }
         break;
       case `Update${name}Order`:
         _.remove(storeObj, action.entity);

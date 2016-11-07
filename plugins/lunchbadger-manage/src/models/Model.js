@@ -45,7 +45,7 @@ export default class Model extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
+      id: this.workspaceId,
       facetName: 'main',
       name: this.name,
       http: {
@@ -60,6 +60,10 @@ export default class Model extends BaseModel {
       public: this.public,
       strict: this.strict
     }
+  }
+
+  get workspaceId() {
+    return `main.${this.name}`;
   }
 
   /**

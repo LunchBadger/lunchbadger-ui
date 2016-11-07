@@ -42,14 +42,6 @@ export default class DataSource extends BaseModel {
    */
   _type = '';
 
-  static deserializers = {
-    name: () => {},
-    lunchbadger: (obj, val) => {
-      obj.name = val.name;
-      obj.itemOrder = val.itemOrder;
-    }
-  }
-
   constructor(id, name, connector) {
     super(id);
 
@@ -67,19 +59,20 @@ export default class DataSource extends BaseModel {
 
   toJSON() {
     return {
-      id: this.id,
+      id: this.workspaceId,
       facetName: 'main',
-      name: this.id.split('.').slice(-1)[0],
+      name: this.name,
       connector: this.connector,
       url: this.url,
       database: this.database,
       username: this.username,
       password: this.password,
-      lunchbadger: {
-        name: this.name,
-        itemOrder: this.itemOrder
-      }
+      itemOrder: this.itemOrder
     }
+  }
+
+  get workspaceId() {
+    return `main.${this.name}`;
   }
 
   get ports() {

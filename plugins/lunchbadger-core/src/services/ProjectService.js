@@ -1,5 +1,5 @@
 import ApiClient from '../utils/ApiClient';
-
+import {bindParams} from '../utils/URLParamsBind';
 
 export default class ProjectService {
   constructor(projectUrl, workspaceUrl, idToken) {
@@ -20,8 +20,17 @@ export default class ProjectService {
     return this._workspaceClient.put('DataSourceDefinitions', { body: data });
   }
 
+  deleteDataSource(id) {
+    return this._workspaceClient.delete(
+      bindParams('DataSourceDefinitions/:id', {id}));
+  }
+
   putModel(data) {
     return this._workspaceClient.put('ModelDefinitions', { body: data });
+  }
+
+  updateModelConfig(data) {
+    return this._workspaceClient.patch('ModelConfigs', { body: data });
   }
 
   save(data) {

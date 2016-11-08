@@ -29,7 +29,16 @@ export default class ProjectService {
     return this._workspaceClient.put('ModelDefinitions', { body: data });
   }
 
-  updateModelConfig(data) {
+  deleteModel(id) {
+    return this._workspaceClient.delete(
+      bindParams('ModelDefinitions/:id', {id}));
+  }
+
+  deleteModelConfig(id) {
+    return this._workspaceClient.delete(bindParams('ModelConfigs/:id', {id}));
+  }
+
+  upsertModelConfig(data) {
     return this._workspaceClient.patch('ModelConfigs', { body: data });
   }
 

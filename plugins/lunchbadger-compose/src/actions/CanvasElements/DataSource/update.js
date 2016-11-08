@@ -33,7 +33,7 @@ export default (id, props) => {
       .map(conn => PrivateStore.findEntity(conn.toId))
       .filter(item => item instanceof Model)
       .forEach(model => {
-        promise.then(() => service.updateModelConfig({
+        promise.then(() => service.upsertModelConfig({
           name: model.name,
           id: model.workspaceId,
           facetName: 'main',

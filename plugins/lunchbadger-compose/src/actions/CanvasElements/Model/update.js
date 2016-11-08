@@ -14,38 +14,33 @@ export default (id, props) => {
     global.loginManager.user.id_token);
 
   let model = Private.findEntity(id);
-  let oldWsId = model.workspaceId;
-
   let promise = Promise.resolve(null);
 
   if (model.loaded && model.name !== props.name) {
     // Workspace API does not support renaming, so we have to delete the old
     // entry before creating a new one.
-    promise = promise.then(() => service.deleteModel(oldWsId));
-
+    promise = promise.then(() => service.deleteModel(model.workspaceId));
     // If we renamed, then must also change the model-config file
+    promise = promise.then(() => service.deleteModelConfig(model.workspaceId));
+  }
+
+  if ((model.loaded && model.name !== props.name) ||
+      (model.loaded && 'public' in props && model.public !== props.public) ||
+      (!model.loaded)) {
+
+    // Need to update or create the model config
     let dataSources = ConnectionStore
       .getConnectionsForTarget(model.id)
       .map(conn => BackendStore.findEntity(conn.fromId))
       .filter(entity => entity instanceof DataSource);
     let dataSourceName = dataSources.length > 0 ? dataSources[0].name : null;
 
-    promise = promise.then(() => service.deleteModelConfig(oldWsId));
     promise = promise.then(() => service.upsertModelConfig({
       name: props.name,
       id: `server.${props.name}`,
       facetName: 'server',
       dataSource: dataSourceName,
-      public: model.public
-    }));
-  } else if (!model.loaded) {
-    // This is a new model, must also create a model config
-    promise = promise.then(() => service.upsertModelConfig({
-      name: props.name,
-      id: model.workspaceId,
-      facetName: 'server',
-      dataSource: null,
-      public: model.public
+      public: 'public' in props ? props.public : model.public
     }));
   }
 

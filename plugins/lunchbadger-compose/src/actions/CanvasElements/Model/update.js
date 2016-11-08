@@ -33,8 +33,8 @@ export default (id, props) => {
     promise = promise.then(() => service.deleteModelConfig(oldWsId));
     promise = promise.then(() => service.upsertModelConfig({
       name: props.name,
-      id: `main.${props.name}`,
-      facetName: 'main',
+      id: `server.${props.name}`,
+      facetName: 'server',
       dataSource: dataSourceName,
       public: model.public
     }));
@@ -43,7 +43,7 @@ export default (id, props) => {
     promise = promise.then(() => service.upsertModelConfig({
       name: props.name,
       id: model.workspaceId,
-      facetName: 'main',
+      facetName: 'server',
       dataSource: null,
       public: model.public
     }));

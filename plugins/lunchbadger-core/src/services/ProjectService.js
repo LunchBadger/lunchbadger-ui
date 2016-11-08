@@ -10,9 +10,9 @@ export default class ProjectService {
   get() {
     return Promise.all([
       this._projectClient.get('Projects'),
-      this._workspaceClient.get('Facets/main/models?filter[include]=properties&filter[include]=relations'),
-      this._workspaceClient.get('Facets/main/datasources'),
-      this._workspaceClient.get('Facets/main/modelConfigs')
+      this._workspaceClient.get('Facets/server/models?filter[include]=properties&filter[include]=relations'),
+      this._workspaceClient.get('Facets/server/datasources'),
+      this._workspaceClient.get('Facets/server/modelConfigs')
     ]);
   }
 

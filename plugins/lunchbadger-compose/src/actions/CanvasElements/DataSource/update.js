@@ -36,7 +36,7 @@ export default (id, props) => {
         promise.then(() => service.upsertModelConfig({
           name: model.name,
           id: model.workspaceId,
-          facetName: 'main',
+          facetName: 'server',
           dataSource: props.name
         }));
       });

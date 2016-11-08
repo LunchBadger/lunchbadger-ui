@@ -60,7 +60,7 @@ export default class DataSource extends BaseModel {
   toJSON() {
     return {
       id: this.workspaceId,
-      facetName: 'main',
+      facetName: 'server',
       name: this.name,
       connector: this.connector,
       url: this.url,
@@ -72,7 +72,7 @@ export default class DataSource extends BaseModel {
   }
 
   get workspaceId() {
-    return `main.${this.name}`;
+    return `server.${this.name}`;
   }
 
   get ports() {

@@ -23,7 +23,7 @@ export default (id, props) => {
   if (dataSource.loaded && dataSource.name !== props.name) {
     // Workspace API does not support renaming, so we have to delete the old
     // entry before creating a new one.
-    promise.then(() => service.deleteDataSource(oldWsId));
+    promise = promise.then(() => service.deleteDataSource(oldWsId));
 
     // Also have to re-point the models to the new data source name.
     // Have to do everything sequentially b/c loopback-workspace cannot deal
@@ -33,7 +33,7 @@ export default (id, props) => {
       .map(conn => PrivateStore.findEntity(conn.toId))
       .filter(item => item instanceof Model)
       .forEach(model => {
-        promise.then(() => service.upsertModelConfig({
+        promise = promise.then(() => service.upsertModelConfig({
           name: model.name,
           id: model.workspaceId,
           facetName: 'server',
@@ -42,7 +42,7 @@ export default (id, props) => {
       });
   }
 
-  promise.then(() => service.putDataSource(_.merge(dataSource, props)));
+  promise = promise.then(() => service.putDataSource(_.merge(dataSource, props)));
 
   dispatchAsync(promise, {
     request: 'UpdateDataSourceStart',

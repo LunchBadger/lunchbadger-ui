@@ -121,4 +121,8 @@ export default class BaseStore extends EventEmitter {
 
     return idSplit.slice(-1)[0];
   }
+
+  findEntityByFilter(filter) {
+    return _.find(this.getData(), filter);
+  }
 }

@@ -57,6 +57,10 @@ export default class DataSource extends BaseModel {
     ];
   }
 
+  static get idField() {
+    return 'lunchbadgerId';
+  }
+
   toJSON() {
     return {
       id: this.workspaceId,
@@ -67,7 +71,8 @@ export default class DataSource extends BaseModel {
       database: this.database,
       username: this.username,
       password: this.password,
-      itemOrder: this.itemOrder
+      itemOrder: this.itemOrder,
+      lunchbadgerId: this.id
     }
   }
 

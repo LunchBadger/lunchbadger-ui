@@ -66,6 +66,19 @@ export function loadFromServer(config, loginManager) {
 
     let result = waitForStores(storesList).then(() => {
       // attach connections ;-)
+      let getId = (store, name) => {
+        return (store.findEntityByFilter({name: name}) || {}).id;
+      };
+
+      for (let config of modelConfigs) {
+        if (config.dataSource) {
+          project.connections.push({
+            fromId: getId(LunchBadgerCompose.stores.Backend, config.dataSource),
+            toId: getId(LunchBadgerManage.stores.Private, config.name)
+          });
+        }
+      }
+
       project.connections.forEach((connection) => {
         if (document.getElementById(`port_out_${connection.fromId}`) && document.getElementById(`port_in_${connection.toId}`)) {
           setTimeout(() => LunchBadgerCore.utils.paper.connect({
@@ -90,15 +103,6 @@ export function loadFromServer(config, loginManager) {
     }
 
     if (LunchBadgerCompose) {
-      for (let config of modelConfigs) {
-        if (config.dataSource) {
-          project.connections.push({
-            fromId: `DataSource.${config.facetName}.${config.dataSource}`,
-            toId: `Model.${config.id}`
-          });
-        }
-      }
-
       LunchBadgerCompose.actions.Stores.Private.initialize(models);
       LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
     }

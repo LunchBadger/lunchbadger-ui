@@ -43,6 +43,14 @@ export default class Model extends BaseModel {
     ];
   }
 
+  static get idField() {
+    // The loopback-workspace API ties the name of an entity to its ID. This
+    // means that renaming a Model would change its ID. So we store the actual
+    // Lunchbadger ID in a separate variable to allow for stable connections
+    // to items outside the workspace API.
+    return 'lunchbadgerId';
+  }
+
   toJSON() {
     return {
       id: this.workspaceId,
@@ -58,7 +66,8 @@ export default class Model extends BaseModel {
       plural: this.plural,
       readonly: this.readonly,
       public: this.public,
-      strict: this.strict
+      strict: this.strict,
+      lunchbadgerId: this.id
     }
   }
 

@@ -1,10 +1,11 @@
 import Backend from '../stores/Backend';
 
+import attachConnection from '../actions/Connection/attach';
+import reattachConnection from '../actions/Connection/reattach';
+
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
 const Strategy = LunchBadgerCore.models.Strategy;
-const attachConnection = LunchBadgerCore.actions.Connection.attachConnection;
-const reattachConnection = LunchBadgerCore.actions.Connection.reattachConnection;
 
 const checkConnection = (sourceId, targetId) => {
   const isBackend = Backend.findEntity(sourceId);

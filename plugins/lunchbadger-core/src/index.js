@@ -53,8 +53,6 @@ import registerPlugin from './actions/registerPlugin';
 import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import toggleEdit from './actions/CanvasElements/toggleEdit';
-import attachConnection from './actions/Connection/attach';
-import reattachConnection from './actions/Connection/reattach';
 import removeConnection from './actions/Connection/remove';
 import setProjectRevision from './actions/Stores/AppState/setProjectRevision';
 import initializeAppState from './actions/Stores/AppState/initialize';
@@ -87,8 +85,6 @@ let LunchBadgerCore = {
     toggleSubelement: toggleSubelement,
     removeEntity: removeEntity,
     Connection: {
-      attachConnection: attachConnection,
-      reattachConnection: reattachConnection,
       removeConnection: removeConnection
     },
     Stores: {

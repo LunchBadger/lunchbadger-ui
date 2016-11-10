@@ -1,5 +1,6 @@
 import {notify} from 'react-notify-toast';
-import {dispatch} from '../../dispatcher/AppDispatcher';
+
+const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default (connectionInfo) => {
   connectionInfo.connection.setType('wip');

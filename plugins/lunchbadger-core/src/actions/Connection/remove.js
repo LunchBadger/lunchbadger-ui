@@ -1,8 +1,8 @@
 import {dispatch} from '../../dispatcher/AppDispatcher';
 
-export default (from, to) => {
+export default (info) => {
   dispatch('RemoveConnection', {
-    from: from,
-    to: to
+    from: info.sourceId,
+    to: info.targetId
   });
 };

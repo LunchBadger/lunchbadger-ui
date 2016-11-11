@@ -2,6 +2,7 @@ import Backend from '../stores/Backend';
 
 import attachConnection from '../actions/Connection/attach';
 import reattachConnection from '../actions/Connection/reattach';
+import detachConnection from '../actions/Connection/detach';
 
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
@@ -19,6 +20,15 @@ const checkConnection = (info) => {
 
   return null;
 };
+
+const checkConnectionDelete = (info) => {
+  const {sourceId, targetId} = info;
+
+  const isBackend = Backend.findEntity(sourceId);
+  const isPrivate = Private.findEntity(targetId);
+
+  return (isBackend && isPrivate);
+}
 
 const checkMovedConnection = (info) => {
   const {originalSourceId, newSourceId, newTargetId} = info;
@@ -46,5 +56,10 @@ const checkMovedConnection = (info) => {
 
 const handleConnectionCreate = new Strategy(checkConnection, attachConnection);
 const handleConnectionMove = new Strategy(checkMovedConnection, reattachConnection);
+const handleConnectionDelete = new Strategy(checkConnectionDelete, detachConnection);
 
-export {handleConnectionCreate, handleConnectionMove};
+export default {
+  handleConnectionCreate,
+  handleConnectionMove,
+  handleConnectionDelete
+};

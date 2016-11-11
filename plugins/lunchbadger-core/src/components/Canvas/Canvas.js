@@ -36,6 +36,7 @@ export default class Canvas extends Component {
   componentDidMount() {
     this.paper = jsPlumb.getInstance({
       DragOptions: {cursor: 'pointer', zIndex: 2000},
+      ReattachConnections: true,
       PaintStyle: {
         strokeStyle: '#ffffff',
         lineWidth: 6
@@ -72,8 +73,6 @@ export default class Canvas extends Component {
     this.paper.detach(connection, {
       fireEvent: false
     });
-
-    removeConnection(connection.sourceId, connection.targetId);
   }
 
   _flipConnection(info) {
@@ -118,6 +117,7 @@ export default class Canvas extends Component {
         return fulfilled;
       }
     }
+    return null;
   }
 
   _attachPaperEvents() {
@@ -193,10 +193,18 @@ export default class Canvas extends Component {
     });
 
     this.paper.bind('connectionDetached', (info) => {
-      this.paper.connect({
-        source: info.source,
-        target: info.target
-      });
+      let strategies = this.props.plugins.getConnectionDeletedStrategies();
+      let fulfilled = this._executeStrategies(strategies, info);
+
+      if (fulfilled === null) {
+        removeConnection(info);
+      } else if (fulfilled === false) {
+        this.paper.connect({
+          source: info.source,
+          target: info.target,
+          fireEvent: false
+        });
+      }
     });
 
     this.paper.bind('beforeDrop', (info) => {
@@ -227,7 +235,7 @@ export default class Canvas extends Component {
 
     this.paper.bind('click', (connection, event) => {
       if (event.target.classList.contains('remove-button')) {
-        this._disconnect(connection);
+        this.paper.detach(connection);
       }
     });
   }

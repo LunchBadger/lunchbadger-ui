@@ -7,7 +7,9 @@ const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
 const Strategy = LunchBadgerCore.models.Strategy;
 
-const checkConnection = (sourceId, targetId) => {
+const checkConnection = (info) => {
+  const {sourceId, targetId} = info;
+
   const isBackend = Backend.findEntity(sourceId);
   const isPrivate = Private.findEntity(targetId);
 
@@ -18,19 +20,21 @@ const checkConnection = (sourceId, targetId) => {
   return null;
 };
 
-const checkMovedConnection = (oldSourceId, oldTargetId, sourceId, targetId) => {
-  const isBackend = Backend.findEntity(sourceId);
-  const isPrivate = Private.findEntity(targetId);
+const checkMovedConnection = (info) => {
+  const {originalSourceId, newSourceId, newTargetId} = info;
+
+  const isBackend = Backend.findEntity(newSourceId);
+  const isPrivate = Private.findEntity(newTargetId);
 
   if (isBackend && isPrivate) {
-    const previousTargetConnections = Connection.search({toId: Connection.formatId(targetId)});
-    const previousSourceConnections = Connection.search({fromId: Connection.formatId(sourceId)});
+    const previousTargetConnections = Connection.search({toId: Connection.formatId(newTargetId)});
+    const previousSourceConnections = Connection.search({fromId: Connection.formatId(newSourceId)});
 
     if (previousSourceConnections.length && previousTargetConnections.length) {
       return false;
     } else if (previousTargetConnections.length < 1) {
       return true;
-    } else if (previousTargetConnections.length > 0 && previousTargetConnections[0].fromId === Connection.formatId(oldSourceId)) {
+    } else if (previousTargetConnections.length > 0 && previousTargetConnections[0].fromId === Connection.formatId(originalSourceId)) {
       return true;
     }
 

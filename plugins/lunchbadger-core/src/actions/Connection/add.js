@@ -1,9 +1,9 @@
 import {dispatch} from '../../dispatcher/AppDispatcher';
 
-export default (from, to, info) => {
+export default (info) => {
   dispatch('AddConnection', {
-    from,
-    to,
+    from: info.sourceId,
+    to: info.targetId,
     info
   });
 };

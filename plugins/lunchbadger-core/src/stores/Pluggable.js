@@ -102,15 +102,15 @@ class Pluggable extends BaseStore {
   }
 
   getConnectionCreatedStrategies() {
-    return _.filter(plugins, (plugin) => {
-      return plugin.handleConnectionCreated;
-    });
+    return plugins
+      .map(plugin => plugin.handleConnectionCreated)
+      .filter(func => !!func);
   }
 
   getConnectionMovedStrategies() {
-    return _.filter(plugins, (plugin) => {
-      return plugin.handleConnectionMoved;
-    });
+    return plugins
+      .map(plugin => plugin.handleConnectionMoved)
+      .filter(func => !!func);
   }
 }
 

@@ -39,6 +39,8 @@ export default class ModelProperty extends BaseModel {
    */
   description = '';
 
+  modelWorkspaceId = '<unattached>';
+
   constructor(id, name = '', default_ = '', type = '', required = false, index = false, description = '') {
     super(id);
 
@@ -50,15 +52,30 @@ export default class ModelProperty extends BaseModel {
     this.description = description;
   }
 
+  static get idField() {
+    return 'lunchbadgerId';
+  }
+
+  get workspaceId() {
+    return `${this.modelWorkspaceId}.${this.name}`;
+  }
+
+  attach(model) {
+    this.modelWorkspaceId = model.workspaceId;
+  }
+
   toJSON() {
     return {
-      id: this.id,
+      id: this.workspaceId,
+      modelId: this.modelWorkspaceId,
+      facetName: 'server',
       name: this.name,
       'default': this.default_,
       type: this.type,
       required: this.required,
       index: this.index,
-      description: this.description
+      description: this.description,
+      lunchbadgerId: this.id
     }
   }
 }

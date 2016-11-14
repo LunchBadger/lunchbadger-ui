@@ -42,6 +42,15 @@ export default class ProjectService {
     return this._workspaceClient.patch('ModelConfigs', { body: data });
   }
 
+  deleteModelProperties(modelId) {
+    return this._workspaceClient.delete(
+      bindParams('ModelDefinitions/:id/properties', {id: modelId}));
+  }
+
+  upsertModelProperties(data) {
+    return this._workspaceClient.post('ModelProperties', { body: data });
+  }
+
   save(data) {
     return this._projectClient.put('Projects', { body: data });
   }

@@ -44,7 +44,10 @@ export default (id, props) => {
     }));
   }
 
-  promise = promise.then(() => service.putModel(_.merge(model, props)));
+  promise = promise
+    .then(() => service.putModel(_.merge(model, props)))
+    .then(() => service.deleteModelProperties(model.workspaceId))
+    .then(() => service.upsertModelProperties(props.properties));
 
   dispatchAsync(promise, {
     request: 'UpdateModelStart',

@@ -33,7 +33,9 @@ class Model extends Component {
 
     model.properties && model.properties.forEach((property) => {
       if (property.name.trim().length > 0) {
-        data.properties.push(ModelPropertyFactory.create(property));
+        let prop = ModelPropertyFactory.create(property);
+        prop.attach(this.props.entity);
+        data.properties.push(prop);
       }
     });
 

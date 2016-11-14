@@ -75,7 +75,9 @@ class ModelDetails extends Component {
 
     model.properties && model.properties.forEach((property) => {
       if (property.name.trim().length > 0) {
-        data.properties.push(ModelProperty.create(property));
+        let prop = ModelProperty.create(property);
+        prop.attach(this.props.entity);
+        data.properties.push(prop);
       }
     });
 

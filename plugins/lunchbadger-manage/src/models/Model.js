@@ -94,6 +94,7 @@ export default class Model extends BaseModel {
    */
   addProperty(property) {
     this._properties.push(property);
+    property.attach(this);
   }
 
   /**

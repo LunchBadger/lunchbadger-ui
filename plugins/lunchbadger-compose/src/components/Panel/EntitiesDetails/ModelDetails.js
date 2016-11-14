@@ -90,10 +90,7 @@ class ModelDetails extends Component {
 
     if (dsId !== currDsId) {
       if (currDsConn) {
-        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection, {
-          fireEvent: false
-        });
-        removeConnection(currDsConn.fromId, currDsConn.toId);
+        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
       }
       if (dsId) {
         LunchBadgerCore.utils.paper.connect({

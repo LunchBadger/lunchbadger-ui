@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import updateDataSource from '../../actions/CanvasElements/DataSource/update';
+import removeDataSource from '../../actions/CanvasElements/DataSource/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -30,6 +31,10 @@ class DataSource extends Component {
               scope={port.portGroup}/>
       );
     });
+  }
+
+  removeEntity() {
+    removeDataSource(this.props.entity);
   }
 
   render() {

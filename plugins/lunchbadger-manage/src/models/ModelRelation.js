@@ -6,31 +6,45 @@ export default class ModelRelation extends BaseModel {
   /**
    * @type {string}
    */
-  relationType = '';
+  name = '';
 
   /**
    * @type {string}
    */
-  relationForeignKey = '';
+  type = '';
 
   /**
    * @type {string}
    */
-  relationModel = '';
+  foreignKey = '';
 
-  constructor(id, foreignKey='', type = '', model='') {
+  /**
+   * @type {string}
+   */
+  model = '';
+
+  constructor(id, name='', foreignKey='', type = '', model='') {
     super(id);
-    this.relationType = foreignKey;
-    this.relationForeignKey = model;
-    this.relationModel = type;
+    this.name = name;
+    this.type = type;
+    this.foreignKey = foreignKey;
+    this.model = model;
+  }
+
+  attach(model) {
+    this.modelWorkspaceId = model.workspaceId;
   }
 
   toJSON() {
     return {
-      id: this.id,
-      relationType: this.relationType,
-      relationForeignKey: this.relationForeignKey,
-      relationModel: this.relationModel
+      id: this.workspaceId,
+      facetName: 'server',
+      modelId: this.modelWorkspaceId,
+      name: this.name,
+      type: this.type,
+      foreignKey: this.foreignKey,
+      model: this.model,
+      lunchbadgerId: this.id
     }
   }
 }

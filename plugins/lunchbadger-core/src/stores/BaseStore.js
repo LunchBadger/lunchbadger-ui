@@ -88,11 +88,11 @@ export default class BaseStore extends EventEmitter {
         this.emitChange();
         break;
       case `Update${name}Start`:
-        this.updateEntity(action.id, { ready: false });
+        this.updateEntity(action.id, _.merge(action.data, { ready: false }));
         this.emitChange();
         break;
       case `Update${name}End`:
-        this.updateEntity(action.id, _.merge(action.data, { ready: true }));
+        this.updateEntity(action.id, { ready: true });
         this.emitChange();
         break;
       case 'RemoveEntity':

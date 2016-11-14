@@ -82,7 +82,9 @@ class ModelDetails extends Component {
     });
 
     model.relations && model.relations.forEach((relation) => {
-      data.relations.push(ModelRelation.create(relation));
+      let rel = ModelRelation.create(relation);
+      rel.attach(this.props.entity);
+      data.relations.push(rel);
     });
 
     const currDsConn = this._getBackendConnection();
@@ -228,6 +230,7 @@ class ModelDetails extends Component {
           <table className="details-panel__table">
             <thead>
               <tr>
+              <th>Name</th>
               <th>Model</th>
               <th>Type</th>
               <th>

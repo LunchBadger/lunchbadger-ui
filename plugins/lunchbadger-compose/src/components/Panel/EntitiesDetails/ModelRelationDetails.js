@@ -20,23 +20,29 @@ export default class ModelRelationDetails extends Component {
 
   render() {
     const {relation, index} = this.props;
-    let modelOptions = Private.getData()
+    let models = Private.getData()
       .filter(entity => entity instanceof Model)
-      .map(model => <option value={model.name}>{model.name}</option>);
+    let modelOptions = models.map(
+      model => <option value={model.name} key={`rel-${model.name}`}>{model.name}</option>);
 
     return (
       <tr>
         <td>
+          <Input className="details-panel__input"
+                 value={relation.name}
+                 name={`relations[${index}][name]`}/>
+        </td>
+        <td>
           <Select className="details-panel__input details-panel__select"
-                value={relation.relationModel}
-                name={`relations[${index}][relationModel]`}>
+                value={relation.model || models[0].name}
+                name={`relations[${index}][model]`}>
             {modelOptions}
           </Select>
         </td>
         <td>
           <Select className="details-panel__input details-panel__select"
-                  value={relation.relationType || 'hasMany'}
-                  name={`relations[${index}][relationType]`}>
+                  value={relation.type || 'hasMany'}
+                  name={`relations[${index}][type]`}>
             <option value="hasMany">hasMany</option>
             <option value="belongsTo">belongsTo</option>
             <option value="hasAndBelongsToMany">hasAndBelongsToMany</option>
@@ -44,8 +50,8 @@ export default class ModelRelationDetails extends Component {
         </td>
         <td>
           <Input className="details-panel__input"
-                 value={relation.relationForeignKey}
-                 name={`relations[${index}][relationForeignKey]`}/>
+                 value={relation.foreignKey}
+                 name={`relations[${index}][foreignKey]`}/>
         </td>
         <td className="details-panel__table__cell details-panel__table__cell--empty">
           <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(relation)}/>

@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
+import removeEntity from '../../actions/CanvasElements/Model/remove';
 import slug from 'slug';
 import './Model.scss';
 
@@ -94,6 +95,10 @@ class Model extends Component {
 
   updateContextPath() {
     this.setState({contextPathDirty: true});
+  }
+
+  removeEntity() {
+    removeEntity(this.props.entity);
   }
 
   render() {

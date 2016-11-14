@@ -15,7 +15,6 @@ const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
-const removeConnection = LunchBadgerCore.actions.Connection.removeConnection;
 
 class ModelDetails extends Component {
   static propTypes = {

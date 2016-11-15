@@ -32,14 +32,22 @@ export default class ModelRelation extends BaseModel {
   }
 
   attach(model) {
-    this.modelWorkspaceId = model.workspaceId;
+    this._model = model;
+  }
+
+  static get idField() {
+    return 'lunchbadgerId';
+  }
+
+  get workspaceId() {
+    return `${this._model.workspaceId}.${this.name}`;
   }
 
   toJSON() {
     return {
       id: this.workspaceId,
       facetName: 'server',
-      modelId: this.modelWorkspaceId,
+      modelId: this._model.workspaceId,
       name: this.name,
       type: this.type,
       foreignKey: this.foreignKey,

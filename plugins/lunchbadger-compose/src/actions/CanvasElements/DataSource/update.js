@@ -42,7 +42,7 @@ export default (id, props) => {
       });
   }
 
-  promise = promise.then(() => service.putDataSource(_.merge(dataSource, props)));
+  promise = promise.then(() => service.upsertDataSource(_.merge(dataSource, props)));
 
   dispatchAsync(promise, {
     request: 'UpdateDataSourceStart',

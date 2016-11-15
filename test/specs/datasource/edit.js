@@ -22,7 +22,7 @@ module.exports = {
     browser.expect.element(propertySelector + ':first-child .canvas-element__properties__property-title').text.to.equal('URL');
     browser.expect.element(propertySelector + ':first-child .hide-while-edit').text.to.equal('');
 
-    browser.expect.element(propertySelector + ':nth-child(2) .canvas-element__properties__property-title').text.to.equal('SCHEMA');
+    browser.expect.element(propertySelector + ':nth-child(2) .canvas-element__properties__property-title').text.to.equal('DATABASE');
     browser.expect.element(propertySelector + ':nth-child(2) .hide-while-edit').text.to.equal('');
 
     browser.expect.element(propertySelector + ':nth-child(3) .canvas-element__properties__property-title').text.to.equal('USERNAME');

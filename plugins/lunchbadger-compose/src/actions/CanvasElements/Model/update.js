@@ -17,11 +17,15 @@ export default (id, props) => {
   let promise = Promise.resolve(null);
 
   if (model.loaded && model.name !== props.name) {
+    // Have to save the workspace ID as model may be modified before the then
+    // handler gets executed.
+    let workspaceId = model.workspaceId;
+
     // Workspace API does not support renaming, so we have to delete the old
     // entry before creating a new one.
-    promise = promise.then(() => service.deleteModel(model.workspaceId));
+    promise = promise.then(() => service.deleteModel(workspaceId));
     // If we renamed, then must also change the model-config file
-    promise = promise.then(() => service.deleteModelConfig(model.workspaceId));
+    promise = promise.then(() => service.deleteModelConfig(workspaceId));
   }
 
   if ((model.loaded && model.name !== props.name) ||
@@ -45,11 +49,19 @@ export default (id, props) => {
   }
 
   promise = promise
-    .then(() => service.putModel(_.merge(model, props)))
+    .then(() => service.upsertModel(_.merge(model, props)))
     .then(() => service.deleteModelProperties(model.workspaceId))
-    .then(() => service.upsertModelProperties(props.properties))
+    .then(() => {
+      if (props.properties) {
+        return service.upsertModelProperties(props.properties)
+      }
+    })
     .then(() => service.deleteModelRelations(model.workspaceId))
-    .then(() => service.upsertModelRelations(props.relations))
+    .then(() => {
+      if (props.relations) {
+        return service.upsertModelRelations(props.relations)
+      }
+    });
 
   dispatchAsync(promise, {
     request: 'UpdateModelStart',

@@ -57,17 +57,17 @@ export default class ModelProperty extends BaseModel {
   }
 
   get workspaceId() {
-    return `${this.modelWorkspaceId}.${this.name}`;
+    return `${this._model.workspaceId}.${this.name}`;
   }
 
   attach(model) {
-    this.modelWorkspaceId = model.workspaceId;
+    this._model = model;
   }
 
   toJSON() {
     return {
       id: this.workspaceId,
-      modelId: this.modelWorkspaceId,
+      modelId: this._model.workspaceId,
       facetName: 'server',
       name: this.name,
       'default': this.default_,

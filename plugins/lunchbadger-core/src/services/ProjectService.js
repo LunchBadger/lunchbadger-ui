@@ -16,8 +16,8 @@ export default class ProjectService {
     ]);
   }
 
-  putDataSource(data) {
-    return this._workspaceClient.put('DataSourceDefinitions', { body: data });
+  upsertDataSource(data) {
+    return this._workspaceClient.post('DataSourceDefinitions', { body: data });
   }
 
   deleteDataSource(id) {
@@ -25,8 +25,8 @@ export default class ProjectService {
       bindParams('DataSourceDefinitions/:id', {id}));
   }
 
-  putModel(data) {
-    return this._workspaceClient.put('ModelDefinitions', { body: data });
+  upsertModel(data) {
+    return this._workspaceClient.post('ModelDefinitions', { body: data });
   }
 
   deleteModel(id) {
@@ -34,12 +34,16 @@ export default class ProjectService {
       bindParams('ModelDefinitions/:id', {id}));
   }
 
+  upsertModelConfig(data) {
+    return this._workspaceClient.post('ModelConfigs', { body: data });
+  }
+
   deleteModelConfig(id) {
     return this._workspaceClient.delete(bindParams('ModelConfigs/:id', {id}));
   }
 
-  upsertModelConfig(data) {
-    return this._workspaceClient.patch('ModelConfigs', { body: data });
+  upsertModelProperties(data) {
+    return this._workspaceClient.post('ModelProperties', { body: data });
   }
 
   deleteModelProperties(modelId) {
@@ -47,17 +51,13 @@ export default class ProjectService {
       bindParams('ModelDefinitions/:id/properties', {id: modelId}));
   }
 
-  upsertModelProperties(data) {
-    return this._workspaceClient.post('ModelProperties', { body: data });
+  upsertModelRelations(data) {
+    return this._workspaceClient.post('ModelRelations', { body: data });
   }
 
   deleteModelRelations(modelId) {
     return this._workspaceClient.delete(
       bindParams('ModelDefinitions/:id/relations', {id: modelId}));
-  }
-
-  upsertModelRelations(data) {
-    return this._workspaceClient.post('ModelRelations', { body: data });
   }
 
   save(data) {

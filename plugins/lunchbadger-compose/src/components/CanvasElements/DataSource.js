@@ -12,12 +12,16 @@ class DataSource extends Component {
     paper: PropTypes.object
   };
 
+  static contextTypes = {
+    projectService: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
   }
 
   update(model) {
-    updateDataSource(this.props.entity.id, model);
+    updateDataSource(this.context.projectService, this.props.entity.id, model);
   }
 
   renderPorts() {
@@ -34,7 +38,7 @@ class DataSource extends Component {
   }
 
   removeEntity() {
-    removeDataSource(this.props.entity);
+    removeDataSource(this.context.projectService, this.props.entity);
   }
 
   render() {

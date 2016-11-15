@@ -9,6 +9,10 @@ import Connection from '../../stores/Connection';
 import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 
 export default class Canvas extends Component {
+  static contextTypes = {
+    projectService: React.PropTypes.object
+  };
+
   constructor(props) {
     super(props);
 
@@ -112,7 +116,9 @@ export default class Canvas extends Component {
 
   _executeStrategies(strategies, info) {
     for (let strategy of strategies) {
-      let fulfilled = strategy.checkAndFulfill(info);
+      let fulfilled = strategy.checkAndFulfill(info, {
+        projectService: this.context.projectService
+      });
       if (fulfilled != null) {
         return fulfilled;
       }

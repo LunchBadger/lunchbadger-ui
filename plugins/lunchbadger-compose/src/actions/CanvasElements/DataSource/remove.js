@@ -1,15 +1,9 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
-const ProjectService = LunchBadgerCore.services.ProjectService;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const Model = LunchBadgerManage.models.Model;
 
-export default (entity) => {
-  let service = new ProjectService(
-    global.LUNCHBADGER_CONFIG.projectApiUrl,
-    global.LUNCHBADGER_CONFIG.workspaceApiUrl,
-    global.loginManager.user.id_token);
-
+export default (service, entity) => {
   let promise = service.deleteDataSource(entity.workspaceId);
 
   ConnectionStore

@@ -17,12 +17,14 @@ import {loadFromServer, saveToServer} from '../../utils/serverIo';
 export default class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object
+    loginManager: PropTypes.object,
+    projectService: PropTypes.object
   }
 
   static propTypes = {
     config: PropTypes.object,
-    loginManager: PropTypes.object
+    loginManager: PropTypes.object,
+    projectService: PropTypes.object
   }
 
   constructor(props) {
@@ -46,15 +48,18 @@ export default class App extends Component {
   getChildContext() {
     return {
       lunchbadgerConfig: this.props.config,
-      loginManager: this.props.loginManager
+      loginManager: this.props.loginManager,
+      projectService: this.props.projectService
     };
   }
 
   componentWillMount() {
+    let {config, loginManager, projectService} = this.props;
+
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
 
-    loadFromServer(this.props.config, this.props.loginManager).then(() => {
+    loadFromServer(config, loginManager, projectService).then(() => {
       notify.show('All data has been synced with API', 'success');
       this.setState({loaded: true});
     }).catch(err => {
@@ -70,8 +75,10 @@ export default class App extends Component {
   }
 
   saveToServer() {
+    let {config, loginManager, projectService} = this.props;
+
     this.setState({loaded: false});
-    saveToServer(this.props.config, this.props.loginManager).then(() => {
+    saveToServer(config, loginManager, projectService).then(() => {
       notify.show('All data has been synced with API', 'success');
       this.setState({loaded: true});
     }).catch(err => {

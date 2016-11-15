@@ -17,6 +17,10 @@ class Model extends Component {
     paper: PropTypes.object
   };
 
+  static contextTypes = {
+    projectService: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
 
@@ -39,7 +43,8 @@ class Model extends Component {
       }
     });
 
-    updateModel(this.props.entity.id, Object.assign(model, data));
+    updateModel(this.context.projectService, this.props.entity.id,
+      Object.assign(model, data));
 
     return true;
   }
@@ -100,7 +105,7 @@ class Model extends Component {
   }
 
   removeEntity() {
-    removeEntity(this.props.entity);
+    removeEntity(this.context.projectService, this.props.entity);
   }
 
   render() {

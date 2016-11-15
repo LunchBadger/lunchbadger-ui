@@ -1,7 +1,6 @@
 /*eslint no-console:0 */
 import AppState from '../stores/AppState';
 import ConnectionStore from '../stores/Connection';
-import ProjectService from '../services/ProjectService';
 import {waitForStores} from '../utils/waitForStores';
 
 const EMPTY_PROJECT = {
@@ -14,12 +13,10 @@ const EMPTY_PROJECT = {
   portals: []
 };
 
-export function loadFromServer(config, loginManager) {
+export function loadFromServer(config, loginManager, projectService) {
   console.info('Pre-fetching projects data...', config);
 
   const user = loginManager.user;
-  const projectService = new ProjectService(
-    config.projectApiUrl, config.workspaceApiUrl, user.id_token);
   const projectData = projectService
     .get(user.profile.sub, config.envId)
     .catch(err => {
@@ -115,7 +112,7 @@ export function loadFromServer(config, loginManager) {
   });
 }
 
-export function saveToServer(config, loginManager) {
+export function saveToServer(config, loginManager, projectService) {
   const user = loginManager.user;
 
   let storesList = [
@@ -216,8 +213,7 @@ export function saveToServer(config, loginManager) {
     });
   }
 
-  let projSave = new ProjectService(
-      config.projectApiUrl, config.workspaceApiUrl, user.id_token)
+  let projSave = projectService
     .save(project)
     .catch(err => {
       if (err.statusCode === 401) {

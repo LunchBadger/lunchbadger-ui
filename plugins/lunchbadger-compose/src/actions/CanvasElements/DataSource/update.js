@@ -2,18 +2,12 @@ import _ from 'lodash';
 import BackendStore from '../../../stores/Backend';
 
 const {dispatchAsync} = LunchBadgerCore.dispatcher.AppDispatcher;
-const ProjectService = LunchBadgerCore.services.ProjectService;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const Model = LunchBadgerManage.models.Model;
 
 
-export default (id, props) => {
-  let service = new ProjectService(
-    global.LUNCHBADGER_CONFIG.projectApiUrl,
-    global.LUNCHBADGER_CONFIG.workspaceApiUrl,
-    global.loginManager.user.id_token);
-
+export default (service, id, props) => {
   let dataSource = BackendStore.findEntity(id);
   let oldWsId = dataSource.workspaceId;
   let oldId = dataSource.id;

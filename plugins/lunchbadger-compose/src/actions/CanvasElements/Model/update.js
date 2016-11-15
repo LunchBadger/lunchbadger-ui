@@ -3,16 +3,10 @@ import BackendStore from '../../../stores/Backend';
 import DataSource from '../../../models/DataSource';
 
 const {dispatchAsync} = LunchBadgerCore.dispatcher.AppDispatcher;
-const ProjectService = LunchBadgerCore.services.ProjectService;
 const Private = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 
-export default (id, props) => {
-  let service = new ProjectService(
-    global.LUNCHBADGER_CONFIG.projectApiUrl,
-    global.LUNCHBADGER_CONFIG.workspaceApiUrl,
-    global.loginManager.user.id_token);
-
+export default (service, id, props) => {
   let model = Private.findEntity(id);
   let promise = Promise.resolve(null);
 

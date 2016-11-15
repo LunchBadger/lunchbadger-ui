@@ -3,16 +3,9 @@ import Backend from '../../stores/Backend';
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
-const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (connectionInfo) => {
+export default (connectionInfo, {projectService}) => {
   connectionInfo.connection.setType('wip');
-
-  let service = new ProjectService(
-    global.LUNCHBADGER_CONFIG.projectApiUrl,
-    global.LUNCHBADGER_CONFIG.workspaceApiUrl,
-    global.loginManager.user.id_token);
-
 
   let {originalTargetId, newSourceId, newTargetId} = connectionInfo;
   let promise = Promise.resolve(null);
@@ -22,7 +15,7 @@ export default (connectionInfo) => {
     let originalModel = Private.findEntity(Connection.formatId(originalTargetId));
 
     promise = promise.then(() => {
-      return service.upsertModelConfig({
+      return projectService.upsertModelConfig({
         name: originalModel.name,
         id: `server.${originalModel.name}`,
         facetName: 'server',
@@ -35,7 +28,7 @@ export default (connectionInfo) => {
   let dataSource = Backend.findEntity(Connection.formatId(newSourceId));
   let model = Private.findEntity(Connection.formatId(newTargetId));
 
-  promise = promise.then(() => service.upsertModelConfig({
+  promise = promise.then(() => projectService.upsertModelConfig({
     name: model.name,
     id: `server.${model.name}`,
     facetName: 'server',

@@ -10,11 +10,11 @@ import config from 'config';
 
 global.LUNCHBADGER_CONFIG = config;
 const App = LunchBadgerCore.components.App;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
 console.info('Application started..!');
 
 let loginManager = LunchBadgerCore.utils.createLoginManager(config);
-global.loginManager = loginManager;
 
 loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) {
@@ -29,7 +29,12 @@ loginManager.checkAuth().then(loggedIn => {
     state: 'simple'
   };
 
+  let projectService = new ProjectService(config.projectApiUrl,
+    config.workspaceApiUrl, loginManager.user.id_token);
+
   // Render the main component into the dom
-  ReactDOM.render(<App config={config} loginManager={loginManager}/>,
+  ReactDOM.render(<App config={config}
+                       loginManager={loginManager}
+                       projectService={projectService} />,
                   document.getElementById('app'));
 });

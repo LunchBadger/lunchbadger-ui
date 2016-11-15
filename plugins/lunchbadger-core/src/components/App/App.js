@@ -11,7 +11,7 @@ import Notifications, {notify} from 'react-notify-toast';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
-import {loadFromServer, saveToServer} from '../../utils/serverIo';
+import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
@@ -88,6 +88,16 @@ export default class App extends Component {
     });
   }
 
+  clearServer() {
+    let {config, loginManager, projectService} = this.props;
+
+    this.setState({loaded: false});
+    clearServer(config, loginManager, projectService).then(() => {
+      notify.show('All data removed from server', 'success');
+      this.setState({loaded: true});
+    })
+  }
+
   render() {
     return (
       <div className="app">
@@ -95,7 +105,8 @@ export default class App extends Component {
         <Header ref="header"
                 appState={this.state.appState}
                 plugins={this.state.pluginsStore}
-                saveToServer={this.saveToServer.bind(this)} />
+                saveToServer={this.saveToServer.bind(this)}
+                clearServer={this.clearServer.bind(this)} />
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">

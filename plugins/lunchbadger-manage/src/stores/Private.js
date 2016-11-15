@@ -29,6 +29,11 @@ class Private extends BaseStore {
           action.model.removeProperty(action.property);
           this.emitChange();
           break;
+
+        case 'ClearData':
+          Privates = [];
+          this.emitChange();
+          break;
       }
     });
   }

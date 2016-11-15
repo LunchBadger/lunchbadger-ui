@@ -2,6 +2,7 @@
 import AppState from '../stores/AppState';
 import ConnectionStore from '../stores/Connection';
 import {waitForStores} from '../utils/waitForStores';
+import clearData from '../actions/Stores/clearData';
 
 const EMPTY_PROJECT = {
   connections: [],
@@ -53,7 +54,7 @@ export function loadFromServer(config, loginManager, projectService) {
   }
 
   return projectData.then(res => {
-    const project = res[0].body[0] || EMPTY_PROJECT;
+    const project = res[0].body || EMPTY_PROJECT;
     const models = res[1].body;
     const dataSources = res[2].body;
     const modelConfigs = res[3].body;
@@ -113,8 +114,6 @@ export function loadFromServer(config, loginManager, projectService) {
 }
 
 export function saveToServer(config, loginManager, projectService) {
-  const user = loginManager.user;
-
   let storesList = [
     ConnectionStore
   ];
@@ -214,7 +213,7 @@ export function saveToServer(config, loginManager, projectService) {
   }
 
   let projSave = projectService
-    .save(project)
+    .save(loginManager.user.profile.sub, config.envId, project)
     .catch(err => {
       if (err.statusCode === 401) {
         loginManager.refreshLogin();
@@ -236,4 +235,19 @@ export function saveToServer(config, loginManager, projectService) {
   }
 
   return Promise.all(saveableServices);
+}
+
+export function clearServer(config, loginManager, projectService) {
+  let user = loginManager.user;
+
+  let promise = projectService.clearProject(user.profile.sub, config.envId)
+    .catch(err => {
+      if (err.statusCode === 401) {
+        loginManager.refreshLogin();
+      }
+      throw err;
+    });
+
+  clearData();
+  return promise;
 }

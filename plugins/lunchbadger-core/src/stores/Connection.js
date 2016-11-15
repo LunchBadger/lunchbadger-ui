@@ -54,6 +54,10 @@ class Connection extends BaseStore {
 
         this.emitChange();
         break;
+      case 'ClearData':
+        connections = [];
+        this.emitChange();
+        break;
     }
   }
 

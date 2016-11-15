@@ -30,6 +30,10 @@ class Gateway extends BaseStore {
             this.emitChange();
           }
           break;
+        case 'ClearData':
+          Gateways = [];
+          this.emitChange();
+          break;
       }
     });
   }

@@ -10,6 +10,13 @@ class Backend extends BaseStore {
     super();
     register((action) => {
       this.handleBaseActions('Backend', ['DataSource'], action);
+
+      switch (action.type) {
+        case 'ClearData':
+          Backends = [];
+          this.emitChange();
+          break;
+      }
     });
   }
 

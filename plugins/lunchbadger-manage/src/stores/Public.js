@@ -63,6 +63,10 @@ class Public extends BaseStore {
           action.toPortal.addAPI(action.api);
           this.emitChange();
           break;
+        case 'ClearData':
+          Publics = [];
+          this.emitChange();
+          break;
       }
     });
   }

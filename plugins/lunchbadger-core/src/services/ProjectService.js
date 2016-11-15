@@ -7,9 +7,11 @@ export default class ProjectService {
     this._workspaceClient = new ApiClient(workspaceUrl, idToken);
   }
 
-  get() {
+  get(userName, envId) {
+    let projectId = `${userName}-${envId}`;
+
     return Promise.all([
-      this._projectClient.get('Projects'),
+      this._projectClient.get(bindParams('Projects/:id', {id: projectId})),
       this._workspaceClient.get('Facets/server/models?filter[include]=properties&filter[include]=relations'),
       this._workspaceClient.get('Facets/server/datasources'),
       this._workspaceClient.get('Facets/server/modelConfigs')
@@ -60,7 +62,17 @@ export default class ProjectService {
       bindParams('ModelDefinitions/:id/relations', {id: modelId}));
   }
 
-  save(data) {
-    return this._projectClient.put('Projects', { body: data });
+  save(userName, envId, data) {
+    let projectId = `${userName}-${envId}`;
+    return this._projectClient.patch('Projects', { body: {
+      id: projectId,
+      ...data
+    }});
+  }
+
+  clearProject(userName, envId) {
+    let projectId = `${userName}-${envId}`;
+    return this._projectClient.post(
+      bindParams('Projects/:id/clear', { id: projectId }));
   }
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import HeaderMenuLink from './HeaderMenuLink';
 import HeaderMenuSaveButton from './HeaderMenuSaveButton';
+import HeaderMenuClearButton from './HeaderMenuClearButton';
 import panelKeys from '../../constants/panelKeys';
 import classNames from 'classnames';
 
@@ -30,6 +31,9 @@ export default class HeaderMenu extends Component {
     return (
       <nav className={headerClass}>
         <ul className="header__menu__list">
+          <li className="header__menu__element">
+            <HeaderMenuClearButton clearServer={this.props.clearServer} />
+          </li>
           <li className="header__menu__element">
             <HeaderMenuSaveButton saveToServer={this.props.saveToServer} />
           </li>

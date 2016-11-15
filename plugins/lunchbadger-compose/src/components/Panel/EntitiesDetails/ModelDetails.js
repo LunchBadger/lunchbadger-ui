@@ -21,6 +21,10 @@ class ModelDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    projectService: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
 
@@ -92,20 +96,17 @@ class ModelDetails extends Component {
     const dsId = model.dataSource === 'none' ? null : model.dataSource;
 
     if (dsId !== currDsId) {
-      if (currDsConn) {
+      if (!dsId) {
         LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
-      }
-      if (dsId) {
-        LunchBadgerCore.utils.paper.connect({
-          source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-          target: document.getElementById(`port_in_${this.props.entity.id}`).querySelector('.port__anchor')
-        });
+      } else if (currDsConn) {
+        LunchBadgerCore.utils.paper.setSource(currDsConn.info.connection,
+          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'));
       }
     }
 
     let updateData = Object.assign({}, model, data);
     delete updateData.dataSource;
-    updateModel(this.props.entity.id, updateData);
+    updateModel(this.context.projectService, this.props.entity.id, updateData);
   }
 
   onAddItem(collection, itemType, defaults={}) {

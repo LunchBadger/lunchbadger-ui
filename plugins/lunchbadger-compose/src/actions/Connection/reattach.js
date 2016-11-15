@@ -43,6 +43,6 @@ export default (connectionInfo, {projectService}) => {
     to: connectionInfo.originalTargetId,
     newFrom: connectionInfo.newSourceId,
     newTo: connectionInfo.newTargetId,
-    connectionInfo
+    info: connectionInfo
   });
 };

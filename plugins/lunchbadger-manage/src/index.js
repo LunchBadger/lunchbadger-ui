@@ -14,6 +14,7 @@ import PrivateEndpointComponent from './components/CanvasElements/PrivateEndpoin
 // actions
 import updateOrderPublic from './actions/Quadrants/Public/updateOrder';
 import updateOrderPrivate from './actions/Quadrants/Private/updateOrder';
+import saveOrderPrivate from './actions/Quadrants/Private/saveOrder';
 import initializeGateway from './actions/Stores/Gateway/initialize';
 import initializePublic from './actions/Stores/Public/initialize';
 import initializePrivate from './actions/Stores/Private/initialize';
@@ -43,7 +44,8 @@ let LunchBadgerManage = {
         updateOrder: updateOrderPublic
       },
       Private: {
-        updateOrder: updateOrderPrivate
+        updateOrder: updateOrderPrivate,
+        saveOrder: saveOrderPrivate
       }
     },
     Stores: {

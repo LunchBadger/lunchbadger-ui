@@ -2,7 +2,7 @@ import ConnectionFactory from '../models/Connection';
 import _ from 'lodash';
 import BaseStore from './BaseStore';
 
-const connections = [];
+let connections = [];
 
 class Connection extends BaseStore {
   constructor() {
@@ -163,6 +163,10 @@ class Connection extends BaseStore {
 
   getData() {
     return connections;
+  }
+
+  setData(data) {
+    connections = data;
   }
 }
 

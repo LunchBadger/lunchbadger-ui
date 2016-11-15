@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import Model from '../CanvasElements/Model';
 
 const updateOrder = LunchBadgerManage.actions.Quadrants.Private.updateOrder;
+const saveOrder = LunchBadgerManage.actions.Quadrants.Private.saveOrder;
 const PrivateEndpoint = LunchBadgerManage.components.PrivateEndpoint;
 const Quadrant = LunchBadgerCore.components.Quadrant;
 
@@ -10,6 +11,10 @@ class PrivateQuadrant extends Component {
     title: PropTypes.string.isRequired,
     entities: PropTypes.array,
     paper: PropTypes.object
+  };
+
+  static contextTypes = {
+    projectService: PropTypes.object
   };
 
   constructor(props) {
@@ -27,7 +32,8 @@ class PrivateQuadrant extends Component {
                    icon="icon-icon-model"
                    hideSourceOnDrag={true}
                    itemOrder={entity.itemOrder}
-                   moveEntity={this.moveEntity}
+                   moveEntity={this.moveEntity.bind(this)}
+                   saveOrder={this.saveOrder.bind(this)}
                    entity={entity}/>
           );
         case 'PrivateEndpoint':
@@ -39,7 +45,7 @@ class PrivateQuadrant extends Component {
               icon="icon-icon-endpoint"
               hideSourceOnDrag={true}
               itemOrder={entity.itemOrder}
-              moveEntity={this.moveEntity}
+              moveEntity={this.moveEntity.bind(this)}
               entity={entity}/>
           );
       }
@@ -48,6 +54,10 @@ class PrivateQuadrant extends Component {
 
   moveEntity(entity, itemOrder, hoverOrder) {
     updateOrder(entity, itemOrder, hoverOrder);
+  }
+
+  saveOrder() {
+    saveOrder(this.context.projectService);
   }
 
   render() {

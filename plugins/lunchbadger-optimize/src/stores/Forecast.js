@@ -112,6 +112,10 @@ class Forecast extends BaseStore {
     return Forecasts;
   }
 
+  setData(data) {
+    Forecasts = data;
+  }
+
   findEntity(id) {
     id = this.formatId(id);
 

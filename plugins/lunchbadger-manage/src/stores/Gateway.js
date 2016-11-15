@@ -41,6 +41,10 @@ class Gateway extends BaseStore {
     return Gateways;
   }
 
+  setData(data) {
+    Gateways = data;
+  }
+
   findEntity(id) {
     return _.find(Gateways, {id: id});
   }

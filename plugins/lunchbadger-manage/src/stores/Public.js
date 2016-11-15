@@ -71,6 +71,10 @@ class Public extends BaseStore {
     return Publics;
   }
 
+  setData(data) {
+    Publics = data;
+  }
+
   findEntity(id) {
     return _.find(Publics, {id: id});
   }

@@ -128,6 +128,7 @@ export default (ComposedComponent) => {
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
+      this._handleDrop(props);
 
       this.checkHighlightAndEditableState(props);
     }
@@ -242,6 +243,12 @@ export default (ComposedComponent) => {
 
       if (this.props.isOver && !props.isOver) {
         this.setState({highlighted: false});
+      }
+    }
+
+    _handleDrop(props) {
+      if (this.props.isDragging && !props.isDragging && props.saveOrder) {
+        props.saveOrder();
       }
     }
 

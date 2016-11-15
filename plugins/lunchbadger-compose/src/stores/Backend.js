@@ -17,6 +17,10 @@ class Backend extends BaseStore {
     return Backends;
   }
 
+  setData(data) {
+    Backends = data;
+  }
+
   findEntity(id) {
     id = this.formatId(id);
 

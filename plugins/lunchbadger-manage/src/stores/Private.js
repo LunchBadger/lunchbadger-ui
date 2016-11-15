@@ -37,6 +37,10 @@ class Private extends BaseStore {
     return Privates;
   }
 
+  setData(data) {
+    Privates = data;
+  }
+
   findEntity(id) {
     id = this.formatId(id);
 

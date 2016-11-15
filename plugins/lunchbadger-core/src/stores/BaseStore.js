@@ -63,7 +63,7 @@ export default class BaseStore extends EventEmitter {
     switch (type) {
       case `Initialize${name}`:
         storeObj.push.apply(storeObj, action.data);
-        storeObj = this.sortItems(storeObj);
+        this.setData(this.sortItems(storeObj));
 
         this.initCalls--;
         if (this.initCalls <= 0) {
@@ -75,8 +75,13 @@ export default class BaseStore extends EventEmitter {
       case `Update${name}Order`:
         _.remove(storeObj, action.entity);
         storeObj.splice(action.hoverOrder, 0, action.entity);
-        storeObj = this.sortItems(this.setEntitiesOrder(storeObj));
+        this.setData(this.sortItems(this.setEntitiesOrder(storeObj)));
         this.emitChange();
+        break;
+      case `Save${name}Order`:
+        _.each(storeObj, function(entity) {
+          entity.reordered = false;
+        });
         break;
       case `Add${name}`:
         storeObj.push(action.entity);
@@ -106,6 +111,7 @@ export default class BaseStore extends EventEmitter {
     return _.each(store, function (entity, index) {
       if (entity) {
         entity.itemOrder = index;
+        entity.reordered = true;
       }
     });
   }

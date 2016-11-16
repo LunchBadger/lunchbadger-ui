@@ -29,7 +29,7 @@ module.exports = {
   "custom_commands_path": "test/commands",
   "custom_assertions_path": "test/assertions",
   "page_objects_path": "test/pageObjects",
-  "globals_path": "",
+  "globals_path": "test/globals",
   "selenium": {
     "start_process": true,
     "server_path": "./node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.53.1.jar",

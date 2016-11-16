@@ -21,6 +21,8 @@ trap cleanup EXIT
 docker-compose up -d
 bin/wait-for-it.sh 127.0.0.1:8000 -t 10
 bin/wait-for-it.sh 127.0.0.1:3000 -t 10
+bin/wait-for-it.sh 127.0.0.1:3001 -t 10
+sleep 2
 
 # run tests
 docker run -it --rm -v `pwd`:/opt/lunchbadger lunchbadger-ui:test npm run test:nodocker $@

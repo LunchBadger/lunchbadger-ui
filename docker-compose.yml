@@ -7,7 +7,8 @@ services:
     image: lunchbadger-ui:dev
     ports:
       - 8000:8000
-  forecast-api:
-    image: lunchbadger/forecast-api:0.0.1
+  loopback-workspace:
+    image: lunchbadger/lunchbadger-workspace:0.0.1
     ports:
       - 3000:3000
+      - 3001:3001

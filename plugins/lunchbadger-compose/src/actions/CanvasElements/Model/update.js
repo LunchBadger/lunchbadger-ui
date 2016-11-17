@@ -5,6 +5,7 @@ import DataSource from '../../../models/DataSource';
 const {dispatchAsync} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Private = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (service, id, props) => {
   let model = Private.findEntity(id);
@@ -57,7 +58,7 @@ export default (service, id, props) => {
       }
     });
 
-  dispatchAsync(promise, {
+  dispatchAsync(handleFatals(promise), {
     request: 'UpdateModelStart',
     success: 'UpdateModelEnd',
     failure: 'UpdateModelEnd'

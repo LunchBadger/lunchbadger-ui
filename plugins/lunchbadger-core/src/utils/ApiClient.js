@@ -36,7 +36,7 @@ class ApiClient {
         }
 
         if (response.statusCode === 0) {
-          return reject(new ApiError(0, 'General API Error!'));
+          return reject(new ApiError(0, 'Error communicating with API'));
         }
 
         const responseData = {

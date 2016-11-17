@@ -72,6 +72,7 @@ import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
 import createLoginManager from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
+import handleFatals from './utils/handleFatals';
 
 let LunchBadgerCore = {
   dispatcher: {
@@ -147,6 +148,7 @@ let LunchBadgerCore = {
     ApiClient: ApiClient,
     URLParams: URLParams,
     waitForStores: waitForStores,
+    handleFatals: handleFatals,
     serverIo: {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer

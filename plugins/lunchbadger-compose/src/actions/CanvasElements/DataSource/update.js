@@ -5,7 +5,7 @@ const {dispatchAsync} = LunchBadgerCore.dispatcher.AppDispatcher;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const Model = LunchBadgerManage.models.Model;
-
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (service, id, props) => {
   let dataSource = BackendStore.findEntity(id);
@@ -38,7 +38,7 @@ export default (service, id, props) => {
 
   promise = promise.then(() => service.upsertDataSource(_.merge(dataSource, props)));
 
-  dispatchAsync(promise, {
+  dispatchAsync(handleFatals(promise), {
     request: 'UpdateDataSourceStart',
     success: 'UpdateDataSourceEnd',
     failure: 'UpdateDataSourceEnd'

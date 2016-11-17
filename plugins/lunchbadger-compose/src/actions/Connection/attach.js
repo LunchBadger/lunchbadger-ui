@@ -3,6 +3,7 @@ import Backend from '../../stores/Backend';
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (connectionInfo, {projectService}) => {
   connectionInfo.connection.setType('wip');
@@ -19,9 +20,11 @@ export default (connectionInfo, {projectService}) => {
     public: model.public
   };
 
-  projectService.upsertModelConfig(modelConfig).then(() => {
+  let promise = projectService.upsertModelConfig(modelConfig).then(() => {
     connectionInfo.connection.removeType('wip');
   });
+
+  handleFatals(promise);
 
   dispatch('AddConnection', {
     from: connectionInfo.sourceId,

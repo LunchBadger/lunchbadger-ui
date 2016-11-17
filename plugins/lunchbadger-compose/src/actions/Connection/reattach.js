@@ -3,6 +3,7 @@ import Backend from '../../stores/Backend';
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (connectionInfo, {projectService}) => {
   connectionInfo.connection.setType('wip');
@@ -37,6 +38,8 @@ export default (connectionInfo, {projectService}) => {
   })).then(() => {
     connectionInfo.connection.removeType('wip');
   });
+
+  handleFatals(promise);
 
   dispatch('MoveConnection', {
     from: connectionInfo.originalSourceId,

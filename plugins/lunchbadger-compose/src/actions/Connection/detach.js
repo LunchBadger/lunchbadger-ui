@@ -1,6 +1,7 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (connectionInfo, {projectService}) => {
   let {sourceId, targetId} = connectionInfo;
@@ -19,5 +20,5 @@ export default (connectionInfo, {projectService}) => {
     to: targetId
   });
 
-  projectService.upsertModelConfig(modelConfig);
+  handleFatals(projectService.upsertModelConfig(modelConfig));
 };

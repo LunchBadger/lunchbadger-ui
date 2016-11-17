@@ -2,6 +2,7 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const Model = LunchBadgerManage.models.Model;
+const handleFatals = LunchBadgerCore.utils.handleFatals;
 
 export default (service, entity) => {
   let promise = service.deleteDataSource(entity.workspaceId);
@@ -18,6 +19,8 @@ export default (service, entity) => {
         dataSource: null
       }));
     });
+
+  handleFatals(promise);
 
   dispatch('RemoveEntity', {
     entity

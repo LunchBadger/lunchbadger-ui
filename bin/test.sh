@@ -7,6 +7,7 @@ LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ pri
 
 # build containers
 docker-compose build
+docker-compose pull
 docker build -t lunchbadger-ui:test -f containers/test/Dockerfile .
 
 # start environment

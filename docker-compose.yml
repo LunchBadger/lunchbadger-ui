@@ -4,11 +4,10 @@ services:
     build:
       context: .
       dockerfile: containers/ui/Dockerfile
-    image: lunchbadger-ui:dev
     ports:
       - 8000:8000
   loopback-workspace:
-    image: lunchbadger/lunchbadger-workspace:0.0.1
+    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/lunchbadger-workspace:0.0.1
     ports:
       - 3000:3000
       - 3001:3001

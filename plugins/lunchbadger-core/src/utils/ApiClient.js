@@ -1,4 +1,5 @@
 import request from 'request';
+import EventSource from 'eventsource';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
 
@@ -67,6 +68,11 @@ class ApiClient {
 
   delete(url, options) {
     return this._callAPI('DELETE', url, options);
+  }
+
+  eventSource(url) {
+    let fullUrl = _.trimEnd(this.url, ['/']) + '/' + _.trimStart(url, ['/'])
+    return new EventSource(fullUrl, { headers: this._getHeaders() });
   }
 }
 

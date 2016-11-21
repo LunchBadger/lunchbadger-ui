@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import WorkspaceStatus from './WorkspaceStatus';
 import './Breadcrumbs.scss';
 
 export default class Breadcrumbs extends Component {
@@ -13,6 +14,7 @@ export default class Breadcrumbs extends Component {
         <span className="breadcrumbs__element">{this.context.loginManager.user.profile.preferred_username}</span>
         <span className="breadcrumbs__element">{this.context.lunchbadgerConfig.envId}</span>
         <span className="breadcrumbs__element">Canvas</span>
+        <WorkspaceStatus />
       </div>
     );
   }

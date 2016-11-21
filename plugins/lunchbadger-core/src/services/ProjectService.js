@@ -75,4 +75,13 @@ export default class ProjectService {
     return this._projectClient.post(
       bindParams('Projects/:id/clear', { id: projectId }));
   }
+
+  monitorStatus() {
+    return this._projectClient.get('/WorkspaceStatus/1').then(res => {
+      return {
+        initial: res.body,
+        es: this._projectClient.eventSource('/WorkspaceStatus/change-stream')
+      };
+    });
+  }
 }

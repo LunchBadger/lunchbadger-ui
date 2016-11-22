@@ -61,7 +61,6 @@ export default class App extends Component {
     AppState.addChangeListener(this.appStateChange);
 
     let prm = loadFromServer(config, loginManager, projectService).then(() => {
-      notify.show('All data has been synced with API', 'success');
       this.setState({loaded: true});
     })
 

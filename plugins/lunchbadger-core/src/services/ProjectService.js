@@ -84,4 +84,8 @@ export default class ProjectService {
       };
     });
   }
+
+  ping() {
+    return this._projectClient.get('/WorkspaceStatus/ping');
+  }
 }

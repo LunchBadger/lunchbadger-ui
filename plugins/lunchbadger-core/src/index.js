@@ -14,6 +14,7 @@ import Connection from './stores/Connection';
 
 // components
 import App from './components/App/App';
+import AppLoader from './components/App/AppLoader';
 import Panel from './components/Panel/Panel';
 import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
@@ -65,6 +66,7 @@ import portGroups from './constants/portGroups';
 
 // services
 import ProjectService from './services/ProjectService';
+import ConfigStoreService from './services/ConfigStoreService';
 
 // utils
 import ApiClient from './utils/ApiClient';
@@ -97,6 +99,7 @@ let LunchBadgerCore = {
   },
   components: {
     App: App,
+    AppLoader: AppLoader,
     Panel: Panel,
     CanvasElement: CanvasElement,
     BaseDetails: BaseDetails,
@@ -142,7 +145,8 @@ let LunchBadgerCore = {
     portGroups: portGroups
   },
   services: {
-    ProjectService: ProjectService
+    ProjectService: ProjectService,
+    ConfigStoreService: ConfigStoreService
   },
   utils: {
     ApiClient: ApiClient,

@@ -1,5 +1,7 @@
 export default {
-  projectApiUrl: 'https://api.lunchbadger.com/api',
+  configStoreApiUrl: 'https://api.lunchbadger.com/api',
+  projectApiUrl: 'http://{USER}-{ENV}.api.lunchbadger.com/api',
+  workspaceApiUrl: 'http://{USER}-{ENV}.api.lunchbadger.com:81/api',
   forecastApiUrl: 'http://localhost:3000/api',
   oauth: {
     authority: 'https://www.lunchbadger.com',

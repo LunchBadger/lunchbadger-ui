@@ -9,8 +9,8 @@ import './fonts/lunchbadger.css';
 import config from 'config';
 
 global.LUNCHBADGER_CONFIG = config;
-const App = LunchBadgerCore.components.App;
-const ProjectService = LunchBadgerCore.services.ProjectService;
+const AppLoader = LunchBadgerCore.components.AppLoader;
+const ConfigStoreService = LunchBadgerCore.services.ConfigStoreService;
 
 console.info('Application started..!');
 
@@ -21,20 +21,22 @@ loginManager.checkAuth().then(loggedIn => {
     return;
   }
 
+  let user = loginManager.user;
+
   // userengage.io integration
   window.civchat = {
     apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
-    name: loginManager.user.profile.preferred_username,
-    email: loginManager.user.profile.email,
+    name: user.profile.preferred_username,
+    email: user.profile.email,
     state: 'simple'
   };
 
-  let projectService = new ProjectService(config.projectApiUrl,
-    config.workspaceApiUrl, loginManager.user.id_token);
+  let configStoreService = new ConfigStoreService(config.configStoreApiUrl,
+    user.id_token);
 
   // Render the main component into the dom
-  ReactDOM.render(<App config={config}
-                       loginManager={loginManager}
-                       projectService={projectService} />,
+  ReactDOM.render(<AppLoader config={config}
+                             loginManager={loginManager}
+                             configStoreService={configStoreService} />,
                   document.getElementById('app'));
 });

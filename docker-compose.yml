@@ -7,7 +7,11 @@ services:
     ports:
       - 8000:8000
   loopback-workspace:
-    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/lunchbadger-workspace:0.0.2
+    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/lunchbadger-workspace:0.0.3
     ports:
       - 3000:3000
       - 3001:3001
+  configstore:
+    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/configstore:0.0.6
+    ports:
+      - 3002:3002

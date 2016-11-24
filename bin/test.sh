@@ -20,9 +20,9 @@ function cleanup() {
 trap cleanup EXIT
 
 docker-compose up -d
-bin/wait-for-it.sh 127.0.0.1:8000 -t 10
-bin/wait-for-it.sh 127.0.0.1:3000 -t 10
-bin/wait-for-it.sh 127.0.0.1:3001 -t 10
+for port in 8000 3000 3001 3002; do
+  bin/wait-for-it.sh 127.0.0.1:$port -t 10
+done
 sleep 2
 
 # run tests

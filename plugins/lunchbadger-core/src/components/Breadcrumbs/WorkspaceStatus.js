@@ -74,7 +74,7 @@ export default class WorkspaceStatus extends Component {
 
   renderInfo(message) {
     let output = null;
-    if (this.state.output) {
+    if (this.state.connected && this.state.output) {
       output = (
         <div className="workspace-status__output">
           {this.state.output}

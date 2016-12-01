@@ -38,6 +38,8 @@ export default class Canvas extends Component {
   }
 
   componentDidMount() {
+    // jsPlumb has to be instantiated here, not in componentWillMount, because
+    // the canvas element has to already be rendered in order for it to work.
     this.paper = jsPlumb.getInstance({
       DragOptions: {cursor: 'pointer', zIndex: 2000},
       ReattachConnections: true,
@@ -59,10 +61,15 @@ export default class Canvas extends Component {
       Anchors: [0.5, 0, 0.5, 0.5]
     });
 
+    // Children get paper object as props, so we have to force React to re-
+    // deliver props to them after creating this.paper.
+    this.forceUpdate();
+
     LunchBadgerCore.utils.paper = this.paper;
 
     this._attachPaperEvents();
     this._registerConnectionTypes();
+
 
     jsPlumb.fire('canvasLoaded', this.paper);
   }

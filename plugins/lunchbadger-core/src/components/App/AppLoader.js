@@ -42,6 +42,12 @@ export default class AppLoader extends Component {
       })
       .then(() => {
         this.setState({projectService});
+        // Setting the projectState will trigger the App render, which will
+        // in turn trigger the remote call to the server. This creates some
+        // Promises that do not get returned all the way here. As a result,
+        // we'll get a warning from Bluebird. Returning null here suppresses
+        // that warning.
+        return null;
       })
       .catch(error => {
         this.setState({error});

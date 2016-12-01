@@ -11,7 +11,14 @@ export default class ProjectService {
     let projectId = `${userName}-${envId}`;
 
     return Promise.all([
-      this._projectClient.get(bindParams('Projects/:id', {id: projectId})),
+      this._projectClient
+        .get(bindParams('Projects/:id', {id: projectId}))
+        .catch(err => {
+          if (err.statusCode === 404) {
+            return {body: null};
+          }
+          throw err;
+        }),
       this._workspaceClient.get('Facets/server/models?filter[include]=properties&filter[include]=relations'),
       this._workspaceClient.get('Facets/server/datasources'),
       this._workspaceClient.get('Facets/server/modelConfigs')

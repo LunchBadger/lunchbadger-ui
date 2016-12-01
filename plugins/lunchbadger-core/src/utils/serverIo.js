@@ -22,13 +22,6 @@ export function loadFromServer(config, loginManager, projectService) {
     .get(user.profile.sub, config.envId)
     .catch(err => {
       switch (err.statusCode) {
-        case 404:
-          return {
-            body: EMPTY_PROJECT,
-            response: {
-              headers: {}
-            }
-          };
         case 401:
           loginManager.refreshLogin();
           throw err;

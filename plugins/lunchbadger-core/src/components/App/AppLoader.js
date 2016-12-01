@@ -58,7 +58,7 @@ export default class AppLoader extends Component {
       return projectService
         .ping()
         .catch(err => {
-          if (err.statusCode !== 0) {
+          if (![0, 404, 502, 504].includes(err.statusCode)) {
             throw err;
           }
           if (retries > 1) {

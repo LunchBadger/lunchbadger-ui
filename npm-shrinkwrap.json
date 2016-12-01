@@ -470,9 +470,9 @@
       "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
     },
     "oidc-client": {
-      "version": "1.1.0",
-      "from": "git+ssh://git@github.com/LunchBadger/oidc-client-js.git",
-      "resolved": "git+ssh://git@github.com/LunchBadger/oidc-client-js.git#60677d5be844a3631d2943323c007fcaef6c0358"
+      "version": "1.2.2",
+      "from": "oidc-client@>=1.2.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/oidc-client/-/oidc-client-1.2.2.tgz"
     },
     "original": {
       "version": "1.0.0",

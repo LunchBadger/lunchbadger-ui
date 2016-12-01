@@ -1,8 +1,8 @@
 export default {
   configStoreApiUrl: 'https://api.lunchbadger.com/api',
-  projectApiUrl: 'http://{USER}-{ENV}.api.lunchbadger.com/api',
-  workspaceApiUrl: 'http://{USER}-{ENV}.api.lunchbadger.com:81/api',
-  forecastApiUrl: 'http://localhost:3000/api',
+  projectApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
+  workspaceApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/workspace-api/api',
+  forecastApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',
@@ -13,12 +13,13 @@ export default {
       authorization_endpoint: 'https://www.lunchbadger.com/oauth/authorize',
       userinfo_endpoint: 'https://www.lunchbadger.com/oauth/me'
     },
+    // use pem-jwk npm to produce this from the public key in the OIDC server
     signingKeys: [
       {
         'kid': 'main',
         'kty': 'RSA',
-        'n':'vfjNBl0-VTV3Bg9Yk5vb2U4jrnQ7E8zOerwmMJHd4T432CpUqdLIhCupbz3wjvnW4K3zSc23wB_DHjhvpPEjH40kFfeIBKetv0_aoC8yEpkMDoRHNxsj-PfAHGnZwuCIU9S9CpcDdfHlWzM8YlKxbhLymO3mMkWlwApa3ryAw_3WAZqxcvdRQGfh-9bDym5OOkjg9ygAtf1oBTrEeK88wjsm7LUBxQ_CYzUHEmuTK66UxLZZYt8xY6wJ9OE-ZQauPlgfS2c-kA2NZMFqVVSeEkNj7jjkVlLgL4bqAxYk60RxkWe_ROKyiTdZkEsQz0MCmtkxTdmWRfbn7CM6MuJmQw',
-        'e':'AQAB'
+        'n': '7ATrA_pvXdzabRID6pBAA-i2zez6FG3SXw5peAV2oQUmd64JbO2vUMih4PIt5D_o6gHfzQDwI_5e8wpiNKKp81dpvy3uYecyfGT4x-FYQ4xj0p7dnczPlp5t1ottCXYQyyB07UZ4UsOT063CRhgi00HhlURBm-yjLwnlZv_VGDNzXNFX1-t-PbGC5Ab7R02Fsnp8TGfjUgzA6NDgerKiJcq_fSxRb5WSB_gscCGGWjvgIJrHOLI9ofaXFpoHCxePCsVkaR0JNz8Q89tIWvWv5msm062aD7y1ThfP6I3HeGf3dT6IavLOVD6Wk82_WN-aaQ7BKOstglWqzjJvcEvUOQ',
+        'e': 'AQAB'
       }
     ]
   },

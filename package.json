@@ -87,7 +87,7 @@
     "moment": "^2.13.0",
     "normalize.css": "^4.0.0",
     "numeral": "^1.5.3",
-    "oidc-client": "git+ssh://git@github.com:LunchBadger/oidc-client-js.git",
+    "oidc-client": "^1.2.2",
     "react": "^15.0.0",
     "react-addons-update": "^15.2.1",
     "react-datepicker": "^0.27.0",

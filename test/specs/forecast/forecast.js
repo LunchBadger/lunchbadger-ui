@@ -65,18 +65,12 @@ module.exports = {
   },
 
   'Forecast: forecast next month': function (browser) {
-    var markWidth = 0;
-
     browser.click(apiForecastSelector + ' .api-forecast__header__nav li:nth-child(2) > a');
     browser.expect.element(apiForecastSelector + '.expanded').to.be.present;
 
     browser.pause(500);
 
     browser.expect.element(apiForecastSelector + ' .date-slider__mark.current').text.to.equal(moment().format('MMM')[0]);
-
-    browser.getElementSize(apiForecastSelector + ' .date-slider__mark.current', function (result) {
-      markWidth = result.value.width;
-    });
 
     browser
       .pause(500)
@@ -88,7 +82,7 @@ module.exports = {
       .pause(500);
 
     browser.elements('css selector', apiForecastSelector + ' .barlayer .trace:nth-child(3) .points path', function (result) {
-      browser.assert.equal(result.value.length, parseInt(moment().add(1, 'months').format('M'), 10));
+      browser.assert.equal(result.value.length, Math.ceil(moment().add(1, 'months').diff('2016-01-01', 'months', true)));
     });
 
     browser.pause(2000);
@@ -102,7 +96,8 @@ module.exports = {
       .mouseButtonClick(0)
       .pause(500);
 
-    browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.equal(moment().add(1, 'months').format('MMM')[0]);
+    let monthAbbr = moment().add(1, 'months').format('MMM')[0];
+    browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.match(new RegExp('^' + monthAbbr));
 
     browser.pause(2000);
   },

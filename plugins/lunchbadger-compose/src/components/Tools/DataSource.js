@@ -3,7 +3,8 @@ import REST from './REST';
 import MongoDB from './MongoDB';
 import Redis from './Redis';
 import MySQL from './MySQL';
-import Blockchain from './Blockchain';
+import Ethereum from './Ethereum';
+import Salesforce from './Salesforce';
 
 const Tool = LunchBadgerCore.components.Tool;
 
@@ -27,7 +28,10 @@ class DataSource extends Component {
             <MySQL />
           </li>
           <li>
-            <Blockchain />
+            <Ethereum />
+          </li>
+          <li>
+            <Salesforce />
           </li>
         </ul>
       </div>

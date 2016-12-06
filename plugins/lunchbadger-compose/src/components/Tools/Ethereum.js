@@ -3,16 +3,16 @@ import AddDataSource from '../../actions/CanvasElements/DataSource/add';
 
 const Tool = LunchBadgerCore.components.Tool;
 
-class Blockchain extends Component {
+class Ethereum extends Component {
   render() {
     return (
-      <div className="blockchain tool__context__item" onClick={() => AddDataSource('Blockchain', 'blockchain')}>
+      <div className="ethereum tool__context__item" onClick={() => AddDataSource('Ethereum', 'ethereum')}>
       	<i className="tool__icon icon-icon-datasource"/>
-      	<span className="tool__name">Blockchain</span>
+      	<span className="tool__name">Ethereum</span>
         <span className="tool__context__tooltip">Data Source</span>
       </div>
     );
   }
 }
 
-export default Tool(Blockchain);
+export default Tool(Ethereum);

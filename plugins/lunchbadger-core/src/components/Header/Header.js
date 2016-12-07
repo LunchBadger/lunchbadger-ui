@@ -13,7 +13,8 @@ export default class Header extends Component {
         <Breadcrumbs />
         <HeaderMenu appState={this.props.appState}
                     plugins={this.props.plugins}
-                    saveToServer={this.props.saveToServer} />
+                    saveToServer={this.props.saveToServer}
+                    clearServer={this.props.clearServer} />
       </header>
     );
   }

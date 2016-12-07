@@ -31,10 +31,10 @@ class DataSourceDetails extends Component {
                    name="url"/>
           </div>
           <div className="details-panel__fieldset">
-            <span className="details-panel__label">Schema</span>
+            <span className="details-panel__label">Database</span>
             <Input className="details-panel__input"
-                   value={entity.schema}
-                   name="schema"/>
+                   value={entity.database}
+                   name="database"/>
           </div>
           <div className="details-panel__fieldset">
             <span className="details-panel__label">Username</span>

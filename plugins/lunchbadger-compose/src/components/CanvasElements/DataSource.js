@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import updateDataSource from '../../actions/CanvasElements/DataSource/update';
+import removeDataSource from '../../actions/CanvasElements/DataSource/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -11,12 +12,16 @@ class DataSource extends Component {
     paper: PropTypes.object
   };
 
+  static contextTypes = {
+    projectService: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
   }
 
   update(model) {
-    updateDataSource(this.props.entity.id, model);
+    updateDataSource(this.context.projectService, this.props.entity.id, model);
   }
 
   renderPorts() {
@@ -30,6 +35,10 @@ class DataSource extends Component {
               scope={port.portGroup}/>
       );
     });
+  }
+
+  removeEntity() {
+    removeDataSource(this.context.projectService, this.props.entity);
   }
 
   render() {
@@ -56,15 +65,15 @@ class DataSource extends Component {
             </div>
 
             <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Schema</div>
+              <div className="canvas-element__properties__property-title">Database</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
-                  {entity.schema}
+                  {entity.database}
                 </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.schema}
-                       name="schema"/>
+                       value={entity.database}
+                       name="database"/>
               </div>
             </div>
 

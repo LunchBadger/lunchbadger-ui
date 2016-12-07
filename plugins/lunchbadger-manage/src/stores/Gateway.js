@@ -10,27 +10,9 @@ class Gateway extends BaseStore {
   constructor() {
     super();
     register((action) => {
+      this.handleBaseActions('Gateway', ['Gateway'], action);
+
       switch (action.type) {
-        case 'InitializeGateway':
-          Gateways.push.apply(Gateways, action.data);
-          Gateways = this.sortItems(Gateways);
-          this.emitInit();
-          break;
-        case 'UpdateGatewayOrder':
-          _.remove(Gateways, action.entity);
-          Gateways.splice(action.hoverOrder, 0, action.entity);
-          Gateways = this.sortItems(this.setEntitiesOrder(Gateways));
-          this.emitChange();
-          break;
-        case 'AddGateway':
-          Gateways.push(action.gateway);
-          action.gateway.itemOrder = Gateways.length - 1;
-          this.emitChange();
-          break;
-        case 'UpdateGateway':
-          this.updateEntity(action.id, action.data);
-          this.emitChange();
-          break;
         case 'AddPipeline':
           action.gateway.addPipeline(Pipeline.create({name: action.name}));
           this.emitChange();
@@ -48,8 +30,8 @@ class Gateway extends BaseStore {
             this.emitChange();
           }
           break;
-        case 'RemoveEntity':
-          _.remove(Gateways, {id: action.entity.id});
+        case 'ClearData':
+          Gateways = [];
           this.emitChange();
           break;
       }
@@ -61,6 +43,10 @@ class Gateway extends BaseStore {
    */
   getData() {
     return Gateways;
+  }
+
+  setData(data) {
+    Gateways = data;
   }
 
   findEntity(id) {

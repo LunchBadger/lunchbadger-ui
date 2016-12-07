@@ -13,6 +13,8 @@ export default class BaseModel {
   top = 0;
   itemOrder = 0;
 
+  static deserializers = {};
+
   constructor(id) {
     if (id) {
       this.id = id;
@@ -22,15 +24,34 @@ export default class BaseModel {
   }
 
   static create(data) {
-    const object = new this(data.id);
+    const object = new this(data[this.idField]);
 
     Object.keys(data).forEach((propertyName) => {
+      if (propertyName === 'id') {
+        return;
+      }
       if (data.hasOwnProperty(propertyName)) {
-        object[propertyName] = data[propertyName];
+        if (this.deserializers[propertyName]) {
+          this.deserializers[propertyName](object, data[propertyName]);
+        } else {
+          object[propertyName] = data[propertyName];
+        }
       }
     });
 
     return object;
+  }
+
+  /*
+   * By default the 'id' field from the data given to the constructor will be
+   * used as the ID of the new object. Override this getter to change the name
+   * of the ID variable to use.
+   *
+   * This can be useful if the value in the ID field that comes from the server
+   * is not the correct value to use.
+   */
+  static get idField() {
+    return 'id';
   }
 
   remove() {
@@ -40,7 +61,11 @@ export default class BaseModel {
   update(data) {
     Object.keys(data).forEach((propertyName) => {
       if (data.hasOwnProperty(propertyName)) {
-        this[propertyName] = data[propertyName];
+        if (this.constructor.deserializers[propertyName]) {
+          this.constructor.deserializers[propertyName](this, data[propertyName]);
+        } else {
+          this[propertyName] = data[propertyName];
+        }
       }
     });
   }

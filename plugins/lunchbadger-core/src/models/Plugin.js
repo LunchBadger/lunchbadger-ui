@@ -42,7 +42,13 @@ export default class Plugin {
    * @private
    */
   _handleConnectionMoved = null;
-  
+
+  /**
+   * @type {Strategy|null}
+   * @private
+   */
+  _handleConnectionDeleted = null;
+
   _panelPriority = 0;
 
   constructor(name) {
@@ -89,6 +95,10 @@ export default class Plugin {
     return this._handleConnectionMoved;
   }
 
+  get handleConnectionDeleted() {
+    return this._handleConnectionDeleted;
+  }
+
 	/**
    * @param panelButtonComponent {PanelButtonComponent}
    * @param panelComponent {PanelComponent}
@@ -131,8 +141,12 @@ export default class Plugin {
   registerOnConnectionCreatedStrategy(strategy) {
     this._handleConnectionCreated = strategy;
   }
-  
+
   registerOnConnectionMovedStrategy(strategy) {
     this._handleConnectionMoved = strategy;
+  }
+
+  registerOnConnectionDeletedStrategy(strategy) {
+    this._handleConnectionDeleted = strategy;
   }
 }

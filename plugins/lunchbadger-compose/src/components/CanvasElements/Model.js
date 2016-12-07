@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
+import removeEntity from '../../actions/CanvasElements/Model/remove';
 import slug from 'slug';
 import './Model.scss';
 
@@ -14,6 +15,10 @@ class Model extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object
+  };
+
+  static contextTypes = {
+    projectService: PropTypes.object
   };
 
   constructor(props) {
@@ -31,12 +36,15 @@ class Model extends Component {
     };
 
     model.properties && model.properties.forEach((property) => {
-      if (property.propertyKey.trim().length > 0) {
-        data.properties.push(ModelPropertyFactory.create(property));
+      if (property.name.trim().length > 0) {
+        let prop = ModelPropertyFactory.create(property);
+        prop.attach(this.props.entity);
+        data.properties.push(prop);
       }
     });
 
-    updateModel(this.props.entity.id, Object.assign(model, data));
+    updateModel(this.context.projectService, this.props.entity.id,
+      Object.assign(model, data));
 
     return true;
   }
@@ -94,6 +102,10 @@ class Model extends Component {
 
   updateContextPath() {
     this.setState({contextPathDirty: true});
+  }
+
+  removeEntity() {
+    removeEntity(this.context.projectService, this.props.entity);
   }
 
   render() {

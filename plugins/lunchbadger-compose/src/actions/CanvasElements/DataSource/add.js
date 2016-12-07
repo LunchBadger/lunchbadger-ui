@@ -2,11 +2,11 @@ import DataSource from '../../../models/DataSource';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (name, type) => {
+export default (name, connector) => {
   dispatch('AddDataSource', {
-    dataSource: DataSource.create({
+    entity: DataSource.create({
       name: name || 'DataSource',
-      type: type || 'memory'
+      connector: connector || 'memory'
     })
   });
 };

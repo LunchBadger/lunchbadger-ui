@@ -12,6 +12,6 @@ export default (name) => {
   }, 1500);
 
   dispatch('AddPortal', {
-    portal
+    entity: portal
   });
 };

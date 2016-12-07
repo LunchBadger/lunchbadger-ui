@@ -4,7 +4,7 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
 export default () => {
   dispatch('AddAPI', {
-    API: API.create({
+    entity: API.create({
       name: 'API'
     })
   });

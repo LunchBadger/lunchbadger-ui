@@ -14,6 +14,7 @@ import Connection from './stores/Connection';
 
 // components
 import App from './components/App/App';
+import AppLoader from './components/App/AppLoader';
 import Panel from './components/Panel/Panel';
 import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
@@ -53,8 +54,6 @@ import registerPlugin from './actions/registerPlugin';
 import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import toggleEdit from './actions/CanvasElements/toggleEdit';
-import attachConnection from './actions/Connection/attach';
-import reattachConnection from './actions/Connection/reattach';
 import removeConnection from './actions/Connection/remove';
 import setProjectRevision from './actions/Stores/AppState/setProjectRevision';
 import initializeAppState from './actions/Stores/AppState/initialize';
@@ -67,13 +66,15 @@ import portGroups from './constants/portGroups';
 
 // services
 import ProjectService from './services/ProjectService';
+import ConfigStoreService from './services/ConfigStoreService';
 
 // utils
-import APIInterceptor from './utils/APIInterceptor';
+import ApiClient from './utils/ApiClient';
 import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
 import createLoginManager from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
+import handleFatals from './utils/handleFatals';
 
 let LunchBadgerCore = {
   dispatcher: {
@@ -87,8 +88,6 @@ let LunchBadgerCore = {
     toggleSubelement: toggleSubelement,
     removeEntity: removeEntity,
     Connection: {
-      attachConnection: attachConnection,
-      reattachConnection: reattachConnection,
       removeConnection: removeConnection
     },
     Stores: {
@@ -100,6 +99,7 @@ let LunchBadgerCore = {
   },
   components: {
     App: App,
+    AppLoader: AppLoader,
     Panel: Panel,
     CanvasElement: CanvasElement,
     BaseDetails: BaseDetails,
@@ -145,12 +145,14 @@ let LunchBadgerCore = {
     portGroups: portGroups
   },
   services: {
-    ProjectService: ProjectService
+    ProjectService: ProjectService,
+    ConfigStoreService: ConfigStoreService
   },
   utils: {
-    APIInterceptor: APIInterceptor,
+    ApiClient: ApiClient,
     URLParams: URLParams,
     waitForStores: waitForStores,
+    handleFatals: handleFatals,
     serverIo: {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer

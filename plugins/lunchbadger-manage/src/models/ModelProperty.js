@@ -3,56 +3,79 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 export default class ModelProperty extends BaseModel {
   static type = 'ModelProperty';
 
-  /**
-   * @type {string}
-   */
-  propertyKey = '';
+  static deserializers = {
+    'default': (obj, val) => {
+      obj.default_ = val;
+    }
+  }
 
   /**
    * @type {string}
    */
-  propertyValue = '';
+  name = '';
 
   /**
    * @type {string}
    */
-  propertyType = '';
+  default_ = '';
+
+  /**
+   * @type {string}
+   */
+  type = '';
 
   /**
    * @type {boolean}
    */
-  propertyIsRequired = false;
+  required = false;
 
   /**
    * @type {boolean}
    */
-  propertyIsIndex = false;
+  index = false;
 
   /**
    * @type {string}
    */
-  propertyNotes = '';
+  description = '';
 
-  constructor(id, key = '', value = '', type = '', isRequired = false, isIndex = false, notes = '') {
+  modelWorkspaceId = '<unattached>';
+
+  constructor(id, name = '', default_ = '', type = '', required = false, index = false, description = '') {
     super(id);
 
-    this.propertyKey = key;
-    this.propertyValue = value;
-    this.propertyType = type;
-    this.propertyIsRequired = isRequired;
-    this.propertyIsIndex = isIndex;
-    this.propertyNotes = notes;
+    this.name = name;
+    this.default_ = default_;
+    this.type = type;
+    this.required = required;
+    this.index = index;
+    this.description = description;
+  }
+
+  static get idField() {
+    return 'lunchbadgerId';
+  }
+
+  get workspaceId() {
+    return `${this._model.workspaceId}.${this.name}`;
+  }
+
+  attach(model) {
+    this._model = model;
   }
 
   toJSON() {
     return {
-      id: this.id,
-      propertyKey: this.propertyKey,
-      propertyValue: this.propertyValue,
-      propertyType: this.propertyType,
-      propertyIsRequired: this.propertyIsRequired,
-      propertyIsIndex: this.propertyIsIndex,
-      propertyNotes: this.propertyNotes
+      id: this.workspaceId,
+      modelId: this._model.workspaceId,
+      facetName: 'server',
+      name: this.name,
+      'default': this.default_,
+      type: this.type,
+      required: this.required,
+      index: this.index,
+      description: this.description,
+      lunchbadgerId: this.id
     }
   }
 }

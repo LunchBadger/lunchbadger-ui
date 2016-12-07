@@ -11,18 +11,21 @@ import Notifications, {notify} from 'react-notify-toast';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
-import {loadFromServer, saveToServer} from '../../utils/serverIo';
+import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
+import handleFatals from '../../utils/handleFatals';
 
 @DragDropContext(HTML5Backend)
 export default class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object
+    loginManager: PropTypes.object,
+    projectService: PropTypes.object
   }
 
   static propTypes = {
     config: PropTypes.object,
-    loginManager: PropTypes.object
+    loginManager: PropTypes.object,
+    projectService: PropTypes.object
   }
 
   constructor(props) {
@@ -46,20 +49,22 @@ export default class App extends Component {
   getChildContext() {
     return {
       lunchbadgerConfig: this.props.config,
-      loginManager: this.props.loginManager
+      loginManager: this.props.loginManager,
+      projectService: this.props.projectService
     };
   }
 
   componentWillMount() {
+    let {config, loginManager, projectService} = this.props;
+
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
 
-    loadFromServer(this.props.config, this.props.loginManager).then(() => {
-      notify.show('All data has been synced with API', 'success');
+    let prm = loadFromServer(config, loginManager, projectService).then(() => {
       this.setState({loaded: true});
-    }).catch(err => {
-      console.error(err);
-      notify.show('Failed to sync data with API, working offline! Try to refresh page...', 'error');
+    })
+
+    handleFatals(prm).catch(() => {
       this.setState({loaded: true});
     });
   }
@@ -70,13 +75,30 @@ export default class App extends Component {
   }
 
   saveToServer() {
+    let {config, loginManager, projectService} = this.props;
+
     this.setState({loaded: false});
-    saveToServer(this.props.config, this.props.loginManager).then(() => {
+    let prm = saveToServer(config, loginManager, projectService).then(() => {
       notify.show('All data has been synced with API', 'success');
       this.setState({loaded: true});
-    }).catch(err => {
-      console.error(err);
-      notify.show('Cannot save data to local API', 'error');
+    });
+
+    handleFatals(prm).catch(() => {
+      this.setState({loaded: true});
+    });
+  }
+
+  clearServer() {
+    let {config, loginManager, projectService} = this.props;
+
+    this.setState({loaded: false});
+
+    let prm = clearServer(config, loginManager, projectService).then(() => {
+      notify.show('All data removed from server', 'success');
+      this.setState({loaded: true});
+    });
+
+    handleFatals(prm).catch(() => {
       this.setState({loaded: true});
     });
   }
@@ -88,7 +110,8 @@ export default class App extends Component {
         <Header ref="header"
                 appState={this.state.appState}
                 plugins={this.state.pluginsStore}
-                saveToServer={this.saveToServer.bind(this)} />
+                saveToServer={this.saveToServer.bind(this)}
+                clearServer={this.clearServer.bind(this)} />
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">

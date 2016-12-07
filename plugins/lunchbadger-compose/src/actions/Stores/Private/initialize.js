@@ -3,15 +3,13 @@ const Model = LunchBadgerManage.models.Model;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 
-export default (data) => {
-  const privateModels = data.privateModels;
-
+export default (privateModels) => {
   const privateModelObjects = privateModels.map((privateModel, index) => {
     // remove properties before de-serializing data but first save it somewhere
-    const embeddedProperties = privateModel.privateModelProperties || [];
-    const embeddedRelations = privateModel.privateModelRelations || [];
-    delete privateModel.privateModelProperties;
-    delete privateModel.privateModelRelations;
+    const embeddedProperties = privateModel.properties || [];
+    const embeddedRelations = privateModel.relations || [];
+    delete privateModel.properties;
+    delete privateModel.relations;
 
     const model = Model.create({
       itemOrder: index,

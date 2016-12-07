@@ -128,6 +128,7 @@ export default (ComposedComponent) => {
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
+      this._handleDrop(props);
 
       this.checkHighlightAndEditableState(props);
     }
@@ -245,8 +246,18 @@ export default (ComposedComponent) => {
       }
     }
 
+    _handleDrop(props) {
+      if (this.props.isDragging && !props.isDragging && props.saveOrder) {
+        props.saveOrder();
+      }
+    }
+
     _handleRemove() {
-      removeEntity(this.props.entity);
+      if (this.element.removeEntity) {
+        this.element.removeEntity();
+      } else {
+        removeEntity(this.props.entity);
+      }
       toggleEdit(null);
     }
 

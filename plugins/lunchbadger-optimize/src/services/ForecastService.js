@@ -1,9 +1,9 @@
-const APIInterceptor = LunchBadgerCore.utils.APIInterceptor;
+const ApiClient = LunchBadgerCore.utils.ApiClient;
 const {bindParams} = LunchBadgerCore.utils.URLParams;
 
 export default class ForecastService {
   constructor(apiUrl) {
-    this._APIHandle = new APIInterceptor(apiUrl);
+    this._APIHandle = new ApiClient(apiUrl);
   }
 
   get(apiId) {

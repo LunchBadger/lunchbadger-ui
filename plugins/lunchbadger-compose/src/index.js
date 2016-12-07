@@ -12,6 +12,9 @@ import Backend from './stores/Backend';
 // actions
 import initializeBackend from './actions/Stores/Backend/initialize';
 import initializePrivate from './actions/Stores/Private/initialize';
+import attachConnection from './actions/Connection/attach';
+import reattachConnection from './actions/Connection/reattach';
+import detachConnection from './actions/Connection/detach';
 
 LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 
@@ -25,6 +28,11 @@ let LunchBadgerCompose = {
     Backend: Backend
   },
   actions: {
+    Connection: {
+      attachConnection: attachConnection,
+      reattachConnection: reattachConnection,
+      detachConnection: detachConnection
+    },
     Stores: {
       Backend: {
         initialize: initializeBackend

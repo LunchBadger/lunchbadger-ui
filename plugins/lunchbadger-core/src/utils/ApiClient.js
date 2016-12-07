@@ -1,8 +1,9 @@
 import request from 'request';
+import EventSource from 'eventsource';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
 
-class APIInterceptor {
+class ApiClient {
   constructor(url, idToken) {
     this.url = url;
     this.idToken = idToken;
@@ -31,12 +32,12 @@ class APIInterceptor {
         }
 
         if (response.statusCode >= 400) {
-          return reject(new APIError(response.statusCode,
+          return reject(new ApiError(response.statusCode,
                                      body.error ? body.error.message : body));
         }
 
         if (response.statusCode === 0) {
-          return reject(new APIError(0, 'General API Error!'));
+          return reject(new ApiError(0, 'Error communicating with API'));
         }
 
         const responseData = {
@@ -68,13 +69,18 @@ class APIInterceptor {
   delete(url, options) {
     return this._callAPI('DELETE', url, options);
   }
+
+  eventSource(url) {
+    let fullUrl = _.trimEnd(this.url, ['/']) + '/' + _.trimStart(url, ['/'])
+    return new EventSource(fullUrl, { headers: this._getHeaders() });
+  }
 }
 
-class APIError extends Error {
+class ApiError extends Error {
   constructor(statusCode, message) {
     super(message);
     this.statusCode = statusCode;
   }
 }
 
-export default APIInterceptor;
+export default ApiClient;

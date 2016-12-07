@@ -1,11 +1,11 @@
 import {dispatch} from '../../dispatcher/AppDispatcher';
 
-export default (from, to, newFrom, newTo, info) => {
+export default (info) => {
   dispatch('MoveConnection', {
-    from,
-    to,
-    newFrom,
-    newTo,
+    from: info.originalSourceId,
+    to: info.originalTargetId,
+    newFrom: info.newSourceId,
+    newTo: info.newTargetId,
     info
   });
 };

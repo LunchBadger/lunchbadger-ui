@@ -80,6 +80,10 @@ class Metric extends BaseStore {
     return Metrics;
   }
 
+  setData(data) {
+    Metrics = data;
+  }
+
   findEntity(id) {
     id = this.formatId(id);
 

@@ -12,9 +12,17 @@ export default class Model extends BaseModel {
   contextPath = 'model';
   base = 'Model';
   plural = '';
-  readOnly = false;
+  readonly = false;
   public = false;
   strict = false;
+
+  static deserializers = {
+    http: (obj, val) => {
+      if (val.path) {
+        obj.contextPath = val.path;
+      }
+    }
+  };
 
   constructor(id, name) {
     super(id);
@@ -35,20 +43,36 @@ export default class Model extends BaseModel {
     ];
   }
 
+  static get idField() {
+    // The loopback-workspace API ties the name of an entity to its ID. This
+    // means that renaming a Model would change its ID. So we store the actual
+    // Lunchbadger ID in a separate variable to allow for stable connections
+    // to items outside the workspace API.
+    return 'lunchbadgerId';
+  }
+
   toJSON() {
     return {
-      id: this.id,
+      id: this.workspaceId,
+      facetName: 'server',
       name: this.name,
-      contextPath: this.contextPath,
-      privateModelProperties: this.properties.map(property => property.toJSON()),
-      privateModelRelations: this.relations.map(relation => relation.toJSON()),
+      http: {
+        path: this.contextPath
+      },
+      properties: this.properties.map(property => property.toJSON()),
+      relations: this.relations.map(relation => relation.toJSON()),
       itemOrder: this.itemOrder,
       base: this.base,
       plural: this.plural,
-      readOnly: this.readOnly,
+      readonly: this.readonly,
       public: this.public,
-      strict: this.strict
+      strict: this.strict,
+      lunchbadgerId: this.id
     }
+  }
+
+  get workspaceId() {
+    return `server.${this.name}`;
   }
 
   /**
@@ -70,6 +94,7 @@ export default class Model extends BaseModel {
    */
   addProperty(property) {
     this._properties.push(property);
+    property.attach(this);
   }
 
   /**

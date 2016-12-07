@@ -15,11 +15,14 @@ const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
-const removeConnection = LunchBadgerCore.actions.Connection.removeConnection;
 
 class ModelDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    projectService: PropTypes.object
   };
 
   constructor(props) {
@@ -75,13 +78,17 @@ class ModelDetails extends Component {
     };
 
     model.properties && model.properties.forEach((property) => {
-      if (property.propertyKey.trim().length > 0) {
-        data.properties.push(ModelProperty.create(property));
+      if (property.name.trim().length > 0) {
+        let prop = ModelProperty.create(property);
+        prop.attach(this.props.entity);
+        data.properties.push(prop);
       }
     });
 
     model.relations && model.relations.forEach((relation) => {
-      data.relations.push(ModelRelation.create(relation));
+      let rel = ModelRelation.create(relation);
+      rel.attach(this.props.entity);
+      data.relations.push(rel);
     });
 
     const currDsConn = this._getBackendConnection();
@@ -89,23 +96,17 @@ class ModelDetails extends Component {
     const dsId = model.dataSource === 'none' ? null : model.dataSource;
 
     if (dsId !== currDsId) {
-      if (currDsConn) {
-        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection, {
-          fireEvent: false
-        });
-        removeConnection(currDsConn.fromId, currDsConn.toId);
-      }
-      if (dsId) {
-        LunchBadgerCore.utils.paper.connect({
-          source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-          target: document.getElementById(`port_in_${this.props.entity.id}`).querySelector('.port__anchor')
-        });
+      if (!dsId) {
+        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
+      } else if (currDsConn) {
+        LunchBadgerCore.utils.paper.setSource(currDsConn.info.connection,
+          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'));
       }
     }
 
     let updateData = Object.assign({}, model, data);
     delete updateData.dataSource;
-    updateModel(this.props.entity.id, updateData);
+    updateModel(this.context.projectService, this.props.entity.id, updateData);
   }
 
   onAddItem(collection, itemType, defaults={}) {
@@ -230,6 +231,7 @@ class ModelDetails extends Component {
           <table className="details-panel__table">
             <thead>
               <tr>
+              <th>Name</th>
               <th>Model</th>
               <th>Type</th>
               <th>

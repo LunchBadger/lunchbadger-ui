@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import DataSource from '../CanvasElements/DataSource';
 import updateOrder from '../../actions/Quadrants/Backend/updateOrder';
+import saveOrder from '../../actions/Quadrants/Backend/saveOrder';
 
 const Quadrant = LunchBadgerCore.components.Quadrant;
 
@@ -9,6 +10,10 @@ class BackendQuadrant extends Component {
     title: PropTypes.string.isRequired,
     entities: PropTypes.array,
     paper: PropTypes.object
+  };
+
+  static contextTypes = {
+    projectService: PropTypes.object
   };
 
   constructor(props) {
@@ -23,13 +28,18 @@ class BackendQuadrant extends Component {
                          icon="icon-icon-datasource"
                          hideSourceOnDrag={true}
                          itemOrder={entity.itemOrder}
-                         moveEntity={this.moveEntity}
+                         moveEntity={this.moveEntity.bind(this)}
+                         saveOrder={this.saveOrder.bind(this)}
                          entity={entity}/>;
     })
   }
 
   moveEntity(entity, itemOrder, hoverOrder) {
     updateOrder(entity, itemOrder, hoverOrder);
+  }
+
+  saveOrder() {
+    saveOrder(this.context.projectService);
   }
 
   render() {

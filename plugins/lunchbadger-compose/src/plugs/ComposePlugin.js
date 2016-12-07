@@ -7,7 +7,7 @@ import DataSourceDetails from '../components/Panel/EntitiesDetails/DataSourceDet
 import ModelDetails from '../components/Panel/EntitiesDetails/ModelDetails';
 import DataSourceFactory from '../models/DataSource';
 
-import {handleConnectionCreate, handleConnectionMove} from '../strategies/connectionBetweenModelAndDataSource';
+import strategies from '../strategies/connectionBetweenModelAndDataSource';
 
 const Private = LunchBadgerManage.stores.Private;
 const composePlugin = new LunchBadgerCore.models.Plugin('ComposePlugin');
@@ -35,7 +35,8 @@ const detailsPanels = [
 composePlugin.registerToolGroup(toolGroup);
 composePlugin.registerQuadrants(quadrants);
 composePlugin.registerDetailsPanels(detailsPanels);
-composePlugin.registerOnConnectionCreatedStrategy(handleConnectionCreate);
-composePlugin.registerOnConnectionMovedStrategy(handleConnectionMove);
+composePlugin.registerOnConnectionCreatedStrategy(strategies.handleConnectionCreate);
+composePlugin.registerOnConnectionMovedStrategy(strategies.handleConnectionMove);
+composePlugin.registerOnConnectionDeletedStrategy(strategies.handleConnectionDelete);
 
 export default composePlugin;

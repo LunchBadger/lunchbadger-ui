@@ -7,6 +7,7 @@ LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ pri
 
 # build containers
 docker-compose build
+docker-compose pull
 docker build -t lunchbadger-ui:test -f containers/test/Dockerfile .
 
 # start environment
@@ -19,8 +20,10 @@ function cleanup() {
 trap cleanup EXIT
 
 docker-compose up -d
-bin/wait-for-it.sh 127.0.0.1:8000 -t 10
-bin/wait-for-it.sh 127.0.0.1:3000 -t 10
+for port in 8000 3000 3001 3002; do
+  bin/wait-for-it.sh 127.0.0.1:$port -t 10
+done
+sleep 2
 
 # run tests
 docker run -it --rm -v `pwd`:/opt/lunchbadger lunchbadger-ui:test npm run test:nodocker $@

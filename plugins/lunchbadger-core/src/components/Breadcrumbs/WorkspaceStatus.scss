@@ -1,0 +1,50 @@
+.workspace-status {
+  margin-left: 1em;
+  cursor: pointer;
+  position: relative;
+}
+
+.workspace-status__success {
+  color: #55Ca92;
+}
+
+.workspace-status__failure {
+  color: #e85742;
+}
+
+.workspace-status__unknown {
+  color: #F5e273;
+}
+
+.workspace-status__info {
+  position: absolute;
+  left: -300px;
+  width: 600px;
+  max-height: 800px;
+  overflow: auto;
+
+  border: 1px solid #c1c1c1;
+  background: white;
+  color: black;
+  padding: 0.5em;
+  cursor: default;
+
+  font-size: 0.8em;
+}
+
+.workspace-status__hidden {
+  visibility: hidden;
+}
+
+.workspace-status__visible {
+  visibility: visible;
+}
+
+.workspace-status__output {
+  font-family: monospace;
+  white-space: pre;
+  text-align: left;
+  margin-top: 1em;
+  cursor: text;
+  user-select: text;
+}

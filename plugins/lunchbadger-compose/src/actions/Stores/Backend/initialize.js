@@ -2,9 +2,7 @@ import DataSource from '../../../models/DataSource';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (data) => {
-  const dataSources = data.dataSources;
-
+export default (dataSources) => {
   const dataSourceObjects = dataSources.map((dataSource, index) => {
     return DataSource.create({
       itemOrder: index,

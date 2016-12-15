@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import DetailsPanel from './DetailsPanel';
+import SettingsPanel from './SettingsPanel';
 import classNames from 'classnames';
 import './PanelContainer.scss';
 
@@ -43,6 +44,10 @@ export default class PanelContainer extends Component {
                       appState={this.props.appState}
                       container={this.props.container}/>
         {this.renderPanels()}
+        <SettingsPanel canvas={this.props.canvas}
+                       header={this.props.header}
+                       appState={this.props.appState}
+                       container={this.props.container}/>
       </div>
     );
   }

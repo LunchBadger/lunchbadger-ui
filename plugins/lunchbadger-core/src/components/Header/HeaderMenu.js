@@ -42,7 +42,7 @@ export default class HeaderMenu extends Component {
           </li>
           {this.renderButtons()}
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={null} icon="icon-icon-settings"/>
+            <HeaderMenuLink togglePanel={panelKeys.SETTINGS_PANEL} icon="icon-icon-settings"/>
           </li>
         </ul>
       </nav>

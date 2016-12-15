@@ -16,8 +16,7 @@ export default class HeaderMenuSaveButton extends Component {
 
   render() {
     const linkClass = classNames({
-      'header__menu__link': true,
-      'header__menu__link--hidden': true
+      'header__menu__link': true
     });
 
     return (

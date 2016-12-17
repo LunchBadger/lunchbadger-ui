@@ -100,7 +100,8 @@ export default class AppLoader extends Component {
   renderApp() {
     return <App config={this.props.config}
                 loginManager={this.props.loginManager}
-                projectService={this.state.projectService} />;
+                projectService={this.state.projectService}
+                configStoreService={this.props.configStoreService} />;
   }
 
   render() {

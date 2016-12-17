@@ -19,13 +19,15 @@ export default class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
     loginManager: PropTypes.object,
-    projectService: PropTypes.object
+    projectService: PropTypes.object,
+    configStoreService: PropTypes.object
   }
 
   static propTypes = {
     config: PropTypes.object,
     loginManager: PropTypes.object,
-    projectService: PropTypes.object
+    projectService: PropTypes.object,
+    configStoreService: PropTypes.object
   }
 
   constructor(props) {
@@ -50,7 +52,8 @@ export default class App extends Component {
     return {
       lunchbadgerConfig: this.props.config,
       loginManager: this.props.loginManager,
-      projectService: this.props.projectService
+      projectService: this.props.projectService,
+      configStoreService: this.props.configStoreService
     };
   }
 

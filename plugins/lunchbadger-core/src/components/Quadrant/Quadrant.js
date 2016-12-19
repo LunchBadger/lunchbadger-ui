@@ -4,7 +4,7 @@ import './Quadrant.scss';
 import {DropTarget} from 'react-dnd';
 
 const boxTarget = {
-  drop(props, monitor, component) {
+  drop(_props, monitor, component) {
     const hasDroppedOnChild = monitor.didDrop();
     const item = monitor.getItem();
 

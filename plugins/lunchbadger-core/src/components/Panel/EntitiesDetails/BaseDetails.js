@@ -44,7 +44,7 @@ export default (ComposedComponent) => {
       this.setState({isPristine: true});
     }
 
-    checkPristine(model, changed) {
+    checkPristine(_model, changed) {
       if (typeof changed === 'undefined') {
         changed = this.refs.form.isChanged();
       }
@@ -65,7 +65,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    componentWillUpdate(_nextProps, nextState) {
       if (this.state.isPristine !== nextState.isPristine) {
         changePanelStatus(!nextState.isPristine, this.update.bind(this), this.discardChanges.bind(this));
       }

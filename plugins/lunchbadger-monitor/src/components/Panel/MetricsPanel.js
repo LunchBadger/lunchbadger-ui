@@ -11,7 +11,7 @@ import './MetricsPanel.scss';
 export const METRICS_PANEL = 'METRICS_PANEL';
 
 const boxTarget = {
-  drop(props, monitor) {
+  drop(_props, monitor) {
     const item = monitor.getItem();
     const itemType = monitor.getItemType();
     const delta = monitor.getSourceClientOffset();
@@ -31,7 +31,7 @@ const boxTarget = {
     }
   },
 
-  canDrop(props, monitor) {
+  canDrop(_props, monitor) {
     const item = monitor.getItem();
     const itemType = monitor.getItemType();
 

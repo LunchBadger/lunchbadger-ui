@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {Component} from 'react';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';

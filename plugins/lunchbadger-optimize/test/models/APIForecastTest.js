@@ -1,6 +1,7 @@
 import APIForecast from 'models/APIForecast';
 import ForecastAPI from 'models/ForecastAPI';
 import uuid from 'uuid';
+import {expect} from 'chai';
 
 const {API} = LunchBadgerMonetize.models;
 

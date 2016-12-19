@@ -6,7 +6,7 @@ import './UserPool.scss';
 import moment from 'moment';
 
 const boxTarget = {
-  drop(props, monitor, component) {
+  drop(_props, monitor, component) {
     const item = monitor.getItem();
     const date = moment(component.props.date, 'M/YYYY');
 

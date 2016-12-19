@@ -223,7 +223,7 @@ export function saveToServer(config, loginManager, projectService) {
       config.forecastApiUrl);
 
     forecasts.forEach((forecast) => {
-      saveableServices.push(forecastService.save(forecast.id, forecast.toJSON()));
+      saveableServices.push(forecastService.save(forecast.toJSON()));
     });
   }
 

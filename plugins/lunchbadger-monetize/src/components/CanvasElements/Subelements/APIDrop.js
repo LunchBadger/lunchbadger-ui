@@ -10,7 +10,7 @@ const boxTarget = {
 
     return props.canDropCheck(item);
   },
-  drop(props, monitor, component) {
+  drop(_props, monitor, component) {
     component.onDrop(monitor.getItem());
   }
 };

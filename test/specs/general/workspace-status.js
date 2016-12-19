@@ -35,7 +35,7 @@ module.exports = {
 
   'Workspace status: info panel shows error': function(browser) {
     browser.click('.workspace-status i');
-    page.expect.element('.workspace-status__info').text.to.contain('Cyclic dependency: "Model"').after(1000);
+    page.expect.element('.workspace-status__info').text.to.contain('Model must be a descendant of loopback.Model').after(1000);
     browser.click('.workspace-status i');
   },
 

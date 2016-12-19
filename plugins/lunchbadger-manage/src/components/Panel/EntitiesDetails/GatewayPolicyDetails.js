@@ -44,8 +44,8 @@ export default class GatewayPolicyDetails extends Component {
     this.setState({type: ev.target.value});
   }
 
-  onRemove(property, index) {
-    this.props.onRemove(property, index);
+  onRemove(index) {
+    this.props.onRemove(index);
   }
 
   render() {
@@ -74,7 +74,7 @@ export default class GatewayPolicyDetails extends Component {
         </td>
         {POLICY_DUMMY_CONFIG[this.state.type]}
         <td className="details-panel__table__cell details-panel__table__cell--empty">
-          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(policy, index)}/>
+          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(index)}/>
         </td>
       </tr>
     );

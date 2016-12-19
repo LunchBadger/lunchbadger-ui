@@ -25,7 +25,7 @@ export default class ForecastService {
     return this._APIHandle.get(bindParams('Forecasts/:id', {id: forecastId}));
   }
 
-  save(forecastId, data) {
+  save(data) {
     return this._APIHandle.put('Forecasts', {
       body: data
     });

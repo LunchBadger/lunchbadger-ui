@@ -11,7 +11,7 @@ export const FORECASTS_PANEL = 'FORECASTS_PANEL';
 
 const AppState = LunchBadgerCore.stores.AppState;
 const boxTarget = {
-  drop(props, monitor, component) {
+  drop(_props, monitor, component) {
     const item = monitor.getItem();
     if (item.entity.constructor.type === 'API') {
       const delta = monitor.getSourceClientOffset();
@@ -37,7 +37,7 @@ const boxTarget = {
     }
   },
 
-  canDrop(props, monitor) {
+  canDrop(_props, monitor) {
     const item = monitor.getItem();
     const {appState} = item;
 

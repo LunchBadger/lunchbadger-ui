@@ -92,7 +92,7 @@ module.exports = {
     browser
       .pause(500)
       .useCss()
-      .moveToElement(apiForecastSelector + ' .barlayer .trace:nth-child(3) .points path:last-child', 10, 10)
+      .moveToElement(apiForecastSelector + ' .barlayer .trace:nth-child(3) .points .point:last-child path', 10, 10)
       .mouseButtonClick(0)
       .pause(500);
 

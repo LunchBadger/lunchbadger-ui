@@ -1,5 +1,6 @@
 import Upgrade from 'models/Upgrade';
 import uuid from 'uuid';
+import {expect} from 'chai';
 
 describe('Update Model', () => {
   it('should serialize to JSON', () => {

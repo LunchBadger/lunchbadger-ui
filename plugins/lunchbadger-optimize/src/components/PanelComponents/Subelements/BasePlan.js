@@ -9,7 +9,7 @@ import moment from 'moment';
 import {USER_POOL} from './UserPoolIcon';
 
 const boxTarget = {
-  drop(props, monitor, component) {
+  drop(_props, monitor, component) {
     const item = monitor.getItem();
     const date = moment(component.props.date, 'M/YYYY');
 

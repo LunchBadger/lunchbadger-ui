@@ -5,6 +5,7 @@ import ForecastTier from 'models/ForecastTier';
 import APIForecast from 'models/APIForecast';
 import Upgrade from 'models/Upgrade';
 import uuid from 'uuid';
+import {expect} from 'chai';
 
 const {APIPlan, PlanDetails, TierDetails} = LunchBadgerMonetize.models;
 

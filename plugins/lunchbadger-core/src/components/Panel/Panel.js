@@ -59,7 +59,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(_prevProps, prevState) {
       if (this.state.opened === prevState.opened && this.state.height === prevState.height) {
         return;
       }
@@ -91,7 +91,7 @@ export default (ComposedComponent) => {
       return this.container.getBoundingClientRect().height;
     }
 
-    handleWindowResize(event) {
+    handleWindowResize(_event) {
       if (this.state.opened) {
         this.updateCanvasHeight();
       }

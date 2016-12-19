@@ -74,13 +74,13 @@ class GatewayDetails extends Component {
     })]);
   }
 
-  onRemovePipeline(pipeline, plIdx) {
+  onRemovePipeline(plIdx) {
     this._setPipelineState(update(this.state.pipelines, {
       $splice: [[plIdx, 1]]
     }));
   }
 
-  onAddPolicy(pipeline, plIdx) {
+  onAddPolicy(plIdx) {
     this._setPipelineState(update(this.state.pipelines, {
       [plIdx]: {
         policies: {
@@ -93,7 +93,7 @@ class GatewayDetails extends Component {
     }));
   }
 
-  onRemovePolicy(pipeline, plIdx, policy, policyIdx) {
+  onRemovePolicy(plIdx, policyIdx) {
     this._setPipelineState(update(this.state.pipelines, {
       [plIdx]: {
         policies: {$splice: [[policyIdx, 1]]}
@@ -114,7 +114,7 @@ class GatewayDetails extends Component {
                                      pipelineIndex={plIdx}
                                      policy={policy}
                                      index={index}
-                                     onRemove={this.onRemovePolicy.bind(this, pipeline, plIdx)} />;
+                                     onRemove={this.onRemovePolicy.bind(this, plIdx)} />;
       });
 
       return (
@@ -127,7 +127,7 @@ class GatewayDetails extends Component {
                    value={pipeline.name}
                    name={`pipelines[${plIdx}][name]`}/>
             <i className="fa fa-remove details-panel__action"
-               onClick={() => this.onRemovePipeline(pipeline, plIdx)}/>
+               onClick={() => this.onRemovePipeline(plIdx)}/>
           </div>
           <table className="details-panel__table">
             <thead>
@@ -136,7 +136,7 @@ class GatewayDetails extends Component {
                 <th>Type</th>
                 <th>
                   Details
-                  <a onClick={() => this.onAddPolicy(pipeline, plIdx)} className="details-panel__add">
+                  <a onClick={() => this.onAddPolicy(plIdx)} className="details-panel__add">
                     <i className="fa fa-plus"/>
                     Add policy
                   </a>

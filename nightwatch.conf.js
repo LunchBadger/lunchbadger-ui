@@ -49,7 +49,7 @@ module.exports = {
       "screenshots": {
         "enabled": true,
         "on_failure": true,
-        "on_error": false,
+        "on_error": true,
         "path": "test/reports/screenshots"
       },
       "desiredCapabilities": chromeCapabilities

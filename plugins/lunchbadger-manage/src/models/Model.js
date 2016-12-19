@@ -10,10 +10,10 @@ export default class Model extends BaseModel {
   _properties = [];
   _relations = [];
   contextPath = 'model';
-  base = 'Model';
+  base = 'PersistedModel';
   plural = '';
   readonly = false;
-  public = false;
+  public = true;
   strict = false;
 
   static deserializers = {

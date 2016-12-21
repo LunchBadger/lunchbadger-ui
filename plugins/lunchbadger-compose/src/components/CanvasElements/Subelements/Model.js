@@ -77,7 +77,7 @@ export default class Model extends Component {
       <div className={elementClass} onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
         <div className="model__info">
           <div className="model__icon">
-            <i className="fa fa-globe"/>
+            <i className="fa fa-plug"/>
           </div>
           <div className="model__name">
             {this.props.entity.name}

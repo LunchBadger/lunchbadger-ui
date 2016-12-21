@@ -17,6 +17,7 @@
   line-height: 1.65;
   transition: all 1s ease;
 
+  .collapsed &,
   .wip &,
   .dragging &,
   .editable & {

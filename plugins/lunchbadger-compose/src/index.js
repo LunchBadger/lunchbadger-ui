@@ -8,6 +8,7 @@ import DataSourceComponent from './components/CanvasElements/DataSource';
 import Backend from './stores/Backend';
 
 // models
+import Microservice from './models/Microservice';
 
 // actions
 import initializeBackend from './actions/Stores/Backend/initialize';
@@ -41,6 +42,9 @@ let LunchBadgerCompose = {
         initialize: initializePrivate
       }
     }
+  },
+  models: {
+    Microservice: Microservice
   }
 };
 

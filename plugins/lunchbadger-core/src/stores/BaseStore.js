@@ -58,7 +58,7 @@ export default class BaseStore extends EventEmitter {
 
   handleBaseActions(name, types, action) {
     let type = action.type.replace(new RegExp(types.join('|'), 'g'), name);
-    let storeObj = this.getData();
+    let storeObj = this.getData(true);
 
     switch (type) {
       case `Initialize${name}`:

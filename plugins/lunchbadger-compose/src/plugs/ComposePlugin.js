@@ -1,5 +1,6 @@
 import DataSource from '../components/Tools/DataSource';
 import Model from '../components/Tools/Model';
+import Microservice from '../components/Tools/Microservice';
 import Backend from '../stores/Backend';
 import BackendQuadrant from '../components/Quadrant/BackendQuadrant';
 import PrivateQuadrant from '../components/Quadrant/PrivateQuadrant';
@@ -16,7 +17,8 @@ const ModelFactory = LunchBadgerManage.models.Model;
 
 const tools = [
   new LunchBadgerCore.models.ToolComponent(DataSource),
-  new LunchBadgerCore.models.ToolComponent(Model)
+  new LunchBadgerCore.models.ToolComponent(Model),
+  new LunchBadgerCore.models.ToolComponent(Microservice)
 ];
 const toolGroup = [
   new LunchBadgerCore.models.ToolGroupComponent('compose', toolGroupComponent, tools, 1)

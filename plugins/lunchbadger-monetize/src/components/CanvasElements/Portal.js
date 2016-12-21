@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
-import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
 import {notify} from 'react-notify-toast';
 import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
@@ -16,6 +15,7 @@ const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const Input = LunchBadgerCore.components.Input;
+const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 
 class Portal extends Component {
   static propTypes = {
@@ -166,17 +166,17 @@ class Portal extends Component {
             </DraggableGroup>
           </div>
           <div className="canvas-element__drop">
-            <APIDrop {...this.props}
-                     canDropCheck={
-                       (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                       && !_.includes(this.props.entity.apis, item.entity)
-                     }
-                     onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
-                     onAdd={bundlePortal}
-                     onMove={moveBetweenPortals}
-                     dropText={'Drag APIs here'}
-                     parent={this.props.parent}
-                     entity={this.props.entity}/>
+            <ElementsBundler {...this.props}
+                             canDropCheck={
+                               (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+                               && !_.includes(this.props.entity.apis, item.entity)
+                             }
+                             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
+                             onAdd={bundlePortal}
+                             onMove={moveBetweenPortals}
+                             dropText={'Drag APIs here'}
+                             parent={this.props.parent}
+                             entity={this.props.entity}/>
           </div>
         </div>
 

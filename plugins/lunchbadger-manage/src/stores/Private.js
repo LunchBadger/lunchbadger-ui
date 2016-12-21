@@ -10,7 +10,7 @@ class Private extends BaseStore {
   constructor() {
     super(2);
     register((action) => {
-      this.handleBaseActions('Private', ['Model', 'PrivateEndpoint'], action);
+      this.handleBaseActions('Private', ['Model', 'Microservice', 'PrivateEndpoint'], action);
 
       switch (action.type) {
         case 'AddModelProperty':
@@ -34,12 +34,33 @@ class Private extends BaseStore {
           Privates = [];
           this.emitChange();
           break;
+
+        case 'BundleMicroservice':
+          action.microservice.addModel(action.model);
+          this.emitChange();
+          break;
+
+        case 'UnbundleMicroservice':
+          action.model.wasBundled = false;
+          action.microservice.removeModel(action.model);
+          this.emitChange();
+          break;
+
+        case 'RebundleMicroservice':
+          action.fromMicroservice.removeModel(action.model);
+          action.toMicroservice.addModel(action.model);
+          this.emitChange();
+          break;
       }
     });
   }
 
-  getData() {
-    return Privates;
+  getData(omitFilter = false) {
+    if (omitFilter) {
+      return Privates;
+    }
+
+    return Privates.filter((entity) => typeof entity.wasBundled === 'undefined' || entity.wasBundled === false);
   }
 
   setData(data) {

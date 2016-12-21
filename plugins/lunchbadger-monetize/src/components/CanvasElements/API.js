@@ -5,7 +5,6 @@ import updateAPI from '../../actions/CanvasElements/API/update';
 import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
 import bundleAPI from '../../actions/CanvasElements/API/bundle';
 import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
-import APIDrop from './Subelements/APIDrop';
 import classNames from 'classnames';
 import _ from 'lodash';
 import './API.scss';
@@ -14,6 +13,7 @@ const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
+const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 
 class API extends Component {
   static propTypes = {
@@ -135,7 +135,7 @@ class API extends Component {
             </DraggableGroup>
           </div>
           <div className="canvas-element__drop">
-            <APIDrop {...this.props}
+            <ElementsBundler {...this.props}
                      canDropCheck={
                        (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
                        && !_.includes(this.props.entity.publicEndpoints, item.entity)

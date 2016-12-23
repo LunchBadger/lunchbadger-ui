@@ -13,6 +13,7 @@ const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Private = LunchBadgerManage.stores.Private;
 const Connection = LunchBadgerCore.stores.Connection;
+const {saveToServer} = LunchBadgerCore.utils.serverIo;
 
 class Microservice extends Component {
   static propTypes = {
@@ -22,7 +23,9 @@ class Microservice extends Component {
   };
 
   static contextTypes = {
-    projectService: PropTypes.object
+    projectService: PropTypes.object,
+    lunchbadgerConfig: PropTypes.object,
+    loginManager: PropTypes.object
   };
 
   constructor(props) {
@@ -69,6 +72,12 @@ class Microservice extends Component {
     });
 
     removeEntity(this.props.entity);
+
+    /**
+     * TODO: we need to extract save action to something more reusable, so it should display notifications out of the box
+     * @link: https://github.com/LunchBadger/general/issues/38
+     */
+    saveToServer(this.context.lunchbadgerConfig, this.context.loginManager, this.context.projectService);
   }
 
   renderModels() {
@@ -129,7 +138,8 @@ class Microservice extends Component {
             Models
           </div>
           <div className="canvas-element__endpoints" ref="endpoints">
-            <DraggableGroup iconClass="icon-icon-microservice" entity={this.props.entity} appState={this.props.appState}>
+            <DraggableGroup iconClass="icon-icon-microservice" entity={this.props.entity}
+                            appState={this.props.appState}>
               {this.renderModels()}
             </DraggableGroup>
           </div>

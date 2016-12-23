@@ -4,7 +4,9 @@ import updateMicroservice from '../../actions/CanvasElements/Microservice/update
 import bundleMicroservice from '../../actions/CanvasElements/Microservice/bundle';
 import unbundleMicroservice from '../../actions/CanvasElements/Microservice/unbundle';
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
+import removeModel from '../../actions/CanvasElements/Model/remove';
 
+const removeEntity = LunchBadgerCore.actions.removeEntity;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
@@ -57,6 +59,16 @@ class Microservice extends Component {
 
   update(model) {
     updateMicroservice(this.props.entity.id, model);
+  }
+
+  removeEntity() {
+    this.props.entity.models.forEach((modelId) => {
+      const entity = Private.findEntity(modelId);
+
+      entity && removeModel(this.context.projectService, entity);
+    });
+
+    removeEntity(this.props.entity);
   }
 
   renderModels() {

@@ -72,12 +72,6 @@ class Microservice extends Component {
     });
 
     removeEntity(this.props.entity);
-
-    /**
-     * TODO: we need to extract save action to something more reusable, so it should display notifications out of the box
-     * @link: https://github.com/LunchBadger/general/issues/38
-     */
-    saveToServer(this.context.lunchbadgerConfig, this.context.loginManager, this.context.projectService);
   }
 
   renderModels() {

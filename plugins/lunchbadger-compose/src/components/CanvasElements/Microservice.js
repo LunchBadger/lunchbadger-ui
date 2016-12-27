@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import Model from './Subelements/Model';
 import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
-import bundleMicroservice from '../../actions/CanvasElements/Microservice/bundle';
-import unbundleMicroservice from '../../actions/CanvasElements/Microservice/unbundle';
+import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
+import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
 import removeModel from '../../actions/CanvasElements/Model/remove';
 import updateModel from '../../actions/CanvasElements/Model/update';
@@ -116,8 +116,10 @@ class Microservice extends Component {
       wasBundled: false
     };
 
+    unbundleStart(item.parent);
+
     updateModel(this.context.projectService, entity.lunchbadgerId || entity.id, modelData)
-      .then(() => unbundleMicroservice(item.parent, entity));
+      .then(() => unbundleFinish(item.parent, entity));
   }
 
   handleClose() {
@@ -131,8 +133,10 @@ class Microservice extends Component {
       wasBundled: true
     };
 
+    bundleStart(microservice);
+
     updateModel(this.context.projectService, bundledItem.id, modelData)
-      .then(() => bundleMicroservice(microservice, bundledItem));
+      .then(() => bundleFinish(microservice, bundledItem));
   }
 
   render() {

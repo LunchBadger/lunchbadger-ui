@@ -1,7 +1,11 @@
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 
-export default (microservice, model) => {
-  dispatch('BundleMicroservice', {
+export const bundleStart = (microservice) => {
+  dispatch('BundleMicroserviceStart', {microservice});
+};
+
+export const bundleFinish = (microservice, model) => {
+  dispatch('BundleMicroserviceFinish', {
     microservice,
     model
   });

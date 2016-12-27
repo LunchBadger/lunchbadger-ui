@@ -35,13 +35,25 @@ class Private extends BaseStore {
           this.emitChange();
           break;
 
-        case 'BundleMicroservice':
-          action.microservice.addModel(action.model);
+        case 'BundleMicroserviceStart':
+          action.microservice.ready = false;
           this.emitChange();
           break;
 
-        case 'UnbundleMicroservice':
+        case 'BundleMicroserviceFinish':
+          action.microservice.addModel(action.model);
+          action.microservice.ready = true;
+          this.emitChange();
+          break;
+
+        case 'UnbundleMicroserviceStart':
+          action.microservice.ready = false;
+          this.emitChange();
+          break;
+
+        case 'UnbundleMicroserviceFinish':
           action.microservice.removeModel(action.model);
+          action.microservice.ready = true;
           this.emitChange();
           break;
 

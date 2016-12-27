@@ -48,7 +48,6 @@ export default class Microservice extends BaseModel {
    * @param model {Model}
    */
   addModel(model) {
-    model.wasBundled = true;
     this._models.push(model.lunchbadgerId || model.id);
   }
 

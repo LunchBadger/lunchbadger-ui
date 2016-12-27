@@ -41,7 +41,6 @@ class Private extends BaseStore {
           break;
 
         case 'UnbundleMicroservice':
-          action.model.wasBundled = false;
           action.microservice.removeModel(action.model);
           this.emitChange();
           break;
@@ -70,7 +69,7 @@ class Private extends BaseStore {
   findEntity(id) {
     id = this.formatId(id);
 
-    return _.find(Privates, {id: id});
+    return _.find(Privates, {id: id}) || _.find(Privates, {lunchbadgerId: id});
   }
 }
 

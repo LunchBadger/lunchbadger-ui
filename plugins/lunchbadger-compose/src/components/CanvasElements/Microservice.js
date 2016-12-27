@@ -5,6 +5,7 @@ import bundleMicroservice from '../../actions/CanvasElements/Microservice/bundle
 import unbundleMicroservice from '../../actions/CanvasElements/Microservice/unbundle';
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
 import removeModel from '../../actions/CanvasElements/Model/remove';
+import updateModel from '../../actions/CanvasElements/Model/update';
 
 const removeEntity = LunchBadgerCore.actions.removeEntity;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -13,7 +14,6 @@ const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Private = LunchBadgerManage.stores.Private;
 const Connection = LunchBadgerCore.stores.Connection;
-const {saveToServer} = LunchBadgerCore.utils.serverIo;
 
 class Microservice extends Component {
   static propTypes = {
@@ -23,9 +23,7 @@ class Microservice extends Component {
   };
 
   static contextTypes = {
-    projectService: PropTypes.object,
-    lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object
+    projectService: PropTypes.object
   };
 
   constructor(props) {
@@ -111,12 +109,30 @@ class Microservice extends Component {
 
   handleModalConfirm() {
     const item = this.state.bundledItem;
+    const {entity} = item;
+    const modelData = {
+      name: entity.name,
+      contextPath: entity.contextPath,
+      wasBundled: false
+    };
 
-    unbundleMicroservice(item.parent, item.entity);
+    updateModel(this.context.projectService, entity.lunchbadgerId || entity.id, modelData)
+      .then(() => unbundleMicroservice(item.parent, entity));
   }
 
   handleClose() {
     this.setState({isShowingModal: false});
+  }
+
+  bundleMicroservice(microservice, bundledItem) {
+    const modelData = {
+      name: bundledItem.name,
+      contextPath: bundledItem.contextPath,
+      wasBundled: true
+    };
+
+    updateModel(this.context.projectService, bundledItem.id, modelData)
+      .then(() => bundleMicroservice(microservice, bundledItem));
   }
 
   render() {
@@ -144,7 +160,7 @@ class Microservice extends Component {
                                && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
                              }
                              onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
-                             onAdd={bundleMicroservice}
+                             onAdd={this.bundleMicroservice.bind(this)}
                              onMove={moveBetweenMicroservice}
                              dropText="Drag Models Here"
                              modalTitle="Bundle Microservice"

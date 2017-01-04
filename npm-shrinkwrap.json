@@ -64,6 +64,11 @@
       "from": "boom@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/boom/-/boom-2.10.1.tgz"
     },
+    "buffer-shims": {
+      "version": "1.0.0",
+      "from": "buffer-shims@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/buffer-shims/-/buffer-shims-1.0.0.tgz"
+    },
     "bufferjs": {
       "version": "3.0.1",
       "from": "bufferjs@>=2.0.0",
@@ -79,6 +84,11 @@
       "from": "buffertools@>=1.0.3",
       "resolved": "https://registry.npmjs.org/buffertools/-/buffertools-2.1.4.tgz",
       "optional": true
+    },
+    "builtin-status-codes": {
+      "version": "2.0.0",
+      "from": "builtin-status-codes@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/builtin-status-codes/-/builtin-status-codes-2.0.0.tgz"
     },
     "caseless": {
       "version": "0.11.0",
@@ -162,8 +172,8 @@
     },
     "eventsource": {
       "version": "0.2.1",
-      "from": "eventsource@>=0.2.1 <0.3.0",
-      "resolved": "https://registry.npmjs.org/eventsource/-/eventsource-0.2.1.tgz"
+      "from": "lunchbadger/eventsource",
+      "resolved": "git://github.com/lunchbadger/eventsource.git#9ed0e750c769c55fe371789d3665e49e61229ad3"
     },
     "extend": {
       "version": "3.0.0",
@@ -637,6 +647,18 @@
       "from": "sntp@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz"
     },
+    "stream-http": {
+      "version": "2.5.0",
+      "from": "rlisagor/stream-http",
+      "resolved": "git://github.com/rlisagor/stream-http.git#f97dd885eae71c4433044e3dae956776a51384f1",
+      "dependencies": {
+        "readable-stream": {
+          "version": "2.2.2",
+          "from": "readable-stream@>=2.1.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.2.2.tgz"
+        }
+      }
+    },
     "string_decoder": {
       "version": "0.10.31",
       "from": "string_decoder@>=0.10.0 <0.11.0",
@@ -666,6 +688,11 @@
       "version": "1.3.8",
       "from": "tether@>=1.3.2 <2.0.0",
       "resolved": "https://registry.npmjs.org/tether/-/tether-1.3.8.tgz"
+    },
+    "to-arraybuffer": {
+      "version": "1.0.1",
+      "from": "to-arraybuffer@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz"
     },
     "tough-cookie": {
       "version": "2.2.2",

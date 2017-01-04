@@ -39,9 +39,7 @@ class Microservice extends Component {
   }
 
   componentDidMount() {
-    this.props.paper.bind('connectionDetached', (info) => {
-      this.previousConnection = info;
-    });
+    this.props.paper.bind('connectionDetached', this.onConnectionDetached);
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -57,6 +55,14 @@ class Microservice extends Component {
       }
     }
   }
+
+  componentWillUnmount() {
+    this.props.paper.unbind('connectionDetached', this.onConnectionDetached);
+  }
+
+  onConnectionDetached = (info) => {
+    this.previousConnection = info;
+  };
 
   update(model) {
     updateMicroservice(this.props.entity.id, model);
@@ -122,7 +128,7 @@ class Microservice extends Component {
       .then(() => unbundleFinish(item.parent, entity));
   }
 
-  handleClose() {
+  handleModalClose() {
     this.setState({isShowingModal: false});
   }
 
@@ -178,7 +184,7 @@ class Microservice extends Component {
           <TwoOptionModal title="Unbundle Microservice"
                           confirmText="Yes"
                           discardText="No"
-                          onClose={this.handleClose.bind(this)}
+                          onClose={this.handleModalClose.bind(this)}
                           onSave={this.handleModalConfirm.bind(this)}>
             <span>
               Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?

@@ -84,12 +84,7 @@ export default class ProjectService {
   }
 
   monitorStatus() {
-    return this._projectClient.get('/WorkspaceStatus/1').then(res => {
-      return {
-        initial: res.body,
-        es: this._projectClient.eventSource('/WorkspaceStatus/change-stream')
-      };
-    });
+    return this._projectClient.eventSource('/WorkspaceStatus/change-stream');
   }
 
   ping() {

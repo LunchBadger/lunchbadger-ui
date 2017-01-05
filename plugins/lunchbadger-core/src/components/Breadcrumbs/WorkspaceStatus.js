@@ -14,25 +14,17 @@ export default class WorkspaceStatus extends Component {
       running: false,
       connected: false,
       output: '',
-      visible: false
+      instance: null,
+      visible: false,
+      isShowingModal: false
     };
   }
 
   componentDidMount() {
-    this.context.projectService.monitorStatus().then(res => {
-      let {initial, es} = res;
-
-      this.setState({
-        connected: true,
-        running: initial.running,
-        output: initial.output
-      });
-
-      this.es = es;
-      this.es.addEventListener('data', this.onStatusReceived.bind(this));
-      this.es.addEventListener('open', this.onConnected.bind(this));
-      this.es.addEventListener('error', this.onDisconnected.bind(this));
-    });
+    this.es = this.context.projectService.monitorStatus();
+    this.es.addEventListener('data', this.onStatusReceived.bind(this));
+    this.es.addEventListener('open', this.onConnected.bind(this));
+    this.es.addEventListener('error', this.onDisconnected.bind(this));
   }
 
   componentWillUnmount() {

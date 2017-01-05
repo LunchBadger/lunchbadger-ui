@@ -2,6 +2,7 @@
 import React, {Component, PropTypes} from 'react';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
+import OneOptionModal from '../Generics/Modal/OneOptionModal';
 
 export default class WorkspaceStatus extends Component {
   static contextTypes = {
@@ -45,10 +46,17 @@ export default class WorkspaceStatus extends Component {
 
     console.log('Status from server', status);
 
+    if (this.state.instance && this.state.instance !== status.instance) {
+      this.setState({
+        isShowingModal: true
+      });
+    }
+
     this.setState({
       connected: true,
       running: status.running,
-      output: status.output
+      output: status.output,
+      instance: status.instance
     });
   }
 
@@ -62,6 +70,10 @@ export default class WorkspaceStatus extends Component {
     this.setState({
       connected: false
     });
+  }
+
+  onModalClose() {
+    location.reload();
   }
 
   renderInfo(message) {
@@ -101,6 +113,16 @@ export default class WorkspaceStatus extends Component {
       <span className="workspace-status">
         <i className={classnames(classes)} onClick={this.onClick.bind(this)} />
         {this.state.visible ? this.renderInfo(message) : null}
+        {
+          this.state.isShowingModal &&
+          <OneOptionModal confirmText="Reload"
+                          onClose={this.onModalClose.bind(this)}>
+            <p>
+              The workspace has changed since the Canvas was loaded. Please
+              reload the page to refresh the Canvas contents.
+            </p>
+          </OneOptionModal>
+        }
       </span>
     );
   }

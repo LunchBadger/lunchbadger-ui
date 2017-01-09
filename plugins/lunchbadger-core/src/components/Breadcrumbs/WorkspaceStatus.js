@@ -2,6 +2,7 @@
 import React, {Component, PropTypes} from 'react';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
+import OneOptionModal from '../Generics/Modal/OneOptionModal';
 
 export default class WorkspaceStatus extends Component {
   static contextTypes = {
@@ -14,25 +15,17 @@ export default class WorkspaceStatus extends Component {
       running: false,
       connected: false,
       output: '',
-      visible: false
+      instance: null,
+      visible: false,
+      isShowingModal: false
     };
   }
 
   componentDidMount() {
-    this.context.projectService.monitorStatus().then(res => {
-      let {initial, es} = res;
-
-      this.setState({
-        connected: true,
-        running: initial.running,
-        output: initial.output
-      });
-
-      this.es = es;
-      this.es.addEventListener('data', this.onStatusReceived.bind(this));
-      this.es.addEventListener('open', this.onConnected.bind(this));
-      this.es.addEventListener('error', this.onDisconnected.bind(this));
-    });
+    this.es = this.context.projectService.monitorStatus();
+    this.es.addEventListener('data', this.onStatusReceived.bind(this));
+    this.es.addEventListener('open', this.onConnected.bind(this));
+    this.es.addEventListener('error', this.onDisconnected.bind(this));
   }
 
   componentWillUnmount() {
@@ -53,10 +46,17 @@ export default class WorkspaceStatus extends Component {
 
     console.log('Status from server', status);
 
+    if (this.state.instance && this.state.instance !== status.instance) {
+      this.setState({
+        isShowingModal: true
+      });
+    }
+
     this.setState({
       connected: true,
       running: status.running,
-      output: status.output
+      output: status.output,
+      instance: status.instance
     });
   }
 
@@ -70,6 +70,10 @@ export default class WorkspaceStatus extends Component {
     this.setState({
       connected: false
     });
+  }
+
+  onModalClose() {
+    location.reload();
   }
 
   renderInfo(message) {
@@ -109,6 +113,16 @@ export default class WorkspaceStatus extends Component {
       <span className="workspace-status">
         <i className={classnames(classes)} onClick={this.onClick.bind(this)} />
         {this.state.visible ? this.renderInfo(message) : null}
+        {
+          this.state.isShowingModal &&
+          <OneOptionModal confirmText="Reload"
+                          onClose={this.onModalClose.bind(this)}>
+            <p>
+              The workspace has changed since the Canvas was loaded. Please
+              reload the page to refresh the Canvas contents.
+            </p>
+          </OneOptionModal>
+        }
       </span>
     );
   }

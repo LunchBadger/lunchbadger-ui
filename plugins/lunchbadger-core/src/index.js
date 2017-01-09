@@ -29,6 +29,7 @@ import CloseButton from './components/Panel/CloseButton';
 import SaveButton from './components/Panel/SaveButton';
 import Draggable from './components/Draggable/Draggable';
 import Modal from './components/Generics/Modal/Modal';
+import OneOptionModal from './components/Generics/Modal/OneOptionModal';
 import TwoOptionModal from './components/Generics/Modal/TwoOptionModal';
 import Quadrant from './components/Quadrant/Quadrant';
 import ToolGroup from './components/Tools/ToolGroup';
@@ -116,6 +117,7 @@ let LunchBadgerCore = {
     Draggable: Draggable,
     DraggableGroup: DraggableGroup,
     Modal: Modal,
+    OneOptionModal: OneOptionModal,
     TwoOptionModal: TwoOptionModal,
     Quadrant: Quadrant,
     Tool: Tool,

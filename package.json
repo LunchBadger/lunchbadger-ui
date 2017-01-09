@@ -75,7 +75,7 @@
     "bluebird": "^3.3.5",
     "classnames": "^2.2.3",
     "core-js": "^2.0.0",
-    "eventsource": "LunchBadger/eventsource",
+    "eventsource": "github:LunchBadger/eventsource",
     "flux": "^2.1.1",
     "font-awesome": "^4.6.1",
     "formsy-react": "^0.18.0",
@@ -99,6 +99,7 @@
     "react-tooltip": "^2.0.3",
     "request": "2.65.0",
     "slug": "^0.9.1",
+    "stream-http": "github:rlisagor/stream-http",
     "uuid": "^2.0.2"
   }
 }

@@ -10,7 +10,7 @@ class Private extends BaseStore {
   constructor() {
     super(2);
     register((action) => {
-      this.handleBaseActions('Private', ['Model', 'PrivateEndpoint'], action);
+      this.handleBaseActions('Private', ['Model', 'Microservice', 'PrivateEndpoint'], action);
 
       switch (action.type) {
         case 'AddModelProperty':
@@ -34,12 +34,44 @@ class Private extends BaseStore {
           Privates = [];
           this.emitChange();
           break;
+
+        case 'BundleMicroserviceStart':
+          action.microservice.ready = false;
+          this.emitChange();
+          break;
+
+        case 'BundleMicroserviceFinish':
+          action.microservice.addModel(action.model);
+          action.microservice.ready = true;
+          this.emitChange();
+          break;
+
+        case 'UnbundleMicroserviceStart':
+          action.microservice.ready = false;
+          this.emitChange();
+          break;
+
+        case 'UnbundleMicroserviceFinish':
+          action.microservice.removeModel(action.model);
+          action.microservice.ready = true;
+          this.emitChange();
+          break;
+
+        case 'RebundleMicroservice':
+          action.fromMicroservice.removeModel(action.model);
+          action.toMicroservice.addModel(action.model);
+          this.emitChange();
+          break;
       }
     });
   }
 
-  getData() {
-    return Privates;
+  getData(omitFilter = false) {
+    if (omitFilter) {
+      return Privates;
+    }
+
+    return Privates.filter((entity) => typeof entity.wasBundled === 'undefined' || entity.wasBundled === false);
   }
 
   setData(data) {
@@ -49,7 +81,7 @@ class Private extends BaseStore {
   findEntity(id) {
     id = this.formatId(id);
 
-    return _.find(Privates, {id: id});
+    return _.find(Privates, {id: id}) || _.find(Privates, {lunchbadgerId: id});
   }
 }
 

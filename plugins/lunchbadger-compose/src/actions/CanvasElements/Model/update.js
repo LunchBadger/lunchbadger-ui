@@ -69,4 +69,6 @@ export default (service, id, props) => {
       ...props
     }
   });
+
+  return promise;
 };

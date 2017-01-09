@@ -94,7 +94,7 @@ export function loadFromServer(config, loginManager, projectService) {
     }
 
     if (LunchBadgerCompose) {
-      LunchBadgerCompose.actions.Stores.Private.initialize(models);
+      LunchBadgerCompose.actions.Stores.Private.initialize(models, project);
       LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
     }
 
@@ -126,6 +126,7 @@ export function saveToServer(config, loginManager, projectService) {
       LunchBadgerManage.stores.Public
     );
 
+    project.microServices = [];
     project.privateEndpoints = [];
     project.gateways = [];
     project.publicEndpoints = [];
@@ -161,6 +162,9 @@ export function saveToServer(config, loginManager, projectService) {
           break;
         case 'Portal':
           project.portals.push(entity.toJSON());
+          break;
+        case 'Microservice':
+          project.microServices.push(entity.toJSON());
           break;
       }
     });

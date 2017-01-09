@@ -1,9 +1,12 @@
+import Microservice from '../../../models/Microservice';
+
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Model = LunchBadgerManage.models.Model;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 
-export default (privateModels) => {
+export default (privateModels, data) => {
+  const microServices = data.microServices;
   const privateModelObjects = privateModels.map((privateModel, index) => {
     // remove properties before de-serializing data but first save it somewhere
     const embeddedProperties = privateModel.properties || [];
@@ -28,7 +31,16 @@ export default (privateModels) => {
     return model;
   });
 
+  const microServiceObjects = microServices.map((microService, index) => {
+    return Microservice.create({
+      itemOrder: index,
+      loaded: true,
+      ready: true,
+      ...microService
+    });
+  });
+
   dispatch('InitializePrivate', {
-    data: privateModelObjects
+    data: privateModelObjects.concat(microServiceObjects)
   });
 };

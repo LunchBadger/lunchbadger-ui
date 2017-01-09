@@ -35,48 +35,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-icon-collapse:before {
-    content: "\e90d";
-}
-.icon-icon-expand:before {
-    content: "\e90e";
-}
-.icon-icon-minus:before {
-    content: "\e907";
+.icon-icon-microservice:before {
+  content: "\e900";
 }
 .icon-arrowhead:before {
-    content: "\e900";
+  content: "\e901";
 }
 .icon-icon-datasource:before {
-    content: "\e901";
+  content: "\e902";
 }
 .icon-icon-details:before {
-    content: "\e902";
+  content: "\e903";
 }
 .icon-icon-endpoint:before {
-    content: "\e903";
+  content: "\e904";
 }
 .icon-icon-forecaster:before {
-    content: "\e904";
+  content: "\e905";
 }
 .icon-icon-gateway:before {
-    content: "\e905";
+  content: "\e906";
 }
 .icon-icon-metrics:before {
-    content: "\e906";
+  content: "\e907";
+}
+.icon-icon-minus:before {
+  content: "\e908";
 }
 .icon-icon-model:before {
-    content: "\e908";
+  content: "\e909";
 }
 .icon-icon-plus:before {
-    content: "\e909";
+  content: "\e90a";
 }
 .icon-icon-portal:before {
-    content: "\e90a";
+  content: "\e90b";
 }
 .icon-icon-product:before {
-    content: "\e90b";
+  content: "\e90c";
 }
 .icon-icon-settings:before {
-    content: "\e90c";
+  content: "\e90d";
+}
+.icon-icon-collapse:before {
+  content: "\e90e";
+}
+.icon-icon-expand:before {
+  content: "\e90f";
 }

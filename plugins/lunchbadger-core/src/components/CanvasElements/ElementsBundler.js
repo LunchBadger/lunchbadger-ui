@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
-
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
+import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 
 const boxTarget = {
   canDrop(props, monitor) {
@@ -21,9 +20,10 @@ const boxTarget = {
   isOverCurrent: monitor.isOver({shallow: true}),
   itemType: monitor.getItemType()
 }))
-export default class APIDrop extends Component {
+export default class ElementsBundler extends Component {
   static defaultProps = {
-    dropText: 'Drag Endpoints Here'
+    dropText: 'Drag Endpoints Here',
+    modalTitle: 'Bundle API'
   };
 
   static propTypes = {
@@ -33,6 +33,7 @@ export default class APIDrop extends Component {
     isOver: PropTypes.bool.isRequired,
     canDropCheck: PropTypes.func.isRequired,
     dropText: PropTypes.string,
+    modalTitle: PropTypes.string,
     onAdd: PropTypes.func.isRequired,
     onAddCheck: PropTypes.func.isRequired,
     onMove: PropTypes.func.isRequired
@@ -97,7 +98,7 @@ export default class APIDrop extends Component {
 
         {
           this.state.isShowingModal &&
-          <TwoOptionModal title="Bundle API"
+          <TwoOptionModal title={this.props.modalTitle}
                           confirmText="Yes"
                           discardText="No"
                           onClose={this._handleClose.bind(this)}

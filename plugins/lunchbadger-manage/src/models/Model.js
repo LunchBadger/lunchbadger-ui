@@ -15,6 +15,7 @@ export default class Model extends BaseModel {
   readonly = false;
   public = true;
   strict = false;
+  wasBundled = false;
 
   static deserializers = {
     http: (obj, val) => {
@@ -67,7 +68,8 @@ export default class Model extends BaseModel {
       readonly: this.readonly,
       public: this.public,
       strict: this.strict,
-      lunchbadgerId: this.id
+      lunchbadgerId: this.id,
+      wasBundled: this.wasBundled
     }
   }
 

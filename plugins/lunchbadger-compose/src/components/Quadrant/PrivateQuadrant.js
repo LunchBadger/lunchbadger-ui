@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import Model from '../CanvasElements/Model';
+import Microservice from '../CanvasElements/Microservice';
 
 const updateOrder = LunchBadgerManage.actions.Quadrants.Private.updateOrder;
 const saveOrder = LunchBadgerManage.actions.Quadrants.Private.saveOrder;
@@ -30,6 +31,18 @@ class PrivateQuadrant extends Component {
                    appState={this.props.appState}
                    key={entity.id}
                    icon="icon-icon-model"
+                   hideSourceOnDrag={true}
+                   itemOrder={entity.itemOrder}
+                   moveEntity={this.moveEntity.bind(this)}
+                   saveOrder={this.saveOrder.bind(this)}
+                   entity={entity}/>
+          );
+        case 'Microservice':
+          return (
+            <Microservice paper={this.props.paper}
+                   appState={this.props.appState}
+                   key={entity.id}
+                   icon="icon-icon-microservice"
                    hideSourceOnDrag={true}
                    itemOrder={entity.itemOrder}
                    moveEntity={this.moveEntity.bind(this)}

@@ -35,6 +35,7 @@ import ToolGroup from './components/Tools/ToolGroup';
 import Tool from './components/Tools/Tool';
 import PortComponent from './components/CanvasElements/Port';
 import DraggableGroup from './components/Draggable/DraggableGroup';
+import ElementsBundler from './components/CanvasElements/ElementsBundler';
 
 // models
 import BaseModel from './models/BaseModel';
@@ -119,7 +120,8 @@ let LunchBadgerCore = {
     Quadrant: Quadrant,
     Tool: Tool,
     ToolGroup: ToolGroup,
-    Port: PortComponent
+    Port: PortComponent,
+    ElementsBundler: ElementsBundler
   },
   stores: {
     BaseStore: BaseStore,

@@ -7,6 +7,7 @@ import clearData from '../actions/Stores/clearData';
 const EMPTY_PROJECT = {
   connections: [],
   states: [],
+  microservices: [],
   privateEndpoints: [],
   gateways: [],
   publicEndpoints: [],

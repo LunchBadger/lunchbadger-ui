@@ -38,13 +38,26 @@ export default class ModelUserFieldsDetails extends Component {
     }
   }
 
+  _prepareValue(value) {
+    const {field} = this.props;
+    const {type} = field;
+
+    if (type === 'object') {
+      return JSON.stringify(value);
+    } else if (type === 'number') {
+      return String(value);
+    }
+
+    return value;
+  }
+
   renderInput() {
     const {field, index} = this.props;
 
     if (this.state.inputType === 'textarea') {
       return (
         <Textarea className="details-panel__textarea"
-                  value={field.value}
+                  value={this._prepareValue(field.value)}
                   validations="isJSON"
                   handleKeyDown={this._checkTabButton.bind(this)}
                   name={`userFields[${index}][value]`}
@@ -53,7 +66,7 @@ export default class ModelUserFieldsDetails extends Component {
     } else {
       return (
         <Input className="details-panel__input"
-               value={field.value}
+               value={this._prepareValue(field.value)}
                handleKeyDown={this._checkTabButton.bind(this)}
                name={`userFields[${index}][value]`}
         />
@@ -80,12 +93,7 @@ export default class ModelUserFieldsDetails extends Component {
                   name={`userFields[${index}][type]`}>
             <option value="string">String</option>
             <option value="number">Number</option>
-            <option value="date">Date</option>
-            <option value="boolean">Boolean</option>
-            <option value="geopoint">GeoPoint</option>
-            <option value="array">Array</option>
             <option value="object">Object</option>
-            <option value="buffer">Buffer</option>
           </Select>
         </td>
         <td>

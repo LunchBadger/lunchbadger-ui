@@ -94,7 +94,16 @@ class ModelDetails extends Component {
     });
 
     model.userFields && model.userFields.forEach(field => {
-      data[field.name] = field.value;
+      const value = field.value;
+      let output = value;
+
+      if (field.type === 'object') {
+        output = JSON.parse(value);
+      } else if (field.type === 'number') {
+        output = Number(value);
+      }
+
+      data[field.name] = output;
     });
 
     const currDsConn = this._getBackendConnection();

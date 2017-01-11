@@ -172,10 +172,6 @@ export default class Model extends BaseModel {
     this._ports = ports;
   }
 
-  _getUserFieldsKeys() {
-    return _.difference(Object.keys(this), Model.forbiddenFields);
-  }
-
   get userFields() {
     const fields = {};
 
@@ -188,9 +184,23 @@ export default class Model extends BaseModel {
     return this._getUserFieldsKeys().map(key => {
       return {
         name: key,
-        type: '',
+        type: Model._assumeUserFieldType(this[key]),
         value: this[key]
       };
     });
+  }
+
+  _getUserFieldsKeys() {
+    return _.difference(Object.keys(this), Model.forbiddenFields);
+  }
+
+  static _assumeUserFieldType(value) {
+    if (_.isObject(value)) {
+      return 'object';
+    } else if (_.isNumber(value)) {
+      return 'number';
+    }
+
+    return 'string';
   }
 }

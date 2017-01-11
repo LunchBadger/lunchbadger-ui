@@ -6,6 +6,33 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 
 export default class Model extends BaseModel {
   static type = 'Model';
+  static forbiddenFields = [
+    "_id",
+    "_ready",
+    "left",
+    "top",
+    "itemOrder",
+    "_ports",
+    "_properties",
+    "_relations",
+    "contextPath",
+    "base",
+    "plural",
+    "readonly",
+    "readOnly",
+    "public",
+    "strict",
+    "wasBundled",
+    "name",
+    "loaded",
+    "facetName",
+    "idInjection",
+    "options",
+    "configFile",
+    "lunchbadgerId",
+    "elementDOM"
+  ];
+
   _ports = [];
   _properties = [];
   _relations = [];
@@ -69,7 +96,8 @@ export default class Model extends BaseModel {
       public: this.public,
       strict: this.strict,
       lunchbadgerId: this.id,
-      wasBundled: this.wasBundled
+      wasBundled: this.wasBundled,
+      ...this.userFields
     }
   }
 
@@ -142,5 +170,27 @@ export default class Model extends BaseModel {
 
   set ports(ports) {
     this._ports = ports;
+  }
+
+  _getUserFieldsKeys() {
+    return _.difference(Object.keys(this), Model.forbiddenFields);
+  }
+
+  get userFields() {
+    const fields = {};
+
+    this._getUserFieldsKeys().forEach(key => fields[key] = this[key]);
+
+    return fields;
+  }
+
+  get extendedUserFields() {
+    return this._getUserFieldsKeys().map(key => {
+      return {
+        name: key,
+        type: '',
+        value: this[key]
+      };
+    });
   }
 }

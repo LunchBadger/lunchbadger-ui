@@ -9,3 +9,7 @@ Formsy.addValidationRule('isJSON', function (values, value) {
 
   return true;
 });
+
+Formsy.addValidationRule('inNotIn', function (values, value, array) {
+  return array.indexOf(value) === -1;
+});

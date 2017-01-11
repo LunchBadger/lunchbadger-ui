@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 
-const {Checkbox, Input, Select} = LunchBadgerCore.components;
+const {Checkbox, Input, Select, Textarea} = LunchBadgerCore.components;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
@@ -13,6 +13,10 @@ export default class ModelPropertyDetails extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      inputType: props.property.type === 'object' ? 'textarea' : 'input'
+    };
   }
 
   onRemove(property) {
@@ -22,6 +26,35 @@ export default class ModelPropertyDetails extends Component {
   _checkTabButton(event) {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
       this.props.addAction();
+    }
+  }
+
+  _changePropertyType(event) {
+    if (event.target.value === 'object') {
+      this.setState({inputType: 'textarea'});
+    } else {
+      this.setState({inputType: 'input'});
+    }
+  }
+
+  renderInput() {
+    const {property, index} = this.props;
+
+    if (this.state.inputType === 'textarea') {
+      return (
+        <Textarea className="details-panel__textarea"
+                  value={property.default_}
+                  validations="isJSON"
+                  name={`properties[${index}][default_]`}
+        />
+      );
+    } else {
+      return (
+        <Input className="details-panel__input"
+               value={property.default_}
+               name={`properties[${index}][default_]`}
+        />
+      );
     }
   }
 
@@ -43,6 +76,7 @@ export default class ModelPropertyDetails extends Component {
         <td>
           <Select className="details-panel__input details-panel__select"
                   value={property.type || 'string'}
+                  handleChange={(value) => this._changePropertyType(value)}
                   name={`properties[${index}][type]`}>
             <option value="string">String</option>
             <option value="number">Number</option>
@@ -55,21 +89,18 @@ export default class ModelPropertyDetails extends Component {
           </Select>
         </td>
         <td>
-          <Input className="details-panel__input"
-                 value={property.default_}
-                 name={`properties[${index}][default_]`}
+          {this.renderInput()}
+        </td>
+        <td>
+          <Checkbox className="model-property__input"
+                    value={property.required}
+                    name={`properties[${index}][required]`}
           />
         </td>
         <td>
           <Checkbox className="model-property__input"
-                 value={property.required}
-                 name={`properties[${index}][required]`}
-          />
-        </td>
-        <td>
-          <Checkbox className="model-property__input"
-                 value={property.index}
-                 name={`properties[${index}][index]`}
+                    value={property.index}
+                    name={`properties[${index}][index]`}
           />
         </td>
         <td>

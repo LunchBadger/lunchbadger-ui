@@ -120,11 +120,15 @@ class ModelDetails extends Component {
     }
 
     const updateData = Object.assign({}, model, data);
+    const propsToRemove = _.difference(
+      Object.keys(this.props.entity.userFields),
+      updateData.userFields.map(field => field.name)
+    );
 
     delete updateData.dataSource;
     delete updateData.userFields;
 
-    updateModel(this.context.projectService, this.props.entity.id, updateData);
+    updateModel(this.context.projectService, this.props.entity.id, updateData, propsToRemove);
   }
 
   onAddItem(collection, item) {

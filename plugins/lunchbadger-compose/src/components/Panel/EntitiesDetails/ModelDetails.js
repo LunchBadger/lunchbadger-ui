@@ -145,7 +145,11 @@ class ModelDetails extends Component {
     const items = this.state[collection];
 
     _.remove(items, function (i) {
-      return i.id === item.id;
+      if (item.id) {
+        return i.id === item.id;
+      }
+
+      return i.name === item.name;
     });
 
     this.setState({
@@ -226,7 +230,7 @@ class ModelDetails extends Component {
                                 addAction={() => this.onAddUserField()}
                                 fieldsCount={this.state.userFields.length}
                                 key={`user-field-${index}`}
-                                onRemove={this.onRemoveUserField.bind(this)}
+                                onRemove={(userField) => this.onRemoveUserField(userField)}
                                 field={field}/>
       );
     });

@@ -83,7 +83,7 @@ export default class ModelUserFieldsDetails extends Component {
           <Input className="details-panel__input details-key"
                  value={field.name}
                  name={`userFields[${index}][name]`}
-                 validations={{inNotIn: ModelClass.forbiddenFields}}
+                 validations={{isNotIn: ModelClass.forbiddenFields}}
           />
         </td>
         <td>

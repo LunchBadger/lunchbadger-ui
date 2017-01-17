@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import REST from './REST';
+import SOAP from './SOAP';
 import MongoDB from './MongoDB';
 import Redis from './Redis';
 import MySQL from './MySQL';
@@ -17,6 +18,9 @@ class DataSource extends Component {
         <ul className="tool__context">
           <li>
             <REST />
+          </li>
+          <li>
+            <SOAP />
           </li>
           <li>
             <Redis />

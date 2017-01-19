@@ -38,8 +38,8 @@ class ModelDetails extends Component {
 
     this.state = Object.assign({}, stateFromStores(props));
 
-    this.onStoreUpdate = () => {
-      this.setState(stateFromStores(this.props));
+    this.onStoreUpdate = (props = this.props) => {
+      this.setState(stateFromStores(props));
     }
   }
 
@@ -60,6 +60,12 @@ class ModelDetails extends Component {
 
   componentDidMount() {
     PrivateStore.addChangeListener(this.onStoreUpdate);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.entity.id !== this.props.entity.id) {
+      this.onStoreUpdate(nextProps);
+    }
   }
 
   componentWillUnmount() {

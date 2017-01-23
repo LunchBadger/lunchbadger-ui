@@ -15,7 +15,8 @@ export default (ComposedComponent) => {
     constructor(props) {
       super(props);
       this.state = {
-        isPristine: true
+        isPristine: true,
+        formValid: false
       }
     }
 
@@ -75,11 +76,21 @@ export default (ComposedComponent) => {
       }
     }
 
+    _handleValid() {
+      this.setState({ formValid: true });
+    }
+
+    _handleInvalid() {
+      this.setState({ formValid: false });
+    }
+
     render() {
       return (
         <div className="details-panel__element">
           <Form name="panelForm"
                 ref="form"
+                onValid={this._handleValid.bind(this)}
+                onInvalid={this._handleInvalid.bind(this)}
                 onChange={this.checkPristine.bind(this)}
                 onValidSubmit={this.update.bind(this)}>
             <CloseButton showConfirmation={!this.state.isPristine}
@@ -93,7 +104,7 @@ export default (ComposedComponent) => {
 
             <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
 
-            <SaveButton enabled={!this.state.isPristine}
+            <SaveButton enabled={!this.state.isPristine && this.state.formValid}
                         onSave={this.update.bind(this)}/>
           </Form>
         </div>

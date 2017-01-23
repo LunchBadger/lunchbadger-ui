@@ -20,6 +20,7 @@ import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
 import CollapsableDetails from './components/Panel/EntitiesDetails/CollapsableDetails';
 import Input from './components/Generics/Form/Input';
+import Textarea from './components/Generics/Form/Textarea';
 import Checkbox from './components/Generics/Form/Checkbox';
 import Select from './components/Generics/Form/Select';
 import InputField from './components/Panel/EntitiesDetails/InputField';
@@ -77,6 +78,7 @@ import {waitForStores} from './utils/waitForStores';
 import createLoginManager from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
+import './utils/formValidators';
 
 let LunchBadgerCore = {
   dispatcher: {
@@ -107,6 +109,7 @@ let LunchBadgerCore = {
     BaseDetails: BaseDetails,
     CollapsableDetails: CollapsableDetails,
     Input: Input,
+    Textarea: Textarea,
     Checkbox: Checkbox,
     Select: Select,
     InputField: InputField,

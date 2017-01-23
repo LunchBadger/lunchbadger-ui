@@ -7,7 +7,7 @@ const Private = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const handleFatals = LunchBadgerCore.utils.handleFatals;
 
-export default (service, id, props) => {
+export default (service, id, props, propsToRemove = []) => {
   let model = Private.findEntity(id);
   let promise = Promise.resolve(null);
 
@@ -42,6 +42,8 @@ export default (service, id, props) => {
       public: 'public' in props ? props.public : model.public
     }));
   }
+
+  propsToRemove.forEach(prop => delete model[prop]);
 
   promise = promise
     .then(() => service.upsertModel(_.merge(model, props)))

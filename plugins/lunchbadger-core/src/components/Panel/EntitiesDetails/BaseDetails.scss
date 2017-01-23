@@ -45,6 +45,7 @@
   margin: 0 .5em;
 }
 
+.details-panel__textarea,
 .details-panel__input {
   border-radius: 5px;
   padding: 0 1em;
@@ -53,6 +54,12 @@
   font-size: 1.2em;
   line-height: 2em;
   height: 40px;
+}
+
+.details-panel__textarea {
+  height: 100px;
+  padding: 0.1em 0.2em;
+  line-height: 1.4em;
 }
 
 .details-panel__select {

@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelRelationDetails from './ModelRelationDetails';
+import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import BackendStore from '../../../stores/Backend';
 import _ from 'lodash';
 
@@ -32,6 +33,7 @@ class ModelDetails extends Component {
       return {
         properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : newProps.entity.properties.slice(),
         relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
+        userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : newProps.entity.extendedUserFields.slice(),
         changed: false
       };
     };
@@ -97,6 +99,19 @@ class ModelDetails extends Component {
       data.relations.push(rel);
     });
 
+    model.userFields && model.userFields.forEach(field => {
+      const value = field.value;
+      let output = value;
+
+      if (field.type === 'object') {
+        output = JSON.parse(value);
+      } else if (field.type === 'number') {
+        output = Number(value);
+      }
+
+      data[field.name] = output;
+    });
+
     const currDsConn = this._getBackendConnection();
     const currDsId = currDsConn ? currDsConn.fromId : null;
     const dsId = model.dataSource === 'none' ? null : model.dataSource;
@@ -110,15 +125,22 @@ class ModelDetails extends Component {
       }
     }
 
-    let updateData = Object.assign({}, model, data);
+    const updateData = Object.assign({}, model, data);
+    const propsToRemove = _.difference(
+      Object.keys(this.props.entity.userFields),
+      updateData.userFields.map(field => field.name)
+    );
+
     delete updateData.dataSource;
-    updateModel(this.context.projectService, this.props.entity.id, updateData);
+    delete updateData.userFields;
+
+    updateModel(this.context.projectService, this.props.entity.id, updateData, propsToRemove);
   }
 
-  onAddItem(collection, itemType, defaults={}) {
+  onAddItem(collection, item) {
     const items = this.state[collection];
 
-    items.push(itemType.create(defaults));
+    items.push(item);
 
     this.setState({
       [collection]: items
@@ -133,7 +155,11 @@ class ModelDetails extends Component {
     const items = this.state[collection];
 
     _.remove(items, function (i) {
-      return i.id === item.id;
+      if (item.id) {
+        return i.id === item.id;
+      }
+
+      return i.name === item.name;
     });
 
     this.setState({
@@ -151,19 +177,16 @@ class ModelDetails extends Component {
     });
   }
 
-  onAddProperty() {
-    this.onAddItem('properties', ModelProperty, {
-      propertyIsRequired: false,
-      propertyIsIndex: false
-    });
-
-    setTimeout(() => this._focusLastDetailsRowInput());
-  }
-
   _focusLastDetailsRowInput() {
     const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
 
     input && input.focus();
+  }
+
+  onAddProperty() {
+    this.onAddItem('properties', ModelProperty.create({propertyIsRequired: false, propertyIsIndex: false}));
+
+    setTimeout(() => this._focusLastDetailsRowInput());
   }
 
   onRemoveProperty(property) {
@@ -171,11 +194,19 @@ class ModelDetails extends Component {
   }
 
   onAddRelation() {
-    this.onAddItem('relations', ModelRelation);
+    this.onAddItem('relations', ModelRelation.create({}));
   }
 
   onRemoveRelation(relation) {
     this.onRemoveItem('relations', relation);
+  }
+
+  onAddUserField() {
+    this.onAddItem('userFields', {name: '', type: '', value: ''});
+  }
+
+  onRemoveUserField(field) {
+    this.onRemoveItem('userFields', field);
   }
 
   renderProperties() {
@@ -198,6 +229,19 @@ class ModelDetails extends Component {
                               key={`relation-${relation.id}`}
                               onRemove={this.onRemoveRelation.bind(this)}
                               relation={relation}/>
+      );
+    });
+  }
+
+  renderUserFields() {
+    return this.state.userFields.map((field, index) => {
+      return (
+        <ModelUserFieldsDetails index={index}
+                                addAction={() => this.onAddUserField()}
+                                fieldsCount={this.state.userFields.length}
+                                key={`user-field-${index}`}
+                                onRemove={(userField) => this.onRemoveUserField(userField)}
+                                field={field}/>
       );
     });
   }
@@ -236,7 +280,7 @@ class ModelDetails extends Component {
         <CollapsableDetails title="Relations">
           <table className="details-panel__table">
             <thead>
-              <tr>
+            <tr>
               <th>Name</th>
               <th>Model</th>
               <th>Type</th>
@@ -247,8 +291,8 @@ class ModelDetails extends Component {
                   Add relation
                 </a>
               </th>
-                <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-              </tr>
+              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+            </tr>
             </thead>
             <tbody>
             {this.renderRelations()}
@@ -276,6 +320,28 @@ class ModelDetails extends Component {
             </thead>
             <tbody>
             {this.renderProperties()}
+            </tbody>
+          </table>
+        </CollapsableDetails>
+        <div className="panel__title panel__title--custom">Custom Fields</div>
+        <CollapsableDetails title="User Defined Fields">
+          <table className="details-panel__table" ref="user-fields">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Data type</th>
+              <th>
+                Value
+                <a onClick={() => this.onAddUserField()} className="details-panel__add">
+                  <i className="fa fa-plus"/>
+                  Add field
+                </a>
+              </th>
+              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+            </tr>
+            </thead>
+            <tbody>
+            {this.renderUserFields()}
             </tbody>
           </table>
         </CollapsableDetails>

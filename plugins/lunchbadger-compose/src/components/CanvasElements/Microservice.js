@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import classNames from 'classnames';
 import Model from './Subelements/Model';
 import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
 import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
@@ -32,7 +33,8 @@ class Microservice extends Component {
     this.previousConnection = null;
 
     this.state = {
-      hasConnection: null,
+      hasTargetConnection: false,
+      hasSourceConnection: false,
       isShowingModal: false,
       bundledItem: null
     }
@@ -43,15 +45,27 @@ class Microservice extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+    if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
       const hasConnection = nextProps.entity.models.some((modelId) => {
         return Connection.getConnectionsForTarget(modelId).length;
       });
 
       if (hasConnection) {
-        this.setState({hasConnection: true});
+        this.setState({hasTargetConnection: true});
       } else {
-        this.setState({hasConnection: false});
+        this.setState({hasTargetConnection: false});
+      }
+    }
+
+    if (nextState === null || this.state.hasSourceConnection !== nextState.hasSourceConnection) {
+      const hasConnection = nextProps.entity.models.some((modelId) => {
+        return Connection.getConnectionsForSource(modelId).length;
+      });
+
+      if (hasConnection) {
+        this.setState({hasSourceConnection: true});
+      } else {
+        this.setState({hasSourceConnection: false});
       }
     }
   }
@@ -146,8 +160,13 @@ class Microservice extends Component {
   }
 
   render() {
+    const elementClass = classNames({
+      'has-connection-in': this.state.hasTargetConnection,
+      'has-connection-out': this.state.hasSourceConnection
+    });
+
     return (
-      <div>
+      <div className={elementClass}>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
           </div>

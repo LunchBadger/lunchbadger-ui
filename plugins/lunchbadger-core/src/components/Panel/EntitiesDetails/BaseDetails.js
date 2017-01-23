@@ -49,6 +49,10 @@ export default (ComposedComponent) => {
         changed = this.refs.form.isChanged();
       }
 
+      if (!this.element) {
+        return;
+      }
+
       if (this.element.state && this.element.state.changed) {
         this.setState({isPristine: false});
       } else {

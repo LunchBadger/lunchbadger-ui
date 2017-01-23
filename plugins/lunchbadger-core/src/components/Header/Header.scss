@@ -37,7 +37,7 @@
 
 .header__menu__link {
   display: block;
-  font-size: 33px;
+  font-size: 37px;
   color: #023845;
   transition: all .3s ease;
   top: 50%;
@@ -45,8 +45,9 @@
   transform: translateY(-50%);
   height: 40px;
   line-height: 40px;
-  padding: 0 7px;
-  border-radius: 10px;
+  border-radius: 3px;
+  width: 40px;
+  text-align: center;
 
   &:hover {
     text-decoration: none;

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Memory from './Memory';
 import REST from './REST';
 import SOAP from './SOAP';
 import MongoDB from './MongoDB';
@@ -16,6 +17,9 @@ class DataSource extends Component {
         <i className="tool__extend icon-arrowhead"/>
         <i className="tool__icon icon-icon-datasource"/>
         <ul className="tool__context">
+          <li>
+            <Memory />
+          </li>
           <li>
             <REST />
           </li>

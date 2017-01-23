@@ -1,9 +1,9 @@
 const serverHost = process.env.LBSERVER_HOST || 'localhost';
 
 export default {
-  projectApiUrl: `http://${serverHost}:3000/api`,
-  workspaceApiUrl: `http://${serverHost}:3001/api`,
-  forecastApiUrl: `http://${serverHost}:3000/api`,
+  projectApiUrl: `http://${serverHost}:4230/api`,
+  workspaceApiUrl: `http://${serverHost}:4231/api`,
+  forecastApiUrl: `http://${serverHost}:4230/api`,
   configStoreApiUrl: `http://${serverHost}:3002/api`,
   gitBaseUrl: `http://${serverHost}:3002/git`,
   user: {

@@ -90,4 +90,8 @@ export default class ProjectService {
   ping() {
     return this._projectClient.get('/WorkspaceStatus/ping');
   }
+
+  restartWorkspace() {
+    return this._projectClient.post('/WorkspaceStatus/restart');
+  }
 }

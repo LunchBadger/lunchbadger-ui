@@ -17,7 +17,8 @@ class SettingsPanel extends Component {
   static contextTypes = {
     loginManager: React.PropTypes.object,
     lunchbadgerConfig: React.PropTypes.object,
-    configStoreService: React.PropTypes.object
+    configStoreService: React.PropTypes.object,
+    projectService: React.PropTypes.object
   };
 
   componentWillMount() {
@@ -46,6 +47,10 @@ class SettingsPanel extends Component {
       console.error(err);
       notify.show('Error regenerating Git access key', 'error');
     });
+  }
+
+  onRestartWorkspace() {
+    this.context.projectService.restartWorkspace();
   }
 
   render() {
@@ -78,6 +83,16 @@ class SettingsPanel extends Component {
             </div>
             <div>
               <button onClick={this.onRegenerate.bind(this)}>Regenerate</button>
+            </div>
+          </div>
+        </div>
+        <div className="details-panel__element">
+          <div className="details-panel__fieldset">
+            <label className="details-panel__label">
+              Restart application
+            </label>
+            <div className="details-panel__static-field">
+              <button onClick={this.onRestartWorkspace.bind(this)}>Restart</button>
             </div>
           </div>
         </div>

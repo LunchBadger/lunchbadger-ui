@@ -35,13 +35,14 @@ export default class AppLoader extends Component {
 
     let projectService = new ProjectService(mkUrl(projectApiUrl),
                                             mkUrl(workspaceApiUrl), idToken);
+    let workspaceUrl = mkUrl(config.workspaceUrl);
 
     this.props.configStoreService.upsertProject(userId)
       .then(() => {
         return waitForProject(48, 2500);
       })
       .then(() => {
-        this.setState({projectService});
+        this.setState({projectService, workspaceUrl});
         // Setting the projectState will trigger the App render, which will
         // in turn trigger the remote call to the server. This creates some
         // Promises that do not get returned all the way here. As a result,
@@ -101,7 +102,8 @@ export default class AppLoader extends Component {
     return <App config={this.props.config}
                 loginManager={this.props.loginManager}
                 projectService={this.state.projectService}
-                configStoreService={this.props.configStoreService} />;
+                configStoreService={this.props.configStoreService}
+                workspaceUrl={this.state.workspaceUrl} />;
   }
 
   render() {

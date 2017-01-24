@@ -4,6 +4,7 @@ export default {
   projectApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
   workspaceApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/workspace-api/api',
   forecastApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
+  workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io/workspace',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

@@ -18,7 +18,8 @@ class SettingsPanel extends Component {
     loginManager: React.PropTypes.object,
     lunchbadgerConfig: React.PropTypes.object,
     configStoreService: React.PropTypes.object,
-    projectService: React.PropTypes.object
+    projectService: React.PropTypes.object,
+    workspaceUrl: React.PropTypes.string
   };
 
   componentWillMount() {
@@ -72,6 +73,22 @@ class SettingsPanel extends Component {
       <div className="panel__body">
         <div className="panel__title">
           Settings
+        </div>
+        <div className="details-panel__element">
+          <div className="details-panel__fieldset">
+            <label className="details-panel__label">
+              Your application URLs
+            </label>
+            <div className="details-panel__static-field">
+              <a href={this.context.workspaceUrl} target="_blank">
+                {this.context.workspaceUrl}
+              </a> (root)
+              <br />
+              <a href={this.context.workspaceUrl + '/explorer'} target="_blank">
+                {this.context.workspaceUrl + '/explorer'}
+              </a> (API explorer)
+            </div>
+          </div>
         </div>
         <div className="details-panel__element">
           <div className="details-panel__fieldset">

@@ -6,6 +6,7 @@ export default {
   forecastApiUrl: `http://${serverHost}:4230/api`,
   configStoreApiUrl: `http://${serverHost}:3002/api`,
   gitBaseUrl: `http://${serverHost}:3002/git`,
+  workspaceUrl: 'http://localhost:3000',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

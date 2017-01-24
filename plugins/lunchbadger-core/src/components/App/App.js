@@ -20,14 +20,16 @@ export default class App extends Component {
     lunchbadgerConfig: PropTypes.object,
     loginManager: PropTypes.object,
     projectService: PropTypes.object,
-    configStoreService: PropTypes.object
+    configStoreService: PropTypes.object,
+    workspaceUrl: PropTypes.string
   }
 
   static propTypes = {
     config: PropTypes.object,
     loginManager: PropTypes.object,
     projectService: PropTypes.object,
-    configStoreService: PropTypes.object
+    configStoreService: PropTypes.object,
+    workspaceUrl: PropTypes.string
   }
 
   constructor(props) {
@@ -53,7 +55,8 @@ export default class App extends Component {
       lunchbadgerConfig: this.props.config,
       loginManager: this.props.loginManager,
       projectService: this.props.projectService,
-      configStoreService: this.props.configStoreService
+      configStoreService: this.props.configStoreService,
+      workspaceUrl: this.props.workspaceUrl
     };
   }
 

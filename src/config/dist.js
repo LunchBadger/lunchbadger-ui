@@ -1,10 +1,10 @@
 export default {
   configStoreApiUrl: 'https://api.lunchbadger.com/api',
   gitBaseUrl: 'https://api.lunchbadger.com/git',
-  projectApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
-  workspaceApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/workspace-api/api',
-  forecastApiUrl: 'https://{USER}-{ENV}.lunchbadger.io/project-api/api',
-  workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io/workspace',
+  projectApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
+  workspaceApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/workspace-api/api',
+  forecastApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
+  workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

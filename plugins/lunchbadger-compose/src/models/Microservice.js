@@ -55,7 +55,7 @@ export default class Microservice extends BaseModel {
    * @param model {Model}
    */
   removeModel(model) {
-    _.remove(this.models, (modelId) => modelId === model.lunchbadgerId);
+    _.remove(this.models, (modelId) => modelId === (model.lunchbadgerId || model.id));
   }
 
   get accept() {

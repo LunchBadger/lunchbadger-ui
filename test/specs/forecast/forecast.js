@@ -120,8 +120,8 @@ module.exports = {
 
     // end date
     browser.click(apiForecastSelector + ' .react-datepicker__input-container:nth-child(3) > input');
-    browser.click('.react-datepicker__navigation--previous');
-    browser.click('.react-datepicker__navigation--previous');
+    browser.click('.react-datepicker__navigation--next');
+    browser.click('.react-datepicker__navigation--next');
     browser.click('.react-datepicker__month .react-datepicker__week:nth-child(4) .react-datepicker__day:first-child');
 
     browser.getValue(apiForecastSelector + ' .react-datepicker__input-container:nth-child(3) > input', function(result) {
@@ -132,7 +132,7 @@ module.exports = {
       browser.assert.equal(result.value.length, endDate.diff(startDate, 'months') + startEndDiff);
     });
 
-    browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.equal(moment().subtract(1, 'months').format('MMM')[0]);
+    browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.equal(moment().add(1, 'months').format('MMM')[0]);
 
     browser.pause(2000);
   },

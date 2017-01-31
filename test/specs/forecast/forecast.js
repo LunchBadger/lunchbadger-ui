@@ -70,7 +70,8 @@ module.exports = {
 
     browser.pause(500);
 
-    browser.expect.element(apiForecastSelector + ' .date-slider__mark.current').text.to.equal(moment().format('MMM')[0]);
+    let month = new RegExp('^' + moment().format('MMM')[0]);
+    browser.expect.element(apiForecastSelector + ' .date-slider__mark.current').text.to.match(month);
 
     browser
       .pause(500)
@@ -82,7 +83,7 @@ module.exports = {
       .pause(500);
 
     browser.elements('css selector', apiForecastSelector + ' .barlayer .trace:nth-child(3) .points path', function (result) {
-      browser.assert.equal(result.value.length, Math.ceil(moment().add(1, 'months').diff('2016-01-01', 'months', true)));
+      browser.assert.equal(result.value.length, Math.ceil(moment().add(1, 'months').diff('2017-01-01', 'months', true)));
     });
 
     browser.pause(2000);

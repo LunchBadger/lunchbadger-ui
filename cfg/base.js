@@ -56,6 +56,6 @@ module.exports = {
       })
     ];
   },
-  apiUrl: 'http://0.0.0.0:3000/api/',
+  apiUrl: 'http://0.0.0.0:4230/api/',
   gitBase: 'git@github.com:LunchBadger/'
 };

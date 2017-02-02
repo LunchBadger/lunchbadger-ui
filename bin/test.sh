@@ -3,7 +3,7 @@
 set -e
 
 # compile UI
-LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ print $2 }') npm run dist:local
+LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ print $2 }') npm run dist:test
 
 # build containers
 docker-compose build
@@ -42,4 +42,4 @@ if ! wait_for_http "http://localhost:4230/api/WorkspaceStatus/ping" 30; then
 fi
 
 # run tests
-docker run -it --rm -v `pwd`:/opt/lunchbadger lunchbadger-ui:test npm run test:nodocker $@
+docker run -it --rm -v `pwd`:/opt/lunchbadger -e PARENT_PWD=`pwd` lunchbadger-ui:test npm run test:nodocker $@

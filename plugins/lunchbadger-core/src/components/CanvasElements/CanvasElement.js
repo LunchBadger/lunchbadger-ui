@@ -291,6 +291,7 @@ export default (ComposedComponent) => {
                 <Input className="canvas-element__input editable-only"
                        ref="nameInput"
                        name="name"
+                       validations="isValidEntityName"
                        value={this.props.entity.name}
                        handleChange={this.updateName.bind(this)}/>
               </div>

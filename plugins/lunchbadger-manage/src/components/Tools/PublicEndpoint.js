@@ -6,7 +6,7 @@ const Tool = LunchBadgerCore.components.Tool;
 class PrivateEndpoint extends Component {
   render() {
     return (
-      <div className="publicendpoint tool__context__item" onClick={() => AddPublicEndpoint('Public Endpoint')}>
+      <div className="publicendpoint tool__context__item" onClick={() => AddPublicEndpoint('PublicEndpoint')}>
       	<i className="tool__icon icon-icon-endpoint"/>
       	<span className="tool__name">Public</span>
         <span className="tool__context__tooltip">Endpoint</span>

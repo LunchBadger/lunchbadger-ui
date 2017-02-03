@@ -92,7 +92,7 @@ export default class Pipeline extends Component {
     }
 
     addPublicEndpointAndConnect(
-      connectionEntity.name + ' Public Endpoint',
+      connectionEntity.name + 'PublicEndpoint',
       connectionEntity.contextPath,
       this.props.entity.id,
       findDOMNode(this.refs['port-out'])

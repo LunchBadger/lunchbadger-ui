@@ -19,7 +19,7 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Public Endpoint');
+    page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('PublicEndpoint');
     page.expect.element(elementSelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__properties__property-title').text.to.equal('PATH');
     page.expect.element(elementSelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__input').to.have.value.that.equals('/endpoint');
 

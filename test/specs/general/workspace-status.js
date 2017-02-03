@@ -24,6 +24,7 @@ module.exports = {
 
   'Workspace status: error when bad configuration': function(browser) {
     page.addElement('.model.tool');
+    browser.pause(500);
     // the name "Model" should cause an error as it is already used within
     // LoopBack
     page.setValue(modelSelector + ' .canvas-element__title .canvas-element__input', 'Model');

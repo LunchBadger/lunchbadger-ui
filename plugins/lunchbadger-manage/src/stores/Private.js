@@ -8,7 +8,7 @@ let Privates = [];
 
 class Private extends BaseStore {
   constructor() {
-    super(2);
+    super();
     register((action) => {
       this.handleBaseActions('Private', ['Model', 'Microservice', 'PrivateEndpoint'], action);
 

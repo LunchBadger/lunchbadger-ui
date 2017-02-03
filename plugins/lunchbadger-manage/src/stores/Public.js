@@ -8,7 +8,7 @@ let Publics = [];
 
 class Public extends BaseStore {
   constructor() {
-    super(2);
+    super();
     register((action) => {
       this.handleBaseActions('Public', ['PublicEndpoint', 'API', 'Portal'], action);
 

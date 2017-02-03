@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 import Model from './Subelements/Model';
 import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
 import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';

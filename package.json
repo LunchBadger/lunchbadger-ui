@@ -18,7 +18,7 @@
     "serve:dist": "node server.js --env=dist",
     "start": "npm run clean && npm run serve",
     "test": "bin/test.sh",
-    "test:nodocker": "xvfb-run nightwatch",
+    "test:nodocker": "xvfb-run -s '-screen 0 1920x1080x24' nightwatch",
     "test:dev": "nightwatch",
     "posttest": "npm run lint"
   },

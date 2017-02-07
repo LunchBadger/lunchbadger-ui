@@ -12,8 +12,8 @@ export default class WorkspaceStatus extends Component {
   constructor() {
     super();
     this.state = {
-      running: false,
       connected: false,
+      status: null,
       output: '',
       instance: null,
       visible: false,
@@ -54,7 +54,7 @@ export default class WorkspaceStatus extends Component {
 
     this.setState({
       connected: true,
-      running: status.running,
+      status: status.status,
       output: status.output,
       instance: status.instance
     });
@@ -99,19 +99,22 @@ export default class WorkspaceStatus extends Component {
     let message = null;
 
     if (!this.state.connected) {
-        message = 'Error connecting to server';
-        classes.push(...['fa-question-circle', 'workspace-status__unknown'])
-    } else if (this.state.running) {
-        message = 'Workspace OK';
-        classes.push(...['fa-check-circle', 'workspace-status__success']);
-    } else {
-        message = 'Workspace crashed. Output follows:'
-        classes.push(...['fa-exclamation-triangle', 'workspace-status__failure']);
+      message = 'Error connecting to server';
+      classes.push(...['fa-question-circle', 'workspace-status__unknown'])
+    } else if (this.state.status === 'running') {
+      message = 'Workspace OK';
+      classes.push(...['fa-check-circle', 'workspace-status__success']);
+    } else if (this.state.status === 'crashed') {
+      message = 'Workspace crashed. Output follows:'
+      classes.push(...['fa-exclamation-triangle', 'workspace-status__failure']);
+    } else if (this.state.status === 'installing') {
+      message = 'Updating dependencies';
+      classes.push('workspace-status__progress');
     }
 
     return (
       <span className="workspace-status">
-        <i className={classnames(classes)} onClick={this.onClick.bind(this)} />
+        <span className={classnames(classes)} onClick={this.onClick.bind(this)} />
         {this.state.visible ? this.renderInfo(message) : null}
         {
           this.state.isShowingModal &&

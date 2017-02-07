@@ -7,18 +7,18 @@ module.exports = {
     page.open();
 
     page.expect.element('.workspace-status').to.be.present;
-    page.expect.element('.workspace-status i').to.have.attribute('class')
+    page.expect.element('.workspace-status span').to.have.attribute('class')
       .which.contains('workspace-status__success').after(5000);
   },
 
   'Workspace status: info panel shows OK status': function(browser) {
-    browser.click('.workspace-status i');
+    browser.click('.workspace-status span');
     page.expect.element('.workspace-status__info').to.be.visible.after(1000);
     page.expect.element('.workspace-status__info').text.to.contain('Workspace OK');
   },
 
   'Workspace status: info panel can close': function(browser) {
-    browser.click('.workspace-status i');
+    browser.click('.workspace-status span');
     page.expect.element('.workspace-status__info').to.not.be.present.after(1000);
   },
 
@@ -30,14 +30,14 @@ module.exports = {
     page.setValue(modelSelector + ' .canvas-element__title .canvas-element__input', 'Model');
     browser.click(modelSelector + ' .canvas-element__button');
 
-    page.expect.element('.workspace-status i').to.have.attribute('class')
+    page.expect.element('.workspace-status span').to.have.attribute('class')
       .which.contains('workspace-status__failure').after(5000);
   },
 
   'Workspace status: info panel shows error': function(browser) {
-    browser.click('.workspace-status i');
+    browser.click('.workspace-status span');
     page.expect.element('.workspace-status__info').text.to.contain('Model must be a descendant of loopback.Model').after(1000);
-    browser.click('.workspace-status i');
+    browser.click('.workspace-status span');
   },
 
   after: function() {

@@ -16,6 +16,13 @@
   color: #F5e273;
 }
 
+.workspace-status__progress {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background-image: url(./wheel.svg);
+}
+
 .workspace-status__info {
   position: absolute;
   left: -300px;

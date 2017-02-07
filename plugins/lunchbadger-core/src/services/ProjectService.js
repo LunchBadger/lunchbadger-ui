@@ -94,4 +94,8 @@ export default class ProjectService {
   restartWorkspace() {
     return this._projectClient.post('/WorkspaceStatus/restart');
   }
+
+  reinstallDeps() {
+    return this._projectClient.post('/WorkspaceStatus/reinstall');
+  }
 }

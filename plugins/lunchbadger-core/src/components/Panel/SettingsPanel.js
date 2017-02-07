@@ -54,6 +54,10 @@ class SettingsPanel extends Component {
     this.context.projectService.restartWorkspace();
   }
 
+  onReinstall() {
+    this.context.projectService.reinstallDeps();
+  }
+
   render() {
     const userName = this.context.loginManager.user.profile.sub;
 
@@ -110,6 +114,16 @@ class SettingsPanel extends Component {
             </label>
             <div className="details-panel__static-field">
               <button onClick={this.onRestartWorkspace.bind(this)}>Restart</button>
+            </div>
+          </div>
+        </div>
+        <div className="details-panel__element">
+          <div className="details-panel__fieldset">
+            <label className="details-panel__label">
+              Reinstall dependencies
+            </label>
+            <div className="details-panel__static-field">
+              <button onClick={this.onReinstall.bind(this)}>Reinstall</button>
             </div>
           </div>
         </div>

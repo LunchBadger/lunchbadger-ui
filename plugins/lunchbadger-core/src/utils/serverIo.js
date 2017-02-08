@@ -33,7 +33,7 @@ export function loadFromServer(config, loginManager, projectService) {
 
   let storesList = [];
 
-  if (LunchBadgerManage) {
+  if (typeof LunchBadgerManage !== 'undefined') {
     storesList.push(
       LunchBadgerManage.stores.Private,
       LunchBadgerManage.stores.Gateway,
@@ -41,7 +41,7 @@ export function loadFromServer(config, loginManager, projectService) {
     );
   }
 
-  if (LunchBadgerCompose) {
+  if (typeof LunchBadgerCompose !== 'undefined') {
     storesList.push(
       LunchBadgerCompose.stores.Backend
     );
@@ -88,25 +88,41 @@ export function loadFromServer(config, loginManager, projectService) {
       });
     });
 
-    if (typeof LunchBadgerManage !== 'undefined') {
-      LunchBadgerManage.actions.Stores.Public.initialize(project);
-      LunchBadgerManage.actions.Stores.Private.initialize(project);
-      LunchBadgerManage.actions.Stores.Gateway.initialize(project);
-    }
+    // at first set amount of init calls required to setup project
+    setupInitCalls();
 
-    if (typeof LunchBadgerCompose !== 'undefined') {
-      LunchBadgerCompose.actions.Stores.Private.initialize(models, project);
-      LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
-      LunchBadgerManage.stores.Private.initCalls++;
-    }
-
-    if (typeof LunchBadgerMonetize !== 'undefined') {
-      LunchBadgerMonetize.actions.Stores.Public.initialize(project);
-      LunchBadgerManage.stores.Public.initCalls++;
-    }
+    // then initialize stores
+    initializeStores({project, models, dataSources});
 
     return result;
   });
+}
+
+function setupInitCalls() {
+  if (typeof LunchBadgerCompose !== 'undefined') {
+    LunchBadgerManage.stores.Private.initCalls++;
+  }
+
+  if (typeof LunchBadgerMonetize !== 'undefined') {
+    LunchBadgerManage.stores.Public.initCalls++;
+  }
+}
+
+function initializeStores({project, models, dataSources}) {
+  if (typeof LunchBadgerManage !== 'undefined') {
+    LunchBadgerManage.actions.Stores.Public.initialize(project);
+    LunchBadgerManage.actions.Stores.Private.initialize(project);
+    LunchBadgerManage.actions.Stores.Gateway.initialize(project);
+  }
+
+  if (typeof LunchBadgerCompose !== 'undefined') {
+    LunchBadgerCompose.actions.Stores.Private.initialize(models, project);
+    LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
+  }
+
+  if (typeof LunchBadgerMonetize !== 'undefined') {
+    LunchBadgerMonetize.actions.Stores.Public.initialize(project);
+  }
 }
 
 export function saveToServer(config, loginManager, projectService) {

@@ -3,7 +3,7 @@
 set -e
 
 # compile UI
-LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ print $2 }') npm run dist:local
+LBSERVER_HOST=$(ip addr show dev docker0 | grep -Eo 'inet [0-9\.]+' | awk '{ print $2 }') npm run dist:test
 
 # build containers
 docker-compose build
@@ -19,11 +19,27 @@ function cleanup() {
 }
 trap cleanup EXIT
 
+function wait_for_http() {
+  echo "waiting for $1 for up to $2 seconds"
+
+  success=1
+  for i in `seq $2`; do
+    curl $1 >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      success=0
+      break
+    fi
+    sleep 1
+  done
+
+  echo "done waiting after $i seconds (result=$success)"
+  return $success
+}
+
 docker-compose up -d
-for port in 8000 3000 3001 3002; do
-  bin/wait-for-it.sh 127.0.0.1:$port -t 10
-done
-sleep 2
+if ! wait_for_http "http://localhost:4230/api/WorkspaceStatus/ping" 30; then
+  exit 1
+fi
 
 # run tests
-docker run -it --rm -v `pwd`:/opt/lunchbadger lunchbadger-ui:test npm run test:nodocker $@
+docker run -it --rm -v `pwd`:/opt/lunchbadger -e PARENT_PWD=`pwd` lunchbadger-ui:test npm run test:nodocker $@

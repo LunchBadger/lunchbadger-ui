@@ -13,3 +13,4 @@ dependencies:
 test:
   post:
     - cp -r test/reports $CIRCLE_TEST_REPORTS/nightwatch
+    - cp -r coverage/lcov-report $CIRCLE_ARTIFACTS/coverage

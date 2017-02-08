@@ -88,19 +88,21 @@ export function loadFromServer(config, loginManager, projectService) {
       });
     });
 
-    if (LunchBadgerManage) {
+    if (typeof LunchBadgerManage !== 'undefined') {
       LunchBadgerManage.actions.Stores.Public.initialize(project);
       LunchBadgerManage.actions.Stores.Private.initialize(project);
       LunchBadgerManage.actions.Stores.Gateway.initialize(project);
     }
 
-    if (LunchBadgerCompose) {
+    if (typeof LunchBadgerCompose !== 'undefined') {
       LunchBadgerCompose.actions.Stores.Private.initialize(models, project);
       LunchBadgerCompose.actions.Stores.Backend.initialize(dataSources);
+      LunchBadgerManage.stores.Private.initCalls++;
     }
 
-    if (LunchBadgerMonetize) {
+    if (typeof LunchBadgerMonetize !== 'undefined') {
       LunchBadgerMonetize.actions.Stores.Public.initialize(project);
+      LunchBadgerManage.stores.Public.initCalls++;
     }
 
     return result;
@@ -120,7 +122,7 @@ export function saveToServer(config, loginManager, projectService) {
     states: []
   };
 
-  if (LunchBadgerManage) {
+  if (typeof LunchBadgerManage !== 'undefined') {
     storesList.push(
       LunchBadgerManage.stores.Private,
       LunchBadgerManage.stores.Gateway,
@@ -133,7 +135,7 @@ export function saveToServer(config, loginManager, projectService) {
     project.publicEndpoints = [];
   }
 
-  if (LunchBadgerMonetize) {
+  if (typeof LunchBadgerMonetize !== 'undefined') {
     project.apis = [];
     project.portals = [];
   }
@@ -222,7 +224,7 @@ export function saveToServer(config, loginManager, projectService) {
   saveableServices.push(projSave);
 
   // save api forecasts
-  if (LunchBadgerOptimize) {
+  if (typeof LunchBadgerOptimize !== 'undefined') {
     const forecasts = LunchBadgerOptimize.stores.Forecast.getData();
     const forecastService = new LunchBadgerOptimize.services.ForecastService(
       config.forecastApiUrl);

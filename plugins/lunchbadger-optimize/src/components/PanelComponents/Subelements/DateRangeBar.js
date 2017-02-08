@@ -26,10 +26,8 @@ export default class DateRangeBar extends Component {
     this.state = {
       startDate: props.startDate ? moment(props.startDate, format) : moment(),
       endDate: props.endDate ? moment(props.endDate, format).endOf('month') : moment(),
-      minStartDate: props.startDate ? moment(props.startDate, format) : moment(),
       maxStartDate: props.endDate ? moment(props.endDate, format).endOf('month') : moment(),
-      minEndDate: props.startDate ? moment(props.startDate, format) : moment(),
-      maxEndDate: props.endDate ? moment(props.endDate, format).endOf('month') : moment()
+      minEndDate: props.startDate ? moment(props.startDate, format) : moment()
     }
   }
 
@@ -42,8 +40,7 @@ export default class DateRangeBar extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       startDate: nextProps.startDate,
-      endDate: nextProps.endDate,
-      maxEndDate: nextProps.endDate ? moment(nextProps.endDate, 'M/YYYY').endOf('month') : moment()
+      endDate: nextProps.endDate
     });
   }
 
@@ -78,7 +75,6 @@ export default class DateRangeBar extends Component {
           selected={this.state.startDate}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
-          minDate={this.state.minStartDate}
           maxDate={this.state.maxStartDate}
           readOnly={true}
           popoverAttachment="top left"
@@ -92,7 +88,6 @@ export default class DateRangeBar extends Component {
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           minDate={this.state.minEndDate}
-          maxDate={this.state.maxEndDate}
           readOnly={true}
           popoverAttachment="top center"
           popoverTargetAttachment="bottom center"

@@ -32,7 +32,7 @@ module.exports = {
       .pause(500);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.expect.element(publicEndpointSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Model Public Endpoint');
+    page.expect.element(publicEndpointSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('ModelPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('test-model');
     page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/test-model');
 

@@ -24,7 +24,7 @@ module.exports = {
     browser.pause(500);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.setValue(publicEndpointSelector + '.editable .canvas-element__input', 'PUBLIC ENDPOINT BUNDLED');
+    page.setValue(publicEndpointSelector + '.editable .canvas-element__input', 'PublicEndpointBundled');
     browser.click(publicEndpointSelector + '.editable .canvas-element__button');
     browser.pause(1000);
 

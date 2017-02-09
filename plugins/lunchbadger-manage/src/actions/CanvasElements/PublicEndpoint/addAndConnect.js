@@ -5,7 +5,7 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 export default (name, path, sourceId, outPort) => {
   dispatch('AddPublicEndpointAndConnect', {
     endpoint: PublicEndpoint.create({
-      name: name || 'Public Endpoint',
+      name: name || 'PublicEndpoint',
       path: path || '/endpoint'
     }),
     sourceId,

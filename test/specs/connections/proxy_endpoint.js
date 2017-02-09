@@ -11,7 +11,7 @@ module.exports = {
     page.addElementFromTooltip('.endpoint.tool', 1);
     browser.pause(500);
     browser.clearValue(privateEndpointSelector + ' .canvas-element__title .canvas-element__input');
-    browser.setValue(privateEndpointSelector + ' .canvas-element__title .canvas-element__input', 'Foo Bar');
+    browser.setValue(privateEndpointSelector + ' .canvas-element__title .canvas-element__input', 'FooBar');
     browser.click(privateEndpointSelector + '.editable .canvas-element__button');
     browser.pause(1000);
 
@@ -33,9 +33,9 @@ module.exports = {
       .pause(500);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.expect.element(publicEndpointSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Foo Bar Public Endpoint');
-    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('foo-bar');
-    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foo-bar');
+    page.expect.element(publicEndpointSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('FooBarPublicEndpoint');
+    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('foobar');
+    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');
 
     browser.pause(1500);
 

@@ -5,7 +5,7 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 export default (name) => {
   dispatch('AddPrivateEndpoint', {
   	entity: PrivateEndpoint.create({
-  		name: name || 'Private Endpoint'
+  		name: name || 'PrivateEndpoint'
   	})
   });
 };

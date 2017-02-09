@@ -32,6 +32,7 @@ module.exports = {
   },
 
   'Model: dirty state of context path': function (browser) {
+    page.clearValue(elementSelector + ' .canvas-element__title .canvas-element__input');
     page.clearValue(elementSelector + ' .canvas-element__properties__property:first-child .canvas-element__input');
 
     browser.pause(500);
@@ -41,6 +42,26 @@ module.exports = {
     page.expect.element(elementSelector + ' .canvas-element__properties__property:first-child .canvas-element__input').to.have.value.that.equals('dirty');
 
     browser.pause(500);
+  },
+
+  'Model: invalid value': function(browser) {
+    page.clearValue(elementSelector + ' .canvas-element__title .canvas-element__input');
+    page.setValue(elementSelector + ' .canvas-element__title .canvas-element__input', '-Invalid !! Value ++**');
+    browser.click(elementSelector + '.editable .canvas-element__button');
+
+    // Still editable
+    browser.pause(500);
+    page.expect.element(elementSelector).to.have.attribute('class').which.contains('editable');
+  },
+
+  'Model: save': function(browser) {
+    page.clearValue(elementSelector + ' .canvas-element__title .canvas-element__input');
+    page.setValue(elementSelector + ' .canvas-element__title .canvas-element__input', '_ThisIsA_Valid_Value');
+
+    browser.click(elementSelector + '.editable .canvas-element__button');
+
+    // No longer editable
+    page.expect.element(elementSelector).to.have.attribute('class').which.does.not.contain('editable').before(1000);
   },
 
   after: function () {

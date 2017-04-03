@@ -126,6 +126,9 @@ class ModelDetails extends Component {
     }
 
     const updateData = Object.assign({}, model, data);
+    if (!updateData.userFields) {
+      updateData.userFields = [];
+    }
     const propsToRemove = _.difference(
       Object.keys(this.props.entity.userFields),
       updateData.userFields.map(field => field.name)

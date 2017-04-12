@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
@@ -73,7 +74,30 @@ class Portal extends Component {
   }
 
   update(model) {
-    updatePortal(this.props.entity.id, model);
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updatePortal(this.props.entity.id, model);
+    }
+    return validations;
+  }
+
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.rootUrl === '') validations.data.rootUrl = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
+
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   renderAPIs() {
@@ -133,21 +157,24 @@ class Portal extends Component {
     const elementClass = classNames({
       'has-connection': this.state.hasConnection
     });
-
+    const {validations: {data}} = this.props;
     return (
       <div className={elementClass}>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
+            <div className={cs('canvas-element__properties__property', {['invalid']: data.rootUrl})}>
               <div className="canvas-element__properties__property-title">Root URL</div>
               <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">
-                {this.props.entity.rootUrl}
+                {this.props.entity.rootUrl || 'Enter root URL here'}
               </span>
 
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.props.entity.rootUrl}
-                       name="rootUrl"/>
+                       placeholder="Enter root URL here"
+                       name="rootUrl"
+                       handleBlur={this.handleFieldChange('rootUrl')}
+                />
               </div>
             </div>
           </div>

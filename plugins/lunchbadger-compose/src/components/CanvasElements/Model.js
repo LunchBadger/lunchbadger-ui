@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
@@ -34,7 +35,6 @@ class Model extends Component {
     let data = {
       properties: []
     };
-
     model.properties && model.properties.forEach((property) => {
       if (property.name.trim().length > 0) {
         let prop = ModelPropertyFactory.create(property);
@@ -42,11 +42,31 @@ class Model extends Component {
         data.properties.push(prop);
       }
     });
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updateModel(this.context.projectService, this.props.entity.id,
+        Object.assign(model, data));
+    }
+    return validations;
+  }
 
-    updateModel(this.context.projectService, this.props.entity.id,
-      Object.assign(model, data));
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.contextPath === '') validations.data.contextPath = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
 
-    return true;
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   updateName(event) {
@@ -109,6 +129,7 @@ class Model extends Component {
   }
 
   render() {
+    const {validations: {data}} = this.props;
     return (
       <div>
         <div>
@@ -116,20 +137,22 @@ class Model extends Component {
         </div>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
+            <div className={cs('canvas-element__properties__property', {['invalid']: data.contextPath})}>
               <div className="canvas-element__properties__property-title">Context path</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
                   {this.props.entity.contextPath}
                 </span>
-
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.state.contextPath}
                        name="contextPath"
-                       handleChange={this.updateContextPath.bind(this)}/>
+                       placeholder="Enter context path here"
+                       handleChange={this.updateContextPath.bind(this)}
+                       handleBlur={this.handleFieldChange('contextPath')}
+                />
               </div>
             </div>
-            <div className="canvas-element__properties__property">
+            <div className="canvas-element__properties__property canvas-element__properties__model">
               <div className="canvas-element__properties__property-title">
                 Properties
                 <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>

@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
@@ -97,8 +98,30 @@ class Gateway extends Component {
         });
       })
     };
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      redeployGateway(this.props.entity, _.merge(model, data));
+    }
+    return validations;
+  }
 
-    redeployGateway(this.props.entity, _.merge(model, data));
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.dnsPrefix === '') validations.data.dnsPrefix = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
+
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   onAddPipeline(name) {
@@ -120,28 +143,30 @@ class Gateway extends Component {
       'has-connection-in': this.state.hasInConnection,
       'has-connection-out': this.state.hasOutConnection
     });
-
+    const {validations: {data}} = this.props;
     return (
       <div className={elementClass}>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
             <div className="canvas-element__properties__property">
               <div className="canvas-element__properties__property-title">Root URL</div>
-              <div className="canvas-element__properties__property-value">
+              <div className="canvas-element__properties__property-value canvas-element__properties__property-fake">
                 http://{this.state.dnsPrefix}.customer.lunchbadger.com
               </div>
             </div>
-            <div className="canvas-element__properties__property editable-only">
+            <div className={cs('canvas-element__properties__property', 'editable-only', {['invalid']: data.dnsPrefix})}>
               <div className="canvas-element__properties__property-title">DNS Prefix</div>
               <div className="canvas-element__properties__property-value">
               <span className="hide-while-edit">
                 {this.props.entity.dnsPrefix}
               </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       name="dnsPrefix"
-                       value={this.props.entity.dnsPrefix}
-                       handleChange={this.onPrefixChange.bind(this)}/>
+              <Input className="canvas-element__input canvas-element__input--property editable-only"
+                     name="dnsPrefix"
+                     value={this.props.entity.dnsPrefix}
+                     placeholder="Enter DNS prefix here"
+                     handleChange={this.onPrefixChange.bind(this)}
+                     handleBlur={this.handleFieldChange('dnsPrefix')}
+              />
               </div>
             </div>
           </div>

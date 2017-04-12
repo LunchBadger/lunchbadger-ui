@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 
 const Port = LunchBadgerCore.components.Port;
@@ -16,7 +17,30 @@ class PrivateEndpoint extends Component {
   }
 
   update(model) {
-    updatePrivateEndpoint(this.props.entity.id, model);
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updatePrivateEndpoint(this.props.entity.id, model);
+    }
+    return validations;
+  }
+
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.url === '') validations.data.url = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
+
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   renderPorts() {
@@ -33,6 +57,7 @@ class PrivateEndpoint extends Component {
   }
 
   render() {
+    const {validations: {data}} = this.props;
     return (
       <div>
         <div>
@@ -40,16 +65,18 @@ class PrivateEndpoint extends Component {
         </div>
         <div className="canvas-element__properties">
           <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
+            <div className={cs('canvas-element__properties__property', {['invalid']: data.url})}>
               <div className="canvas-element__properties__property-title">URL</div>
               <div className="canvas-element__properties__property-value">
                 <span className="hide-while-edit">
-                  {this.props.entity.url}
+                  {this.props.entity.url || 'Enter URL here'}
                 </span>
-
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.props.entity.url}
-                       name="url"/>
+                       placeholder="Enter URL here"
+                       name="url"
+                       handleBlur={this.handleFieldChange('url')}
+                />
               </div>
             </div>
           </div>

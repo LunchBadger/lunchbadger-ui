@@ -11,7 +11,8 @@ class Input extends Component {
     handleKeyDown: PropTypes.func,
     handleChange: PropTypes.func,
     className: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    placeholder: PropTypes.string
   };
 
   _handleKeyPress(event) {
@@ -40,7 +41,6 @@ class Input extends Component {
 
   _handleChange(event) {
     this.props.setValue(event.target.value);
-
     if (typeof this.props.handleChange === 'function') {
       this.props.handleChange(event);
     }
@@ -56,7 +56,9 @@ class Input extends Component {
              onKeyUp={this._handleKeyUp.bind(this)}
              onKeyDown={this._handleKeyDown.bind(this)}
              onChange={this._handleChange.bind(this)}
-             id={this.props.name}/>
+             id={this.props.name}
+             placeholder={this.props.placeholder}
+      />
     );
   }
 }

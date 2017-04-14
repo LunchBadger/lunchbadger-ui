@@ -5,7 +5,7 @@ import togglePanel from '../../actions/togglePanel';
 
 export default class HeaderMenuLink extends Component {
   static propTypes = {
-    icon: PropTypes.string.isRequired,
+    icon: PropTypes.string,
     togglePanel: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.object
@@ -43,10 +43,10 @@ export default class HeaderMenuLink extends Component {
       'header__menu__link': true,
       'header__menu__link--pressed': this.state.pressed
     });
-
     return (
       <a href="#" className={linkClass} onClick={() => togglePanel(this.props.togglePanel)}>
-        <i className={`fa ${this.props.icon}`}/>
+        {this.props.icon && <i className={`fa ${this.props.icon}`} />}
+        {this.props.svg && <span className="header__menu__link__svg" dangerouslySetInnerHTML={{__html: this.props.svg}} />}
       </a>
     );
   }

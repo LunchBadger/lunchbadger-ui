@@ -66,7 +66,22 @@
 .header__menu__link--pressed {
   color: $font-light;
   background: #023845;
+  .header__menu__link__svg {
+    svg {
+      fill: $font-light;
+    }
+  }
 }
+
+.header__menu__link__svg {
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+  svg {
+    fill: #023845;
+  }
+}
+
 .Logo {
   position: absolute;
   width: 35px;

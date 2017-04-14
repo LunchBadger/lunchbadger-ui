@@ -4,6 +4,7 @@ import HeaderMenuSaveButton from './HeaderMenuSaveButton';
 import HeaderMenuClearButton from './HeaderMenuClearButton';
 import panelKeys from '../../constants/panelKeys';
 import classNames from 'classnames';
+import iconDetails from '../../../../../src/icons/icon-details.svg';
 
 export default class HeaderMenu extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class HeaderMenu extends Component {
             <HeaderMenuSaveButton saveToServer={this.props.saveToServer} />
           </li>
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} icon="icon-icon-details"/>
+            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} svg={iconDetails} />
           </li>
           {this.renderButtons()}
           <li className="header__menu__element">

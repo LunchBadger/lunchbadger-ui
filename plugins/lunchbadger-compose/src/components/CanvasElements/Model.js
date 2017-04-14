@@ -151,6 +151,11 @@ class Model extends Component {
                        handleBlur={this.handleFieldChange('contextPath')}
                 />
               </div>
+              {data.contextPath && (
+                <div className="canvas-element__validation__error">
+                  {data.contextPath}
+                </div>
+              )}
             </div>
             <div className="canvas-element__properties__property canvas-element__properties__model">
               <div className="canvas-element__properties__property-title">

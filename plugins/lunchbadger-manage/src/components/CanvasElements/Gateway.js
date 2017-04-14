@@ -157,17 +157,22 @@ class Gateway extends Component {
             <div className={cs('canvas-element__properties__property', 'editable-only', {['invalid']: data.dnsPrefix})}>
               <div className="canvas-element__properties__property-title">DNS Prefix</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.dnsPrefix}
-              </span>
-              <Input className="canvas-element__input canvas-element__input--property editable-only"
-                     name="dnsPrefix"
-                     value={this.props.entity.dnsPrefix}
-                     placeholder="Enter DNS prefix here"
-                     handleChange={this.onPrefixChange.bind(this)}
-                     handleBlur={this.handleFieldChange('dnsPrefix')}
-              />
+                <span className="hide-while-edit">
+                  {this.props.entity.dnsPrefix}
+                </span>
+                <Input className="canvas-element__input canvas-element__input--property editable-only"
+                       name="dnsPrefix"
+                       value={this.props.entity.dnsPrefix}
+                       placeholder="Enter DNS prefix here"
+                       handleChange={this.onPrefixChange.bind(this)}
+                       handleBlur={this.handleFieldChange('dnsPrefix')}
+                />
               </div>
+              {data.dnsPrefix && (
+                <div className="canvas-element__validation__error">
+                  {data.dnsPrefix}
+                </div>
+              )}
             </div>
           </div>
         </div>

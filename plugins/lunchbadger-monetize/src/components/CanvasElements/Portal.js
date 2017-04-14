@@ -165,10 +165,9 @@ class Portal extends Component {
             <div className={cs('canvas-element__properties__property', {['invalid']: data.rootUrl})}>
               <div className="canvas-element__properties__property-title">Root URL</div>
               <div className="canvas-element__properties__property-value">
-              <span className="hide-while-edit">
-                {this.props.entity.rootUrl || 'Enter root URL here'}
-              </span>
-
+                <span className="hide-while-edit">
+                  {this.props.entity.rootUrl || 'Enter root URL here'}
+                </span>
                 <Input className="canvas-element__input canvas-element__input--property editable-only"
                        value={this.props.entity.rootUrl}
                        placeholder="Enter root URL here"
@@ -176,6 +175,11 @@ class Portal extends Component {
                        handleBlur={this.handleFieldChange('rootUrl')}
                 />
               </div>
+              {data.rootUrl && (
+                <div className="canvas-element__validation__error">
+                  {data.rootUrl}
+                </div>
+              )}
             </div>
           </div>
         </div>

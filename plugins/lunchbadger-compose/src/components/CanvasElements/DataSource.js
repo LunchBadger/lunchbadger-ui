@@ -48,7 +48,7 @@ class DataSource extends Component {
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
-      this.props.onFieldUpdate(field, evt.target.value);
+      this.props.onFieldUpdate(field, evt.target.value, evt);
     }
   }
 
@@ -90,6 +90,11 @@ class DataSource extends Component {
                        handleBlur={this.handleFieldChange('url')}
                 />
               </div>
+              {data.url && (
+                <div className="canvas-element__validation__error">
+                  {data.url}
+                </div>
+              )}
             </div>
 
             <div className={cs('canvas-element__properties__property', {['invalid']: data.database})}>
@@ -105,6 +110,11 @@ class DataSource extends Component {
                        handleBlur={this.handleFieldChange('database')}
                 />
               </div>
+              {data.database && (
+                <div className="canvas-element__validation__error">
+                  {data.database}
+                </div>
+              )}
             </div>
 
             <div className={cs('canvas-element__properties__property', {['invalid']: data.username})}>
@@ -120,6 +130,11 @@ class DataSource extends Component {
                        handleBlur={this.handleFieldChange('username')}
                 />
               </div>
+              {data.username && (
+                <div className="canvas-element__validation__error">
+                  {data.username}
+                </div>
+              )}
             </div>
 
             <div className={cs('canvas-element__properties__property', {['invalid']: data.password})}>
@@ -136,6 +151,11 @@ class DataSource extends Component {
                        handleBlur={this.handleFieldChange('password')}
                 />
               </div>
+              {data.password && (
+                <div className="canvas-element__validation__error">
+                  {data.password}
+                </div>
+              )}
             </div>
           </div>
         </div>

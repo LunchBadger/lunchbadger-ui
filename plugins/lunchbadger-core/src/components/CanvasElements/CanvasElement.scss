@@ -38,7 +38,10 @@
       border-color: rgb(222, 222, 221);
     }
     .canvas-element__actions {
-      height: 60px;
+      height: 65px;
+      .canvas-element__actions__box {
+        margin-top: 24px;
+      }
     }
     .canvas-element__icon {
       pointer-events: none;
@@ -92,9 +95,10 @@
   background-color: $ui-light;
   height: 0;
   overflow: hidden;
-  transition: height 500ms ease;
+  transition: height 500ms linear;
   .canvas-element__actions__box {
-    padding: 0 16px 20px;
+    margin-top: 0px;
+    transition: margin-top 500ms linear;
   }
 }
 
@@ -206,22 +210,24 @@
   transition: all 1.2s ease;
   padding: 0 20px;
   margin: 0 -20px;
+  &__inner {
+    padding: 16px 16px 20px;
+    background-color: $ui-light;
+  }
 }
 
 .canvas-element__validation {
   background-color: #FFF;
-  padding: 0 16px;
   color: #FFF;
   font-size: 14px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 600ms ease;
+  transition: max-height 800ms linear;
   &__info {
     background-color: rgb(244, 67, 54);
     padding: 8px 16px 16px 48px;
     border-radius: 3px;
     position: relative;
-    margin-top: 16px;
     &:before,
     &:after {
       display: block;
@@ -413,9 +419,10 @@
 }
 
 .canvas-element__properties {
-  padding: 16px 16px 20px;
+  // padding: 16px 16px 20px;
   background-color: $ui-light;
   overflow: hidden;
+  margin-top: 16px;
 }
 
 .canvas-element__properties__title {
@@ -486,6 +493,28 @@
   border-color: #c1c1c1;
   font-family: "Open Sans";
   outline: 0;
+}
+
+.canvas-element__validation__error {
+  margin: 8px 0 8px 28px;
+  color: rgb(244, 67, 54);
+  font-size: 12px;
+  line-height: 24px;
+  position: relative;
+  &:before {
+    display: block;
+    content: '!';
+    position: absolute;
+    top: 2px;
+    left: -28px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgb(244, 67, 54);
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 17px;
+    text-align: center;
+  }
 }
 
 .canvas-element.Model {

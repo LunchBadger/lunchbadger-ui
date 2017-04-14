@@ -112,21 +112,18 @@ export default (ComposedComponent) => {
         validations: {
           isValid: true,
           data: {}
-        }
+        },
+        modelBeforeEdit: {},
       };
 
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
-        // console.log(66, (currentElement || {id: -1}).id, this.props.entity.id);
         if (currentElement && currentElement.id === this.props.entity.id) {
-          // console.log(55);
           if (!this.state.highlighted) {
-            // console.log(44);
             this.setState({highlighted: true});
           }
         } else {
-          // console.log(33);
           this.setState({highlighted: false});
         }
       };
@@ -140,11 +137,20 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       if (this.props.entity.wasBundled) {
-        this.setState({editable: false, expanded: false, validations: {isValid: true, data:{}}});
+        this.setState({
+          editable: false,
+          expanded: false,
+          validations: {isValid: true, data:{}}
+        });
         return;
       }
       if (this.props.entity.loaded) {
-        this.setState({editable: false, expanded: false, validations: {isValid: true, data:{}}});
+        this.setState({
+          editable: false,
+          expanded: false,
+          validations: {isValid: true, data:{}},
+          modelBeforeEdit: this.refs.form.getModel()
+        });
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
         toggleEdit(this.props.entity);
@@ -158,10 +164,12 @@ export default (ComposedComponent) => {
     }
 
     update(model) {
+      console.log('update', model);
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
       if (typeof element.update === 'function') {
         updated = element.update(model);
+        this.setState({modelBeforeEdit: model});
       }
       if (typeof updated === 'undefined' || updated) {
         if (updated) {
@@ -276,7 +284,7 @@ export default (ComposedComponent) => {
     _handleCancel(evt) {
       evt.persist();
       if (this.refs.form) {
-        this.refs.form.reset(this.props.entity);
+        this.refs.form.reset(this.state.modelBeforeEdit);
       }
       toggleEdit(null);
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
@@ -292,13 +300,12 @@ export default (ComposedComponent) => {
         delete data[field];
       }
       const isValid = Object.keys(data).length === 0;
-      if (!isValid) {
-        this.setState({validations: {isValid, data}});
-      }
+      this.setState({validations: {isValid, data}});
+      // this.state.validations.isValid = isValid;
+      // this.state.validations.data = data;
     }
 
     _handleValidationFieldClick = (field) => ({target}) => {
-      console.log(field);
       const closestCanvasElement = target.closest('.canvas-element');
       const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${field}`);
       if (closestInput) {
@@ -358,38 +365,40 @@ export default (ComposedComponent) => {
               </div>
             </div>
             <div className="canvas-element__extra">
-              <div className="canvas-element__validation">
-                <div className="canvas-element__validation__info">
-                  The following items require your attention:
-                  <div className="canvas-element__validation__fields">
-                    {validations.data && Object.keys(validations.data).map(key => (
-                      <div
-                        key={key}
-                        className="canvas-element__validation__field"
-                        onClick={this._handleValidationFieldClick(key)}
-                      >
-                        {key.replace(/([A-Z])/g, " $1" )}
-                      </div>
-                    ))}
+              <div className="canvas-element__extra__inner">
+                <div className="canvas-element__validation">
+                  <div className="canvas-element__validation__info">
+                    The following items require your attention:
+                    <div className="canvas-element__validation__fields">
+                      {validations.data && Object.keys(validations.data).map(key => (
+                        <div
+                          key={key}
+                          className="canvas-element__validation__field"
+                          onClick={this._handleValidationFieldClick(key)}
+                        >
+                          {key.replace(/([A-Z])/g, " $1" )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <ComposedComponent
-                ref={(ref) => this.element = ref}
-                parent={this}
-                {...this.props}
-                {...this.state}
-                onFieldUpdate={this._handleFieldUpdate}
-              />
-              <div className="canvas-element__actions">
-                <div className="canvas-element__actions__box">
-                  <button
-                    className="canvas-element__button canvas-element__button--cancel"
-                    onClick={this._handleCancel.bind(this)}
-                  >
-                    CANCEL
-                  </button>
-                  <button type="submit" className="canvas-element__button">OK</button>
+                <ComposedComponent
+                  ref={(ref) => this.element = ref}
+                  parent={this}
+                  {...this.props}
+                  {...this.state}
+                  onFieldUpdate={this._handleFieldUpdate}
+                />
+                <div className="canvas-element__actions">
+                  <div className="canvas-element__actions__box">
+                    <button
+                      className="canvas-element__button canvas-element__button--cancel"
+                      onClick={this._handleCancel.bind(this)}
+                    >
+                      CANCEL
+                    </button>
+                    <button onClick={() => console.log(3333)} type="submit" className="canvas-element__button">OK</button>
+                  </div>
                 </div>
               </div>
             </div>

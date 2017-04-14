@@ -97,6 +97,11 @@ class PublicEndpoint extends Component {
                        handleBlur={this.handleFieldChange('path')}
                 />
               </div>
+              {data.path && (
+                <div className="canvas-element__validation__error">
+                  {data.path}
+                </div>
+              )}
             </div>
           </div>
         </div>

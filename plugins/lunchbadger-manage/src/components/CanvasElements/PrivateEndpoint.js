@@ -78,6 +78,11 @@ class PrivateEndpoint extends Component {
                        handleBlur={this.handleFieldChange('url')}
                 />
               </div>
+              {data.url && (
+                <div className="canvas-element__validation__error">
+                  {data.url}
+                </div>
+              )}
             </div>
           </div>
         </div>

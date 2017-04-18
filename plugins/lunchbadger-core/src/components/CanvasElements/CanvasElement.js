@@ -3,6 +3,7 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
+import SmoothCollapse from 'react-smooth-collapse';
 import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 import toggleEdit from '../../actions/CanvasElements/toggleEdit';
 import _ from 'lodash';
@@ -306,9 +307,11 @@ export default (ComposedComponent) => {
                 }
               </div>
             </div>
-            <div className="canvas-element__extra">
-              <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-            </div>
+            <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">
+              <div className="canvas-element__extra">
+                <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
+              </div>
+            </SmoothCollapse>
             <div className="canvas-element__actions editable-only">
               <button type="submit" className="canvas-element__button">OK</button>
             </div>

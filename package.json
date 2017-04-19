@@ -85,6 +85,8 @@
     "formsy-react": "^0.18.0",
     "jsonfile": "^2.3.0",
     "jsplumb": "^2.0.7",
+    "kefir": "^3.7.1",
+    "kefir-bus": "^2.2.1",
     "keymirror": "^0.1.1",
     "lockr": "^0.8.4",
     "lodash": "^4.11.2",

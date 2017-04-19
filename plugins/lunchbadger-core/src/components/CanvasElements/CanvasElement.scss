@@ -59,7 +59,7 @@
       display: block;
     }
     .canvas-element__extra {
-      max-height: 1000px;
+      // max-height: 1000px;
       overflow: hidden;
     }
   }
@@ -68,7 +68,7 @@
     pointer-events: none !important;
     z-index: 15;
     .canvas-element__extra {
-      max-height: 0;
+      // max-height: 0;
       visibility: hidden;
     }
   }
@@ -205,7 +205,7 @@
 }
 
 .canvas-element__extra {
-  max-height: 0;
+  // max-height: 0;
   overflow: hidden;
   transition: all 1.2s ease;
   padding: 0 20px;

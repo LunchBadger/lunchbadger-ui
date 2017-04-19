@@ -3,6 +3,7 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
+import SmoothCollapse from './SmoothCollapse';
 import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 import toggleEdit from '../../actions/CanvasElements/toggleEdit';
 import _ from 'lodash';
@@ -364,46 +365,47 @@ export default (ComposedComponent) => {
                 <img className="canvas-element__edit__icon" src={iconEdit} />
               </div>
             </div>
-            <div className="canvas-element__extra">
-              <div className="canvas-element__extra__inner">
-                <div className="canvas-element__validation">
-                  <div className="canvas-element__validation__info">
-                    The following items require your attention:
-                    <div className="canvas-element__validation__fields">
-                      {validations.data && Object.keys(validations.data).map(key => (
-                        <div
-                          key={key}
-                          className="canvas-element__validation__field"
-                          onClick={this._handleValidationFieldClick(key)}
-                        >
-                          {key.replace(/([A-Z])/g, " $1" )}
-                        </div>
-                      ))}
+            <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">
+              <div className="canvas-element__extra">
+                <div className="canvas-element__extra__inner">
+                  <div className="canvas-element__validation">
+                    <div className="canvas-element__validation__info">
+                      The following items require your attention:
+                      <div className="canvas-element__validation__fields">
+                        {validations.data && Object.keys(validations.data).map(key => (
+                          <div
+                            key={key}
+                            className="canvas-element__validation__field"
+                            onClick={this._handleValidationFieldClick(key)}
+                          >
+                            {key.replace(/([A-Z])/g, " $1" )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <ComposedComponent
+                    ref={(ref) => this.element = ref}
+                    parent={this}
+                    {...this.props}
+                    {...this.state}
+                    onFieldUpdate={this._handleFieldUpdate}
+                  />
+                  <div className="canvas-element__actions">
+                    <div className="canvas-element__actions__box">
+                      <button
+                        className="canvas-element__button canvas-element__button--cancel"
+                        onClick={this._handleCancel.bind(this)}
+                      >
+                        CANCEL
+                      </button>
+                      <button type="submit" className="canvas-element__button">OK</button>
                     </div>
                   </div>
                 </div>
-                <ComposedComponent
-                  ref={(ref) => this.element = ref}
-                  parent={this}
-                  {...this.props}
-                  {...this.state}
-                  onFieldUpdate={this._handleFieldUpdate}
-                />
-                <div className="canvas-element__actions">
-                  <div className="canvas-element__actions__box">
-                    <button
-                      className="canvas-element__button canvas-element__button--cancel"
-                      onClick={this._handleCancel.bind(this)}
-                    >
-                      CANCEL
-                    </button>
-                    <button onClick={() => console.log(3333)} type="submit" className="canvas-element__button">OK</button>
-                  </div>
-                </div>
               </div>
-            </div>
+            </SmoothCollapse>
           </Form>
-
           {
             this.state.showRemovingModal &&
             <TwoOptionModal onClose={() => this.setState({showRemovingModal: false})}

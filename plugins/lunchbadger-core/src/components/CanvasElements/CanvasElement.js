@@ -11,6 +11,7 @@ import {Form} from 'formsy-react';
 import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
+import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
 import iconEdit from '../../../../../src/icons/icon-edit.svg';
 
 const boxSource = {
@@ -362,7 +363,7 @@ export default (ComposedComponent) => {
                 }
               </div>
               <div className="canvas-element__edit" onClick={this._handleEdit.bind(this)}>
-                <img className="canvas-element__edit__icon" src={iconEdit} />
+                <IconSVG className="canvas-element__edit__icon" svg={iconEdit} />
               </div>
             </div>
             <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">

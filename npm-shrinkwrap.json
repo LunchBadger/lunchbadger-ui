@@ -3283,6 +3283,20 @@
       "from": "http-signature@>=0.11.0 <0.12.0",
       "resolved": "https://registry.npmjs.org/http-signature/-/http-signature-0.11.0.tgz"
     },
+    "httpplease": {
+      "version": "0.16.4",
+      "from": "httpplease@>=0.16.0 <0.17.0",
+      "resolved": "https://registry.npmjs.org/httpplease/-/httpplease-0.16.4.tgz",
+      "dev": true,
+      "dependencies": {
+        "xtend": {
+          "version": "3.0.0",
+          "from": "xtend@>=3.0.0 <3.1.0",
+          "resolved": "https://registry.npmjs.org/xtend/-/xtend-3.0.0.tgz",
+          "dev": true
+        }
+      }
+    },
     "https-browserify": {
       "version": "0.0.1",
       "from": "https-browserify@0.0.1",
@@ -5323,6 +5337,26 @@
         }
       }
     },
+    "react-inlinesvg": {
+      "version": "0.5.5",
+      "from": "react-inlinesvg@latest",
+      "resolved": "https://registry.npmjs.org/react-inlinesvg/-/react-inlinesvg-0.5.5.tgz",
+      "dev": true,
+      "dependencies": {
+        "core-js": {
+          "version": "1.2.7",
+          "from": "core-js@>=1.0.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz",
+          "dev": true
+        },
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.0 <0.9.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.12.tgz",
+          "dev": true
+        }
+      }
+    },
     "react-jss": {
       "version": "2.1.1",
       "from": "react-jss@>=2.0.6 <3.0.0",
@@ -6337,6 +6371,12 @@
       "from": "url-parse@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/url-parse/-/url-parse-1.0.5.tgz"
     },
+    "urllite": {
+      "version": "0.5.0",
+      "from": "urllite@>=0.5.0 <0.6.0",
+      "resolved": "https://registry.npmjs.org/urllite/-/urllite-0.5.0.tgz",
+      "dev": true
+    },
     "user-home": {
       "version": "2.0.0",
       "from": "user-home@>=2.0.0 <3.0.0",
@@ -6580,6 +6620,12 @@
       "version": "0.2.1",
       "from": "write@>=0.2.1 <0.3.0",
       "resolved": "https://registry.npmjs.org/write/-/write-0.2.1.tgz",
+      "dev": true
+    },
+    "xmlhttprequest": {
+      "version": "1.8.0",
+      "from": "xmlhttprequest@*",
+      "resolved": "https://registry.npmjs.org/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz",
       "dev": true
     },
     "xregexp": {

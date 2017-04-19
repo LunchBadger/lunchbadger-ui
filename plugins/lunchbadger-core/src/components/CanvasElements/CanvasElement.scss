@@ -292,6 +292,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+    }
   }
 }
 

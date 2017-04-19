@@ -63,7 +63,8 @@
   }
 }
 
-.header__menu__link--pressed {
+.header__menu__link--pressed,
+.header__menu__link--pressed:hover {
   color: $font-light;
   background: #023845;
 }

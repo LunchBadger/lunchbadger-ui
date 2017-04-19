@@ -17,8 +17,10 @@ export default class ToolGroup extends Component {
   renderTools() {
     return this.props.tools.map((tool, index) => {
       const ToolComponent = tool.component;
-
-      return <ToolComponent key={`tool-button-${this.props.groupName}-${index}`} />
+      return <ToolComponent
+        key={`tool-button-${this.props.groupName}-${index}`}
+        currentEditElement={this.props.currentEditElement}
+      />
     })
   }
 

@@ -31,9 +31,6 @@
     .editable-only {
       display: block;
     }
-    .canvas-element__edit {
-      display: none !important;
-    }
     .canvas-element__properties__property-value {
       border-color: rgb(222, 222, 221);
     }
@@ -45,6 +42,12 @@
     }
     .canvas-element__icon {
       pointer-events: none;
+    }
+    &.highlighted {
+      .canvas-element__toolbox {
+        opacity: 0;
+        pointer-events: none;
+      }
     }
   }
   .canvas-element__properties__property-value {
@@ -75,10 +78,55 @@
   &.highlighted {
     border-color: $ui-active;
     background: $ui-active;
+    .canvas-element__toolbox {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
   &.invalid {
     .canvas-element__validation {
       max-height: 250px;
+    }
+  }
+  &__toolbox {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background-color: #FFF;
+    width: 100px;
+    height: 30px;
+    border-radius: 15px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 300ms;
+    overflow: hidden;
+    pointer-events: none;
+    &__button {
+      width: 50px;
+      height: 100%;
+      display: inline-block;
+      cursor: pointer;
+      text-align: center;
+      &:hover {
+        background-color: hsl(0, 0%, 95%);
+      }
+      &:active {
+        background-color: #00404f;
+        .canvas-element__toolbox__button__icon {
+          svg {
+            stroke: #FFF;
+          }
+        }
+      }
+      &__icon {
+        margin-top: 3px;
+        display: inline-block;
+        svg {
+          width: auto;
+          height: 24px;
+          stroke: #07677E;
+        }
+      }
     }
   }
 }
@@ -107,11 +155,6 @@
   width: 100%;
   display: table;
   vertical-align: middle;
-  &:hover {
-    .canvas-element__edit {
-      display: block;
-    }
-  }
 }
 
 .canvas-element__icon {
@@ -269,36 +312,6 @@
   text-align: right;
   padding-right: 22px;
   padding-bottom: 2px;
-}
-
-.canvas-element__edit {
-  display: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50px;
-  height: 48px;
-  text-align: center;
-  font-size: 25px;
-  line-height: 44px;
-  cursor: pointer;
-  &:hover {
-    background: rgba(0, 0, 0, 0.19);
-  }
-  &__icon {
-    display: block;
-    width: 24px;
-    height: 24px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    svg {
-      display: block;
-      width: 24px;
-      height: 24px;
-    }
-  }
 }
 
 .canvas-element__remove__action {

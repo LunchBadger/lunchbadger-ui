@@ -12,6 +12,7 @@ import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
 import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
+import iconTrash from '../../../../../src/icons/icon-trash.svg';
 import iconEdit from '../../../../../src/icons/icon-edit.svg';
 
 const boxSource = {
@@ -302,8 +303,6 @@ export default (ComposedComponent) => {
       }
       const isValid = Object.keys(data).length === 0;
       this.setState({validations: {isValid, data}});
-      // this.state.validations.isValid = isValid;
-      // this.state.validations.data = data;
     }
 
     _handleValidationFieldClick = (field) => ({target}) => {
@@ -335,6 +334,20 @@ export default (ComposedComponent) => {
              style={{ opacity }}
              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
              onDoubleClick={this._handleEdit.bind(this)}>
+          <div className="canvas-element__toolbox">
+            <div
+              className="canvas-element__toolbox__button canvas-element__toolbox__button--delete"
+              onClick={() => this.setState({showRemovingModal: true})}
+            >
+              <IconSVG className="canvas-element__toolbox__button__icon" svg={iconTrash} />
+            </div>
+            <div
+              className="canvas-element__toolbox__button canvas-element__toolbox__button--edit"
+              onClick={this._handleEdit.bind(this)}
+            >
+              <IconSVG className="canvas-element__toolbox__button__icon" svg={iconEdit} />
+            </div>
+          </div>
           <Form name="elementForm" ref="form" onValidSubmit={this.update.bind(this)}>
             <div className="canvas-element__inside">
               <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
@@ -350,19 +363,6 @@ export default (ComposedComponent) => {
                          value={this.props.entity.name}
                          handleChange={this.updateName.bind(this)}/>
                 </div>
-              </div>
-              <div className="canvas-element__remove">
-                {
-                  this.state.editable && (
-                    <a className="canvas-element__remove__action"
-                       onClick={() => this.setState({showRemovingModal: true})}>
-                      <i className="fa fa-times"/>
-                    </a>
-                  )
-                }
-              </div>
-              <div className="canvas-element__edit" onClick={this._handleEdit.bind(this)}>
-                <IconSVG className="canvas-element__edit__icon" svg={iconEdit} />
               </div>
             </div>
             <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">

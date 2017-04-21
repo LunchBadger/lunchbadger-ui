@@ -94,13 +94,13 @@ class Microservice extends Component {
   }
 
   renderModels() {
+    let index = -1;
     return this.props.entity.models.map((modelId) => {
       const entity = Private.findEntity(modelId);
-
       if (!entity) {
         return null;
       }
-
+      index += 1;
       return (
         <div key={entity.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <Model
@@ -113,7 +113,9 @@ class Microservice extends Component {
             left={entity.left}
             top={entity.top}
             handleEndDrag={(item) => this.handleEndDrag(item)}
-            hideSourceOnDrag={true}/>
+            hideSourceOnDrag={true}
+            index={index}
+          />
         </div>
       );
     });

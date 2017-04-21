@@ -35,7 +35,8 @@ class Portal extends Component {
       isShowingModal: false,
       isShowingModalMultiple: false,
       bundledItem: null,
-      bundledItems: []
+      bundledItems: [],
+      APIsOpened: {},
     }
   }
 
@@ -100,8 +101,16 @@ class Portal extends Component {
     }
   }
 
+  handleToggleAPIOpen = APIId => opened => {
+    this.setState({APIsOpened: {...this.state.APIsOpened, [APIId]: opened}});
+  }
+
   renderAPIs() {
-    return this.props.entity.apis.map((endpoint) => {
+    const APIsPublicEndpoints = {};
+    this.props.entity.apis.forEach((endpoint) => {
+      APIsPublicEndpoints[endpoint.id] = endpoint.publicEndpoints.length;
+    });
+    return this.props.entity.apis.map((endpoint, index) => {
       return (
         <div key={endpoint.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <API
@@ -114,7 +123,12 @@ class Portal extends Component {
             left={endpoint.left}
             top={endpoint.top}
             handleEndDrag={(item) => this._handleEndDrag(item)}
-            hideSourceOnDrag={true}/>
+            hideSourceOnDrag={true}
+            onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}
+            APIsOpened={this.state.APIsOpened}
+            index={index}
+            APIsPublicEndpoints={APIsPublicEndpoints}
+          />
         </div>
       );
     });

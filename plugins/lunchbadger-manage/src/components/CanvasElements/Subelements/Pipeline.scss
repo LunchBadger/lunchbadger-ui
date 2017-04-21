@@ -1,22 +1,22 @@
 @import '../../../../../lunchbadger-core/src/config';
 
 .pipeline {
-  position: relative;
+  // position: relative;
   font-size: 16px;
   margin-top: 0;
   border-top: 1px solid rgb(210, 210, 210);
   border-bottom: 1px solid rgb(210, 210, 210);
 
-  .collapsed &,
-  .wip & {
-    position: static;
-
-    .port {
-      visibility: visible;
-      bottom: 19px;
-      top: auto;
-    }
-  }
+  // .collapsed &,
+  // .wip & {
+  //   position: static;
+  //
+  //   // .port {
+  //   //   visibility: visible;
+  //   //   bottom: 19px;
+  //   //   top: auto;
+  //   // }
+  // }
 }
 
 .pipeline__action {
@@ -90,10 +90,10 @@
 .pipeline__details {
   max-height: 0;
   overflow: hidden;
-  transition: all .7s ease;
+  transition: all 800ms ease;
 
   .pipeline--opened & {
-    max-height: 300px;
+    max-height: 124px;
     overflow: auto;
 
     .editable & {

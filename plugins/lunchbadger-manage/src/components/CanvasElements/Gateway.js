@@ -28,7 +28,8 @@ class Gateway extends Component {
     this.state = {
       hasInConnection: null,
       hasOutConnection: null,
-      dnsPrefix: props.entity.dnsPrefix
+      dnsPrefix: props.entity.dnsPrefix,
+      pipelinesOpened: {},
     };
   }
 
@@ -72,6 +73,10 @@ class Gateway extends Component {
     }
   }
 
+  handleTogglePipelineOpen = pipelineId => opened => {
+    this.setState({pipelinesOpened: {...this.state.pipelinesOpened, [pipelineId]: opened}});
+  }
+
   renderPipelines() {
     return this.props.entity.pipelines.map((pipeline, index) => {
       return (
@@ -80,7 +85,10 @@ class Gateway extends Component {
                     index={index}
                     parent={this.props.entity}
                     paper={this.props.paper}
-                    entity={pipeline}/>
+                    entity={pipeline}
+                    onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
+                    pipelinesOpened={this.state.pipelinesOpened}
+          />
         </div>
       );
     });

@@ -55,7 +55,7 @@ export default class API extends Component {
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api) => {
+    return this.props.entity.publicEndpoints.map((api, index) => {
       return (
         <div key={api.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <PublicEndpoint
@@ -64,7 +64,13 @@ export default class API extends Component {
             key={api.id}
             id={api.id}
             entity={api}
-            paper={this.props.paper}/>
+            paper={this.props.paper}
+            APIsOpened={this.props.APIsOpened}
+            APIId={this.props.entity.id}
+            index={index}
+            indexAPI={this.props.index}
+            APIsPublicEndpoints={this.props.APIsPublicEndpoints}
+          />
         </div>
       );
     });
@@ -72,6 +78,7 @@ export default class API extends Component {
 
   toggleOpenState() {
     this.setState({opened: !this.state.opened});
+    this.props.onToggleOpen(!this.state.opened);
   }
 
   render() {

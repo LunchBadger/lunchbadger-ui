@@ -9,10 +9,18 @@
   background: #fff;
   z-index: $z-index-medium;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-
   &.hover {
     border-style: solid;
     border-color: $ui-dark-border;
+  }
+  .collapsed & {
+    top: 13px !important;
+  }
+  .DataSource &,
+  .Model &,
+  .PrivateEndpoint &,
+  .PublicEndpoint & {
+    top: -2px !important;
   }
 }
 

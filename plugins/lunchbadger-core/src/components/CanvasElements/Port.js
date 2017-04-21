@@ -19,6 +19,7 @@ export default class Port extends Component {
 
   constructor(props) {
     super(props);
+    this.portTopOffsets = {};
   }
 
   componentWillMount() {
@@ -44,10 +45,10 @@ export default class Port extends Component {
         outlineColor: '#FFFFFF'
       },
       anchor: [
-        [0.5, 0, 0, -1, 0, 0, 'top'],
-        [1, 0.5, 1, 0, 0, 0, 'right'],
-        [0.5, 1, 0, 1, 0, 0, 'bottom'],
-        [0, 0.5, -1, 0, 0, 0, 'left']
+        [0.6, 0.6, 0, -1, 0, 0, 'top'],
+        [0.6, 0.6, 1, 0, 0, 0, 'right'],
+        [0.6, 0.6, 0, 1, 0, 0, 'bottom'],
+        [0.6, 0.6, -1, 0, 0, 0, 'left']
       ],
       scope: this.props.scope
     };
@@ -67,6 +68,24 @@ export default class Port extends Component {
     if (this.props.way === 'in') {
       this._checkAndReattachConnections();
     }
+    this.calculatePortTopOffsets();
+  }
+
+  componentWillUpdate(nextProps) {
+    this.calculatePortTopOffsets();
+    if (nextProps.offsetTop !== this.props.offsetTop) {
+      this.forceUpdate();
+    }
+  }
+
+  calculatePortTopOffsets = () => {
+    const portWrapDOM = findDOMNode(this.refs.port__wrap);
+    const subElementOffsetTop = portWrapDOM.closest('.canvas-element__sub-elements')
+      ? portWrapDOM.closest('.canvas-element__sub-elements').getBoundingClientRect().top
+      : 0;
+    this.portTopOffsets[this.props.elementId] = (this.props.offsetTop || 0)
+      + subElementOffsetTop
+      - portWrapDOM.closest('.canvas-element__extra').getBoundingClientRect().top;
   }
 
   componentWillUnmount() {
@@ -118,25 +137,25 @@ export default class Port extends Component {
       'port': true,
       'port__middle': this.props.middle
     });
-
     let isConnected = false;
-
     if (this.props.way === 'out') {
       isConnected = Connection.search({fromId: this.props.elementId}).length;
     } else if (this.props.way === 'in') {
       isConnected = Connection.search({toId: this.props.elementId}).length;
     }
-
     const portAnchorClass = classNames({
       port__anchor: true,
       'port__anchor--connected': isConnected
     });
-
     return (
-      <div id={`port_${this.props.way}_${this.props.elementId}`}
-           className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}>
-        <div className={portAnchorClass} ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
-          <div className="port__inside">
+      <div ref="port__wrap">
+        <div id={`port_${this.props.way}_${this.props.elementId}`}
+             className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}
+             style={{top: this.portTopOffsets[this.props.elementId]}}
+        >
+          <div className={portAnchorClass} ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
+            <div className="port__inside">
+            </div>
           </div>
         </div>
       </div>

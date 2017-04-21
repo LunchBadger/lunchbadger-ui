@@ -166,7 +166,6 @@ export default (ComposedComponent) => {
     }
 
     update(model) {
-      console.log('update', model);
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
       if (typeof element.update === 'function') {

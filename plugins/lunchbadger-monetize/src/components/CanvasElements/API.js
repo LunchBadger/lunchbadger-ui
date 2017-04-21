@@ -69,7 +69,7 @@ class API extends Component {
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api) => {
+    return this.props.entity.publicEndpoints.map((api, index) => {
       return (
         <div key={api.id} className="canvas-element__sub-element canvas-element__sub-element--api">
           <PublicEndpoint
@@ -82,7 +82,9 @@ class API extends Component {
             left={api.left}
             top={api.top}
             handleEndDrag={(item) => this._handleEndDrag(item)}
-            hideSourceOnDrag={true}/>
+            hideSourceOnDrag={true}
+            index={index}
+          />
         </div>
       );
     });

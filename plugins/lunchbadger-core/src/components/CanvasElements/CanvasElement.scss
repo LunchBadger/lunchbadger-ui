@@ -193,7 +193,8 @@
 .canvas-element__port {
   position: absolute;
   margin-top: 15px;
-  top: 0;
+  // top: 0;
+  transition: top 800ms ease;
 }
 
 .canvas-element__port--in {
@@ -318,7 +319,7 @@
 .canvas-element__sub-elements {
   padding-top: 8px;
   background-color: $ui-light;
-
+  margin: 0 -16px;
   .canvas-element {
     padding: 0 20px;
     border: none;
@@ -583,6 +584,12 @@
   .model-property {
     overflow-y: visible;
     padding-right: 10px;
+  }
+}
+
+.canvas-element.Microservice {
+  .model {
+    position: static;
   }
 }
 

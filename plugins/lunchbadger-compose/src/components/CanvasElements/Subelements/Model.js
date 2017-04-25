@@ -60,7 +60,7 @@ export default class Model extends Component {
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
               scope={port.portGroup}
-              offsetTop={85 + this.props.index * 30}
+              offsetTop={85 + this.props.index * 38}
         />
       );
     });

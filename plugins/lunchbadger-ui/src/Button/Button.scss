@@ -1,0 +1,37 @@
+.Button {
+  display: inline-block;
+  width: calc(50% - 20px);
+  height: 40px;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 38px;
+  border-color: #ddd;
+  background-color: #FFF;
+  color: #888282;
+  margin-right: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  &:hover {
+    background-color: rgb(242, 242, 242);
+  }
+  &:active {
+    background-color: rgb(233, 233, 233);
+  }
+  &[type=submit] {
+    border-color: rgb(65, 144, 205);
+    background-color: rgb(65, 144, 205);
+    color: #FFF;
+    &:hover {
+      background-color: rgb(58, 129, 183);
+    }
+    &:active {
+      background-color: rgb(47, 113, 165);
+    }
+  }
+}

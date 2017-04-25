@@ -61,7 +61,7 @@ export default class PublicEndpoint extends Component {
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
               scope={port.portGroup}
-              offsetTop={86 + this.props.index * 33}
+              offsetTop={96 + this.props.index * 32}
         />
       );
     });

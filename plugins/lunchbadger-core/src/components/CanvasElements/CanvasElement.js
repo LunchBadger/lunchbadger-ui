@@ -11,7 +11,7 @@ import {Form} from 'formsy-react';
 import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
-import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
+import {IconSVG, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
 import iconTrash from '../../../../../src/icons/icon-trash.svg';
 import iconEdit from '../../../../../src/icons/icon-edit.svg';
 
@@ -239,7 +239,7 @@ export default (ComposedComponent) => {
     }
 
     _focusClosestInput(target) {
-      const closestProperty = target.closest('.canvas-element__properties__property');
+      const closestProperty = target.closest('.EntityProperty__field');
       const closestPropertyInput = closestProperty && closestProperty.querySelector('input');
       const closestElement = target.closest('.canvas-element');
       const closestInput = closestElement.querySelector('input');
@@ -283,7 +283,7 @@ export default (ComposedComponent) => {
       evt.stopPropagation();
     }
 
-    _handleCancel(evt) {
+    _handleCancel = (evt) => {
       evt.persist();
       if (this.refs.form) {
         this.refs.form.reset(this.state.modelBeforeEdit);
@@ -305,7 +305,7 @@ export default (ComposedComponent) => {
       this.setState({validations: {isValid, data}});
     }
 
-    _handleValidationFieldClick = (field) => ({target}) => {
+    _handleValidationFieldClick = field => ({target}) => {
       const closestCanvasElement = target.closest('.canvas-element');
       const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${field}`);
       if (closestInput) {
@@ -315,7 +315,7 @@ export default (ComposedComponent) => {
 
     render() {
       const {ready} = this.props.entity;
-      const {connectDragSource, connectDropTarget, isDragging} = this.props;
+      const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
       const {validations} = this.state;
       const elementClass = classNames({
         'canvas-element': true,
@@ -368,7 +368,11 @@ export default (ComposedComponent) => {
             <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">
               <div className="canvas-element__extra">
                 <div className="canvas-element__extra__inner">
-                  <div className="canvas-element__validation">
+                  <EntityValidationErrors
+                    validations={validations}
+                    onFieldClick={this._handleValidationFieldClick}
+                  />
+                  {/*}<div className="canvas-element__validation">
                     <div className="canvas-element__validation__info">
                       The following items require your attention:
                       <div className="canvas-element__validation__fields">
@@ -383,7 +387,7 @@ export default (ComposedComponent) => {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </div>*/}
                   <ComposedComponent
                     ref={(ref) => this.element = ref}
                     parent={this}
@@ -391,7 +395,10 @@ export default (ComposedComponent) => {
                     {...this.state}
                     onFieldUpdate={this._handleFieldUpdate}
                   />
-                  <div className="canvas-element__actions">
+                  <SmoothCollapse expanded={this.state.editable && ready} heightTransition="800ms ease">
+                    <EntityActionButtons onCancel={this._handleCancel} />
+                  </SmoothCollapse>
+                  {/*<div className="canvas-element__actions">
                     <div className="canvas-element__actions__box">
                       <button
                         className="canvas-element__button canvas-element__button--cancel"
@@ -401,7 +408,7 @@ export default (ComposedComponent) => {
                       </button>
                       <button type="submit" className="canvas-element__button">OK</button>
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </SmoothCollapse>

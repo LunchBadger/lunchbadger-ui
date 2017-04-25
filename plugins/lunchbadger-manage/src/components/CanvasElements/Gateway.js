@@ -7,6 +7,7 @@ import {notify} from 'react-notify-toast';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
 import PipelineFactory from '../../models/Pipeline';
+import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
 
 const toggleEdit = LunchBadgerCore.actions.toggleEdit;
@@ -24,13 +25,15 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       hasInConnection: null,
       hasOutConnection: null,
       dnsPrefix: props.entity.dnsPrefix,
       pipelinesOpened: {},
     };
+    props.entity.pipelines.forEach((item) => {
+      this.state.pipelinesOpened[item.id] = false;
+    });
   }
 
   componentDidMount() {
@@ -43,55 +46,59 @@ class Gateway extends Component {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
     }
-
     if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
       const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
         return Connection.getConnectionsForTarget(pipeline.id).length;
       });
-
       if (hasInConnection) {
         this.setState({hasInConnection: true});
       } else {
         this.setState({hasInConnection: false});
       }
     }
-
     if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
       const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
         return Connection.getConnectionsForSource(pipeline.id).length;
       });
-
       if (hasOutConnection) {
         this.setState({hasOutConnection: true});
       } else {
         this.setState({hasOutConnection: false});
       }
     }
-
     if (!this.props.parent.state.editable) {
       this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
     }
+    const pipelinesOpened = {...this.state.pipelinesOpened};
+    let pipelinesAdded = false;
+    nextProps.entity.pipelines.forEach(({id}) => {
+      if (typeof pipelinesOpened[id] === 'undefined') {
+        pipelinesOpened[id] = false;
+        pipelinesAdded = true;
+      }
+    });
+    if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
   handleTogglePipelineOpen = pipelineId => opened => {
-    this.setState({pipelinesOpened: {...this.state.pipelinesOpened, [pipelineId]: opened}});
+    const pipelinesOpened = {...this.state.pipelinesOpened};
+    pipelinesOpened[pipelineId] = opened;
+    this.setState({pipelinesOpened});
   }
 
-  renderPipelines() {
-    return this.props.entity.pipelines.map((pipeline, index) => {
-      return (
-        <div key={pipeline.id} className="canvas-element__sub-element canvas-element__sub-element--pipeline">
-          <Pipeline {...this.props}
-                    index={index}
-                    parent={this.props.entity}
-                    paper={this.props.paper}
-                    entity={pipeline}
-                    onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
-                    pipelinesOpened={this.state.pipelinesOpened}
-          />
-        </div>
-      );
-    });
+  renderPipelines = () => {
+    return this.props.entity.pipelines.map((pipeline, index) => (
+      <Pipeline
+        key={pipeline.id}
+        {...this.props}
+        index={index}
+        parent={this.props.entity}
+        paper={this.props.paper}
+        entity={pipeline}
+        onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
+        pipelinesOpened={this.state.pipelinesOpened}
+      />
+    ));
   }
 
   update(model) {
@@ -132,19 +139,14 @@ class Gateway extends Component {
     }
   }
 
-  onAddPipeline(name) {
-    addPipeline(this.props.entity, name);
-  }
+  onAddPipeline = name => () => addPipeline(this.props.entity, name);
 
   _onDeploy() {
     notify.show('Gateway successfully deployed', 'success');
-
     this.props.parent.triggerElementAutofocus();
   }
 
-  onPrefixChange(event) {
-    this.setState({dnsPrefix: event.target.value});
-  }
+  onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   render() {
     const elementClass = classNames({
@@ -152,47 +154,35 @@ class Gateway extends Component {
       'has-connection-out': this.state.hasOutConnection
     });
     const {validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'rootURL',
+        title: 'root URL',
+        value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
+        fake: true,
+      },
+      {
+        name: 'dnsPrefix',
+        title: 'DNS prefix',
+        value: this.props.entity.dnsPrefix,
+        editableOnly: true,
+        invalid: data.dnsPrefix,
+        onChange: this.onPrefixChange,
+        onBlur: this.handleFieldChange('dnsPrefix'),
+      },
+    ];
     return (
       <div className={elementClass}>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Root URL</div>
-              <div className="canvas-element__properties__property-value canvas-element__properties__property-fake">
-                http://{this.state.dnsPrefix}.customer.lunchbadger.com
-              </div>
-            </div>
-            <div className={cs('canvas-element__properties__property', 'editable-only', {['invalid']: data.dnsPrefix})}>
-              <div className="canvas-element__properties__property-title">DNS Prefix</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.dnsPrefix}
-                </span>
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       name="dnsPrefix"
-                       value={this.props.entity.dnsPrefix}
-                       placeholder="Enter DNS prefix here"
-                       handleChange={this.onPrefixChange.bind(this)}
-                       handleBlur={this.handleFieldChange('dnsPrefix')}
-                />
-              </div>
-              {data.dnsPrefix && (
-                <div className="canvas-element__validation__error">
-                  {data.dnsPrefix}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            Pipelines
-            <i onClick={() => this.onAddPipeline('Pipeline')} className="canvas-element__add fa fa-plus"/>
-          </div>
+        <EntityProperties properties={mainProperties} />
+        <EntitySubElements
+          title="Pipelines"
+          onAdd={this.onAddPipeline('Pipeline')}
+          main
+        >
           <DraggableGroup iconClass="icon-icon-gateway" entity={this.props.entity} appState={this.props.appState}>
             {this.renderPipelines()}
           </DraggableGroup>
-        </div>
+        </EntitySubElements>
       </div>
     );
   }

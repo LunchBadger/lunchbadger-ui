@@ -1,0 +1,23 @@
+.EntityHeader {
+  background-color: #01667D;
+  height: 48px;
+  color: #FFF;
+  padding: 0 55px 0 66px;
+  position: relative;
+  .highlighted & {
+    background-color: #4190CE;
+  }
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 58px;
+    height: 100%;
+    font-size: 38px;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

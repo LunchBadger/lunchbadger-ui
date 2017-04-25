@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
+import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
 
@@ -15,7 +16,6 @@ class PublicEndpoint extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       path: props.entity.path
     };
@@ -54,57 +54,48 @@ class PublicEndpoint extends Component {
     }
   }
 
-  onPathChange(event) {
-    this.setState({path: event.target.value});
-  }
+  onPathChange = event => this.setState({path: event.target.value});
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              scope={port.portGroup}/>
-      );
-    });
+    return this.props.entity.ports.map(port => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.id}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
+  }
+
+  renderMainProperties = () => {
+    const {entity, validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'url',
+        title: 'URL',
+        value: getPublicEndpointUrl(entity.id, this.state.path),
+        fake: true,
+      },
+      {
+        name: 'path',
+        title: 'path',
+        value: entity.path,
+        invalid: data.path,
+        onChange: this.onPathChange,
+        onBlur: this.handleFieldChange('path'),
+        editableOnly: true,
+      },
+    ];
+    return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
-    const {validations: {data}} = this.props;
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
-              <div className="canvas-element__properties__property-value canvas-element__properties__property-fake">
-                {getPublicEndpointUrl(this.props.entity.id, this.state.path)}
-              </div>
-            </div>
-            <div className={cs('canvas-element__properties__property', 'editable-only', {['invalid']: data.path})}>
-              <div className="canvas-element__properties__property-title">Path</div>
-              <div className="canvas-element__properties__property-value">
-                <Input className="canvas-element__input canvas-element__input--property"
-                       value={this.props.entity.path}
-                       placeholder="Enter path here"
-                       name="path"
-                       handleChange={this.onPathChange.bind(this)}
-                       handleBlur={this.handleFieldChange('path')}
-                />
-              </div>
-              {data.path && (
-                <div className="canvas-element__validation__error">
-                  {data.path}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        {this.renderPorts()}
+        {this.renderMainProperties()}
       </div>
     );
   }

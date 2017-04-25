@@ -21,7 +21,7 @@ export default class PublicEndpoint extends Component {
     Object.keys(this.props.APIsOpened).forEach((key, index) => {
       if (!stopLoop) {
         if (key === this.props.APIId && this.props.APIsOpened[key]) {
-          APIsOffsetTop += 66 + this.props.index * 32;
+          APIsOffsetTop += 54 + this.props.index * 26;
         }
       }
       if (key === this.props.APIId) {
@@ -29,7 +29,7 @@ export default class PublicEndpoint extends Component {
       }
       if (stopLoop) return;
       if (this.props.APIsOpened[key]) {
-        APIsOffsetTop += 34 + this.props.APIsPublicEndpoints[key] * 32;
+        APIsOffsetTop += 25 + this.props.APIsPublicEndpoints[key] * 26;
       }
     });
     return this.props.entity.ports.map((port) => {
@@ -41,7 +41,7 @@ export default class PublicEndpoint extends Component {
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
               scope={port.portGroup}
-              offsetTop={86 + APIsOffsetTop + this.props.indexAPI * 32}
+              offsetTop={103 + APIsOffsetTop + this.props.indexAPI * 52}
         />
       );
     });
@@ -49,17 +49,15 @@ export default class PublicEndpoint extends Component {
 
   render() {
     return (
-      <div className="public-endpoint public-endpoint--bundled">
-        <div className="public-endpoint__info">
-          <div className="public-endpoint__icon">
-            <i className="fa fa-globe"/>
-          </div>
-          <div className="public-endpoint__name">
-            {this.props.entity.name}
-          </div>
-
-          {this.renderPorts()}
+      <div className="public-endpoint__info">
+        <div className="public-endpoint__icon">
+          <i className="fa fa-globe"/>
         </div>
+        <div className="public-endpoint__name">
+          {this.props.entity.name}
+        </div>
+
+        {this.renderPorts()}
       </div>
     );
   }

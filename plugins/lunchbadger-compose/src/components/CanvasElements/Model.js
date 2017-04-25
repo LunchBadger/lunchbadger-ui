@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
+import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
@@ -75,33 +76,7 @@ class Model extends Component {
     }
   }
 
-  renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              scope={port.portGroup}/>
-      );
-    });
-  }
-
-  renderProperties() {
-    return this.props.entity.properties.map((property, index) => {
-      return (
-        <ModelProperty index={index} key={`property-${property.id}`}
-                       property={property}
-                       propertiesForm={() => this.refs.properties}
-                       propertiesCount={this.props.entity.properties.length}
-                       addAction={() => this.onAddProperty()}
-                       entity={this.props.entity}/>
-      );
-    });
-  }
-
-  onAddProperty() {
+  onAddProperty = () => {
     addProperty(this.props.entity, {
       key: '',
       value: '',
@@ -110,68 +85,78 @@ class Model extends Component {
       isIndex: false,
       notes: ''
     });
-
     setTimeout(() => this._focusLastInput());
   }
 
   _focusLastInput() {
-    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0];
-
+    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0]; //FIXME
     input && input.focus();
   }
 
-  updateContextPath() {
-    this.setState({contextPathDirty: true});
-  }
+  updateContextPath = () => this.setState({contextPathDirty: true});
 
   removeEntity() {
     removeEntity(this.context.projectService, this.props.entity);
   }
 
-  render() {
+  renderPorts = () => {
+    return this.props.entity.ports.map((port) => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.id}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
+  }
+
+  renderProperties = () => {
+    return this.props.entity.properties.map((property, index) => (
+      <ModelProperty
+        index={index}
+        key={`property-${property.id}`}
+        property={property}
+        propertiesForm={() => this.refs.properties}
+        propertiesCount={this.props.entity.properties.length}
+        addAction={this.onAddProperty}
+        entity={this.props.entity}
+      />
+    ));
+  }
+
+  renderMainProperties = () => {
     const {validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'contextPath',
+        title: 'context path',
+        value: this.state.contextPath,
+        invalid: data.contextPath,
+        onChange: this.updateContextPath,
+        onBlur: this.handleFieldChange('contextPath')
+      }
+    ];
+    return <EntityProperties properties={mainProperties} />;
+  }
+
+  render() {
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className={cs('canvas-element__properties__property', {['invalid']: data.contextPath})}>
-              <div className="canvas-element__properties__property-title">Context path</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.contextPath}
-                </span>
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.state.contextPath}
-                       name="contextPath"
-                       placeholder="Enter context path here"
-                       handleChange={this.updateContextPath.bind(this)}
-                       handleBlur={this.handleFieldChange('contextPath')}
-                />
-              </div>
-              {data.contextPath && (
-                <div className="canvas-element__validation__error">
-                  {data.contextPath}
-                </div>
-              )}
+        {this.renderPorts()}
+        {this.renderMainProperties()}
+        <EntitySubElements
+          title="Properties"
+          onAdd={this.onAddProperty}
+          main
+        >
+          {this.props.entity.properties.length > 0 && (
+            <div ref="properties">
+              {this.renderProperties()}
             </div>
-            <div className="canvas-element__properties__property canvas-element__properties__model">
-              <div className="canvas-element__properties__property-title">
-                Properties
-                <i onClick={() => this.onAddProperty()} className="model-property__add fa fa-plus"/>
-              </div>
-              {
-                this.props.entity.properties.length > 0 && (
-                  <div ref="properties" className="canvas-element__properties__property-value">
-                    {this.renderProperties()}
-                  </div>
-                )
-              }
-            </div>
-          </div>
-        </div>
+          )}
+        </EntitySubElements>
       </div>
     );
   }

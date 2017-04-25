@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
+import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
@@ -112,24 +113,23 @@ class Portal extends Component {
     });
     return this.props.entity.apis.map((endpoint, index) => {
       return (
-        <div key={endpoint.id} className="canvas-element__sub-element canvas-element__sub-element--api">
-          <API
-            {...this.props}
-            parent={this.props.entity}
-            key={endpoint.id}
-            id={endpoint.id}
-            entity={endpoint}
-            paper={this.props.paper}
-            left={endpoint.left}
-            top={endpoint.top}
-            handleEndDrag={(item) => this._handleEndDrag(item)}
-            hideSourceOnDrag={true}
-            onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}
-            APIsOpened={this.state.APIsOpened}
-            index={index}
-            APIsPublicEndpoints={APIsPublicEndpoints}
-          />
-        </div>
+        <API
+          key={endpoint.id}
+          {...this.props}
+          parent={this.props.entity}
+          key={endpoint.id}
+          id={endpoint.id}
+          entity={endpoint}
+          paper={this.props.paper}
+          left={endpoint.left}
+          top={endpoint.top}
+          handleEndDrag={(item) => this._handleEndDrag(item)}
+          hideSourceOnDrag={true}
+          onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}
+          APIsOpened={this.state.APIsOpened}
+          index={index}
+          APIsPublicEndpoints={APIsPublicEndpoints}
+        />
       );
     });
   }
@@ -172,84 +172,75 @@ class Portal extends Component {
       'has-connection': this.state.hasConnection
     });
     const {validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'rootUrl',
+        title: 'root URL',
+        value: this.props.entity.rootUrl,
+        invalid: data.rootUrl,
+        onBlur: this.handleFieldChange('rootUrl'),
+      },
+    ];
     return (
       <div className={elementClass}>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className={cs('canvas-element__properties__property', {['invalid']: data.rootUrl})}>
-              <div className="canvas-element__properties__property-title">Root URL</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.rootUrl || 'Enter root URL here'}
-                </span>
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.props.entity.rootUrl}
-                       placeholder="Enter root URL here"
-                       name="rootUrl"
-                       handleBlur={this.handleFieldChange('rootUrl')}
-                />
-              </div>
-              {data.rootUrl && (
-                <div className="canvas-element__validation__error">
-                  {data.rootUrl}
-                </div>
-              )}
-            </div>
-          </div>
+        <EntityProperties properties={mainProperties} />
+        <EntitySubElements title="APIs" main>
+          <DraggableGroup
+            iconClass="icon-icon-portal"
+            entity={this.props.entity}
+            groupEndDrag={() => this._handleMultipleUnbundle()}
+            appState={this.props.appState}
+          >
+          {this.renderAPIs()}
+          </DraggableGroup>
+        </EntitySubElements>
+        <div className="canvas-element__drop">
+          <ElementsBundler
+            {...this.props}
+            canDropCheck={
+              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+              && !_.includes(this.props.entity.apis, item.entity)
+            }
+            onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
+            onAdd={bundlePortal}
+            onMove={moveBetweenPortals}
+            dropText={'Drag APIs here'}
+            parent={this.props.parent}
+            entity={this.props.entity}
+          />
         </div>
-
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            APIs
-          </div>
-          <div className="canvas-element__endpoints" ref="apis">
-            <DraggableGroup iconClass="icon-icon-portal"
-                            entity={this.props.entity}
-                            groupEndDrag={() => this._handleMultipleUnbundle()}
-                            appState={this.props.appState}>
-              {this.renderAPIs()}
-            </DraggableGroup>
-          </div>
-          <div className="canvas-element__drop">
-            <ElementsBundler {...this.props}
-                             canDropCheck={
-                               (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                               && !_.includes(this.props.entity.apis, item.entity)
-                             }
-                             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
-                             onAdd={bundlePortal}
-                             onMove={moveBetweenPortals}
-                             dropText={'Drag APIs here'}
-                             parent={this.props.parent}
-                             entity={this.props.entity}/>
-          </div>
-        </div>
-
-        {
-          this.state.isShowingModal &&
-          <TwoOptionModal title="Unbundle Portal"
-                          confirmText="Yes"
-                          discardText="No"
-                          onClose={this._handleClose.bind(this)}
-                          onSave={this._handleModalConfirm.bind(this)}>
+        {this.state.isShowingModal && (
+          <TwoOptionModal
+            title="Unbundle Portal"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this._handleClose.bind(this)}
+            onSave={this._handleModalConfirm.bind(this)}
+          >
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
+              Are you sure you want to unbundle
+              "{this.state.bundledItem.entity.name}"
+              from
+              "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
-        }
-
-        {
-          this.state.isShowingModalMultiple &&
-          <TwoOptionModal title="Unbundle Portal"
-                          confirmText="Yes"
-                          discardText="No"
-                          onClose={this._handleClose.bind(this)}
-                          onSave={this._handleModalConfirmMultiple.bind(this)}>
+        )}
+        {this.state.isShowingModalMultiple && (
+          <TwoOptionModal
+            title="Unbundle Portal"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this._handleClose.bind(this)}
+            onSave={this._handleModalConfirmMultiple.bind(this)}
+          >
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItems.map(entity => entity.name).join(', ')}" from "{this.props.entity.name}"?
+              Are you sure you want to unbundle
+              "{this.state.bundledItems.map(entity => entity.name).join(', ')}"
+              from
+              "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
-        }
+        )}
       </div>
     );
   }

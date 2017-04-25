@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
-import './API.scss';
-import {DragSource} from 'react-dnd';
-import _ from 'lodash';
-import PublicEndpoint from './SubPublicEndpoint';
 import classNames from 'classnames';
+import _ from 'lodash';
+import {DragSource} from 'react-dnd';
+import PublicEndpoint from './SubPublicEndpoint';
+import {EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import './API.scss';
 
 const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 
@@ -19,11 +20,9 @@ const boxSource = {
   canDrag(props) {
     const selectedParent = props.appState.getStateKey('currentlySelectedParent');
     const selectedElements = props.appState.getStateKey('currentlySelectedSubelements');
-
     if (selectedParent && selectedParent.id === props.parent.id && selectedElements.length) {
       return false;
     }
-
     return !props.appState.getStateKey('currentEditElement');
   }
 };
@@ -57,26 +56,25 @@ export default class API extends Component {
   renderEndpoints() {
     return this.props.entity.publicEndpoints.map((api, index) => {
       return (
-        <div key={api.id} className="canvas-element__sub-element canvas-element__sub-element--api">
-          <PublicEndpoint
-            parent={this.props.entity}
-            {...this.props}
-            key={api.id}
-            id={api.id}
-            entity={api}
-            paper={this.props.paper}
-            APIsOpened={this.props.APIsOpened}
-            APIId={this.props.entity.id}
-            index={index}
-            indexAPI={this.props.index}
-            APIsPublicEndpoints={this.props.APIsPublicEndpoints}
-          />
-        </div>
+        <PublicEndpoint
+          key={api.id}
+          parent={this.props.entity}
+          {...this.props}
+          key={api.id}
+          id={api.id}
+          entity={api}
+          paper={this.props.paper}
+          APIsOpened={this.props.APIsOpened}
+          APIId={this.props.entity.id}
+          index={index}
+          indexAPI={this.props.index}
+          APIsPublicEndpoints={this.props.APIsPublicEndpoints}
+        />
       );
     });
   }
 
-  toggleOpenState() {
+  toggleOpenState = () => {
     this.setState({opened: !this.state.opened});
     this.props.onToggleOpen(!this.state.opened);
   }
@@ -84,37 +82,27 @@ export default class API extends Component {
   render() {
     const {connectDragSource} = this.props;
     const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
-
     const elementClass = classNames({
       subapi: true,
       'subapi--opened': this.state.opened,
       'subapi--closed': !this.state.opened
     });
-
     const apiInfoClass = classNames({
       'subapi__info': true,
       'subapi__info--selected': _.find(selectedElements, {id: this.props.id})
     });
-
     return connectDragSource(
-      <div className={elementClass}>
-        <div className={apiInfoClass}>
-          <span className="subapi__action" onClick={this.toggleOpenState.bind(this)}>
-            <span className="subapi__toggle"/>
-            <span className="subapi__icon">
-              <i className="icon-icon-product"/>
-            </span>
-          </span>
-
-          <div className="subapi__name" onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
-            {this.props.entity.name}
-          </div>
-        </div>
-
-        <div className="subapi__details">
-          <div className="subapi__details__title">Endpoints</div>
-          {this.renderEndpoints()}
-        </div>
+      <div>
+        <CollapsibleProperties
+          bar={this.props.entity.name}
+          collapsible={
+            <div>
+              <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>
+              {this.renderEndpoints()}
+            </div>
+          }
+          onToggleCollapse={this.toggleOpenState}
+        />
       </div>
     );
   }

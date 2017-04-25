@@ -80,8 +80,8 @@ export default class Port extends Component {
 
   calculatePortTopOffsets = () => {
     const portWrapDOM = findDOMNode(this.refs.port__wrap);
-    const subElementOffsetTop = portWrapDOM.closest('.canvas-element__sub-elements')
-      ? portWrapDOM.closest('.canvas-element__sub-elements').getBoundingClientRect().top
+    const subElementOffsetTop = portWrapDOM.closest('.EntitySubElements__main')
+      ? portWrapDOM.closest('.EntitySubElements').getBoundingClientRect().top
       : 0;
     this.portTopOffsets[this.props.elementId] = (this.props.offsetTop || 0)
       + subElementOffsetTop

@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
+import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 
 const Port = LunchBadgerCore.components.Port;
@@ -44,48 +45,37 @@ class PrivateEndpoint extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              scope={port.portGroup}/>
-      );
-    });
+    return this.props.entity.ports.map(port => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.id}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
+  }
+
+  renderMainProperties = () => {
+    const {entity, validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'url',
+        title: 'URL',
+        value: entity.url,
+        invalid: data.url,
+        onBlur: this.handleFieldChange('url'),
+      },
+    ];
+    return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
-    const {validations: {data}} = this.props;
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className={cs('canvas-element__properties__property', {['invalid']: data.url})}>
-              <div className="canvas-element__properties__property-title">URL</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.url || 'Enter URL here'}
-                </span>
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.props.entity.url}
-                       placeholder="Enter URL here"
-                       name="url"
-                       handleBlur={this.handleFieldChange('url')}
-                />
-              </div>
-              {data.url && (
-                <div className="canvas-element__validation__error">
-                  {data.url}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        {this.renderPorts()}
+        {this.renderMainProperties()}
       </div>
     );
   }

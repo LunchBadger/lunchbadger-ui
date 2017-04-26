@@ -11,7 +11,7 @@ import {Form} from 'formsy-react';
 import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
-import {IconSVG, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
+import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
 import iconTrash from '../../../../../src/icons/icon-trash.svg';
 import iconEdit from '../../../../../src/icons/icon-edit.svg';
 
@@ -152,7 +152,7 @@ export default (ComposedComponent) => {
           editable: false,
           expanded: false,
           validations: {isValid: true, data:{}},
-          modelBeforeEdit: this.refs.form.getModel()
+          modelBeforeEdit: this.entityRef.getFormRef().getModel()
         });
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
@@ -166,7 +166,7 @@ export default (ComposedComponent) => {
       this.props.entity.elementDOM = this.elementDOM;
     }
 
-    update(model) {
+    update = (model) => {
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
       if (typeof element.update === 'function') {
@@ -185,7 +185,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    updateName(evt) {
+    updateName = (evt) => {
       const element = this.element.decoratedComponentInstance || this.element;
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
@@ -193,7 +193,8 @@ export default (ComposedComponent) => {
     }
 
     triggerElementAutofocus() {
-      const nameInput = findDOMNode(this.refs.nameInput);
+      if (!this.entityRef) return; // FIXME
+      const nameInput = findDOMNode(this.entityRef.getInputNameRef());
       const selectAllOnce = () => {
         nameInput.select();
         nameInput.removeEventListener('focus', selectAllOnce);
@@ -202,7 +203,7 @@ export default (ComposedComponent) => {
       nameInput.focus();
     }
 
-    toggleExpandedState(evt) {
+    toggleExpandedState = (evt) => {
       evt.persist();
       this.setState({expanded: !this.state.expanded}, () => {
         if (this.state.editable && !this.state.expanded) {
@@ -241,7 +242,7 @@ export default (ComposedComponent) => {
     _focusClosestInput(target) {
       const closestProperty = target.closest('.EntityProperty__field');
       const closestPropertyInput = closestProperty && closestProperty.querySelector('input');
-      const closestElement = target.closest('.canvas-element');
+      const closestElement = target.closest('.Entity');
       const closestInput = closestElement.querySelector('input');
       if (closestPropertyInput) {
         closestPropertyInput.select();
@@ -268,7 +269,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    _handleRemove() {
+    _handleRemove = () => {
       if (this.element.removeEntity) {
         this.element.removeEntity();
       } else {
@@ -277,7 +278,7 @@ export default (ComposedComponent) => {
       toggleEdit(null);
     }
 
-    _handleEdit(evt) {
+    _handleEdit = (evt) => {
       this.toggleEditableState(evt);
       this.setState({expanded: true});
       evt.stopPropagation();
@@ -285,8 +286,8 @@ export default (ComposedComponent) => {
 
     _handleCancel = (evt) => {
       evt.persist();
-      if (this.refs.form) {
-        this.refs.form.reset(this.state.modelBeforeEdit);
+      if (this.entityRef.getFormRef()) {
+        this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
       }
       toggleEdit(null);
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
@@ -306,7 +307,7 @@ export default (ComposedComponent) => {
     }
 
     _handleValidationFieldClick = field => ({target}) => {
-      const closestCanvasElement = target.closest('.canvas-element');
+      const closestCanvasElement = target.closest('.Entity');
       const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${field}`);
       if (closestInput) {
         closestInput.focus();
@@ -328,104 +329,63 @@ export default (ComposedComponent) => {
         invalid: !validations.isValid
       });
       const opacity = isDragging ? 0.2 : 1;
-      return connectDragSource(connectDropTarget(
-        <div ref={(ref) => this.elementDOM = ref}
-             className={`${elementClass} ${this.props.entity.constructor.type}`}
-             style={{ opacity }}
-             onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
-             onDoubleClick={this._handleEdit.bind(this)}>
-          <div className="canvas-element__toolbox">
-            <div
-              className="canvas-element__toolbox__button canvas-element__toolbox__button--delete"
-              onClick={() => this.setState({showRemovingModal: true})}
+      const toolboxConfig = [
+        {
+          svg: iconTrash,
+          onClick: () => this.setState({showRemovingModal: true}),
+        },
+        {
+          svg: iconEdit,
+          onClick: this._handleEdit,
+        },
+      ];
+      return (
+            <Entity
+              ref={(r) => {this.entityRef = r}}
+              type={this.props.entity.constructor.type}
+              editable={this.state.editable && ready}
+              expanded={this.state.expanded && ready}
+              collapsed={!this.state.expanded}
+              highlighted={this.state.highlighted || this.state.editable}
+              dragging={isDragging}
+              wip={!ready}
+              invalid={validations.isValid}
+              toolboxConfig={toolboxConfig}
+              onToggleExpand={this.toggleExpandedState}
+              name={this.props.entity.name}
+              onNameChange={this.updateName}
+              onCancel={this._handleCancel}
+              validations={validations}
+              onFieldClick={this._handleValidationFieldClick}
+              onValidSubmit={this.update}
+              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
+              onDoubleClick={this._handleEdit}
+              connectDragSource={connectDragSource}
+              connectDropTarget={connectDropTarget}
             >
-              <IconSVG className="canvas-element__toolbox__button__icon" svg={iconTrash} />
-            </div>
-            <div
-              className="canvas-element__toolbox__button canvas-element__toolbox__button--edit"
-              onClick={this._handleEdit.bind(this)}
-            >
-              <IconSVG className="canvas-element__toolbox__button__icon" svg={iconEdit} />
-            </div>
-          </div>
-          <Form name="elementForm" ref="form" onValidSubmit={this.update.bind(this)}>
-            <div className="canvas-element__inside">
-              <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
-                <i className={`fa ${this.props.icon}`}/>
-              </div>
-              <div className="canvas-element__title">
-                <div className="canvas-element__title__box">
-                  <span className="canvas-element__name hide-while-edit">{this.props.entity.name}</span>
-                  <Input className="canvas-element__input editable-only"
-                         ref="nameInput"
-                         name="name"
-                         validations="isValidEntityName"
-                         value={this.props.entity.name}
-                         handleChange={this.updateName.bind(this)}/>
-                </div>
-              </div>
-            </div>
-            <SmoothCollapse expanded={this.state.expanded && ready} heightTransition="800ms ease">
-              <div className="canvas-element__extra">
-                <div className="canvas-element__extra__inner">
-                  <EntityValidationErrors
-                    validations={validations}
-                    onFieldClick={this._handleValidationFieldClick}
-                  />
-                  {/*}<div className="canvas-element__validation">
-                    <div className="canvas-element__validation__info">
-                      The following items require your attention:
-                      <div className="canvas-element__validation__fields">
-                        {validations.data && Object.keys(validations.data).map(key => (
-                          <div
-                            key={key}
-                            className="canvas-element__validation__field"
-                            onClick={this._handleValidationFieldClick(key)}
-                          >
-                            {key.replace(/([A-Z])/g, " $1" )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>*/}
-                  <ComposedComponent
-                    ref={(ref) => this.element = ref}
-                    parent={this}
-                    {...this.props}
-                    {...this.state}
-                    onFieldUpdate={this._handleFieldUpdate}
-                  />
-                  <SmoothCollapse expanded={this.state.editable && ready} heightTransition="800ms ease">
-                    <EntityActionButtons onCancel={this._handleCancel} />
-                  </SmoothCollapse>
-                  {/*<div className="canvas-element__actions">
-                    <div className="canvas-element__actions__box">
-                      <button
-                        className="canvas-element__button canvas-element__button--cancel"
-                        onClick={this._handleCancel.bind(this)}
-                      >
-                        CANCEL
-                      </button>
-                      <button type="submit" className="canvas-element__button">OK</button>
-                    </div>
-                  </div>*/}
-                </div>
-              </div>
-            </SmoothCollapse>
-          </Form>
-          {
-            this.state.showRemovingModal &&
-            <TwoOptionModal onClose={() => this.setState({showRemovingModal: false})}
-                            onSave={this._handleRemove.bind(this)}
-                            onCancel={() => this.setState({showRemovingModal: false})}
-                            title="Remove entity"
-                            confirmText="Remove"
-                            discardText="Cancel">
-              <span>Do you really want to remove that entity?</span>
-            </TwoOptionModal>
-          }
-        </div>
-      ));
+              <ComposedComponent
+                ref={(ref) => this.element = ref}
+                parent={this}
+                {...this.props}
+                {...this.state}
+                onFieldUpdate={this._handleFieldUpdate}
+              />
+              {this.state.showRemovingModal && (
+                <TwoOptionModal
+                  onClose={() => this.setState({showRemovingModal: false})}
+                  onSave={this._handleRemove}
+                  onCancel={() => this.setState({showRemovingModal: false})}
+                  title="Remove entity"
+                  confirmText="Remove"
+                  discardText="Cancel"
+                >
+                  <span>
+                    Do you really want to remove that entity?
+                  </span>
+                </TwoOptionModal>
+              )}
+            </Entity>
+      );
     }
   }
 }

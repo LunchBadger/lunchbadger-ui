@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {SmoothCollapse} from '../';
+import {SmoothCollapse} from '../../';
 import './EntityValidationErrors.scss';
 
 const EntityValidationErrors = ({validations, onFieldClick}) => (

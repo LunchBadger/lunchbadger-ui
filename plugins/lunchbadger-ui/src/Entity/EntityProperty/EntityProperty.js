@@ -1,10 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
-import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse} from '../';
-import iconDelete from '../../../../src/icons/icon-delete.svg';
+import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse} from '../../';
+import iconDelete from '../../../../../src/icons/icon-delete.svg';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
+  getInputRef = () => this.inputRef;
+
   render() {
     const {
       name, value,
@@ -31,6 +33,7 @@ class EntityProperty extends Component {
           </div>
           {!fake && (
             <Input
+              ref={(r) => {this.inputRef = r;}}
               className="EntityProperty__field--input"
               name={name}
               value={value}

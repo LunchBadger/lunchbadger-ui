@@ -85,7 +85,7 @@ export default class Port extends Component {
       : 0;
     this.portTopOffsets[this.props.elementId] = (this.props.offsetTop || 0)
       + subElementOffsetTop
-      - portWrapDOM.closest('.canvas-element__extra').getBoundingClientRect().top;
+      - portWrapDOM.closest('.Entity__extra').getBoundingClientRect().top;
   }
 
   componentWillUnmount() {

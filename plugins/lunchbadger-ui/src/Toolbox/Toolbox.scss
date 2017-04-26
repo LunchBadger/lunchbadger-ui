@@ -1,0 +1,45 @@
+.Toolbox {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background-color: #FFF;
+  width: 100px;
+  height: 30px;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 300ms;
+  overflow: hidden;
+  pointer-events: none;
+  .highlighted:not(.editable) & {
+    opacity: 1;
+    pointer-events: all;
+  }
+  &__button {
+    width: 50px;
+    height: 100%;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    &:hover {
+      background-color: hsl(0, 0%, 95%);
+    }
+    &:active {
+      background-color: #00404f;
+      .Toolbox__button__icon {
+        svg {
+          stroke: #FFF;
+        }
+      }
+    }
+    &__icon {
+      margin-top: 3px;
+      display: inline-block;
+      svg {
+        width: auto;
+        height: 24px;
+        stroke: #07677E;
+      }
+    }
+  }
+}

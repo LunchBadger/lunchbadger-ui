@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import cs from 'classnames';
-import {EntityPropertyLabel, IconSVG} from '../';
-import iconPlus from '../../../../src/icons/icon-plus.svg';
+import {EntityPropertyLabel, IconSVG} from '../../';
+import iconPlus from '../../../../../src/icons/icon-plus.svg';
 import './EntitySubElements.scss';
 
 const EntitySubElements = ({title, children, main, onAdd}) => (

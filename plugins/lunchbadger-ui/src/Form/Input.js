@@ -48,16 +48,17 @@ class Input extends Component {
 
   render() {
     return (
-      <input className={this.props.className || ''}
-             value={this.props.getValue()}
-             type={this.props.type || 'text'}
-             onBlur={this._handleBlur.bind(this)}
-             onKeyPress={this._handleKeyPress.bind(this)}
-             onKeyUp={this._handleKeyUp.bind(this)}
-             onKeyDown={this._handleKeyDown.bind(this)}
-             onChange={this._handleChange.bind(this)}
-             id={this.props.name}
-             placeholder={this.props.placeholder}
+      <input
+        className={this.props.className || ''}
+        value={this.props.getValue()}
+        type={this.props.type || 'text'}
+        onBlur={this._handleBlur.bind(this)}
+        onKeyPress={this._handleKeyPress.bind(this)}
+        onKeyUp={this._handleKeyUp.bind(this)}
+        onKeyDown={this._handleKeyDown.bind(this)}
+        onChange={this._handleChange.bind(this)}
+        id={this.props.name}
+        placeholder={this.props.placeholder}
       />
     );
   }

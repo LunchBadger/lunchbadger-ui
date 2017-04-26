@@ -16,8 +16,28 @@
     font-size: 38px;
     text-align: center;
     cursor: pointer;
+    .editable & {
+      pointer-events: none;
+    }
     &:hover {
       background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  &__name {
+    padding-top: 12px;
+    .EntityProperty__field {
+      color: #FFF;
+      height: 28px;
+      &--text {
+        line-height: 26px;
+      }
+      .editable & {
+        background-color: #4190CE;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        &:hover {
+          background-color: #2170AE;
+        }
+      }
     }
   }
 }

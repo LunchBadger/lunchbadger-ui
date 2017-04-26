@@ -1,11 +1,58 @@
+@import '../../../lunchbadger-core/src/config';
+
 .Entity {
-  background-color: #FFF;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
+  max-width: 100%;
   min-width: 200px;
+  color: rgb(41, 134, 156);
   position: relative;
+  display: block;
+  background: $ui-light;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  padding: 0;
   margin: 20px 0;
-  transition: all 300ms ease;
+  // transition: all .3s ease;
   transform: translateZ(0);
-  color: #01667D;
+  font-weight: normal;
+  &.editable {
+    z-index: 15;
+    .hide-while-edit {
+      display: none;
+    }
+    .editable-only {
+      display: block;
+    }
+  }
+  &.expanded {
+    .expanded-only {
+      display: block;
+    }
+  }
+  &.wip {
+    opacity: .4 !important;
+    pointer-events: none !important;
+    z-index: 15;
+    .canvas-element__extra {
+      // max-height: 0;
+      visibility: hidden;
+    }
+  }
+  &.highlighted {
+    color: rgb(65, 144, 206);
+  }
+  &__data {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+  &__extra {
+    padding-bottom: 20px;
+  }
+}
+
+.editable-only {
+  display: none;
+}
+
+.expanded-only {
+  display: none;
 }

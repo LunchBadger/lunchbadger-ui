@@ -1,11 +1,13 @@
 import React, {PropTypes} from 'react';
-import {Button} from '../';
+import {Button} from '../../';
 import './EntityActionButtons.scss';
 
 const EntityActionButtons = ({onCancel}) => (
   <div className="EntityActionButtons">
-    <Button onClick={onCancel}>Cancel</Button>
-    <Button type="submit">OK</Button>
+    <div className="EntityActionButtons__inner">
+      <Button onClick={onCancel}>Cancel</Button>
+      <Button type="submit">OK</Button>
+    </div>
   </div>
 );
 

@@ -1,5 +1,5 @@
 var page;
-var modelSelector = '.quadrant:nth-child(2) .canvas-element.Model:last-child';
+var modelSelector = '.quadrant:nth-child(2) .Entity.Model:last-child';
 
 module.exports = {
   'Workspace status: ok by default': function(browser) {
@@ -27,11 +27,11 @@ module.exports = {
     browser.pause(500);
     // the name "Model" should cause an error as it is already used within
     // LoopBack
-    page.setValue(modelSelector + ' .canvas-element__title .canvas-element__input', 'Model');
-    browser.click(modelSelector + ' .canvas-element__button');
+    page.setValue(modelSelector + ' .EntityHeader .EntityProperty__field--input', 'Model');
+    browser.click(modelSelector + ' button[type=submit]');
 
     page.expect.element('.workspace-status span').to.have.attribute('class')
-      .which.contains('workspace-status__failure').after(5000);
+      .which.contains('workspace-status__failure').after(7000);
   },
 
   'Workspace status: info panel shows error': function(browser) {

@@ -32,7 +32,7 @@ var pageCommands = {
     option = option || 1;
 
     this.moveToElement(element, 5, 5, function () {
-      this.waitForElementVisible(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item', 500);
+      this.waitForElementVisible(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item', 1000);
       this.click(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item');
     });
   },
@@ -61,7 +61,7 @@ module.exports = {
       selector: '.panel:nth-child(3) .panel__container'
     },
     details: {
-      selector: '.header__menu__element .icon-icon-details'
+      selector: '.header__menu__element .header__menu__link.details'
     },
     detailsPanel: {
       selector: '.panel:first-child .panel__container'

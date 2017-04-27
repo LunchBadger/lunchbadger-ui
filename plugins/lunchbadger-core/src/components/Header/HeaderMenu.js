@@ -39,7 +39,7 @@ export default class HeaderMenu extends Component {
             <HeaderMenuSaveButton saveToServer={this.props.saveToServer} />
           </li>
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} svg={iconDetails} />
+            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} kind="details" svg={iconDetails} />
           </li>
           {this.renderButtons()}
           <li className="header__menu__element">

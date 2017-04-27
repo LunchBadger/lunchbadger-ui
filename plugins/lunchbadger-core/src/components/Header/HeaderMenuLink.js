@@ -7,6 +7,7 @@ import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
 export default class HeaderMenuLink extends Component {
   static propTypes = {
     icon: PropTypes.string,
+    kind: PropTypes.string,
     togglePanel: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.object
@@ -40,9 +41,9 @@ export default class HeaderMenuLink extends Component {
   }
 
   render() {
-    const linkClass = classNames({
+    const linkClass = classNames(this.props.kind, {
       'header__menu__link': true,
-      'header__menu__link--pressed': this.state.pressed
+      'header__menu__link--pressed': this.state.pressed,
     });
     return (
       <a href="#" className={linkClass} onClick={() => togglePanel(this.props.togglePanel)}>

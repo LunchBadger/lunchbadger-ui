@@ -1,11 +1,16 @@
 import React, {PropTypes} from 'react';
+import cs from 'classnames';
 import {IconSVG} from '../';
 import './Toolbox.scss';
 
 const Toolbox = ({config}) => (
   <div className="Toolbox">
-    {config.map(({svg, onClick}, idx) => (
-      <div key={idx} className="Toolbox__button" onClick={onClick}>
+    {config.map(({action, svg, onClick}, idx) => (
+      <div
+        key={idx}
+        className={cs('Toolbox__button', `Toolbox__button--${action}`)}
+        onClick={onClick}
+      >
         <IconSVG className="Toolbox__button__icon" svg={svg} />
       </div>
     ))}

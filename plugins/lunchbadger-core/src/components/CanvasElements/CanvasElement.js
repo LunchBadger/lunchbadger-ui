@@ -331,10 +331,12 @@ export default (ComposedComponent) => {
       const opacity = isDragging ? 0.2 : 1;
       const toolboxConfig = [
         {
+          action: 'delete',
           svg: iconTrash,
           onClick: () => this.setState({showRemovingModal: true}),
         },
         {
+          action: 'edit',
           svg: iconEdit,
           onClick: this._handleEdit,
         },

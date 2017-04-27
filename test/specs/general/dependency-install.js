@@ -17,7 +17,6 @@ module.exports = {
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
-    return; //FIXME - fix when rest/soap datasources will be possible to create on backendside
     browser.click('.workspace-status span');
 
     page.addElementFromTooltip('.dataSource.tool', 2);
@@ -27,12 +26,12 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
+    browser.pause(2000);
 
     expectInstall(page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
-    return; //FIXME - fix when rest/soap datasources will be possible to create on backendside
     page.addElementFromTooltip('.dataSource.tool', 3);
     browser.pause(1000);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input', 'dumpUrl');
@@ -40,6 +39,7 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
+    browser.pause(2000);
 
     page.addElementFromTooltip('.dataSource.tool', 4);
     browser.pause(1000);
@@ -48,15 +48,12 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
+    browser.pause(2000);
 
     expectInstall(page, 'failure', '?wsdl')
   },
 
   'Connector uninstallation: remove datasource': function(browser) {
-    return; //FIXME - fix when rest/soap datasources will be possible to create on backendside
-    page.moveToElement(elementSelector, 10, 10);
-    browser.click();
-
     page.click(elementSelector + ' .Toolbox__button--delete');
     browser.pause(1000);
     page.click('.modal__actions__button.modal__actions__button--confirm');
@@ -65,7 +62,6 @@ module.exports = {
   },
 
   'Connector uninstallation: trash workspace': function(browser) {
-    return; //FIXME - fix when rest/soap datasources will be possible to create on backendside
     page.click('.header__menu__element .fa-trash-o');
 
     expectInstall(page, 'success', 'Workspace OK');

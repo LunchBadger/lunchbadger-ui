@@ -3,7 +3,6 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import SmoothCollapse from './SmoothCollapse';
 import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 import toggleEdit from '../../actions/CanvasElements/toggleEdit';
 import _ from 'lodash';

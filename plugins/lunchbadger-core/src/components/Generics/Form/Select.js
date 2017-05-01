@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 import {HOC} from 'formsy-react';
 
 class Select extends Component {
@@ -13,6 +14,11 @@ class Select extends Component {
     multiple: PropTypes.bool,
     children: PropTypes.array.isRequired
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const shallow = shallowCompare(this, nextProps, nextState);
+    return shallow || this.props.getValue() !== nextProps.value;
+  }
 
   _handleBlur(event) {
     if (typeof this.props.handleBlur === 'function') {

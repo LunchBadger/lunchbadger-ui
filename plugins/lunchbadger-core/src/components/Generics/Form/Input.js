@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 import {HOC} from 'formsy-react';
 
 class Input extends Component {
@@ -14,6 +15,11 @@ class Input extends Component {
     type: PropTypes.string,
     placeholder: PropTypes.string
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const shallow = shallowCompare(this, nextProps, nextState);
+    return shallow || this.props.getValue() !== nextProps.value;
+  }
 
   _handleKeyPress(event) {
     if (typeof this.props.handleKeyPress === 'function') {

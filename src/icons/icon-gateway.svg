@@ -1,0 +1,12 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+<style type="text/css">
+	.icon-gateway-0{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="icon-gateway-0" d="M39.2,7c-9.8,0-8.2,6.5-19.1,6.5S10.8,7,1,7"/>
+	<path class="icon-gateway-0" d="M39.2,33c-9.8,0-8.2-6.5-19.1-6.5S10.8,33,1,33"/>
+	<path class="icon-gateway-0" d="M33.2,12.6c-0.3,0.2-0.5,0.4-0.8,0.6c-2.3,1.7-5.5,4.1-12.3,4.1s-10-2.4-12.3-4.1C7.5,13,7.3,12.8,7,12.6v14.9
+		c0.3-0.2,0.5-0.4,0.8-0.6c2.3-1.7,5.5-4.1,12.3-4.1s10,2.4,12.3,4.1c0.3,0.2,0.5,0.4,0.8,0.6V12.6z"/>
+</g>
+</svg>

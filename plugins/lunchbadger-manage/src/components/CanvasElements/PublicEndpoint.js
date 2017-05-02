@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
+import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
 
@@ -14,14 +16,36 @@ class PublicEndpoint extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       path: props.entity.path
     };
   }
 
   update(model) {
-    updatePublicEndpoint(this.props.entity.id, model);
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updatePublicEndpoint(this.props.entity.id, model);
+    }
+    return validations;
+  }
+
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.path === '') validations.data.path = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
+
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,48 +54,48 @@ class PublicEndpoint extends Component {
     }
   }
 
-  onPathChange(event) {
-    this.setState({path: event.target.value});
-  }
+  onPathChange = event => this.setState({path: event.target.value});
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              scope={port.portGroup}/>
-      );
-    });
+    return this.props.entity.ports.map(port => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.id}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
+  }
+
+  renderMainProperties = () => {
+    const {entity, validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'url',
+        title: 'URL',
+        value: getPublicEndpointUrl(entity.id, this.state.path),
+        fake: true,
+      },
+      {
+        name: 'path',
+        title: 'path',
+        value: entity.path,
+        invalid: data.path,
+        onChange: this.onPathChange,
+        onBlur: this.handleFieldChange('path'),
+        editableOnly: true,
+      },
+    ];
+    return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
-              <div className="canvas-element__properties__property-value">
-                {getPublicEndpointUrl(this.props.entity.id, this.state.path)}
-              </div>
-            </div>
-            <div className="canvas-element__properties__property editable-only">
-              <div className="canvas-element__properties__property-title">Path</div>
-              <div className="canvas-element__properties__property-value">
-                <Input className="canvas-element__input canvas-element__input--property"
-                       value={this.props.entity.path}
-                       name="path"
-                       handleChange={this.onPathChange.bind(this)}/>
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.renderPorts()}
+        {this.renderMainProperties()}
       </div>
     );
   }

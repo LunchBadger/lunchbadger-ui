@@ -10,21 +10,27 @@ module.exports = {
 
     page.addElementFromTooltip('.dataSource.tool');
 
-    browser.pause(500);
+    browser.pause(1000);
 
     page.expect.element('.aside--editing').to.be.present;
     page.expect.element('.canvas__container--editing').to.be.present;
-    page.expect.element('.canvas-element.editable.expanded.DataSource').to.be.present;
+    page.expect.element('.Entity.editable.expanded.DataSource').to.be.present;
 
-    page.expect.element('.quadrant:first-child .canvas-element.editable.DataSource .canvas-element__title .canvas-element__input').to.have.value.that.equals('Memory');
+    page.expect.element('.quadrant:first-child .Entity.editable.DataSource .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('Memory');
 
-    page.setValue('.quadrant:first-child .canvas-element.DataSource:last-child .canvas-element__input', 'Mem');
+    page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:first-child .EntityProperty__field--input', 'dumpUrl');
+    page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input', 'dumpDatabase');
+    page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
+    page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
 
-    browser.click('.quadrant:first-child .canvas-element.editable.DataSource .canvas-element__button');
+    browser.click('.quadrant:first-child .Entity.editable.DataSource button[type=submit]');
 
     browser.pause(2000);
 
-    browser.expect.element('.quadrant:first-child .canvas-element.DataSource:last-child .canvas-element__title').text.to.equal('Mem');
+    browser.expect.element('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').text.to.equal('dumpUrl');
+    browser.expect.element('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--text').text.to.equal('dumpDatabase');
+    browser.expect.element('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--text').text.to.equal('dumpUsername');
+    browser.expect.element('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:last-child .EntityProperty__field--text').text.to.equal('••••••••••••');
 
     browser.pause(2000);
 

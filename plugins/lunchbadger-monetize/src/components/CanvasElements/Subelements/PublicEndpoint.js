@@ -43,7 +43,8 @@ export default class PublicEndpoint extends Component {
     left: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
     hideSourceOnDrag: PropTypes.bool.isRequired,
-    handleEndDrag: PropTypes.func
+    handleEndDrag: PropTypes.func,
+    index: PropTypes.number,
   };
 
   constructor(props) {
@@ -59,7 +60,9 @@ export default class PublicEndpoint extends Component {
               middle={true}
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
-              scope={port.portGroup}/>
+              scope={port.portGroup}
+              offsetTop={96 + this.props.index * 32}
+        />
       );
     });
   }

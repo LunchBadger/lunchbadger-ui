@@ -1,0 +1,11 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 23.2 23.3" xml:space="preserve">
+<style type="text/css">
+	.icon-edit-0{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="icon-edit-0" d="M6.5,20.4l-5.7,2.1l2.1-5.7L18.7,1.1c0.6-0.7,1.7-0.7,2.4-0.1l1.2,1.2c0.6,0.6,0.6,1.7,0,2.4L6.5,20.4z"/>
+	<line class="icon-edit-0" x1="2.8" y1="16.7" x2="6.5" y2="20.4"/>
+	<line class="icon-edit-0" x1="16.4" y1="3.2" x2="20" y2="6.8"/>
+</g>
+</svg>

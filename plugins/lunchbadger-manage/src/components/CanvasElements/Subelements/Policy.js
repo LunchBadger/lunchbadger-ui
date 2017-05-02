@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {EntityProperty} from '../../../../../lunchbadger-ui/src';
 import './Policy.scss';
 
 const {Input} = LunchBadgerCore.components;
@@ -16,27 +17,22 @@ export default class Policy extends Component {
 
   render() {
     const {policy, pipelineIndex, index} = this.props;
-
+    const hiddenInputs = [
+      {
+        name: `pipelines[${pipelineIndex}][policies][${index}][id]`,
+        value: policy.id,
+      },
+      {
+        name: `pipelines[${pipelineIndex}][policies][${index}][type]`,
+        value: policy.type,
+      },
+    ];
     return (
-      <div className="policy">
-        <div className="policy__icon">
-          <i className="fa fa-certificate"/>
-        </div>
-        <div className="policy__name">
-          <span className="hide-while-edit">{policy.name}</span>
-
-          <Input className="canvas-element__input canvas-element__input--property editable-only"
-                 value={policy.name}
-                 name={`pipelines[${pipelineIndex}][policies][${index}][name]`}/>
-          <Input value={policy.id}
-                 type="hidden"
-                 name={`pipelines[${pipelineIndex}][policies][${index}][id]`}/>
-          <Input value={policy.type}
-                 type="hidden"
-                 name={`pipelines[${pipelineIndex}][policies][${index}][type]`}/>
-
-        </div>
-      </div>
+      <EntityProperty
+        name={`pipelines[${pipelineIndex}][policies][${index}][name]`}
+        value={policy.name}
+        hiddenInputs={hiddenInputs}
+      />
     );
   }
 }

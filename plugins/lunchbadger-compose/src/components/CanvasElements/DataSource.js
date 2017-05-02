@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
+import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updateDataSource from '../../actions/CanvasElements/DataSource/update';
 import removeDataSource from '../../actions/CanvasElements/DataSource/remove';
 
@@ -21,90 +23,95 @@ class DataSource extends Component {
   }
 
   update(model) {
-    updateDataSource(this.context.projectService, this.props.entity.id, model);
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updateDataSource(this.context.projectService, this.props.entity.id, model);
+    }
+    return validations;
   }
 
-  renderPorts() {
-    return this.props.entity.ports.map((port) => {
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.name === '') validations.data.name = messages.empty;
+    if (model.url === '') validations.data.url = messages.empty;
+    if (model.database === '') validations.data.database = messages.empty;
+    if (model.username === '') validations.data.username = messages.empty;
+    if (model.password === '') validations.data.password = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
 
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              scope={port.portGroup}/>
-      );
-    });
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value, evt);
+    }
   }
 
   removeEntity() {
     removeDataSource(this.context.projectService, this.props.entity);
   }
 
-  render() {
-    const {entity} = this.props;
+  renderPorts() {
+    return this.props.entity.ports.map((port) => {
+      return (
+        <Port
+          key={`port-${port.portType}-${port.id}`}
+          paper={this.props.paper}
+          way={port.portType}
+          elementId={this.props.entity.id}
+          scope={port.portGroup}
+        />
+      );
+    });
+  }
 
+  renderMainProperties = () => {
+    const {entity, validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'url',
+        title: 'URL',
+        value: entity.url,
+        invalid: data.url,
+        onBlur: this.handleFieldChange('url')
+      },
+      {
+        name: 'database',
+        title: 'database',
+        value: entity.database,
+        invalid: data.database,
+        onBlur: this.handleFieldChange('database')
+      },
+      {
+        name: 'username',
+        title: 'username',
+        value: entity.username,
+        invalid: data.username,
+        onBlur: this.handleFieldChange('username'),
+      },
+      {
+        name: 'password',
+        title: 'password',
+        value: entity.password,
+        invalid: data.password,
+        onBlur: this.handleFieldChange('password'),
+        password: true,
+      },
+    ];
+    return <EntityProperties properties={mainProperties} />;
+  }
+
+  render() {
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {entity.url}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.url}
-                       name="url"/>
-              </div>
-            </div>
-
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Database</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {entity.database}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.database}
-                       name="database"/>
-              </div>
-            </div>
-
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Username</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {entity.username}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.username}
-                       name="username"/>
-              </div>
-            </div>
-
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">Password</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {'*'.repeat(entity.password.length)}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={entity.password}
-                       type="password"
-                       name="password"/>
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.renderPorts()}
+        {this.renderMainProperties()}
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
+import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
 import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
 import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
@@ -94,27 +95,28 @@ class Microservice extends Component {
   }
 
   renderModels() {
+    let index = -1;
     return this.props.entity.models.map((modelId) => {
       const entity = Private.findEntity(modelId);
-
       if (!entity) {
         return null;
       }
-
+      index += 1;
       return (
-        <div key={entity.id} className="canvas-element__sub-element canvas-element__sub-element--api">
-          <Model
-            {...this.props}
-            parent={this.props.entity}
-            key={entity.id}
-            id={entity.id}
-            entity={entity}
-            paper={this.props.paper}
-            left={entity.left}
-            top={entity.top}
-            handleEndDrag={(item) => this.handleEndDrag(item)}
-            hideSourceOnDrag={true}/>
-        </div>
+        <Model
+          key={entity.id}
+          {...this.props}
+          parent={this.props.entity}
+          key={entity.id}
+          id={entity.id}
+          entity={entity}
+          paper={this.props.paper}
+          left={entity.left}
+          top={entity.top}
+          handleEndDrag={(item) => this.handleEndDrag(item)}
+          hideSourceOnDrag={true}
+          index={index}
+        />
       );
     });
   }
@@ -128,7 +130,7 @@ class Microservice extends Component {
     }
   }
 
-  handleModalConfirm() {
+  handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
     const modelData = {
@@ -136,16 +138,12 @@ class Microservice extends Component {
       contextPath: entity.contextPath,
       wasBundled: false
     };
-
     unbundleStart(item.parent);
-
     updateModel(this.context.projectService, entity.lunchbadgerId || entity.id, modelData)
       .then(() => unbundleFinish(item.parent, entity));
   }
 
-  handleModalClose() {
-    this.setState({isShowingModal: false});
-  }
+  handleModalClose = () => this.setState({isShowingModal: false});
 
   bundleMicroservice(microservice, bundledItem) {
     const modelData = {
@@ -168,49 +166,50 @@ class Microservice extends Component {
 
     return (
       <div className={elementClass}>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-          </div>
+        <EntitySubElements
+          title="Models"
+          main
+        >
+          <DraggableGroup
+            iconClass="icon-icon-microservice"
+            entity={this.props.entity}
+            appState={this.props.appState}
+          >
+            {this.renderModels()}
+          </DraggableGroup>
+        </EntitySubElements>
+        <div className="canvas-element__drop">
+          <ElementsBundler
+            {...this.props}
+            canDropCheck={
+              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+              && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
+            }
+            onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
+            onAdd={this.bundleMicroservice.bind(this)}
+            onMove={moveBetweenMicroservice}
+            dropText="Drag Models Here"
+            modalTitle="Bundle Microservice"
+            parent={this.props.parent}
+            entity={this.props.entity}
+          />
         </div>
-
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            Models
-          </div>
-          <div className="canvas-element__endpoints" ref="endpoints">
-            <DraggableGroup iconClass="icon-icon-microservice" entity={this.props.entity}
-                            appState={this.props.appState}>
-              {this.renderModels()}
-            </DraggableGroup>
-          </div>
-          <div className="canvas-element__drop">
-            <ElementsBundler {...this.props}
-                             canDropCheck={
-                               (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                               && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
-                             }
-                             onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
-                             onAdd={this.bundleMicroservice.bind(this)}
-                             onMove={moveBetweenMicroservice}
-                             dropText="Drag Models Here"
-                             modalTitle="Bundle Microservice"
-                             parent={this.props.parent}
-                             entity={this.props.entity}/>
-          </div>
-        </div>
-
-        {
-          this.state.isShowingModal &&
-          <TwoOptionModal title="Unbundle Microservice"
-                          confirmText="Yes"
-                          discardText="No"
-                          onClose={this.handleModalClose.bind(this)}
-                          onSave={this.handleModalConfirm.bind(this)}>
+        {this.state.isShowingModal && (
+          <TwoOptionModal
+            title="Unbundle Microservice"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this.handleModalClose}
+            onSave={this.handleModalConfirm}
+          >
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
+              Are you sure you want to unbundle
+              "{this.state.bundledItem.entity.name}"
+              from
+              "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
-        }
+        )}
       </div>
     );
   }

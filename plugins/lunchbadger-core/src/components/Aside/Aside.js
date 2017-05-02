@@ -11,11 +11,13 @@ export default class Aside extends Component {
     return this.props.plugins.getToolGroups().map((plugin, index) => {
       const ToolGroupComponent = plugin.component;
       const tools = plugin.tools;
-
+      const currentEditElement = this.props.appState.getStateKey('currentEditElement');
       return (
         <ToolGroupComponent key={`tools-${plugin.name}-${index}`}
                             groupName={plugin.name}
-                            tools={tools}/>
+                            tools={tools}
+                            currentEditElement={currentEditElement}
+                            />
       );
     });
   }

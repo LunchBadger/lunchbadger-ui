@@ -2,24 +2,24 @@ module.exports = {
   // '@disabled': true,
   'Connection: proxy endpoint': function (browser) {
     var page = browser.page.lunchBadger();
-    var privateEndpointSelector = '.quadrant:nth-child(2) .canvas-element.PrivateEndpoint:last-child';
-    var gatewaySelector = '.quadrant:nth-child(3) .canvas-element.Gateway:last-child';
-    var publicEndpointSelector = '.quadrant:nth-child(4) .canvas-element.PublicEndpoint:last-child';
+    var privateEndpointSelector = '.quadrant:nth-child(2) .Entity.PrivateEndpoint:last-child';
+    var gatewaySelector = '.quadrant:nth-child(3) .Entity.Gateway:last-child';
+    var publicEndpointSelector = '.quadrant:nth-child(4) .Entity.PublicEndpoint:last-child';
 
     page.open();
 
     page.addElementFromTooltip('.endpoint.tool', 1);
     browser.pause(500);
-    browser.clearValue(privateEndpointSelector + ' .canvas-element__title .canvas-element__input');
-    browser.setValue(privateEndpointSelector + ' .canvas-element__title .canvas-element__input', 'FooBar');
-    browser.click(privateEndpointSelector + '.editable .canvas-element__button');
+    browser.clearValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input');
+    browser.setValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input', 'FooBar');
+    browser.click(privateEndpointSelector + '.editable button[type=submit]');
     browser.pause(1000);
 
     page.addElement('.gateway.tool');
     browser.pause(3500);
-    browser.clearValue(gatewaySelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__input');
-    browser.setValue(gatewaySelector + ' .canvas-element__properties__property:nth-child(2) .canvas-element__input', 'blip-bloop');
-    browser.click(gatewaySelector + '.editable .canvas-element__button');
+    browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input');
+    browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input', 'blip-bloop');
+    browser.click(gatewaySelector + '.editable button[type=submit]');
     browser.pause(2000);
 
     browser
@@ -33,9 +33,9 @@ module.exports = {
       .pause(500);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.expect.element(publicEndpointSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('FooBarPublicEndpoint');
-    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__input').to.have.value.that.equals('foobar');
-    page.expect.element(publicEndpointSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');
+    page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('FooBarPublicEndpoint');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input').to.have.value.that.equals('foobar');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');
 
     browser.pause(1500);
 

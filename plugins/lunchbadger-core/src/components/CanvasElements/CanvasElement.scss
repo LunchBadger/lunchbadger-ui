@@ -3,356 +3,523 @@
 .canvas-element {
   max-width: 100%;
   min-width: 200px;
-  color: $font-light;
+  color: rgb(41, 134, 156);
   position: relative;
   display: block;
   background: $ui-light;
-  border-radius: 5px;
-  background-color: #01667D;
+  border-radius: 3px;
+  // background-color: #01667D;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin: 20px 0;
-  transition: all .3s ease;
+  // transition: all .3s ease;
   transform: translateZ(0);
-
+  font-weight: normal;
   &.mouse-over {
     z-index: 1;
   }
-
   &.editable {
-    border-radius: 0;
     z-index: 15;
-
     .model-property:hover {
       .model-property__remove.fa {
         display: block;
       }
     }
-
     .hide-while-edit {
       display: none;
     }
-
     .editable-only {
       display: block;
     }
+    .canvas-element__properties__property-value {
+      border-color: rgb(222, 222, 221);
+    }
+    .canvas-element__actions {
+      height: 65px;
+      .canvas-element__actions__box {
+        margin-top: 24px;
+      }
+    }
+    // .canvas-element__icon {
+    //   pointer-events: none;
+    // }
   }
-
+  .canvas-element__properties__property-value {
+    &.canvas-element__properties__property-fake {
+      border: none;
+      padding: 6px 0 0 7px;
+    }
+  }
   &.expanded {
     padding-bottom: 0;
-
     .expanded-only {
       display: block;
     }
-
     .canvas-element__extra {
-      max-height: 1000px;
+      // max-height: 1000px;
       overflow: hidden;
     }
+    // .canvas-element__inside {
+    //   border-bottom-left-radius: 0;
+    //   border-bottom-right-radius: 0;
+    // }
   }
-
   &.wip {
     opacity: .4 !important;
     pointer-events: none !important;
     z-index: 15;
-
     .canvas-element__extra {
-      max-height: 0;
+      // max-height: 0;
       visibility: hidden;
     }
   }
-
   &.highlighted {
-    border-color: $ui-active;
-    background: $ui-active;
+    color: rgb(65, 144, 206);
+    // .canvas-element__inside {
+    //   background: $ui-active;
+    // }
   }
+  // &.invalid {
+  //   .canvas-element__validation {
+  //     max-height: 250px;
+  //   }
+  // }
 }
 
-.editable-only {
-  display: none;
-}
+// .editable-only {
+//   display: none;
+// }
+//
+// .expanded-only {
+//   display: none;
+// }
 
-.expanded-only {
-  display: none;
-}
+// .canvas-element__actions {
+//   background-color: $ui-light;
+//   height: 0;
+//   overflow: hidden;
+//   transition: height 800ms linear;
+//   .canvas-element__actions__box {
+//     margin-top: 0px;
+//     transition: margin-top 800ms linear;
+//   }
+// }
 
-.canvas-element__actions {
-  text-align: right;
-  background-color: $ui-light;
-  padding-bottom: 10px;
-}
+// .canvas-element__inside {
+//   overflow: hidden;
+//   width: 100%;
+//   display: table;
+//   vertical-align: middle;
+//   background-color: #01667D;
+//   border-radius: 3px;
+// }
 
-.canvas-element__inside {
-  overflow: hidden;
-  width: 100%;
-  display: table;
-  vertical-align: middle;
-}
+// .canvas-element__icon {
+//   text-align: center;
+//   width: 58px;
+//   height: 48px;
+//   display: inline-block;
+//   vertical-align: middle;
+//   cursor: pointer;
+//   font-size: 36px;
+//   line-height: 53px;
+//   padding: 0;
+//   border-top-left-radius: 5px;
+//   color: #FFF;
+//   &:hover {
+//     background: rgba(0, 0, 0, 0.19);
+//   }
+// }
 
-.canvas-element__icon {
-  text-align: center;
-  width: 57px;
-  display: table-cell;
-  vertical-align: middle;
-  cursor: pointer;
-  font-size: 36px;
-  padding: 5px 12px;
-  &:hover {
-    background: rgba(0, 0, 0, 0.19);
-  }
-}
-
-.canvas-element__title {
-  text-align: left;
-  font-size: 1.111em;
-  display: table-cell;
-  vertical-align: middle;
-  padding-right: 25px;
-  padding-left: 10px;
-  .editing {
-    font-size: 17px;
-    margin-left: -2px;
-  }
-  .canvas-element__input {
-    color: #fff;
-    padding: 2px 6px;
-  }
-  input[type=text].canvas-element__input.editable-only {
-    &::selection {
-      background-color: #8BD6EF;
-      color: $ui-light;
-    }
-    &:focus {
-      outline-color: #8BD6EF;
-    }
-  }
-}
+// .canvas-element__title {
+//   display: inline-block;
+//   vertical-align: middle;
+//   width: calc(100% - 108px);
+//   padding: 0 6px 0 18px;
+//   &__box {
+//     width: 100%;
+//     height: 28px;
+//     .canvas-element__name {
+//       display: block;
+//       line-height: 27px;
+//       overflow: hidden;
+//       text-overflow: ellipsis;
+//     }
+//     .canvas-element__name,
+//     .canvas-element__input {
+//       color: #FFF;
+//       font-size: 18px;
+//       font-weight: normal;
+//       width: 100%;
+//       height: 100%;
+//       padding: 0 10px;
+//       border-color: transparent;
+//       border-style: solid;
+//       border-width: 1px;
+//       border-radius: 3px;
+//     }
+//     .canvas-element__input {
+//       background-color: transparent;
+//       border-color: rgba(255, 255, 255, 0.4);
+//       &:hover {
+//         background-color: #2170AE;
+//       }
+//     }
+//   }
+// }
 
 .canvas-element__port {
   position: absolute;
   margin-top: 15px;
-  top: 0;
+  transition: top 800ms ease, left 800ms ease, right 800ms ease;
 }
 
 .canvas-element__port--in {
   left: -12px;
+  .editable & {
+    left: -27px;
+  }
 }
 
 .canvas-element__port--out {
   right: -12px;
-}
-
-.canvas-element__extra {
-  max-height: 0;
-  overflow: hidden;
-  transition: all 1.2s ease;
-  padding: 0 20px;
-  margin: 0 -20px;
-}
-
-.canvas-element__remove {
-  display: table-cell;
-  vertical-align: middle;
-  width: 30px;
-  text-align: right;
-  padding-right: 15px;
-}
-
-.canvas-element__remove__action {
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.canvas-element__sub-element {
-  padding-top: 10px;
-  padding-bottom: 5px;
-  color: $font-base;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  background-color: $ui-light;
-}
-
-.canvas-element__sub-elements {
-  padding-top: 8px;
-  background-color: $ui-light;
-
-  .canvas-element {
-    padding: 0 20px;
-    border: none;
-    width: 100%;
-    min-width: 100%;
-
-    .canvas-element__icon {
-      width: 20px;
-      padding-left: 10px;
-      font-size: 16px;
-    }
+  .editable & {
+    right: -27px;
   }
 }
 
-.canvas-element__sub-elements__title {
-  font-weight: 400;
-  font-size: 0.833em;
-  padding-left: 30px;
-  color: $font-light-title;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+// .canvas-element__extra {
+//   // max-height: 0;
+//   overflow: hidden;
+//   transition: all 1.2s ease;
+//   padding: 0 20px;
+//   margin: 0 -20px;
+//   &__inner {
+//     padding-bottom: 20px;
+//     background-color: $ui-light;
+//   }
+// }
 
-  &:hover {
-    .canvas-element__add {
-      display: initial;
-    }
-  }
-}
+// .canvas-element__validation {
+//   background-color: #FFF;
+//   color: #FFF;
+//   font-size: 14px;
+//   max-height: 0;
+//   overflow: hidden;
+//   transition: max-height 800ms linear;
+//   &__info {
+//     background-color: rgb(244, 67, 54);
+//     padding: 8px 16px 16px 48px;
+//     border-radius: 3px;
+//     position: relative;
+//     &:before,
+//     &:after {
+//       display: block;
+//       position: absolute;
+//       top: 8px;
+//       left: 8px;
+//     }
+//     &:before {
+//       content: '!';
+//       color: #FFF;
+//       font-size: 15px;
+//       margin-left: 8px;
+//       line-height: 19px;
+//     }
+//     &:after {
+//       content: '';
+//       width: 20px;
+//       height: 20px;
+//       border: 2px solid #FFF;
+//       border-radius: 50%;
+//     }
+//   }
+//   &__fields {
+//     margin-top: 8px;
+//   }
+//   &__field {
+//     text-transform: uppercase;
+//     text-decoration: underline;
+//     cursor: pointer;
+//     display: table;
+//   }
+// }
 
-.canvas-element__add {
-  display: none;
-  float: right;
-  font-size: 14px;
-  cursor: pointer;
-  padding: .2em .5em;
-  margin-right: 1em;
-  color: #8DDFEE;
+// .canvas-element__remove {
+//   display: inline-block;
+//   vertical-align: middle;
+//   width: 50px;
+//   text-align: right;
+//   padding-right: 22px;
+//   padding-bottom: 2px;
+// }
+//
+// .canvas-element__remove__action {
+//   color: #fff;
+//   font-size: 16px;
+//   cursor: pointer;
+// }
 
-  &:hover {
-    color: #2E92A3;
-  }
-}
+// .canvas-element__sub-element {
+//   margin-top: 8px;
+//   padding: 0 24px;
+//   // color: $font-base;
+//   background-color: $ui-light;
+// }
 
-.canvas-element__button {
-  font-size: 17px;
-  margin: 1em .5em 0 .5em;
-  padding: .2em .5em;
-  border-radius: 5px;
-  background: #fff;
-  border: none;
-  cursor: pointer;
-  color: #8DDFEE;
-  &:hover {
-    color: #2E92A3;
-  }
-}
+// .canvas-element__sub-elements {
+//   padding-top: 16px;
+//   background-color: $ui-light;
+//   border-top: 1px solid rgb(248, 248, 248);
+//   .canvas-element {
+//     padding: 0 20px;
+//     border: none;
+//     width: 100%;
+//     min-width: 100%;
+//
+//     .canvas-element__icon {
+//       width: 20px;
+//       padding-left: 10px;
+//       font-size: 16px;
+//     }
+//   }
+// }
 
-.canvas-element__input {
-  font-size: 17px;
-  width: 100%;
-  color: #5B5A5A;
-  background-color: #01667D;
-  border: 1px solid $ui-base-border;
-  padding: 2px 4px;
-}
+// .canvas-element__sub-elements__title {
+//   font-weight: 600;
+//   font-size: 14px;
+//   margin-left: 32px;
+//   color: $font-light-title;
+//   text-transform: uppercase;
+//   &:hover {
+//     .canvas-element__add {
+//       display: initial;
+//     }
+//   }
+// }
 
-.canvas-element__input--property {
-  font-size: 14px;
-  background-color: $ui-light;
-  border: 1px solid #ECECED;
-  &:hover {
-    border: 1px solid #8BD6EF;
-  }
-}
+// .canvas-element__add {
+//   display: none;
+//   float: right;
+//   font-size: 14px;
+//   cursor: pointer;
+//   padding: .2em .5em;
+//   margin-right: 1em;
+//   color: #8DDFEE;
+//
+//   &:hover {
+//     color: #2E92A3;
+//   }
+// }
 
-.canvas-element__properties {
-  padding: 10px 30px 15px;
-  background-color: $ui-light;
-  overflow: hidden;
-}
+// .canvas-element__button {
+//   display: inline-block;
+//   width: calc(50% - 10px);
+//   height: 40px;
+//   font-size: 15px;
+//   font-weight: 700;
+//   line-height: 1.29;
+//   border-radius: 3px;
+//   border-width: 1px;
+//   border-style: solid;
+//   border-color: rgb(65, 144, 205);
+//   background-color: rgb(65, 144, 205);
+//   cursor: pointer;
+//   color: #FFF;
+//   text-align: center;
+//   outline: 0;
+//   &:hover {
+//     background-color: rgb(58, 129, 183);
+//   }
+//   &.canvas-element__button--cancel {
+//     border-color: #ddd;
+//     background-color: rgba(234, 231, 231, 0);
+//     color: #888282;
+//     margin-right: 20px;
+//     &:hover {
+//       background-color: rgb(242, 242, 242);
+//     }
+//   }
+// }
 
-.canvas-element__properties__title {
-  font-weight: 700;
-  font-size: 0.833em;
-  letter-spacing: 1px;
-  color: $font-light-title;
-  text-transform: uppercase;
-}
+// .canvas-element__input--property {
+//   width: 100%;
+//   height: 100%;
+//   border: none;
+//   font-size: 18px;
+//   display: block;
+//   color: inherit;
+// }
 
-.canvas-element__properties__table {
-  display: block;
-  width: 100%;
-}
+// .canvas-element__properties {
+//   padding: 1px 16px 0;
+//   background-color: $ui-light;
+//   overflow: hidden;
+// }
+//
+// .canvas-element__properties__title {
+//   font-weight: 700;
+//   font-size: 0.833em;
+//   letter-spacing: 1px;
+//   color: $font-light-title;
+//   text-transform: uppercase;
+// }
 
-.canvas-element__properties__property {
-  width: 100%;
-  color: $font-base;
-}
+// .canvas-element__properties__table {
+//   display: block;
+//   width: 100%;
+//   margin-top: 16px;
+// }
+//
+// .canvas-element__properties__property {
+//   width: 100%;
+//   color: $font-base;
+//   padding-bottom: 16px;
+//   &.invalid {
+//     .canvas-element__properties__property-title {
+//       color: rgb(244, 67, 54);
+//     }
+//     .canvas-element__properties__property-value {
+//       border-color: rgb(244, 67, 54);
+//     }
+//   }
+// }
 
-.canvas-element__properties__property-title {
-  display: block;
-  font-size: 0.833em;
-  padding-top: 10px;
-  color: $font-light-title;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+// .canvas-element__properties__property-title {
+//   display: block;
+//   font-size: 14px;
+//   font-weight: 600;
+//   color: $font-light-title;
+//   text-transform: uppercase;
+//   margin-left: 8px;
+// }
 
-.canvas-element__properties__property-value {
-  display: block;
-  padding-top: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
+// .canvas-element__properties__property-value {
+//   display: block;
+//   text-overflow: ellipsis;
+//   overflow: hidden;
+//   white-space: nowrap;
+//   width: 100%;
+//   height: 30px;
+//   border-style: solid;
+//   border-color: transparent;
+//   border-width: 1px;
+//   border-radius: 3px;
+//   color: rgb(75, 75, 75);
+//   font-size: 18px;
+//   font-weight: normal;
+//   .hide-while-edit {
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//     line-height: 34px;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//   }
+// }
 
-  &:hover {
-    color: #00ABFF;
-  }
-}
+// .canvas-element__input {
+//   border-color: #c1c1c1;
+//   font-family: "Open Sans";
+//   outline: 0;
+// }
 
-.canvas-element.Model {
-  .canvas-element__properties__property-value {
-    padding-left: 0;
-  }
-  .canvas-element__model-endpoint {
-    line-height: 44px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px 20px;
-    font-size: 30px;
-    border-left: 2px solid $ui-base-border;
-  }
-  &.editable, &.expanded {
-    .canvas-element__model-endpoint {
-      border-left: none;
-    }
-    .canvas-element__input.canvas-element__input--property, .canvas-element__span--property {
-      width: 45%;
-      float: left;
-      margin-right: 2.5%;
-    }
-  }
-  &.expanded {
-    .canvas-element__span--property {
-      margin: 0;
-      padding: 2px 5px;
-      border: 1px solid #ccc;
-    }
-  }
-  .fa-plus {
-    display: none;
-  }
-  &.editable {
-    .fa-plus {
-      display: initial;
-    }
-  }
-}
+// .canvas-element__validation__error {
+//   margin: 8px 0 8px 28px;
+//   color: rgb(244, 67, 54);
+//   font-size: 12px;
+//   line-height: 24px;
+//   position: relative;
+//   &:before {
+//     display: block;
+//     content: '!';
+//     position: absolute;
+//     top: 2px;
+//     left: -28px;
+//     width: 20px;
+//     height: 20px;
+//     border: 2px solid rgb(244, 67, 54);
+//     border-radius: 50%;
+//     font-size: 16px;
+//     line-height: 17px;
+//     text-align: center;
+//   }
+// }
 
-.Model .canvas-element__properties__property-title {
-  clear: both;
-}
-
-.Model .canvas-element__properties__property-value {
-  overflow: visible;
-  .model-property {
-    overflow-y: visible;
-  }
-}
-
-.icon-icon-minus {
-  font-size: medium;
-  vertical-align: middle;
-}
+// .canvas-element.Model {
+//   .canvas-element__properties__model {
+//     .canvas-element__properties__property-value {
+//       border: none;
+//       padding: 0;
+//       border-radius: 0;
+//       .canvas-element__input {
+//         font-size: 14px;
+//         color: #5B5A5A;
+//         border: 1px solid $ui-base-border;
+//         padding: 2px 4px;
+//         width: 100%;
+//         line-height: 17px;
+//       }
+//     }
+//   }
+//   .canvas-element__model-endpoint {
+//     line-height: 44px;
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     padding: 10px 20px;
+//     font-size: 30px;
+//     border-left: 2px solid $ui-base-border;
+//   }
+//   &.editable, &.expanded {
+//     .canvas-element__model-endpoint {
+//       border-left: none;
+//     }
+//     /*.canvas-element__input.canvas-element__input--property, .canvas-element__span--property {
+//       width: 45%;
+//       float: left;
+//       margin-right: 2.5%;
+//     }*/
+//   }
+//   &.expanded {
+//     .canvas-element__span--property {
+//       margin: 0;
+//       padding: 2px 5px;
+//       border: 1px solid #ccc;
+//     }
+//   }
+//   .fa-plus {
+//     display: none;
+//   }
+//   &.editable {
+//     .fa-plus {
+//       display: initial;
+//     }
+//   }
+// }
+//
+// .Model .canvas-element__properties__property-title {
+//   clear: both;
+// }
+//
+// .Model .canvas-element__properties__property-value {
+//   overflow: visible;
+//   .model-property {
+//     overflow-y: visible;
+//     padding-right: 10px;
+//   }
+// }
+//
+// .canvas-element.Microservice {
+//   .model {
+//     position: static;
+//   }
+// }
+//
+// .icon-icon-minus {
+//   font-size: medium;
+//   vertical-align: middle;
+// }
 
 .clearfix {
   clear: both;

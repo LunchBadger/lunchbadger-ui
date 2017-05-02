@@ -1,12 +1,13 @@
 import React, {Component, PropTypes} from 'react';
+import classNames from 'classnames';
+import _ from 'lodash';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
 import updateAPI from '../../actions/CanvasElements/API/update';
 import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
 import bundleAPI from '../../actions/CanvasElements/API/bundle';
 import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
-import classNames from 'classnames';
-import _ from 'lodash';
+import {EntityPropertyLabel, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
@@ -24,9 +25,7 @@ class API extends Component {
 
   constructor(props) {
     super(props);
-
     this.previousConnection = null;
-
     this.state = {
       hasConnection: null,
       isShowingModal: false,
@@ -58,34 +57,27 @@ class API extends Component {
     updateAPI(this.props.entity.id, model);
   }
 
-  renderPlans() {
-    return this.props.entity.plans.map((plan) => {
-      return (
-        <div key={plan.id} className="canvas-element__sub-element">
-          <Plan entity={plan}/>
-        </div>
-      )
-    });
+  renderPlans = () => {
+    return this.props.entity.plans.map(plan => <Plan key={plan.id} entity={plan} />);
   }
 
-  renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api) => {
-      return (
-        <div key={api.id} className="canvas-element__sub-element canvas-element__sub-element--api">
-          <PublicEndpoint
-            {...this.props}
-            parent={this.props.entity}
-            key={api.id}
-            id={api.id}
-            entity={api}
-            paper={this.props.paper}
-            left={api.left}
-            top={api.top}
-            handleEndDrag={(item) => this._handleEndDrag(item)}
-            hideSourceOnDrag={true}/>
-        </div>
-      );
-    });
+  renderEndpoints = () => {
+    return this.props.entity.publicEndpoints.map((api, index) => (
+      <PublicEndpoint
+        key={api.id}
+        {...this.props}
+        parent={this.props.entity}
+        key={api.id}
+        id={api.id}
+        entity={api}
+        paper={this.props.paper}
+        left={api.left}
+        top={api.top}
+        handleEndDrag={(item) => this._handleEndDrag(item)}
+        hideSourceOnDrag={true}
+        index={index}
+      />
+    ));
   }
 
   _handleEndDrag(item) {
@@ -99,7 +91,6 @@ class API extends Component {
 
   _handleModalConfirm() {
     const item = this.state.bundledItem;
-
     unbundleAPI(item.parent, item.entity);
   }
 
@@ -111,55 +102,59 @@ class API extends Component {
     const elementClass = classNames({
       'has-connection': this.state.hasConnection
     });
-
     return (
       <div className={elementClass}>
-        {
-          this.props.entity.plans.length > 0 && (
-            <div className="canvas-element__sub-elements">
-              <div className="canvas-element__sub-elements__title">
-                Plans
-              </div>
-              <div ref="plans">{this.renderPlans()}</div>
-            </div>
-          )
-        }
-
-        <div className="canvas-element__sub-elements">
-          <div className="canvas-element__sub-elements__title">
-            Endpoints
-          </div>
+        {this.props.entity.plans.length > 0 && (
+          <EntitySubElements
+            title="Plans"
+          >
+            {this.renderPlans()}
+          </EntitySubElements>
+        )}
+        <EntitySubElements
+          title="Endpoints"
+          main
+        >
           <div className="canvas-element__endpoints" ref="endpoints">
-            <DraggableGroup iconClass="icon-icon-product" entity={this.props.entity} appState={this.props.appState}>
+            <DraggableGroup
+              iconClass="icon-icon-product"
+              entity={this.props.entity}
+              appState={this.props.appState}
+            >
               {this.renderEndpoints()}
             </DraggableGroup>
           </div>
           <div className="canvas-element__drop">
-            <ElementsBundler {...this.props}
-                     canDropCheck={
-                       (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                       && !_.includes(this.props.entity.publicEndpoints, item.entity)
-                     }
-                     onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
-                     onAdd={bundleAPI}
-                     onMove={moveBetweenAPIs}
-                     parent={this.props.parent}
-                     entity={this.props.entity}/>
+            <ElementsBundler
+              {...this.props}
+              canDropCheck={
+                (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+                && !_.includes(this.props.entity.publicEndpoints, item.entity)
+              }
+              onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
+              onAdd={bundleAPI}
+              onMove={moveBetweenAPIs}
+              parent={this.props.parent}
+              entity={this.props.entity}
+            />
           </div>
-        </div>
-
-        {
-          this.state.isShowingModal &&
-          <TwoOptionModal title="Unbundle API"
-                          confirmText="Yes"
-                          discardText="No"
-                          onClose={this._handleClose.bind(this)}
-                          onSave={this._handleModalConfirm.bind(this)}>
+        </EntitySubElements>
+        {this.state.isShowingModal && (
+          <TwoOptionModal
+            title="Unbundle API"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this._handleClose.bind(this)}
+            onSave={this._handleModalConfirm.bind(this)}
+          >
             <span>
-              Are you sure you want to unbundle "{this.state.bundledItem.entity.name}" from "{this.props.entity.name}"?
+              Are you sure you want to unbundle
+              "{this.state.bundledItem.entity.name}"
+              from
+              "{this.props.entity.name}"?
             </span>
           </TwoOptionModal>
-        }
+        )}
       </div>
     );
   }

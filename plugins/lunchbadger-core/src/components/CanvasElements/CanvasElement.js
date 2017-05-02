@@ -10,6 +10,9 @@ import {Form} from 'formsy-react';
 import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
+import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
+import iconTrash from '../../../../../src/icons/icon-trash.svg';
+import iconEdit from '../../../../../src/icons/icon-edit.svg';
 
 const boxSource = {
   beginDrag(props) {
@@ -102,20 +105,22 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
-
       this.currentOpenedPanel = null;
-
       this.state = {
         editable: true,
         expanded: true,
         highlighted: false,
-        showRemovingModal: false
+        showRemovingModal: false,
+        validations: {
+          isValid: true,
+          data: {}
+        },
+        modelBeforeEdit: {},
       };
 
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
-
         if (currentElement && currentElement.id === this.props.entity.id) {
           if (!this.state.highlighted) {
             this.setState({highlighted: true});
@@ -129,26 +134,30 @@ export default (ComposedComponent) => {
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
       this._handleDrop(props);
-
       this.checkHighlightAndEditableState(props);
     }
 
     componentDidMount() {
       if (this.props.entity.wasBundled) {
-        this.setState({editable: false, expanded: false});
-
+        this.setState({
+          editable: false,
+          expanded: false,
+          validations: {isValid: true, data:{}}
+        });
         return;
       }
-
       if (this.props.entity.loaded) {
-        this.setState({editable: false, expanded: false});
+        this.setState({
+          editable: false,
+          expanded: false,
+          validations: {isValid: true, data:{}},
+          modelBeforeEdit: this.entityRef.getFormRef().getModel()
+        });
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
         toggleEdit(this.props.entity);
       }
-
       this.checkHighlightAndEditableState(this.props);
-
       this.props.entity.elementDOM = this.elementDOM;
     }
 
@@ -156,53 +165,63 @@ export default (ComposedComponent) => {
       this.props.entity.elementDOM = this.elementDOM;
     }
 
-    update(model) {
+    update = (model) => {
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
-
       if (typeof element.update === 'function') {
         updated = element.update(model);
+        this.setState({modelBeforeEdit: model});
       }
-
       if (typeof updated === 'undefined' || updated) {
-        this.setState({editable: false});
-
+        if (updated) {
+          this.setState({validations: updated});
+          if (!updated.isValid) {
+            return;
+          }
+        }
+        this.setState({editable: false, validations: {isValid: true, data:{}}});
         toggleEdit(null);
       }
     }
 
-    updateName(evt) {
+    updateName = (evt) => {
       const element = this.element.decoratedComponentInstance || this.element;
-
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
       }
     }
 
     triggerElementAutofocus() {
-      const nameInput = findDOMNode(this.refs.nameInput);
+      if (!this.entityRef) return; // FIXME
+      const nameInput = findDOMNode(this.entityRef.getInputNameRef());
       const selectAllOnce = () => {
         nameInput.select();
         nameInput.removeEventListener('focus', selectAllOnce);
       };
-
       nameInput.addEventListener('focus', selectAllOnce);
       nameInput.focus();
     }
 
-    toggleExpandedState() {
-      this.setState({expanded: !this.state.expanded});
+    toggleExpandedState = (evt) => {
+      evt.persist();
+      this.setState({expanded: !this.state.expanded}, () => {
+        if (this.state.editable && !this.state.expanded) {
+          toggleEdit(null);
+          this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
+            this.toggleHighlighted();
+          });
+        }
+      });
     }
 
     toggleEditableState(event) {
       const {target} = event;
-
       if (this.state.editable) {
         return;
       }
-
       toggleEdit(this.props.entity);
       this.setState({editable: true}, () => {
+        this.toggleHighlighted();
         this._focusClosestInput(target);
       });
     }
@@ -220,11 +239,10 @@ export default (ComposedComponent) => {
     }
 
     _focusClosestInput(target) {
-      const closestProperty = target.closest('.canvas-element__properties__property');
+      const closestProperty = target.closest('.EntityProperty__field');
       const closestPropertyInput = closestProperty && closestProperty.querySelector('input');
-      const closestElement = target.closest('.canvas-element');
+      const closestElement = target.closest('.Entity');
       const closestInput = closestElement.querySelector('input');
-
       if (closestPropertyInput) {
         closestPropertyInput.select();
       } else if (closestInput) {
@@ -236,11 +254,9 @@ export default (ComposedComponent) => {
       if (!this.props.canDrop) {
         return;
       }
-
       if (!this.props.isOver && props.isOver) {
         this.setState({highlighted: true});
       }
-
       if (this.props.isOver && !props.isOver) {
         this.setState({highlighted: false});
       }
@@ -252,7 +268,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    _handleRemove() {
+    _handleRemove = () => {
       if (this.element.removeEntity) {
         this.element.removeEntity();
       } else {
@@ -261,72 +277,116 @@ export default (ComposedComponent) => {
       toggleEdit(null);
     }
 
+    _handleEdit = (evt) => {
+      this.toggleEditableState(evt);
+      this.setState({expanded: true});
+      evt.stopPropagation();
+    }
+
+    _handleCancel = (evt) => {
+      evt.persist();
+      if (this.entityRef.getFormRef()) {
+        this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
+      }
+      toggleEdit(null);
+      this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
+        this.toggleHighlighted();
+      });
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+
+    _handleFieldUpdate = (field, value) => {
+      const data = Object.assign({}, this.state.validations.data);
+      if (data[field] && value !== '') {
+        delete data[field];
+      }
+      const isValid = Object.keys(data).length === 0;
+      this.setState({validations: {isValid, data}});
+    }
+
+    _handleValidationFieldClick = field => ({target}) => {
+      const closestCanvasElement = target.closest('.Entity');
+      const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${field}`);
+      if (closestInput) {
+        closestInput.focus();
+      }
+    }
+
     render() {
       const {ready} = this.props.entity;
-      const {connectDragSource, connectDropTarget, isDragging} = this.props;
+      const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
+      const {validations} = this.state;
       const elementClass = classNames({
         'canvas-element': true,
         editable: this.state.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        highlighted: this.state.highlighted && !this.state.editable,
+        highlighted: this.state.highlighted || this.state.editable,
         dragging: isDragging,
-        wip: !ready
+        wip: !ready,
+        invalid: !validations.isValid
       });
       const opacity = isDragging ? 0.2 : 1;
-
-      return connectDragSource(connectDropTarget(
-        <div ref={(ref) => this.elementDOM = ref}
-             className={`${elementClass} ${this.props.entity.constructor.type}`}
-             style={{ opacity }}
-             onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
-             onDoubleClick={this.toggleEditableState.bind(this)}>
-          <Form name="elementForm" ref="form" onValidSubmit={this.update.bind(this)}>
-            <div className="canvas-element__inside">
-              <div className="canvas-element__icon" onClick={this.toggleExpandedState.bind(this)}>
-                <i className={`fa ${this.props.icon}`}/>
-              </div>
-              <div className="canvas-element__title">
-                <span className="canvas-element__name hide-while-edit">{this.props.entity.name}</span>
-                <Input className="canvas-element__input editable-only"
-                       ref="nameInput"
-                       name="name"
-                       validations="isValidEntityName"
-                       value={this.props.entity.name}
-                       handleChange={this.updateName.bind(this)}/>
-              </div>
-              <div className="canvas-element__remove">
-                {
-                  this.state.editable && (
-                    <a className="canvas-element__remove__action"
-                       onClick={() => this.setState({showRemovingModal: true})}>
-                      <i className="fa fa-times"/>
-                    </a>
-                  )
-                }
-              </div>
-            </div>
-            <div className="canvas-element__extra">
-              <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-            </div>
-            <div className="canvas-element__actions editable-only">
-              <button type="submit" className="canvas-element__button">OK</button>
-            </div>
-          </Form>
-
-          {
-            this.state.showRemovingModal &&
-            <TwoOptionModal onClose={() => this.setState({showRemovingModal: false})}
-                            onSave={this._handleRemove.bind(this)}
-                            onCancel={() => this.setState({showRemovingModal: false})}
-                            title="Remove entity"
-                            confirmText="Remove"
-                            discardText="Cancel">
-              <span>Do you really want to remove that entity?</span>
-            </TwoOptionModal>
-          }
-        </div>
-      ));
+      const toolboxConfig = [
+        {
+          action: 'delete',
+          svg: iconTrash,
+          onClick: () => this.setState({showRemovingModal: true}),
+        },
+        {
+          action: 'edit',
+          svg: iconEdit,
+          onClick: this._handleEdit,
+        },
+      ];
+      return (
+            <Entity
+              ref={(r) => {this.entityRef = r}}
+              type={this.props.entity.constructor.type}
+              editable={this.state.editable && ready}
+              expanded={this.state.expanded && ready}
+              collapsed={!this.state.expanded}
+              highlighted={this.state.highlighted || this.state.editable}
+              dragging={isDragging}
+              wip={!ready}
+              invalid={validations.isValid}
+              toolboxConfig={toolboxConfig}
+              onToggleExpand={this.toggleExpandedState}
+              name={this.props.entity.name}
+              onNameChange={this.updateName}
+              onCancel={this._handleCancel}
+              validations={validations}
+              onFieldClick={this._handleValidationFieldClick}
+              onValidSubmit={this.update}
+              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
+              onDoubleClick={this._handleEdit}
+              connectDragSource={connectDragSource}
+              connectDropTarget={connectDropTarget}
+            >
+              <ComposedComponent
+                ref={(ref) => this.element = ref}
+                parent={this}
+                {...this.props}
+                {...this.state}
+                onFieldUpdate={this._handleFieldUpdate}
+              />
+              {this.state.showRemovingModal && (
+                <TwoOptionModal
+                  onClose={() => this.setState({showRemovingModal: false})}
+                  onSave={this._handleRemove}
+                  onCancel={() => this.setState({showRemovingModal: false})}
+                  title="Remove entity"
+                  confirmText="Remove"
+                  discardText="Cancel"
+                >
+                  <span>
+                    Do you really want to remove that entity?
+                  </span>
+                </TwoOptionModal>
+              )}
+            </Entity>
+      );
     }
   }
 }

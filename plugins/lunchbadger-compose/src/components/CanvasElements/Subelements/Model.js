@@ -59,7 +59,9 @@ export default class Model extends Component {
               middle={true}
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
-              scope={port.portGroup}/>
+              scope={port.portGroup}
+              offsetTop={85 + this.props.index * 24}
+        />
       );
     });
   }
@@ -82,7 +84,6 @@ export default class Model extends Component {
           <div className="model__name">
             {this.props.entity.name}
           </div>
-
           {this.renderPorts()}
         </div>
       </div>

@@ -1,5 +1,14 @@
 @import '../../config';
 
+.tool--selected {
+  .tool {
+    background-color: #666;
+  }
+  i.tool__icon {
+    color: #fff;
+  }
+}
+
 .tool {
   display: block;
   position: relative;
@@ -24,7 +33,10 @@
   }
   &:hover {
     overflow: visible;
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: #F0F0F0;
+    &:active {
+      background-color: #E0E0E0;
+    }
     > .tool__tooltip {
       opacity: 1;
       transform: translateX($aside-width);
@@ -76,7 +88,7 @@ i.over {
   transform: translateX($aside-width - 10);
   transition: all .2s ease-in-out;
   top: 50%;
-  margin-top: -10px;
+  margin-top: -14px;
   box-sizing: border-box;
 }
 
@@ -131,4 +143,5 @@ i.over {
 
 .tool__name {
   margin-left: 10px;
+  vertical-align: text-bottom;
 }

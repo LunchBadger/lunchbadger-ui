@@ -1,5 +1,5 @@
 var page;
-var apiSelector = '.quadrant:nth-child(4) .canvas-element.API';
+var apiSelector = '.quadrant:nth-child(4) .Entity.API';
 var forecasterSelector = '.panel:nth-child(3) .panel__container .panel__body';
 var apiForecastSelector = forecasterSelector + ' .api-forecast';
 
@@ -21,7 +21,8 @@ module.exports = {
 
     // Create an API
     page.addElement('.api.tool');
-    browser.click(apiSelector + ' .canvas-element__button');
+    browser.pause(1000);
+    browser.click(apiSelector + ' button[type=submit]');
 
     browser.pause(500);
   },
@@ -37,7 +38,7 @@ module.exports = {
     browser.pause(1000);
     browser.expect.element(apiForecastSelector).to.be.present;
 
-    browser.getText(apiSelector + ' .canvas-element__name', function (result) {
+    browser.getText(apiSelector + ' .EntityHeader .EntityProperty__field--text', function (result) {
       browser.expect.element(apiForecastSelector + ' .api-forecast__header__title').text.to.contain(result.value);
     });
 

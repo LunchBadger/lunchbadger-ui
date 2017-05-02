@@ -3,11 +3,9 @@
 .model-property {
   display: block;
   width: 100%;
-  //border-bottom: 1px solid $ui-base-border;
   position: relative;
-  //&:first-child {
-  //  border-top: 1px solid $ui-base-border;
-  //}
+  margin: 0 16px;
+  color: #4b4b4b;
 }
 
 .model-property__key-cell {

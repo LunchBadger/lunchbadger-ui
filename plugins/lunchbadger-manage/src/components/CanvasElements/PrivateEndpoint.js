@@ -1,4 +1,6 @@
 import React, {Component, PropTypes} from 'react';
+import cs from 'classnames';
+import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
 
 const Port = LunchBadgerCore.components.Port;
@@ -16,44 +18,64 @@ class PrivateEndpoint extends Component {
   }
 
   update(model) {
-    updatePrivateEndpoint(this.props.entity.id, model);
+    const validations = this.validate(model);
+    if (validations.isValid) {
+      updatePrivateEndpoint(this.props.entity.id, model);
+    }
+    return validations;
+  }
+
+  validate = (model) => {
+    const validations = {
+      isValid: true,
+      data: {},
+    }
+    const messages = {
+      empty: 'This field cannot be empty',
+    }
+    if (model.url === '') validations.data.url = messages.empty;
+    if (Object.keys(validations.data).length > 0) validations.isValid = false;
+    return validations;
+  }
+
+  handleFieldChange = field => (evt) => {
+    if (typeof this.props.onFieldUpdate === 'function') {
+      this.props.onFieldUpdate(field, evt.target.value);
+    }
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port key={`port-${port.portType}-${port.id}`}
-              paper={this.props.paper}
-              way={port.portType}
-              elementId={this.props.entity.id}
-              className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-              scope={port.portGroup}/>
-      );
-    });
+    return this.props.entity.ports.map(port => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.id}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
+  }
+
+  renderMainProperties = () => {
+    const {entity, validations: {data}} = this.props;
+    const mainProperties = [
+      {
+        name: 'url',
+        title: 'URL',
+        value: entity.url,
+        invalid: data.url,
+        onBlur: this.handleFieldChange('url'),
+      },
+    ];
+    return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
     return (
       <div>
-        <div>
-          {this.renderPorts()}
-        </div>
-        <div className="canvas-element__properties">
-          <div className="canvas-element__properties__table">
-            <div className="canvas-element__properties__property">
-              <div className="canvas-element__properties__property-title">URL</div>
-              <div className="canvas-element__properties__property-value">
-                <span className="hide-while-edit">
-                  {this.props.entity.url}
-                </span>
-
-                <Input className="canvas-element__input canvas-element__input--property editable-only"
-                       value={this.props.entity.url}
-                       name="url"/>
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.renderPorts()}
+        {this.renderMainProperties()}
       </div>
     );
   }

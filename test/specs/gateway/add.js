@@ -2,7 +2,7 @@ module.exports = {
   // '@disabled': true,
   'Gateway: add': function (browser) {
     var page = browser.page.lunchBadger();
-    var elementSelector = '.quadrant:nth-child(3) .canvas-element.Gateway:last-child';
+    var elementSelector = '.quadrant:nth-child(3) .Entity.Gateway:last-child';
 
     page.open();
 
@@ -22,12 +22,12 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .canvas-element__title .canvas-element__input').to.have.value.that.equals('Gateway');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-title').text.to.equal('ROOT URL');
-    page.expect.element(elementSelector + ' .canvas-element__properties__property .canvas-element__properties__property-value').to.have.text.that.equals('http://gateway.customer.lunchbadger.com');
+    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('Gateway');
+    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityPropertyLabel').text.to.equal('ROOT URL');
+    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gateway.customer.lunchbadger.com');
 
     browser.pause(500);
-    
+
     page.close();
   }
 };

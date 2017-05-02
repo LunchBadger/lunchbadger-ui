@@ -1,0 +1,35 @@
+.EntitySubElements {
+  padding-top: 16px;
+  border-top: 1px solid rgb(248, 248, 248);
+  &__title {
+    margin: 0 24px 0 26px;
+    position: relative;
+    &__add {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 800ms ease;
+      &:hover svg {
+        stroke: #3B85BF;
+      }
+      &:active svg {
+        stroke: #377CB3;
+      }
+      .editable & {
+        opacity: 1;
+        pointer-events: all;
+      }
+      svg {
+        stroke: #3F8FCD;
+      }
+    }
+  }
+  &__elements {
+
+  }
+}

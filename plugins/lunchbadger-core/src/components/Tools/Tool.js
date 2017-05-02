@@ -9,7 +9,7 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      const currentEditElement = this.props.currentEditElement ? this.props.currentEditElement.__proto__.constructor.name : '';
+      const currentEditElement = this.props.currentEditElement ? this.props.currentEditElement.name : '';
       let isToolSelected = currentEditElement === ComposedComponent.name;
       if (ComposedComponent.name === 'Endpoint') {
         isToolSelected = currentEditElement.endsWith(ComposedComponent.name);

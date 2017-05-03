@@ -22,6 +22,9 @@ loginManager.checkAuth().then(loggedIn => {
   }
 
   let user = loginManager.user;
+
+  global.ID_TOKEN = user.id_token; // FIXME: quick and dirty fix for urgent demo
+
   config.forecastApiUrl = config.forecastApiUrl.replace('{USER}', user.profile.sub).replace('{ENV}', config.envId);
 
   // userengage.io integration

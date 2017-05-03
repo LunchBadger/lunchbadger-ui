@@ -2,8 +2,8 @@ const ApiClient = LunchBadgerCore.utils.ApiClient;
 const {bindParams} = LunchBadgerCore.utils.URLParams;
 
 export default class ForecastService {
-  constructor(apiUrl) {
-    this._APIHandle = new ApiClient(apiUrl);
+  constructor(apiUrl, idToken) {
+    this._APIHandle = new ApiClient(apiUrl, idToken);
   }
 
   get(apiId) {
@@ -31,4 +31,3 @@ export default class ForecastService {
     });
   }
 }
-

@@ -1,0 +1,15 @@
+.SystemInformationMessage {
+  position: fixed;
+  top: 95px;
+  right: 10px;
+  width: 350px;
+  &__item {
+    border: 1px solid #555;
+    padding: 10px;
+    background-color: #666;
+    color: #FFF;
+    font-size: 14px;
+    margin-bottom: 5px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  }
+}

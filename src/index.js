@@ -2,11 +2,14 @@
 // entry for app...
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 import config from 'config';
+import reducers from './reducers';
 
 global.LUNCHBADGER_CONFIG = config;
 const AppLoader = LunchBadgerCore.components.AppLoader;
@@ -34,9 +37,20 @@ loginManager.checkAuth().then(loggedIn => {
   let configStoreService = new ConfigStoreService(config.configStoreApiUrl,
     user.id_token);
 
+  let store = createStore(
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
   // Render the main component into the dom
-  ReactDOM.render(<AppLoader config={config}
-                             loginManager={loginManager}
-                             configStoreService={configStoreService} />,
-                  document.getElementById('app'));
+  ReactDOM.render(
+    <Provider store={store}>
+      <AppLoader
+        config={config}
+        loginManager={loginManager}
+        configStoreService={configStoreService}
+      />
+    </Provider>,
+    document.getElementById('app')
+  );
 });

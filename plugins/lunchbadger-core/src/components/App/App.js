@@ -1,5 +1,6 @@
 /*eslint no-console:0 */
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
@@ -13,9 +14,11 @@ import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {SystemInformationMessage} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
-export default class App extends Component {
+class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
     loginManager: PropTypes.object,
@@ -86,6 +89,10 @@ export default class App extends Component {
     this.setState({loaded: false});
     let prm = saveToServer(config, loginManager, projectService).then(() => {
       notify.show('All data has been synced with API', 'success');
+      this.props.displaySystemInformationMessage({
+        message: 'All data has been synced with API',
+        type: 'success'
+      });
       this.setState({loaded: true});
     });
 
@@ -130,7 +137,14 @@ export default class App extends Component {
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
         <Notifications />
+        <SystemInformationMessage />
       </div>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message))
+});
+
+export default connect(null, mapDispatchToProps)(App);

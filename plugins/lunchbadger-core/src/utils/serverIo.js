@@ -243,7 +243,7 @@ export function saveToServer(config, loginManager, projectService) {
   if (typeof LunchBadgerOptimize !== 'undefined') {
     const forecasts = LunchBadgerOptimize.stores.Forecast.getData();
     const forecastService = new LunchBadgerOptimize.services.ForecastService(
-      config.forecastApiUrl);
+      config.forecastApiUrl, loginManager.user.id_token);
 
     forecasts.forEach((forecast) => {
       saveableServices.push(forecastService.save(forecast.toJSON()));

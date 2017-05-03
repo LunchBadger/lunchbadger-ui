@@ -22,6 +22,7 @@ loginManager.checkAuth().then(loggedIn => {
   }
 
   let user = loginManager.user;
+  config.forecastApiUrl = config.forecastApiUrl.replace('{USER}', user.profile.sub).replace('{ENV}', config.envId);
 
   // userengage.io integration
   window.civchat = {

@@ -1,5 +1,6 @@
 /*eslint no-console:0 */
 /*global LUNCHBADGER_CONFIG */
+/*global ID_TOKEN */
 // Let's register plugins inside the Core, yay!
 import ForecastsPanel from './plugs/ForecastsPanel';
 
@@ -26,7 +27,7 @@ waitForStores([AppState]).then(() => {
   setTimeout(() => {
 
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
-    const forecastService = new ForecastService(LUNCHBADGER_CONFIG.forecastApiUrl);
+    const forecastService = new ForecastService(LUNCHBADGER_CONFIG.forecastApiUrl, ID_TOKEN);
 
     if (apiForecastInformation) {
       forecastService.getByForecast(apiForecastInformation.id).then((data) => {

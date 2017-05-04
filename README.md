@@ -35,7 +35,7 @@ Tests run using [nightwatch.js](http://nightwatchjs.org/). Any arguments passed
 to the `npm run test` command will be passed through to nightwatch. To specify
 a test to run, for example:
 
-    npm run test:dev -t tests/spec/api/add.js
+    npm run test:dev -t test/specs/api/add.js
 
 To set up a dev/test environment prior to running the above commands, perform
 the following steps:
@@ -52,6 +52,6 @@ the following steps:
   * `npm install`
   * `npm start`
 
-###Important thing while building: 
+###Important thing while building:
 
 You can set which plugins should be installed during bundling container to main app in `cfg/info.json`

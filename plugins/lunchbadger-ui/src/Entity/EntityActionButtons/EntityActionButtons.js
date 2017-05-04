@@ -5,8 +5,8 @@ import './EntityActionButtons.scss';
 const EntityActionButtons = ({onCancel}) => (
   <div className="EntityActionButtons">
     <div className="EntityActionButtons__inner">
-      <Button onClick={onCancel}>Cancel</Button>
-      <Button type="submit">OK</Button>
+      <Button name="cancel" onClick={onCancel}>Cancel</Button>
+      <Button name="submit" type="submit">OK</Button>
     </div>
   </div>
 );

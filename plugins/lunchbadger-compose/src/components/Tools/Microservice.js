@@ -8,7 +8,7 @@ class Microservice extends Component {
   render() {
     const isSelected = (this.props.currentEditElement || {name: ''}).name === 'Microservice';
     return (
-      <div className={cs('model', 'tool', {['tool--selected']: isSelected})} onClick={() => AddMicroservice()}>
+      <div className={cs('microservice', 'tool', {['tool--selected']: isSelected})} onClick={() => AddMicroservice()}>
         <i className="tool__icon icon-icon-microservice"/>
         <span className="tool__tooltip">Microservice</span>
       </div>

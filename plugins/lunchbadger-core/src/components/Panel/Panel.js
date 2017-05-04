@@ -34,7 +34,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
-      window.addEventListener('resize', this.handleWindowResize.bind(this));
+      window.addEventListener('resize', this.handleWindowResize);
       setTimeout(() => {
         this.header = this.props.header().refs.headerContainer;
         this.canvas = this.props.canvas();
@@ -50,7 +50,7 @@ export default (ComposedComponent) => {
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.handleWindowResize.bind(this));
+      window.removeEventListener('resize', this.handleWindowResize);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -91,13 +91,13 @@ export default (ComposedComponent) => {
       return this.container.getBoundingClientRect().height;
     }
 
-    handleWindowResize(_event) {
+    handleWindowResize = (_event) => {
       if (this.state.opened) {
         this.updateCanvasHeight();
       }
     }
 
-    handlePanelResize(event) {
+    handlePanelResize = (event) => {
       const container = this.props.container();
       const containerBBox = container.getBoundingClientRect();
       const headerBBox = this.header.getBoundingClientRect();
@@ -121,7 +121,7 @@ export default (ComposedComponent) => {
       });
     }
 
-    handlePanelResizeEnd() {
+    handlePanelResizeEnd = () => {
       this.setState({dragging: false});
     }
 
@@ -143,8 +143,8 @@ export default (ComposedComponent) => {
             <ComposedComponent parent={this} ref={(ref) => this.panel = ref} {...this.props} {...this.state} />
           </div>
           <PanelResizeHandle resizable={this.state.opened}
-                             onDragEnd={this.handlePanelResizeEnd.bind(this)}
-                             onDrag={this.handlePanelResize.bind(this)}/>
+                             onDragEnd={this.handlePanelResizeEnd}
+                             onDrag={this.handlePanelResize}/>
         </div>
       );
     }

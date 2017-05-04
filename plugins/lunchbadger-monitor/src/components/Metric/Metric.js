@@ -78,11 +78,11 @@ export default class Metric extends Component {
     };
   }
 
-  _handleMetricSelection(pair) {
+  _handleMetricSelection = (pair) => {
     this.setState({currentPairId: pair ? pair.id : null});
   }
 
-  _handleMetricTypeChange() {
+  _handleMetricTypeChange = () => {
     this.setState({currentPairId: null});
   }
 
@@ -96,7 +96,7 @@ export default class Metric extends Component {
                 {index > 0 && <div className="metric__title__details__split">AND</div>}
                 <MetricHeader selectedPair={this.state.currentPairId}
                               pair={pair}
-                              metricSelection={this._handleMetricSelection.bind(this)}/>
+                              metricSelection={this._handleMetricSelection}/>
               </div>
             );
           })
@@ -143,7 +143,7 @@ export default class Metric extends Component {
           <div className={tooltipClass} onMouseLeave={() => this.setState({currentPairId: null})}>
             <MetricTypeTooltip pairId={this.state.currentPairId}
                                metric={metric}
-                               onChange={this._handleMetricTypeChange.bind(this)}/>
+                               onChange={this._handleMetricTypeChange}/>
           </div>
           <MetricDetails metric={metric}/>
         </div>

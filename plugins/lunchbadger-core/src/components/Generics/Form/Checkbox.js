@@ -16,7 +16,8 @@ class Checkbox extends Component {
     return shallow || this.props.getValue() !== nextProps.value;
   }
 
-  _handleChange(event) {
+
+  _handleChange = (event) => {
     this.props.setValue(event.currentTarget.checked);
 
     if (typeof this.props.handleChange === 'function') {
@@ -31,7 +32,7 @@ class Checkbox extends Component {
              type="checkbox"
              checked={this.props.getValue() ? 'checked' : null}
              id={this.props.name}
-             onChange={this._handleChange.bind(this)}/>
+             onChange={this._handleChange}/>
     );
   }
 }

@@ -32,28 +32,28 @@ export default class ForecastPlanInput extends Component {
     nameInput.focus();
   }
 
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.setState({value: event.target.value});
   }
 
-  _handleKeyPress(event) {
+  _handleKeyPress = (event) => {
     if ((event.keyCode === 13 || event.which === 13) && event.target.value.trim().length > 0) {
       this._update();
     }
   }
 
-  _update() {
+  _update = () => {
     updatePlan(this.props.forecast, this.props.plan, this.state.value);
   }
 
   render() {
     return (
       <input value={this.state.value}
-             onBlur={this._update.bind(this)}
+             onBlur={this._update}
              ref="input"
              className={this.props.className || ''}
-             onKeyDown={this._handleKeyPress.bind(this)}
-             onChange={this._handleChange.bind(this)}
+             onKeyDown={this._handleKeyPress}
+             onChange={this._handleChange}
              type="text"/>
     );
   }

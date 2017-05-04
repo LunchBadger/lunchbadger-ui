@@ -12,7 +12,7 @@ class Select extends Component {
     className: PropTypes.string,
     type: PropTypes.string,
     multiple: PropTypes.bool,
-    children: PropTypes.array.isRequired
+    options: PropTypes.array.isRequired
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -20,21 +20,20 @@ class Select extends Component {
     return shallow || this.props.getValue() !== nextProps.value;
   }
 
-  _handleBlur(event) {
+  _handleBlur = (event) => {
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
     }
   }
 
-  _handleKeyDown(event) {
+  _handleKeyDown = (event) => {
     if (typeof this.props.handleKeyDown === 'function') {
       this.props.handleKeyDown(event);
     }
   }
 
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.props.setValue(event.target.value);
-
     if (typeof this.props.handleChange === 'function') {
       this.props.handleChange(event);
     }
@@ -45,10 +44,12 @@ class Select extends Component {
       <select className={this.props.className || ''}
               value={this.props.getValue()}
               multiple={this.props.multiple}
-              onKeyDown={this._handleKeyDown.bind(this)}
-              onBlur={this._handleBlur.bind(this)}
-              onChange={this._handleChange.bind(this)}>
-        {this.props.children}
+              onKeyDown={this._handleKeyDown}
+              onBlur={this._handleBlur}
+              onChange={this._handleChange}>
+        {this.props.options.map(({value, label}, idx) => (
+          <option key={idx} value={value}>{label}</option>
+        ))}
       </select>
     );
   }

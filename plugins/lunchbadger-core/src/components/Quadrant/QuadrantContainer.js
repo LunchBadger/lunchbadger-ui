@@ -6,7 +6,7 @@ export default class QuadrantContainer extends Component {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     paper: PropTypes.object,
-    style: PropTypes.object
+    canvasHeight: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   };
 
   constructor(props) {
@@ -50,7 +50,7 @@ export default class QuadrantContainer extends Component {
     });
 
     return (
-      <div style={this.props.style} className={`${this.props.className} ${containerClass}`} id={this.props.id}>
+      <div style={{minHeight: this.props.canvasHeight}} className={`${this.props.className} ${containerClass}`} id={this.props.id}>
         {this.renderQuadrants()}
       </div>
     );

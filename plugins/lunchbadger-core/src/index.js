@@ -164,8 +164,24 @@ let LunchBadgerCore = {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer
     },
-    createLoginManager: createLoginManager
-  }
+    createLoginManager: createLoginManager,
+    propertyTypes: [
+      {label: 'String', value: 'string'},
+      {label: 'Number', value: 'number'},
+      {label: 'Date', value: 'date'},
+      {label: 'Boolean', value: 'boolean'},
+      {label: 'GeoPoint', value: 'geopoint'},
+      {label: 'Array', value: 'array'},
+      {label: 'Object', value: 'object'},
+      {label: 'Buffer', value: 'buffer'},
+    ],
+    gatewayPoliciesOptions: [
+      {label: 'OAuth2', value: 'OAuth2'},
+      {label: 'Throttling', value: 'Rate limit'},
+      {label: 'Logging', value: 'Logging'},
+      {label: 'Redirect', value: 'Redirect'},
+    ],
+  },
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {

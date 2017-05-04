@@ -12,12 +12,12 @@ export default class ForecastNav extends Component {
     super(props);
   }
 
-  remove() {
+  remove = () => {
     this.props.onClose();
     removeAPIForecast(this.props.entity.id);
   }
 
-  toggleExpand() {
+  toggleExpand = () => {
     this.props.onExpand();
   }
 
@@ -25,12 +25,12 @@ export default class ForecastNav extends Component {
     return (
       <ul className="api-forecast__header__nav">
         <li>
-          <a onClick={this.remove.bind(this)}>
+          <a onClick={this.remove}>
             <i className="fa fa-remove"/>
           </a>
         </li>
         <li>
-          <a onClick={this.toggleExpand.bind(this)}>
+          <a onClick={this.toggleExpand}>
             <i className="icon-icon-resize"/>
           </a>
         </li>

@@ -8,7 +8,7 @@ class AppState extends BaseStore {
   constructor() {
     super();
 
-    this.subscribe(() => this._registerActions.bind(this));
+    this.subscribe(() => this._registerActions);
   }
 
   setStateKey(key, value) {
@@ -29,7 +29,7 @@ class AppState extends BaseStore {
     return projectRevision;
   }
 
-  _registerActions(action) {
+  _registerActions = (action) => {
     switch (action.type) {
       case 'AddElement':
         this.setStateKey('recentElement', action.element);

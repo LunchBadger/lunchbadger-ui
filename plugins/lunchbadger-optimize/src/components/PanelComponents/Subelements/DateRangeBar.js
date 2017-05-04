@@ -44,7 +44,7 @@ export default class DateRangeBar extends Component {
     });
   }
 
-  handleChangeStart(date) {
+  handleChangeStart = (date) => {
     this.setState({
       startDate: date,
       minEndDate: date
@@ -55,7 +55,7 @@ export default class DateRangeBar extends Component {
     });
   }
 
-  handleChangeEnd(date) {
+  handleChangeEnd = (date) => {
     this.setState({
       endDate: date,
       maxStartDate: date
@@ -79,7 +79,7 @@ export default class DateRangeBar extends Component {
           readOnly={true}
           popoverAttachment="top left"
           popoverTargetAttachment="bottom center"
-          onChange={this.handleChangeStart.bind(this)}/>
+          onChange={this.handleChangeStart}/>
         <span className="date-range-bar__between">to</span>
         <DatePicker
           dateFormat="D MMM YYYY"
@@ -91,7 +91,7 @@ export default class DateRangeBar extends Component {
           readOnly={true}
           popoverAttachment="top center"
           popoverTargetAttachment="bottom center"
-          onChange={this.handleChangeEnd.bind(this)}/>
+          onChange={this.handleChangeEnd}/>
       </div>
     )
   }

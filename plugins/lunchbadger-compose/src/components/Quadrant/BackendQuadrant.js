@@ -28,17 +28,17 @@ class BackendQuadrant extends Component {
                          icon="icon-icon-datasource"
                          hideSourceOnDrag={true}
                          itemOrder={entity.itemOrder}
-                         moveEntity={this.moveEntity.bind(this)}
-                         saveOrder={this.saveOrder.bind(this)}
+                         moveEntity={this.moveEntity}
+                         saveOrder={this.saveOrder}
                          entity={entity}/>;
     })
   }
 
-  moveEntity(entity, itemOrder, hoverOrder) {
+  moveEntity = (entity, itemOrder, hoverOrder) => {
     updateOrder(entity, itemOrder, hoverOrder);
   }
 
-  saveOrder() {
+  saveOrder = () => {
     saveOrder(this.context.projectService);
   }
 

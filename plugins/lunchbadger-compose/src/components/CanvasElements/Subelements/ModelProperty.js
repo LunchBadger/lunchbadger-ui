@@ -3,6 +3,7 @@ import './ModelProperty.scss';
 import removeProperty from '../../../actions/CanvasElements/Model/removeProperty';
 
 const {Select, Input} = LunchBadgerCore.components;
+const {propertyTypes} = LunchBadgerCore.utils;
 
 export default class ModelProperty extends Component {
   static propTypes = {
@@ -22,7 +23,7 @@ export default class ModelProperty extends Component {
     removeProperty(entity, property);
   }
 
-  _checkTabButton(event) {
+  _checkTabButton = (event) => {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
       this.props.addAction();
 
@@ -58,17 +59,10 @@ export default class ModelProperty extends Component {
           </span>
           <Select className="model-property__input model-property__select canvas-element__input editable-only"
                   value={property.type || 'string'}
-                  handleKeyDown={this._checkTabButton.bind(this)}
-                  name={`properties[${index}][type]`}>
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="date">Date</option>
-            <option value="boolean">Boolean</option>
-            <option value="geopoint">GeoPoint</option>
-            <option value="array">Array</option>
-            <option value="object">Object</option>
-            <option value="buffer">Buffer</option>
-          </Select>
+                  handleKeyDown={this._checkTabButton}
+                  name={`properties[${index}][type]`}
+                  options={propertyTypes}
+          />
         </div>
 
         <Input value={property.index}

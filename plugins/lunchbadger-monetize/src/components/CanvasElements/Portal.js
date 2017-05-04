@@ -134,13 +134,12 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirm() {
+  _handleModalConfirm = () => {
     const item = this.state.bundledItem;
-
     unbundlePortal(item.parent, item.entity);
   }
 
-  _handleClose() {
+  _handleClose = () => {
     this.setState({
       isShowingModal: false,
       isShowingModalMultiple: false
@@ -163,7 +162,7 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirmMultiple() {
+  _handleModalConfirmMultiple = () => {
     this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
   }
 
@@ -214,8 +213,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose.bind(this)}
-            onSave={this._handleModalConfirm.bind(this)}
+            onClose={this._handleClose}
+            onSave={this._handleModalConfirm}
           >
             <span>
               Are you sure you want to unbundle
@@ -230,8 +229,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose.bind(this)}
-            onSave={this._handleModalConfirmMultiple.bind(this)}
+            onClose={this._handleClose}
+            onSave={this._handleModalConfirmMultiple}
           >
             <span>
               Are you sure you want to unbundle

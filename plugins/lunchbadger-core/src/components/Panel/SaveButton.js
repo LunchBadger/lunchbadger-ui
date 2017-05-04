@@ -11,15 +11,11 @@ export default class SaveButton extends Component {
     enabled: false
   };
 
-  constructor(props) {
-    super(props);
-
-    this.handleClick = () => {
-      if (this.props.enabled) {
-        this.props.onSave();
-      }
-    };
-  }
+  handleClick = () => {
+    if (this.props.enabled) {
+      this.props.onSave();
+    }
+  };
 
   render() {
     const buttonClass = classNames({
@@ -28,7 +24,7 @@ export default class SaveButton extends Component {
     });
 
     return (
-      <a className={buttonClass} onClick={this.handleClick.bind(this)}>
+      <a className={buttonClass} onClick={this.handleClick}>
         <span className="confirm-button__button">Save</span>
       </a>
     )

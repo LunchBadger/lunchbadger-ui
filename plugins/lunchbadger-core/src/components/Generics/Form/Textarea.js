@@ -20,31 +20,31 @@ class Textarea extends Component {
     return shallow || this.props.getValue() !== nextProps.value;
   }
 
-  _handleKeyPress(event) {
+  _handleKeyPress = (event) => {
     if (typeof this.props.handleKeyPress === 'function') {
       this.props.handleKeyPress(event);
     }
   }
 
-  _handleKeyDown(event) {
+  _handleKeyDown = (event) => {
     if (typeof this.props.handleKeyDown === 'function') {
       this.props.handleKeyDown(event);
     }
   }
 
-  _handleKeyUp(event) {
+  _handleKeyUp = (event) => {
     if (typeof this.props.handleKeyUp === 'function') {
       this.props.handleKeyUp(event);
     }
   }
 
-  _handleBlur(event) {
+  _handleBlur = (event) => {
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
     }
   }
 
-  _handleChange(event) {
+  _handleChange = (event) => {
     this.props.setValue(event.target.value);
 
     if (typeof this.props.handleChange === 'function') {
@@ -57,11 +57,11 @@ class Textarea extends Component {
       <textarea className={this.props.className || ''}
              value={this.props.getValue()}
              type={this.props.type || 'text'}
-             onBlur={this._handleBlur.bind(this)}
-             onKeyPress={this._handleKeyPress.bind(this)}
-             onKeyUp={this._handleKeyUp.bind(this)}
-             onKeyDown={this._handleKeyDown.bind(this)}
-             onChange={this._handleChange.bind(this)}
+             onBlur={this._handleBlur}
+             onKeyPress={this._handleKeyPress}
+             onKeyUp={this._handleKeyUp}
+             onKeyDown={this._handleKeyDown}
+             onChange={this._handleChange}
              id={this.props.name}/>
     );
   }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import cs from 'classnames';
 import Memory from './Memory';
 import REST from './REST';
 import SOAP from './SOAP';
@@ -12,8 +13,18 @@ const Tool = LunchBadgerCore.components.Tool;
 
 class DataSource extends Component {
   render() {
+    const isSelected = [
+      'Memory',
+      'REST',
+      'SOAP',
+      'MongoDB',
+      'Redis',
+      'MySQL',
+      'Ethereum',
+      'Salesforce',
+    ].includes((this.props.currentEditElement || {name: ''}).name);
     return (
-      <div className="dataSource tool context">
+      <div className={cs('dataSource', 'tool', 'context', {['tool--selected']: isSelected})}>
         <i className="tool__extend icon-arrowhead"/>
         <i className="tool__icon icon-icon-datasource"/>
         <ul className="tool__context">

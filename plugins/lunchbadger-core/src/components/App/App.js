@@ -14,8 +14,8 @@ import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {SystemInformationMessage} from '../../../../lunchbadger-ui/src';
+import {addSystemInformationMessage, shiftSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {SystemInformationMessages} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
@@ -88,11 +88,12 @@ class App extends Component {
 
     this.setState({loaded: false});
     let prm = saveToServer(config, loginManager, projectService).then(() => {
-      notify.show('All data has been synced with API', 'success');
+      // notify.show('All data has been synced with API', 'success');
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
       });
+      setTimeout(this.props.shiftSystemInformationMessage, 5000);
       this.setState({loaded: true});
     });
 
@@ -107,7 +108,12 @@ class App extends Component {
     this.setState({loaded: false});
 
     let prm = clearServer(config, loginManager, projectService).then(() => {
-      notify.show('All data removed from server', 'success');
+      // notify.show('All data removed from server', 'success');
+      this.props.displaySystemInformationMessage({
+        message: 'All data removed from server',
+        type: 'success'
+      });
+      setTimeout(this.props.shiftSystemInformationMessage, 5000);
       this.setState({loaded: true});
     });
 
@@ -137,14 +143,15 @@ class App extends Component {
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
         <Notifications />
-        <SystemInformationMessage />
+        <SystemInformationMessages />
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message))
+const mapDispatchToProps = dispatch => ({
+  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+  shiftSystemInformationMessage: () => dispatch(shiftSystemInformationMessage()),
 });
 
 export default connect(null, mapDispatchToProps)(App);

@@ -1,14 +1,5 @@
 @import '../../config';
 
-.tool--selected {
-  .tool {
-    background-color: #666;
-  }
-  i.tool__icon {
-    color: #fff;
-  }
-}
-
 .tool {
   display: block;
   position: relative;
@@ -50,7 +41,14 @@
       }
     }
   }
-
+  .tool__svg svg {
+    stroke: #034757;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 16px;
+    left: 15px;
+  }
 }
 
 i.tool__extend {
@@ -96,7 +94,7 @@ i.over {
   display: none;
   position: relative;
   width: 150px;
-  top: -56px;
+  top: -5px;
   margin: 5px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -122,6 +120,9 @@ i.over {
         opacity: 1;
         transform: translateX($aside-width + 90);
       }
+      .tool__context__svg svg {
+        stroke: $ui-active;
+      }
     }
 
     i {
@@ -139,9 +140,29 @@ i.over {
   min-width: 200px;
   position: relative;
   text-align: left;
+  .tool__context__svg {
+    display: inline-block;
+    vertical-align: middle;
+    height: 26px;
+    margin-left: 12px;
+    svg {
+      stroke: #034757;
+      width: 26px;
+      height: 26px;
+    }
+  }
 }
 
 .tool__name {
   margin-left: 10px;
-  vertical-align: text-bottom;
+  vertical-align: middle;
+}
+
+.tool--selected {
+  .tool {
+    background-color: #666;
+  }
+  .tool__svg svg {
+    stroke: #fff;
+  }
 }

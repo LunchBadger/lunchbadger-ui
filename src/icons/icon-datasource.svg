@@ -1,0 +1,13 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+<style type="text/css">
+	.icon-datasource-0{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="icon-datasource-0" d="M20,4.7c-7.5,0-13.6,2.2-13.6,5v2.6c0,2.8,6.1,5,13.6,5s13.6-2.2,13.6-5V9.7C33.6,6.9,27.5,4.7,20,4.7z"/>
+	<path class="icon-datasource-0" d="M20,29.2c-4.9,0-9.9-0.9-13.1-2.8c-0.3,0.4-0.4,0.8-0.4,1.2v2.6c0,2.8,6.1,5,13.6,5s13.6-2.2,13.6-5v-2.6
+		c0-0.4-0.2-0.8-0.4-1.2C29.9,28.3,24.9,29.2,20,29.2z"/>
+	<path class="icon-datasource-0" d="M20,20.7c-5,0-10.1-0.9-13.3-2.9c-0.1,0.3-0.2,0.6-0.2,0.9v2.6c0,2.8,6.1,5,13.6,5s13.6-2.2,13.6-5v-2.6
+		c0-0.3-0.1-0.6-0.2-0.9C30.1,19.8,25,20.7,20,20.7z"/>
+</g>
+</svg>

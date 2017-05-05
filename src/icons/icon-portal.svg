@@ -1,0 +1,11 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+<style type="text/css">
+	.icon-portal-0{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="icon-portal-0" d="M14.8,19.7H28"/>
+	<circle class="icon-portal-0" cx="10.8" cy="19.7" r="3.4"/>
+	<path class="icon-portal-0" d="M21.1,22.8C21.6,29.7,24,35,26.8,35c3.2,0,5.8-6.7,5.8-15S30,5,26.8,5c-2.7,0-5,4.9-5.6,11.5"/>
+</g>
+</svg>

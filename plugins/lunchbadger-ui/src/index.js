@@ -2,6 +2,7 @@ import Button from './Button/Button';
 import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties';
 import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
+import SystemDefcon1 from './SystemDefcon1/SystemDefcon1';
 import SystemInformationMessages from './SystemInformationMessages/SystemInformationMessages';
 
 import Entity from './Entity/Entity';
@@ -47,6 +48,7 @@ export {
   IconSVG,
   Input,
   SmoothCollapse,
+  SystemDefcon1,
   SystemInformationMessages,
   Toolbox,
   entityIcons,

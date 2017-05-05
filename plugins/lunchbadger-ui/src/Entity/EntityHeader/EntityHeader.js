@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {EntityProperty} from '../../';
+import {entityIcons, IconSVG, EntityProperty} from '../../';
 import './EntityHeader.scss';
 
 class EntityHeader extends Component {
@@ -7,17 +7,10 @@ class EntityHeader extends Component {
 
   render() {
     const {type, name, onNameChange, onToggleExpand} = this.props;
-    let icon = type.toLowerCase();
-    if (icon.endsWith('endpoint')) {
-      icon = icon.replace(/public/, '').replace(/private/, '');
-    }
-    if (icon === 'api') {
-      icon = 'product';
-    }
     return (
       <div className="EntityHeader">
         <div className="EntityHeader__icon" onClick={onToggleExpand}>
-          <i className={`fa icon-icon-${icon}`} />
+          <IconSVG svg={entityIcons[type]}/>
         </div>
         <div className="EntityHeader__name">
           <EntityProperty

@@ -8,6 +8,7 @@ import Redis from './Redis';
 import MySQL from './MySQL';
 import Ethereum from './Ethereum';
 import Salesforce from './Salesforce';
+import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
 
 const Tool = LunchBadgerCore.components.Tool;
 
@@ -26,7 +27,7 @@ class DataSource extends Component {
     return (
       <div className={cs('dataSource', 'tool', 'context', {['tool--selected']: isSelected})}>
         <i className="tool__extend icon-arrowhead"/>
-        <i className="tool__icon icon-icon-datasource"/>
+        <IconSVG className="tool__svg" svg={entityIcons.DataSource} />
         <ul className="tool__context">
           <li>
             <Memory />

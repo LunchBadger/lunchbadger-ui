@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
 import systemInformationMessages from './systemInformationMessages';
+import systemNotifications from './systemNotifications';
 
 const ui = combineReducers({
-  systemInformationMessages
+  systemInformationMessages,
+  systemNotifications,
 })
 
 export default ui;

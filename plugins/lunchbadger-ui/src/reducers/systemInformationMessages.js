@@ -5,7 +5,7 @@ const systemInformationMessages = (state = [], action) => {
     case 'SYSTEM_INFORMATION_MESSAGES/SHIFT':
       return state.filter((item, idx) => idx > 0);
     default:
-      return state
+      return state;
   }
 }
 

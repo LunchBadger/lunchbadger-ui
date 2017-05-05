@@ -1,0 +1,70 @@
+.SystemNotification {
+  background-color: #333;
+  padding: 20px 200px;
+  position: relative;
+  &:before {
+    display: block;
+    content: '!';
+    position: absolute;
+    top: 17px;
+    left: 145px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f44336;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    padding-top: 1px;
+    line-height: 1;
+  }
+  &:after {
+    display: block;
+    content: '';
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &__close {
+    position: absolute;
+    top: 27px;
+    right: 200px;
+    background-color: #DDD;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-radius: 3px;
+    padding: 8px 25px;
+  }
+  &__title {
+    color: #FFF;
+    font-size: 20px;
+    letter-spacing: 2pt;
+    line-height: 1;
+  }
+  &__details {
+    color: #AAA;
+    margin-top: 5px;
+    &__link {
+      text-decoration: underline;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    &__output {
+      font-size: 12px;
+      color: #CCC;
+      margin-left: 20px;
+      max-height: 0;
+      transition: max-height 600ms ease;
+      overflow: hidden;
+      &.opened {
+        max-height: 900px;
+      }
+    }
+  }
+}

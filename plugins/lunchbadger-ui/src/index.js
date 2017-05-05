@@ -4,6 +4,7 @@ import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
 import SystemDefcon1 from './SystemDefcon1/SystemDefcon1';
 import SystemInformationMessages from './SystemInformationMessages/SystemInformationMessages';
+import SystemNotifications from './SystemNotifications/SystemNotifications';
 
 import Entity from './Entity/Entity';
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
@@ -50,6 +51,7 @@ export {
   SmoothCollapse,
   SystemDefcon1,
   SystemInformationMessages,
+  SystemNotifications,
   Toolbox,
   entityIcons,
 };

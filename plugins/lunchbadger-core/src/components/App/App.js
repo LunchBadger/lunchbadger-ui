@@ -15,7 +15,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage, shiftSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {SystemInformationMessages} from '../../../../lunchbadger-ui/src';
+import {SystemInformationMessages, SystemNotifications} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
@@ -134,6 +134,7 @@ class App extends Component {
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">
+            <SystemNotifications />
             <PanelContainer plugins={this.state.pluginsStore}
                             appState={this.state.appState}
                             canvas={() => this.refs.canvas}

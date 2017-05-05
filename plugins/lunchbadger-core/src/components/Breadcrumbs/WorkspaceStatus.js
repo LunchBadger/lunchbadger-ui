@@ -1,10 +1,13 @@
 /*eslint no-console:0 */
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
+import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
 
-export default class WorkspaceStatus extends Component {
+
+class WorkspaceStatus extends Component {
   static contextTypes = {
     projectService: PropTypes.object
   };
@@ -58,6 +61,10 @@ export default class WorkspaceStatus extends Component {
       output: status.output,
       instance: status.instance
     });
+
+    if (status.status === 'crashed') {
+      this.props.displaySystemNotification({revision: status.revision, output: status.output});
+    }
   }
 
   onConnected() {
@@ -130,3 +137,9 @@ export default class WorkspaceStatus extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(WorkspaceStatus);

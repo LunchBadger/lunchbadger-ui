@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {shiftSystemInformationMessage} from '../actions';
 import SystemInformationMessage from './SystemInformationMessage';
 import './SystemInformationMessages.scss';
 

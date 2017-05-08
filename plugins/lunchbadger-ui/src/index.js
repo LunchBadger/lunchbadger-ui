@@ -13,6 +13,7 @@ import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValida
 import Input from './Form/Input';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import {Form} from './utils/Formsy/main';
 
 export {
   Button,
@@ -23,6 +24,7 @@ export {
   EntityPropertyLabel,
   EntitySubElements,
   EntityValidationErrors,
+  Form,
   IconSVG,
   Input,
   SmoothCollapse,

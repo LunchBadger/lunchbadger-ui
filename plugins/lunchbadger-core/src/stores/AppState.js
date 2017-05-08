@@ -4,25 +4,33 @@ import _ from 'lodash';
 const state = {};
 let projectRevision = null;
 const stateQueue = [];
+const USE_QUEUE = true;
 
 class AppState extends BaseStore {
   constructor() {
     super();
     this.subscribe(() => this._registerActions);
-    setInterval(() => {
-      const queueSize = stateQueue.length;
-      for (let i = 0; i < queueSize; i += 1) {
-        const [key, value] = stateQueue.shift();
-        state[key] = value;
-      }
-      if (queueSize > 0) {
-        this.emitChange();
-      }
-    }, 300);
+    if (USE_QUEUE) {
+      setInterval(() => {
+        const queueSize = stateQueue.length;
+        for (let i = 0; i < queueSize; i += 1) {
+          const [key, value] = stateQueue.shift();
+          state[key] = value;
+        }
+        if (queueSize > 0) {
+          this.emitChange();
+        }
+      }, 10);
+    }
   }
 
   setStateKey(key, value) {
-    stateQueue.push([key, value]);
+    if (USE_QUEUE) {
+      stateQueue.push([key, value]);
+    } else {
+      state[key] = value;
+      this.emitChange();
+    }
   }
 
   getStateKey(key) {

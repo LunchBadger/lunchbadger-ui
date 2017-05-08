@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './BaseDetails.scss';
-import {Form} from 'formsy-react';
+import {Form} from '../../../../../lunchbadger-ui/src';
 import InputField from './InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';

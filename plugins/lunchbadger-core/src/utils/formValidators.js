@@ -1,4 +1,4 @@
-import Formsy from 'formsy-react';
+import Formsy from '../../../lunchbadger-ui/src/utils/Formsy/main';
 
 Formsy.addValidationRule('isJSON', function (_values, value) {
   try {

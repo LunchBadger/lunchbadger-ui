@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
-import {HOC} from 'formsy-react';
+import HOC from '../../../../../lunchbadger-ui/src/utils/Formsy/HOC';
 
 class Textarea extends Component {
   static propTypes = {
@@ -14,11 +13,6 @@ class Textarea extends Component {
     className: PropTypes.string,
     type: PropTypes.string
   };
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const shallow = shallowCompare(this, nextProps, nextState);
-    return shallow || this.props.getValue() !== nextProps.value;
-  }
 
   _handleKeyPress = (event) => {
     if (typeof this.props.handleKeyPress === 'function') {

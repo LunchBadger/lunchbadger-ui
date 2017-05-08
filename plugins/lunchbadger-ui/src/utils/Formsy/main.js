@@ -66,10 +66,18 @@ Formsy.Form = React.createClass({
   // the values of the form and register child inputs
   componentWillMount: function () {
     this.inputs = [];
+    this.doValidateForm = false;
   },
 
   componentDidMount: function () {
-    this.validateForm();
+    this.validateFormCronjobInterval = setInterval(this.validateFormCronjob, 10);
+  },
+
+  validateFormCronjob: function () {
+    if (this.doValidateForm) {
+      this.doValidateForm = false;
+      this.validateFormReal();
+    }
   },
 
   componentWillUpdate: function () {
@@ -89,6 +97,10 @@ Formsy.Form = React.createClass({
       this.validateForm();
     }
 
+  },
+
+  componentWillUnmount: function () {
+    clearInterval(this.validateFormCronjobInterval);
   },
 
   // Allow resetting to specified data
@@ -347,10 +359,13 @@ Formsy.Form = React.createClass({
 
   },
 
+  validateForm: function () {
+    this.doValidateForm = true;
+  },
+
   // Validate the form by going through all child input components
   // and check their state
-  validateForm: function () {
-
+  validateFormReal: function () {
     // We need a callback as we are validating all inputs again. This will
     // run when the last component has set its state
     var onValidationComplete = function () {

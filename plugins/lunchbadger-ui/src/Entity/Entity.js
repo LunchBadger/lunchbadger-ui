@@ -1,10 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import cs from 'classnames';
-import {Form} from 'formsy-react';
 import EntityHeader from './EntityHeader/EntityHeader';
 import EntityValidationErrors from './EntityValidationErrors/EntityValidationErrors';
 import EntityActionButtons from './EntityActionButtons/EntityActionButtons';
-import {SmoothCollapse, Toolbox} from '../';
+import {SmoothCollapse, Toolbox, Form} from '../';
 import './Entity.scss';
 
 class Entity extends Component {

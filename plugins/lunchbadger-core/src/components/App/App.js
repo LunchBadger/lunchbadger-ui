@@ -8,13 +8,12 @@ import Spinner from './Spinner';
 import './App.scss';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Notifications, {notify} from 'react-notify-toast';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
-import {addSystemInformationMessage, shiftSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {SystemInformationMessages, SystemNotifications} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
@@ -88,12 +87,10 @@ class App extends Component {
 
     this.setState({loaded: false});
     let prm = saveToServer(config, loginManager, projectService).then(() => {
-      // notify.show('All data has been synced with API', 'success');
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
       });
-      setTimeout(this.props.shiftSystemInformationMessage, 5000);
       this.setState({loaded: true});
     });
 
@@ -108,12 +105,10 @@ class App extends Component {
     this.setState({loaded: false});
 
     let prm = clearServer(config, loginManager, projectService).then(() => {
-      // notify.show('All data removed from server', 'success');
       this.props.displaySystemInformationMessage({
         message: 'All data removed from server',
         type: 'success'
       });
-      setTimeout(this.props.shiftSystemInformationMessage, 5000);
       this.setState({loaded: true});
     });
 
@@ -143,7 +138,6 @@ class App extends Component {
           </div>
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
-        <Notifications />
         <SystemInformationMessages />
       </div>
     );
@@ -152,7 +146,6 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => ({
   displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
-  shiftSystemInformationMessage: () => dispatch(shiftSystemInformationMessage()),
 });
 
 export default connect(null, mapDispatchToProps)(App);

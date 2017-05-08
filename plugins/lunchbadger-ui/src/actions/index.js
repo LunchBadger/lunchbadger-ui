@@ -3,8 +3,9 @@ export const addSystemInformationMessage = message => ({
   message,
 });
 
-export const shiftSystemInformationMessage = () => ({
-  type: 'SYSTEM_INFORMATION_MESSAGES/SHIFT',
+export const removeSystemInformationMessages = messages => ({
+  type: 'SYSTEM_INFORMATION_MESSAGES/REMOVE',
+  messages,
 });
 
 export const addSystemNotification = notification => ({

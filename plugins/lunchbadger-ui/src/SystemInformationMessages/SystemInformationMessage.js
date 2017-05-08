@@ -3,9 +3,9 @@ import {IconSVG} from '../';
 import iconDelete from '../../../../src/icons/icon-delete.svg';
 import './SystemInformationMessages.scss';
 
-const SystemInformationMessage = ({message}) => (
+const SystemInformationMessage = ({message, onRemove}) => (
   <div className="SystemInformationMessages__item">
-    <div className="SystemInformationMessages__item__delete">
+    <div className="SystemInformationMessages__item__delete" onClick={onRemove}>
       <IconSVG svg={iconDelete} />
     </div>
     {message}

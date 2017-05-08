@@ -15,7 +15,7 @@ const SystemDefcon1 = ({error}) => (
         </div>
       </div>
       <div className="SystemDefcon1__box__content">
-        <button>OK</button>
+        <button onClick={() => { document.location.reload(); }}>OK</button>
       </div>
     </div>
   </div>

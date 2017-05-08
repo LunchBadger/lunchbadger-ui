@@ -158,10 +158,8 @@ i.over {
   vertical-align: middle;
 }
 
-.tool--selected {
-  .tool {
-    background-color: #666;
-  }
+.tool.tool--selected {
+  background-color: #666;
   .tool__svg svg {
     stroke: #fff;
   }

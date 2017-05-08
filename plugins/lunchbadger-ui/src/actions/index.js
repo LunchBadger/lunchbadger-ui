@@ -12,3 +12,7 @@ export const addSystemNotification = notification => ({
   type: 'SYSTEM_NOTIFICATIONS/ADD',
   notification,
 });
+
+export const removeSystemNotifications = () => ({
+  type: 'SYSTEM_NOTIFICATIONS/REMOVE',
+});

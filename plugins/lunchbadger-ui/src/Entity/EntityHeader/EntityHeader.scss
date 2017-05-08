@@ -22,6 +22,14 @@
     &:hover {
       background-color: rgba(0, 0, 0, 0.2);
     }
+    svg {
+      width: 34px;
+      height: 34px;
+      position: absolute;
+      top: 7px;
+      left: 12px;
+      stroke: #FFF;
+    }
   }
   &__name {
     padding-top: 12px;

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import cs from 'classnames';
 import PrivateEndpoint from './PrivateEndpoint';
 import PublicEndpoint from './PublicEndpoint';
+import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
 
 const Tool = LunchBadgerCore.components.Tool;
 
@@ -11,7 +12,7 @@ class Endpoint extends Component {
     return (
       <div className={cs('endpoint', 'tool', 'context', {['tool--selected']: isSelected})}>
         <i className="tool__extend icon-arrowhead"/>
-        <i className="tool__icon icon-icon-endpoint"/>
+        <IconSVG className="tool__svg" svg={entityIcons.PrivateEndpoint} />
         <ul className="tool__context">
           <li>
             <PrivateEndpoint />

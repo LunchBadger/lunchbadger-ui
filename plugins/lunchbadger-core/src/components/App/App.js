@@ -14,7 +14,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {SystemInformationMessages, SystemNotifications} from '../../../../lunchbadger-ui/src';
+import {SystemInformationMessages, SystemNotifications, SystemDefcon1} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
@@ -63,7 +63,9 @@ class App extends Component {
   }
 
   componentWillMount() {
-    let {config, loginManager, projectService} = this.props;
+    let {config, loginManager, projectService, dispatch} = this.props;
+
+    LunchBadgerCore.dispatchRedux = dispatch;
 
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
@@ -118,6 +120,7 @@ class App extends Component {
   }
 
   render() {
+    const {systemDefcon1Error} = this.props;
     return (
       <div className="app">
         <Spinner loading={!this.state.loaded} />
@@ -139,13 +142,21 @@ class App extends Component {
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
         <SystemInformationMessages />
+        {systemDefcon1Error !== '' && (
+          <SystemDefcon1 error={systemDefcon1Error} />
+        )}
       </div>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  systemDefcon1Error: state.ui.systemDefcon1,
+});
+
 const mapDispatchToProps = dispatch => ({
+  dispatch,
   displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

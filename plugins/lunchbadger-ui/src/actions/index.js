@@ -17,3 +17,8 @@ export const toggleSystemNotifications = visible => ({
   type: 'SYSTEM_NOTIFICATIONS/TOGGLE',
   visible,
 });
+
+export const showSystemDefcon1 = message => ({
+  type: 'SYSTEM_DEFCON1/SHOW',
+  message,
+});

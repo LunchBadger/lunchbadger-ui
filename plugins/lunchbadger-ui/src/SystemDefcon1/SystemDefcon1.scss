@@ -4,7 +4,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(100, 100, 100, 0.75);
+  z-index: 1000;
   &__box {
     position: absolute;
     top: 50%;
@@ -64,6 +65,18 @@
         margin-top: 20px;
         opacity: 0.5;
         font-size: 14px;
+      }
+      &__details {
+        margin-top: 20px;
+        &--link {
+          color: #538cca;
+          cursor: pointer;
+        }
+        pre {
+          padding-top: 20px;
+          white-space: pre-wrap;
+          opacity: 0.9;
+        }
       }
       &:last-child {
         text-align: right;

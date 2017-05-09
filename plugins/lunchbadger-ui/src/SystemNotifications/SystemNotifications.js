@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import cs from 'classnames';
-import {removeSystemNotifications} from '../actions';
+import {toggleSystemNotifications} from '../actions';
 import './SystemNotifications.scss';
 
 class SystemNotifications extends Component {
@@ -14,18 +14,18 @@ class SystemNotifications extends Component {
 
   toggleOpen = () => this.setState({opened: !this.state.opened});
 
-  handleRemove = () => {
-    this.setState({opened: false}, this.props.removeMessages);
+  hideMessages = () => {
+    this.setState({opened: false}, this.props.hideMessages);
   }
 
   render() {
-    const {notifications, removeMessages} = this.props;
+    const {visible, notifications, hideMessages} = this.props;
     const {opened} = this.state;
     const amount = notifications.length;
-    if (amount === 0) return null;
+    if (!visible || amount === 0) return null;
     return (
       <div className="SystemNotification">
-        <button className="SystemNotification__close" onClick={this.handleRemove}>
+        <button className="SystemNotification__close" onClick={this.hideMessages}>
           Close
         </button>
         <div className="SystemNotification__title">
@@ -56,11 +56,12 @@ class SystemNotifications extends Component {
 }
 
 const mapStateToProps = state => ({
-  notifications: state.ui.systemNotifications,
+  notifications: state.ui.systemNotifications.errors,
+  visible: state.ui.systemNotifications.visible,
 });
 
 const mapDispatchToProps = dispatch => ({
-  removeMessages: () => dispatch(removeSystemNotifications()),
+  hideMessages: () => dispatch(toggleSystemNotifications(false)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SystemNotifications);

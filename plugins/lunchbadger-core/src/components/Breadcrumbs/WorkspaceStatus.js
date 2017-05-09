@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
-import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
+import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
+import {addSystemNotification, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
 
 
 class WorkspaceStatus extends Component {
@@ -38,10 +39,20 @@ class WorkspaceStatus extends Component {
     }
   }
 
-  onClick() {
-    this.setState({
-      visible: !this.state.visible
-    });
+  onClick = () => {
+    if (this.state.status === 'crashed') {
+      this.props.showSystemNotifications();
+    }
+  }
+
+  onEnter = () => {
+    if (['running', 'installing'].includes(this.state.status)) {
+      this.setState({visible: true});
+    }
+  }
+
+  onLeave = () => {
+    this.setState({visible: false});
   }
 
   onStatusReceived(message) {
@@ -83,24 +94,6 @@ class WorkspaceStatus extends Component {
     location.reload();
   }
 
-  renderInfo(message) {
-    let output = null;
-    if (this.state.connected && this.state.output) {
-      output = (
-        <div className="workspace-status__output">
-          {this.state.output}
-        </div>
-      );
-    }
-
-    return (
-      <div className="workspace-status__info">
-        {message}
-        {output}
-      </div>
-    );
-  }
-
   render() {
     let classes = ['fa'];
     let message = null;
@@ -112,17 +105,26 @@ class WorkspaceStatus extends Component {
       message = 'Workspace OK';
       classes.push(...['fa-check-circle', 'workspace-status__success']);
     } else if (this.state.status === 'crashed') {
-      message = 'Workspace crashed. Output follows:'
+      message = 'Workspace crashed';
       classes.push(...['fa-exclamation-triangle', 'workspace-status__failure']);
     } else if (this.state.status === 'installing') {
       message = 'Updating dependencies';
       classes.push('workspace-status__progress');
     }
-
+    const {visible} = this.state;
     return (
       <span className="workspace-status">
-        <span className={classnames(classes)} onClick={this.onClick.bind(this)} />
-        {this.state.visible ? this.renderInfo(message) : null}
+        <span className={classnames(classes)}
+          onClick={this.onClick}
+          onMouseEnter={this.onEnter}
+          onMouseLeave={this.onLeave}
+        >
+          {visible && (
+            <ContextualInformationMessage>
+              {message}
+            </ContextualInformationMessage>
+          )}
+        </span>
         {
           this.state.isShowingModal &&
           <OneOptionModal confirmText="Reload"
@@ -140,6 +142,7 @@ class WorkspaceStatus extends Component {
 
 const mapDispatchToProps = dispatch => ({
   displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
+  showSystemNotifications: () => dispatch(toggleSystemNotifications(true)),
 });
 
 export default connect(null, mapDispatchToProps)(WorkspaceStatus);

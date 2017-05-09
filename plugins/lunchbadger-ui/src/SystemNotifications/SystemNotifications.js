@@ -24,23 +24,23 @@ class SystemNotifications extends Component {
     const amount = notifications.length;
     if (!visible || amount === 0) return null;
     return (
-      <div className="SystemNotification">
-        <button className="SystemNotification__close" onClick={this.hideMessages}>
+      <div className="SystemNotifications">
+        <button className="SystemNotifications__close" onClick={this.hideMessages}>
           Close
         </button>
-        <div className="SystemNotification__title">
+        <div className="SystemNotifications__title">
           The workspace crashed
         </div>
-        <div className="SystemNotification__details">
-          <span className="SystemNotification__details__link" onClick={this.toggleOpen}>
+        <div className="SystemNotifications__details">
+          <span className="SystemNotifications__details__link" onClick={this.toggleOpen}>
             {`${opened ? 'Hide' : 'Show'} server output details`}
           </span>
-          <div className={cs('SystemNotification__details__output', {opened})}>
-            <div className="SystemNotification__details__output--box">
+          <div className={cs('SystemNotifications__details__output', {opened})}>
+            <div className="SystemNotifications__details__output--box">
               {notifications.map((item, idx) => (
                 <div key={idx}>
                   {amount > 1  && (
-                    <div className="SystemNotification__details__output--title">
+                    <div className="SystemNotifications__details__output--title">
                       Error {idx + 1}:
                     </div>
                   )}

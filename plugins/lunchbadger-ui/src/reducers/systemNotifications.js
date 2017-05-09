@@ -6,9 +6,11 @@ const initialState = {
 const SystemNotifications = (state = initialState, action) => {
   switch (action.type) {
     case 'SYSTEM_NOTIFICATIONS/ADD':
-      if (state.errors.filter(item => item.output === action.notification.output).length === 0) {
+      const {notification} = action;
+      notification.output = notification.output.replace(/^(\n)*/, '');
+      if (state.errors.filter(item => item.output === notification.output).length === 0) {
         return {
-          errors: [action.notification, ...state.errors],
+          errors: [notification, ...state.errors],
           visible: state.visible,
         };
       }

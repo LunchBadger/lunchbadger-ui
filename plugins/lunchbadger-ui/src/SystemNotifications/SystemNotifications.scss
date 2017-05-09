@@ -1,9 +1,9 @@
-.SystemNotification {
+.SystemNotifications {
   background-color: #444545;
   padding: 0px 200px;
   position: relative;
   height: 95px;
-  z-index: 890;
+  z-index: 22;
   &:before,
   &:after {
     display: block;
@@ -91,7 +91,7 @@
         padding-top: 20px;
       }
       pre {
-        padding-left: 20px;
+        padding: 20px 0 0 20px;
       }
     }
   }

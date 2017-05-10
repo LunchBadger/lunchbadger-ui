@@ -210,7 +210,7 @@ export default class Canvas extends Component {
       let fulfilled = this._executeStrategies(strategies, info);
 
       if (fulfilled === null) {
-        removeConnection(info);
+        removeConnection(info.sourceId, info.targetId);
       } else if (fulfilled === false) {
         this.paper.connect({
           source: info.source,

@@ -54,7 +54,6 @@
     "json-loader": "^0.5.4",
     "minimist": "^1.2.0",
     "mocha": "^2.2.5",
-    "moment": "^2.14.1",
     "nightwatch": "^0.9.4",
     "node-sass": "^3.4.2",
     "null-loader": "^0.1.1",

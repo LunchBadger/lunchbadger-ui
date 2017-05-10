@@ -344,8 +344,8 @@ export default (ComposedComponent) => {
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.constructor.type}
-              editable={this.state.editable && ready}
-              expanded={this.state.expanded && ready}
+              editable={this.state.editable}
+              expanded={this.state.expanded}
               collapsed={!this.state.expanded}
               highlighted={this.state.highlighted || this.state.editable}
               dragging={isDragging}

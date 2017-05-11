@@ -70,7 +70,7 @@ Formsy.Form = React.createClass({
   },
 
   componentDidMount: function () {
-    this.validateFormCronjobInterval = setInterval(this.validateFormCronjob, 10);
+    this.validateFormCronjobInterval = setInterval(this.validateFormCronjob, 100);
   },
 
   validateFormCronjob: function () {

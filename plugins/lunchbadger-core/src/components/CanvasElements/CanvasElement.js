@@ -6,8 +6,6 @@ import {DragSource, DropTarget} from 'react-dnd';
 import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 import toggleEdit from '../../actions/CanvasElements/toggleEdit';
 import _ from 'lodash';
-import {Form} from 'formsy-react';
-import Input from '../Generics/Form/Input';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';

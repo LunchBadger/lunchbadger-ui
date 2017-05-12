@@ -14,7 +14,7 @@ export default class MetricType extends Component {
     super(props);
   }
 
-  _handleCirclesClick() {
+  _handleCirclesClick = () => {
     if (typeof this.props.circlesClick === 'function') {
       this.props.circlesClick(
         (this.props.isCurrentPair) ? null : this.props.pair
@@ -33,7 +33,7 @@ export default class MetricType extends Component {
     });
 
     return (
-      <div className={typeClass} onClick={this._handleCirclesClick.bind(this)}>
+      <div className={typeClass} onClick={this._handleCirclesClick}>
         <figure className="metric-type__circles">
           <span className="metric-type__circle metric-type__circle--left"/>
           <span className="metric-type__circle metric-type__circle--right"/>

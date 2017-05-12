@@ -20,7 +20,7 @@ export default class CanvasOverlay extends Component {
     };
   }
 
-  _handleClick() {
+  _handleClick = () => {
     this.setState({isShowingModal: true});
 
     if (typeof this.props.handleClick === 'function') {
@@ -28,7 +28,7 @@ export default class CanvasOverlay extends Component {
     }
   }
 
-  _handleSave() {
+  _handleSave = () => {
     const saveFunction = this.props.appState.getStateKey('panelEditingStatusSave');
 
     if (typeof saveFunction === 'function') {
@@ -36,7 +36,7 @@ export default class CanvasOverlay extends Component {
     }
   }
 
-  _handleCancel() {
+  _handleCancel = () => {
     const cancelFunction = this.props.appState.getStateKey('panelEditingStatusDiscard');
 
     if (typeof cancelFunction === 'function') {
@@ -46,12 +46,12 @@ export default class CanvasOverlay extends Component {
 
   render() {
     return (
-      <div className="canvas-overlay" onClick={this._handleClick.bind(this)}>
+      <div className="canvas-overlay" onClick={this._handleClick}>
         {
           this.state.isShowingModal &&
           <TwoOptionModal onClose={this.handleClose}
-                          onSave={this._handleSave.bind(this)}
-                          onCancel={this._handleCancel.bind(this)}>
+                          onSave={this._handleSave}
+                          onCancel={this._handleCancel}>
             <span>You have unsaved changes!</span>
           </TwoOptionModal>
         }

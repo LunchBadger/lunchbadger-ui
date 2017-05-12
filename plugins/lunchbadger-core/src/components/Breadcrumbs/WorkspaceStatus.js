@@ -23,9 +23,9 @@ export default class WorkspaceStatus extends Component {
 
   componentDidMount() {
     this.es = this.context.projectService.monitorStatus();
-    this.es.addEventListener('data', this.onStatusReceived.bind(this));
-    this.es.addEventListener('open', this.onConnected.bind(this));
-    this.es.addEventListener('error', this.onDisconnected.bind(this));
+    this.es.addEventListener('data', this.onStatusReceived);
+    this.es.addEventListener('open', this.onConnected);
+    this.es.addEventListener('error', this.onDisconnected);
   }
 
   componentWillUnmount() {
@@ -35,13 +35,13 @@ export default class WorkspaceStatus extends Component {
     }
   }
 
-  onClick() {
+  onClick = () => {
     this.setState({
       visible: !this.state.visible
     });
   }
 
-  onStatusReceived(message) {
+  onStatusReceived = (message) => {
     let status = JSON.parse(message.data).data;
 
     console.log('Status from server', status);
@@ -60,19 +60,19 @@ export default class WorkspaceStatus extends Component {
     });
   }
 
-  onConnected() {
+  onConnected = () => {
     this.setState({
       connected: true
     });
   }
 
-  onDisconnected() {
+  onDisconnected = () => {
     this.setState({
       connected: false
     });
   }
 
-  onModalClose() {
+  onModalClose = () => {
     location.reload();
   }
 
@@ -114,12 +114,12 @@ export default class WorkspaceStatus extends Component {
 
     return (
       <span className="workspace-status">
-        <span className={classnames(classes)} onClick={this.onClick.bind(this)} />
+        <span className={classnames(classes)} onClick={this.onClick} />
         {this.state.visible ? this.renderInfo(message) : null}
         {
           this.state.isShowingModal &&
           <OneOptionModal confirmText="Reload"
-                          onClose={this.onModalClose.bind(this)}>
+                          onClose={this.onModalClose}>
             <p>
               The workspace has changed since the Canvas was loaded. Please
               reload the page to refresh the Canvas contents.

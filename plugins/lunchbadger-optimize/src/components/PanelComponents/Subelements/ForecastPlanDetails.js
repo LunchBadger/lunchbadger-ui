@@ -44,9 +44,8 @@ export default class ForecastPlanDetails extends Component {
     });
   }
 
-  addTier(event) {
+  addTier = (event) => {
     addTier(this.props.plan, this.props.date);
-
     event.stopPropagation();
   }
 
@@ -75,7 +74,7 @@ export default class ForecastPlanDetails extends Component {
 
             {
               date.isAfter(moment(), 'month') && (
-                <a className="base-plan__add-tier" onClick={this.addTier.bind(this)}>
+                <a className="base-plan__add-tier" onClick={this.addTier}>
                   <i className="fa fa-plus"/>
                 </a>
               )

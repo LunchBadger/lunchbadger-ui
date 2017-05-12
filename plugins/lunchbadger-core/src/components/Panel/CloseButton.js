@@ -11,23 +11,22 @@ export default class CloseButton extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       isShowingModal: false
     };
-
-    this.handleClick = () => {
-      if (this.props.showConfirmation) {
-        this.setState({isShowingModal: true});
-      } else {
-        togglePanel(null);
-      }
-    };
-
-    this.handleClose = () => {
-      this.setState({isShowingModal: false});
-    };
   }
+
+  handleClick = () => {
+    if (this.props.showConfirmation) {
+      this.setState({isShowingModal: true});
+    } else {
+      togglePanel(null);
+    }
+  };
+
+  handleClose = () => {
+    this.setState({isShowingModal: false});
+  };
 
   _handleSave() {
     this.props.onSave();
@@ -41,14 +40,14 @@ export default class CloseButton extends Component {
 
   render() {
     return (
-      <a className="confirm-button__cancel" onClick={this.handleClick.bind(this)}>
+      <a className="confirm-button__cancel" onClick={this.handleClick}>
         <i className="fa fa-remove"/>
 
         {
           this.state.isShowingModal &&
           <TwoOptionModal onClose={this.handleClose}
-                          onSave={this._handleSave.bind(this)}
-                          onCancel={this._handleCancel.bind(this)}>
+                          onSave={this._handleSave}
+                          onCancel={this._handleCancel}>
             <span>You have unsaved changes, what You gonna do with that?</span>
           </TwoOptionModal>
         }

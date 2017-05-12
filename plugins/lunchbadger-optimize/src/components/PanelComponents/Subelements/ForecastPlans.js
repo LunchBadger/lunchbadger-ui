@@ -35,7 +35,7 @@ export default class ForecastPlans extends Component {
     }
   }
 
-  _handleAddPlan() {
+  _handleAddPlan = () => {
     addPlan(this.props.entity, {name: 'Enterprise', icon: 'fa-space-shuttle'}, this.props.selectedDate);
   }
 
@@ -143,7 +143,7 @@ export default class ForecastPlans extends Component {
         {
           date.isAfter(moment(), 'month') && (
             <div className="forecast-plans__action">
-              <a className="forecast-plans__action__add" onClick={this._handleAddPlan.bind(this)}>
+              <a className="forecast-plans__action__add" onClick={this._handleAddPlan}>
                 <i className="icon-icon-plus"/>
               </a>
             </div>

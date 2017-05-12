@@ -14,7 +14,7 @@ class TwoOptionModal extends Component {
     discardText: 'Discard changes'
   };
 
-  _handleConfirm() {
+  _handleConfirm = () => {
     if (typeof this.props.onSave === 'function') {
       this.props.onSave();
     }
@@ -22,7 +22,7 @@ class TwoOptionModal extends Component {
     this.props.onClose();
   }
 
-  _handleCancel() {
+  _handleCancel = () => {
     if (typeof this.props.onCancel === 'function') {
       this.props.onCancel();
     }
@@ -38,12 +38,12 @@ class TwoOptionModal extends Component {
 
         <div className="modal__actions">
           <button className="modal__actions__button modal__actions__button--confirm"
-                  onClick={this._handleConfirm.bind(this)}>
+                  onClick={this._handleConfirm}>
             {this.props.confirmText}
           </button>
 
           <button className="modal__actions__button modal__actions__button--discard"
-                  onClick={this._handleCancel.bind(this)}>
+                  onClick={this._handleCancel}>
             {this.props.discardText}
           </button>
         </div>

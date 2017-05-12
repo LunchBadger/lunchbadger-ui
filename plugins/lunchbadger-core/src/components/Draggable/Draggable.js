@@ -8,32 +8,25 @@ export default class Draggable extends Component {
     children: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-
-    this._handleDrag = this.handleDrag.bind(this);
-    this._handleDragEnd = this.handleDragEnd.bind(this);
-  }
-
-  handleDragStart(event) {
-    document.body.addEventListener('mousemove', this._handleDrag);
-    document.body.addEventListener('mouseup', this._handleDragEnd);
+  handleDragStart = (event) => {
+    document.body.addEventListener('mousemove', this.handleDrag);
+    document.body.addEventListener('mouseup', this.handleDragEnd);
 
     if (typeof this.props.onDragStart === 'function') {
       this.props.onDragStart(event);
     }
   }
 
-  handleDragEnd(event) {
-    document.body.removeEventListener('mousemove', this._handleDrag);
-    document.body.removeEventListener('mouseup', this._handleDragEnd);
+  handleDragEnd = (event) => {
+    document.body.removeEventListener('mousemove', this.handleDrag);
+    document.body.removeEventListener('mouseup', this.handleDragEnd);
 
     if (typeof this.props.onDragEnd === 'function') {
       this.props.onDragEnd(event);
     }
   }
 
-  handleDrag(event) {
+  handleDrag = (event) => {
     if (typeof this.props.onDrag === 'function') {
       this.props.onDrag(event);
     }
@@ -41,7 +34,7 @@ export default class Draggable extends Component {
 
   render() {
     return (
-      <div onMouseDown={this.handleDragStart.bind(this)}>
+      <div onMouseDown={this.handleDragStart}>
         {this.props.children}
       </div>
     );

@@ -17,6 +17,11 @@ const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 
+const baseModelTypes = [
+  {label: 'Model', value: 'Model'},
+  {label: 'PersistedModel', value: 'PersistedModel'},
+];
+
 class ModelDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
@@ -192,7 +197,7 @@ class ModelDetails extends Component {
     setTimeout(() => this._focusLastDetailsRowInput());
   }
 
-  onRemoveProperty(property) {
+  onRemoveProperty = (property) => {
     this.onRemoveItem('properties', property);
   }
 
@@ -200,7 +205,7 @@ class ModelDetails extends Component {
     this.onAddItem('relations', ModelRelation.create({}));
   }
 
-  onRemoveRelation(relation) {
+  onRemoveRelation = (relation) => {
     this.onRemoveItem('relations', relation);
   }
 
@@ -219,7 +224,7 @@ class ModelDetails extends Component {
                               addAction={() => this.onAddProperty()}
                               propertiesCount={this.state.properties.length}
                               key={`property-${property.id}`}
-                              onRemove={this.onRemoveProperty.bind(this)}
+                              onRemove={this.onRemoveProperty}
                               property={property}/>
       );
     });
@@ -230,7 +235,7 @@ class ModelDetails extends Component {
       return (
         <ModelRelationDetails index={index}
                               key={`relation-${relation.id}`}
-                              onRemove={this.onRemoveRelation.bind(this)}
+                              onRemove={this.onRemoveRelation}
                               relation={relation}/>
       );
     });
@@ -251,9 +256,7 @@ class ModelDetails extends Component {
 
   render() {
     const {entity} = this.props;
-    const dataSources = BackendStore.getData().map((ds, index) => {
-      return <option key={`${ds.id}-${index}`} value={ds.id}>{ds.name}</option>
-    });
+    const dataSources = BackendStore.getData().map((item, idx) => ({label: item.name, value: item.id}));
 
     return (
       <div>
@@ -261,19 +264,17 @@ class ModelDetails extends Component {
           <div className="details-panel__container details-panel__columns">
             <InputField label="Context path" propertyName="contextPath" entity={entity}/>
             <InputField label="Plural" propertyName="plural" entity={entity}/>
-            <SelectField label="Base model" propertyName="base" entity={entity}>
-              <option value="Model">Model</option>
-              <option value="PersistedModel">PersistedModel</option>
-            </SelectField>
+            <SelectField label="Base model" propertyName="base" entity={entity}
+              options={baseModelTypes}
+            />
             <div className="details-panel__fieldset">
               <label className="details-panel__label"
                      htmlFor="dataSource">Data source</label>
               <Select className="details-panel__input"
                       name="dataSource"
-                      value={this._getCurrentBackend()}>
-                <option value="none">[None]</option>
-                {dataSources}
-              </Select>
+                      value={this._getCurrentBackend()}
+                      options={[{label: '[None]', value: 'none'}, ...dataSources]}
+              />
             </div>
             <CheckboxField label="Read only" propertyName="readOnly" entity={entity}/>
             <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
@@ -354,4 +355,3 @@ class ModelDetails extends Component {
 }
 
 export default BaseDetails(ModelDetails);
-

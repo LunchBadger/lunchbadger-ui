@@ -4,6 +4,12 @@ const {Input, Select} = LunchBadgerCore.components;
 const Private = LunchBadgerManage.stores.Private;
 const Model = LunchBadgerManage.models.Model;
 
+const relationTypeOptions = [
+  {label: 'hasMany', value: 'hasMany'},
+  {label: 'belongsTo', value: 'belongsTo'},
+  {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
+];
+
 export default class ModelRelationDetails extends Component {
   static propTypes = {
     relation: PropTypes.object.isRequired,
@@ -22,9 +28,7 @@ export default class ModelRelationDetails extends Component {
     const {relation, index} = this.props;
     let models = Private.getData()
       .filter(entity => entity instanceof Model)
-    let modelOptions = models.map(
-      model => <option value={model.name} key={`rel-${model.name}`}>{model.name}</option>);
-
+    const modelOptions = models.map(model => ({label: model.name, value: model.name}));
     return (
       <tr>
         <td>
@@ -35,18 +39,16 @@ export default class ModelRelationDetails extends Component {
         <td>
           <Select className="details-panel__input details-panel__select"
                 value={relation.model || models[0].name}
-                name={`relations[${index}][model]`}>
-            {modelOptions}
-          </Select>
+                name={`relations[${index}][model]`}
+                options={modelOptions}
+          />
         </td>
         <td>
           <Select className="details-panel__input details-panel__select"
                   value={relation.type || 'hasMany'}
-                  name={`relations[${index}][type]`}>
-            <option value="hasMany">hasMany</option>
-            <option value="belongsTo">belongsTo</option>
-            <option value="hasAndBelongsToMany">hasAndBelongsToMany</option>
-          </Select>
+                  name={`relations[${index}][type]`}
+                  options={relationTypeOptions}
+          />
         </td>
         <td>
           <Input className="details-panel__input"

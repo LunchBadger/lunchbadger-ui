@@ -13,6 +13,7 @@ import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValida
 import Input from './Form/Input';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import {Form} from './utils/Formsy/main';
 
 // entities icons
 import iconApi from '../../../src/icons/icon-api.svg';
@@ -43,6 +44,7 @@ export {
   EntityPropertyLabel,
   EntitySubElements,
   EntityValidationErrors,
+  Form,
   IconSVG,
   Input,
   SmoothCollapse,

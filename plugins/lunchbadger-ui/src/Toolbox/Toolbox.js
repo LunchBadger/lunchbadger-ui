@@ -4,7 +4,7 @@ import {IconSVG} from '../';
 import './Toolbox.scss';
 
 const Toolbox = ({config}) => (
-  <div className="Toolbox">
+  <div className="Toolbox" style={{width: config.length * 50}}>
     {config.map(({action, svg, onClick}, idx) => (
       <div
         key={idx}

@@ -1,0 +1,13 @@
+@import '../plugins/lunchbadger-core/src/components/App/App.scss';
+
+body {
+  overflow: auto;
+}
+
+.story {
+  margin: 50px;
+  position: relative;
+  &__Buttons {
+    width: 280px;
+  }
+}

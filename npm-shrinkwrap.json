@@ -8,6 +8,12 @@
       "resolved": "https://registry.npmjs.org/@kadira/react-split-pane/-/react-split-pane-1.4.7.tgz",
       "dev": true
     },
+    "@kadira/react-storybook-addon-info": {
+      "version": "3.4.0",
+      "from": "@kadira/react-storybook-addon-info@latest",
+      "resolved": "https://registry.npmjs.org/@kadira/react-storybook-addon-info/-/react-storybook-addon-info-3.4.0.tgz",
+      "dev": true
+    },
     "@kadira/storybook": {
       "version": "2.35.3",
       "from": "@kadira/storybook@latest",
@@ -156,10 +162,22 @@
       "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-actions/-/storybook-addon-actions-1.1.3.tgz",
       "dev": true
     },
+    "@kadira/storybook-addon-knobs": {
+      "version": "1.7.1",
+      "from": "@kadira/storybook-addon-knobs@latest",
+      "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-knobs/-/storybook-addon-knobs-1.7.1.tgz",
+      "dev": true
+    },
     "@kadira/storybook-addon-links": {
       "version": "1.0.1",
       "from": "@kadira/storybook-addon-links@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-links/-/storybook-addon-links-1.0.1.tgz",
+      "dev": true
+    },
+    "@kadira/storybook-addon-notes": {
+      "version": "1.0.1",
+      "from": "@kadira/storybook-addon-notes@latest",
+      "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-notes/-/storybook-addon-notes-1.0.1.tgz",
       "dev": true
     },
     "@kadira/storybook-addons": {
@@ -3726,6 +3744,12 @@
       "from": "hawk@>=3.1.0 <3.2.0",
       "resolved": "https://registry.npmjs.org/hawk/-/hawk-3.1.3.tgz"
     },
+    "he": {
+      "version": "1.1.1",
+      "from": "he@>=1.1.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/he/-/he-1.1.1.tgz",
+      "dev": true
+    },
     "hoek": {
       "version": "2.16.3",
       "from": "hoek@>=2.0.0 <3.0.0",
@@ -3902,6 +3926,12 @@
       "version": "0.12.0",
       "from": "inquirer@>=0.12.0 <0.13.0",
       "resolved": "https://registry.npmjs.org/inquirer/-/inquirer-0.12.0.tgz",
+      "dev": true
+    },
+    "insert-css": {
+      "version": "1.1.0",
+      "from": "insert-css@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/insert-css/-/insert-css-1.1.0.tgz",
       "dev": true
     },
     "interpret": {
@@ -4671,6 +4701,24 @@
       "version": "1.0.1",
       "from": "map-obj@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz",
+      "dev": true
+    },
+    "markdown-to-react-components": {
+      "version": "0.2.4",
+      "from": "markdown-to-react-components@>=0.2.1 <0.3.0",
+      "resolved": "https://registry.npmjs.org/markdown-to-react-components/-/markdown-to-react-components-0.2.4.tgz",
+      "dev": true
+    },
+    "marked": {
+      "version": "0.3.6",
+      "from": "marked@>=0.3.3 <0.4.0",
+      "resolved": "https://registry.npmjs.org/marked/-/marked-0.3.6.tgz",
+      "dev": true
+    },
+    "material-colors": {
+      "version": "1.2.5",
+      "from": "material-colors@>=1.2.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/material-colors/-/material-colors-1.2.5.tgz",
       "dev": true
     },
     "math-expression-evaluator": {
@@ -5905,6 +5953,38 @@
         }
       }
     },
+    "react-addons-create-fragment": {
+      "version": "15.5.4",
+      "from": "react-addons-create-fragment@>=15.3.2 <16.0.0",
+      "resolved": "https://registry.npmjs.org/react-addons-create-fragment/-/react-addons-create-fragment-15.5.4.tgz",
+      "dev": true,
+      "dependencies": {
+        "core-js": {
+          "version": "1.2.7",
+          "from": "core-js@>=1.0.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz",
+          "dev": true
+        },
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.4 <0.9.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.12.tgz",
+          "dev": true
+        },
+        "js-tokens": {
+          "version": "3.0.1",
+          "from": "js-tokens@>=3.0.0 <4.0.0",
+          "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-3.0.1.tgz",
+          "dev": true
+        },
+        "loose-envify": {
+          "version": "1.3.1",
+          "from": "loose-envify@>=1.3.1 <2.0.0",
+          "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.3.1.tgz",
+          "dev": true
+        }
+      }
+    },
     "react-addons-test-utils": {
       "version": "15.4.2",
       "from": "react-addons-test-utils@>=15.0.0 <16.0.0",
@@ -5935,10 +6015,36 @@
       "from": "react-center-component@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/react-center-component/-/react-center-component-3.0.0.tgz"
     },
+    "react-color": {
+      "version": "2.11.7",
+      "from": "react-color@>=2.4.3 <3.0.0",
+      "resolved": "https://registry.npmjs.org/react-color/-/react-color-2.11.7.tgz",
+      "dev": true
+    },
     "react-datepicker": {
       "version": "0.27.0",
       "from": "react-datepicker@>=0.27.0 <0.28.0",
       "resolved": "https://registry.npmjs.org/react-datepicker/-/react-datepicker-0.27.0.tgz"
+    },
+    "react-datetime": {
+      "version": "2.8.10",
+      "from": "react-datetime@>=2.6.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/react-datetime/-/react-datetime-2.8.10.tgz",
+      "dev": true,
+      "dependencies": {
+        "object-assign": {
+          "version": "3.0.0",
+          "from": "object-assign@>=3.0.0 <4.0.0",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-3.0.0.tgz",
+          "dev": true
+        },
+        "react-onclickoutside": {
+          "version": "5.11.1",
+          "from": "react-onclickoutside@>=5.9.0 <6.0.0",
+          "resolved": "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-5.11.1.tgz",
+          "dev": true
+        }
+      }
     },
     "react-dnd": {
       "version": "2.1.4",
@@ -6103,10 +6209,22 @@
       "resolved": "https://registry.npmjs.org/react-stubber/-/react-stubber-1.0.0.tgz",
       "dev": true
     },
+    "react-textarea-autosize": {
+      "version": "4.3.0",
+      "from": "react-textarea-autosize@>=4.0.5 <5.0.0",
+      "resolved": "https://registry.npmjs.org/react-textarea-autosize/-/react-textarea-autosize-4.3.0.tgz",
+      "dev": true
+    },
     "react-tooltip": {
       "version": "2.0.3",
       "from": "react-tooltip@>=2.0.3 <3.0.0",
       "resolved": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-2.0.3.tgz"
+    },
+    "reactcss": {
+      "version": "1.2.2",
+      "from": "reactcss@>=1.2.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/reactcss/-/reactcss-1.2.2.tgz",
+      "dev": true
     },
     "read-pkg": {
       "version": "1.1.0",
@@ -6961,6 +7079,12 @@
       "version": "2.0.2",
       "from": "timers-browserify@>=2.0.2 <3.0.0",
       "resolved": "https://registry.npmjs.org/timers-browserify/-/timers-browserify-2.0.2.tgz",
+      "dev": true
+    },
+    "tinycolor2": {
+      "version": "1.4.1",
+      "from": "tinycolor2@>=1.1.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.4.1.tgz",
       "dev": true
     },
     "to-arraybuffer": {

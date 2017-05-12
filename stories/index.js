@@ -29,9 +29,11 @@ storiesOf('Colors', module)
   ));
 
 storiesOf('Button', module)
-  .addWithInfo('show', 'a', () => (
-    <Button onClick={action('clicked')}>Cancel</Button>
-  ));
+  .addWithInfo('show',
+    '',
+    () => <Button onClick={action('clicked')}>Cancel</Button>,
+    {inline: true},
+  );
 
 storiesOf('Buttons', module)
   .add('show', () => (

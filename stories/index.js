@@ -28,6 +28,11 @@ storiesOf('Colors', module)
     </WithNotes>
   ));
 
+storiesOf('Button', module)
+  .addWithInfo('show', 'a', () => (
+    <Button onClick={action('clicked')}>Cancel</Button>
+  ));
+
 storiesOf('Buttons', module)
   .add('show', () => (
     <div className="story__Buttons">

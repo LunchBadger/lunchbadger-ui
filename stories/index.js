@@ -22,7 +22,9 @@ import './styles.scss';
 storiesOf('Colors', module)
   .add('show', () => (
     <WithNotes notes="To be extended">
-      {colors.map((item, idx) => <Color key={idx} {...item} />)}
+      <div>
+        {colors.map((item, idx) => <Color key={idx} {...item} />)}
+      </div>
     </WithNotes>
   ));
 

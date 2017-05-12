@@ -51,7 +51,7 @@ class ModelNestedProperties extends Component {
   render() {
     const {title, collapsed, properties, onAddProperty} = this.props;
     return (
-      <CollapsableDetails collapsed={collapsed} title={`${title} (${properties.length})`}>
+      <CollapsableDetails collapsed={collapsed} title={`${properties.length} ${title}`}>
         <table className="details-panel__table" ref="properties">
           <thead>
           <tr>

@@ -41,7 +41,8 @@ export default class ModelProperty extends Component {
 
   render() {
     const {property, index} = this.props;
-
+    let type = property.type || 'string';
+    type = typeof type === 'string' ? type : 'object';
     return (
       <div className="model-property">
         <div className="model-property__key-cell">
@@ -55,10 +56,10 @@ export default class ModelProperty extends Component {
         </div>
         <div className="model-property__value-cell">
           <span className="model-property__value value hide-while-edit">
-            {property.type}
+            {type}
           </span>
           <Select className="model-property__input model-property__select canvas-element__input editable-only"
-                  value={property.type || 'string'}
+                  value={type || 'string'}
                   handleKeyDown={this._checkTabButton}
                   name={`properties[${index}][type]`}
                   options={propertyTypes}

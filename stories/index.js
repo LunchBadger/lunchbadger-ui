@@ -1,5 +1,6 @@
 import React from 'react';
 import {storiesOf, action} from '@kadira/storybook';
+import {WithNotes} from '@kadira/storybook-addon-notes';
 import {Form} from 'formsy-react';
 import {
   Button,
@@ -20,9 +21,9 @@ import './styles.scss';
 
 storiesOf('Colors', module)
   .add('show', () => (
-    <div>
+    <WithNotes notes="To be extended">
       {colors.map((item, idx) => <Color key={idx} {...item} />)}
-    </div>
+    </WithNotes>
   ));
 
 storiesOf('Buttons', module)

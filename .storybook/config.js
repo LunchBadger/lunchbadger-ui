@@ -11,7 +11,7 @@ addDecorator((story) => (
 ));
 
 function loadStories() {
-  require('../stories/index.js');
+  require('../storybook/index.js');
 }
 
 configure(loadStories, module);

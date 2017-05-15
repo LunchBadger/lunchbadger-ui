@@ -124,4 +124,15 @@ export const colors = [
     name: 'Error',
     value: '#f44336',
   },
-]
+];
+
+export const entityTypes = {
+  DataSource: 'DataSource',
+  Model: 'Model',
+  Microservice: 'Microservice',
+  PrivateEndpoint: 'PrivateEndpoint',
+  PublicEndpoint: 'PublicEndpoint',
+  Gateway: 'Gateway',
+  API: 'API',
+  Portal: 'Portal',
+};

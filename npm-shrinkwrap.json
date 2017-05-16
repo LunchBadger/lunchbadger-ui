@@ -180,6 +180,12 @@
       "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-notes/-/storybook-addon-notes-1.0.1.tgz",
       "dev": true
     },
+    "@kadira/storybook-addon-options": {
+      "version": "1.0.2",
+      "from": "@kadira/storybook-addon-options@latest",
+      "resolved": "https://registry.npmjs.org/@kadira/storybook-addon-options/-/storybook-addon-options-1.0.2.tgz",
+      "dev": true
+    },
     "@kadira/storybook-addons": {
       "version": "1.6.1",
       "from": "@kadira/storybook-addons@>=1.5.0 <2.0.0",

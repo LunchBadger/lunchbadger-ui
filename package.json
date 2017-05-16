@@ -33,6 +33,7 @@
     "@kadira/storybook": "^2.35.3",
     "@kadira/storybook-addon-knobs": "^1.7.1",
     "@kadira/storybook-addon-notes": "^1.0.1",
+    "@kadira/storybook-addon-options": "^1.0.2",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.0.0",
     "babel-eslint": "^6.0.0",

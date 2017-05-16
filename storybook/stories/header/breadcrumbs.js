@@ -6,7 +6,6 @@ import {withContext} from '../../decorators';
 import {importPath} from '../../constants';
 import {MockHeader} from '../../components';
 import Breadcrumbs from '../../../plugins/lunchbadger-core/src/components/Breadcrumbs/Breadcrumbs';
-import {iconEdit, iconTrash} from '../../../src/icons';
 
 storiesOf('Header', module)
   .addDecorator(withKnobs)

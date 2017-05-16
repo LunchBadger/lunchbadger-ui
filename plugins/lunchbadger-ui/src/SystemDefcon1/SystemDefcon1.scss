@@ -15,6 +15,10 @@
     background-color: #FFF;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
     border: 2px solid #DDD;
+    transition: width 500ms ease 1ms;
+    &.visibleError {
+      width: 800px;
+    }
     &__title {
       text-align: center;
       padding: 21px 0;
@@ -73,9 +77,15 @@
           cursor: pointer;
         }
         pre {
-          padding-top: 20px;
-          white-space: pre-wrap;
+          margin-top: 20px;
+          padding: 10px 15px;
+          color: #900;
+          background-color: rgba(128, 0, 0, 0.1);
+          border: 2px solid rgba(128, 0, 0, 0.1);
           opacity: 0.9;
+          font-size: 12px;
+          max-height: 300px;
+          overflow: auto;
         }
       }
       &:last-child {

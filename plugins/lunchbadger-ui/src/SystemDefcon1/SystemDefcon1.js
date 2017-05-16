@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import cs from 'classnames';
 import {SmoothCollapse} from '../';
 import './SystemDefcon1.scss';
 
@@ -21,7 +22,7 @@ class SystemDefcon1 extends Component {
       : "You'll need to reload the page to continue";
     return (
       <div className="SystemDefcon1">
-        <div className="SystemDefcon1__box">
+        <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
           <div className="SystemDefcon1__box__title">
             {title}
           </div>

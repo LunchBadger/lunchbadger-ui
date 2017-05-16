@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
-import {addSystemNotification, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
+import {showSystemDefcon1, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
 
 
 class WorkspaceStatus extends Component {
@@ -74,7 +74,7 @@ class WorkspaceStatus extends Component {
     });
 
     if (status.status === 'crashed') {
-      this.props.displaySystemNotification({revision: status.revision, output: status.output});
+      this.props.displaySystemDefcon1(status.output);
     }
   }
 
@@ -141,7 +141,7 @@ class WorkspaceStatus extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
+  displaySystemDefcon1: message => dispatch(showSystemDefcon1(message)),
   showSystemNotifications: () => dispatch(toggleSystemNotifications(true)),
 });
 

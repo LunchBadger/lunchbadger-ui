@@ -293,6 +293,7 @@ class ModelDetails extends Component {
         </CollapsableDetails>
         <ModelNestedProperties
           title="Properties"
+          path=""
           properties={this.state.properties}
           onAddProperty={this.onAddProperty}
           onRemoveProperty={this.onRemoveProperty}

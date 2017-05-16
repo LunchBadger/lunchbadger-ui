@@ -19,7 +19,8 @@ class ModelNestedProperties extends Component {
       <tr>
         <td colSpan={7}>
           <ModelNestedProperties
-            title={`Nested properties for ${propertyName}`}
+            title="Nested properties"
+            path={propertyName}
             collapsed
             properties={nested}
             onAddProperty={onAddProperty}
@@ -31,7 +32,7 @@ class ModelNestedProperties extends Component {
   }
 
   renderProperties() {
-    const {properties, onAddProperty, onRemoveProperty} = this.props;
+    const {title, path, properties, onAddProperty, onRemoveProperty} = this.props;
     return properties.map((property, index) => {
       return (
         <tbody key={`property-${property.id}`}>
@@ -42,16 +43,17 @@ class ModelNestedProperties extends Component {
             onRemove={onRemoveProperty}
             property={property}
           />
-          {this.renderNested(property.name, property.type)}
+          {this.renderNested(`${path !== '' ? `${path} ⇨` : ''} ${property.name}`, property.type)}
         </tbody>
       );
     });
   }
 
   render() {
-    const {title, collapsed, properties, onAddProperty} = this.props;
+    const {title, path, collapsed, properties, onAddProperty} = this.props;
+    const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${properties.length})`;
     return (
-      <CollapsableDetails collapsed={collapsed} title={`${properties.length} ${title}`}>
+      <CollapsableDetails collapsed={collapsed} title={titleLabel}>
         <table className="details-panel__table" ref="properties">
           <thead>
           <tr>

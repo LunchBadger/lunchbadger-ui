@@ -89,7 +89,7 @@ class Model extends Component {
   }
 
   _focusLastInput() {
-    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0]; //FIXME
+    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0];
     input && input.focus();
   }
 

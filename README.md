@@ -18,6 +18,9 @@ Plugins are located in the `plugins` directory.
     # Run dev server
     npm start
 
+    # Run storybook on dev server (library of UI components)
+    npm run storybook
+
     # Package a distribution
     npm run dist
 

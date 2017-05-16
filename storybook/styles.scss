@@ -1,4 +1,7 @@
 @import '../plugins/lunchbadger-core/src/components/App/App.scss';
+@import '../node_modules/font-awesome/css/font-awesome.css';
+@import '../src/fonts/trench100free.css';
+@import '../src/fonts/lunchbadger.css';
 
 body {
   overflow: auto;
@@ -42,5 +45,18 @@ body {
   &__mockHeader {
     position: relative;
     height: 52px;
+    .header__menu--disabled {
+      opacity: 1;
+      pointer-events: all;
+      .header__menu__element {
+        vertical-align: top;
+        .header__menu__link--hidden {
+          opacity: 1;
+        }
+        .header__menu__link {
+          text-decoration: none;
+        }
+      }
+    }
   }
 }

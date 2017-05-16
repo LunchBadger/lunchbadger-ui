@@ -3,6 +3,7 @@ import cs from 'classnames';
 import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs, text} from '@kadira/storybook-addon-knobs';
+import {importPath} from '../../constants';
 import {CollapsibleProperties} from '../../../plugins/lunchbadger-ui/src';
 import './styles.scss';
 
@@ -14,7 +15,7 @@ const types = {
 storiesOf('Entity', module)
   .addDecorator(withKnobs)
 
-  .addWithInfo('CollapsibleProperties', '', () => (
+  .addWithInfo('CollapsibleProperties', importPath('CollapsibleProperties', 'plugins/lunchbadger-ui/src'), () => (
     <CollapsibleProperties
       bar={text('bar content', 'bar')}
       collapsible={text('collapsible content', 'collapsible content')}

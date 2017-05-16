@@ -3,6 +3,7 @@ import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs, select} from '@kadira/storybook-addon-knobs';
 import {withStyleSVG} from '../../decorators';
+import {importPath} from '../../constants';
 import {IconSVG} from '../../../plugins/lunchbadger-ui/src';
 import {iconEdit, iconTrash} from '../../../src/icons';
 import './styles.scss';
@@ -22,7 +23,7 @@ storiesOf('IconSVG', module)
   .addDecorator(withStyleSVG)
   .addDecorator(withKnobs)
 
-  .addWithInfo('IconSVG', '', () => (
+  .addWithInfo('IconSVG', importPath('IconSVG', 'plugins/lunchbadger-ui/src'), () => (
     <IconSVG
       svg={select('icon', svgs, iconEdit)}
       className={select('className', classNames, '')}

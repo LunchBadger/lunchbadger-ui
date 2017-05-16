@@ -3,6 +3,7 @@ import cs from 'classnames';
 import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs, text, select} from '@kadira/storybook-addon-knobs';
+import {importPath} from '../../constants';
 import {Button} from '../../../plugins/lunchbadger-ui/src';
 import './styles.scss';
 
@@ -14,7 +15,7 @@ const types = {
 storiesOf('Entity', module)
   .addDecorator(withKnobs)
 
-  .addWithInfo('Button', '', () => (
+  .addWithInfo('Button', importPath('Button', 'plugins/lunchbadger-ui/src'), () => (
     <Button
       onClick={action('onClick')}
       type={select('type', types, '')}

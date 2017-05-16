@@ -1,3 +1,4 @@
+import React from 'react';
 import {action} from '@kadira/storybook';
 import {
   iconEdit,
@@ -136,3 +137,12 @@ export const entityTypes = {
   API: 'API',
   Portal: 'Portal',
 };
+
+export const importPath = (component, path, isDefault = true) => (
+  <div className="storyCode">
+    <h1>Import</h1>
+    <pre>
+      {`import ${!isDefault ? component : `{${component}}`} from '/${path}';`}
+    </pre>
+  </div>
+);

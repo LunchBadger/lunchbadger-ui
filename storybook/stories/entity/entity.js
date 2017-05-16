@@ -3,7 +3,7 @@ import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs, text, boolean, select, object, array} from '@kadira/storybook-addon-knobs';
 import {withForm} from '../../decorators';
-import {entityTypes} from '../../constants';
+import {entityTypes, importPath} from '../../constants';
 import {Entity, EntityProperties} from '../../../plugins/lunchbadger-ui/src';
 import {iconEdit, iconTrash} from '../../../src/icons';
 
@@ -62,7 +62,7 @@ storiesOf('Entity', module)
   // .addDecorator(withForm)
   .addDecorator(withKnobs)
 
-  .addWithInfo('Entity', '', () => (
+  .addWithInfo('Entity', importPath('Entity', 'plugins/lunchbadger-ui/src'), () => (
     <Entity
       type={select('type', entityTypes, 'DataSource')}
       name={text('name', 'Entity name')}
@@ -89,7 +89,7 @@ storiesOf('Entity', module)
     </Entity>
   ), {propTables: [Entity], inline: true})
 
-  .addWithInfo('Entity (validation errors)', '', () => (
+  .addWithInfo('Entity (validation errors)', importPath('Entity', 'plugins/lunchbadger-ui/src'), () => (
     <Entity
       type={select('type', entityTypes, 'DataSource')}
       name={text('name', 'Entity name')}

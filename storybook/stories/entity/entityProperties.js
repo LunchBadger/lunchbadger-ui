@@ -4,6 +4,7 @@ import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs, object, boolean} from '@kadira/storybook-addon-knobs';
 import {withForm} from '../../decorators';
+import {importPath} from '../../constants';
 import {EntityProperties} from '../../../plugins/lunchbadger-ui/src';
 import './styles.scss';
 
@@ -39,7 +40,7 @@ storiesOf('Entity', module)
   .addDecorator(withForm)
   .addDecorator(withKnobs)
 
-  .addWithInfo('EntityProperties', '', () => (
+  .addWithInfo('EntityProperties', importPath('EntityProperties', 'plugins/lunchbadger-ui/src'), () => (
     <div className={cs('Entity', 'fake', {
       ['highlighted']: boolean('highlighted', true),
       ['editable']: boolean('editable', true),

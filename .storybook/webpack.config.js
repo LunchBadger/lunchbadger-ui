@@ -12,7 +12,12 @@ module.exports = {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: "svg-inline-loader",
         include: path.join(__dirname, '/../src/icons')
-      }
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml",
+        exclude: path.join(__dirname, '/../src/icons'),
+      },
     ]
   }
 }

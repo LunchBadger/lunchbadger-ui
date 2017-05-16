@@ -23,7 +23,8 @@
     "test:nodocker": "bin/run-tests.sh",
     "test:dev": "nightwatch",
     "posttest": "npm run lint",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook:out": "build-storybook -c .storybook -o .out"
   },
   "repository": "",
   "keywords": [],

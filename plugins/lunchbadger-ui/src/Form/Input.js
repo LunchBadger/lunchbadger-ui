@@ -78,7 +78,7 @@ class Input extends Component {
     const underlineFocusStyles = {
       ...underlineFocusStyle,
       bottom: -1,
-      borderWidth: 1,
+      borderWidth: 2,
     };
     return (
       <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>

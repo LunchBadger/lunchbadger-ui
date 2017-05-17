@@ -19,7 +19,8 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Open Sans',
   palette: {
     primary1Color: '#4190cd',
-  },
+    accent1Color: '#047C99'
+  }
 });
 
 

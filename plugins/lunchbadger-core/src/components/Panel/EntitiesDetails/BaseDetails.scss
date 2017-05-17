@@ -54,19 +54,13 @@
   font-size: 1.2em;
   line-height: 2em;
   height: 40px;
+  display: inline-block;
 }
 
 .details-panel__textarea {
   height: 100px;
   padding: 0.1em 0.2em;
   line-height: 1.4em;
-}
-
-.details-panel__select {
-  -webkit-appearance: none;
-  background: url('./dropdown.svg');
-  background-position: 100% 50%;
-  background-repeat: no-repeat;
 }
 
 .confirm-button__cancel {

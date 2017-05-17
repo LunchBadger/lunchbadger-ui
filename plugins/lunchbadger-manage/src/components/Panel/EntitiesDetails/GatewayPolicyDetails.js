@@ -41,9 +41,7 @@ export default class GatewayPolicyDetails extends Component {
     this.state = {type: props.policy.type};
   }
 
-  onTypeChange = (ev) => {
-    this.setState({type: ev.target.value});
-  }
+  onTypeChange = (type) => this.setState({type})
 
   onRemove(index) {
     this.props.onRemove(index);

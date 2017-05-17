@@ -31,8 +31,8 @@ export default class ModelPropertyDetails extends Component {
     }
   }
 
-  _changePropertyType(event) {
-    if (event.target.value === 'object') {
+  _changePropertyType = (value) => {
+    if (value === 'object') {
       this.setState({inputType: 'textarea'});
     } else {
       this.setState({inputType: 'input'});
@@ -78,7 +78,7 @@ export default class ModelPropertyDetails extends Component {
         <td>
           <Select className="details-panel__input details-panel__select"
                   value={property.type || 'string'}
-                  handleChange={(value) => this._changePropertyType(value)}
+                  handleChange={this._changePropertyType}
                   name={`properties[${index}][type]`}
                   options={propertyTypes}
           />

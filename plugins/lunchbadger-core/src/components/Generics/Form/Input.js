@@ -80,7 +80,7 @@ class Input extends Component {
       borderWidth: 2,
     };
     return (
-      <span className={className || ''} style={{display: type === 'hidden' ? 'none' : 'inline-block'}}>
+      <span className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
         <TextField
           value={getValue()}
           type={type || 'text'}
@@ -96,6 +96,7 @@ class Input extends Component {
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
           underlineFocusStyle={underlineFocusStyles}
+          underlineShow={false}
         />
       </span>
     );

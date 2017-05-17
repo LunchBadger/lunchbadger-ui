@@ -1,14 +1,15 @@
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import cs from 'classnames';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
-import {notify} from 'react-notify-toast';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
 import PipelineFactory from '../../models/Pipeline';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 
 const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const Connection = LunchBadgerCore.stores.Connection;
@@ -142,7 +143,10 @@ class Gateway extends Component {
   onAddPipeline = name => () => addPipeline(this.props.entity, name);
 
   _onDeploy() {
-    notify.show('Gateway successfully deployed', 'success');
+    this.props.displaySystemInformationMessage({
+      message: 'Gateway successfully deployed',
+      type: 'success'
+    });
     this.props.parent.triggerElementAutofocus();
   }
 
@@ -188,4 +192,8 @@ class Gateway extends Component {
   }
 }
 
-export default CanvasElement(Gateway);
+const mapDispatchToProps = dispatch => ({
+  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+});
+
+export default CanvasElement(connect(null, mapDispatchToProps)(Gateway));

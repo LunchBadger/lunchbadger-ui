@@ -1,12 +1,13 @@
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import cs from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
-import {notify} from 'react-notify-toast';
 import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
@@ -70,8 +71,10 @@ class Portal extends Component {
   }
 
   _onDeploy() {
-    notify.show('Portal successfully deployed', 'success');
-
+    this.props.displaySystemInformationMessage({
+      message: 'Portal successfully deployed',
+      type: 'success'
+    });
     this.props.parent.triggerElementAutofocus();
   }
 
@@ -246,4 +249,8 @@ class Portal extends Component {
   }
 }
 
-export default CanvasElement(Portal);
+const mapDispatchToProps = dispatch => ({
+  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+});
+
+export default CanvasElement(connect(null, mapDispatchToProps)(Portal));

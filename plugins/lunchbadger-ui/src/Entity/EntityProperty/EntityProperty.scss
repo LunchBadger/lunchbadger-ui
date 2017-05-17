@@ -40,7 +40,7 @@
     height: 30px;
     font-size: 18px;
     font-weight: normal;
-    overflow: hidden;
+    padding: 0 8px;
     .editable & {
       border-color: rgb(222, 222, 221);
     }
@@ -51,7 +51,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 8px;
       line-height: 28px;
       .editable & {
         display: none;
@@ -63,7 +62,6 @@
       height: 100%;
       border: none;
       color: inherit;
-      padding-left: 8px;
       font-size: inherit;
       font-family: inherit;
       outline: none;

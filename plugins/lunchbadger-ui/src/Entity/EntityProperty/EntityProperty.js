@@ -10,9 +10,20 @@ class EntityProperty extends Component {
 
   render() {
     const {
-      name, value,
-      title, placeholder, fake, invalid, editableOnly, password, hiddenInputs,
-      onChange, onDelete, onBlur,
+      name,
+      value,
+      title,
+      placeholder,
+      fake,
+      invalid,
+      editableOnly,
+      password,
+      hiddenInputs,
+      onChange,
+      onDelete,
+      onBlur,
+      underlineStyle,
+      underlineFocusStyle,
     } = this.props;
     const classNames = cs('EntityProperty', {
       ['EntityProperty__fake']: fake,
@@ -42,6 +53,9 @@ class EntityProperty extends Component {
               handleChange={onChange}
               handleBlur={onBlur}
               type={password ? 'password' : 'text'}
+              fullWidth
+              underlineStyle={underlineStyle}
+              underlineFocusStyle={underlineFocusStyle}
             />
           )}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
@@ -72,6 +86,8 @@ EntityProperty.propTypes = {
   onChange: PropTypes.func,
   onDelete: PropTypes.func,
   onBlur: PropTypes.func,
+  underlineStyle: PropTypes.object,
+  underlineFocusStyle: PropTypes.object,
 }
 
 EntityProperty.defaultProps = {

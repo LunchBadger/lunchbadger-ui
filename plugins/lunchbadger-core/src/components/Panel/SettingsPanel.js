@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
 import {notify} from 'react-notify-toast';
@@ -15,11 +16,11 @@ class SettingsPanel extends Component {
   }
 
   static contextTypes = {
-    loginManager: React.PropTypes.object,
-    lunchbadgerConfig: React.PropTypes.object,
-    configStoreService: React.PropTypes.object,
-    projectService: React.PropTypes.object,
-    workspaceUrl: React.PropTypes.string
+    loginManager: PropTypes.object,
+    lunchbadgerConfig: PropTypes.object,
+    configStoreService: PropTypes.object,
+    projectService: PropTypes.object,
+    workspaceUrl: PropTypes.string
   };
 
   componentWillMount() {

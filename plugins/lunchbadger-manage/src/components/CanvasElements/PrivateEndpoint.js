@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';

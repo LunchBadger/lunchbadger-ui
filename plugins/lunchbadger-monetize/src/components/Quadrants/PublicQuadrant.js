@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import API from '../CanvasElements/API';
 import Portal from '../CanvasElements/Portal';
 

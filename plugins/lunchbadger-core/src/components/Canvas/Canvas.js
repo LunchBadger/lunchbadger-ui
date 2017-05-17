@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
 import './Canvas.scss';
@@ -10,7 +11,7 @@ import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 
 export default class Canvas extends Component {
   static contextTypes = {
-    projectService: React.PropTypes.object
+    projectService: PropTypes.object
   };
 
   constructor(props) {

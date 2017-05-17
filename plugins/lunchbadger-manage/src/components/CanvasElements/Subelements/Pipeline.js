@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Policy from './Policy';
 import classNames from 'classnames';
 import './Pipeline.scss';

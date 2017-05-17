@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import PrivateEndpoint from '../CanvasElements/PrivateEndpoint';
 import updateOrder from '../../actions/Quadrants/Private/updateOrder';
 import PrivateEndpointFactory from '../../models/PrivateEndpoint';

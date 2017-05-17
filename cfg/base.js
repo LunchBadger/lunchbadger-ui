@@ -44,10 +44,10 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM'
-  },
+  // externals: {
+  //   'react': 'React',
+  //   'react-dom': 'ReactDOM'
+  // },
   module: defaultSettings.getDefaultModules(),
   postcss: function () {
     return [

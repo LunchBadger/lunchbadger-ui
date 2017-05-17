@@ -1,4 +1,4 @@
-import {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';

@@ -97,6 +97,7 @@ class Input extends Component {
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
           underlineFocusStyle={underlineFocusStyles}
+          underlineShow={false}
         />
       </div>
     );

@@ -14,7 +14,7 @@ class Input extends Component {
     handleChange: PropTypes.func,
     className: PropTypes.string,
     type: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
   };
 
   _handleKeyPress = (event) => {

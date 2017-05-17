@@ -2,11 +2,17 @@
 // entry for app...
 import React from 'react';
 import ReactDOM from 'react-dom';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 import config from 'config';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 global.LUNCHBADGER_CONFIG = config;
 const AppLoader = LunchBadgerCore.components.AppLoader;
@@ -39,8 +45,14 @@ loginManager.checkAuth().then(loggedIn => {
     user.id_token);
 
   // Render the main component into the dom
-  ReactDOM.render(<AppLoader config={config}
-                             loginManager={loginManager}
-                             configStoreService={configStoreService} />,
-                  document.getElementById('app'));
+  ReactDOM.render(
+    <MuiThemeProvider>
+      <AppLoader
+        config={config}
+        loginManager={loginManager}
+        configStoreService={configStoreService}
+      />
+    </MuiThemeProvider>,
+    document.getElementById('app')
+  );
 });

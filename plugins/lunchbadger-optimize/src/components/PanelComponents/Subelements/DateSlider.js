@@ -66,7 +66,7 @@ export default class DateSlider extends Component {
     return marks;
   }
 
-  formatToolTip(tooltip) {
+  formatToolTip = (tooltip) => {
     return moment.months(tooltip - 1);
   }
 
@@ -86,7 +86,7 @@ export default class DateSlider extends Component {
     });
   }
 
-  _handleOnChange(e) {
+  _handleOnChange = (e) => {
     const year = +this.props.range.startDate.format('YYYY');
     const startDate = e[0] > 12 ? moment(year + 1 + '/' + (e[0] - 12), 'YYYY/M') : moment(year + '/' + e[0], 'YYYY/M');
     const endDate = e[1] > 12 ? moment(year + 1 + '/' + (e[1] - 12), 'YYYY/M') : moment(year + '/' + e[1], 'YYYY/M');
@@ -124,8 +124,8 @@ export default class DateSlider extends Component {
                   marks={this.state.marks}
                   min={1}
                   max={this.state.count}
-                  onChange={this._handleOnChange.bind(this)}
-                  tipFormatter={this.formatToolTip.bind(this)}/>
+                  onChange={this._handleOnChange}
+                  tipFormatter={this.formatToolTip}/>
           <div className="date-slider__marks">
             {this.renderSliderMarks()}
           </div>

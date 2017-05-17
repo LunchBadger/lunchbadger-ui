@@ -89,12 +89,12 @@ class API extends Component {
     }
   }
 
-  _handleModalConfirm() {
+  _handleModalConfirm = () => {
     const item = this.state.bundledItem;
     unbundleAPI(item.parent, item.entity);
   }
 
-  _handleClose() {
+  _handleClose = () => {
     this.setState({isShowingModal: false});
   }
 
@@ -144,8 +144,8 @@ class API extends Component {
             title="Unbundle API"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose.bind(this)}
-            onSave={this._handleModalConfirm.bind(this)}
+            onClose={this._handleClose}
+            onSave={this._handleModalConfirm}
           >
             <span>
               Are you sure you want to unbundle

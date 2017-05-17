@@ -137,7 +137,7 @@ export default class APIForecast extends Component {
     });
   }
 
-  _handleRangeUpdate(range) {
+  _handleRangeUpdate = (range) => {
     this.setState({
       selectedRange: range,
       startDate: range.startDate,
@@ -157,7 +157,7 @@ export default class APIForecast extends Component {
     });
   }
 
-  _handleEndDateUpdate(endDate) {
+  _handleEndDateUpdate = (endDate) => {
     const {selectedRange} = this.state;
     const newRange = Object.assign({}, selectedRange, {endDate: endDate});
 
@@ -171,7 +171,7 @@ export default class APIForecast extends Component {
     });
   }
 
-  handlePanelResize(event) {
+  handlePanelResize = (event) => {
     const container = this.forecast;
     const containerBBox = container.getBoundingClientRect();
 
@@ -186,7 +186,7 @@ export default class APIForecast extends Component {
     });
   }
 
-  handlePanelResizeEnd() {
+  handlePanelResizeEnd = () => {
     this.setState({dragging: false});
   }
 
@@ -221,8 +221,8 @@ export default class APIForecast extends Component {
             </div>
             {
               !!this.state.startDate && (
-                <DateRangeBar onInit={this._handleRangeUpdate.bind(this)}
-                              onRangeUpdate={this._handleRangeUpdate.bind(this)}
+                <DateRangeBar onInit={this._handleRangeUpdate}
+                              onRangeUpdate={this._handleRangeUpdate}
                               startDate={this.state.startDate}
                               endDate={this.state.endDate}/>
               )
@@ -239,14 +239,14 @@ export default class APIForecast extends Component {
                 !!this.state.selectedRange && (
                   <DateSlider parent={this.props.entity}
                               range={this.state.selectedRange}
-                              onRangeUpdate={this._handleRangeUpdate.bind(this)}
+                              onRangeUpdate={this._handleRangeUpdate}
                               selectedDate={this.state.selectedDate}/>
                 )
               }
             </div>
             <div className="api-forecast__plans">
               <ForecastPlans selectedDate={this.state.selectedDate}
-                             handleUpgradeCreation={this._handleEndDateUpdate.bind(this)}
+                             handleUpgradeCreation={this._handleEndDateUpdate}
                              entity={this.props.entity}/>
             </div>
           </div>
@@ -265,8 +265,8 @@ export default class APIForecast extends Component {
           }
         </div>
         <ForecastResizeHandle resizable={!this.props.isExpanded}
-                           onDragEnd={this.handlePanelResizeEnd.bind(this)}
-                           onDrag={this.handlePanelResize.bind(this)}/>
+                           onDragEnd={this.handlePanelResizeEnd}
+                           onDrag={this.handlePanelResize}/>
       </div>
     );
   }

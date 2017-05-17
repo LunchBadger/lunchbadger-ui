@@ -13,7 +13,7 @@ export default class MetricHeader extends Component {
     super(props);
   }
 
-  _handleMetricSelection(pair) {
+  _handleMetricSelection = (pair) => {
     if (typeof this.props.metricSelection === 'function') {
       this.props.metricSelection(pair);
     }
@@ -31,7 +31,7 @@ export default class MetricHeader extends Component {
         <div className="metric-header__title__type">
           {!!metricTwo && <MetricType isCurrentPair={this.props.selectedPair === this.props.pair.id}
                                       pair={pair}
-                                      circlesClick={this._handleMetricSelection.bind(this)}/>}
+                                      circlesClick={this._handleMetricSelection}/>}
         </div>
         <div className="metric-header__title__name">
           {!!metricTwo && <span className="metric-header__entity-name">{metricTwo.entity.name}</span>}

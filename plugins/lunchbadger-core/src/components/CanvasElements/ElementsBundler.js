@@ -65,7 +65,7 @@ export default class ElementsBundler extends Component {
     this.props.onMove(item.parent, this.props.entity, item.entity);
   }
 
-  _handleModalConfirm() {
+  _handleModalConfirm = () => {
     const item = this.state.bundledItem;
 
     if (item.parent) {
@@ -79,7 +79,7 @@ export default class ElementsBundler extends Component {
     this.props.parent.setState({expanded: true});
   }
 
-  _handleClose() {
+  _handleClose = () => {
     this.setState({isShowingModal: false});
   }
 
@@ -101,8 +101,8 @@ export default class ElementsBundler extends Component {
           <TwoOptionModal title={this.props.modalTitle}
                           confirmText="Yes"
                           discardText="No"
-                          onClose={this._handleClose.bind(this)}
-                          onSave={this._handleModalConfirm.bind(this)}>
+                          onClose={this._handleClose}
+                          onSave={this._handleModalConfirm}>
             <span>
               Are you sure you want to bundle "{this.state.bundledItem.entity.name}" into "{this.props.entity.name}"?
             </span>

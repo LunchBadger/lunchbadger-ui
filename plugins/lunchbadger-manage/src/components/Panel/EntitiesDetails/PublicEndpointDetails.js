@@ -24,19 +24,19 @@ class PublicEndpointDetails extends Component {
     updatePublicEndpoint(this.props.entity.id, model);
   }
 
-  onStoreUpdate() {
+  onStoreUpdate = () => {
     this.setState({path: this.props.entity.path});
   }
 
   componentDidMount() {
-    PublicStore.addChangeListener(this.onStoreUpdate.bind(this));
+    PublicStore.addChangeListener(this.onStoreUpdate);
   }
 
   componentWillUnmount() {
-    PublicStore.removeChangeListener(this.onStoreUpdate.bind(this));
+    PublicStore.removeChangeListener(this.onStoreUpdate);
   }
 
-  onPathChange(event) {
+  onPathChange = (event) => {
     this.setState({path: event.target.value});
   }
 
@@ -52,7 +52,7 @@ class PublicEndpointDetails extends Component {
             <Input className="details-panel__input"
                    value={entity.path}
                    name="path"
-                   handleChange={this.onPathChange.bind(this)}/>
+                   handleChange={this.onPathChange}/>
           </div>
           <div className="details-panel__fieldset">
             <span className="details-panel__label">URL</span>
@@ -67,4 +67,3 @@ class PublicEndpointDetails extends Component {
 }
 
 export default BaseDetails(PublicEndpointDetails);
-

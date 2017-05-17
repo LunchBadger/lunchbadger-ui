@@ -34,7 +34,7 @@ class SettingsPanel extends Component {
     });
   }
 
-  onRegenerate() {
+  onRegenerate = () => {
     const userName = this.context.loginManager.user.profile.sub;
     this.setState({
       accessKey: null
@@ -50,11 +50,11 @@ class SettingsPanel extends Component {
     });
   }
 
-  onRestartWorkspace() {
+  onRestartWorkspace = () => {
     this.context.projectService.restartWorkspace();
   }
 
-  onReinstall() {
+  onReinstall = () => {
     this.context.projectService.reinstallDeps();
   }
 
@@ -103,7 +103,7 @@ class SettingsPanel extends Component {
               <pre>{cloneCommand}</pre>
             </div>
             <div>
-              <button onClick={this.onRegenerate.bind(this)}>Regenerate</button>
+              <button onClick={this.onRegenerate}>Regenerate</button>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ class SettingsPanel extends Component {
               Restart application
             </label>
             <div className="details-panel__static-field">
-              <button onClick={this.onRestartWorkspace.bind(this)}>Restart</button>
+              <button onClick={this.onRestartWorkspace}>Restart</button>
             </div>
           </div>
         </div>
@@ -123,7 +123,7 @@ class SettingsPanel extends Component {
               Reinstall dependencies
             </label>
             <div className="details-panel__static-field">
-              <button onClick={this.onReinstall.bind(this)}>Reinstall</button>
+              <button onClick={this.onReinstall}>Reinstall</button>
             </div>
           </div>
         </div>

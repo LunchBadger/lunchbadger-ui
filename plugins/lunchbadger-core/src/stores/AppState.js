@@ -3,17 +3,34 @@ import _ from 'lodash';
 
 const state = {};
 let projectRevision = null;
+const stateQueue = [];
+const USE_QUEUE = true;
 
 class AppState extends BaseStore {
   constructor() {
     super();
-
-    this.subscribe(() => this._registerActions.bind(this));
+    this.subscribe(() => this._registerActions);
+    if (USE_QUEUE) {
+      setInterval(() => {
+        const queueSize = stateQueue.length;
+        for (let i = 0; i < queueSize; i += 1) {
+          const [key, value] = stateQueue.shift();
+          state[key] = value;
+        }
+        if (queueSize > 0) {
+          this.emitChange();
+        }
+      }, 100);
+    }
   }
 
   setStateKey(key, value) {
-    state[key] = value;
-    this.emitChange();
+    if (USE_QUEUE) {
+      stateQueue.push([key, value]);
+    } else {
+      state[key] = value;
+      this.emitChange();
+    }
   }
 
   getStateKey(key) {
@@ -29,7 +46,7 @@ class AppState extends BaseStore {
     return projectRevision;
   }
 
-  _registerActions(action) {
+  _registerActions = (action) => {
     switch (action.type) {
       case 'AddElement':
         this.setStateKey('recentElement', action.element);

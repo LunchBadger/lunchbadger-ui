@@ -145,7 +145,7 @@ class Microservice extends Component {
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
-  bundleMicroservice(microservice, bundledItem) {
+  bundleMicroservice = (microservice, bundledItem) => {
     const modelData = {
       name: bundledItem.name,
       contextPath: bundledItem.contextPath,
@@ -186,7 +186,7 @@ class Microservice extends Component {
               && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
-            onAdd={this.bundleMicroservice.bind(this)}
+            onAdd={this.bundleMicroservice}
             onMove={moveBetweenMicroservice}
             dropText="Drag Models Here"
             modalTitle="Bundle Microservice"

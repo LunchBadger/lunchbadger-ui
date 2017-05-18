@@ -1,0 +1,111 @@
+.SystemDefcon1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(100, 100, 100, 0.75);
+  z-index: 1000;
+  &__box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 435px;
+    background-color: #FFF;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+    border: 2px solid #DDD;
+    transition: width 500ms ease 1ms;
+    &.visibleError {
+      width: 800px;
+    }
+    &__title {
+      text-align: center;
+      padding: 21px 0;
+      font-size: 22px;
+      font-weight: 400;
+      color: #555;
+      position: relative;
+      &:before {
+        display: block;
+        content: '!';
+        background-color: #d44a27;
+        color: #FFF;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 45px;
+        transform: translateY(-50%);
+        font-size: 24px;
+        font-weight: 800;
+        padding-top: 2px;
+        line-height: 1;
+        text-align: center;
+      }
+    }
+    &__content {
+      padding: 26px 30px;
+      color: #444;
+      position: relative;
+      &:before,
+      &:after {
+        display: block;
+        content: '';
+        background-color: #DDD;
+        height: 2px;
+        left: 0;
+        right: 0;
+        position: absolute;
+      }
+      &:before {
+        top: 0;
+      }
+      &:after {
+        bottom: 0;
+      }
+      &--error {
+        margin-top: 20px;
+        opacity: 0.5;
+        font-size: 14px;
+      }
+      &__details {
+        margin-top: 20px;
+        &--link {
+          color: #538cca;
+          cursor: pointer;
+        }
+        pre {
+          margin-top: 20px;
+          padding: 10px 15px;
+          color: #900;
+          background-color: rgba(128, 0, 0, 0.1);
+          border: 2px solid rgba(128, 0, 0, 0.1);
+          opacity: 0.9;
+          font-size: 12px;
+          max-height: 300px;
+          overflow: auto;
+        }
+      }
+      &:last-child {
+        text-align: right;
+        padding: 16px 30px;
+        &:before,
+        &:after {
+          display: none;
+        }
+      }
+      button {
+        padding: 8px 30px;
+        color: #FFF;
+        background-color: #538cca;
+        border: none;
+        border-radius: 3px;
+        font-size: 14px;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+  }
+}

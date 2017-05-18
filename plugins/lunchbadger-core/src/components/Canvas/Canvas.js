@@ -47,7 +47,7 @@ export default class Canvas extends Component {
         strokeStyle: '#ffffff',
         lineWidth: 6
       },
-      Connector: ['Bezier', {curviness: 40}],
+      Connector: ['Bezier', {curviness: 50}],
       Container: 'canvas',
       ConnectionOverlays: [
         ['Label',
@@ -210,7 +210,7 @@ export default class Canvas extends Component {
       let fulfilled = this._executeStrategies(strategies, info);
 
       if (fulfilled === null) {
-        removeConnection(info);
+        removeConnection(info.sourceId, info.targetId);
       } else if (fulfilled === false) {
         this.paper.connect({
           source: info.source,

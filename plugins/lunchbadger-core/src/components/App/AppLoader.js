@@ -2,6 +2,7 @@ import {Component, PropTypes} from 'react';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
+import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import './AppLoader.scss';
 
 export default class AppLoader extends Component {
@@ -91,9 +92,7 @@ export default class AppLoader extends Component {
   renderError() {
     return (
       <div className='app'>
-        <div className='app__loading-error'>
-          Failed to connect to workspace ({this.state.error.message}).
-        </div>
+        <SystemDefcon1 server error={this.state.error.message} />
       </div>
     );
   }

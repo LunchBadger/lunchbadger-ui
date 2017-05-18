@@ -10,7 +10,7 @@ export default class HeaderMenuClearButton extends Component {
     };
   }
 
-  clearServer() {
+  clearServer = () => {
     this.props.clearServer();
   }
 
@@ -21,7 +21,7 @@ export default class HeaderMenuClearButton extends Component {
     });
 
     return (
-      <a href="#" className={linkClass} onClick={this.clearServer.bind(this)}>
+      <a href="#" className={linkClass} onClick={this.clearServer}>
         <i className="fa fa-trash-o"/>
       </a>
     );

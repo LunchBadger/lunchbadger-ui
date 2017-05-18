@@ -101,7 +101,7 @@ class GatewayDetails extends Component {
     }));
   }
 
-  onPrefixChange(event) {
+  onPrefixChange = (event) => {
     this.setState({
       dnsPrefix: event.target.value
     });
@@ -164,7 +164,7 @@ class GatewayDetails extends Component {
           <InputField label="DNS prefix"
                       propertyName="dnsPrefix"
                       entity={entity}
-                      handleChange={this.onPrefixChange.bind(this)}/>
+                      handleChange={this.onPrefixChange}/>
           <div className="details-panel__fieldset">
             <label className="details-panel__label">
               Root URL
@@ -187,4 +187,3 @@ class GatewayDetails extends Component {
 }
 
 export default BaseDetails(GatewayDetails);
-

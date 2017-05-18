@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
-import {notify} from 'react-notify-toast';
+import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
 
 class SettingsPanel extends Component {
   constructor(props) {
@@ -29,12 +30,11 @@ class SettingsPanel extends Component {
         accessKey: data.body.key
       });
     }).catch(err => {
-      console.error(err);
-      notify.show('Error fetching Git access key', 'error');
+      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
     });
   }
 
-  onRegenerate() {
+  onRegenerate = () => {
     const userName = this.context.loginManager.user.profile.sub;
     this.setState({
       accessKey: null
@@ -45,16 +45,15 @@ class SettingsPanel extends Component {
         accessKey: data.body.key
       });
     }).catch(err => {
-      console.error(err);
-      notify.show('Error regenerating Git access key', 'error');
+      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
     });
   }
 
-  onRestartWorkspace() {
+  onRestartWorkspace = () => {
     this.context.projectService.restartWorkspace();
   }
 
-  onReinstall() {
+  onReinstall = () => {
     this.context.projectService.reinstallDeps();
   }
 
@@ -103,7 +102,7 @@ class SettingsPanel extends Component {
               <pre>{cloneCommand}</pre>
             </div>
             <div>
-              <button onClick={this.onRegenerate.bind(this)}>Regenerate</button>
+              <button onClick={this.onRegenerate}>Regenerate</button>
             </div>
           </div>
         </div>
@@ -113,7 +112,7 @@ class SettingsPanel extends Component {
               Restart application
             </label>
             <div className="details-panel__static-field">
-              <button onClick={this.onRestartWorkspace.bind(this)}>Restart</button>
+              <button onClick={this.onRestartWorkspace}>Restart</button>
             </div>
           </div>
         </div>
@@ -123,7 +122,7 @@ class SettingsPanel extends Component {
               Reinstall dependencies
             </label>
             <div className="details-panel__static-field">
-              <button onClick={this.onReinstall.bind(this)}>Reinstall</button>
+              <button onClick={this.onReinstall}>Reinstall</button>
             </div>
           </div>
         </div>
@@ -132,4 +131,8 @@ class SettingsPanel extends Component {
   }
 }
 
-export default Panel(SettingsPanel);
+const mapDispatchToProps = dispatch => ({
+  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(Panel(SettingsPanel));

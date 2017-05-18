@@ -1,11 +1,11 @@
 /*eslint no-console:0 */
-import {notify} from 'react-notify-toast';
+import {showSystemDefcon1} from '../../../lunchbadger-ui/src/actions';
 
 export default function handleFatals(promise) {
   return promise.catch(err => {
+    const dispatchRedux = LunchBadgerCore.dispatchRedux;
     console.error('Fatal error: ', err);
-    notify.show(`Critical failure occurred (${err.message || err}). ` +
-                'Please refresh the page.', 'error', -1);
+    dispatchRedux(showSystemDefcon1(err.message || err));
     throw err;
   });
 }

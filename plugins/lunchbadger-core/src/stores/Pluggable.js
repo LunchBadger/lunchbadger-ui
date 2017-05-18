@@ -10,10 +10,10 @@ class Pluggable extends BaseStore {
   constructor() {
     super();
 
-    this.subscribe(() => this._registerEvents.bind(this));
+    this.subscribe(() => this._registerEvents);
   }
 
-  _registerEvents(action) {
+  _registerEvents = (action) => {
     switch (action.type) {
       case 'RegisterPlugin':
         this.registerPlugin(action.plugin);

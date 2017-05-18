@@ -2,6 +2,10 @@ import Button from './Button/Button';
 import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties';
 import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
+import ContextualInformationMessage from './ContextualInformationMessage/ContextualInformationMessage';
+import SystemDefcon1 from './SystemDefcon1/SystemDefcon1';
+import SystemInformationMessages from './SystemInformationMessages/SystemInformationMessages';
+import SystemNotifications from './SystemNotifications/SystemNotifications';
 
 import Entity from './Entity/Entity';
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
@@ -13,6 +17,7 @@ import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValida
 import Input from './Form/Input';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import {Form} from './utils/Formsy/main';
 
 // entities icons
 import iconApi from '../../../src/icons/icon-api.svg';
@@ -37,15 +42,20 @@ const entityIcons = {
 export {
   Button,
   CollapsibleProperties,
+  ContextualInformationMessage,
   Entity,
   EntityProperties,
   EntityProperty,
   EntityPropertyLabel,
   EntitySubElements,
   EntityValidationErrors,
+  Form,
   IconSVG,
   Input,
   SmoothCollapse,
+  SystemDefcon1,
+  SystemInformationMessages,
+  SystemNotifications,
   Toolbox,
   entityIcons,
 };

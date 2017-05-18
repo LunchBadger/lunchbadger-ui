@@ -1,10 +1,14 @@
 /*eslint no-console:0 */
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
+import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
+import {showSystemDefcon1, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
 
-export default class WorkspaceStatus extends Component {
+
+class WorkspaceStatus extends Component {
   static contextTypes = {
     projectService: PropTypes.object
   };
@@ -23,9 +27,9 @@ export default class WorkspaceStatus extends Component {
 
   componentDidMount() {
     this.es = this.context.projectService.monitorStatus();
-    this.es.addEventListener('data', this.onStatusReceived.bind(this));
-    this.es.addEventListener('open', this.onConnected.bind(this));
-    this.es.addEventListener('error', this.onDisconnected.bind(this));
+    this.es.addEventListener('data', this.onStatusReceived);
+    this.es.addEventListener('open', this.onConnected);
+    this.es.addEventListener('error', this.onDisconnected);
   }
 
   componentWillUnmount() {
@@ -35,13 +39,23 @@ export default class WorkspaceStatus extends Component {
     }
   }
 
-  onClick() {
-    this.setState({
-      visible: !this.state.visible
-    });
+  onClick = () => {
+    if (this.state.status === 'crashed') {
+      this.props.showSystemNotifications();
+    }
   }
 
-  onStatusReceived(message) {
+  onEnter = () => {
+    if (['running', 'installing'].includes(this.state.status)) {
+      this.setState({visible: true});
+    }
+  }
+
+  onLeave = () => {
+    this.setState({visible: false});
+  }
+
+  onStatusReceived = (message) => {
     let status = JSON.parse(message.data).data;
 
     console.log('Status from server', status);
@@ -58,40 +72,26 @@ export default class WorkspaceStatus extends Component {
       output: status.output,
       instance: status.instance
     });
+
+    if (status.status === 'crashed') {
+      this.props.displaySystemDefcon1(status.output);
+    }
   }
 
-  onConnected() {
+  onConnected = () => {
     this.setState({
       connected: true
     });
   }
 
-  onDisconnected() {
+  onDisconnected = () => {
     this.setState({
       connected: false
     });
   }
 
-  onModalClose() {
+  onModalClose = () => {
     location.reload();
-  }
-
-  renderInfo(message) {
-    let output = null;
-    if (this.state.connected && this.state.output) {
-      output = (
-        <div className="workspace-status__output">
-          {this.state.output}
-        </div>
-      );
-    }
-
-    return (
-      <div className="workspace-status__info">
-        {message}
-        {output}
-      </div>
-    );
   }
 
   render() {
@@ -105,21 +105,30 @@ export default class WorkspaceStatus extends Component {
       message = 'Workspace OK';
       classes.push(...['fa-check-circle', 'workspace-status__success']);
     } else if (this.state.status === 'crashed') {
-      message = 'Workspace crashed. Output follows:'
+      message = 'Workspace crashed';
       classes.push(...['fa-exclamation-triangle', 'workspace-status__failure']);
     } else if (this.state.status === 'installing') {
       message = 'Updating dependencies';
       classes.push('workspace-status__progress');
     }
-
+    const {visible} = this.state;
     return (
       <span className="workspace-status">
-        <span className={classnames(classes)} onClick={this.onClick.bind(this)} />
-        {this.state.visible ? this.renderInfo(message) : null}
+        <span className={classnames(classes)}
+          onClick={this.onClick}
+          onMouseEnter={this.onEnter}
+          onMouseLeave={this.onLeave}
+        >
+          {visible && (
+            <ContextualInformationMessage>
+              {message}
+            </ContextualInformationMessage>
+          )}
+        </span>
         {
           this.state.isShowingModal &&
           <OneOptionModal confirmText="Reload"
-                          onClose={this.onModalClose.bind(this)}>
+                          onClose={this.onModalClose}>
             <p>
               The workspace has changed since the Canvas was loaded. Please
               reload the page to refresh the Canvas contents.
@@ -130,3 +139,10 @@ export default class WorkspaceStatus extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  displaySystemDefcon1: message => dispatch(showSystemDefcon1(message)),
+  showSystemNotifications: () => dispatch(toggleSystemNotifications(true)),
+});
+
+export default connect(null, mapDispatchToProps)(WorkspaceStatus);

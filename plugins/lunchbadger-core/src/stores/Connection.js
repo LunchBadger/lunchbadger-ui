@@ -8,10 +8,10 @@ class Connection extends BaseStore {
   constructor() {
     super();
 
-    this.subscribe(() => this._registerEvents.bind(this));
+    this.subscribe(() => this._registerEvents);
   }
 
-  _registerEvents(action) {
+  _registerEvents = (action) => {
     switch (action.type) {
       case 'AddConnection':
         const fromId = this.formatId(action.from);

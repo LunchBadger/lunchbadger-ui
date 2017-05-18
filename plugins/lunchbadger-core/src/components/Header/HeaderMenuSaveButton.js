@@ -10,7 +10,7 @@ export default class HeaderMenuSaveButton extends Component {
     };
   }
 
-  saveDetails() {
+  saveDetails = () => {
     this.props.saveToServer();
   }
 
@@ -20,7 +20,7 @@ export default class HeaderMenuSaveButton extends Component {
     });
 
     return (
-      <a href="#" className={linkClass} onClick={this.saveDetails.bind(this)}>
+      <a href="#" className={linkClass} onClick={this.saveDetails}>
         <i className="fa fa-floppy-o"/>
       </a>
     );

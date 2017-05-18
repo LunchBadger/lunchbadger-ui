@@ -2,7 +2,7 @@ import React from 'react';
 import {storiesOf, action} from '@kadira/storybook';
 import {WithNotes} from '@kadira/storybook-addon-notes';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
-import {withContext} from '../../decorators';
+import {withContext, withProvider} from '../../decorators';
 import {importPath} from '../../constants';
 import {MockHeader} from '../../components';
 import Header from '../../../plugins/lunchbadger-core/src/components/Header/Header';
@@ -18,6 +18,7 @@ const mockPlugins = {
 
 storiesOf('Header', module)
   .addDecorator(withKnobs)
+  .addDecorator(withProvider)
   .addDecorator(withContext)
   .addWithInfo('Header',
     importPath('Header', 'plugins/lunchbadger-core/src/components/Header/Header', false),

@@ -10,7 +10,6 @@ import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const ModelPropertyFactory = LunchBadgerManage.models.ModelProperty;
 
 class Model extends Component {

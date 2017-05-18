@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import './BaseDetails.scss';
-import {Form} from 'formsy-react';
+import {Form} from '../../../../../lunchbadger-ui/src';
 import InputField from './InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
@@ -20,7 +20,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    discardChanges() {
+    discardChanges = () => {
       const element = this.element;
 
       if (typeof element.discardChanges === 'function') {
@@ -31,7 +31,7 @@ export default (ComposedComponent) => {
       this.forceUpdate();
     }
 
-    update(model) {
+    update = (model) => {
       const element = this.element;
 
       if (!model) {
@@ -45,7 +45,7 @@ export default (ComposedComponent) => {
       this.setState({isPristine: true});
     }
 
-    checkPristine(_model, changed) {
+    checkPristine = (_model, changed) => {
       if (typeof changed === 'undefined') {
         changed = this.refs.form.isChanged();
       }
@@ -61,9 +61,8 @@ export default (ComposedComponent) => {
       }
     }
 
-    _preventSubmit(event) {
+    _preventSubmit = (event) => {
       const keyCode = event.keyCode || event.which;
-
       if (keyCode === 13) {
         event.preventDefault();
         return false;
@@ -72,15 +71,15 @@ export default (ComposedComponent) => {
 
     componentWillUpdate(_nextProps, nextState) {
       if (this.state.isPristine !== nextState.isPristine) {
-        changePanelStatus(!nextState.isPristine, this.update.bind(this), this.discardChanges.bind(this));
+        changePanelStatus(!nextState.isPristine, this.update, this.discardChanges);
       }
     }
 
-    _handleValid() {
+    _handleValid = () => {
       this.setState({ formValid: true });
     }
 
-    _handleInvalid() {
+    _handleInvalid = () => {
       this.setState({ formValid: false });
     }
 
@@ -89,23 +88,23 @@ export default (ComposedComponent) => {
         <div className="details-panel__element">
           <Form name="panelForm"
                 ref="form"
-                onValid={this._handleValid.bind(this)}
-                onInvalid={this._handleInvalid.bind(this)}
-                onChange={this.checkPristine.bind(this)}
-                onValidSubmit={this.update.bind(this)}>
+                onValid={this._handleValid}
+                onInvalid={this._handleInvalid}
+                onChange={this.checkPristine}
+                onValidSubmit={this.update}>
             <CloseButton showConfirmation={!this.state.isPristine}
-                         onSave={this.update.bind(this)}
-                         onCancel={this.discardChanges.bind(this)}/>
+                         onSave={this.update}
+                         onCancel={this.discardChanges}/>
 
             <InputField label="Name"
                         propertyName="name"
-                        handleKeyPress={this._preventSubmit.bind(this)}
+                        handleKeyPress={this._preventSubmit}
                         entity={this.props.entity} />
 
             <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
 
             <SaveButton enabled={!this.state.isPristine && this.state.formValid}
-                        onSave={this.update.bind(this)}/>
+                        onSave={this.update}/>
           </Form>
         </div>
       )

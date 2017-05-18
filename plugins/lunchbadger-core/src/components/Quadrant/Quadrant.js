@@ -43,7 +43,6 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
-      this.moveEntity = this.moveEntity.bind(this);
 
       this.dataStoreUpdate = () => {
         this.setState({entities: this.props.data.getData()});
@@ -77,7 +76,7 @@ export default (ComposedComponent) => {
       this.props.data.removeInitListener(this.dataStoreUpdate);
     }
 
-    recalculateQuadrantWidth(event) {
+    recalculateQuadrantWidth = (event) => {
       const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
       const newWidth = event.clientX - quadrantBounds.left;
 
@@ -85,7 +84,7 @@ export default (ComposedComponent) => {
       this.props.paper.repaintEverything();
     }
 
-    moveEntity(...props) {
+    moveEntity = (...props) => {
       if (typeof this.quadrant.moveEntity === 'function') {
         this.quadrant.moveEntity(...props);
       }
@@ -104,7 +103,7 @@ export default (ComposedComponent) => {
           <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
           {(() => {
             if (this.props.resizable) {
-              return <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth.bind(this)}/>;
+              return <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth}/>;
             }
           })()}
         </div>

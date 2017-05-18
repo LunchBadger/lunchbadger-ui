@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
-const Select = LunchBadgerCore.components.Select;
-const Input = LunchBadgerCore.components.Input;
+const {Select, Input} = LunchBadgerCore.components;
+const {gatewayPoliciesOptions} = LunchBadgerCore.utils;
 
 const POLICY_DUMMY_CONFIG = {
   'OAuth2': (
@@ -40,7 +40,7 @@ export default class GatewayPolicyDetails extends Component {
     this.state = {type: props.policy.type};
   }
 
-  onTypeChange(ev) {
+  onTypeChange = (ev) => {
     this.setState({type: ev.target.value});
   }
 
@@ -65,12 +65,9 @@ export default class GatewayPolicyDetails extends Component {
           <Select className="details-panel__input details-panel__select"
                   value={policy.type}
                   name={`pipelines[${pipelineIndex}][policies][${index}][type]`}
-                  handleChange={this.onTypeChange.bind(this)}>
-            <option value="OAuth2">OAuth2</option>
-            <option value="Rate limit">Throttling</option>
-            <option value="Logging">Logging</option>
-            <option value="Redirect">Redirect</option>
-          </Select>
+                  handleChange={this.onTypeChange}
+                  options={gatewayPoliciesOptions}
+          />
         </td>
         {POLICY_DUMMY_CONFIG[this.state.type]}
         <td className="details-panel__table__cell details-panel__table__cell--empty">

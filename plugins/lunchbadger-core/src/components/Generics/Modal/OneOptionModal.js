@@ -13,7 +13,7 @@ class OneOptionModal extends Component {
     confirmText: 'Ok'
   };
 
-  _handleConfirm() {
+  _handleConfirm = () => {
     this.props.onClose();
   }
 
@@ -25,7 +25,7 @@ class OneOptionModal extends Component {
 
         <div className="modal__actions">
           <button className="modal__actions__button modal__actions__button--confirm"
-                  onClick={this._handleConfirm.bind(this)}>
+                  onClick={this._handleConfirm}>
             {this.props.confirmText}
           </button>
         </div>

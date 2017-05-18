@@ -1,12 +1,13 @@
 import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 import cs from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
-import {notify} from 'react-notify-toast';
 import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
@@ -70,8 +71,11 @@ class Portal extends Component {
   }
 
   _onDeploy() {
-    notify.show('Portal successfully deployed', 'success');
-
+    const dispatchRedux = LunchBadgerCore.dispatchRedux;
+    dispatchRedux(addSystemInformationMessage({
+      message: 'Portal successfully deployed',
+      type: 'success'
+    }));
     this.props.parent.triggerElementAutofocus();
   }
 
@@ -134,13 +138,12 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirm() {
+  _handleModalConfirm = () => {
     const item = this.state.bundledItem;
-
     unbundlePortal(item.parent, item.entity);
   }
 
-  _handleClose() {
+  _handleClose = () => {
     this.setState({
       isShowingModal: false,
       isShowingModalMultiple: false
@@ -163,7 +166,7 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirmMultiple() {
+  _handleModalConfirmMultiple = () => {
     this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
   }
 
@@ -214,8 +217,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose.bind(this)}
-            onSave={this._handleModalConfirm.bind(this)}
+            onClose={this._handleClose}
+            onSave={this._handleModalConfirm}
           >
             <span>
               Are you sure you want to unbundle
@@ -230,8 +233,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose.bind(this)}
-            onSave={this._handleModalConfirmMultiple.bind(this)}
+            onClose={this._handleClose}
+            onSave={this._handleModalConfirmMultiple}
           >
             <span>
               Are you sure you want to unbundle

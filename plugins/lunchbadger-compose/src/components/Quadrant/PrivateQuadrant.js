@@ -33,8 +33,8 @@ class PrivateQuadrant extends Component {
                    icon="icon-icon-model"
                    hideSourceOnDrag={true}
                    itemOrder={entity.itemOrder}
-                   moveEntity={this.moveEntity.bind(this)}
-                   saveOrder={this.saveOrder.bind(this)}
+                   moveEntity={this.moveEntity}
+                   saveOrder={this.saveOrder}
                    entity={entity}/>
           );
         case 'Microservice':
@@ -45,8 +45,8 @@ class PrivateQuadrant extends Component {
                    icon="icon-icon-microservice"
                    hideSourceOnDrag={true}
                    itemOrder={entity.itemOrder}
-                   moveEntity={this.moveEntity.bind(this)}
-                   saveOrder={this.saveOrder.bind(this)}
+                   moveEntity={this.moveEntity}
+                   saveOrder={this.saveOrder}
                    entity={entity}/>
           );
         case 'PrivateEndpoint':
@@ -58,18 +58,18 @@ class PrivateQuadrant extends Component {
               icon="icon-icon-endpoint"
               hideSourceOnDrag={true}
               itemOrder={entity.itemOrder}
-              moveEntity={this.moveEntity.bind(this)}
+              moveEntity={this.moveEntity}
               entity={entity}/>
           );
       }
     });
   }
 
-  moveEntity(entity, itemOrder, hoverOrder) {
+  moveEntity = (entity, itemOrder, hoverOrder) => {
     updateOrder(entity, itemOrder, hoverOrder);
   }
 
-  saveOrder() {
+  saveOrder = () => {
     saveOrder(this.context.projectService);
   }
 

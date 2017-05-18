@@ -21,6 +21,9 @@ Plugins are located in the `plugins` directory.
     # Run storybook on dev server (library of UI components)
     npm run storybook
 
+    # Build a distribution of storybook into /.out folder
+    npm run storybook:out
+
     # Package a distribution
     npm run dist
 

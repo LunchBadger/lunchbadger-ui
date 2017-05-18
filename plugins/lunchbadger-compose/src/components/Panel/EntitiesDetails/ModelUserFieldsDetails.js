@@ -3,6 +3,12 @@ import React, {Component, PropTypes} from 'react';
 const {Input, Select, Textarea} = LunchBadgerCore.components;
 const ModelClass = LunchBadgerManage.models.Model;
 
+const userFieldsTypeOptions = [
+  {label: 'String', value: 'string'},
+  {label: 'Number', value: 'number'},
+  {label: 'Object', value: 'object'},
+];
+
 export default class ModelUserFieldsDetails extends Component {
   static propTypes = {
     field: PropTypes.object.isRequired,
@@ -24,7 +30,7 @@ export default class ModelUserFieldsDetails extends Component {
     this.props.onRemove(field);
   }
 
-  _checkTabButton(event) {
+  _checkTabButton = (event) => {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.fieldsCount === this.props.index + 1) {
       this.props.addAction();
     }
@@ -59,7 +65,7 @@ export default class ModelUserFieldsDetails extends Component {
         <Textarea className="details-panel__textarea"
                   value={this._prepareValue(field.value)}
                   validations="isJSON"
-                  handleKeyDown={this._checkTabButton.bind(this)}
+                  handleKeyDown={this._checkTabButton}
                   name={`userFields[${index}][value]`}
         />
       );
@@ -67,7 +73,7 @@ export default class ModelUserFieldsDetails extends Component {
       return (
         <Input className="details-panel__input"
                value={this._prepareValue(field.value)}
-               handleKeyDown={this._checkTabButton.bind(this)}
+               handleKeyDown={this._checkTabButton}
                name={`userFields[${index}][value]`}
         />
       );
@@ -90,11 +96,9 @@ export default class ModelUserFieldsDetails extends Component {
           <Select className="details-panel__input details-panel__select"
                   value={field.type || 'string'}
                   handleChange={(value) => this._changeFieldType(value)}
-                  name={`userFields[${index}][type]`}>
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="object">Object</option>
-          </Select>
+                  name={`userFields[${index}][type]`}
+                  options={userFieldsTypeOptions}
+          />
         </td>
         <td>
           {this.renderInput()}

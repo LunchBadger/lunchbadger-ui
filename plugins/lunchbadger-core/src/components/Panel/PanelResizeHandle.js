@@ -9,13 +9,13 @@ export default class PanelResizeHandle extends Component {
     onDragEnd: PropTypes.func
   };
 
-  _handleDrag(event) {
+  _handleDrag = (event) => {
     if (this.props.resizable) {
       this.props.onDrag(event);
     }
   }
 
-  _handleDragEnd(event) {
+  _handleDragEnd = (event) => {
     if (this.props.resizable && typeof this.props.onDragEnd === 'function') {
       this.props.onDragEnd(event);
     }
@@ -28,7 +28,7 @@ export default class PanelResizeHandle extends Component {
     });
 
     return (
-      <Draggable onDrag={this._handleDrag.bind(this)} onDragEnd={this._handleDragEnd.bind(this)}>
+      <Draggable onDrag={this._handleDrag} onDragEnd={this._handleDragEnd}>
         <div className={resizableClass}></div>
       </Draggable>
     );

@@ -276,7 +276,7 @@ export default class Canvas extends Component {
                              plugins={this.props.plugins}
                              paper={this.paper}
                              connections={this.state.connections}
-                             style={{minHeight: canvasHeight}}
+                             canvasHeight={canvasHeight}
                              className="canvas__container" id="canvas"/>
         </div>
       </section>

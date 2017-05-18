@@ -5236,6 +5236,23 @@
         }
       }
     },
+    "react-addons-shallow-compare": {
+      "version": "15.5.2",
+      "from": "react-addons-shallow-compare@latest",
+      "resolved": "https://registry.npmjs.org/react-addons-shallow-compare/-/react-addons-shallow-compare-15.5.2.tgz",
+      "dependencies": {
+        "core-js": {
+          "version": "1.2.7",
+          "from": "core-js@>=1.0.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
+        },
+        "fbjs": {
+          "version": "0.8.12",
+          "from": "fbjs@>=0.8.4 <0.9.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.12.tgz"
+        }
+      }
+    },
     "react-addons-test-utils": {
       "version": "15.4.2",
       "from": "react-addons-test-utils@>=15.0.0 <16.0.0",

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 
 const {Checkbox, Input, Select, Textarea} = LunchBadgerCore.components;
+const {propertyTypes} = LunchBadgerCore.utils;
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
@@ -23,7 +24,7 @@ export default class ModelPropertyDetails extends Component {
     this.props.onRemove(property);
   }
 
-  _checkTabButton(event) {
+  _checkTabButton = (event) => {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
       this.props.addAction();
     }
@@ -77,16 +78,9 @@ export default class ModelPropertyDetails extends Component {
           <Select className="details-panel__input details-panel__select"
                   value={property.type || 'string'}
                   handleChange={(value) => this._changePropertyType(value)}
-                  name={`properties[${index}][type]`}>
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="date">Date</option>
-            <option value="boolean">Boolean</option>
-            <option value="geopoint">GeoPoint</option>
-            <option value="array">Array</option>
-            <option value="object">Object</option>
-            <option value="buffer">Buffer</option>
-          </Select>
+                  name={`properties[${index}][type]`}
+                  options={propertyTypes}
+          />
         </td>
         <td>
           {this.renderInput()}
@@ -108,7 +102,7 @@ export default class ModelPropertyDetails extends Component {
                  value={property.description}
                  name={`properties[${index}][description]`}
                  type="text"
-                 handleKeyDown={this._checkTabButton.bind(this)}
+                 handleKeyDown={this._checkTabButton}
           />
         </td>
         <td className="details-panel__table__cell details-panel__table__cell--empty">

@@ -84,7 +84,7 @@ class App extends Component {
     AppState.removeChangeListener(this.appStateChange);
   }
 
-  saveToServer() {
+  saveToServer = () => {
     let {config, loginManager, projectService} = this.props;
 
     this.setState({loaded: false});
@@ -101,7 +101,7 @@ class App extends Component {
     });
   }
 
-  clearServer() {
+  clearServer = () => {
     let {config, loginManager, projectService} = this.props;
 
     this.setState({loaded: false});
@@ -127,8 +127,8 @@ class App extends Component {
         <Header ref="header"
                 appState={this.state.appState}
                 plugins={this.state.pluginsStore}
-                saveToServer={this.saveToServer.bind(this)}
-                clearServer={this.clearServer.bind(this)} />
+                saveToServer={this.saveToServer}
+                clearServer={this.clearServer} />
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">

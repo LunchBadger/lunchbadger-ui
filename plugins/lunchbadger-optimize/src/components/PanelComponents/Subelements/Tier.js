@@ -239,7 +239,7 @@ export default class Tier extends Component {
       <div>
         {
           this.state.editing && (
-            <a className="tier__action__save" onClick={this._handleSave.bind(this)}>
+            <a className="tier__action__save" onClick={this._handleSave}>
               <i className="fa fa-floppy-o"/>
             </a>
           )
@@ -247,7 +247,7 @@ export default class Tier extends Component {
 
         {
           !this.state.editing && (
-            <a className="tier__action__edit" onClick={this._handleEdit.bind(this)}>
+            <a className="tier__action__edit" onClick={this._handleEdit}>
               <i className="fa fa-pencil"/>
             </a>
           )
@@ -260,7 +260,7 @@ export default class Tier extends Component {
     );
   }
 
-  _handleSave() {
+  _handleSave = () => {
     saveTier(this.props.plan, this.props.tier, this.props.date, {
       type: this.state.type,
       conditionFrom: this.state.conditionFrom,
@@ -271,11 +271,11 @@ export default class Tier extends Component {
     this.setState({editing: false});
   }
 
-  _handleEdit() {
+  _handleEdit = () => {
     this.setState({editing: true});
   }
 
-  _handleRemove() {
+  _handleRemove = () => {
     removeTier(this.props.plan, this.props.tier, this.props.date);
   }
 
@@ -305,7 +305,7 @@ export default class Tier extends Component {
           {
             this.state.isShowingModal &&
             <TwoOptionModal onClose={() => this.setState({isShowingModal: false})}
-                            onSave={this._handleRemove.bind(this)}
+                            onSave={this._handleRemove}
                             onCancel={() => this.setState({isShowingModal: false})}
                             title="Remove tier"
                             confirmText="Remove"

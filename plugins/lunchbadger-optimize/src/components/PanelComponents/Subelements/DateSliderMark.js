@@ -45,7 +45,7 @@ export default class DateSliderMark extends Component {
     return this.props.position * this.getWidth() - this.getWidth() / 2;
   }
 
-  toggleSelected() {
+  toggleSelected = () => {
     const date = this.formatMonth(this.props.month);
 
     if (date.isAfter(this.props.selectedRange.endDate, 'month') || date.isBefore(this.props.selectedRange.startDate, 'month')) {
@@ -83,7 +83,7 @@ export default class DateSliderMark extends Component {
     });
 
     return (
-      <div onClick={this.toggleSelected.bind(this)}
+      <div onClick={this.toggleSelected}
            className={`date-slider__mark ${elementClass}`}
            style={style}>
 

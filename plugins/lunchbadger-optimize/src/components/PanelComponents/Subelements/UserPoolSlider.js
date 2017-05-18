@@ -80,7 +80,7 @@ export default class UpgradeSlider extends Component {
     this.setState({maxChange: maxChange});
   }
 
-  _handleOnChange(value) {
+  _handleOnChange = (value) => {
     const {forecast, upgrade} = this.props;
     const {max, scaleStep} = this.state;
 
@@ -106,7 +106,7 @@ export default class UpgradeSlider extends Component {
     }
   }
 
-  _handleRemove() {
+  _handleRemove = () => {
     removeUpgrade(this.props.forecast, this.props.upgrade);
   }
 
@@ -145,8 +145,8 @@ export default class UpgradeSlider extends Component {
             step={1}
             defaultValue={this.props.upgrade.value}
             value={this.state.value}
-            onChange={_.throttle(this._handleOnChange.bind(this), 600)}
-            onAfterChange={this._handleOnChange.bind(this)}
+            onChange={_.throttle(this._handleOnChange, 600)}
+            onAfterChange={this._handleOnChange}
             min={minValue}
             max={maxValue}/>
           <div className="upgrade-slider__slider-legend">
@@ -159,7 +159,7 @@ export default class UpgradeSlider extends Component {
           </div>
         </div>
         <div className="upgrade-slider__action">
-          <a onClick={this._handleRemove.bind(this)} className="upgrade-slider__action__remove">
+          <a onClick={this._handleRemove} className="upgrade-slider__action__remove">
             <i className="fa fa-times" />
           </a>
         </div>

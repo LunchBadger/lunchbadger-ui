@@ -143,10 +143,11 @@ class Gateway extends Component {
   onAddPipeline = name => () => addPipeline(this.props.entity, name);
 
   _onDeploy() {
-    this.props.displaySystemInformationMessage({
+    const dispatchRedux = LunchBadgerCore.dispatchRedux;
+    dispatchRedux(addSystemInformationMessage({
       message: 'Gateway successfully deployed',
       type: 'success'
-    });
+    }));
     this.props.parent.triggerElementAutofocus();
   }
 
@@ -192,8 +193,4 @@ class Gateway extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
-});
-
-export default CanvasElement(connect(null, mapDispatchToProps)(Gateway));
+export default CanvasElement(Gateway);

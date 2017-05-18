@@ -33,6 +33,12 @@ class Input extends Component {
     }
   }
 
+  _handleFocus = (event) => {
+    if (typeof this.props.handleFocus === 'function') {
+      this.props.handleFocus(event);
+    }
+  }
+
   _handleBlur = (event) => {
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
@@ -52,6 +58,7 @@ class Input extends Component {
         className={this.props.className || ''}
         value={this.props.getValue()}
         type={this.props.type || 'text'}
+        onFocus={this._handleFocus}
         onBlur={this._handleBlur}
         onKeyPress={this._handleKeyPress}
         onKeyUp={this._handleKeyUp}

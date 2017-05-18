@@ -1,0 +1,96 @@
+.storyIconSVG svg {
+    width: 100px;
+    height: auto;
+    stroke: #000;
+}
+
+.storyIconSVG .customRed svg {
+  stroke: red;
+}
+.storyIconSVG .customGreen svg {
+  stroke: green;
+}
+
+.entityTypeIcons {
+  &__title {
+    display: inline-block;
+    vertical-align: middle;
+    width: 170px;
+    margin: 10px 10px 0 0;
+  }
+  &__icon {
+    width: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 10px;
+    margin: 10px 10px 0 0;
+    position: relative;
+    &.fill svg {
+      stroke: none;
+      fill: #000;
+    }
+    svg {
+      stroke: #000;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    &.menu svg {
+      stroke: #01667D;
+    }
+    &.menu.fill,
+    &.menuHover.fill {
+      svg {
+        stroke: none;
+        fill: #01667D;
+      }
+    }
+    &.menuHover {
+      background-color: #F0F0F0;
+      svg {
+        stroke: #01667D;
+      }
+    }
+    &.menuSelected {
+      background-color: #666;
+      svg {
+        stroke: #FFF;
+      }
+    }
+    &.menuSelected.fill,
+    &.entity.fill,
+    &.entityHover.fill,
+    &.entityHighlighted.fill,
+    &.entityHighlightedHover.fill {
+      svg {
+        stroke: none;
+        fill: #FFF;
+      }
+    }
+    &.entity,
+    &.entityHover {
+      background-color: #01667D;
+      svg {
+        stroke: #FFF;
+      }
+    }
+    &.entityHighlighted,
+    &.entityHighlightedHover {
+      background-color: #4190CE;
+      svg {
+        stroke: #FFF;
+      }
+    }
+    &.entityHover:before,
+    &.entityHighlightedHover:before {
+      display: block;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

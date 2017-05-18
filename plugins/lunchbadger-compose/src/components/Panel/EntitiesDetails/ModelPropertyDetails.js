@@ -44,13 +44,6 @@ export default class ModelPropertyDetails extends Component {
 
     if (this.state.inputType === 'textarea') {
       return null;
-      // return (
-      //   <Textarea className="details-panel__textarea"
-      //             value={property.default_}
-      //             validations="isJSON"
-      //             name={`properties[${index}][default_]`}
-      //   />
-      // );
     } else {
       return (
         <Input className="details-panel__input"

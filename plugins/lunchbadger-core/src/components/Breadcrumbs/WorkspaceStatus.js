@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
-import {showSystemDefcon1, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemNotification, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
 
 
 class WorkspaceStatus extends Component {
@@ -141,7 +141,7 @@ class WorkspaceStatus extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  displaySystemDefcon1: message => dispatch(showSystemDefcon1(message)),
+  displaySystemDefcon1: message => dispatch(addSystemNotification({output: message})),
   showSystemNotifications: () => dispatch(toggleSystemNotifications(true)),
 });
 

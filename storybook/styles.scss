@@ -59,4 +59,9 @@ body {
       }
     }
   }
+  &__mockPage {
+    height: 450px;
+    position: relative;
+    background-color: rgba(100, 100, 100, 0.75);
+  }
 }

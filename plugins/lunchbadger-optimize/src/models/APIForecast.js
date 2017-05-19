@@ -43,8 +43,17 @@ export default class APIForecast extends BaseModel {
 
       return;
     }
-
-    this._api = ForecastAPI.create(api);
+    /*
+      FIXME - when real APIForecast (not mock) will be returned from backend,
+      replace code below with:
+        this._api = ForecastAPI.create(api);
+    */
+    const mockApi = ForecastAPI.create(api);
+    const id = this._api.id;
+    mockApi.id = id;
+    mockApi.name = this._api.name;
+    this.id = id;
+    this._api = mockApi;
   }
 
   /**

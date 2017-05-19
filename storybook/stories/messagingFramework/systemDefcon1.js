@@ -7,11 +7,6 @@ import {importPath, lorem} from '../../constants';
 import {MockPage} from '../../components';
 import SystemDefcon1Box from '../../../plugins/lunchbadger-ui/src/SystemDefcon1/SystemDefcon1Box';
 
-const types = {
-  '': '',
-  submit: 'submit',
-}
-
 const errorMock = `Error mock:
   ${lorem(2)}.
   ${lorem(2)}.
@@ -23,7 +18,6 @@ const errorMock = `Error mock:
 
 storiesOf('Messaging Framework', module)
   .addDecorator(withKnobs)
-
   .addWithInfo('SystemDefcon1Box', importPath('SystemDefcon1Box', 'plugins/lunchbadger-ui/src/SystemDefcon1/SystemDefcon1Box', false), () => (
     <MockPage>
       <SystemDefcon1Box

@@ -113,7 +113,7 @@ export default (ComposedComponent) => {
           isValid: true,
           data: {}
         },
-        modelBeforeEdit: {},
+        modelBeforeEdit: null,
       };
 
       this.checkHighlightAndEditableState = (props) => {
@@ -283,6 +283,12 @@ export default (ComposedComponent) => {
 
     _handleCancel = (evt) => {
       evt.persist();
+      if (this.state.modelBeforeEdit === null) {
+        this._handleRemove();
+        evt.preventDefault();
+        evt.stopPropagation();
+        return;
+      }
       if (this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
       }

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse, IconSVG} from '../';
-import {showSystemDefcon1} from '../actions';
 import {iconDelete} from '../../../../src/icons';
 import './SystemDefcon1.scss';
 
@@ -16,10 +14,8 @@ class SystemDefcon1Box extends Component {
 
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
-  handleClose = () => this.props.close();
-
   render() {
-    const {server = false, error} = this.props;
+    const {server = false, error, onClose} = this.props;
     const {visibleError} = this.state;
     const title = server ? 'Server Failure' : 'The workspace crashed';
     const content = server
@@ -30,9 +26,11 @@ class SystemDefcon1Box extends Component {
         <div className="SystemDefcon1__box__title">
           {title}
         </div>
-        <div className="SystemDefcon1__box__delete" onClick={this.handleClose}>
-          <IconSVG svg={iconDelete} />
-        </div>
+        {onClose && (
+          <div className="SystemDefcon1__box__delete" onClick={onClose}>
+            <IconSVG svg={iconDelete} />
+          </div>
+        )}
         <div className="SystemDefcon1__box__content">
           {content}
           {server && (
@@ -66,8 +64,4 @@ class SystemDefcon1Box extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  close: () => dispatch(showSystemDefcon1('')),
-});
-
-export default connect(null, mapDispatchToProps)(SystemDefcon1Box);
+export default SystemDefcon1Box;

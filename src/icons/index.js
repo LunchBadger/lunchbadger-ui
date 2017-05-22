@@ -25,5 +25,5 @@ export {
   iconModel,
   iconPlus,
   iconPortal,
-  iconTrash,
+  iconTrash
 };

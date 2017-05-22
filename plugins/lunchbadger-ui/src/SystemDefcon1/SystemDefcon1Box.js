@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import cs from 'classnames';
-import {SmoothCollapse} from '../';
+import {SmoothCollapse, IconSVG} from '../';
+import {showSystemDefcon1} from '../actions';
+import {iconDelete} from '../../../../src/icons';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
@@ -13,6 +16,8 @@ class SystemDefcon1Box extends Component {
 
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
+  handleClose = () => this.props.close();
+
   render() {
     const {server = false, error} = this.props;
     const {visibleError} = this.state;
@@ -24,6 +29,9 @@ class SystemDefcon1Box extends Component {
       <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
         <div className="SystemDefcon1__box__title">
           {title}
+        </div>
+        <div className="SystemDefcon1__box__delete" onClick={this.handleClose}>
+          <IconSVG svg={iconDelete} />
         </div>
         <div className="SystemDefcon1__box__content">
           {content}
@@ -58,4 +66,8 @@ class SystemDefcon1Box extends Component {
   }
 }
 
-export default SystemDefcon1Box;
+const mapDispatchToProps = dispatch => ({
+  close: () => dispatch(showSystemDefcon1('')),
+});
+
+export default connect(null, mapDispatchToProps)(SystemDefcon1Box);

@@ -27,8 +27,11 @@ class CollapsibleProperties extends Component {
     });
     return (
       <div className={classNames}>
-        <div className="CollapsibleProperties__bar" onClick={this.handleToggleCollapse}>
-          <div className="CollapsibleProperties__bar__left">
+        <div className="CollapsibleProperties__bar">
+          <div
+            className="CollapsibleProperties__bar__left"
+             onClick={this.handleToggleCollapse}
+          >
             <div className="CollapsibleProperties__bar__left--arrow">
               <IconSVG svg={iconArrow} />
             </div>

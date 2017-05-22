@@ -124,6 +124,10 @@ export default class Pipeline extends Component {
     this.props.onToggleOpen(!this.state.opened);
   }
 
+  toggleCollapsibleProperties = () => {
+    this.collapsiblePropertiesDOM.handleToggleCollapse();
+  }
+
   render() {
     const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
     const pipelineClass = classNames({
@@ -137,12 +141,14 @@ export default class Pipeline extends Component {
     const {index} = this.props;
     return (
       <CollapsibleProperties
+        ref={(r) => {this.collapsiblePropertiesDOM = r;}}
         bar={
           <EntityProperty
             name={`pipelines[${index}][name]`}
             value={this.props.entity.name}
             hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
             onDelete={() => {console.log('TODO')}}
+            onViewModeClick={this.toggleCollapsibleProperties}
           />
         }
         collapsible={

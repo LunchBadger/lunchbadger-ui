@@ -1,6 +1,7 @@
 /*eslint no-console:0 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
@@ -8,15 +9,16 @@ import Spinner from './Spinner';
 import './App.scss';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Notifications, {notify} from 'react-notify-toast';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
+import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {SystemInformationMessages, SystemNotifications, SystemDefcon1} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
-export default class App extends Component {
+class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
     loginManager: PropTypes.object,
@@ -62,7 +64,9 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    let {config, loginManager, projectService} = this.props;
+    let {config, loginManager, projectService, dispatch} = this.props;
+
+    LunchBadgerCore.dispatchRedux = dispatch;
 
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
@@ -86,7 +90,10 @@ export default class App extends Component {
 
     this.setState({loaded: false});
     let prm = saveToServer(config, loginManager, projectService).then(() => {
-      notify.show('All data has been synced with API', 'success');
+      this.props.displaySystemInformationMessage({
+        message: 'All data has been synced with API',
+        type: 'success'
+      });
       this.setState({loaded: true});
     });
 
@@ -101,7 +108,10 @@ export default class App extends Component {
     this.setState({loaded: false});
 
     let prm = clearServer(config, loginManager, projectService).then(() => {
-      notify.show('All data removed from server', 'success');
+      this.props.displaySystemInformationMessage({
+        message: 'All data removed from server',
+        type: 'success'
+      });
       this.setState({loaded: true});
     });
 
@@ -111,6 +121,7 @@ export default class App extends Component {
   }
 
   render() {
+    const {systemDefcon1Error} = this.props;
     return (
       <div className="app">
         <Spinner loading={!this.state.loaded} />
@@ -122,6 +133,7 @@ export default class App extends Component {
         <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
         <div ref="container" className="app__container">
           <div className="app__panel-wrapper">
+            <SystemNotifications />
             <PanelContainer plugins={this.state.pluginsStore}
                             appState={this.state.appState}
                             canvas={() => this.refs.canvas}
@@ -130,8 +142,22 @@ export default class App extends Component {
           </div>
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
-        <Notifications />
+        <SystemInformationMessages />
+        {systemDefcon1Error !== '' && (
+          <SystemDefcon1 error={systemDefcon1Error} />
+        )}
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  systemDefcon1Error: state.ui.systemDefcon1,
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

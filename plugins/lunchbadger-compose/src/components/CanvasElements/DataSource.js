@@ -103,6 +103,7 @@ class DataSource extends Component {
         invalid: data.password,
         onBlur: this.handleFieldChange('password'),
         password: true,
+        contextual: 'Password should be at least 6 chars long',
       },
     ];
     return <EntityProperties properties={mainProperties} />;

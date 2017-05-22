@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
-import {notify} from 'react-notify-toast';
+import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
 
 class SettingsPanel extends Component {
   constructor(props) {
@@ -30,8 +31,7 @@ class SettingsPanel extends Component {
         accessKey: data.body.key
       });
     }).catch(err => {
-      console.error(err);
-      notify.show('Error fetching Git access key', 'error');
+      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
     });
   }
 
@@ -46,8 +46,7 @@ class SettingsPanel extends Component {
         accessKey: data.body.key
       });
     }).catch(err => {
-      console.error(err);
-      notify.show('Error regenerating Git access key', 'error');
+      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
     });
   }
 
@@ -133,4 +132,8 @@ class SettingsPanel extends Component {
   }
 }
 
-export default Panel(SettingsPanel);
+const mapDispatchToProps = dispatch => ({
+  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(Panel(SettingsPanel));

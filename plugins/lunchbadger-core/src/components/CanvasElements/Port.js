@@ -36,7 +36,7 @@ export default class Port extends Component {
         fillStyle: '#DF5F37'
       },
       connectorStyle: {
-        lineWidth: 4,
+        lineWidth: 3,
         strokeStyle: '#DF5F37',
         joinstyle: 'round',
         outlineColor: '#DF5F37',
@@ -46,10 +46,10 @@ export default class Port extends Component {
         outlineColor: '#FFFFFF'
       },
       anchor: [
-        [0.6, 0.6, 0, -1, 0, 0, 'top'],
-        [0.6, 0.6, 1, 0, 0, 0, 'right'],
-        [0.6, 0.6, 0, 1, 0, 0, 'bottom'],
-        [0.6, 0.6, -1, 0, 0, 0, 'left']
+        // [0.5, 0, 0, -1, 0, 0, 'top'],
+        [1, 0.5, 1, 0, -10, 2, 'right'],
+        // [0.5, 1, 0, 1, 0, 0, 'bottom'],
+        [0, 0.5, -1, 0, 14, 2, 'left']
       ],
       scope: this.props.scope
     };

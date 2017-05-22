@@ -1,0 +1,27 @@
+.ContextualInformationMessage {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+  color: #FFF;
+  padding: 16px 20px;
+  font-family: 'Open Sans';
+  font-size: 17px;
+  white-space: nowrap;
+  &:before {
+    display: block;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -25%) rotate(45deg);
+    z-index: -1;
+  }
+}

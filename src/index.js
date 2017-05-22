@@ -5,11 +5,14 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 import config from 'config';
+import reducers from './reducers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -54,15 +57,22 @@ loginManager.checkAuth().then(loggedIn => {
   let configStoreService = new ConfigStoreService(config.configStoreApiUrl,
     user.id_token);
 
+  let store = createStore(
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  );
+
   // Render the main component into the dom
   ReactDOM.render(
-    <MuiThemeProvider muiTheme={muiTheme}>
-      <AppLoader
-        config={config}
-        loginManager={loginManager}
-        configStoreService={configStoreService}
-      />
-    </MuiThemeProvider>,
+    <Provider store={store}>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <AppLoader
+          config={config}
+          loginManager={loginManager}
+          configStoreService={configStoreService}
+        />
+      </MuiThemeProvider>
+    </Provider>,
     document.getElementById('app')
   );
 });

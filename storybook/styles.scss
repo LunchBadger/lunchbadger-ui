@@ -59,4 +59,17 @@ body {
       }
     }
   }
+  &__mockPage {
+    height: 450px;
+    position: relative;
+    background-color: rgba(100, 100, 100, 0.75);
+  }
+  &__mockContextualInformationWrapper {
+    background-color: #888;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    margin: 0 auto 100px;
+    border-radius: 50%;
+  }
 }

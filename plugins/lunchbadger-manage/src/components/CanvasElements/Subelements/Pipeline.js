@@ -19,7 +19,8 @@ export default class Pipeline extends Component {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    expanded: PropTypes.bool,
   };
 
   constructor(props) {
@@ -105,18 +106,21 @@ export default class Pipeline extends Component {
         pipelinesOffsetTop += 117;
       }
     });
-    return this.props.entity.ports.map(port => (
-      <Port
-        key={`port-${port.portType}-${port.id}`}
-        ref={`port-${port.portType}`}
-        paper={this.props.paper}
-        way={port.portType}
-        elementId={this.props.entity.id}
-        middle={true}
-        scope={port.portGroup}
-        offsetTop={pipelinesOffsetTop + this.props.index * 57}
-      />
-    ));
+    return this.props.entity.ports.map(port => {
+      const key = `port-${port.portType}-${port.id}`;
+      return (
+        <Port
+          key={key}
+          ref={`port-${port.portType}`}
+          paper={this.props.paper}
+          way={port.portType}
+          elementId={this.props.entity.id}
+          middle={true}
+          scope={this.props.expanded ? port.portGroup : key}
+          offsetTop={pipelinesOffsetTop + this.props.index * 57}
+        />
+      );
+    });
   }
 
   toggleOpenState = () => {

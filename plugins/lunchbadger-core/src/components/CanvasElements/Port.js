@@ -76,6 +76,11 @@ export default class Port extends Component {
     if (nextProps.offsetTop !== this.props.offsetTop) {
       this.forceUpdate();
     }
+    if (nextProps.scope !== this.props.scope) {
+      const portDOM = findDOMNode(this.refs.port);
+      this.props.paper.setTargetScope(portDOM, nextProps.scope);
+      this.props.paper.setSourceScope(portDOM, nextProps.scope);
+    }
   }
 
   calculatePortTopOffsets = () => {

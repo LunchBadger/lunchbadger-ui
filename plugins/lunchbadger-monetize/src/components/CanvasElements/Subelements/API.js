@@ -70,6 +70,7 @@ export default class API extends Component {
           index={index}
           indexAPI={this.props.index}
           APIsPublicEndpoints={this.props.APIsPublicEndpoints}
+          expanded={this.state.opened}
         />
       );
     });

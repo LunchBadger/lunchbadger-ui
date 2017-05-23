@@ -44,7 +44,8 @@ export default class Model extends Component {
     left: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
     hideSourceOnDrag: PropTypes.bool.isRequired,
-    handleEndDrag: PropTypes.func
+    handleEndDrag: PropTypes.func,
+    expanded: PropTypes.bool,
   };
 
   constructor(props) {
@@ -53,14 +54,15 @@ export default class Model extends Component {
 
   renderPorts() {
     return this.props.entity.ports.map((port) => {
+      const key = `port-${port.portType}-${port.id}`;
       return (
-        <Port key={`port-${port.portType}-${port.id}`}
+        <Port key={key}
               paper={this.props.paper}
               way={port.portType}
               middle={true}
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
-              scope={port.portGroup}
+              scope={this.props.expanded ? port.portGroup : key}
               offsetTop={85 + this.props.index * 24}
         />
       );

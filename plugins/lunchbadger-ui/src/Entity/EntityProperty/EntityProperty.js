@@ -46,6 +46,7 @@ class EntityProperty extends Component {
       onBlur,
       underlineStyle,
       underlineFocusStyle,
+      onViewModeClick,
     } = this.props;
     const {contextualVisible} = this.state;
     const classNames = cs('EntityProperty', {
@@ -60,12 +61,17 @@ class EntityProperty extends Component {
     if (password && value.length > 0) {
       textValue = '•'.repeat(value.length);
     }
+    const textValueClassNames = cs('EntityProperty__field--textValue', {
+      ['EntityProperty__field--textValue--clickable']: !!onViewModeClick,
+    });
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
         <div className="EntityProperty__field">
-          <div className="EntityProperty__field--text">
-            {textValue}
+          <div className='EntityProperty__field--text'>
+            <span className={textValueClassNames} onClick={onViewModeClick}>
+              {textValue}
+            </span>
           </div>
           {!fake && (
             <Input
@@ -118,6 +124,7 @@ EntityProperty.propTypes = {
   onBlur: PropTypes.func,
   underlineStyle: PropTypes.object,
   underlineFocusStyle: PropTypes.object,
+  onViewModeClick: PropTypes.func,
 }
 
 EntityProperty.defaultProps = {

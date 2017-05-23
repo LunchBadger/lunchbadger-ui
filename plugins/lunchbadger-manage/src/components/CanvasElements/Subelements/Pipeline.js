@@ -20,7 +20,8 @@ export default class Pipeline extends Component {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    expanded: PropTypes.bool,
   };
 
   constructor(props) {
@@ -106,23 +107,30 @@ export default class Pipeline extends Component {
         pipelinesOffsetTop += 117;
       }
     });
-    return this.props.entity.ports.map(port => (
-      <Port
-        key={`port-${port.portType}-${port.id}`}
-        ref={`port-${port.portType}`}
-        paper={this.props.paper}
-        way={port.portType}
-        elementId={this.props.entity.id}
-        middle={true}
-        scope={port.portGroup}
-        offsetTop={pipelinesOffsetTop + this.props.index * 57}
-      />
-    ));
+    return this.props.entity.ports.map(port => {
+      const key = `port-${port.portType}-${port.id}`;
+      return (
+        <Port
+          key={key}
+          ref={`port-${port.portType}`}
+          paper={this.props.paper}
+          way={port.portType}
+          elementId={this.props.entity.id}
+          middle={true}
+          scope={this.props.expanded ? port.portGroup : key}
+          offsetTop={pipelinesOffsetTop + this.props.index * 57}
+        />
+      );
+    });
   }
 
   toggleOpenState = () => {
     this.setState({opened: !this.state.opened});
     this.props.onToggleOpen(!this.state.opened);
+  }
+
+  toggleCollapsibleProperties = () => {
+    this.collapsiblePropertiesDOM.handleToggleCollapse();
   }
 
   render() {
@@ -138,12 +146,14 @@ export default class Pipeline extends Component {
     const {index} = this.props;
     return (
       <CollapsibleProperties
+        ref={(r) => {this.collapsiblePropertiesDOM = r;}}
         bar={
           <EntityProperty
             name={`pipelines[${index}][name]`}
             value={this.props.entity.name}
             hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
             onDelete={() => {console.log('TODO')}}
+            onViewModeClick={this.toggleCollapsibleProperties}
           />
         }
         collapsible={

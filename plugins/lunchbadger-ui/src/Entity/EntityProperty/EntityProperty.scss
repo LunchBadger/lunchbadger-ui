@@ -60,6 +60,11 @@
       .editable & {
         display: none;
       }
+      &Value {
+        &--clickable {
+          cursor: pointer;
+        }
+      }
     }
     &--input {
       display: none;

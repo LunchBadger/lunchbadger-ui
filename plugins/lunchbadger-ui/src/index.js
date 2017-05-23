@@ -15,6 +15,7 @@ import EntitySubElements from './Entity/EntitySubElements/EntitySubElements';
 import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValidationErrors';
 
 import Input from './Form/Input';
+import Checkbox from './Form/Checkbox';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import {Form} from './utils/Formsy/main';
@@ -41,6 +42,7 @@ const entityIcons = {
 
 export {
   Button,
+  Checkbox,
   CollapsibleProperties,
   ContextualInformationMessage,
   Entity,

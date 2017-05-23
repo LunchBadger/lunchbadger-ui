@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Checkbox from '../../Generics/Form/Checkbox';
+import {Checkbox} from '../../../../../lunchbadger-ui/src';
 
 class CheckboxField extends Component {
   render() {

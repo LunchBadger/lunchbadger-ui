@@ -181,6 +181,9 @@ let LunchBadgerCore = {
       {label: 'Logging', value: 'Logging'},
       {label: 'Redirect', value: 'Redirect'},
     ],
+    defaultEntityNames: {
+      Model: 'NewModel',
+    },
   },
 };
 

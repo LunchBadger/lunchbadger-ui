@@ -3,6 +3,7 @@ import _ from 'lodash';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
+const {defaultEntityNames} = LunchBadgerCore.utils;
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -36,7 +37,7 @@ export default class Model extends BaseModel {
   _ports = [];
   _properties = [];
   _relations = [];
-  contextPath = 'model';
+  contextPath = defaultEntityNames.Model.toLowerCase();
   base = 'PersistedModel';
   plural = '';
   readonly = false;

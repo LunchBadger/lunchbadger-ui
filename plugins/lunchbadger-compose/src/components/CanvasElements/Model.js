@@ -11,6 +11,7 @@ import './Model.scss';
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const ModelPropertyFactory = LunchBadgerManage.models.ModelProperty;
+const {defaultEntityNames} = LunchBadgerCore.utils;
 
 class Model extends Component {
   static propTypes = {
@@ -58,6 +59,8 @@ class Model extends Component {
     const messages = {
       empty: 'This field cannot be empty',
     }
+    if (model.name === 'Model') validations.data.name = 'Model name cannot be "Model"';
+    if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
     if (model.contextPath === '') validations.data.contextPath = messages.empty;
     if (Object.keys(validations.data).length > 0) validations.isValid = false;
     return validations;

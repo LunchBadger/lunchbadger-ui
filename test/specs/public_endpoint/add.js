@@ -19,9 +19,9 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('PublicEndpoint');
+    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('PublicEndpoint');
     page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityPropertyLabel').text.to.equal('PATH');
-    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input').to.have.value.that.equals('/endpoint');
+    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('/endpoint');
 
     browser.pause(1000);
   },

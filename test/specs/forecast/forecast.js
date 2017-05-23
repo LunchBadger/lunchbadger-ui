@@ -35,7 +35,7 @@ module.exports = {
       apiSelector,
       forecasterSelector
     );
-    browser.pause(1000);
+    browser.pause(3000);
     browser.expect.element(apiForecastSelector).to.be.present;
 
     browser.getText(apiSelector + ' .EntityHeader .EntityProperty__field--text', function (result) {

@@ -15,22 +15,22 @@ module.exports = {
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.pause(1000);
   },
-
-  'Tools menu: REST datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 2);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
-    browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
-  },
-
-  'Tools menu: SOAP datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 3);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
-    browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
-  },
+  //
+  // 'Tools menu: REST datasource selected': function (browser) {
+  //   page.addElementFromTooltip('.dataSource.tool', 2);
+  //   browser.pause(1000);
+  //   page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+  //   browser.click(backendSelector + '.DataSource.editable .Button.cancel');
+  //   browser.pause(1000);
+  // },
+  //
+  // 'Tools menu: SOAP datasource selected': function (browser) {
+  //   page.addElementFromTooltip('.dataSource.tool', 3);
+  //   browser.pause(1000);
+  //   page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+  //   browser.click(backendSelector + '.DataSource.editable .Button.cancel');
+  //   browser.pause(1000);
+  // },
 
   'Tools menu: Redis datasource selected': function (browser) {
     page.addElementFromTooltip('.dataSource.tool', 4);

@@ -10,15 +10,15 @@ module.exports = {
 
     page.addElementFromTooltip('.endpoint.tool', 1);
     browser.pause(500);
-    browser.clearValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input');
-    browser.setValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input', 'FooBar');
+    browser.clearValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input');
+    browser.setValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input', 'FooBar');
     browser.click(privateEndpointSelector + '.editable button[type=submit]');
     browser.pause(1000);
 
     page.addElement('.gateway.tool');
     browser.pause(3500);
-    browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input');
-    browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input', 'blip-bloop');
+    browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input');
+    browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
     browser.click(gatewaySelector + '.editable button[type=submit]');
     browser.pause(2000);
 
@@ -33,8 +33,8 @@ module.exports = {
       .pause(500);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('FooBarPublicEndpoint');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input').to.have.value.that.equals('foobar');
+    page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('FooBarPublicEndpoint');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('foobar');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');
 
     browser.pause(1500);

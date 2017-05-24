@@ -18,7 +18,11 @@ export const toggleSystemNotifications = visible => ({
   visible,
 });
 
-export const showSystemDefcon1 = message => ({
-  type: 'SYSTEM_DEFCON1/SHOW',
-  message,
+export const addSystemDefcon1 = error => ({
+  type: 'SYSTEM_DEFCON1/ADD',
+  error,
+});
+
+export const toggleSystemDefcon1 = () => ({
+  type: 'SYSTEM_DEFCON1/TOGGLE',
 });

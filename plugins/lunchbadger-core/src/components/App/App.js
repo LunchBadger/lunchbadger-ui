@@ -120,7 +120,10 @@ class App extends Component {
   }
 
   render() {
-    const {systemDefcon1Error} = this.props;
+    const {
+      systemDefcon1Visible,
+      systemDefcon1Errors,
+    } = this.props;
     return (
       <div className="app">
         <Spinner loading={!this.state.loaded} />
@@ -142,8 +145,8 @@ class App extends Component {
           <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
         </div>
         <SystemInformationMessages />
-        {systemDefcon1Error !== '' && (
-          <SystemDefcon1 error={systemDefcon1Error} />
+        {systemDefcon1Visible && (
+          <SystemDefcon1 errors={systemDefcon1Errors} />
         )}
       </div>
     );
@@ -151,7 +154,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  systemDefcon1Error: state.ui.systemDefcon1,
+  systemDefcon1Visible: state.ui.systemDefcon1.visible,
+  systemDefcon1Errors: state.ui.systemDefcon1.errors,
 });
 
 const mapDispatchToProps = dispatch => ({

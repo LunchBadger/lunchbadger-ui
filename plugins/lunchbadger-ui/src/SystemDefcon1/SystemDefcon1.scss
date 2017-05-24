@@ -91,7 +91,7 @@
           color: #538cca;
           cursor: pointer;
         }
-        pre {
+        &--box {
           margin-top: 20px;
           padding: 10px 15px;
           color: #900;
@@ -101,6 +101,9 @@
           font-size: 12px;
           max-height: 300px;
           overflow: auto;
+          pre {
+            margin-bottom: 10px;
+          }
         }
       }
       &:last-child {

@@ -14,14 +14,7 @@ function expectInstall(page, finalStatus, finalMsg) {
 }
 
 module.exports = {
-  '@disabled': true,
-  /* FIXME - on localhost, server returns error:
-      LoopBack connector "rest" is not installed as any of the following modules:
-        ./connectors/rest
-        loopback-connector-rest
-      To fix, run:
-        npm install loopback-connector-rest --save
-  */
+  // '@disabled': true,
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();

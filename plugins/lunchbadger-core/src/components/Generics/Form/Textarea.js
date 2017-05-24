@@ -100,7 +100,6 @@ class Textarea extends Component {
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
           underlineFocusStyle={underlineFocusStyles}
-          underlineShow={false}
           textareaStyle={textareaStyle}
           multiLine={true}
           rows={4}

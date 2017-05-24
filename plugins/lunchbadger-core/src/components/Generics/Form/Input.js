@@ -15,6 +15,10 @@ class Input extends Component {
     className: PropTypes.string,
     type: PropTypes.string,
     placeholder: PropTypes.string,
+    fullWidth: PropTypes.bool,
+    underlineStyle: PropTypes.object,
+    underlineFocusStyle: PropTypes.object,
+    isInvalid: PropTypes.bool,
   };
 
   _handleKeyPress = (event) => {
@@ -32,6 +36,12 @@ class Input extends Component {
   _handleKeyUp = (event) => {
     if (typeof this.props.handleKeyUp === 'function') {
       this.props.handleKeyUp(event);
+    }
+  }
+
+  _handleFocus = (event) => {
+    if (typeof this.props.handleFocus === 'function') {
+      this.props.handleFocus(event);
     }
   }
 
@@ -55,35 +65,31 @@ class Input extends Component {
       type,
       name,
       placeholder,
+      fullWidth,
       underlineStyle,
-      underlineFocusStyle,
+      isInvalid,
     } = this.props;
     const rootStyle = {
-      height: 'inherit',
+      fontWeight: 'inherit',
       fontSize: 'inherit',
-      fontWeight: 400,
       color: 'inherit',
     }
     const inputStyle = {
-      fontSize: 'inherit',
-      fontWeight: 400,
-      color: 'inherit',
+      ...rootStyle,
+      padding: '0 8px',
     };
     const underlineStyles = {
       ...underlineStyle,
-      borderColor: '#999',
-      bottom: 1,
     };
-    const underlineFocusStyles = {
-      ...underlineFocusStyle,
-      bottom: 1,
-      borderWidth: 2,
-    };
+    if (isInvalid) {
+      underlineStyles.borderColor = '#f44336';
+    }
     return (
-      <span className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
+      <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
         <TextField
           value={getValue()}
           type={type || 'text'}
+          onFocus={this._handleFocus}
           onBlur={this._handleBlur}
           onKeyPress={this._handleKeyPress}
           onKeyUp={this._handleKeyUp}
@@ -91,27 +97,13 @@ class Input extends Component {
           onChange={this._handleChange}
           id={name}
           placeholder={placeholder}
-          fullWidth
+          fullWidth={fullWidth}
           style={rootStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
-          underlineFocusStyle={underlineFocusStyles}
-          underlineShow={false}
+          underlineFocusStyle={underlineStyles}
         />
-      </span>
-    );
-    return (
-      <input className={this.props.className || ''}
-             value={this.props.getValue()}
-             type={this.props.type || 'text'}
-             onBlur={this._handleBlur}
-             onKeyPress={this._handleKeyPress}
-             onKeyUp={this._handleKeyUp}
-             onKeyDown={this._handleKeyDown}
-             onChange={this._handleChange}
-             id={this.props.name}
-             placeholder={this.props.placeholder}
-      />
+      </div>
     );
   }
 }

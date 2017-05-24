@@ -40,20 +40,11 @@ class Select extends Component {
     const {className, getValue, multiple, options} = this.props;
     const style = {
       fontWeight: 400,
-      height: 40,
-      // top: 0,
     };
     const labelStyle = {
       ...style,
-      lineHeight: '40px',
-      top: 0,
+      padding: '0 8px',
     }
-    const iconStyle = {
-      width: 40,
-      height: 40,
-      border: 0,
-      padding: 0,
-    };
     return (
       <span className={className || ''}>
         <SelectField
@@ -66,26 +57,12 @@ class Select extends Component {
           style={style}
           labelStyle={labelStyle}
           listStyle={style}
-          iconStyle={iconStyle}
-          underlineStyle={{display: 'none'}}
         >
         {options.map(({value, label}, idx) => (
           <MenuItem key={idx} value={value} primaryText={label} />
         ))}
         </SelectField>
       </span>
-    )
-    return (
-      <select className={this.props.className || ''}
-              value={this.props.getValue()}
-              multiple={this.props.multiple}
-              onKeyDown={this._handleKeyDown}
-              onBlur={this._handleBlur}
-              onChange={this._handleChange}>
-        {this.props.options.map(({value, label}, idx) => (
-          <option key={idx} value={value}>{label}</option>
-        ))}
-      </select>
     );
   }
 }

@@ -70,6 +70,7 @@ class Input extends Component {
       isInvalid,
     } = this.props;
     const rootStyle = {
+      fontWeight: 'inherit',
       fontSize: 'inherit',
       color: 'inherit',
     }

@@ -23,7 +23,7 @@ export default class PublicEndpoint extends Component {
     Object.keys(this.props.APIsOpened).forEach((key, index) => {
       if (!stopLoop) {
         if (key === this.props.APIId && this.props.APIsOpened[key]) {
-          APIsOffsetTop += 54 + this.props.index * 26;
+          APIsOffsetTop += 60 + this.props.index * 26;
         }
       }
       if (key === this.props.APIId) {
@@ -31,7 +31,7 @@ export default class PublicEndpoint extends Component {
       }
       if (stopLoop) return;
       if (this.props.APIsOpened[key]) {
-        APIsOffsetTop += 25 + this.props.APIsPublicEndpoints[key] * 26;
+        APIsOffsetTop += 34 + this.props.APIsPublicEndpoints[key] * 26;
       }
     });
     return this.props.entity.ports.map((port) => {
@@ -44,7 +44,7 @@ export default class PublicEndpoint extends Component {
               elementId={`${this.props.entity.id}`}
               ref={`port-${port.portType}`}
               scope={this.props.expanded ? port.portGroup : key}
-              offsetTop={103 + APIsOffsetTop + this.props.indexAPI * 52}
+              offsetTop={98 + APIsOffsetTop + this.props.indexAPI * 40}
         />
       );
     });

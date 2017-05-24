@@ -96,7 +96,7 @@ export default class Pipeline extends Component {
   }
 
   renderPorts() {
-    let pipelinesOffsetTop = 106;
+    let pipelinesOffsetTop = 102;
     let stopLoop = false;
     Object.keys(this.props.pipelinesOpened).forEach((key) => {
       if (key === this.props.entity.id) {
@@ -104,7 +104,7 @@ export default class Pipeline extends Component {
       }
       if (stopLoop) return;
       if (this.props.pipelinesOpened[key]) {
-        pipelinesOffsetTop += 117;
+        pipelinesOffsetTop += 171;
       }
     });
     return this.props.entity.ports.map(port => {
@@ -118,7 +118,7 @@ export default class Pipeline extends Component {
           elementId={this.props.entity.id}
           middle={true}
           scope={this.props.expanded ? port.portGroup : key}
-          offsetTop={pipelinesOffsetTop + this.props.index * 57}
+          offsetTop={pipelinesOffsetTop + this.props.index * 48}
         />
       );
     });

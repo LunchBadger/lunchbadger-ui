@@ -18,6 +18,7 @@ class Input extends Component {
     fullWidth: PropTypes.bool,
     underlineStyle: PropTypes.object,
     underlineFocusStyle: PropTypes.object,
+    isInvalid: PropTypes.bool,
   };
 
   _handleKeyPress = (event) => {
@@ -66,26 +67,22 @@ class Input extends Component {
       placeholder,
       fullWidth,
       underlineStyle,
-      underlineFocusStyle,
+      isInvalid,
     } = this.props;
     const rootStyle = {
-      height: 'inherit',
       fontSize: 'inherit',
       color: 'inherit',
     }
     const inputStyle = {
-      fontSize: 'inherit',
-      color: 'inherit',
+      ...rootStyle,
+      padding: '0 8px',
     };
     const underlineStyles = {
       ...underlineStyle,
-      bottom: -1,
     };
-    const underlineFocusStyles = {
-      ...underlineFocusStyle,
-      bottom: -1,
-      borderWidth: 2,
-    };
+    if (isInvalid) {
+      underlineStyles.borderColor = '#f44336';
+    }
     return (
       <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
         <TextField
@@ -103,8 +100,7 @@ class Input extends Component {
           style={rootStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
-          underlineFocusStyle={underlineFocusStyles}
-          underlineShow={false}
+          underlineFocusStyle={underlineStyles}
         />
       </div>
     );

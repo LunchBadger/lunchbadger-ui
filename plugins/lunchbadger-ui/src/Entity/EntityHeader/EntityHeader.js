@@ -11,9 +11,6 @@ class EntityHeader extends Component {
     const underlineStyle = {
       borderColor: '#8dbde2',
     }
-    const underlineFocusStyle = {
-      borderColor: '#FFF',
-    }
     return (
       <div className="EntityHeader">
         <div className="EntityHeader__icon" onClick={onToggleExpand}>
@@ -26,7 +23,6 @@ class EntityHeader extends Component {
             value={name}
             onChange={onNameChange}
             underlineStyle={underlineStyle}
-            underlineFocusStyle={underlineFocusStyle}
           />
         </div>
       </div>

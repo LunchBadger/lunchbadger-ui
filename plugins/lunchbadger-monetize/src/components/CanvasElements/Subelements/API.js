@@ -96,7 +96,11 @@ export default class API extends Component {
     return connectDragSource(
       <div>
         <CollapsibleProperties
-          bar={this.props.entity.name}
+          bar={(
+            <span className="Portal__APIs__title">
+              {this.props.entity.name}
+            </span>
+          )}
           collapsible={
             <div>
               <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>

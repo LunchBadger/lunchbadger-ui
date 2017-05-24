@@ -35,17 +35,10 @@
     }
   }
   &__field {
-    margin-top: 8px;
-    border-width: 1px;
-    border-color: transparent;
-    border-style: solid;
     color: rgb(75, 75, 75);
-    border-radius: 3px;
     width: 100%;
-    height: 30px;
     font-size: 18px;
     font-weight: normal;
-    padding: 0 8px;
     .editable & {
       border-color: rgb(222, 222, 221);
     }
@@ -56,7 +49,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      line-height: 28px;
+      line-height: 48px;
+      padding: 0 8px;
       .editable & {
         display: none;
       }

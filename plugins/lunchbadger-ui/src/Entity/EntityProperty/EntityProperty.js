@@ -45,16 +45,16 @@ class EntityProperty extends Component {
       onDelete,
       onBlur,
       underlineStyle,
-      underlineFocusStyle,
       onViewModeClick,
     } = this.props;
     const {contextualVisible} = this.state;
+    const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', {
       ['EntityProperty__fake']: fake,
       ['EntityProperty__editableOnly']: editableOnly,
       ['EntityProperty__noTitle']: title === '',
       ['EntityProperty__contextual']: contextualVisible,
-      ['EntityProperty__invalid']: invalid !== '',
+      ['EntityProperty__invalid']: isInvalid,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;
@@ -86,7 +86,7 @@ class EntityProperty extends Component {
               type={password ? 'password' : 'text'}
               fullWidth
               underlineStyle={underlineStyle}
-              underlineFocusStyle={underlineFocusStyle}
+              isInvalid={isInvalid}
             />
           )}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
@@ -101,7 +101,7 @@ class EntityProperty extends Component {
             <div className="EntityProperty__context">{contextual}</div>
           </SmoothCollapse>
         )}
-        <SmoothCollapse expanded={invalid !== ''} heightTransition="800ms ease">
+        <SmoothCollapse expanded={isInvalid} heightTransition="800ms ease">
           <div className="EntityProperty__error">{invalid}</div>
         </SmoothCollapse>
       </div>
@@ -123,7 +123,6 @@ EntityProperty.propTypes = {
   onDelete: PropTypes.func,
   onBlur: PropTypes.func,
   underlineStyle: PropTypes.object,
-  underlineFocusStyle: PropTypes.object,
   onViewModeClick: PropTypes.func,
 }
 

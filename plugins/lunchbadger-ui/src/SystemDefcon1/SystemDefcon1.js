@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse, IconSVG} from '../';
-import {showSystemDefcon1} from '../actions';
+import {toggleSystemDefcon1} from '../actions';
 import {iconDelete} from '../../../../src/icons';
 import './SystemDefcon1.scss';
 
@@ -16,29 +16,33 @@ class SystemDefcon1 extends Component {
 
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
-  handleClose = () => this.props.close();
+  handleClose = () => {
+    const {close, server} = this.props;
+    if (server) {
+      document.location.reload();
+    } else {
+      close();
+    }
+  }
 
   render() {
-    const {server = false, error} = this.props;
+    const {server = false, errors} = this.props;
     const {visibleError} = this.state;
     const title = server ? 'Server Failure' : 'The workspace crashed';
     const content = server
       ? "The system can't connect to the server. Please check that the server is running and reload the page."
-      : "You'll need to reload the page to continue";
+      : "You'll need to fix the workspace crash cause";
     return (
       <div className="SystemDefcon1">
         <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
           <div className="SystemDefcon1__box__title">
             {title}
           </div>
-          <div className="SystemDefcon1__box__delete" onClick={this.handleClose}>
-            <IconSVG svg={iconDelete} />
-          </div>
           <div className="SystemDefcon1__box__content">
             {content}
             {server && (
               <div className="SystemDefcon1__box__content--error">
-                ERROR: {error}
+                ERROR: {errors.join('')}
               </div>
             )}
             {!server && (
@@ -52,15 +56,22 @@ class SystemDefcon1 extends Component {
                   </span>
                 </div>
                 <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
-                  <pre>
-                    {error}
-                  </pre>
+                  <div className="SystemDefcon1__box__content__details--box">
+                    {errors.map((item, idx) => (
+                      <div key={idx}>
+                        {errors.length > 1 && <h3>Error {idx + 1}</h3>}
+                        <pre>{item}</pre>
+                      </div>
+                    ))}
+                  </div>
                 </SmoothCollapse>
               </div>
             )}
           </div>
           <div className="SystemDefcon1__box__content">
-            <button onClick={() => { document.location.reload(); }}>RELOAD</button>
+            <button onClick={this.handleClose}>
+              {server ? 'RELOAD' : 'OK'}
+            </button>
           </div>
         </div>
       </div>
@@ -69,7 +80,7 @@ class SystemDefcon1 extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  close: () => dispatch(showSystemDefcon1('')),
+  close: () => dispatch(toggleSystemDefcon1()),
 });
 
 export default connect(null, mapDispatchToProps)(SystemDefcon1);

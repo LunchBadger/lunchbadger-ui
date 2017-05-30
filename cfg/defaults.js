@@ -64,6 +64,9 @@ function getDefaultModules() {
           'imports?this=>window',
           'script'
         ]
+      }, {
+        test: /\.ico$/,
+        loader: 'file-loader?name=[name].[ext]'
       }
     ]
   };

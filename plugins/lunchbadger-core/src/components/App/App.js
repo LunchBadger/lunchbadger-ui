@@ -151,7 +151,7 @@ class App extends Component {
   }
 
   render() {
-    const {systemDefcon1Error, multiEnvDelta, multiEnvIndex} = this.props;
+    const {systemDefcon1Visible, systemDefcon1Errors, multiEnvDelta, multiEnvIndex} = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
@@ -189,8 +189,8 @@ class App extends Component {
             </div>
           </div>
           <SystemInformationMessages />
-          {systemDefcon1Error !== '' && (
-            <SystemDefcon1 error={systemDefcon1Error} />
+          {systemDefcon1Visible && (
+            <SystemDefcon1 errors={systemDefcon1Errors} />
           )}
         </div>
       </div>
@@ -199,7 +199,8 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  systemDefcon1Error: state.ui.systemDefcon1,
+  systemDefcon1Visible: state.ui.systemDefcon1.visible,
+  systemDefcon1Errors: state.ui.systemDefcon1.errors,
   multiEnvIndex: state.ui.multiEnvironments.selected,
   multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   multiEnvAmount: state.ui.multiEnvironments.environments.length,

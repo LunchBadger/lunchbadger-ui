@@ -14,50 +14,63 @@ class SystemDefcon1Box extends Component {
 
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
+  handleClose = () => {
+    const {onClose, server} = this.props;
+    if (server) {
+      document.location.reload();
+    } else {
+      onClose();
+    }
+  }
+
   render() {
-    const {server = false, error, onClose} = this.props;
+    const {server = false, errors} = this.props;
     const {visibleError} = this.state;
     const title = server ? 'Server Failure' : 'The workspace crashed';
     const content = server
       ? "The system can't connect to the server. Please check that the server is running and reload the page."
-      : "You'll need to reload the page to continue";
+      : "You'll need to fix the workspace crash cause";
     return (
-      <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
-        <div className="SystemDefcon1__box__title">
-          {title}
-        </div>
-        {onClose && (
-          <div className="SystemDefcon1__box__delete" onClick={onClose}>
-            <IconSVG svg={iconDelete} />
+      <div className="SystemDefcon1">
+        <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
+          <div className="SystemDefcon1__box__title">
+            {title}
           </div>
-        )}
-        <div className="SystemDefcon1__box__content">
-          {content}
-          {server && (
-            <div className="SystemDefcon1__box__content--error">
-              ERROR: {error}
-            </div>
-          )}
-          {!server && (
-            <div className="SystemDefcon1__box__content__details">
-              <div>
-                <span
-                  className="SystemDefcon1__box__content__details--link"
-                  onClick={this.toggleVisibleError}
-                >
-                  {visibleError ? 'Hide' : 'Show'} server output details
-                </span>
+          <div className="SystemDefcon1__box__content">
+            {content}
+            {server && (
+              <div className="SystemDefcon1__box__content--error">
+                ERROR: {errors.join('')}
               </div>
-              <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
-                <pre>
-                  {error}
-                </pre>
-              </SmoothCollapse>
-            </div>
-          )}
-        </div>
-        <div className="SystemDefcon1__box__content">
-          <button onClick={() => { document.location.reload(); }}>RELOAD</button>
+            )}
+            {!server && (
+              <div className="SystemDefcon1__box__content__details">
+                <div>
+                  <span
+                    className="SystemDefcon1__box__content__details--link"
+                    onClick={this.toggleVisibleError}
+                  >
+                    {visibleError ? 'Hide' : 'Show'} server output details
+                  </span>
+                </div>
+                <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
+                  <div className="SystemDefcon1__box__content__details--box">
+                    {errors.map((item, idx) => (
+                      <div key={idx}>
+                        {errors.length > 1 && <h3>Error {idx + 1}</h3>}
+                        <pre>{item}</pre>
+                      </div>
+                    ))}
+                  </div>
+                </SmoothCollapse>
+              </div>
+            )}
+          </div>
+          <div className="SystemDefcon1__box__content">
+            <button onClick={this.handleClose}>
+              {server ? 'RELOAD' : 'OK'}
+            </button>
+          </div>
         </div>
       </div>
     );

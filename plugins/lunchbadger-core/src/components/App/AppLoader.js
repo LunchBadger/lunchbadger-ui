@@ -93,7 +93,7 @@ export default class AppLoader extends Component {
   renderError() {
     return (
       <div className='app'>
-        <SystemDefcon1 server error={this.state.error.message} />
+        <SystemDefcon1 server errors={[this.state.error.message]} />
       </div>
     );
   }

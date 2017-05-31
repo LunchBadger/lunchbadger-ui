@@ -49,8 +49,10 @@
       z-index: 99999;
       position: relative;
       background-color: #FFF;
-      .Toolbox {
+      &:hover .Toolbox {
         display: block;
+        opacity: 1;
+        pointer-events: all;
       }
     }
     .editable & {

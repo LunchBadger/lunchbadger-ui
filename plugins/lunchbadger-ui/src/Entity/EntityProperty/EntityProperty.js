@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
-import iconDelete from '../../../../../src/icons/icon-delete.svg';
-import iconTrash from '../../../../../src/icons/icon-trash.svg';
+import {iconDelete, iconTrash, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
@@ -72,7 +71,7 @@ class EntityProperty extends Component {
     if (isDelta) {
       toolboxConfig.push({
         action: 'delete',
-        svg: iconTrash,
+        svg: iconRevert,
         onClick: onResetField(name),
       });
     }

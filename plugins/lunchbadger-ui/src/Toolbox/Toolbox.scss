@@ -34,7 +34,7 @@
     &:active {
       background-color: #00404f;
       .multiEnvDelta & {
-        background-color: #99375c;
+        background-color: hsl(0, 0%, 90%);
       }
       .Toolbox__button__icon {
         svg {
@@ -49,10 +49,9 @@
       margin-top: 3px;
       display: inline-block;
       .multiEnvDelta & {
-        margin-top: 5px;
+        margin-top: 7px;
         svg {
-          height: 27px;
-          stroke: #d24a7c;
+          height: 21px;
         }
       }
       svg {

@@ -10,8 +10,7 @@ import _ from 'lodash';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import removeEntity from '../../actions/CanvasElements/removeEntity';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
-import iconTrash from '../../../../../src/icons/icon-trash.svg';
-import iconEdit from '../../../../../src/icons/icon-edit.svg';
+import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 
 const boxSource = {
   beginDrag(props) {
@@ -411,7 +410,7 @@ export default (ComposedComponent) => {
         if (isDelta) {
           toolboxConfig.push({
             action: 'delete',
-            svg: iconTrash,
+            svg: iconRevert,
             onClick: this.resetEnvEntity,
           });
         }

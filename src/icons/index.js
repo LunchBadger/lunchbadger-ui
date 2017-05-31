@@ -14,6 +14,7 @@ import iconMouse from './icon-mouse.svg';
 import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
+import iconRevert from './icon-revert.svg';
 import iconTrash from './icon-trash.svg';
 import iconUser from './icon-user.svg';
 
@@ -34,6 +35,7 @@ export {
   iconPlus,
   iconPlane,
   iconPortal,
+  iconRevert,
   iconTrash,
   iconUser
 };

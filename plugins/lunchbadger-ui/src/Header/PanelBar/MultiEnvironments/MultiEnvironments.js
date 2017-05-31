@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {selectMultiEnvironment, addMultiEnvironment, toggleMultiEnvironmentDelta} from '../../../actions';
+import {
+  selectMultiEnvironment,
+  addMultiEnvironment,
+  toggleMultiEnvironmentDelta,
+  toggleMultiEnvironmentNameEdit,
+  updateMultiEnvironmentName,
+} from '../../../actions';
 import {IconSVG, ContextualInformationMessage} from '../../../';
 import MultiEnvironment from './MultiEnvironment/MultiEnvironment';
 import {iconPlus, iconLeaf, iconMouse} from '../../../../../../src/icons';
@@ -27,7 +33,7 @@ class MultiEnvironments extends Component {
   }
 
   render() {
-    const {environments, selected, add} = this.props;
+    const {environments, selected, add, onToggleNameEdit, onUpdateName} = this.props;
     const {balloonVisible} = this.state;
     return (
       <div className="MultiEnv">
@@ -40,6 +46,8 @@ class MultiEnvironments extends Component {
             icon={idx === 0 ? iconLeaf : iconMouse}
             onClick={this.select}
             onToggleDelta={this.toggleDelta}
+            onToggleNameEdit={onToggleNameEdit}
+            onUpdateName={onUpdateName}
           />
         ))}
         {environments.length <= 4 && (
@@ -77,6 +85,8 @@ const mapDispatchToProps = dispatch => ({
   select: index => dispatch(selectMultiEnvironment(index)),
   add: () => dispatch(addMultiEnvironment()),
   toggleDelta: index => dispatch(toggleMultiEnvironmentDelta(index)),
+  onToggleNameEdit: (index, edit) => dispatch(toggleMultiEnvironmentNameEdit(index, edit)),
+  onUpdateName: (index, name) => dispatch(updateMultiEnvironmentName(index, name)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MultiEnvironments);

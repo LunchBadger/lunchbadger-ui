@@ -2,10 +2,10 @@
   display: inline-block;
   vertical-align: top;
   background-color: #2b1a3a;
-  line-height: 33px;
   margin: 2px 2px 0 0;
   width: 240px;
-  padding-left: 60px;
+  padding-left: 55px;
+  padding-top: 6px;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   font-size: 16px;
@@ -35,5 +35,34 @@
     left: 19px;
     width: 23px;
     height: 23px;
+  }
+  &__input {
+    display: inline-block;
+    width: 125px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 5px;
+    border-bottom: 1px solid transparent;
+    line-height: 23px;
+    .edit & {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    input {
+      width: 100%;
+      border: none;
+      background-color: inherit;
+      color: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      padding: 0;
+      outline: none;
+      display: none;
+      line-height: inherit;
+      .edit & {
+        display: inline;
+      }
+    }
   }
 }

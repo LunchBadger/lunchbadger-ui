@@ -10,7 +10,14 @@ class MultiEnvironment extends Component {
     super(props);
     this.state = {
       balloonVisible: false,
+      name: props.name,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.edit !== this.props.edit && this.props.edit) {
+      this.nameRef.select();
+    }
   }
 
   onClick = () => {
@@ -21,8 +28,26 @@ class MultiEnvironment extends Component {
 
   toggleBalloon = balloonVisible => () => this.setState({balloonVisible});
 
+  handleChangeName = event => this.setState({name: event.target.value});
+
+  handleKeyDown = (event) => {
+    if ((event.keyCode === 13 || event.which === 13) && event.target.value.trim().length > 0) {
+      const {onUpdateName, index} = this.props;
+      onUpdateName(index, event.target.value.trim());
+    }
+  }
+
+  toggleNameEdit = edit => () => {
+    const {onToggleNameEdit, index} = this.props;
+    onToggleNameEdit(index, edit);
+    if (!edit) {
+      this.setState({name: this.props.name});
+    }
+  }
+
   render() {
-    const {name, delta, index, selected, icon, onClick, onToggleDelta} = this.props;
+    const {delta, index, selected, icon, onClick, onToggleDelta, edit} = this.props;
+    const {name} = this.state;
     const {balloonVisible} = this.state;
     const styles = {
       trackStyle: {
@@ -48,11 +73,25 @@ class MultiEnvironment extends Component {
     };
     return (
       <div
-        className={cs('MultiEnvironment', {['selected']: selected, ['development']: index === 0})}
+        className={cs('MultiEnvironment', {selected, ['development']: index === 0, edit})}
         onClick={this.onClick}
       >
         <IconSVG className="MultiEnvironment__icon" svg={icon} />
-        {index > 0 && name}
+        {index > 0 && (
+          <span
+            className="MultiEnvironment__input"
+            onDoubleClick={this.toggleNameEdit(true)}
+          >
+            {!edit && name}
+            <input
+              ref={(r) => {this.nameRef = r;}}
+              value={name}
+              onChange={this.handleChangeName}
+              onKeyDown={this.handleKeyDown}
+              onBlur={this.toggleNameEdit(false)}
+            />
+          </span>
+        )}
         {selected && index > 0 && (
           <div
             className="MultiEnvironment__switch"

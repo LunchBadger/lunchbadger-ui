@@ -40,3 +40,15 @@ export const toggleMultiEnvironmentDelta = index => ({
   type: 'MULTIENVIRONMENTS/TOGGLE_DELTA',
   index,
 });
+
+export const toggleMultiEnvironmentNameEdit = (index, edit) => ({
+  type: 'MULTIENVIRONMENTS/TOGGLE_NAME_EDIT',
+  index,
+  edit,
+});
+
+export const updateMultiEnvironmentName= (index, name) => ({
+  type: 'MULTIENVIRONMENTS/UPDATE_NAME',
+  index,
+  name,
+});

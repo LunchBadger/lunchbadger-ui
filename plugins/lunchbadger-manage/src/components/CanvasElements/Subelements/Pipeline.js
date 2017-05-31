@@ -91,15 +91,12 @@ export default class Pipeline extends Component {
 
   renderPolicies() {
     return this.props.entity.policies.map((policy, index) => {
-      const isDelta = this.props.entityDevelopment && this.props.entityDevelopment.policies
-        ? (policy.name !== this.props.entityDevelopment.policies[index].name) : false;
       return (
         <Policy
           key={policy.id}
           index={index}
           pipelineIndex={this.props.index}
           policy={policy}
-          isDelta={isDelta}
         />
       );
     });
@@ -154,7 +151,6 @@ export default class Pipeline extends Component {
       'pipeline__info--selected': _.find(selectedElements, {id: this.props.entity.id})
     });
     const {index} = this.props;
-    const isDelta = this.props.entityDevelopment ? (this.props.entity.name !== this.props.entityDevelopment.name) : false;
     return (
       <CollapsibleProperties
         ref={(r) => {this.collapsiblePropertiesDOM = r;}}
@@ -165,7 +161,6 @@ export default class Pipeline extends Component {
             hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
             onDelete={() => {console.log('TODO')}}
             onViewModeClick={this.toggleCollapsibleProperties}
-            isDelta={isDelta}
           />
         }
         collapsible={

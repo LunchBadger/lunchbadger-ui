@@ -378,6 +378,8 @@ export default (ComposedComponent) => {
       this.update(model);
     }
 
+    propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
+
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
       const {ready} = this.props.entity;
@@ -398,7 +400,9 @@ export default (ComposedComponent) => {
       const entity = this.props.entity;
       if (this.state[`modelEnv_${multiEnvIndex}`]) {
         Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
-          entity[`${key}`] = this.state[`modelEnv_${multiEnvIndex}`][key];
+          if (!['pipelines'].includes(key)) {
+            entity[key] = this.state[`modelEnv_${multiEnvIndex}`][key];
+          }
         });
       }
       let isDelta = false;

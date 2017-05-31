@@ -17,7 +17,7 @@ export default class Policy extends Component {
   }
 
   render() {
-    const {policy, pipelineIndex, index, isDelta} = this.props;
+    const {policy, pipelineIndex, index} = this.props;
     const hiddenInputs = [
       {
         name: `pipelines[${pipelineIndex}][policies][${index}][id]`,
@@ -33,7 +33,6 @@ export default class Policy extends Component {
         name={`pipelines[${pipelineIndex}][policies][${index}][name]`}
         value={policy.name}
         hiddenInputs={hiddenInputs}
-        isDelta={isDelta}
       />
     );
   }

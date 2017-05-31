@@ -154,7 +154,7 @@ export default (ComposedComponent) => {
       if (this.props.entity.loaded) {
         this.setState({
           editable: false,
-          expanded: false,
+          // expanded: false,
           validations: {isValid: true, data:{}},
           modelBeforeEdit: this.entityRef.getFormRef().getModel(),
           modelEnv_0: this.entityRef.getFormRef().getModel(),

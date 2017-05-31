@@ -50,7 +50,7 @@ export default class API extends Component {
     super(props);
 
     this.state = {
-      opened: false
+      opened: true
     };
   }
 
@@ -108,6 +108,7 @@ export default class API extends Component {
             </div>
           }
           onToggleCollapse={this.toggleOpenState}
+          defaultOpened
         />
       </div>
     );

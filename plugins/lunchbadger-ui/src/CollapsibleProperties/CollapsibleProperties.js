@@ -10,7 +10,7 @@ class CollapsibleProperties extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
+      expanded: props.defaultOpened,
     };
   }
 
@@ -55,10 +55,12 @@ CollapsibleProperties.propTypes = {
   bar: PropTypes.node.isRequired,
   collapsible: PropTypes.node.isRequired,
   onToggleCollapse: PropTypes.func,
+  defaultOpened: PropTypes.bool,
 }
 
 CollapsibleProperties.defaultProps = {
   onToggleCollapse: () => {},
+  defaultOpened: false,
 }
 
 export default CollapsibleProperties;

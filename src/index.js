@@ -63,7 +63,7 @@ loginManager.checkAuth().then(loggedIn => {
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
 
-  LunchBadgerCore.isMultiEnv = document.location.hash === '#multi';
+  LunchBadgerCore.isMultiEnv = document.location.search === '?multi';
 
   // Render the main component into the dom
   ReactDOM.render(

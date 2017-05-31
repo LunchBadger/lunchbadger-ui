@@ -1,10 +1,12 @@
 /*eslint no-console:0 */
 import React, {Component} from 'react';
+import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
+import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
 import './App.scss';
 import {DragDropContext} from 'react-dnd';
@@ -24,7 +26,10 @@ class App extends Component {
     loginManager: PropTypes.object,
     projectService: PropTypes.object,
     configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string
+    workspaceUrl: PropTypes.string,
+    multiEnvIndex: PropTypes.number,
+    multiEnvDelta: PropTypes.bool,
+    multiEnvAmount: PropTypes.number,
   }
 
   static propTypes = {
@@ -32,7 +37,10 @@ class App extends Component {
     loginManager: PropTypes.object,
     projectService: PropTypes.object,
     configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string
+    workspaceUrl: PropTypes.string,
+    multiEnvIndex: PropTypes.number,
+    multiEnvDelta: PropTypes.bool,
+    multiEnvAmount: PropTypes.number,
   }
 
   constructor(props) {
@@ -59,7 +67,10 @@ class App extends Component {
       loginManager: this.props.loginManager,
       projectService: this.props.projectService,
       configStoreService: this.props.configStoreService,
-      workspaceUrl: this.props.workspaceUrl
+      workspaceUrl: this.props.workspaceUrl,
+      multiEnvIndex: this.props.multiEnvIndex,
+      multiEnvDelta: this.props.multiEnvDelta,
+      multiEnvAmount: this.props.multiEnvAmount,
     };
   }
 
@@ -120,32 +131,68 @@ class App extends Component {
     });
   }
 
-  render() {
-    const {systemDefcon1Error} = this.props;
-    return (
-      <div className="app">
-        <Spinner loading={!this.state.loaded} />
-        <Header ref="header"
+  renderHeader = () => {
+    if (LunchBadgerCore.isMultiEnv) {
+      return (
+        <HeaderMultiEnv ref="header"
                 appState={this.state.appState}
                 plugins={this.state.pluginsStore}
                 saveToServer={this.saveToServer}
                 clearServer={this.clearServer} />
-        <Aside appState={this.state.appState} plugins={this.state.pluginsStore}/>
-        <div ref="container" className="app__container">
-          <div className="app__panel-wrapper">
-            <SystemNotifications />
-            <PanelContainer plugins={this.state.pluginsStore}
-                            appState={this.state.appState}
-                            canvas={() => this.refs.canvas}
-                            header={() => this.refs.header}
-                            container={() => this.refs.container}/>
+      );
+    }
+    return (
+      <Header ref="header"
+              appState={this.state.appState}
+              plugins={this.state.pluginsStore}
+              saveToServer={this.saveToServer}
+              clearServer={this.clearServer} />
+    );
+  }
+
+  render() {
+    const {systemDefcon1Error, multiEnvDelta, multiEnvIndex} = this.props;
+    const {isMultiEnv} = LunchBadgerCore;
+    const multiEnvDeltaStyle = {
+      // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
+    }
+    const multiEnvNotDev = multiEnvIndex > 0;
+    return (
+      <div>
+        <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
+        <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
+          <Spinner loading={!this.state.loaded} />
+          {this.renderHeader()}
+          <Aside
+            appState={this.state.appState}
+            plugins={this.state.pluginsStore}
+            disabled={multiEnvNotDev}
+          />
+          <div ref="container" className="app__container">
+            <div className="app__panel-wrapper">
+              <SystemNotifications />
+              <div style={multiEnvDeltaStyle}>
+                <PanelContainer plugins={this.state.pluginsStore}
+                                appState={this.state.appState}
+                                canvas={() => this.refs.canvas}
+                                header={() => this.refs.header}
+                                container={() => this.refs.container}/>
+              </div>
+            </div>
+            <div style={multiEnvDeltaStyle}>
+              <Canvas
+                appState={this.state.appState}
+                plugins={this.state.pluginsStore}
+                ref="canvas"
+                multiEnvDelta={multiEnvDelta}
+              />
+            </div>
           </div>
-          <Canvas appState={this.state.appState} plugins={this.state.pluginsStore} ref="canvas"/>
+          <SystemInformationMessages />
+          {systemDefcon1Error !== '' && (
+            <SystemDefcon1 error={systemDefcon1Error} />
+          )}
         </div>
-        <SystemInformationMessages />
-        {systemDefcon1Error !== '' && (
-          <SystemDefcon1 error={systemDefcon1Error} />
-        )}
       </div>
     );
   }
@@ -153,6 +200,9 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   systemDefcon1Error: state.ui.systemDefcon1,
+  multiEnvIndex: state.ui.multiEnvironments.selected,
+  multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
+  multiEnvAmount: state.ui.multiEnvironments.environments.length,
 });
 
 const mapDispatchToProps = dispatch => ({

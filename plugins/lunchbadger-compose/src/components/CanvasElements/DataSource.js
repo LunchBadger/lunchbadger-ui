@@ -73,7 +73,7 @@ class DataSource extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}} = this.props;
+    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'url',
@@ -106,6 +106,10 @@ class DataSource extends Component {
         contextual: 'Password should be at least 6 chars long',
       },
     ];
+    mainProperties.forEach((item, idx) => {
+      mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
+      mainProperties[idx].onResetField = onResetField;
+    });
     return <EntityProperties properties={mainProperties} />;
   }
 

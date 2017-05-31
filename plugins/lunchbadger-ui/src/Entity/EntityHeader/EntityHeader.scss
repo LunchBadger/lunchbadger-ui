@@ -4,8 +4,15 @@
   color: #FFF;
   padding: 0 35px 0 60px;
   position: relative;
+  .multiEnvDelta & {
+    filter: grayscale(100%);
+  }
   .highlighted & {
     background-color: #4190CE;
+    .multiEnvDelta & {
+      background-color: #d24a7c;
+      filter: none;
+    }
   }
   &__icon {
     position: absolute;

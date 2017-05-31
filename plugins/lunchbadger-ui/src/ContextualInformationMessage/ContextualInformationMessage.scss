@@ -12,6 +12,16 @@
   font-family: 'Open Sans';
   font-size: 17px;
   white-space: nowrap;
+  z-index: 810;
+  line-height: 1;
+  &.left {
+    left: -5px;
+    transform: none;
+    &:before {
+      left: 13px;
+      transform: translate(0, -25%) rotate(45deg);
+    }
+  }
   &:before {
     display: block;
     content: '';

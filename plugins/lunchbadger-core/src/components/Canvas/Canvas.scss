@@ -13,7 +13,9 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
+  .multiEnv & {
+    min-height: calc(100vh - 75px);
+  }
   // jsplumbs overrides
   .jsplumb-endpoint,
   .jsplumb-connector {
@@ -64,6 +66,9 @@
 .canvas__wrapper {
   overflow: auto;
   height: calc(100vh - #{$header-height});
+  .multiEnv & {
+    height: calc(100vh - 75px);
+  }
 }
 
 .canvas__container {
@@ -73,6 +78,9 @@
   overflow: auto;
   display: flex;
   flex-wrap: nowrap;
+  .multiEnv & {
+    min-height: calc(100vh - 75px);
+  }
 }
 
 .canvas__legend {

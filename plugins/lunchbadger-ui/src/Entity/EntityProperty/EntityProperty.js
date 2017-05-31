@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse} from '../../';
+import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
 import iconDelete from '../../../../../src/icons/icon-delete.svg';
+import iconTrash from '../../../../../src/icons/icon-trash.svg';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
@@ -46,6 +47,8 @@ class EntityProperty extends Component {
       onBlur,
       underlineStyle,
       onViewModeClick,
+      isDelta,
+      onResetField,
     } = this.props;
     const {contextualVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -55,6 +58,7 @@ class EntityProperty extends Component {
       ['EntityProperty__noTitle']: title === '',
       ['EntityProperty__contextual']: contextualVisible,
       ['EntityProperty__invalid']: isInvalid,
+      ['EntityProperty__delta']: isDelta,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;
@@ -64,6 +68,14 @@ class EntityProperty extends Component {
     const textValueClassNames = cs('EntityProperty__field--textValue', {
       ['EntityProperty__field--textValue--clickable']: !!onViewModeClick,
     });
+    const toolboxConfig = [];
+    if (isDelta) {
+      toolboxConfig.push({
+        action: 'delete',
+        svg: iconTrash,
+        onClick: onResetField(name),
+      });
+    }
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
@@ -90,6 +102,7 @@ class EntityProperty extends Component {
             />
           )}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
+          <Toolbox config={toolboxConfig} />
         </div>
         {onDelete && (
           <div className="EntityProperty__delete" onClick={onDelete}>
@@ -137,6 +150,7 @@ EntityProperty.defaultProps = {
   hiddenInputs: [],
   onChange: () => {},
   onBlur: () => {},
+  onResetField: () => {},
 }
 
 export default EntityProperty;

@@ -1,0 +1,39 @@
+.MultiEnvironment {
+  display: inline-block;
+  vertical-align: top;
+  background-color: #2b1a3a;
+  line-height: 33px;
+  margin: 2px 2px 0 0;
+  width: 240px;
+  padding-left: 60px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  height: 34px;
+  &.development {
+    width: 60px;
+    background-color: #166176;
+  }
+  &.selected {
+    background-color: #462c5f;
+    color: #FFF;
+    cursor: default;
+    &.development {
+      background-color: #1088a7;
+    }
+  }
+  &__switch {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+  }
+  &__icon {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 19px;
+    width: 23px;
+    height: 23px;
+  }
+}

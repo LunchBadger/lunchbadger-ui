@@ -102,6 +102,12 @@ export default (ComposedComponent) => {
       canDrop: PropTypes.bool
     };
 
+    static contextTypes = {
+      multiEnvIndex: PropTypes.number,
+      multiEnvDelta: PropTypes.bool,
+      multiEnvAmount: PropTypes.number,
+    };
+
     constructor(props) {
       super(props);
       this.currentOpenedPanel = null;
@@ -115,8 +121,9 @@ export default (ComposedComponent) => {
           data: {}
         },
         modelBeforeEdit: null,
+        modelEnv_0: null,
       };
-
+      this.multiEnvIndex = 0;
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.appState.getStateKey('currentElement');
         this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
@@ -150,7 +157,8 @@ export default (ComposedComponent) => {
           editable: false,
           expanded: false,
           validations: {isValid: true, data:{}},
-          modelBeforeEdit: this.entityRef.getFormRef().getModel()
+          modelBeforeEdit: this.entityRef.getFormRef().getModel(),
+          modelEnv_0: this.entityRef.getFormRef().getModel(),
         });
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
@@ -162,14 +170,49 @@ export default (ComposedComponent) => {
 
     componentDidUpdate() {
       this.props.entity.elementDOM = this.elementDOM;
+      const {multiEnvIndex} = this.context;
+      if (this.multiEnvIndex !== multiEnvIndex) {
+        LunchBadgerCore.multiEnvIndex = multiEnvIndex;
+        this.multiEnvIndex = multiEnvIndex;
+        const newState = {...this.state};
+        if (!this.state[`modelEnv_${multiEnvIndex}`]) {
+          newState[`modelEnv_${multiEnvIndex}`] = _.cloneDeep(this.state.modelEnv_0);
+        }
+        this.setState(newState, () => {
+          this.entityRef.getFormRef().reset(this.state[`modelEnv_${multiEnvIndex}`]);
+          this.forceUpdate();
+        });
+      }
     }
 
     update = (model) => {
+      const {multiEnvIndex, multiEnvAmount} = this.context;
+      if (multiEnvIndex === 0 && this.state.modelEnv_0) {
+        const newState = {};
+        let isChange = false;
+        Object.keys(model).forEach((key) => {
+          if (this.state.modelEnv_0[key] !== model[key]) {
+            isChange = true;
+            for (let i = 1; i < multiEnvAmount; i += 1) {
+              if (!newState[`modelEnv_${i}`]) {
+                newState[`modelEnv_${i}`] = {...this.state[`modelEnv_${i}`]};
+              }
+              newState[`modelEnv_${i}`][key] = model[key];
+            }
+          }
+        });
+        if (isChange) {
+          this.setState(newState);
+        }
+      }
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
       if (typeof element.update === 'function') {
         updated = element.update(model);
-        this.setState({modelBeforeEdit: model});
+        this.setState({
+          modelBeforeEdit: model,
+          [`modelEnv_${multiEnvIndex}`]: model,
+        });
       }
       if (typeof updated === 'undefined' || updated) {
         if (updated) {
@@ -277,6 +320,11 @@ export default (ComposedComponent) => {
     }
 
     _handleEdit = (evt) => {
+      const {multiEnvIndex, multiEnvDelta} = this.context;
+      if (multiEnvDelta && multiEnvIndex > 0) {
+        evt.stopPropagation();
+        return;
+      }
       this.toggleEditableState(evt);
       this.setState({expanded: true});
       evt.stopPropagation();
@@ -318,7 +366,21 @@ export default (ComposedComponent) => {
       }
     }
 
+    resetEnvEntity = () => {
+      this.update(this.state.modelEnv_0);
+    }
+
+    _handleResetField = name => () => {
+      const {multiEnvIndex} = this.context;
+      const model = {
+        ...this.state[`modelEnv_${multiEnvIndex}`],
+        [name]: this.state.modelEnv_0[name],
+      };
+      this.update(model);
+    }
+
     render() {
+      const {multiEnvIndex, multiEnvDelta} = this.context;
       const {ready} = this.props.entity;
       const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
       const {validations} = this.state;
@@ -333,18 +395,40 @@ export default (ComposedComponent) => {
         invalid: !validations.isValid
       });
       const opacity = isDragging ? 0.2 : 1;
-      const toolboxConfig = [
-        {
-          action: 'delete',
-          svg: iconTrash,
-          onClick: () => this.setState({showRemovingModal: true}),
-        },
-        {
+      const entityDevelopment = {...this.state.modelEnv_0};
+      const entity = this.props.entity;
+      if (this.state[`modelEnv_${multiEnvIndex}`]) {
+        Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
+          entity[`${key}`] = this.state[`modelEnv_${multiEnvIndex}`][key];
+        });
+      }
+      let isDelta = false;
+      Object.keys(entityDevelopment).forEach((key) => {
+        if (entityDevelopment[key] !== entity[key]) isDelta = true;
+      });
+      const toolboxConfig = [];
+      if (multiEnvDelta) {
+        if (isDelta) {
+          toolboxConfig.push({
+            action: 'delete',
+            svg: iconTrash,
+            onClick: this.resetEnvEntity,
+          });
+        }
+      } else {
+        if (multiEnvIndex === 0) {
+          toolboxConfig.push({
+            action: 'delete',
+            svg: iconTrash,
+            onClick: () => this.setState({showRemovingModal: true}),
+          });
+        }
+        toolboxConfig.push({
           action: 'edit',
           svg: iconEdit,
           onClick: this._handleEdit,
-        },
-      ];
+        });
+      }
       return (
             <Entity
               ref={(r) => {this.entityRef = r}}
@@ -368,13 +452,17 @@ export default (ComposedComponent) => {
               onDoubleClick={this._handleEdit}
               connectDragSource={connectDragSource}
               connectDropTarget={connectDropTarget}
+              isDelta={isDelta}
             >
               <ComposedComponent
                 ref={(ref) => this.element = ref}
                 parent={this}
                 {...this.props}
                 {...this.state}
+                entity={entity}
+                entityDevelopment={entityDevelopment}
                 onFieldUpdate={this._handleFieldUpdate}
+                onResetField={this._handleResetField}
               />
               {this.state.showRemovingModal && (
                 <TwoOptionModal

@@ -8,7 +8,14 @@
   left: 0;
   height: $header-height;
   display: table;
-  z-index: ($z-index-top + 1);
+  // z-index: ($z-index-top + 1);
+  z-index: 999;
+  .multiEnv & {
+    background: #FFF;
+    height: 75px;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .header__menu {
@@ -33,6 +40,11 @@
   display: inline-block;
   height: $header-height;
   margin-right: 19px;
+  .multiEnv & {
+    height: 36px;
+    margin-right: 7px;
+    vertical-align: top;
+  }
 }
 
 .header__menu__link {
@@ -48,10 +60,17 @@
   border-radius: 3px;
   width: 40px;
   text-align: center;
-
+  cursor: pointer;
   &:hover {
     text-decoration: none;
     background: rgba(0, 0, 0, 0.06);
+  }
+  .multiEnv & {
+    width: 36px;
+    height: 36px;
+    font-size: 31px;
+    line-height: 36px;
+    border-radius: 0;
   }
 }
 

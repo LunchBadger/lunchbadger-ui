@@ -3,9 +3,12 @@ import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties
 import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
 import ContextualInformationMessage from './ContextualInformationMessage/ContextualInformationMessage';
+import ContextualMenu from './ContextualMenu/ContextualMenu';
 import SystemDefcon1 from './SystemDefcon1/SystemDefcon1';
 import SystemInformationMessages from './SystemInformationMessages/SystemInformationMessages';
 import SystemNotifications from './SystemNotifications/SystemNotifications';
+import TopBar from './Header/TopBar/TopBar';
+import PanelBar from './Header/PanelBar/PanelBar';
 
 import Entity from './Entity/Entity';
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
@@ -45,6 +48,7 @@ export {
   Checkbox,
   CollapsibleProperties,
   ContextualInformationMessage,
+  ContextualMenu,
   Entity,
   EntityProperties,
   EntityProperty,
@@ -54,11 +58,13 @@ export {
   Form,
   IconSVG,
   Input,
+  PanelBar,
   SmoothCollapse,
   SystemDefcon1,
   SystemInformationMessages,
   SystemNotifications,
   Toolbox,
+  TopBar,
   entityIcons,
 };
 

@@ -26,6 +26,9 @@
       transform: translateX(8px);
       transition: transform 800ms ease;
       z-index: 1;
+      .multiEnvDelta & {
+        filter: grayscale(100%);
+      }
       .editable & {
         transform: translateX(0);
       }

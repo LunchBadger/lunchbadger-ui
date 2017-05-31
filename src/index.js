@@ -30,6 +30,7 @@ const muiTheme = getMuiTheme({
 global.LUNCHBADGER_CONFIG = config;
 const AppLoader = LunchBadgerCore.components.AppLoader;
 const ConfigStoreService = LunchBadgerCore.services.ConfigStoreService;
+LunchBadgerCore.multiEnvIndex = 0;
 
 console.info('Application started..!');
 
@@ -61,6 +62,8 @@ loginManager.checkAuth().then(loggedIn => {
     reducers,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
+
+  LunchBadgerCore.isMultiEnv = document.location.hash === '#multi';
 
   // Render the main component into the dom
   ReactDOM.render(

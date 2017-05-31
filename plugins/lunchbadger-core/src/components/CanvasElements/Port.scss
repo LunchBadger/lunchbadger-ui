@@ -9,6 +9,9 @@
   background: #fff;
   z-index: $z-index-medium;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  .multiEnvDelta & {
+    filter: grayscale(100%);
+  }
   &.hover {
     border-style: solid;
     border-color: $ui-dark-border;

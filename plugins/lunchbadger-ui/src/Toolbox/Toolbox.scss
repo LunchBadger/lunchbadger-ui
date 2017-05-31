@@ -1,7 +1,7 @@
 .Toolbox {
   position: absolute;
-  top: -40px;
-  right: 0;
+  top: -15px;
+  right: 15px;
   background-color: #FFF;
   width: 100px;
   height: 30px;
@@ -11,9 +11,16 @@
   transition: opacity 300ms;
   overflow: hidden;
   pointer-events: none;
+  z-index: 1;
   .highlighted:not(.editable) & {
     opacity: 1;
     pointer-events: all;
+  }
+  .multiEnvDelta & {
+    width: 38px !important;
+    height: 38px;
+    border-radius: 50%;
+    top: -19px;
   }
   &__button {
     width: 50px;
@@ -26,15 +33,28 @@
     }
     &:active {
       background-color: #00404f;
+      .multiEnvDelta & {
+        background-color: #99375c;
+      }
       .Toolbox__button__icon {
         svg {
           stroke: #FFF;
         }
       }
     }
+    .multiEnvDelta & {
+      width: 38px;
+    }
     &__icon {
       margin-top: 3px;
       display: inline-block;
+      .multiEnvDelta & {
+        margin-top: 5px;
+        svg {
+          height: 27px;
+          stroke: #d24a7c;
+        }
+      }
       svg {
         width: auto;
         height: 24px;

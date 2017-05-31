@@ -97,6 +97,7 @@ class Gateway extends Component {
         parent={this.props.entity}
         paper={this.props.paper}
         entity={pipeline}
+        entityDevelopment={this.props.entityDevelopment.pipelines ? this.props.entityDevelopment.pipelines[index] : undefined}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
       />
@@ -159,7 +160,7 @@ class Gateway extends Component {
       'has-connection-in': this.state.hasInConnection,
       'has-connection-out': this.state.hasOutConnection
     });
-    const {validations: {data}} = this.props;
+    const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'rootURL',
@@ -177,6 +178,8 @@ class Gateway extends Component {
         onBlur: this.handleFieldChange('dnsPrefix'),
       },
     ];
+    mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
+    mainProperties[0].onResetField = () => onResetField('dnsPrefix');
     return (
       <div className={elementClass}>
         <EntityProperties properties={mainProperties} />

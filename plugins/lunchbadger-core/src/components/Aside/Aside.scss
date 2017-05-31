@@ -9,7 +9,9 @@
   background: $ui-light;
   border-right: 1px solid $ui-base-border;
   z-index: ($z-index-top + 7);
-
+  .multiEnv & {
+    top: 75px;
+  }
   hr {
     margin-left: 5%;
     margin-right: 5%;

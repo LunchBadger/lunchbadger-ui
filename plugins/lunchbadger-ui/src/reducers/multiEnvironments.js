@@ -1,7 +1,4 @@
-const environments = [
-  {name: 'Testing'},
-  {name: 'Staging'},
-];
+const defaultEnvironmentName = 'Environment';
 
 const initialState = {
   selected: 0,
@@ -26,7 +23,7 @@ const multiEnvironments = (state = initialState, action) => {
         environments: [
           ...state.environments,
           {
-            ...Object.assign({}, environments[state.environments.length - 1]),
+            name: `${defaultEnvironmentName} 0${state.environments.length}`,
             delta: false,
           },
         ],

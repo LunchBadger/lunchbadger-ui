@@ -4,15 +4,8 @@ import {connect} from 'react-redux';
 import {selectMultiEnvironment, addMultiEnvironment, toggleMultiEnvironmentDelta} from '../../../actions';
 import {IconSVG, ContextualInformationMessage} from '../../../';
 import MultiEnvironment from './MultiEnvironment/MultiEnvironment';
-import {iconPlus, iconLeaf, iconMouse, iconForklift} from '../../../../../../src/icons';
+import {iconPlus, iconLeaf, iconMouse} from '../../../../../../src/icons';
 import './MultiEnvironments.scss';
-
-const icons = [
-  iconLeaf,
-  iconMouse,
-  iconForklift,
-  iconForklift,
-];
 
 class MultiEnvironments extends Component {
   constructor(props) {
@@ -44,12 +37,12 @@ class MultiEnvironments extends Component {
             {...item}
             index={idx}
             selected={idx === selected}
-            icon={icons[idx]}
+            icon={idx === 0 ? iconLeaf : iconMouse}
             onClick={this.select}
             onToggleDelta={this.toggleDelta}
           />
         ))}
-        {environments.length <= 2 && (
+        {environments.length <= 4 && (
           <div
             className="MultiEnv__add"
             onClick={this.add}

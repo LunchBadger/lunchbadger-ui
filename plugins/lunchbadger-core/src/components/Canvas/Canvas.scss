@@ -20,7 +20,9 @@
   .jsplumb-endpoint,
   .jsplumb-connector {
     z-index: 15;
-
+    .multiEnvDelta & {
+      filter: grayscale(100%);
+    }
     &.jsplumb-hover {
       z-index: 10;
 

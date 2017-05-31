@@ -398,16 +398,17 @@ export default (ComposedComponent) => {
       const opacity = isDragging ? 0.2 : 1;
       const entityDevelopment = {...this.state.modelEnv_0};
       const entity = this.props.entity;
+      const mask = ['pipelines'];
       if (this.state[`modelEnv_${multiEnvIndex}`]) {
         Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
-          if (!['pipelines'].includes(key)) {
+          if (!mask.includes(key)) {
             entity[key] = this.state[`modelEnv_${multiEnvIndex}`][key];
           }
         });
       }
       let isDelta = false;
       Object.keys(entityDevelopment).forEach((key) => {
-        if (entityDevelopment[key] !== entity[key]) isDelta = true;
+        if (!mask.includes(key) && entityDevelopment[key] !== entity[key]) isDelta = true;
       });
       const toolboxConfig = [];
       if (multiEnvDelta) {

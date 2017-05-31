@@ -14,9 +14,10 @@ export default class ModelPropertyDetails extends Component {
 
   constructor(props) {
     super(props);
-
+    let type = props.property.type || 'string';
+    type = typeof type === 'string' ? type : 'object';
     this.state = {
-      inputType: props.property.type === 'object' ? 'textarea' : 'input'
+      inputType: type === 'object' ? 'textarea' : 'input'
     };
   }
 
@@ -42,13 +43,7 @@ export default class ModelPropertyDetails extends Component {
     const {property, index} = this.props;
 
     if (this.state.inputType === 'textarea') {
-      return (
-        <Textarea className="details-panel__textarea"
-                  value={property.default_}
-                  validations="isJSON"
-                  name={`properties[${index}][default_]`}
-        />
-      );
+      return null;
     } else {
       return (
         <Input className="details-panel__input"
@@ -61,7 +56,8 @@ export default class ModelPropertyDetails extends Component {
 
   render() {
     const {property, index} = this.props;
-
+    let type = property.type || 'string';
+    type = typeof type === 'string' ? type : 'object';
     return (
       <tr>
         <td>
@@ -76,7 +72,7 @@ export default class ModelPropertyDetails extends Component {
         </td>
         <td>
           <Select className="details-panel__input details-panel__select"
-                  value={property.type || 'string'}
+                  value={type || 'string'}
                   handleChange={(value) => this._changePropertyType(value)}
                   name={`properties[${index}][type]`}
                   options={propertyTypes}

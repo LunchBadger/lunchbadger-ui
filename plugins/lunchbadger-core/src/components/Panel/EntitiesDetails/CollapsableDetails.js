@@ -10,7 +10,7 @@ export default class CollapsableDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsed: false
+      collapsed: props.collapsed || false,
     }
   }
 
@@ -27,9 +27,11 @@ export default class CollapsableDetails extends Component {
           <i className="fa fa-caret-down"/>
           {this.props.title}
         </h2>
-        <div className={containerClass}>
-          {this.props.children}
-        </div>
+        {!this.state.collapsed && (
+          <div className={containerClass}>
+            {this.props.children}
+          </div>
+        )}
       </div>
     );
   }

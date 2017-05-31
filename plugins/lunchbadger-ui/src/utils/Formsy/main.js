@@ -70,13 +70,15 @@ Formsy.Form = React.createClass({
   },
 
   componentDidMount: function () {
-    this.validateFormCronjobInterval = setInterval(this.validateFormCronjob, 100);
+    this.validateFormCronjobInterval = setInterval(this.validateFormCronjob, 300);
   },
 
   validateFormCronjob: function () {
     if (this.doValidateForm) {
       this.doValidateForm = false;
+      this.lockValidateForm = true;
       this.validateFormReal();
+      this.lockValidateForm = false;
     }
   },
 
@@ -366,6 +368,7 @@ Formsy.Form = React.createClass({
   // Validate the form by going through all child input components
   // and check their state
   validateFormReal: function () {
+    if (this.lockValidateForm) return;
     // We need a callback as we are validating all inputs again. This will
     // run when the last component has set its state
     var onValidationComplete = function () {

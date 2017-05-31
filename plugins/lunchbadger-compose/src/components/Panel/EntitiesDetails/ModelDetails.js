@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import updateModel from '../../../actions/CanvasElements/Model/update';
-import ModelPropertyDetails from './ModelPropertyDetails';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
+import ModelNestedProperties from './ModelNestedProperties';
 import BackendStore from '../../../stores/Backend';
 import _ from 'lodash';
 
@@ -186,12 +186,13 @@ class ModelDetails extends Component {
   }
 
   _focusLastDetailsRowInput() {
-    const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
-
-    input && input.focus();
+    // FIXME
+    // const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
+    //
+    // input && input.focus();
   }
 
-  onAddProperty() {
+  onAddProperty = () => {
     this.onAddItem('properties', ModelProperty.create({propertyIsRequired: false, propertyIsIndex: false}));
 
     setTimeout(() => this._focusLastDetailsRowInput());
@@ -215,19 +216,6 @@ class ModelDetails extends Component {
 
   onRemoveUserField(field) {
     this.onRemoveItem('userFields', field);
-  }
-
-  renderProperties() {
-    return this.state.properties.map((property, index) => {
-      return (
-        <ModelPropertyDetails index={index}
-                              addAction={() => this.onAddProperty()}
-                              propertiesCount={this.state.properties.length}
-                              key={`property-${property.id}`}
-                              onRemove={this.onRemoveProperty}
-                              property={property}/>
-      );
-    });
   }
 
   renderRelations() {
@@ -303,30 +291,13 @@ class ModelDetails extends Component {
             </tbody>
           </table>
         </CollapsableDetails>
-        <CollapsableDetails title="Properties">
-          <table className="details-panel__table" ref="properties">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Data type</th>
-              <th>Default Value</th>
-              <th>Required</th>
-              <th>Is index</th>
-              <th>
-                Notes
-                <a onClick={() => this.onAddProperty()} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add property
-                </a>
-              </th>
-              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-            </tr>
-            </thead>
-            <tbody>
-            {this.renderProperties()}
-            </tbody>
-          </table>
-        </CollapsableDetails>
+        <ModelNestedProperties
+          title="Properties"
+          path=""
+          properties={this.state.properties}
+          onAddProperty={this.onAddProperty}
+          onRemoveProperty={this.onRemoveProperty}
+        />
         <div className="panel__title panel__title--custom">Custom Fields</div>
         <CollapsableDetails title="User Defined Fields">
           <table className="details-panel__table" ref="user-fields">

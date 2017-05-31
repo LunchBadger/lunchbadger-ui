@@ -129,10 +129,16 @@
   }
 
   .details-panel__table__cell--empty {
-    border: 0;
+    // border: 0;
     background: transparent;
     min-width: 0;
     width: 36px;
+  }
+
+  .details-panel__textarea,
+  .details-panel__input {
+    min-width: 0;
+    width: 100%;
   }
 }
 

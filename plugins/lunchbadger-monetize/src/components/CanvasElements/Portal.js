@@ -50,6 +50,11 @@ class Portal extends Component {
     if (!this.props.ready) {
       toggleEdit(this.props.entity);
     }
+    const APIsOpened = {...this.state.APIsOpened};
+    this.props.entity.apis.forEach((item) => {
+      APIsOpened[item.id] = true;
+    });
+    this.setState({APIsOpened});
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -67,6 +72,17 @@ class Portal extends Component {
       } else {
         this.setState({hasConnection: false});
       }
+    }
+    const APIsOpened = {...this.state.APIsOpened};
+    let isChange = false;
+    nextProps.entity.apis.forEach((item) => {
+      if (typeof APIsOpened[item.id] === 'undefined') {
+        APIsOpened[item.id] = true;
+        isChange = true;
+      }
+    });
+    if (isChange) {
+      this.setState({APIsOpened});
     }
   }
 

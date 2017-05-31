@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 import './ContextualMenu.scss';
 
 class ContextualMenu extends Component {
   render() {
     const {options} = this.props;
     return (
-      <div className="ContextualMenu">
+      <Menu>
         {options.map((item, idx) => (
-          <div key={idx} className="ContextualMenu__option">
-            {item}
-          </div>
+          <MenuItem key={idx} primaryText={item} />
         ))}
-      </div>
+      </Menu>
     );
   };
 }

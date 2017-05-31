@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Popover from 'material-ui/Popover';
 import {IconSVG, ContextualMenu} from '../../../';
 import {iconPlane} from '../../../../../../src/icons';
 import './Projects.scss';
@@ -15,25 +16,42 @@ class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuVisible: false,
+      open: false,
     };
   }
 
-  toggleMenu = menuVisible => () => this.setState({menuVisible});
+  toggleMenu = (event) => {
+    event.preventDefault();
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   render() {
     const {menuVisible} = this.state;
     return (
       <div
         className="Projects"
-        onMouseEnter={this.toggleMenu(true)}
-        onMouseLeave={this.toggleMenu(false)}
+        onClick={this.toggleMenu}
       >
         <IconSVG className="Projects__icon" svg={iconPlane} />
         Projects
-        {menuVisible && (
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.handleRequestClose}
+        >
           <ContextualMenu options={menu}/>
-        )}
+        </Popover>
       </div>
     );
   }

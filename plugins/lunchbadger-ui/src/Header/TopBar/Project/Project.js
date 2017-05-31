@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Popover from 'material-ui/Popover';
 import {ContextualMenu} from '../../../';
 import './Project.scss';
 
@@ -14,24 +15,41 @@ class Project extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuVisible: false,
+      open: false,
     };
   }
 
-  toggleMenu = menuVisible => () => this.setState({menuVisible});
+  toggleMenu = (event) => {
+    event.preventDefault();
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
 
   render() {
     const {menuVisible} = this.state;
     return (
       <div
         className="Project"
-        onMouseEnter={this.toggleMenu(true)}
-        onMouseLeave={this.toggleMenu(false)}
+        onClick={this.toggleMenu}
       >
         Project 01
-        {menuVisible && (
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.handleRequestClose}
+        >
           <ContextualMenu options={menu}/>
-        )}
+        </Popover>
       </div>
     );
   }

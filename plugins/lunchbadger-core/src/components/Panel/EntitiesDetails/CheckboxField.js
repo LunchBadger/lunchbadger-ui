@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Checkbox from '../../Generics/Form/Checkbox';
+import {Checkbox} from '../../../../../lunchbadger-ui/src';
 
 class CheckboxField extends Component {
   render() {
@@ -9,9 +9,7 @@ class CheckboxField extends Component {
     });
     return (
       <div className="details-panel__fieldset">
-        <Checkbox {...inputProps} />
-        <label className="details-panel__checkbox-label"
-               htmlFor={this.props.propertyName}>{this.props.label}</label>
+        <Checkbox {...inputProps} label={this.props.label} />
       </div>
     );
   }

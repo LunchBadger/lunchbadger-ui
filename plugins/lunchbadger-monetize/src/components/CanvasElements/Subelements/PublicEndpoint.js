@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './PublicEndpoint.scss';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';

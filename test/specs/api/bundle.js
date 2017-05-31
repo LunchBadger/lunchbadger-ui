@@ -24,7 +24,7 @@ module.exports = {
     browser.pause(2000);
 
     page.expect.element(publicEndpointSelector + '.editable').to.be.present;
-    page.setValue(publicEndpointSelector + '.editable .EntityProperty__field--input', 'PublicEndpointBundled');
+    page.setValue(publicEndpointSelector + '.editable .EntityProperty__field--input input', 'PublicEndpointBundled');
     browser.click(publicEndpointSelector + '.editable button[type=submit]');
     browser.pause(2000);
 
@@ -42,6 +42,7 @@ module.exports = {
 
   'API: bundle endpoint - accept': function (browser) {
     browser.click('.modal__actions__button--confirm', function () {
+      browser.pause(2000);
       page.expect.element(publicEndpointSelector + ':last-child').to.not.be.present;
       page.expect.element(apiSelector + ':last-child .EntitySubElements__main .public-endpoint').to.be.present;
 
@@ -51,6 +52,7 @@ module.exports = {
 
   'API: bundle endpoint - decline': function (browser) {
     browser.click('.modal__actions__button--discard', function () {
+      browser.pause(2000);
       page.expect.element(publicEndpointSelector + ':last-child').to.be.present;
       page.expect.element(apiSelector + ':last-child .EntitySubElements__main .public-endpoint').to.not.be.present;
 

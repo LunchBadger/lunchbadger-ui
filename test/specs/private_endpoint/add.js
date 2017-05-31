@@ -18,9 +18,9 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('PrivateEndpoint');
+    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('PrivateEndpoint');
     page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityPropertyLabel').text.to.equal('URL');
-    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input').to.have.value.that.equals('https://private/endpoint');
+    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input').to.have.value.that.equals('https://private/endpoint');
   },
 
   after: function () {

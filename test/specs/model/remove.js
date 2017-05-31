@@ -13,7 +13,7 @@ module.exports = {
     browser.pause(500);
 
     // Set name and save
-    page.setValue(elementSelector + ' .EntityHeader .EntityProperty__field--input', 'ModelTest');
+    page.setValue(elementSelector + ' .EntityHeader .EntityProperty__field--input input', 'ModelTest');
     page.click(elementSelector + ' button[type=submit]');
     browser.expect.element('.Entity.expanded.Model').to.be.present.before(2000);
 
@@ -27,17 +27,15 @@ module.exports = {
     browser.expect.element('.Entity.expanded.Model').to.not.be.present.before(2000);
   },
 
-  // 'Model: delete before saving': function (browser) { //TODO - should this testcase be still valid?
-  //   // Create model
-  //   page.addElement('.model.tool');
-  //   browser.pause(500);
-  //
-  //   page.click(elementSelector + ' .canvas-element__remove');
-  //   page.click('.modal__actions__button.modal__actions__button--confirm');
-  //
-  //   browser.expect.element('.canvas-element.expanded.Model').to.not.be.present.before(2000);
-  //   browser.expect.element('.toast-notification .error').to.not.be.present.before(2000);
-  // },
+  'Model: delete after first cancel': function (browser) {
+    // Create model
+    page.addElement('.model.tool');
+    browser.pause(500);
+
+    page.click(elementSelector + ' .EntityActionButtons__inner .cancel');
+    browser.pause(500);
+    browser.expect.element('.canvas-element.expanded.Model').to.not.be.present.before(2000);
+  },
 
   after: function () {
     page.close();

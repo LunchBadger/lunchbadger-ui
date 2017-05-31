@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
@@ -70,7 +71,7 @@ class PublicEndpoint extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}} = this.props;
+    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'url',
@@ -88,6 +89,8 @@ class PublicEndpoint extends Component {
         editableOnly: true,
       },
     ];
+    mainProperties[0].isDelta = this.state.path !== entityDevelopment.path;
+    mainProperties[0].onResetField = () => onResetField('path');
     return <EntityProperties properties={mainProperties} />;
   }
 

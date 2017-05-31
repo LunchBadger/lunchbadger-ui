@@ -1,7 +1,8 @@
-import React, {Component, PropTypes} from 'react';
-
-const {Checkbox, Input, Select, Textarea} = LunchBadgerCore.components;
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+const {Input, Select, Textarea} = LunchBadgerCore.components;
 const {propertyTypes} = LunchBadgerCore.utils;
+import {Checkbox} from '../../../../../lunchbadger-ui/src';
 
 export default class ModelPropertyDetails extends Component {
   static propTypes = {
@@ -30,8 +31,8 @@ export default class ModelPropertyDetails extends Component {
     }
   }
 
-  _changePropertyType(event) {
-    if (event.target.value === 'object') {
+  _changePropertyType = (value) => {
+    if (value === 'object') {
       this.setState({inputType: 'textarea'});
     } else {
       this.setState({inputType: 'input'});
@@ -77,7 +78,7 @@ export default class ModelPropertyDetails extends Component {
         <td>
           <Select className="details-panel__input details-panel__select"
                   value={property.type || 'string'}
-                  handleChange={(value) => this._changePropertyType(value)}
+                  handleChange={this._changePropertyType}
                   name={`properties[${index}][type]`}
                   options={propertyTypes}
           />
@@ -86,14 +87,12 @@ export default class ModelPropertyDetails extends Component {
           {this.renderInput()}
         </td>
         <td>
-          <Checkbox className="model-property__input"
-                    value={property.required}
+          <Checkbox value={property.required}
                     name={`properties[${index}][required]`}
           />
         </td>
         <td>
-          <Checkbox className="model-property__input"
-                    value={property.index}
+          <Checkbox value={property.index}
                     name={`properties[${index}][index]`}
           />
         </td>

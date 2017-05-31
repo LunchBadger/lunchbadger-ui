@@ -17,7 +17,19 @@ input {
   user-select: text;
 }
 
-.app {
+.apla {
+  &.multiEnvDelta {
+    display: block;
+    content: '';
+    position: fixed;
+    top: 75px;
+    left: 60px;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(70, 44, 95, 0.3);
+    pointer-events: none;
+    z-index: 809;
+  }
 }
 
 .app__container {
@@ -32,4 +44,7 @@ input {
   position: relative;
   min-height: 4px;
   padding-top: $header-height;
+  .multiEnv & {
+    padding-top: 75px;
+  }
 }

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import './Quadrant.scss';
 import {DropTarget} from 'react-dnd';
@@ -34,7 +35,7 @@ export default (ComposedComponent) => {
   class Quadrant extends Component {
     static propTypes = {
       title: PropTypes.string.isRequired,
-      sortableInstance: React.PropTypes.object,
+      sortableInstance: PropTypes.object,
       resizable: PropTypes.bool,
       data: PropTypes.object.isRequired,
       initialPercentageWidth: PropTypes.number,

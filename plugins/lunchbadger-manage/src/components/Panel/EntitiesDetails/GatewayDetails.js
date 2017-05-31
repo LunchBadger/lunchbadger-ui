@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import update from 'react-addons-update';
 import redeployGateway from '../../../actions/CanvasElements/Gateway/redeploy';
 import Pipeline from '../../../models/Pipeline';

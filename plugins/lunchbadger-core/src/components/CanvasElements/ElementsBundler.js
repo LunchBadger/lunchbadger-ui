@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';

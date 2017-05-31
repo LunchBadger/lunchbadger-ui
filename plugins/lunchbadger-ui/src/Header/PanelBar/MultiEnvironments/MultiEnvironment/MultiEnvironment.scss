@@ -1,0 +1,68 @@
+.MultiEnvironment {
+  display: inline-block;
+  vertical-align: top;
+  background-color: #2b1a3a;
+  margin: 2px 2px 0 0;
+  width: 240px;
+  padding-left: 55px;
+  padding-top: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  height: 34px;
+  &.development {
+    width: 60px;
+    background-color: #166176;
+  }
+  &.selected {
+    background-color: #462c5f;
+    color: #FFF;
+    cursor: default;
+    &.development {
+      background-color: #1088a7;
+    }
+  }
+  &__switch {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+  }
+  &__icon {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 19px;
+    width: 23px;
+    height: 23px;
+  }
+  &__input {
+    display: inline-block;
+    width: 125px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 5px;
+    border-bottom: 1px solid transparent;
+    line-height: 23px;
+    .edit & {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    input {
+      width: 100%;
+      border: none;
+      background-color: inherit;
+      color: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      padding: 0;
+      outline: none;
+      display: none;
+      line-height: inherit;
+      .edit & {
+        display: inline;
+      }
+    }
+  }
+}

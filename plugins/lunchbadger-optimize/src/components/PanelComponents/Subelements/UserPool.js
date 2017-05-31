@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import UserPoolIcon, {USER_POOL} from './UserPoolIcon';
 import {DropTarget} from 'react-dnd';
 import addDowngrade from '../../../actions/APIForecast/addDowngrade';

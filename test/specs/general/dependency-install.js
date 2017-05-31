@@ -14,6 +14,7 @@ function expectInstall(page, finalStatus, finalMsg) {
 }
 
 module.exports = {
+  // '@disabled': true,
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
@@ -21,10 +22,10 @@ module.exports = {
 
     page.addElementFromTooltip('.dataSource.tool', 2);
     browser.pause(1000);
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input', 'dumpUrl');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input', 'dumpDatabase');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
     browser.pause(2000);
 
@@ -34,19 +35,19 @@ module.exports = {
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('.dataSource.tool', 3);
     browser.pause(1000);
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input', 'dumpUrl');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input', 'dumpDatabase');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
     browser.pause(2000);
 
     page.addElementFromTooltip('.dataSource.tool', 4);
     browser.pause(1000);
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input', 'dumpUrl');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input', 'dumpDatabase');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input', 'dumpUsername');
-    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input', 'dumpPassword');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
     browser.pause(2000);
 

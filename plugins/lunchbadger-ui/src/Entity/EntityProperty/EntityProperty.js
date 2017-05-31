@@ -1,7 +1,8 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse} from '../../';
-import iconDelete from '../../../../../src/icons/icon-delete.svg';
+import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
+import {iconDelete, iconTrash, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
@@ -30,18 +31,33 @@ class EntityProperty extends Component {
 
   render() {
     const {
-      name, value,
-      title, placeholder, fake, invalid, contextual,
-      editableOnly, password, hiddenInputs,
-      onChange, onDelete, onViewModeClick,
+      name,
+      value,
+      title,
+      placeholder,
+      fake,
+      invalid,
+      contextual,
+      editableOnly,
+      password,
+      hiddenInputs,
+      onChange,
+      onDelete,
+      onBlur,
+      underlineStyle,
+      onViewModeClick,
+      isDelta,
+      onResetField,
     } = this.props;
     const {contextualVisible} = this.state;
+    const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', {
       ['EntityProperty__fake']: fake,
       ['EntityProperty__editableOnly']: editableOnly,
       ['EntityProperty__noTitle']: title === '',
       ['EntityProperty__contextual']: contextualVisible,
-      ['EntityProperty__invalid']: invalid !== '',
+      ['EntityProperty__invalid']: isInvalid,
+      ['EntityProperty__delta']: isDelta,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;
@@ -51,6 +67,14 @@ class EntityProperty extends Component {
     const textValueClassNames = cs('EntityProperty__field--textValue', {
       ['EntityProperty__field--textValue--clickable']: !!onViewModeClick,
     });
+    const toolboxConfig = [];
+    if (isDelta) {
+      toolboxConfig.push({
+        action: 'delete',
+        svg: iconRevert,
+        onClick: onResetField(name),
+      });
+    }
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
@@ -71,9 +95,13 @@ class EntityProperty extends Component {
               handleFocus={this.handleFocus}
               handleBlur={this.handleBlur}
               type={password ? 'password' : 'text'}
+              fullWidth
+              underlineStyle={underlineStyle}
+              isInvalid={isInvalid}
             />
           )}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
+          <Toolbox config={toolboxConfig} />
         </div>
         {onDelete && (
           <div className="EntityProperty__delete" onClick={onDelete}>
@@ -85,7 +113,7 @@ class EntityProperty extends Component {
             <div className="EntityProperty__context">{contextual}</div>
           </SmoothCollapse>
         )}
-        <SmoothCollapse expanded={invalid !== ''} heightTransition="800ms ease">
+        <SmoothCollapse expanded={isInvalid} heightTransition="800ms ease">
           <div className="EntityProperty__error">{invalid}</div>
         </SmoothCollapse>
       </div>
@@ -106,6 +134,7 @@ EntityProperty.propTypes = {
   onChange: PropTypes.func,
   onDelete: PropTypes.func,
   onBlur: PropTypes.func,
+  underlineStyle: PropTypes.object,
   onViewModeClick: PropTypes.func,
 }
 
@@ -120,6 +149,7 @@ EntityProperty.defaultProps = {
   hiddenInputs: [],
   onChange: () => {},
   onBlur: () => {},
+  onResetField: () => {},
 }
 
 export default EntityProperty;

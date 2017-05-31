@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 const {Select, Input} = LunchBadgerCore.components;
 const {gatewayPoliciesOptions} = LunchBadgerCore.utils;
@@ -40,9 +41,7 @@ export default class GatewayPolicyDetails extends Component {
     this.state = {type: props.policy.type};
   }
 
-  onTypeChange = (ev) => {
-    this.setState({type: ev.target.value});
-  }
+  onTypeChange = (type) => this.setState({type})
 
   onRemove(index) {
     this.props.onRemove(index);

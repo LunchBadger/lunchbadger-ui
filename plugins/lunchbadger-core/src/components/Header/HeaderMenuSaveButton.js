@@ -20,9 +20,9 @@ export default class HeaderMenuSaveButton extends Component {
     });
 
     return (
-      <a href="#" className={linkClass} onClick={this.saveDetails}>
+      <span className={linkClass} onClick={this.saveDetails}>
         <i className="fa fa-floppy-o"/>
-      </a>
+      </span>
     );
   }
 }

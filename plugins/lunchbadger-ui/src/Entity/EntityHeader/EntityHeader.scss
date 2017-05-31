@@ -2,10 +2,17 @@
   background-color: #01667D;
   height: 48px;
   color: #FFF;
-  padding: 0 55px 0 66px;
+  padding: 0 35px 0 60px;
   position: relative;
+  .multiEnvDelta & {
+    filter: grayscale(100%);
+  }
   .highlighted & {
     background-color: #4190CE;
+    .multiEnvDelta & {
+      background-color: #d24a7c;
+      filter: none;
+    }
   }
   &__icon {
     position: absolute;
@@ -32,18 +39,29 @@
     }
   }
   &__name {
-    padding-top: 12px;
     .EntityProperty__field {
       color: #FFF;
-      height: 28px;
       &--text {
-        line-height: 26px;
+        line-height: 48px;
       }
       .editable & {
-        background-color: #4190CE;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        &:hover {
-          background-color: #2170AE;
+        input {
+          &::-webkit-input-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &:-ms-input-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &::-moz-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &:-moz-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
         }
       }
     }

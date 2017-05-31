@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import PublicEndpoint from '../CanvasElements/PublicEndpoint';
 import updateOrder from '../../actions/Quadrants/Public/updateOrder';
 

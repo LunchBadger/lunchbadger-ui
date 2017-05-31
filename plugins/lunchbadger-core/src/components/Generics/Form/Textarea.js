@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import TextField from 'material-ui/TextField';
 import HOC from '../../../../../lunchbadger-ui/src/utils/Formsy/HOC';
 
 class Textarea extends Component {
@@ -11,7 +13,8 @@ class Textarea extends Component {
     handleKeyDown: PropTypes.func,
     handleChange: PropTypes.func,
     className: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    placeholder: PropTypes.string,
   };
 
   _handleKeyPress = (event) => {
@@ -47,6 +50,63 @@ class Textarea extends Component {
   }
 
   render() {
+    const {
+      className,
+      getValue,
+      type,
+      name,
+      placeholder,
+      underlineStyle,
+      underlineFocusStyle,
+    } = this.props;
+    const rootStyle = {
+      height: 'inherit',
+      fontSize: 'inherit',
+      fontWeight: 400,
+      color: 'inherit',
+    }
+    const inputStyle = {
+      fontSize: 'inherit',
+      fontWeight: 400,
+      color: 'inherit',
+    };
+    const underlineStyles = {
+      ...underlineStyle,
+      borderColor: '#999',
+      bottom: 1,
+    };
+    const underlineFocusStyles = {
+      ...underlineFocusStyle,
+      bottom: 1,
+      borderWidth: 2,
+    };
+    const textareaStyle = {
+      marginTop: 0,
+    }
+    return (
+      <span className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
+        <TextField
+          value={getValue()}
+          type={type || 'text'}
+          onBlur={this._handleBlur}
+          onKeyPress={this._handleKeyPress}
+          onKeyUp={this._handleKeyUp}
+          onKeyDown={this._handleKeyDown}
+          onChange={this._handleChange}
+          id={name}
+          placeholder={placeholder}
+          fullWidth
+          style={rootStyle}
+          inputStyle={inputStyle}
+          underlineStyle={underlineStyles}
+          underlineFocusStyle={underlineFocusStyles}
+          textareaStyle={textareaStyle}
+          multiLine={true}
+          rows={4}
+          rowsMax={4}
+        />
+      </span>
+    );
     return (
       <textarea className={this.props.className || ''}
              value={this.props.getValue()}

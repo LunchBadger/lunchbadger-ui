@@ -1,0 +1,15 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 20 20" xml:space="preserve">
+<style type="text/css">
+	.icon-revert-st0{fill:none;stroke:#D14A7C;stroke-miterlimit:10;}
+	.icon-revert-st1{fill:#D14A7C;stroke:none;}
+</style>
+<g>
+	<g>
+		<path class="icon-revert-st0" d="M5.8,6.4h7.9c3.2,0,5.8,2.6,5.8,5.8v0c0,3.2-2.6,5.8-5.8,5.8H5.8"/>
+		<g>
+			<polygon class="icon-revert-st1" points="7,10.4 0.1,6.4 7,2.4"/>
+		</g>
+	</g>
+</g>
+</svg>

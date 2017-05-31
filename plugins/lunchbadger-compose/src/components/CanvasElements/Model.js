@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
@@ -129,7 +130,7 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}} = this.props;
+    const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'contextPath',
@@ -140,6 +141,8 @@ class Model extends Component {
         onBlur: this.handleFieldChange('contextPath')
       }
     ];
+    mainProperties[0].isDelta = this.state.contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }
 

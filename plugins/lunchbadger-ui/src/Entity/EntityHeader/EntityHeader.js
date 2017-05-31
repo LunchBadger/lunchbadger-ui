@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {entityIcons, IconSVG, EntityProperty} from '../../';
 import './EntityHeader.scss';
 
@@ -7,6 +8,9 @@ class EntityHeader extends Component {
 
   render() {
     const {type, name, onNameChange, onToggleExpand} = this.props;
+    const underlineStyle = {
+      borderColor: '#8dbde2',
+    }
     return (
       <div className="EntityHeader">
         <div className="EntityHeader__icon" onClick={onToggleExpand}>
@@ -18,6 +22,7 @@ class EntityHeader extends Component {
             name="name"
             value={name}
             onChange={onNameChange}
+            underlineStyle={underlineStyle}
           />
         </div>
       </div>

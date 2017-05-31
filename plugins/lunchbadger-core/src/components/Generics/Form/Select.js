@@ -1,4 +1,7 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import HOC from '../../../../../lunchbadger-ui/src/utils/Formsy/HOC';
 
 class Select extends Component {
@@ -26,25 +29,40 @@ class Select extends Component {
     }
   }
 
-  _handleChange = (event) => {
-    this.props.setValue(event.target.value);
+  _handleChange = (event, index, value) => {
+    this.props.setValue(value);
     if (typeof this.props.handleChange === 'function') {
-      this.props.handleChange(event);
+      this.props.handleChange(value);
     }
   }
 
   render() {
+    const {className, getValue, multiple, options} = this.props;
+    const style = {
+      fontWeight: 400,
+    };
+    const labelStyle = {
+      ...style,
+      padding: '0 8px',
+    }
     return (
-      <select className={this.props.className || ''}
-              value={this.props.getValue()}
-              multiple={this.props.multiple}
-              onKeyDown={this._handleKeyDown}
-              onBlur={this._handleBlur}
-              onChange={this._handleChange}>
-        {this.props.options.map(({value, label}, idx) => (
-          <option key={idx} value={value}>{label}</option>
+      <span className={className || ''}>
+        <SelectField
+          value={getValue()}
+          multiple={multiple}
+          onKeyDown={this._handleKeyDown}
+          onBlur={this._handleBlur}
+          onChange={this._handleChange}
+          fullWidth
+          style={style}
+          labelStyle={labelStyle}
+          listStyle={style}
+        >
+        {options.map(({value, label}, idx) => (
+          <MenuItem key={idx} value={value} primaryText={label} />
         ))}
-      </select>
+        </SelectField>
+      </span>
     );
   }
 }

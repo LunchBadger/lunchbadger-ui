@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
@@ -95,7 +96,11 @@ export default class API extends Component {
     return connectDragSource(
       <div>
         <CollapsibleProperties
-          bar={this.props.entity.name}
+          bar={(
+            <span className="Portal__APIs__title">
+              {this.props.entity.name}
+            </span>
+          )}
           collapsible={
             <div>
               <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>

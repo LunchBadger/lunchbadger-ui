@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './BasePlan.scss';
 import PlanIcon from './PlanIcon';
 import classNames from 'classnames';

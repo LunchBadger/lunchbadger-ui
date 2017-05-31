@@ -1,0 +1,15 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+<style type="text/css">
+	.icon-forklift-st0{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<symbol id="Forklift" viewBox="-11.5 -10.9 22.9 21.8">
+	<path class="icon-forklift-st0" d="M0.7-1.2l-2.4,8.1c0,0.4-0.3,0.7-0.6,0.7h-6.1c-0.4,0-0.6-0.3-0.6-0.7V0.5"/>
+	<circle class="icon-forklift-st0" cx="-8.1" cy="-8.3" r="2.1"/>
+	<path class="icon-forklift-st0" d="M2.6-4.2v1.9c0,0.6-0.5,1-1,1h-3.7l-2,1.7h-5.7c-0.6,0-1-0.5-1-1v-6.6c0-0.4,0.3-0.8,0.7-1"/>
+	<line class="icon-forklift-st0" x1="-6" y1="-8.1" x2="-2.1" y2="-8.1"/>
+	<circle class="icon-forklift-st0" cx="1.1" cy="-7.1" r="3.3"/>
+	<polyline class="icon-forklift-st0" points="1.1,10.4 6.5,-7.1 11,-6.1 	"/>
+</symbol>
+<use xlink:href="#Forklift"  width="22.9" height="21.8" id="XMLID_274_" x="-11.5" y="-10.9" transform="matrix(1.4805 0 0 -1.4805 20.0002 20)" style="overflow:visible;"/>
+</svg>

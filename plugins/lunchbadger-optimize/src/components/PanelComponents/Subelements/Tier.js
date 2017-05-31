@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import removeTier from '../../../actions/APIForecast/removeTier';
 import saveTier from '../../../actions/APIForecast/saveTier';
 import './Tier.scss';

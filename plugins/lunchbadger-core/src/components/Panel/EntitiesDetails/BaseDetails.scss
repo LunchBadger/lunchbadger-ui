@@ -54,7 +54,8 @@
 }
 
 .details-panel__textarea {
-  height: 100px;
+  min-height: 60px;
+  max-height: 120px;
   padding: 0.1em 0.2em;
   line-height: 1.4em;
 }

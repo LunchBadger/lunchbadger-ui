@@ -8,7 +8,6 @@ const boxTarget = {
   drop(_props, monitor, component) {
     const hasDroppedOnChild = monitor.didDrop();
     const item = monitor.getItem();
-
     if (!hasDroppedOnChild) {
       if (item.subelement) {
         if (typeof item.handleEndDrag === 'function') {
@@ -20,7 +19,6 @@ const boxTarget = {
         }
       }
     }
-
     component.setState({
       hasDropped: true,
       hasDroppedOnChild: hasDroppedOnChild
@@ -38,33 +36,23 @@ export default (ComposedComponent) => {
       sortableInstance: PropTypes.object,
       resizable: PropTypes.bool,
       data: PropTypes.object.isRequired,
-      initialPercentageWidth: PropTypes.number,
-      paper: PropTypes.object
+      paper: PropTypes.object,
+      width: PropTypes.number,
+      index: PropTypes.number,
+      scrollLeft: PropTypes.number,
+      recalculateQuadrantsWidths: PropTypes.func,
     };
 
     constructor(props) {
       super(props);
-
       this.dataStoreUpdate = () => {
         this.setState({entities: this.props.data.getData()});
       };
-
       this.state = {
-        quadrantWidth: `${props.initialPercentageWidth}%`,
         entities: this.props.data.getData(),
         hasDroppedOnChild: false,
         hasDropped: false,
-        initialWidth: 0
       };
-    }
-
-    componentDidMount() {
-      const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
-
-      this.setState({
-        quadrantWidth: `${quadrantBounds.width}px`,
-        initialWidth: `${quadrantBounds.width}px`
-      });
     }
 
     componentWillMount() {
@@ -78,11 +66,8 @@ export default (ComposedComponent) => {
     }
 
     recalculateQuadrantWidth = (event) => {
-      const quadrantBounds = this.quadrantDOM.getBoundingClientRect();
-      const newWidth = event.clientX - quadrantBounds.left;
-
-      this.setState({quadrantWidth: `${newWidth}px`});
-      this.props.paper.repaintEverything();
+      const {recalculateQuadrantsWidths, index} = this.props;
+      recalculateQuadrantsWidths(index, event.clientX - this.quadrantDOM.getBoundingClientRect().left);
     }
 
     moveEntity = (...props) => {
@@ -92,21 +77,23 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      const {connectDropTarget} = this.props;
+      const {connectDropTarget, index, scrollLeft, resizable, width} = this.props;
+      const styles = {width};
+      const titleStyles = {
+        ...styles,
+        transform: `translateX(-${scrollLeft}px)`,
+      }
       return connectDropTarget(
-        <div className="quadrant"
-             ref={(ref) => this.quadrantDOM = ref}
-             style={{width: this.state.quadrantWidth, minWidth: `${this.props.initialPercentageWidth}%`}}>
-          <div className="quadrant__title"
-               style={{width: this.state.quadrantWidth}}>
+        <div
+          className="quadrant"
+          ref={(ref) => this.quadrantDOM = ref}
+          style={styles}
+        >
+          <div className="quadrant__title" style={titleStyles}>
             {this.props.title}
           </div>
           <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
-          {(() => {
-            if (this.props.resizable) {
-              return <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth}/>;
-            }
-          })()}
+          {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
         </div>
       );
     }

@@ -24,7 +24,8 @@
     "test:dev": "nightwatch",
     "posttest": "npm run lint",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "storybook:out": "build-storybook -c .storybook -o .out"
+    "storybook:build": "build-storybook -c .storybook -o .out",
+    "storybook:deploy": "npm run storybook:build && bin/deploy-storybook.sh"
   },
   "repository": "",
   "keywords": [],

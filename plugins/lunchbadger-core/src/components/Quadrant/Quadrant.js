@@ -77,7 +77,7 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      const {connectDropTarget, index, scrollLeft, resizable, width} = this.props;
+      const {connectDropTarget, scrollLeft, resizable, width} = this.props;
       const styles = {width};
       const titleStyles = {
         ...styles,

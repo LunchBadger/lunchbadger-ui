@@ -20,7 +20,8 @@ export default class Canvas extends Component {
     this.state = {
       lastUpdate: new Date(),
       canvasHeight: null,
-      connections: []
+      connections: [],
+      scrollLeft: 0,
     };
 
     this.connectionsChanged = () => {
@@ -39,6 +40,7 @@ export default class Canvas extends Component {
   }
 
   componentDidMount() {
+    this.canvasWrapperDOM.addEventListener('scroll', this.onCanvasScroll);
     // jsPlumb has to be instantiated here, not in componentWillMount, because
     // the canvas element has to already be rendered in order for it to work.
     this.paper = jsPlumb.getInstance({
@@ -76,9 +78,14 @@ export default class Canvas extends Component {
   }
 
   componentWillUnmount() {
+    this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
     clearInterval(this.repaint);
 
     Connection.removeChangeListener(this.connectionsChanged);
+  }
+
+  onCanvasScroll = (event) => {
+    this.setState({scrollLeft: event.target.scrollLeft});
   }
 
   _disconnect(connection) {
@@ -255,30 +262,38 @@ export default class Canvas extends Component {
   }
 
   render() {
+    const {appState, plugins} = this.props;
+    const {connections, scrollLeft} = this.state;
     let {canvasHeight} = this.state;
-
-    if (!this.props.appState.getStateKey('currentlyOpenedPanel')) {
+    if (!appState.getStateKey('currentlyOpenedPanel')) {
       canvasHeight = null;
     }
-
-    const panelEditingStatus = this.props.appState.getStateKey('panelEditingStatus');
-
+    const panelEditingStatus = appState.getStateKey('panelEditingStatus');
     return (
-      <section className="canvas"
-               onClick={() => !panelEditingStatus && this.props.appState.getStateKey('currentElement') && toggleHighlight(null)}>
-        {panelEditingStatus && <CanvasOverlay appState={this.props.appState}/> }
-        <div style={{height: canvasHeight}} className="canvas__wrapper">
+      <section
+        className="canvas"
+        onClick={() => !panelEditingStatus && appState.getStateKey('currentElement') && toggleHighlight(null)}
+      >
+        {panelEditingStatus && <CanvasOverlay appState={appState}/> }
+        <div
+          style={{height: canvasHeight}}
+          className="canvas__wrapper"
+          ref={(r) => {this.canvasWrapperDOM = r;}}
+        >
           <div style={{height: canvasHeight}} className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>
             <div className="canvas__label canvas__label--right">Consumers</div>
           </div>
-
-          <QuadrantContainer appState={this.props.appState}
-                             plugins={this.props.plugins}
-                             paper={this.paper}
-                             connections={this.state.connections}
-                             canvasHeight={canvasHeight}
-                             className="canvas__container" id="canvas"/>
+          <QuadrantContainer
+            appState={appState}
+            plugins={plugins}
+            paper={this.paper}
+            connections={connections}
+            canvasHeight={canvasHeight}
+            className="canvas__container"
+            id="canvas"
+            scrollLeft={scrollLeft}
+          />
         </div>
       </section>
     );

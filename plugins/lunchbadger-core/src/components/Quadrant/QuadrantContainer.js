@@ -13,7 +13,6 @@ export default class QuadrantContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scrollLeft: 0,
       quadrantWidths: {},
     };
     this.quadrantsPercentageWidths = [
@@ -33,18 +32,12 @@ export default class QuadrantContainer extends Component {
   }
 
   componentDidMount() {
-    this.canvasContainerDOM.addEventListener('scroll', this.onCanvasScroll);
     window.addEventListener('resize', this.onWindowResize);
     this.onWindowResize();
   }
 
   componentWillUnmount() {
-    this.canvasContainerDOM.removeEventListener('scroll', this.onCanvasScroll);
     window.removeEventListener('resize', this.onWindowResize);
-  }
-
-  onCanvasScroll = (event) => {
-    this.setState({scrollLeft: event.target.scrollLeft});
   }
 
   getCanvasWidth = () => window.innerWidth - 60;
@@ -90,15 +83,16 @@ export default class QuadrantContainer extends Component {
   }
 
   renderQuadrants() {
-    const pluggedQuadrants = this.props.plugins.getQuadrants();
-    const {scrollLeft, quadrantWidths} = this.state;
+    const {plugins, appState, paper, scrollLeft} = this.props;
+    const pluggedQuadrants = plugins.getQuadrants();
+    const {quadrantWidths} = this.state;
     return pluggedQuadrants.map((plugin, index) => {
       const QuadrantComponent = plugin.component;
       return (
         <QuadrantComponent
           key={`plugged-quadrant-${index}-${plugin.title}`}
-          appState={this.props.appState}
-          paper={this.props.paper}
+          appState={appState}
+          paper={paper}
           data={plugin.dataStore}
           resizable={index < pluggedQuadrants.length - 1}
           index={index}
@@ -121,7 +115,6 @@ export default class QuadrantContainer extends Component {
         style={{minHeight: this.props.canvasHeight}}
         className={`${this.props.className} ${containerClass}`}
         id={this.props.id}
-        ref={(r) => {this.canvasContainerDOM = r;}}
       >
         {this.renderQuadrants()}
       </div>

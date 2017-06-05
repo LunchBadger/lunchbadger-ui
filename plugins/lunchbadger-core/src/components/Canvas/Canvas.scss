@@ -77,7 +77,6 @@
   min-width: 100%;
   min-height: calc(100vh - #{$header-height});
   position: relative;
-  overflow: auto;
   display: flex;
   flex-wrap: nowrap;
   .multiEnv & {

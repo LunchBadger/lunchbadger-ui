@@ -25,6 +25,7 @@ import iconPortal from './icon-portal.svg';
 import iconRevert from './icon-revert.svg';
 import iconTrash from './icon-trash.svg';
 import iconUser from './icon-user.svg';
+import iconWand from './icon-wand.svg';
 
 export {
   iconApi,
@@ -53,5 +54,6 @@ export {
   iconPortal,
   iconRevert,
   iconTrash,
-  iconUser
+  iconUser,
+  iconWand
 };

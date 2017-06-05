@@ -11,7 +11,6 @@ class REST extends Component {
       <div className="rest tool__context__item" onClick={() => AddDataSource('REST', 'rest')}>
       	<IconSVG className="tool__context__svg" svg={iconDataSourceREST} />
       	<span className="tool__name">REST</span>
-        <span className="tool__context__tooltip">Data Source</span>
       </div>
     );
   }

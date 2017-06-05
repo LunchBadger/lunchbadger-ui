@@ -106,13 +106,17 @@ i.over {
   left: $aside-width - 17;
   list-style: none;
   z-index: $z-index-high;
+  .dataSource & {
+    width: 250px;
+    cursor: default;
+  }
   li {
     line-height: 33px;
-    cursor: pointer;
-
     &:hover {
       color: $ui-active;
-
+      .dataSource & {
+        color: inherit;
+      }
       i {
         color: $ui-active;
       }
@@ -140,6 +144,14 @@ i.over {
   min-width: 200px;
   position: relative;
   text-align: left;
+  padding-left: 5px;
+  &.memory,
+  &.rest,
+  &.soap,
+  &.ethereum,
+  &.salesforce {
+    cursor: pointer;
+  }
   .tool__context__svg {
     display: inline-block;
     vertical-align: middle;
@@ -149,6 +161,29 @@ i.over {
       stroke: #034757;
       width: 26px;
       height: 26px;
+    }
+  }
+  .tool__item__db {
+    cursor: pointer;
+    display: inline-block;
+    padding-right: 15px;
+  }
+  .tool__item__wand {
+    position: absolute;
+    top: 5px;
+    right: 17px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    svg {
+      fill: #FFFFFF;
+      stroke: #ED7933;
+      &:hover {
+        stroke: #D96F2C;
+      }
+      &:active {
+        stroke: #CD6929;
+      }
     }
   }
 }

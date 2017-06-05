@@ -11,7 +11,6 @@ class Ethereum extends Component {
       <div className="ethereum tool__context__item" onClick={() => AddDataSource('Ethereum', 'web3')}>
       	<IconSVG className="tool__context__svg" svg={iconDataSourceEthereum} />
       	<span className="tool__name">Ethereum</span>
-        <span className="tool__context__tooltip">Data Source</span>
       </div>
     );
   }

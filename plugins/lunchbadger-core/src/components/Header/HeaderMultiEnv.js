@@ -6,15 +6,17 @@ import {TopBar, PanelBar} from '../../../../lunchbadger-ui/src';
 
 export default class HeaderMultiEnv extends Component {
   render() {
+    const {appState, plugins, saveToServer, clearServer} = this.props;
+    const disabledMultiEnvMenu = appState.getStateKey('currentEditElement') || appState.getStateKey('isPanelOpened');
     return (
       <header className="header" ref="headerContainer">
         <TopBar />
-        <PanelBar>
+        <PanelBar disabledMultiEnvMenu={disabledMultiEnvMenu}>
           <HeaderMenu
-            appState={this.props.appState}
-            plugins={this.props.plugins}
-            saveToServer={this.props.saveToServer}
-            clearServer={this.props.clearServer}
+            appState={appState}
+            plugins={plugins}
+            saveToServer={saveToServer}
+            clearServer={clearServer}
           />
         </PanelBar>
       </header>

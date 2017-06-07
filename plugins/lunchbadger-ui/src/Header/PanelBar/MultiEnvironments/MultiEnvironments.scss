@@ -1,5 +1,22 @@
 .MultiEnv {
   height: 100%;
+  margin-right: 270px;
+  opacity: 1;
+  transition: opacity 300ms ease;
+  position: relative;
+  &.disabled {
+    opacity: 0.5;
+    &:after {
+      display: block;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+    }
+  }
   &__add {
     display: inline-block;
     vertical-align: top;

@@ -1,20 +1,18 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AddAPI from '../../actions/CanvasElements/API/add';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
+const API = ({editedElement}) => (
+  <Tool
+    icon={entityIcons.API}
+    selected={editedElement === 'API'}
+    onClick={() => AddAPI('API')}
+  />
+);
 
-class API extends Component {
-  render() {
-    const isSelected = (this.props.currentEditElement || {name: ''}).name === 'API';
-    return (
-      <div className={cs('api', 'tool', {['tool--selected']: isSelected})} onClick={() => AddAPI('API')}>
-        <IconSVG className="tool__svg" svg={entityIcons.API} />
-        <span className="tool__tooltip">API</span>
-      </div>
-    );
-  }
-}
+API.propTypes = {
+  editedElement: PropTypes.string,
+};
 
-export default Tool(API);
+export default API;

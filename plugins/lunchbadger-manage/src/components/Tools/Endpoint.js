@@ -1,29 +1,34 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
-import PrivateEndpoint from './PrivateEndpoint';
-import PublicEndpoint from './PublicEndpoint';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import React from 'react';
+import PropTypes from 'prop-types';
+import AddPrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/add';
+import AddPublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/add';
+import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
-
-class Endpoint extends Component {
-  render() {
-    const isSelected = (this.props.currentEditElement || {name: ''}).name.endsWith('Endpoint');
-    return (
-      <div className={cs('endpoint', 'tool', 'context', {['tool--selected']: isSelected})}>
-        <i className="tool__extend icon-arrowhead"/>
-        <IconSVG className="tool__svg" svg={entityIcons.PrivateEndpoint} />
-        <ul className="tool__context">
-          <li>
-            <PrivateEndpoint />
-          </li>
-          <li>
-            <PublicEndpoint />
-          </li>
-        </ul>
-      </div>
-    );
-  }
+const Endpoint = ({editedElement}) => {
+  const submenu = [
+    {
+      label: 'Private',
+      icon: entityIcons.PrivateEndpoint,
+      onClick: () => AddPrivateEndpoint('PrivateEndpoint'),
+    },
+    {
+      label: 'Public',
+      icon: entityIcons.PrivateEndpoint,
+      onClick: () => AddPublicEndpoint('PublicEndpoint'),
+    },
+  ];
+  return (
+    <Tool
+      icon={entityIcons.PrivateEndpoint}
+      selected={editedElement.endsWith('Endpoint')}
+      submenu={submenu}
+      plain
+    />
+  );
 }
 
-export default Tool(Endpoint);
+Endpoint.propTypes = {
+  editedElement: PropTypes.string,
+};
+
+export default Endpoint;

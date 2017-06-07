@@ -1,0 +1,64 @@
+.Tool {
+  width: 59px;
+  height: 60px;
+  transition: background-color 300ms ease;
+  &.opened,
+  &:hover {
+    background-color: #F0F0F0;
+  }
+  &.selected {
+    background-color: #666;
+  }
+  &__icon {
+    stroke: #034757;
+    &.submenu {
+      position: absolute;
+      top: 6px;
+      left: 18px;
+      line-height: normal;
+      &.plain {
+        top: 5px;
+        left: 15px;
+      }
+      svg {
+        width: 23px;
+        height: 23px;
+      }
+    }
+    .Tool.selected & {
+      stroke: #FFF;
+    }
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  &__label {
+    margin-left: 58px;
+    width: 125px;
+    height: 34px;
+    &.plain {
+      width: 80px;
+      margin-left: 50px;
+    }
+  }
+  &__wizard {
+    position: absolute;
+    top: 5px;
+    right: 16px;
+    &__icon {
+      svg {
+        width: 23px;
+        height: 23px;
+        fill: #FFFFFF;
+        stroke: #ED7933;
+        &:hover {
+          stroke: #D96F2C;
+        }
+        &:active {
+          stroke: #CD6929;
+        }
+      }
+    }
+  }
+}

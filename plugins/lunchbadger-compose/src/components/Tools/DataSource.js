@@ -1,62 +1,55 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
-import Memory from './Memory';
-import REST from './REST';
-import SOAP from './SOAP';
-import MongoDB from './MongoDB';
-import Redis from './Redis';
-import MySQL from './MySQL';
-import Ethereum from './Ethereum';
-import Salesforce from './Salesforce';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import React from 'react';
+import PropTypes from 'prop-types';
+import AddDataSource from '../../actions/CanvasElements/DataSource/add';
+import {entityIcons, dataSourceIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
+const dataSources = [
+  'Memory',
+  'REST',
+  'SOAP',
+  'MongoDB',
+  'Redis',
+  'MySQL',
+  'Ethereum',
+  'Salesforce',
+];
 
-class DataSource extends Component {
-  render() {
-    const isSelected = [
-      'Memory',
-      'REST',
-      'SOAP',
-      'MongoDB',
-      'Redis',
-      'MySQL',
-      'Ethereum',
-      'Salesforce',
-    ].includes((this.props.currentEditElement || {name: ''}).name);
-    return (
-      <div className={cs('dataSource', 'tool', 'context', {['tool--selected']: isSelected})}>
-        <i className="tool__extend icon-arrowhead"/>
-        <IconSVG className="tool__svg" svg={entityIcons.DataSource} />
-        <ul className="tool__context">
-          <li>
-            <Memory />
-          </li>
-          <li>
-            <REST />
-          </li>
-          <li>
-            <SOAP />
-          </li>
-          <li>
-            <Redis />
-          </li>
-          <li>
-            <MongoDB />
-          </li>
-          <li>
-            <MySQL />
-          </li>
-          <li>
-            <Ethereum />
-          </li>
-          <li>
-            <Salesforce />
-          </li>
-        </ul>
-      </div>
-    );
-  }
+const dataSourcesWizard = [
+  'MongoDB',
+  'Redis',
+  'MySQL',
+];
+
+const getDataSourceType = label => label === 'Ethereum' ? 'web3' : label;
+
+const wizardFunc = (label) => () => {
+  //TODO: implement datasource wizard
+};
+
+const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+
+const DataSource = ({editedElement}) => {
+  const selected = dataSources.includes(editedElement);
+  const submenu = [];
+  dataSources.forEach((label) => {
+    submenu.push({
+      label,
+      icon: dataSourceIcons[label],
+      onClick: () => AddDataSource(label, getDataSourceType(label)),
+      wizard: getWizardFunc(label),
+    })
+  })
+  return (
+    <Tool
+      icon={entityIcons.DataSource}
+      selected={selected}
+      submenu={submenu}
+    />
+  );
 }
 
-export default Tool(DataSource);
+DataSource.propTypes = {
+  editedElement: PropTypes.string,
+};
+
+export default DataSource;

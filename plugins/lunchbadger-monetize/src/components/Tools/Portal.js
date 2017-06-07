@@ -1,20 +1,18 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
 import DeployPortal from '../../actions/CanvasElements/Portal/deploy';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
+const Portal = ({editedElement}) => (
+  <Tool
+    icon={entityIcons.Portal}
+    selected={editedElement === 'Portal'}
+    onClick={() => DeployPortal('Portal')}
+  />
+);
 
-class Portal extends Component {
-  render() {
-    const isSelected = (this.props.currentEditElement || {name: ''}).name === 'Portal';
-    return (
-      <div className={cs('portal', 'tool', {['tool--selected']: isSelected})} onClick={() => DeployPortal('Portal')}>
-        <IconSVG className="tool__svg" svg={entityIcons.Portal} />
-        <span className="tool__tooltip">Portal</span>
-      </div>
-    );
-  }
-}
+Portal.propTypes = {
+  editedElement: PropTypes.string,
+};
 
-export default Tool(Portal);
+export default Portal;

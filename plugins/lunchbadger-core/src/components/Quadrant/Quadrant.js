@@ -91,6 +91,7 @@ export default (ComposedComponent) => {
         >
           <div className="quadrant__title" style={titleStyles}>
             {this.props.title}
+            {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
           </div>
           <ComposedComponent {...this.props} ref={(ref) => this.quadrant = ref} entities={this.state.entities}/>
           {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}

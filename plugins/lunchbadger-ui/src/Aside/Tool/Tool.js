@@ -5,6 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import SubmenuItem from './SubmenuItem';
 import {IconSVG, ContextualInformationMessage} from '../../';
+import {iconArrow} from '../../../../../src/icons';
 import './Tool.scss';
 
 class Tool extends Component {
@@ -81,6 +82,7 @@ class Tool extends Component {
             {tooltip}
           </ContextualInformationMessage>
         </div>
+        {isSubmenu && <IconSVG className="Tool__arrow" svg={iconArrow} />}
       </div>
     );
   }

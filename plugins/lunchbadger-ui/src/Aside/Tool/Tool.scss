@@ -92,4 +92,20 @@
       z-index: 99999;
     }
   }
+  &__arrow {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    bottom: 5px;
+    right: 5px;
+    svg {
+      fill: #000;
+      display: block;
+      transform: rotate(0deg);
+      transition: transform 300ms ease;
+      .Tool.opened & {
+        transform: rotate(-90deg);
+      }
+    }
+  }
 }

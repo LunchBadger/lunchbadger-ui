@@ -17,7 +17,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {SystemInformationMessages, SystemNotifications, SystemDefcon1} from '../../../../lunchbadger-ui/src';
+import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
@@ -192,6 +192,7 @@ class App extends Component {
           {systemDefcon1Visible && (
             <SystemDefcon1 errors={systemDefcon1Errors} />
           )}
+          <TooltipWrapper />
         </div>
       </div>
     );

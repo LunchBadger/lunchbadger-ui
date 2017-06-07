@@ -8,6 +8,7 @@ const Portal = ({editedElement}) => (
     icon={entityIcons.Portal}
     selected={editedElement === 'Portal'}
     onClick={() => DeployPortal('Portal')}
+    tooltip="Portal"
   />
 );
 

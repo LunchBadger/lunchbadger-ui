@@ -8,6 +8,7 @@ const Gateway = ({editedElement}) => (
     icon={entityIcons.Gateway}
     selected={editedElement === 'Gateway'}
     onClick={() => DeployGateway()}
+    tooltip="Gateway"
   />
 );
 

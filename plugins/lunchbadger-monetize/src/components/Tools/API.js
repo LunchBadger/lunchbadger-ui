@@ -8,6 +8,7 @@ const API = ({editedElement}) => (
     icon={entityIcons.API}
     selected={editedElement === 'API'}
     onClick={() => AddAPI('API')}
+    tooltip="API"
   />
 );
 

@@ -52,3 +52,10 @@ export const updateMultiEnvironmentName= (index, name) => ({
   index,
   name,
 });
+
+export const tooltipSet = (content, left, top) => ({
+  type: 'TOOLTIP/SET',
+  content,
+  left,
+  top,
+});

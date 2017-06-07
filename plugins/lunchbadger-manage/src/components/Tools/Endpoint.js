@@ -23,6 +23,7 @@ const Endpoint = ({editedElement}) => {
       selected={editedElement.endsWith('Endpoint')}
       submenu={submenu}
       plain
+      tooltip="Endpoint"
     />
   );
 }

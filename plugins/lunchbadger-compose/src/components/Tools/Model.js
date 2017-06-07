@@ -10,6 +10,7 @@ const Model = ({editedElement}) => (
     icon={entityIcons.Model}
     selected={editedElement === defaultEntityNames.Model}
     onClick={() => AddModel()}
+    tooltip="Model"
   />
 );
 

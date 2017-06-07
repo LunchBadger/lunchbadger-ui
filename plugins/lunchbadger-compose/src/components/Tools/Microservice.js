@@ -8,6 +8,7 @@ const Microservice = ({editedElement}) => (
     icon={entityIcons.Microservice}
     selected={editedElement === 'Microservice'}
     onClick={() => AddMicroservice()}
+    tooltip="Microservice"
   />
 );
 

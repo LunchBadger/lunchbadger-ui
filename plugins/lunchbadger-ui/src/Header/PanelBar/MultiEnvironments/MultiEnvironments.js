@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import cs from 'classnames';
 import {
   selectMultiEnvironment,
   addMultiEnvironment,
@@ -33,10 +34,10 @@ class MultiEnvironments extends Component {
   }
 
   render() {
-    const {environments, selected, add, onToggleNameEdit, onUpdateName} = this.props;
+    const {environments, selected, add, onToggleNameEdit, onUpdateName, disabled} = this.props;
     const {balloonVisible} = this.state;
     return (
-      <div className="MultiEnv">
+      <div className={cs('MultiEnv', {disabled})}>
         {environments.map((item, idx) => (
           <MultiEnvironment
             key={idx}
@@ -74,6 +75,7 @@ MultiEnvironments.propTypes = {
   environments: PropTypes.array,
   selected: PropTypes.number,
   select: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({

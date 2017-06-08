@@ -22,7 +22,8 @@ storiesOf('Messaging Framework', module)
     <MockPage>
       <SystemDefcon1Box
         server={boolean('server', false)}
-        error={text('error', errorMock)}
+        errors={[text('error', errorMock)]}
+        onClose={action('onClose')}
       />
     </MockPage>
   ), {propTables: [SystemDefcon1Box], inline: true});

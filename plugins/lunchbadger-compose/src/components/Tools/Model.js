@@ -11,6 +11,7 @@ const Model = ({editedElement}) => (
     selected={editedElement === defaultEntityNames.Model}
     onClick={() => AddModel()}
     tooltip="Model"
+    name="model"
   />
 );
 

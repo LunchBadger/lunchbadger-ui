@@ -9,6 +9,7 @@ const API = ({editedElement}) => (
     selected={editedElement === 'API'}
     onClick={() => AddAPI('API')}
     tooltip="API"
+    name="api"
   />
 );
 

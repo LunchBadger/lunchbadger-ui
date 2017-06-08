@@ -34,6 +34,7 @@ const DataSource = ({editedElement}) => {
   dataSources.forEach((label) => {
     submenu.push({
       label,
+      name: label.toLowerCase(),
       icon: dataSourceIcons[label],
       onClick: () => AddDataSource(label, getDataSourceType(label)),
       wizard: getWizardFunc(label),
@@ -47,6 +48,7 @@ const DataSource = ({editedElement}) => {
       selected={selected}
       submenu={submenu}
       tooltip="Data Source"
+      name="dataSource"
     />
   );
 }

@@ -22,7 +22,7 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
 
-    page.addElementFromTooltip('.dataSource.tool', 2);
+    page.addElementFromTooltip('dataSource', 'rest');
     browser.pause(300);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');

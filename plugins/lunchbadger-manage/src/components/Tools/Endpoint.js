@@ -8,11 +8,13 @@ const Endpoint = ({editedElement}) => {
   const submenu = [
     {
       label: 'Private',
+      name: 'privateendpoint',
       icon: entityIcons.PrivateEndpoint,
       onClick: () => AddPrivateEndpoint('PrivateEndpoint'),
     },
     {
       label: 'Public',
+      name: 'publicendpoint',
       icon: entityIcons.PrivateEndpoint,
       onClick: () => AddPublicEndpoint('PublicEndpoint'),
     },
@@ -24,6 +26,7 @@ const Endpoint = ({editedElement}) => {
       submenu={submenu}
       plain
       tooltip="Endpoint"
+      name="endpoint"
     />
   );
 }

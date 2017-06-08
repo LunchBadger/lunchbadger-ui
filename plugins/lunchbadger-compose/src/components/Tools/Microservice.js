@@ -9,6 +9,7 @@ const Microservice = ({editedElement}) => (
     selected={editedElement === 'Microservice'}
     onClick={() => AddMicroservice()}
     tooltip="Microservice"
+    name="microservice"
   />
 );
 

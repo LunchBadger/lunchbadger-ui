@@ -9,6 +9,7 @@ const Portal = ({editedElement}) => (
     selected={editedElement === 'Portal'}
     onClick={() => DeployPortal('Portal')}
     tooltip="Portal"
+    name="portal"
   />
 );
 

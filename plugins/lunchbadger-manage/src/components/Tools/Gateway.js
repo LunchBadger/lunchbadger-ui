@@ -9,6 +9,7 @@ const Gateway = ({editedElement}) => (
     selected={editedElement === 'Gateway'}
     onClick={() => DeployGateway()}
     tooltip="Gateway"
+    name="gateway"
   />
 );
 

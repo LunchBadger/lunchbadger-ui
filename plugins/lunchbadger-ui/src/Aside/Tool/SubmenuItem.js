@@ -36,7 +36,7 @@ class SubmenuItem extends Component {
   }
 
   render() {
-    const {icon, label, wizard, plain, tooltip, wizardTooltip} = this.props;
+    const {icon, label, name, wizard, plain, tooltip, wizardTooltip} = this.props;
     return (
       <MenuItem
         onTouchTap={this.onClick}
@@ -44,7 +44,7 @@ class SubmenuItem extends Component {
         innerDivStyle={{padding: 0}}
       >
         <div
-          className="Tool__submenuItem"
+          className={cs('Tool__submenuItem', name)}
           style={{width: plain ? 130 : 224}}
         >
           <span
@@ -79,6 +79,7 @@ SubmenuItem.propTypes = {
   onMenuItemClick: PropTypes.func,
   plain: PropTypes.bool,
   tooltip: PropTypes.string,
+  name: PropTypes.string,
   wizardTooltip: PropTypes.string,
   onTooltipToggle: PropTypes.func,
 };

@@ -10,7 +10,7 @@ module.exports = {
     page.open();
 
     // Create model
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(1000);
 
     // Set name and save

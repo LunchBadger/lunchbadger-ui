@@ -28,17 +28,15 @@ var pageCommands = {
     }).end();
   },
 
-  addElementFromTooltip: function (element, option) {
-    option = option || 1;
-
-    this.moveToElement(element, 5, 5, function () {
-      this.waitForElementVisible(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item', 1000);
-      this.click(element + ' .tool__context li:nth-child(' + option + ') .tool__context__item');
-    });
+  addElementFromTooltip: function (entity, option) {
+    option = option || 'memory';
+    this.click('.Tool.' + entity);
+    this.api.pause(500);
+    this.click('.Tool__submenuItem.' + option);
   },
 
-  addElement: function (element) {
-    this.click(element);
+  addElement: function (entity) {
+    this.click('.Tool.' + entity);
   },
 
   dragDropElement: function (dragTarget, dropTarget) {

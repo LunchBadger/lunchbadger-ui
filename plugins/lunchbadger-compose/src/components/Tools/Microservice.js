@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
 import AddMicroservice from '../../actions/CanvasElements/Microservice/add';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
+const Microservice = ({editedElement}) => (
+  <Tool
+    icon={entityIcons.Microservice}
+    selected={editedElement === 'Microservice'}
+    onClick={() => AddMicroservice()}
+    tooltip="Microservice"
+    name="microservice"
+  />
+);
 
-class Microservice extends Component {
-  render() {
-    const isSelected = (this.props.currentEditElement || {name: ''}).name === 'Microservice';
-    return (
-      <div className={cs('microservice', 'tool', {['tool--selected']: isSelected})} onClick={() => AddMicroservice()}>
-        <IconSVG className="tool__svg" svg={entityIcons.Microservice} />
-        <span className="tool__tooltip">Microservice</span>
-      </div>
-    );
-  }
-}
+Microservice.propTypes = {
+  editedElement: PropTypes.string,
+};
 
-export default Tool(Microservice);
+export default Microservice;

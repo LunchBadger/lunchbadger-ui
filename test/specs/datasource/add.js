@@ -5,14 +5,14 @@ module.exports = {
 
     page.open();
 
-    page.expect.element('.aside--editing').to.not.be.present;
+    page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
 
-    page.addElementFromTooltip('.dataSource.tool');
+    page.addElementFromTooltip('dataSource');
 
     browser.pause(1000);
 
-    page.expect.element('.aside--editing').to.be.present;
+    page.expect.element('.Aside.disabled').to.be.present;
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element('.Entity.editable.expanded.DataSource').to.be.present;
 

@@ -8,14 +8,14 @@ module.exports = {
 
     page.open();
 
-    page.expect.element('.aside--editing').to.not.be.present;
+    page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
 
-    page.addElement('.model.tool');
+    page.addElement('model');
 
     browser.pause(2000);
 
-    page.expect.element('.aside--editing').to.be.present;
+    page.expect.element('.Aside.disabled').to.be.present;
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 

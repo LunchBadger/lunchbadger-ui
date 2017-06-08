@@ -34,7 +34,7 @@ module.exports = {
     page = browser.page.lunchBadger();
     page.open();
     browser.click('.workspace-status span');
-    page.addElementFromTooltip('.dataSource.tool', 2);
+    page.addElementFromTooltip('dataSource', 'rest');
     browser.pause(300);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   'Connector installation: add more data source': function(browser) {
-    page.addElementFromTooltip('.dataSource.tool', 3);
+    page.addElementFromTooltip('dataSource', 'soap');
     browser.pause(300);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
@@ -54,7 +54,7 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
     browser.pause(300);
-    page.addElementFromTooltip('.dataSource.tool', 4);
+    page.addElementFromTooltip('dataSource', 'mongodb');
     browser.pause(300);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');

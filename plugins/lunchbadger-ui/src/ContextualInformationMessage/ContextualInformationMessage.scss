@@ -34,4 +34,17 @@
     transform: translate(-50%, -25%) rotate(45deg);
     z-index: -1;
   }
+  &.right {
+    left: calc(100% + 9px);
+    top: 50%;
+    transform: translateY(-50%);
+    &:before {
+      top: 50%;
+      left: 0;
+      transform: translate(-25%, -50%) rotate(45deg);
+    }
+  }
+  &.withWidth {
+    white-space: normal;
+  }
 }

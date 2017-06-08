@@ -1,0 +1,111 @@
+.Tool {
+  position: relative;
+  &__box {
+    width: 59px;
+    height: 60px;
+    transition: background-color 300ms ease;
+    &.opened,
+    &:hover {
+      background-color: #F0F0F0;
+    }
+    &.selected {
+      background-color: #666;
+    }
+  }
+  &__icon {
+    stroke: #034757;
+    &.submenu {
+      position: absolute;
+      top: 6px;
+      left: 18px;
+      line-height: normal;
+      &.plain {
+        top: 5px;
+        left: 15px;
+      }
+      svg {
+        width: 23px;
+        height: 23px;
+      }
+    }
+    .Tool.selected & {
+      stroke: #FFF;
+    }
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  &__submenuItem {
+    &:before {
+      display: none;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #F0F0F0;
+      z-index: -1;
+    }
+    &:hover:before {
+      display: block;
+    }
+  }
+  &__label {
+    padding: 0 10px 0 58px;
+    height: 34px;
+    display: inline-block;
+    &.plain {
+      padding: 0;
+      margin-left: 50px;
+    }
+  }
+  &__wizard {
+    position: absolute;
+    top: 5px;
+    right: 16px;
+    &__icon {
+      svg {
+        width: 23px;
+        height: 23px;
+        fill: #FFFFFF;
+        stroke: #ED7933;
+        &:hover {
+          stroke: #D96F2C;
+        }
+        &:active {
+          stroke: #CD6929;
+        }
+      }
+    }
+  }
+  &__tooltip {
+    opacity: 0;
+    transition: opacity 300ms ease 0ms;
+    &.visible {
+      opacity: 1;
+      transition: opacity 300ms ease 500ms;
+    }
+    &.submenu {
+      position: fixed;
+      z-index: 99999;
+    }
+  }
+  &__arrow {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    bottom: 5px;
+    right: 5px;
+    svg {
+      fill: #000;
+      display: block;
+      transform: rotate(0deg);
+      transition: transform 300ms ease;
+      .Tool.opened & {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

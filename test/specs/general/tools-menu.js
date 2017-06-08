@@ -9,123 +9,123 @@ module.exports = {
   'Tools menu: memory datasource selected': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
-    page.addElementFromTooltip('.dataSource.tool', 1);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'memory');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: REST datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 2);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'rest');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: SOAP datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 3);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'soap');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
-  },
-
-  'Tools menu: Redis datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 4);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
-    browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: MongoDB datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 5);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'mongodb');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
+  },
+
+  'Tools menu: Redis datasource selected': function (browser) {
+    page.addElementFromTooltip('dataSource', 'redis');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
+    browser.click(backendSelector + '.DataSource.editable .Button.cancel');
+    browser.pause(1500);
   },
 
   'Tools menu: MySQL datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 6);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'mysql');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: Ethereum datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 7);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'ethereum');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: Salesforce datasource selected': function (browser) {
-    page.addElementFromTooltip('.dataSource.tool', 8);
-    browser.pause(1000);
-    page.expect.element('.dataSource.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('dataSource', 'salesforce');
+    browser.pause(1500);
+    page.expect.element('.dataSource.Tool.selected').to.be.present;
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: model selected': function (browser) {
-    page.addElement('.model.tool');
-    browser.pause(1000);
-    page.expect.element('.model.tool.tool--selected').to.be.present;
+    page.addElement('model');
+    browser.pause(1500);
+    page.expect.element('.model.Tool.selected').to.be.present;
     browser.click(privateSelector + '.Model.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: microservice selected': function (browser) {
-    page.addElement('.microservice.tool');
-    browser.pause(1000);
-    page.expect.element('.microservice.tool.tool--selected').to.be.present;
+    page.addElement('microservice');
+    browser.pause(1500);
+    page.expect.element('.microservice.Tool.selected').to.be.present;
     browser.click(privateSelector + '.Microservice.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: private endpoint selected': function (browser) {
-    page.addElementFromTooltip('.endpoint.tool', 1);
-    browser.pause(1000);
-    page.expect.element('.endpoint.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('endpoint', 'privateendpoint');
+    browser.pause(1500);
+    page.expect.element('.endpoint.Tool.selected').to.be.present;
     browser.click(privateSelector + '.PrivateEndpoint.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: public endpoint selected': function (browser) {
-    page.addElementFromTooltip('.endpoint.tool', 2);
-    browser.pause(1000);
-    page.expect.element('.endpoint.tool.tool--selected').to.be.present;
+    page.addElementFromTooltip('endpoint', 'publicendpoint');
+    browser.pause(1500);
+    page.expect.element('.endpoint.Tool.selected').to.be.present;
     browser.click(publicSelector + '.PublicEndpoint.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: gateway selected': function (browser) {
-    page.addElement('.gateway.tool');
+    page.addElement('gateway');
     browser.pause(3000);
-    page.expect.element('.gateway.tool.tool--selected').to.be.present;
+    page.expect.element('.gateway.Tool.selected').to.be.present;
     browser.click(gatewaySelector + '.Gateway.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: api selected': function (browser) {
-    page.addElement('.api.tool');
-    browser.pause(1000);
-    page.expect.element('.api.tool.tool--selected').to.be.present;
+    page.addElement('api');
+    browser.pause(1500);
+    page.expect.element('.api.Tool.selected').to.be.present;
     browser.click(publicSelector + '.API.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   'Tools menu: portal selected': function (browser) {
-    page.addElement('.portal.tool');
+    page.addElement('portal');
     browser.pause(3000);
-    page.expect.element('.portal.tool.tool--selected').to.be.present;
+    page.expect.element('.portal.Tool.selected').to.be.present;
     browser.click(publicSelector + '.Portal.editable .Button.cancel');
-    browser.pause(1000);
+    browser.pause(1500);
   },
 
   after: function () {

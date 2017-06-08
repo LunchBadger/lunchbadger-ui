@@ -7,7 +7,7 @@ module.exports = {
 
     page.open();
 
-    page.addElementFromTooltip('.dataSource.tool');
+    page.addElementFromTooltip('dataSource');
 
     browser.pause(1000);
 

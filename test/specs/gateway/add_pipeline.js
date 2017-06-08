@@ -6,7 +6,7 @@ module.exports = {
 
     page.open();
 
-    page.addElement('.gateway.tool');
+    page.addElement('gateway');
 
     browser.pause(3500);
 

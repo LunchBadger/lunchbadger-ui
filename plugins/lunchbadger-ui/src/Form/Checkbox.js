@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import MaterialUICheckbox from 'material-ui/Checkbox';
+import uncheckedIcon from './uncheckedIcon';
 import HOC from '../utils/Formsy/HOC';
 
 class Checkbox extends Component {
@@ -34,6 +35,7 @@ class Checkbox extends Component {
         onCheck={this._handleChange}
         label={label}
         labelStyle={labelStyle}
+        uncheckedIcon={uncheckedIcon()}
       />
     );
   }

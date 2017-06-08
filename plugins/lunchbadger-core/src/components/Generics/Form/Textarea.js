@@ -60,13 +60,10 @@ class Textarea extends Component {
       underlineFocusStyle,
     } = this.props;
     const rootStyle = {
-      height: 'inherit',
-      fontSize: 'inherit',
       fontWeight: 400,
       color: 'inherit',
     }
     const inputStyle = {
-      fontSize: 'inherit',
       fontWeight: 400,
       color: 'inherit',
     };
@@ -102,21 +99,10 @@ class Textarea extends Component {
           underlineFocusStyle={underlineFocusStyles}
           textareaStyle={textareaStyle}
           multiLine={true}
-          rows={4}
+          rows={2}
           rowsMax={4}
         />
       </span>
-    );
-    return (
-      <textarea className={this.props.className || ''}
-             value={this.props.getValue()}
-             type={this.props.type || 'text'}
-             onBlur={this._handleBlur}
-             onKeyPress={this._handleKeyPress}
-             onKeyUp={this._handleKeyUp}
-             onKeyDown={this._handleKeyDown}
-             onChange={this._handleChange}
-             id={this.props.name}/>
     );
   }
 }

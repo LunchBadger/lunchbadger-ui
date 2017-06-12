@@ -5,7 +5,7 @@ const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage
 
 function expectInstall(browser, page, finalStatus, finalMsg) {
   page.expect.element('.workspace-status span').to.have.attribute('class')
-    .which.contains('workspace-status__progress').before(1000);
+    .which.contains('workspace-status__progress').before(3000);
   page.moveToElement('.logotype', 5, 5);
   page.click('.logotype');
   page.moveToElement('.workspace-status', 5, 5, function () {
@@ -61,6 +61,7 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
+    browser.pause(300);
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 
@@ -70,7 +71,7 @@ module.exports = {
     page.click(elementSelector + ' .Toolbox__button--delete');
     browser.pause(1000);
     page.click('.modal__actions__button.modal__actions__button--confirm');
-    browser.pause(3000);
+    browser.pause(300);
     expectInstall(browser, page, 'failure', '?wsdl');
   },
 
@@ -78,7 +79,7 @@ module.exports = {
     page.click('.SystemDefcon1 button');
     browser.pause(300);
     page.click('.header__menu__element .fa-trash-o');
-    browser.pause(3000);
+    browser.pause(300);
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 

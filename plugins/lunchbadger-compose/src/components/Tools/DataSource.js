@@ -20,7 +20,7 @@ const dataSourcesWizard = [
   'MySQL',
 ];
 
-const getDataSourceType = label => label === 'Ethereum' ? 'web3' : label;
+const getDataSourceType = label => label === 'Ethereum' ? 'web3' : label.toLowerCase();
 
 const wizardFunc = (label) => () => {
   //TODO: implement datasource wizard

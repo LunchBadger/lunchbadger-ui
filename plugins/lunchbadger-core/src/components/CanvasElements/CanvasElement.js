@@ -399,13 +399,14 @@ export default (ComposedComponent) => {
       const entityDevelopment = {...this.state.modelEnv_0};
       const entity = this.props.entity;
       const mask = ['pipelines'];
-      if (this.state[`modelEnv_${multiEnvIndex}`]) {
-        Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
-          if (!mask.includes(key)) {
-            entity[key] = this.state[`modelEnv_${multiEnvIndex}`][key];
-          }
-        });
-      }
+      // FIXME - refactor below for multi env, because it cannot overwrite entity properties
+      // if (this.state[`modelEnv_${multiEnvIndex}`]) {
+      //   Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
+      //     if (!mask.includes(key)) {
+      //       entity[key] = this.state[`modelEnv_${multiEnvIndex}`][key];
+      //     }
+      //   });
+      // }
       let isDelta = false;
       Object.keys(entityDevelopment).forEach((key) => {
         if (!mask.includes(key) && entityDevelopment[key] !== entity[key]) isDelta = true;

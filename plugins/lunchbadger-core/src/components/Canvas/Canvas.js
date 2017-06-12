@@ -48,7 +48,7 @@ export default class Canvas extends Component {
         strokeStyle: '#ffffff',
         lineWidth: 6
       },
-      Connector: ['Bezier', {curviness: 50}],
+      Connector: ['Flowchart', {cornerRadius: 15}],
       Container: 'canvas',
       ConnectionOverlays: [
         ['Label',

@@ -61,7 +61,6 @@ module.exports = {
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
-    browser.pause(1000);
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

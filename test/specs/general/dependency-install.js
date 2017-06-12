@@ -79,6 +79,7 @@ module.exports = {
     page.click('.SystemDefcon1 button');
     browser.pause(300);
     page.click('.header__menu__element .fa-trash-o');
+    browser.pause(3000);
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 

@@ -20,7 +20,7 @@ module.exports = {
     page.open();
 
     // Create an API
-    page.addElement('.api.tool');
+    page.addElement('api');
     browser.pause(1000);
     browser.click(apiSelector + ' button[type=submit]');
 
@@ -35,7 +35,7 @@ module.exports = {
       apiSelector,
       forecasterSelector
     );
-    browser.pause(1000);
+    browser.pause(4000);
     browser.expect.element(apiForecastSelector).to.be.present;
 
     browser.getText(apiSelector + ' .EntityHeader .EntityProperty__field--text', function (result) {

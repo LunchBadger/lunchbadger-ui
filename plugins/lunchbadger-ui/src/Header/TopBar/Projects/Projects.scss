@@ -1,0 +1,24 @@
+.Projects {
+  display: inline-block;
+  font-size: 16px;
+  padding: 3px 10px 3px 50px;
+  cursor: pointer;
+  position: relative;
+  &__icon {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 9px;
+    width: 26px;
+    height: 26px;
+  }
+  svg {
+    stroke: #CDC75C;
+  }
+  &:hover svg {
+    stroke: #C0BA55;
+  }
+  &:active svg {
+    stroke: #B3AE50;
+  }
+}

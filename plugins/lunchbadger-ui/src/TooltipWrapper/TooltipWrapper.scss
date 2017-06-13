@@ -1,0 +1,13 @@
+.TooltipWrapper {
+  position: fixed;
+  z-index: 2200;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0ms ease;
+  pointer-events: none;
+  &.visible {
+    opacity: 1;
+    transition: opacity 0ms ease 500ms;
+  }
+}

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import updateDataSource from '../../../actions/CanvasElements/DataSource/update';
 
 const Input = LunchBadgerCore.components.Input;

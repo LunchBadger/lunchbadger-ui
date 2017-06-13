@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './UpgradeSlider.scss';
 import Slider from 'rc-slider';
 import PlanInfoTooltip from './PlanInfoTooltip';

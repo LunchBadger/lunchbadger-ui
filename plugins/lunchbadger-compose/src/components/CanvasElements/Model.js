@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
@@ -11,6 +12,7 @@ import './Model.scss';
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const ModelPropertyFactory = LunchBadgerManage.models.ModelProperty;
+const {defaultEntityNames} = LunchBadgerCore.utils;
 
 class Model extends Component {
   static propTypes = {
@@ -58,6 +60,8 @@ class Model extends Component {
     const messages = {
       empty: 'This field cannot be empty',
     }
+    if (model.name === 'Model') validations.data.name = 'Model name cannot be "Model"';
+    if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
     if (model.contextPath === '') validations.data.contextPath = messages.empty;
     if (Object.keys(validations.data).length > 0) validations.isValid = false;
     return validations;
@@ -126,7 +130,7 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}} = this.props;
+    const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'contextPath',
@@ -137,6 +141,8 @@ class Model extends Component {
         onBlur: this.handleFieldChange('contextPath')
       }
     ];
+    mainProperties[0].isDelta = this.state.contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }
 

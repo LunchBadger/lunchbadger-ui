@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AppState from '../../stores/AppState';
 import togglePanel from '../../actions/togglePanel';
@@ -46,10 +47,10 @@ export default class HeaderMenuLink extends Component {
       'header__menu__link--pressed': this.state.pressed,
     });
     return (
-      <a href="#" className={linkClass} onClick={() => togglePanel(this.props.togglePanel)}>
+      <span className={linkClass} onClick={() => togglePanel(this.props.togglePanel)}>
         {this.props.icon && <i className={`fa ${this.props.icon}`} />}
         {this.props.svg && <IconSVG className="header__menu__link__svg" svg={this.props.svg} />}
-      </a>
+      </span>
     );
   }
 }

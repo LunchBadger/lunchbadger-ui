@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 const {Input, Select, Textarea} = LunchBadgerCore.components;
 const ModelClass = LunchBadgerManage.models.Model;
@@ -36,8 +37,8 @@ export default class ModelUserFieldsDetails extends Component {
     }
   }
 
-  _changeFieldType(event) {
-    if (event.target.value === 'object') {
+  _changeFieldType = (value) => {
+    if (value === 'object') {
       this.setState({inputType: 'textarea'});
     } else {
       this.setState({inputType: 'input'});
@@ -95,7 +96,7 @@ export default class ModelUserFieldsDetails extends Component {
         <td>
           <Select className="details-panel__input details-panel__select"
                   value={field.type || 'string'}
-                  handleChange={(value) => this._changeFieldType(value)}
+                  handleChange={this._changeFieldType}
                   name={`userFields[${index}][type]`}
                   options={userFieldsTypeOptions}
           />

@@ -10,11 +10,11 @@ module.exports = {
     page.open();
 
     // Create model
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(1000);
 
     // Set name and save
-    page.setValue(elementSelector + ' .EntityHeader .EntityProperty__field--input', 'ModelTest');
+    page.setValue(elementSelector + ' .EntityHeader .EntityProperty__field--input input', 'ModelTest');
     page.click(elementSelector + ' button[type=submit]');
     browser.expect.element('.Entity.expanded.Model').to.be.present.before(2000);
 
@@ -25,8 +25,8 @@ module.exports = {
     page.click('@details');
     browser.pause(5000);
 
-    page.clearValue(detailsPanelSelector + ' .details-panel__element .details-panel__fieldset .details-panel__input');
-    page.setValue(detailsPanelSelector + ' .details-panel__element .details-panel__fieldset .details-panel__input', 'ModelTestChanged');
+    page.clearValue(detailsPanelSelector + ' .details-panel__element .details-panel__fieldset .details-panel__input input');
+    page.setValue(detailsPanelSelector + ' .details-panel__element .details-panel__fieldset .details-panel__input input', 'ModelTestChanged');
     browser.pause(1000);
 
     page.click(detailsPanelSelector + ' .confirm-button__accept.confirm-button__accept--enabled');

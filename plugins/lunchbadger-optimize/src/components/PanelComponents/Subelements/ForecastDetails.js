@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ForecastDetailsTop from './ForecastDetailsTop';
 import ForecastDetailsBottom from './ForecastDetailsBottom';
 import ForecastingChart from '../../Chart/ForecastingChart';

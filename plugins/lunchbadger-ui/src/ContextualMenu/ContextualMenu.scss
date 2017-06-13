@@ -1,0 +1,20 @@
+.ContextualMenu {
+  position: absolute;
+  top: calc(100%);
+  left: 0;
+  background-color: #FFF;
+  padding: 5px 0;
+  border: 1px solid #CCC;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1;
+  min-width: 200px;
+  &__option {
+    padding: 10px 20px;
+    &:hover {
+      background-color: #EEE;
+    }
+  }
+}

@@ -21,9 +21,9 @@ export default class HeaderMenuClearButton extends Component {
     });
 
     return (
-      <a href="#" className={linkClass} onClick={this.clearServer}>
+      <span className={linkClass} onClick={this.clearServer}>
         <i className="fa fa-trash-o"/>
-      </a>
+      </span>
     );
   }
 }

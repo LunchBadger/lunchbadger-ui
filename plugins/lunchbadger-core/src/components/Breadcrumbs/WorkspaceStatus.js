@@ -1,11 +1,12 @@
 /*eslint no-console:0 */
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import classnames from 'classnames';
 import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
-import {showSystemDefcon1, toggleSystemNotifications} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemDefcon1, toggleSystemDefcon1} from '../../../../lunchbadger-ui/src/actions';
 
 
 class WorkspaceStatus extends Component {
@@ -41,7 +42,7 @@ class WorkspaceStatus extends Component {
 
   onClick = () => {
     if (this.state.status === 'crashed') {
-      this.props.showSystemNotifications();
+      this.props.showSystemDefcon1();
     }
   }
 
@@ -141,8 +142,8 @@ class WorkspaceStatus extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  displaySystemDefcon1: message => dispatch(showSystemDefcon1(message)),
-  showSystemNotifications: () => dispatch(toggleSystemNotifications(true)),
+  displaySystemDefcon1: error => dispatch(addSystemDefcon1(error)),
+  showSystemDefcon1: () => dispatch(toggleSystemDefcon1()),
 });
 
 export default connect(null, mapDispatchToProps)(WorkspaceStatus);

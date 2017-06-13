@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {SmoothCollapse} from '../';
 import {IconSVG} from '../';
@@ -9,7 +10,7 @@ class CollapsibleProperties extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
+      expanded: props.defaultOpened,
     };
   }
 
@@ -27,8 +28,11 @@ class CollapsibleProperties extends Component {
     });
     return (
       <div className={classNames}>
-        <div className="CollapsibleProperties__bar" onClick={this.handleToggleCollapse}>
-          <div className="CollapsibleProperties__bar__left">
+        <div className="CollapsibleProperties__bar">
+          <div
+            className="CollapsibleProperties__bar__left"
+             onClick={this.handleToggleCollapse}
+          >
             <div className="CollapsibleProperties__bar__left--arrow">
               <IconSVG svg={iconArrow} />
             </div>
@@ -51,10 +55,12 @@ CollapsibleProperties.propTypes = {
   bar: PropTypes.node.isRequired,
   collapsible: PropTypes.node.isRequired,
   onToggleCollapse: PropTypes.func,
+  defaultOpened: PropTypes.bool,
 }
 
 CollapsibleProperties.defaultProps = {
   onToggleCollapse: () => {},
+  defaultOpened: false,
 }
 
 export default CollapsibleProperties;

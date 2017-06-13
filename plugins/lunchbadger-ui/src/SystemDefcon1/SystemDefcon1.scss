@@ -19,6 +19,21 @@
     &.visibleError {
       width: 800px;
     }
+    &__delete {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      overflow: hidden;
+      svg {
+        stroke: #888;
+        width: 100%;
+        height: auto;
+        position: block;
+      }
+    }
     &__title {
       text-align: center;
       padding: 21px 0;
@@ -76,7 +91,7 @@
           color: #538cca;
           cursor: pointer;
         }
-        pre {
+        &--box {
           margin-top: 20px;
           padding: 10px 15px;
           color: #900;
@@ -86,6 +101,9 @@
           font-size: 12px;
           max-height: 300px;
           overflow: auto;
+          pre {
+            margin-bottom: 10px;
+          }
         }
       }
       &:last-child {

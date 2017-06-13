@@ -33,8 +33,6 @@ import Modal from './components/Generics/Modal/Modal';
 import OneOptionModal from './components/Generics/Modal/OneOptionModal';
 import TwoOptionModal from './components/Generics/Modal/TwoOptionModal';
 import Quadrant from './components/Quadrant/Quadrant';
-import ToolGroup from './components/Tools/ToolGroup';
-import Tool from './components/Tools/Tool';
 import PortComponent from './components/CanvasElements/Port';
 import DraggableGroup from './components/Draggable/DraggableGroup';
 import ElementsBundler from './components/CanvasElements/ElementsBundler';
@@ -123,8 +121,6 @@ let LunchBadgerCore = {
     OneOptionModal: OneOptionModal,
     TwoOptionModal: TwoOptionModal,
     Quadrant: Quadrant,
-    Tool: Tool,
-    ToolGroup: ToolGroup,
     Port: PortComponent,
     ElementsBundler: ElementsBundler
   },
@@ -181,6 +177,9 @@ let LunchBadgerCore = {
       {label: 'Logging', value: 'Logging'},
       {label: 'Redirect', value: 'Redirect'},
     ],
+    defaultEntityNames: {
+      Model: 'NewModel',
+    },
   },
 };
 

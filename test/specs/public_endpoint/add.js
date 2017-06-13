@@ -8,20 +8,20 @@ module.exports = {
 
     page.open();
 
-    page.expect.element('.aside--editing').to.not.be.present;
+    page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
 
-    page.addElementFromTooltip('.endpoint.tool', 2);
+    page.addElementFromTooltip('endpoint', 'publicendpoint');
 
     browser.pause(1000);
 
-    page.expect.element('.aside--editing').to.be.present;
+    page.expect.element('.Aside.disabled').to.be.present;
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('PublicEndpoint');
+    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('PublicEndpoint');
     page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityPropertyLabel').text.to.equal('PATH');
-    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input').to.have.value.that.equals('/endpoint');
+    page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('/endpoint');
 
     browser.pause(1000);
   },

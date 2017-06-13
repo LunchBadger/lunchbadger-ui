@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 const {Input, Select} = LunchBadgerCore.components;
 const Private = LunchBadgerManage.stores.Private;

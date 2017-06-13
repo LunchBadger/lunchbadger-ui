@@ -47,26 +47,17 @@
 
 .details-panel__textarea,
 .details-panel__input {
-  border-radius: 5px;
-  padding: 0 1em;
-  border: 1px solid #999;
   min-width: 300px;
   font-size: 1.2em;
-  line-height: 2em;
-  height: 40px;
+  display: inline-block;
+  font-weight: 400;
 }
 
 .details-panel__textarea {
-  height: 100px;
+  min-height: 60px;
+  max-height: 120px;
   padding: 0.1em 0.2em;
   line-height: 1.4em;
-}
-
-.details-panel__select {
-  -webkit-appearance: none;
-  background: url('./dropdown.svg');
-  background-position: 100% 50%;
-  background-repeat: no-repeat;
 }
 
 .confirm-button__cancel {
@@ -117,6 +108,7 @@
   th, td {
     border: 1px solid #999;
     padding: .2em .5em;
+    vertical-align: middle;
   }
 
   th {

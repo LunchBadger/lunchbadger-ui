@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
@@ -49,7 +50,7 @@ export default class API extends Component {
     super(props);
 
     this.state = {
-      opened: false
+      opened: true
     };
   }
 
@@ -69,6 +70,7 @@ export default class API extends Component {
           index={index}
           indexAPI={this.props.index}
           APIsPublicEndpoints={this.props.APIsPublicEndpoints}
+          expanded={this.state.opened}
         />
       );
     });
@@ -94,7 +96,11 @@ export default class API extends Component {
     return connectDragSource(
       <div>
         <CollapsibleProperties
-          bar={this.props.entity.name}
+          bar={(
+            <span className="Portal__APIs__title">
+              {this.props.entity.name}
+            </span>
+          )}
           collapsible={
             <div>
               <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>
@@ -102,6 +108,7 @@ export default class API extends Component {
             </div>
           }
           onToggleCollapse={this.toggleOpenState}
+          defaultOpened
         />
       </div>
     );

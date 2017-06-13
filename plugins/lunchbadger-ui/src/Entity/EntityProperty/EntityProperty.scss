@@ -35,17 +35,26 @@
     }
   }
   &__field {
-    margin-top: 8px;
-    border-width: 1px;
-    border-color: transparent;
-    border-style: solid;
     color: rgb(75, 75, 75);
-    border-radius: 3px;
     width: 100%;
-    height: 30px;
     font-size: 18px;
     font-weight: normal;
-    overflow: hidden;
+    .Toolbox {
+      display: none;
+    }
+    .multiEnvDelta .EntityProperty__delta & {
+      margin: -2px;
+      border: 2px solid #d24a7c;
+      border-radius: 10px;
+      z-index: 99999;
+      position: relative;
+      background-color: #FFF;
+      &:hover .Toolbox {
+        display: block;
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
     .editable & {
       border-color: rgb(222, 222, 221);
     }
@@ -56,10 +65,18 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding-left: 8px;
-      line-height: 28px;
+      line-height: 48px;
+      padding: 0 8px;
       .editable & {
         display: none;
+      }
+      .multiEnvNotDev .editable .EntityHeader & {
+        display: block;
+      }
+      &Value {
+        &--clickable {
+          cursor: pointer;
+        }
       }
     }
     &--input {
@@ -68,13 +85,15 @@
       height: 100%;
       border: none;
       color: inherit;
-      padding-left: 8px;
       font-size: inherit;
       font-family: inherit;
       outline: none;
       background-color: inherit;
       .editable & {
         display: block;
+      }
+      .multiEnvNotDev .editable .EntityHeader & {
+        display: none;
       }
     }
   }

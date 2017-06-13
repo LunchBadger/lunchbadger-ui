@@ -6,7 +6,7 @@ module.exports = {
 
     page.open();
 
-    page.addElement('.gateway.tool');
+    page.addElement('gateway');
 
     browser.pause(3500);
 
@@ -14,17 +14,17 @@ module.exports = {
 
     page.click(elementSelector + ' .EntitySubElements__main .EntitySubElements__title__add');
 
-    browser.pause(50);
+    browser.pause(500);
 
     page.expect.element(elementSelector + ' .EntitySubElements__elements .CollapsibleProperties:nth-child(2)').to.be.present;
 
     page.click(elementSelector + ' .EntitySubElements__main .EntitySubElements__title__add');
 
-    browser.pause(50);
+    browser.pause(500);
 
     page.expect.element(elementSelector + ' .EntitySubElements__elements .CollapsibleProperties:nth-child(3)').to.be.present;
 
-    browser.pause(50);
+    browser.pause(500);
 
     page.click(elementSelector + ' .EntitySubElements__elements .CollapsibleProperties:first-child .CollapsibleProperties__bar__left');
 

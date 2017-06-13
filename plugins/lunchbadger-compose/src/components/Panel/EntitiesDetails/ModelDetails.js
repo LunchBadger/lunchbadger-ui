@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';

@@ -1,0 +1,10 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+<style type="text/css">
+	.icon-user{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<circle class="icon-user" cx="20" cy="13.9" r="8"/>
+	<path class="icon-user" d="M10.1,23.4c-2.9,2.7-4.7,6.5-4.7,10.7h29.1c0-6.4-4.1-11.8-9.9-13.8"/>
+</g>
+</svg>

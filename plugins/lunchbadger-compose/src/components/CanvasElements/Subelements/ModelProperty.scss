@@ -4,14 +4,14 @@
   display: block;
   width: 100%;
   position: relative;
-  margin: 0 16px;
+  padding: 0 16px;
   color: #4b4b4b;
 }
 
 .model-property__key-cell {
   float: left;
   width: 50%;
-  padding: 5px 10px 5px 0;
+  padding: 5px 10px 5px;
 }
 
 .model-property__value-cell {
@@ -25,9 +25,12 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
   .editable & {
     overflow: visible;
+    border-color: #ECECED;
   }
 }
 
@@ -36,17 +39,8 @@
 }
 
 .model-property__input {
-  font-size: 14px;
+  font-size: 18px;
   background-color: #ffffff;
-  border: 1px solid #ECECED;
-
-  &:hover {
-    border: 1px solid #8BD6EF;
-  }
-
-  .editable-only {
-    border: 1px solid #7ABFD6;
-  }
 }
 
 input[type=text].model-property__input.editable-only {
@@ -79,9 +73,5 @@ input[type=text].model-property__input.editable-only {
 
 .model-property__select {
   -webkit-appearance: none;
-  border-radius: 0;
-  background: url('./dropdown.svg');
-  background-position: 100% 50%;
-  background-repeat: no-repeat;
   height: 23px;
 }

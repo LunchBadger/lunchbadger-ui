@@ -14,6 +14,9 @@
   // transition: all .3s ease;
   transform: translateZ(0);
   font-weight: normal;
+  .multiEnvNotDev & {
+    transform: none;
+  }
   &.editable {
     z-index: 15;
     .hide-while-edit {
@@ -39,6 +42,23 @@
   }
   &.highlighted {
     color: rgb(65, 144, 206);
+    .multiEnvDelta & {
+      // border: 2px solid #d24a7c;
+      // border-top: none;
+      z-index: 810;
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid #d24a7c;
+        z-index: -1;
+        pointer-events: none;
+      }
+    }
   }
   &__data {
     margin: 0 -20px;

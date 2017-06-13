@@ -1,0 +1,28 @@
+.Aside {
+  position: fixed;
+  left: 0;
+  top: 52px;
+  width: 60px;
+  height: 100%;
+  border-right: 1px solid #c1c1c1;
+  z-index: 27;
+  .multiEnv & {
+    top: 75px;
+  }
+  &:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: -1px;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+  &.disabled:before {
+    opacity: 0.34;
+    z-index: 10;
+  }
+}

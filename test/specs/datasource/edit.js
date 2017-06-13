@@ -9,7 +9,7 @@ module.exports = {
 
     page.open();
 
-    page.addElementFromTooltip('.dataSource.tool');
+    page.addElementFromTooltip('dataSource');
 
     browser.pause(1000);
 
@@ -49,10 +49,10 @@ module.exports = {
     //
     // browser.pause(200);
 
-    browser.setValue(propertySelector + ':first-child .EntityProperty__field--input', 'test url');
-    browser.setValue(propertySelector + ':nth-child(2) .EntityProperty__field--input', 'test schema');
-    browser.setValue(propertySelector + ':nth-child(3) .EntityProperty__field--input', 'test username');
-    browser.setValue(propertySelector + ':last-child .EntityProperty__field--input', 'test password');
+    browser.setValue(propertySelector + ':first-child .EntityProperty__field--input input', 'test url');
+    browser.setValue(propertySelector + ':nth-child(2) .EntityProperty__field--input input', 'test schema');
+    browser.setValue(propertySelector + ':nth-child(3) .EntityProperty__field--input input', 'test username');
+    browser.setValue(propertySelector + ':last-child .EntityProperty__field--input input', 'test password');
 
     browser.click(elementSelector + ' button[type=submit]');
 

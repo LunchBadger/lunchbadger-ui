@@ -22,7 +22,10 @@ Plugins are located in the `plugins` directory.
     npm run storybook
 
     # Build a distribution of storybook into /.out folder
-    npm run storybook:out
+    npm run storybook:build
+
+    # Deploy storybook on GitHub pages: https://lunchbadger.github.io
+    npm run storybook:deploy
 
     # Package a distribution
     npm run dist

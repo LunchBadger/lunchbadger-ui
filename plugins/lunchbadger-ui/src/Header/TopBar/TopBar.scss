@@ -1,0 +1,19 @@
+.TopBar {
+  height: 39px;
+  position: relative;
+  text-align: center;
+  &__projects {
+    position: absolute;
+    bottom: 4px;
+    left: 10px;
+  }
+  &__project {
+    display: inline-block;
+    margin-top: 3px;
+  }
+  &__user {
+    position: absolute;
+    bottom: 4px;
+    right: 40px;
+  }
+}

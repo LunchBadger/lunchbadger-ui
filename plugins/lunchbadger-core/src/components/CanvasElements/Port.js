@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
@@ -46,9 +47,9 @@ export default class Port extends Component {
       },
       anchor: [
         // [0.5, 0, 0, -1, 0, 0, 'top'],
-        [1, 0.5, 1, 0, -10, 2, 'right'],
+        [1, 0.5, 1, 0, -6, 2, 'right'],
         // [0.5, 1, 0, 1, 0, 0, 'bottom'],
-        [0, 0.5, -1, 0, 14, 2, 'left']
+        [0, 0.5, -1, 0, 11, 2, 'left']
       ],
       scope: this.props.scope
     };
@@ -75,6 +76,11 @@ export default class Port extends Component {
     this.calculatePortTopOffsets();
     if (nextProps.offsetTop !== this.props.offsetTop) {
       this.forceUpdate();
+    }
+    if (nextProps.scope !== this.props.scope) {
+      const portDOM = findDOMNode(this.refs.port);
+      this.props.paper.setTargetScope(portDOM, nextProps.scope);
+      this.props.paper.setSourceScope(portDOM, nextProps.scope);
     }
   }
 

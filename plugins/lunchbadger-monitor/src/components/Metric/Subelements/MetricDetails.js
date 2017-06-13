@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import MetricDetail from './MetricDetail';
 import {USERS, REQUESTS, APPS, PORTALS} from '../../../models/MetricDetail';
 import classNames from 'classnames';

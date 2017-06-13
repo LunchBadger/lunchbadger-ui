@@ -6,10 +6,10 @@ module.exports = {
 
     page.open();
 
-    page.expect.element('.aside--editing').to.not.be.present;
+    page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
 
-    page.addElement('.gateway.tool');
+    page.addElement('gateway');
 
     browser.pause(500);
 
@@ -18,11 +18,11 @@ module.exports = {
     browser.pause(3000);
 
     page.expect.element(elementSelector + '.wip').to.be.not.present;
-    page.expect.element('.aside--editing').to.be.present;
+    page.expect.element('.Aside.disabled').to.be.present;
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element(elementSelector + '.editable').to.be.present;
 
-    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input').to.have.value.that.equals('Gateway');
+    page.expect.element(elementSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('Gateway');
     page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityPropertyLabel').text.to.equal('ROOT URL');
     page.expect.element(elementSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gateway.customer.lunchbadger.com');
 

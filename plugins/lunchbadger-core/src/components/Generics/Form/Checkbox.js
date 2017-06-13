@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import MaterialUICheckbox from 'material-ui/Checkbox';
 import HOC from '../../../../../lunchbadger-ui/src/utils/Formsy/HOC';
 
 class Checkbox extends Component {
@@ -7,7 +9,8 @@ class Checkbox extends Component {
     setValue: PropTypes.func,
     handleChange: PropTypes.func,
     className: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    label: PropTypes.string,
   };
 
   _handleChange = (event) => {
@@ -19,13 +22,16 @@ class Checkbox extends Component {
   }
 
   render() {
+    const {className, getValue, name, label} = this.props;
     return (
-      <input className={this.props.className || ''}
-             value={this.props.getValue()}
-             type="checkbox"
-             checked={this.props.getValue() ? 'checked' : null}
-             id={this.props.name}
-             onChange={this._handleChange}/>
+      <MaterialUICheckbox
+        className={className || ''}
+        type="checkbox"
+        checked={getValue()}
+        id={name}
+        onCheck={this._handleChange}
+        label={label}
+      />
     );
   }
 }

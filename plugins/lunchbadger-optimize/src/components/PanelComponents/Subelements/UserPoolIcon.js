@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {DragSource} from 'react-dnd';
 
 export const USER_POOL = 'USER_POOL';

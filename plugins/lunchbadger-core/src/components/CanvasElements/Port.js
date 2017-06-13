@@ -47,9 +47,9 @@ export default class Port extends Component {
       },
       anchor: [
         // [0.5, 0, 0, -1, 0, 0, 'top'],
-        [1, 0.5, 1, 0, -10, 2, 'right'],
+        [1, 0.5, 1, 0, -6, 2, 'right'],
         // [0.5, 1, 0, 1, 0, 0, 'bottom'],
-        [0, 0.5, -1, 0, 14, 2, 'left']
+        [0, 0.5, -1, 0, 11, 2, 'left']
       ],
       scope: this.props.scope
     };

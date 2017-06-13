@@ -38,7 +38,6 @@ const DataSource = ({editedElement}) => {
       icon: dataSourceIcons[label],
       onClick: () => AddDataSource(label, getDataSourceType(label)),
       wizard: getWizardFunc(label),
-      tooltip: 'Connect to an existing data source',
       wizardTooltip: 'Create and connect to a new data source',
     });
   })

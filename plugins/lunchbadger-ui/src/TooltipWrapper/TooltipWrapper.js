@@ -5,16 +5,13 @@ import {connect} from 'react-redux';
 import {ContextualInformationMessage} from '../';
 import './TooltipWrapper.scss';
 
-const TooltipWrapper = ({content, left, top}) => {
-  if (content === null) return null;
-  return (
-    <div className="TooltipWrapper" style={{left, top}}>
-      <ContextualInformationMessage direction="right" width={210}>
-        {content}
-      </ContextualInformationMessage>
-    </div>
-  );
-};
+const TooltipWrapper = ({content, left, top}) => (
+  <div className={cs('TooltipWrapper', {visible: content !== null})} style={{left, top}}>
+    <ContextualInformationMessage direction="right" width={210}>
+      {content}
+    </ContextualInformationMessage>
+  </div>
+);
 
 const mapStateToProps = ({ui: {tooltip: {content, left, top}}}) => ({
   content,

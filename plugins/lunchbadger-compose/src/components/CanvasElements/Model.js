@@ -26,10 +26,9 @@ class Model extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      contextPath: props.entity.contextPath,
-      contextPathDirty: false
+      name: props.entity.name,
+      contextPathDirty: slug(props.entity.name, {lower: true}) !== props.entity.contextPath,
     };
   }
 
@@ -74,9 +73,7 @@ class Model extends Component {
   }
 
   updateName(event) {
-    if (!this.state.contextPathDirty) {
-      this.setState({contextPath: slug(event.target.value, {lower: true})});
-    }
+    this.setState({name: event.target.value});
   }
 
   onAddProperty = () => {
@@ -130,18 +127,20 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {validations: {data}, entityDevelopment, onResetField, entity} = this.props;
+    const {name, contextPathDirty} = this.state;
+    const contextPath = contextPathDirty ? entity.contextPath : slug(name, {lower: true});
     const mainProperties = [
       {
         name: 'contextPath',
         title: 'context path',
-        value: this.state.contextPath,
+        value: contextPath,
         invalid: data.contextPath,
         onChange: this.updateContextPath,
         onBlur: this.handleFieldChange('contextPath')
       }
     ];
-    mainProperties[0].isDelta = this.state.contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].isDelta = contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }

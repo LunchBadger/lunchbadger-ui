@@ -5,7 +5,7 @@ const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage
 
 function expectInstall(browser, page, finalStatus, finalMsg) {
   page.expect.element('.workspace-status span').to.have.attribute('class')
-    .which.contains('workspace-status__progress').before(3000);
+    .which.contains('workspace-status__progress').before(1000);
   page.moveToElement('.logotype', 5, 5);
   page.click('.logotype');
   page.moveToElement('.workspace-status', 5, 5, function () {
@@ -79,7 +79,7 @@ module.exports = {
     page.click('.SystemDefcon1 button');
     browser.pause(300);
     page.click('.header__menu__element .fa-trash-o');
-    browser.pause(300);
+    browser.pause(1000);
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 

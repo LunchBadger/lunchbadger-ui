@@ -9,7 +9,7 @@ module.exports = {
     page.open();
 
     // Create model
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(500);
 
     // Set name and save
@@ -29,7 +29,7 @@ module.exports = {
 
   'Model: delete after first cancel': function (browser) {
     // Create model
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(500);
 
     page.click(elementSelector + ' .EntityActionButtons__inner .cancel');

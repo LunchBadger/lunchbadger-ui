@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
-import cs from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
 import DeployGateway from '../../actions/CanvasElements/Gateway/deploy';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
 
-const Tool = LunchBadgerCore.components.Tool;
+const Gateway = ({editedElement}) => (
+  <Tool
+    icon={entityIcons.Gateway}
+    selected={editedElement === 'Gateway'}
+    onClick={() => DeployGateway()}
+    tooltip="Gateway"
+    name="gateway"
+  />
+);
 
-class Gateway extends Component {
-  render() {
-    const isSelected = (this.props.currentEditElement || {name: ''}).name === 'Gateway';
-    return (
-      <div className={cs('gateway', 'tool', {['tool--selected']: isSelected})} onClick={() => DeployGateway()}>
-      	<IconSVG className="tool__svg" svg={entityIcons.Gateway} />
-      	<span className="tool__tooltip">Gateway</span>
-      </div>
-    );
-  }
-}
+Gateway.propTypes = {
+  editedElement: PropTypes.string,
+};
 
-export default Tool(Gateway);
+export default Gateway;

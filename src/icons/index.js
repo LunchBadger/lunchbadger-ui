@@ -1,6 +1,14 @@
 import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
 import iconDataSource from './icon-datasource.svg';
+import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
+import iconDataSourceMemory from './icon-datasource-memory.svg';
+import iconDataSourceMongoDB from './icon-datasource-mongodb.svg';
+import iconDataSourceMySQL from './icon-datasource-mysql.svg';
+import iconDataSourceRedis from './icon-datasource-redis.svg';
+import iconDataSourceREST from './icon-datasource-rest.svg';
+import iconDataSourceSalesforce from './icon-datasource-salesforce.svg';
+import iconDataSourceSOAP from './icon-datasource-soap.svg';
 import iconDelete from './icon-delete.svg';
 import iconDetails from './icon-details.svg';
 import iconEdit from './icon-edit.svg';
@@ -17,11 +25,20 @@ import iconPortal from './icon-portal.svg';
 import iconRevert from './icon-revert.svg';
 import iconTrash from './icon-trash.svg';
 import iconUser from './icon-user.svg';
+import iconWand from './icon-wand.svg';
 
 export {
   iconApi,
   iconArrow,
   iconDataSource,
+  iconDataSourceEthereum,
+  iconDataSourceMemory,
+  iconDataSourceMongoDB,
+  iconDataSourceMySQL,
+  iconDataSourceRedis,
+  iconDataSourceREST,
+  iconDataSourceSalesforce,
+  iconDataSourceSOAP,
   iconDelete,
   iconDetails,
   iconEdit,
@@ -37,5 +54,6 @@ export {
   iconPortal,
   iconRevert,
   iconTrash,
-  iconUser
+  iconUser,
+  iconWand
 };

@@ -3,14 +3,14 @@ var elementSelector = '.quadrant:nth-child(2) .Entity.Model:last-child';
 var detailsPanelSelector = '.panel__container';
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Model: edit panel details': function (browser) {
     page = browser.page.lunchBadger();
 
     page.open();
 
     // Create model
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(1000);
 
     // Set name and save

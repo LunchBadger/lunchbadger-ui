@@ -8,14 +8,14 @@ module.exports = {
 
     page.open();
 
-    page.addElement('.model.tool');
+    page.addElement('model');
     browser.pause(1000);
     browser.clearValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input');
     browser.setValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'test-model');
     browser.click(modelSelector + '.editable button[type=submit]');
     browser.pause(1000);
 
-    page.addElement('.gateway.tool');
+    page.addElement('gateway');
     browser.pause(3500);
     browser.clearValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input');
     browser.setValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');

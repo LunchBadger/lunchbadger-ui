@@ -11,7 +11,7 @@ module.exports = {
   },
 
   beforeEach: function (browser) {
-    page.addElement('.api.tool');
+    page.addElement('api');
 
     browser.pause(2000);
 
@@ -19,7 +19,7 @@ module.exports = {
     browser.click(apiSelector + '.editable button[type=submit]');
     browser.pause(2000);
 
-    page.addElementFromTooltip('.endpoint.tool', 2);
+    page.addElementFromTooltip('endpoint', 'publicendpoint');
 
     browser.pause(2000);
 

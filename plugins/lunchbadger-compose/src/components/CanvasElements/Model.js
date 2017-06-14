@@ -27,7 +27,7 @@ class Model extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: props.entity.name,
+      contextPath: props.entity.contextPath,
       contextPathDirty: slug(props.entity.name, {lower: true}) !== props.entity.contextPath,
     };
   }
@@ -73,7 +73,9 @@ class Model extends Component {
   }
 
   updateName(event) {
-    this.setState({name: event.target.value});
+    if (!this.state.contextPathDirty) {
+      this.setState({contextPath: slug(event.target.value, {lower: true})});
+    }
   }
 
   onAddProperty = () => {
@@ -93,7 +95,7 @@ class Model extends Component {
     input && input.focus();
   }
 
-  updateContextPath = () => this.setState({contextPathDirty: true});
+  updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   removeEntity() {
     removeEntity(this.context.projectService, this.props.entity);
@@ -127,9 +129,8 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}, entityDevelopment, onResetField, entity} = this.props;
-    const {name, contextPathDirty} = this.state;
-    const contextPath = contextPathDirty ? entity.contextPath : slug(name, {lower: true});
+    const {validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {contextPath} = this.state;
     const mainProperties = [
       {
         name: 'contextPath',

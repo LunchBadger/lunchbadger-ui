@@ -6,6 +6,8 @@ import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import ModelNestedProperties from './ModelNestedProperties';
 import BackendStore from '../../../stores/Backend';
 import _ from 'lodash';
+import addPropertiesToData from '../../addPropertiesToData';
+import addNestedProperties from '../../addNestedProperties';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
@@ -36,12 +38,16 @@ class ModelDetails extends Component {
     super(props);
 
     const stateFromStores = (newProps) => {
-      return {
-        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : newProps.entity.properties.slice(),
+      const data = {
+        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
         relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : newProps.entity.extendedUserFields.slice(),
         changed: false
       };
+      if (!newProps.entity.privateModelProperties) {
+         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      }
+      return data;
     };
 
     this.state = Object.assign({}, stateFromStores(props));
@@ -86,18 +92,12 @@ class ModelDetails extends Component {
   }
 
   update(model) {
-    let data = {
+    const data = {
       properties: [],
-      relations: []
+      relations: [],
     };
 
-    model.properties && model.properties.forEach((property) => {
-      if (property.name.trim().length > 0) {
-        let prop = ModelProperty.create(property);
-        prop.attach(this.props.entity);
-        data.properties.push(prop);
-      }
-    });
+    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
 
     model.relations && model.relations.forEach((relation) => {
       let rel = ModelRelation.create(relation);
@@ -193,9 +193,12 @@ class ModelDetails extends Component {
     // input && input.focus();
   }
 
-  onAddProperty = () => {
-    this.onAddItem('properties', ModelProperty.create({propertyIsRequired: false, propertyIsIndex: false}));
-
+  onAddProperty = (parentId) => () => {
+    this.onAddItem('properties', ModelProperty.create({
+      parentId,
+      propertyIsRequired: false,
+      propertyIsIndex: false,
+    }));
     setTimeout(() => this._focusLastDetailsRowInput());
   }
 
@@ -217,6 +220,12 @@ class ModelDetails extends Component {
 
   onRemoveUserField(field) {
     this.onRemoveItem('userFields', field);
+  }
+
+  onPropertyTypeChange = (id, type) => {
+    const properties = [...this.state.properties];
+    properties.find(prop => prop.id === id).type = type;
+    this.setState({properties});
   }
 
   renderRelations() {
@@ -246,7 +255,6 @@ class ModelDetails extends Component {
   render() {
     const {entity} = this.props;
     const dataSources = BackendStore.getData().map((item, idx) => ({label: item.name, value: item.id}));
-
     return (
       <div>
         <CollapsableDetails title="Details">
@@ -298,6 +306,7 @@ class ModelDetails extends Component {
           properties={this.state.properties}
           onAddProperty={this.onAddProperty}
           onRemoveProperty={this.onRemoveProperty}
+          onPropertyTypeChange={this.onPropertyTypeChange}
         />
         <div className="panel__title panel__title--custom">Custom Fields</div>
         <CollapsableDetails title="User Defined Fields">

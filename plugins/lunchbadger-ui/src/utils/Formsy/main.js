@@ -76,9 +76,9 @@ Formsy.Form = React.createClass({
   validateFormCronjob: function () {
     if (this.doValidateForm) {
       this.doValidateForm = false;
-      this.lockValidateForm = true;
-      this.validateFormReal();
       this.lockValidateForm = false;
+      this.validateFormReal();
+      this.lockValidateForm = true;
     }
   },
 

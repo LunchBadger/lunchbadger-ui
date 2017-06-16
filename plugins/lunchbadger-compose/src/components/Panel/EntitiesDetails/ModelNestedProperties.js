@@ -1,57 +1,22 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import ModelPropertyDetails from './ModelPropertyDetails';
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class ModelNestedProperties extends Component {
-  renderNested = (propertyName, type) => {
-    if (typeof type !== 'object') return null;
-    const facetName = 'server';
-    const modelId = `${facetName}.Customer`;
-    const nested = Object.keys(type).map(name => ({
-      facetName,
-      id: `${modelId}.${name}`,
-      modelId,
-      name,
-      type: type[name].type,
-    }));
-    const {onAddProperty, onRemoveProperty} = this.props;
-    return (
-      <tr>
-        <td colSpan={7}>
-          <ModelNestedProperties
-            title="Nested properties"
-            path={propertyName}
-            collapsed
-            properties={nested}
-            onAddProperty={onAddProperty}
-            onRemoveProperty={onRemoveProperty}
-          />
-        </td>
-      </tr>
-    );
-  }
-
-  renderProperties() {
-    const {title, path, properties, onAddProperty, onRemoveProperty} = this.props;
-    return properties.map((property, index) => {
-      return (
-        <tbody key={`property-${property.id}`}>
-          <ModelPropertyDetails
-            index={index}
-            addAction={onAddProperty}
-            propertiesCount={properties.length}
-            onRemove={onRemoveProperty}
-            property={property}
-          />
-          {this.renderNested(`${path !== '' ? `${path} ⇨` : ''} ${property.name}`, property.type)}
-        </tbody>
-      );
-    });
-  }
-
   render() {
-    const {title, path, collapsed, properties, onAddProperty} = this.props;
-    const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${properties.length})`;
+    const {
+      title,
+      path,
+      collapsed,
+      properties,
+      onAddProperty,
+      onRemoveProperty,
+      onPropertyTypeChange,
+      parentId,
+    } = this.props;
+    const filteredProperties = properties.filter(property => property.parentId === parentId);
+    const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     return (
       <CollapsableDetails collapsed={collapsed} title={titleLabel}>
         <table className="details-panel__table" ref="properties">
@@ -64,7 +29,7 @@ class ModelNestedProperties extends Component {
             <th>Is index</th>
             <th>
               Notes
-              <a onClick={onAddProperty} className="details-panel__add">
+              <a onClick={onAddProperty(parentId)} className="details-panel__add">
                 <i className="fa fa-plus"/>
                 Add property
               </a>
@@ -72,11 +37,57 @@ class ModelNestedProperties extends Component {
             <th className="details-panel__table__cell details-panel__table__cell--empty"/>
           </tr>
           </thead>
-          {this.renderProperties()}
+          {filteredProperties.map((property, index) => {
+            return (
+              <tbody key={`property-${property.id}`}>
+                <ModelPropertyDetails
+                  index={index}
+                  addAction={onAddProperty}
+                  propertiesCount={filteredProperties.length}
+                  onRemove={onRemoveProperty}
+                  property={property}
+                  onPropertyTypeChange={onPropertyTypeChange}
+                  parentId={parentId}
+                />
+                {property.type === 'object' && (
+                  <tr>
+                    <td colSpan={7}>
+                      <ModelNestedProperties
+                        title="Nested properties"
+                        path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
+                        collapsed
+                        properties={properties}
+                        onAddProperty={onAddProperty}
+                        onRemoveProperty={onRemoveProperty}
+                        onPropertyTypeChange={onPropertyTypeChange}
+                        parentId={property.id}
+                      />
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            );
+          })}
         </table>
       </CollapsableDetails>
     );
   }
 }
+
+ModelNestedProperties.propTypes = {
+  parentId: PropTypes.string,
+  title: PropTypes.string,
+  path: PropTypes.string,
+  properties: PropTypes.array,
+  onAddProperty: PropTypes.func,
+  onRemoveProperty: PropTypes.func,
+  onPropertyTypeChange: PropTypes.func,
+  collapsed: PropTypes.bool,
+};
+
+ModelNestedProperties.defaultProps = {
+  parentId: '',
+  collapsed: false,
+};
 
 export default ModelNestedProperties;

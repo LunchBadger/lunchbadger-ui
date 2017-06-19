@@ -209,7 +209,7 @@ class Model extends Component {
           onAdd={this.onAddProperty('')}
           main
         >
-          {this.props.entity.properties.length > 0 && (
+          {this.state.properties.length > 0 && (
             <div ref="properties">
               {this.renderProperties()}
             </div>

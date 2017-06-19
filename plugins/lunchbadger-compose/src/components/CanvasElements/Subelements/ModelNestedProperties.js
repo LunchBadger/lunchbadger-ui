@@ -24,7 +24,7 @@ class ModelNestedProperties extends Component {
       <div>
         {filteredProperties.map((property, index) => (
           <ModelPropertyCollapsed
-            key={index}
+            key={`ModelPropertyCollapsed-${property.id}`}
             level={level}
             collapsable={property.type === 'object'}
             nested={property.type === 'object' ?

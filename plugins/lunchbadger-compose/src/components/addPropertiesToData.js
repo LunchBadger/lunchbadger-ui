@@ -4,7 +4,7 @@ export default (model, entity, properties, stateProperties) => {
   const rootProperties = [];
   const props = {};
   const idMapping = {};
-  Object.keys(model.properties).forEach((key) => {
+  Object.keys(model.properties || {}).forEach((key) => {
     const property = model.properties[key];
     if (property.name.trim().length === 0) return;
     const prop = ModelProperty.create(property);

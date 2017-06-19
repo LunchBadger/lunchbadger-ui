@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import HOC from '../../../../../lunchbadger-ui/src/utils/Formsy/HOC';
+import './Select.scss';
 
 class Select extends Component {
   static propTypes = {
@@ -46,7 +48,7 @@ class Select extends Component {
       padding: '0 8px',
     }
     return (
-      <span className={className || ''}>
+      <div className={cs('Select', className)}>
         <SelectField
           value={getValue()}
           multiple={multiple}
@@ -62,7 +64,7 @@ class Select extends Component {
           <MenuItem key={idx} value={value} primaryText={label} />
         ))}
         </SelectField>
-      </span>
+      </div>
     );
   }
 }

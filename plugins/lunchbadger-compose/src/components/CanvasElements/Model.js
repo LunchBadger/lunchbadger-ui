@@ -1,53 +1,76 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import ModelProperty from '../CanvasElements/Subelements/ModelProperty';
+import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
 import removeEntity from '../../actions/CanvasElements/Model/remove';
 import slug from 'slug';
+import addPropertiesToData from '../addPropertiesToData';
+import addNestedProperties from '../addNestedProperties';
 import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const ModelPropertyFactory = LunchBadgerManage.models.ModelProperty;
+const ModelProperty = LunchBadgerManage.models.ModelProperty;
+const PrivateStore = LunchBadgerManage.stores.Private;
 const {defaultEntityNames} = LunchBadgerCore.utils;
 
 class Model extends Component {
-  static propTypes = {
-    entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
-  };
-
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
-
+    const stateFromStores = (newProps) => {
+      const data = {
+        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
+      };
+      if (!newProps.entity.privateModelProperties) {
+         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      }
+      return data;
+    };
     this.state = {
       contextPath: props.entity.contextPath,
-      contextPathDirty: false
+      contextPathDirty: false,
+      ...stateFromStores(props),
+    };
+    this.onStoreUpdate = (props = this.props) => {
+      this.setState({...stateFromStores(props)});
     };
   }
 
+  componentDidMount() {
+    PrivateStore.addChangeListener(this.onStoreUpdate);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.entity.id !== this.props.entity.id) {
+      this.onStoreUpdate(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    PrivateStore.removeChangeListener(this.onStoreUpdate);
+  }
+
+  discardChanges() {
+    // revert properties
+    this.onStoreUpdate();
+  }
+
   update(model) {
-    let data = {
-      properties: []
+    const data = {
+      properties: [],
     };
-    model.properties && model.properties.forEach((property) => {
-      if (property.name.trim().length > 0) {
-        let prop = ModelPropertyFactory.create(property);
-        prop.attach(this.props.entity);
-        data.properties.push(prop);
-      }
-    });
+    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
     const validations = this.validate(model);
     if (validations.isValid) {
-      updateModel(this.context.projectService, this.props.entity.id,
-        Object.assign(model, data));
+      updateModel(
+        this.context.projectService,
+        this.props.entity.id,
+        Object.assign(model, data),
+      );
     }
     return validations;
   }
@@ -79,16 +102,47 @@ class Model extends Component {
     }
   }
 
-  onAddProperty = () => {
-    addProperty(this.props.entity, {
-      key: '',
-      value: '',
-      type: '',
-      isRequired: false,
-      isIndex: false,
-      notes: ''
+  onAddItem = (collection, item) => {
+    const items = this.state[collection];
+    items.push(item);
+    this.setState({
+      [collection]: items
     });
-    setTimeout(() => this._focusLastInput());
+  }
+
+  onRemoveItem = (collection, item) => {
+    const items = this.state[collection];
+    _.remove(items, function (i) {
+      if (item.id) {
+        return i.id === item.id;
+      }
+      return i.name === item.name;
+    });
+    this.setState({
+      [collection]: items
+    });
+  }
+
+  onAddProperty = (parentId) => () => {
+    this.onAddItem('properties', ModelProperty.create({
+      parentId,
+      default_: '',
+      type: 'string',
+      description: '',
+      required: false,
+      index: false,
+    }));
+    // setTimeout(() => this._focusLastInput()); // FIXME
+  }
+
+  onRemoveProperty = (property) => {
+    this.onRemoveItem('properties', property);
+  }
+
+  onPropertyTypeChange = (id, type) => {
+    const properties = [...this.state.properties];
+    properties.find(prop => prop.id === id).type = type;
+    this.setState({properties});
   }
 
   _focusLastInput() {
@@ -116,17 +170,16 @@ class Model extends Component {
   }
 
   renderProperties = () => {
-    return this.props.entity.properties.map((property, index) => (
-      <ModelProperty
-        index={index}
-        key={`property-${property.id}`}
-        property={property}
-        propertiesForm={() => this.refs.properties}
-        propertiesCount={this.props.entity.properties.length}
-        addAction={this.onAddProperty}
-        entity={this.props.entity}
+    return (
+      <ModelNestedProperties
+        title="Properties"
+        path=""
+        properties={this.state.properties}
+        onAddProperty={this.onAddProperty}
+        onRemoveProperty={this.onRemoveProperty}
+        onPropertyTypeChange={this.onPropertyTypeChange}
       />
-    ));
+    );
   }
 
   renderMainProperties = () => {
@@ -153,7 +206,7 @@ class Model extends Component {
         {this.renderMainProperties()}
         <EntitySubElements
           title="Properties"
-          onAdd={this.onAddProperty}
+          onAdd={this.onAddProperty('')}
           main
         >
           {this.props.entity.properties.length > 0 && (
@@ -166,5 +219,14 @@ class Model extends Component {
     );
   }
 }
+
+Model.propTypes = {
+  entity: PropTypes.object.isRequired,
+  paper: PropTypes.object,
+};
+
+Model.contextTypes = {
+  projectService: PropTypes.object,
+};
 
 export default CanvasElement(Model);

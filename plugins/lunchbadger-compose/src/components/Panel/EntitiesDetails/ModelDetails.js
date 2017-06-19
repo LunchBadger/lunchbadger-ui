@@ -26,17 +26,8 @@ const baseModelTypes = [
 ];
 
 class ModelDetails extends Component {
-  static propTypes = {
-    entity: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
-
     const stateFromStores = (newProps) => {
       const data = {
         properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
@@ -49,9 +40,7 @@ class ModelDetails extends Component {
       }
       return data;
     };
-
     this.state = Object.assign({}, stateFromStores(props));
-
     this.onStoreUpdate = (props = this.props) => {
       this.setState(stateFromStores(props));
     }
@@ -96,41 +85,35 @@ class ModelDetails extends Component {
       properties: [],
       relations: [],
     };
-
     addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-
     model.relations && model.relations.forEach((relation) => {
       let rel = ModelRelation.create(relation);
       rel.attach(this.props.entity);
       data.relations.push(rel);
     });
-
     model.userFields && model.userFields.forEach(field => {
       const value = field.value;
       let output = value;
-
       if (field.type === 'object') {
         output = JSON.parse(value);
       } else if (field.type === 'number') {
         output = Number(value);
       }
-
       data[field.name] = output;
     });
-
     const currDsConn = this._getBackendConnection();
     const currDsId = currDsConn ? currDsConn.fromId : null;
     const dsId = model.dataSource === 'none' ? null : model.dataSource;
-
     if (dsId !== currDsId) {
       if (!dsId) {
         LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
       } else if (currDsConn) {
-        LunchBadgerCore.utils.paper.setSource(currDsConn.info.connection,
-          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'));
+        LunchBadgerCore.utils.paper.setSource(
+          currDsConn.info.connection,
+          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+        );
       }
     }
-
     const updateData = Object.assign({}, model, data);
     if (!updateData.userFields) {
       updateData.userFields = [];
@@ -139,22 +122,17 @@ class ModelDetails extends Component {
       Object.keys(this.props.entity.userFields),
       updateData.userFields.map(field => field.name)
     );
-
     delete updateData.dataSource;
     delete updateData.userFields;
-
     updateModel(this.context.projectService, this.props.entity.id, updateData, propsToRemove);
   }
 
   onAddItem(collection, item) {
     const items = this.state[collection];
-
     items.push(item);
-
     this.setState({
       [collection]: items
     });
-
     this.setState({changed: true}, () => {
       this.props.parent.checkPristine();
     });
@@ -162,25 +140,20 @@ class ModelDetails extends Component {
 
   onRemoveItem(collection, item) {
     const items = this.state[collection];
-
     _.remove(items, function (i) {
       if (item.id) {
         return i.id === item.id;
       }
-
       return i.name === item.name;
     });
-
     this.setState({
       [collection]: items
     });
-
     if (!_.isEqual(items, this.props.entity[collection])) {
       this.setState({changed: true});
     } else {
       this.setState({changed: false});
     }
-
     setTimeout(() => {
       this.props.parent.checkPristine();
     });
@@ -196,8 +169,11 @@ class ModelDetails extends Component {
   onAddProperty = (parentId) => () => {
     this.onAddItem('properties', ModelProperty.create({
       parentId,
-      propertyIsRequired: false,
-      propertyIsIndex: false,
+      default_: '',
+      type: 'string',
+      description: '',
+      required: false,
+      index: false,
     }));
     setTimeout(() => this._focusLastDetailsRowInput());
   }
@@ -231,10 +207,12 @@ class ModelDetails extends Component {
   renderRelations() {
     return this.state.relations.map((relation, index) => {
       return (
-        <ModelRelationDetails index={index}
-                              key={`relation-${relation.id}`}
-                              onRemove={this.onRemoveRelation}
-                              relation={relation}/>
+        <ModelRelationDetails
+          index={index}
+          key={`relation-${relation.id}`}
+          onRemove={this.onRemoveRelation}
+          relation={relation}
+        />
       );
     });
   }
@@ -242,12 +220,14 @@ class ModelDetails extends Component {
   renderUserFields() {
     return this.state.userFields.map((field, index) => {
       return (
-        <ModelUserFieldsDetails index={index}
-                                addAction={() => this.onAddUserField()}
-                                fieldsCount={this.state.userFields.length}
-                                key={`user-field-${index}`}
-                                onRemove={(userField) => this.onRemoveUserField(userField)}
-                                field={field}/>
+        <ModelUserFieldsDetails
+          index={index}
+          addAction={() => this.onAddUserField()}
+          fieldsCount={this.state.userFields.length}
+          key={`user-field-${index}`}
+          onRemove={(userField) => this.onRemoveUserField(userField)}
+          field={field}
+        />
       );
     });
   }
@@ -261,21 +241,29 @@ class ModelDetails extends Component {
           <div className="details-panel__container details-panel__columns">
             <InputField label="Context path" propertyName="contextPath" entity={entity}/>
             <InputField label="Plural" propertyName="plural" entity={entity}/>
-            <SelectField label="Base model" propertyName="base" entity={entity}
+            <SelectField
+              label="Base model"
+              propertyName="base"
+              entity={entity}
               options={baseModelTypes}
             />
             <div className="details-panel__fieldset">
-              <label className="details-panel__label"
-                     htmlFor="dataSource">Data source</label>
-              <Select className="details-panel__input"
-                      name="dataSource"
-                      value={this._getCurrentBackend()}
-                      options={[{label: '[None]', value: 'none'}, ...dataSources]}
+              <label
+                className="details-panel__label"
+                htmlFor="dataSource"
+              >
+                Data source
+              </label>
+              <Select
+                className="details-panel__input"
+                name="dataSource"
+                value={this._getCurrentBackend()}
+                options={[{label: '[None]', value: 'none'}, ...dataSources]}
               />
             </div>
-            <CheckboxField label="Read only" propertyName="readOnly" entity={entity}/>
-            <CheckboxField label="Strict schema" propertyName="strict" entity={entity}/>
-            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity}/>
+            <CheckboxField label="Read only" propertyName="readOnly" entity={entity} />
+            <CheckboxField label="Strict schema" propertyName="strict" entity={entity} />
+            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity} />
           </div>
         </CollapsableDetails>
         <CollapsableDetails title="Relations">
@@ -296,7 +284,7 @@ class ModelDetails extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.renderRelations()}
+              {this.renderRelations()}
             </tbody>
           </table>
         </CollapsableDetails>
@@ -326,7 +314,7 @@ class ModelDetails extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.renderUserFields()}
+              {this.renderUserFields()}
             </tbody>
           </table>
         </CollapsableDetails>
@@ -334,5 +322,13 @@ class ModelDetails extends Component {
     )
   }
 }
+
+ModelDetails.propTypes = {
+  entity: PropTypes.object.isRequired,
+};
+
+ModelDetails.contextTypes = {
+  projectService: PropTypes.object,
+};
 
 export default BaseDetails(ModelDetails);

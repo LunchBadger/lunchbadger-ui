@@ -20,11 +20,12 @@ class CollapsibleProperties extends Component {
   }
 
   render() {
-    const {bar, collapsible} = this.props;
+    const {bar, collapsible, plain} = this.props;
     const {expanded} = this.state;
     const classNames = cs('CollapsibleProperties', {
-      ['expanded']: expanded,
-      ['nonEditable']: typeof bar === 'string',
+      expanded,
+      plain,
+      nonEditable: typeof bar === 'string',
     });
     return (
       <div className={classNames}>
@@ -56,11 +57,13 @@ CollapsibleProperties.propTypes = {
   collapsible: PropTypes.node.isRequired,
   onToggleCollapse: PropTypes.func,
   defaultOpened: PropTypes.bool,
+  plain: PropTypes.bool,
 }
 
 CollapsibleProperties.defaultProps = {
   onToggleCollapse: () => {},
   defaultOpened: false,
+  plain: false,
 }
 
 export default CollapsibleProperties;

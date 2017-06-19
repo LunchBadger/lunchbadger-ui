@@ -5,14 +5,6 @@ import uncheckedIcon from './uncheckedIcon';
 import HOC from '../utils/Formsy/HOC';
 
 class Checkbox extends Component {
-  static propTypes = {
-    getValue: PropTypes.func,
-    setValue: PropTypes.func,
-    handleChange: PropTypes.func,
-    className: PropTypes.string,
-    label: PropTypes.string,
-  };
-
   _handleChange = (event) => {
     this.props.setValue(event.currentTarget.checked);
 
@@ -22,7 +14,11 @@ class Checkbox extends Component {
   }
 
   render() {
-    const {className, getValue, name, label} = this.props;
+    const {className, getValue, name, label, hidden} = this.props;
+    const style = {};
+    if (hidden) {
+      style.display = 'none';
+    }
     const labelStyle = {
       color: '#999',
     }
@@ -33,6 +29,7 @@ class Checkbox extends Component {
         checked={getValue()}
         id={name}
         onCheck={this._handleChange}
+        style={style}
         label={label}
         labelStyle={labelStyle}
         uncheckedIcon={uncheckedIcon()}
@@ -40,5 +37,18 @@ class Checkbox extends Component {
     );
   }
 }
+
+Checkbox.propTypes = {
+  getValue: PropTypes.func,
+  setValue: PropTypes.func,
+  handleChange: PropTypes.func,
+  className: PropTypes.string,
+  label: PropTypes.string,
+  hidden: PropTypes.bool,
+};
+
+Checkbox.defaultProps = {
+  hidden: false,
+};
 
 export default HOC(Checkbox);

@@ -79,7 +79,7 @@ class ModelPropertyDetails extends Component {
           <div className="EntityProperty__field">
             <div className="EntityProperty__field--text">
               <span className="EntityProperty__field--textValue">
-                {type || 'string'}
+                {propertyTypes.find(item => item.value === (type || 'string')).label}
               </span>
             </div>
             <Select

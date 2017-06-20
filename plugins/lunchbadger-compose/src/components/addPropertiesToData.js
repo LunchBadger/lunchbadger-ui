@@ -11,15 +11,20 @@ export default (model, entity, properties, stateProperties) => {
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
     const [parentId, idx] = key.split('/');
-    if (prop.type === 'object') {
-      prop.type = null;
+    if (['array', 'object'].includes(prop.type)) {
+      prop.isNull = true;
+      prop.type = prop.type === 'object' ? {} : [];
     }
     if (parentId !== '') {
       const parent = props[parentId];
-      if (parent.type === null) {
-        parent.type = {};
+      if (parent.isNull) {
+        delete parent.isNull;
       }
-      parent.type[prop.name] = prop;
+      if (Array.isArray(parent.type)) {
+        parent.type.push(prop);
+      } else {
+        parent.type[prop.name] = prop;
+      }
     } else {
       rootProperties.push(property.id);
     }
@@ -31,14 +36,22 @@ export default (model, entity, properties, stateProperties) => {
     if (prop.type === 'object') {
       prop.type = {};
     }
+    if (prop.type === 'array') {
+      prop.type = [];
+    }
     if (prop.parentId !== '' && fallbackProperties[prop.parentId]) {
-      fallbackProperties[prop.parentId].type[prop.name] = prop;
+      if (Array.isArray(fallbackProperties[prop.parentId].type)) {
+        fallbackProperties[prop.parentId].type.push(prop);
+      } else {
+        fallbackProperties[prop.parentId].type[prop.name] = prop;
+      }
     }
   });
   Object.keys(props).forEach((key) => {
     const prop = props[key];
-    if (prop.type === null) {
+    if (prop.isNull) {
       prop.type = fallbackProperties[key].type;
+      delete prop.isNull;
     }
     prop.attach(entity);
     if (rootProperties.includes(key)) {

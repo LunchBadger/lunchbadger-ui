@@ -29,6 +29,7 @@ class ModelPropertyDetails extends Component {
     const {property, parentId, addAction} = this.props;
     const index = `${parentId}/${this.props.index}`;
     const type = property.type || 'string';
+    const isNested = ['array', 'object'].includes(property.type);
     return (
       <div className="ModelProperty">
         <Input
@@ -52,7 +53,7 @@ class ModelPropertyDetails extends Component {
           name={`properties[${index}][description]`}
           // handleKeyDown={this._checkTabButton} // FIXME
         />
-        {property.type !== 'object' && (
+        {!isNested && (
           <Input
             type="hidden"
             value={property.default_}
@@ -94,7 +95,7 @@ class ModelPropertyDetails extends Component {
           <div className="ModelProperty__action" onClick={this.onRemove}>
             <IconSVG svg={iconDelete} />
           </div>
-          {property.type === 'object' && (
+          {isNested && (
             <div className="ModelProperty__action" onClick={addAction(property.id)}>
               <IconSVG svg={iconPlus} />
             </div>

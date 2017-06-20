@@ -14,7 +14,7 @@ const addNestedProperties = (entity, props, properties, parentId) => {
           ...prop.type[key],
         });
       });
-      prop.type = 'object';
+      prop.type = Array.isArray(prop.type) ? 'array' : 'object';
       addNestedProperties(entity, props, nestedProperties, prop.id);
     }
   });

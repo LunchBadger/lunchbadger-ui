@@ -29,7 +29,7 @@ var pageCommands = {
   },
 
   addElementFromTooltip: function (entity, option) {
-    option = option || 'memory';
+    option = option || 'rest';
     this.click('.Tool.' + entity);
     this.api.pause(500);
     this.click('.Tool__submenuItem.' + option);

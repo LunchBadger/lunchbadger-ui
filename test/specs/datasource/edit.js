@@ -9,7 +9,7 @@ module.exports = {
 
     page.open();
 
-    page.addElementFromTooltip('dataSource', 'rest');
+    page.addElementFromTooltip('dataSource');
 
     browser.pause(1000);
 

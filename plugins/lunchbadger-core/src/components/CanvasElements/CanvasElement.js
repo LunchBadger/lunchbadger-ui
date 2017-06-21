@@ -438,6 +438,7 @@ export default (ComposedComponent) => {
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.constructor.type}
+              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={this.state.editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}

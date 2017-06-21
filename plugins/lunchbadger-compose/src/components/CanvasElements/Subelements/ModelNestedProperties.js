@@ -6,6 +6,16 @@ import ModelPropertyCollapsed from './ModelPropertyCollapsed';
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class ModelNestedProperties extends Component {
+  constructor(props) {
+    super(props);
+    this.nestedDOM = {};
+  }
+
+  onAddProperty = (parentId) => () => {
+    this.nestedDOM[parentId].toggleCollapse(false);
+    this.props.onAddProperty(parentId)();
+  }
+
   render() {
     const {
       title,
@@ -24,6 +34,7 @@ class ModelNestedProperties extends Component {
       <div>
         {filteredProperties.map((property, index) => (
           <ModelPropertyCollapsed
+            ref={(r) => {this.nestedDOM[property.id] = r;}}
             key={`ModelPropertyCollapsed-${property.id}`}
             level={level}
             collapsable={property.type === 'object'}
@@ -43,7 +54,7 @@ class ModelNestedProperties extends Component {
           >
             <ModelProperty
               index={index}
-              addAction={onAddProperty}
+              addAction={this.onAddProperty}
               propertiesCount={filteredProperties.length}
               onRemove={onRemoveProperty}
               property={property}

@@ -17,6 +17,7 @@ export default (model, entity, properties, stateProperties) => {
     }
     if (parentId !== '') {
       const parent = props[parentId];
+      if (!parent) return;
       if (parent.isNull) {
         delete parent.isNull;
       }
@@ -39,7 +40,7 @@ export default (model, entity, properties, stateProperties) => {
     if (prop.type === 'array') {
       prop.type = [];
     }
-    if (prop.parentId !== '' && fallbackProperties[prop.parentId]) {
+    if (prop.parentId !== '' && fallbackProperties[prop.parentId] && prop.name !== '') {
       if (Array.isArray(fallbackProperties[prop.parentId].type)) {
         fallbackProperties[prop.parentId].type.push(prop);
       } else {

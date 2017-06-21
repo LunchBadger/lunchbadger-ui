@@ -13,7 +13,9 @@ class ModelPropertyCollapsed extends Component {
     };
   }
 
-  toggleCollapse = () => this.setState({collapsed: !this.state.collapsed});
+  toggleCollapse = collapsed => this.setState({
+    collapsed: typeof collapsed === 'boolean' ? collapsed : !this.state.collapsed,
+  });
 
   render() {
     const {children, level, collapsable, nested} = this.props;

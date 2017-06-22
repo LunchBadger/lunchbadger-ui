@@ -168,22 +168,15 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate() {
-      if (this.props.entity.constructor.type === 'Model'
-        && this.state.modelBeforeEdit
-        && (
-          this.state.modelBeforeEdit.contextPath !== this.props.entity.contextPath
-          || this.state.modelBeforeEdit.name !== this.props.entity.name
-        )
-      ) {
-        const modelBeforeEdit = {
-          ...this.state.modelBeforeEdit,
-          name: this.props.entity.name,
-          contextPath: this.props.entity.contextPath,
+      const element = this.element.decoratedComponentInstance || this.element;
+      if (typeof element.getEntityDiffProps === 'function') {
+        const modelBeforeEdit = element.getEntityDiffProps(this.state.modelBeforeEdit);
+        if (modelBeforeEdit !== null) {
+          this.setState({
+            modelBeforeEdit,
+            modelEnv_0: modelBeforeEdit,
+          });
         }
-        this.setState({
-          modelBeforeEdit,
-          modelEnv_0: modelBeforeEdit,
-        });
       }
       this.props.entity.elementDOM = this.elementDOM;
       const {multiEnvIndex} = this.context;

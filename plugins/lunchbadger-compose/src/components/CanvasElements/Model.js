@@ -77,6 +77,17 @@ class Model extends Component {
     return validations;
   }
 
+  getEntityDiffProps = (model) => {
+    if (!model) return null;
+    const {name, contextPath} = this.props.entity;
+    if (name === model.name && contextPath === model.contextPath) return null;
+    return {
+      ...model,
+      name,
+      contextPath,
+    };
+  }
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);

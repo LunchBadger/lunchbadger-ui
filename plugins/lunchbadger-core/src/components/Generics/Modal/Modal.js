@@ -18,7 +18,7 @@ export default (ComposedComponent) => {
 
     render() {
       return (
-        <ModalContainer zIndex={20} onClose={this.props.onClose} className="modal">
+        <ModalContainer zIndex={95} onClose={this.props.onClose} className="modal">
           <ModalDialog onClose={this.props.onClose} width={this.props.width} className="modal__dialog">
             <ComposedComponent {...this.props} {...this.state} modal={this}/>
           </ModalDialog>

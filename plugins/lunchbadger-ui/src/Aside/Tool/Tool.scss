@@ -83,6 +83,7 @@
   &__tooltip {
     opacity: 0;
     transition: opacity 300ms ease 0ms;
+    pointer-events: none;
     &.visible {
       opacity: 1;
       transition: opacity 300ms ease 500ms;

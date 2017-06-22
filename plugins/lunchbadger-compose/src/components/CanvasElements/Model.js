@@ -26,10 +26,9 @@ class Model extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       contextPath: props.entity.contextPath,
-      contextPathDirty: false
+      contextPathDirty: slug(props.entity.name, {lower: true}) !== props.entity.contextPath,
     };
   }
 
@@ -96,7 +95,7 @@ class Model extends Component {
     input && input.focus();
   }
 
-  updateContextPath = () => this.setState({contextPathDirty: true});
+  updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   removeEntity() {
     removeEntity(this.context.projectService, this.props.entity);
@@ -131,17 +130,18 @@ class Model extends Component {
 
   renderMainProperties = () => {
     const {validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {contextPath} = this.state;
     const mainProperties = [
       {
         name: 'contextPath',
         title: 'context path',
-        value: this.state.contextPath,
+        value: contextPath,
         invalid: data.contextPath,
         onChange: this.updateContextPath,
         onBlur: this.handleFieldChange('contextPath')
       }
     ];
-    mainProperties[0].isDelta = this.state.contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].isDelta = contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }

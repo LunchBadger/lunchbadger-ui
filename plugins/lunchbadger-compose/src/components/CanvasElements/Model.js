@@ -26,10 +26,20 @@ class Model extends Component {
 
   constructor(props) {
     super(props);
+    this.state = this.initState(props);
+  }
 
-    this.state = {
-      contextPath: props.entity.contextPath,
-      contextPathDirty: false
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
+      this.setState(this.initState());
+    }
+  }
+
+  initState = (props = this.props) => {
+    const {contextPath, name} = props.entity;
+    return {
+      contextPath,
+      contextPathDirty: slug(name, {lower: true}) !== contextPath,
     };
   }
 
@@ -96,7 +106,12 @@ class Model extends Component {
     input && input.focus();
   }
 
-  updateContextPath = () => this.setState({contextPathDirty: true});
+  updateContextPath = event => this.setState({
+    contextPath: event.target.value,
+    contextPathDirty: true,
+  });
+
+  discardChanges = () => this.setState(this.initState());
 
   removeEntity() {
     removeEntity(this.context.projectService, this.props.entity);

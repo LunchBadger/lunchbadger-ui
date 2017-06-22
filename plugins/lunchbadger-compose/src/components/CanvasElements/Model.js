@@ -117,12 +117,9 @@ class Model extends Component {
     input && input.focus();
   }
 
-  updateContextPath = event => this.setState({
-    contextPath: event.target.value,
-    contextPathDirty: true,
-  });
-
   discardChanges = () => this.setState(this.initState());
+
+  updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   removeEntity() {
     removeEntity(this.context.projectService, this.props.entity);
@@ -157,17 +154,18 @@ class Model extends Component {
 
   renderMainProperties = () => {
     const {validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {contextPath} = this.state;
     const mainProperties = [
       {
         name: 'contextPath',
         title: 'context path',
-        value: this.state.contextPath,
+        value: contextPath,
         invalid: data.contextPath,
         onChange: this.updateContextPath,
         onBlur: this.handleFieldChange('contextPath')
       }
     ];
-    mainProperties[0].isDelta = this.state.contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].isDelta = contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }

@@ -1,77 +1,32 @@
-@import '../../../config';
-
-.model-property {
-  display: block;
-  width: 100%;
-  position: relative;
-  padding: 0 16px;
-  color: #4b4b4b;
-}
-
-.model-property__key-cell {
-  float: left;
-  width: 50%;
-  padding: 5px 10px 5px;
-}
-
-.model-property__value-cell {
-  float: left;
-  width: 50%;
-  padding: 5px 10px 5px;
-}
-
-.model-property__key-cell,
-.model-property__value-cell {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  border-width: 1px;
-  border-style: solid;
-  border-color: transparent;
-  .editable & {
-    overflow: visible;
-    border-color: #ECECED;
+.ModelProperty {
+  &__col {
+    display: inline-block;
+    vertical-align: middle;
+    &.name {
+      width: calc(100% - 130px);
+      padding-right: 10px;
+    }
+    &.type {
+      width: 110px;
+    }
+    &.actions {
+      width: 20px;
+      padding-left: 3px;
+      display: none;
+      .editable & {
+        display: inline-block;
+      }
+    }
   }
-}
-
-.model-property__value {
-
-}
-
-.model-property__input {
-  font-size: 18px;
-  background-color: #ffffff;
-}
-
-input[type=text].model-property__input.editable-only {
-  &::selection {
-    background-color: #8BD6EF;
-    color: $ui-light;
+  &__action {
+    cursor: pointer;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    svg {
+      width: 13px;
+      height: auto;
+      stroke: #4190CE;
+    }
   }
-
-  &:focus {
-    border-color: #8BD6EF;
-  }
-}
-
-.model-property__remove.fa {
-  display: none;
-  color: #8BD6EF;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  right: -20px;
-  line-height: 20px;
-  text-align: center;
-  transform: translateY(-50%);
-  &:hover {
-    color: #000;
-  }
-}
-
-.model-property__select {
-  -webkit-appearance: none;
-  height: 23px;
 }

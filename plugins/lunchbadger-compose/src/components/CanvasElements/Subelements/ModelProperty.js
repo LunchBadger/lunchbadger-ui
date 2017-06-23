@@ -1,91 +1,118 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './ModelProperty.scss';
-import removeProperty from '../../../actions/CanvasElements/Model/removeProperty';
-
-const {Select, Input} = LunchBadgerCore.components;
+import cs from 'classnames';
+const {Input, Select, Textarea} = LunchBadgerCore.components;
 const {propertyTypes} = LunchBadgerCore.utils;
+import {Checkbox, IconSVG} from '../../../../../lunchbadger-ui/src';
+import {iconDelete, iconPlus} from '../../../../../../src/icons';
+import './ModelProperty.scss';
 
-export default class ModelProperty extends Component {
-  static propTypes = {
-    entity: PropTypes.object.isRequired,
-    property: PropTypes.object.isRequired,
-    addAction: PropTypes.func.isRequired,
-    propertiesCount: PropTypes.number.isRequired,
-    propertiesForm: PropTypes.func,
-    index: PropTypes.number.isRequired
-  };
-
-  constructor(props) {
-    super(props);
+class ModelPropertyDetails extends Component {
+  onRemove = () => {
+    const {property, onRemove} = this.props;
+    onRemove(property);
   }
 
-  onRemove(entity, property) {
-    removeProperty(entity, property);
-  }
+  // FIXME - restore this functionality after discussion, how it should works with nested properties
+  // _checkTabButton = (event) => {
+  //   if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
+  //     this.props.addAction();
+  //   }
+  // }
 
-  _checkTabButton = (event) => {
-    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
-      this.props.addAction();
-
-      setTimeout(() => this._focusLastField());
-    }
-  }
-
-  _focusLastField() {
-    const form = this.props.propertiesForm();
-
-    if (form) {
-      form.querySelector('.model-property:last-child .model-property__input').focus();
-    }
+  onPropertyTypeChange = (type) => {
+    const {property, onPropertyTypeChange} = this.props;
+    onPropertyTypeChange(property.id, type);
   }
 
   render() {
-    const {property, index} = this.props;
-
+    const {property, parentId, addAction} = this.props;
+    const index = `${parentId}/${this.props.index}`;
+    const type = property.type || 'string';
     return (
-      <div className="model-property">
-        <div className="model-property__key-cell">
-          <span className="model-property__value key hide-while-edit">
-            {property.name}
-          </span>
-          <Input className="model-property__input canvas-element__input editable-only"
-                 ref="keyInput"
-                 value={property.name}
-                 name={`properties[${index}][name]`}/>
-        </div>
-        <div className="model-property__value-cell">
-          <span className="model-property__value value hide-while-edit">
-            {property.type}
-          </span>
-          <Select className="model-property__input model-property__select canvas-element__input editable-only"
-                  value={property.type || 'string'}
-                  handleKeyDown={this._checkTabButton}
-                  name={`properties[${index}][type]`}
-                  options={propertyTypes}
+      <div className="ModelProperty">
+        <Input
+          value={property.id}
+          type="hidden"
+          name={`properties[${index}][id]`}
+        />
+        <Checkbox
+          value={property.required}
+          hidden
+          name={`properties[${index}][required]`}
+        />
+        <Checkbox
+          value={property.index}
+          hidden
+          name={`properties[${index}][index]`}
+        />
+        <Input
+          type="hidden"
+          value={property.description}
+          name={`properties[${index}][description]`}
+          // handleKeyDown={this._checkTabButton} // FIXME
+        />
+        {property.type !== 'object' && (
+          <Input
+            type="hidden"
+            value={property.default_}
+            name={`properties[${index}][default_]`}
           />
+        )}
+        <div className={cs('ModelProperty__col', 'name')}>
+          <div className="EntityProperty__field">
+            <div className="EntityProperty__field--text">
+              <span className="EntityProperty__field--textValue">
+                {property.name}
+              </span>
+            </div>
+            <Input
+              value={property.name}
+              name={`properties[${index}][name]`}
+              fullWidth
+              className="EntityProperty__field--input"
+            />
+          </div>
         </div>
-
-        <Input value={property.index}
-               type="hidden"
-               name={`properties[${index}][index]`}/>
-        <Input value={property.required}
-               type="hidden"
-               name={`properties[${index}][required]`}/>
-        <Input value={property.description}
-               type="hidden"
-               name={`properties[${index}][description]`}/>
-        <Input value={property.default_}
-               type="hidden"
-               name={`properties[${index}][default_]`}/>
-        <Input value={property.id}
-               type="hidden"
-               className="property-id"
-               name={`properties[${index}][id]`}/>
-        <i className="model-property__remove icon-icon-minus"
-           onClick={() => this.onRemove(this.props.entity, property)}/>
-        <div className="clearfix"></div>
+        <div className={cs('ModelProperty__col', 'type')}>
+          <div className="EntityProperty__field">
+            <div className="EntityProperty__field--text">
+              <span className="EntityProperty__field--textValue">
+                {type || 'string'}
+              </span>
+            </div>
+            <Select
+              value={type || 'string'}
+              handleChange={this.onPropertyTypeChange}
+              name={`properties[${index}][type]`}
+              options={propertyTypes}
+              className="EntityProperty__field--input"
+            />
+          </div>
+        </div>
+        <div className={cs('ModelProperty__col', 'actions')}>
+          <div className="ModelProperty__action" onClick={this.onRemove}>
+            <IconSVG svg={iconDelete} />
+          </div>
+          {property.type === 'object' && (
+            <div className="ModelProperty__action" onClick={addAction(property.id)}>
+              <IconSVG svg={iconPlus} />
+            </div>
+          )}
+        </div>
       </div>
     );
   }
 }
+
+ModelPropertyDetails.propTypes = {
+  property: PropTypes.object.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  addAction: PropTypes.func.isRequired,
+  onPropertyTypeChange: PropTypes.func.isRequired,
+  propertiesCount: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
+  parentId: PropTypes.string.isRequired,
+};
+
+export default ModelPropertyDetails;

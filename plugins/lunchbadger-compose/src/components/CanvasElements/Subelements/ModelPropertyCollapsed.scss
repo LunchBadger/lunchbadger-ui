@@ -1,0 +1,26 @@
+.ModelPropertyCollapsed {
+  padding-left: 10px;
+  &__col {
+    display: inline-block;
+    vertical-align: middle;
+    &.toggle {
+      width: 10px;
+      & > div {
+        cursor: pointer;
+      }
+      svg {
+        fill: #01667D;
+        transform: rotate(0deg);
+        .ModelPropertyCollapsed.collapsed & {
+          transform: rotate(-90deg);
+        }
+        .highlighted & {
+          fill: #4190CE;
+        }
+      }
+    }
+    &.content {
+      width: calc(100% - 10px);
+    }
+  }
+}

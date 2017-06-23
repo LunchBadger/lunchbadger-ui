@@ -20,7 +20,7 @@ class AppState extends BaseStore {
         if (queueSize > 0) {
           this.emitChange();
         }
-      }, 100);
+      }, 300);
     }
   }
 

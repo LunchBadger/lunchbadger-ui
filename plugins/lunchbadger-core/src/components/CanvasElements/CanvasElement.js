@@ -344,6 +344,9 @@ export default (ComposedComponent) => {
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
         this.toggleHighlighted();
       });
+      if (this.element && this.element.discardChanges) {
+        this.element.discardChanges();
+      }
       evt.preventDefault();
       evt.stopPropagation();
     }

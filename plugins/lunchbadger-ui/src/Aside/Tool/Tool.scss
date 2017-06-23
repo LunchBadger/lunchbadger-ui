@@ -87,6 +87,7 @@
     &.visible {
       opacity: 1;
       transition: opacity 300ms ease 500ms;
+      pointer-events: all;
     }
     &.submenu {
       position: fixed;

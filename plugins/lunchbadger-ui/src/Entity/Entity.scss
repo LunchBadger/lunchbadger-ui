@@ -2,7 +2,7 @@
 
 .Entity {
   max-width: 100%;
-  min-width: 200px;
+  // min-width: 200px;
   color: rgb(41, 134, 156);
   position: relative;
   display: block;
@@ -66,6 +66,9 @@
   }
   &__extra {
     padding-bottom: 20px;
+    .Entity.DataSource.memory:not(.editable) & {
+      padding-bottom: 0;
+    }
   }
 }
 

@@ -16,7 +16,7 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.be.present;
     page.expect.element('.Entity.editable.expanded.DataSource').to.be.present;
 
-    page.expect.element('.quadrant:first-child .Entity.editable.DataSource .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('Memory');
+    page.expect.element('.quadrant:first-child .Entity.editable.DataSource .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('REST');
 
     page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue('.quadrant:first-child .Entity.DataSource .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');

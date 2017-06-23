@@ -67,7 +67,10 @@ export default class Port extends Component {
     }, endpointOptions);
 
     if (this.props.way === 'in') {
-      this._checkAndReattachConnections();
+      this._checkAndReattachTargetConnections();
+    }
+    if (this.props.way === 'out') {
+      this._checkAndReattachSourceConnections();
     }
     this.calculatePortTopOffsets();
   }
@@ -114,23 +117,36 @@ export default class Port extends Component {
     });
   }
 
-  _checkAndReattachConnections() {
+  _checkAndReattachTargetConnections() {
     const connections = Connection.getConnectionsForTarget(this.props.elementId);
-
     _.forEach(connections, (connection) => {
       let source = null;
-
       if (connection.info.source) {
         source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
       } else {
         source = document.querySelector(`#${connection.info.sourceId}`);
       }
-
       removeConnection(connection.fromId, connection.toId);
-
       this.props.paper.connect({
         source: source,
         target: findDOMNode(this.refs.port)
+      });
+    });
+  }
+
+  _checkAndReattachSourceConnections() {
+    const connections = Connection.getConnectionsForSource(this.props.elementId);
+    _.forEach(connections, (connection) => {
+      let target = null;
+      if (connection.info.target) {
+        target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
+      } else {
+        target = document.querySelector(`#${connection.info.targetId}`);
+      }
+      removeConnection(connection.fromId, connection.toId);
+      this.props.paper.connect({
+        source: findDOMNode(this.refs.port),
+        target: target
       });
     });
   }

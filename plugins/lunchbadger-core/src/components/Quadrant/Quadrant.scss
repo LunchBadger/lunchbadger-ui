@@ -2,7 +2,6 @@
 
 .quadrant {
   vertical-align: top;
-  min-width: 25%;
   position: relative;
   border-right: 1px solid $ui-base-border;
   flex: 0 0 auto;
@@ -39,7 +38,6 @@
   text-align: center;
   position: fixed;
   border-right: 1px solid $ui-base-border;
-  min-width: calc(25% - 15px);
   z-index: $z-index-top;
 }
 

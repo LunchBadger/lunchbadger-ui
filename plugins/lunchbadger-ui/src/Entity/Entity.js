@@ -16,6 +16,7 @@ class Entity extends Component {
     const {
       children,
       type,
+      connector,
       editable,
       expanded,
       collapsed,
@@ -39,7 +40,7 @@ class Entity extends Component {
     const opacity = dragging ? 0.2 : 1;
     return connectDragSource(connectDropTarget(
       <div
-        className={cs('Entity', type, {editable, expanded, collapsed, highlighted, dragging, wip, invalid})}
+        className={cs('Entity', type, connector, {editable, expanded, collapsed, highlighted, dragging, wip, invalid})}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         style={{opacity}}
@@ -94,6 +95,7 @@ Entity.propTypes = {
   onDoubleClick: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
+  connector: PropTypes.string,
 };
 
 export default Entity;

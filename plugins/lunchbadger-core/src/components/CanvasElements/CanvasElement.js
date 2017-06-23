@@ -358,6 +358,9 @@ export default (ComposedComponent) => {
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
         this.toggleHighlighted();
       });
+      if (this.element && this.element.discardChanges) {
+        this.element.discardChanges();
+      }
       evt.preventDefault();
       evt.stopPropagation();
     }
@@ -452,6 +455,7 @@ export default (ComposedComponent) => {
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.constructor.type}
+              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={this.state.editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}

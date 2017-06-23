@@ -1,5 +1,14 @@
 .CollapsibleProperties {
   padding: 0 24px;
+  &.plain {
+    padding: 0;
+    .CollapsibleProperties__collapsible {
+      margin: 0;
+    }
+    .CollapsibleProperties__bar:before {
+      display: none;
+    }
+  }
   &__bar {
     margin-left: -20px;
     position: relative;

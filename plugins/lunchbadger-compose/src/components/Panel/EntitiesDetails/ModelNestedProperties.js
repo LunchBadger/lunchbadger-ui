@@ -49,7 +49,7 @@ class ModelNestedProperties extends Component {
                   onPropertyTypeChange={onPropertyTypeChange}
                   parentId={parentId}
                 />
-                {property.type === 'object' && (
+                {['array', 'object'].includes(property.type) && (
                   <tr>
                     <td colSpan={7}>
                       <ModelNestedProperties

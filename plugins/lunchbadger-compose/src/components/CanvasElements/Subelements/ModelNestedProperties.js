@@ -32,50 +32,40 @@ class ModelNestedProperties extends Component {
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     return (
       <div>
-        {filteredProperties.map((property, index) => (
-          <ModelPropertyCollapsed
-            ref={(r) => {this.nestedDOM[property.id] = r;}}
-            key={`ModelPropertyCollapsed-${property.id}`}
-            level={level}
-            collapsable={property.type === 'object'}
-            nested={property.type === 'object' ?
-              <ModelNestedProperties
-                title="Nested properties"
-                path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
-                collapsed
-                properties={properties}
-                onAddProperty={onAddProperty}
-                onRemoveProperty={onRemoveProperty}
+        {filteredProperties.map((property, index) => {
+          const isNested = ['array', 'object'].includes(property.type);
+          return (
+            <ModelPropertyCollapsed
+              ref={(r) => {this.nestedDOM[property.id] = r;}}
+              key={`ModelPropertyCollapsed-${property.id}`}
+              level={level}
+              collapsable={isNested}
+              nested={isNested ?
+                <ModelNestedProperties
+                  title="Nested properties"
+                  path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
+                  collapsed
+                  properties={properties}
+                  onAddProperty={onAddProperty}
+                  onRemoveProperty={onRemoveProperty}
+                  onPropertyTypeChange={onPropertyTypeChange}
+                  parentId={property.id}
+                  level={level + 1}
+                /> : null
+              }
+            >
+              <ModelProperty
+                index={index}
+                addAction={this.onAddProperty}
+                propertiesCount={filteredProperties.length}
+                onRemove={onRemoveProperty}
+                property={property}
                 onPropertyTypeChange={onPropertyTypeChange}
-                parentId={property.id}
-                level={level + 1}
-              /> : null
-            }
-          >
-            <ModelProperty
-              index={index}
-              addAction={this.onAddProperty}
-              propertiesCount={filteredProperties.length}
-              onRemove={onRemoveProperty}
-              property={property}
-              onPropertyTypeChange={onPropertyTypeChange}
-              parentId={parentId}
-            />
-            {/*property.type === 'object' && (
-              <ModelNestedProperties
-                title="Nested properties"
-                path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
-                collapsed
-                properties={properties}
-                onAddProperty={onAddProperty}
-                onRemoveProperty={onRemoveProperty}
-                onPropertyTypeChange={onPropertyTypeChange}
-                parentId={property.id}
-                level={level + 1}
+                parentId={parentId}
               />
-            )*/}
-          </ModelPropertyCollapsed>
-        ))}
+            </ModelPropertyCollapsed>
+          )
+        })}
       </div>
     );
   }

@@ -41,7 +41,9 @@ class Select extends Component {
   render() {
     const {className, getValue, multiple, options} = this.props;
     const style = {
-      fontWeight: 400,
+      fontWeight: 'inherit',
+      fontSize: 'inherit',
+      color: 'inherit',
     };
     const labelStyle = {
       ...style,
@@ -58,7 +60,7 @@ class Select extends Component {
           fullWidth
           style={style}
           labelStyle={labelStyle}
-          listStyle={style}
+          listStyle={{...style, fontWeight: 400}}
         >
         {options.map(({value, label}, idx) => (
           <MenuItem key={idx} value={value} primaryText={label} />

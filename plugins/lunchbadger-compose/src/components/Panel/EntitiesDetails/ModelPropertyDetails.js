@@ -50,7 +50,7 @@ class ModelPropertyDetails extends Component {
           />
         </td>
         <td>
-          {property.type !== 'object' && (
+          {!['array', 'object'].includes(property.type) && (
             <Input
               className="details-panel__input"
               value={property.default_}

@@ -168,6 +168,16 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate() {
+      const element = this.element.decoratedComponentInstance || this.element;
+      if (typeof element.getEntityDiffProps === 'function') {
+        const modelBeforeEdit = element.getEntityDiffProps(this.state.modelBeforeEdit);
+        if (modelBeforeEdit !== null) {
+          this.setState({
+            modelBeforeEdit,
+            modelEnv_0: modelBeforeEdit,
+          });
+        }
+      }
       this.props.entity.elementDOM = this.elementDOM;
       const {multiEnvIndex} = this.context;
       if (this.multiEnvIndex !== multiEnvIndex) {
@@ -339,6 +349,10 @@ export default (ComposedComponent) => {
       }
       if (this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
+      }
+      const element = this.element.decoratedComponentInstance || this.element;
+      if (typeof element.discardChanges === 'function') {
+        element.discardChanges();
       }
       toggleEdit(null);
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {

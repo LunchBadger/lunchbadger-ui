@@ -31,8 +31,7 @@ class Model extends Component {
       return data;
     };
     this.state = {
-      contextPath: props.entity.contextPath,
-      contextPathDirty: slug(props.entity.name, {lower: true}) !== props.entity.contextPath,
+      ...this.initState(props),
       ...stateFromStores(props),
     };
     this.onStoreUpdate = (props = this.props) => {
@@ -48,15 +47,27 @@ class Model extends Component {
     if (nextProps.entity.id !== this.props.entity.id) {
       this.onStoreUpdate(nextProps);
     }
+    if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
+      this.setState(this.initState());
+    }
   }
 
   componentWillUnmount() {
     PrivateStore.removeChangeListener(this.onStoreUpdate);
   }
 
+  initState = (props = this.props) => {
+    const {contextPath, name} = props.entity;
+    return {
+      contextPath,
+      contextPathDirty: slug(name, {lower: true}) !== contextPath,
+    };
+  }
+
   discardChanges() {
     // revert properties
     this.onStoreUpdate();
+    this.setState(this.initState());
   }
 
   update(model) {
@@ -88,6 +99,17 @@ class Model extends Component {
     if (model.contextPath === '') validations.data.contextPath = messages.empty;
     if (Object.keys(validations.data).length > 0) validations.isValid = false;
     return validations;
+  }
+
+  getEntityDiffProps = (model) => {
+    if (!model) return null;
+    const {name, contextPath} = this.props.entity;
+    if (name === model.name && contextPath === model.contextPath) return null;
+    return {
+      ...model,
+      name,
+      contextPath,
+    };
   }
 
   handleFieldChange = field => (evt) => {

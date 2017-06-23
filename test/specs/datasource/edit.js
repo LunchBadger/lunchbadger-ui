@@ -33,22 +33,6 @@ module.exports = {
 
     browser.expect.element(elementSelector + ' .EntityValidationErrors__fields .EntityValidationErrors__fields__field').to.be.present;
 
-    // browser.moveTo(elementSelector + ' .EntityHeader', null, null, function () {
-    //   browser.click(elementSelector + ' .EntityHeader__icon');
-    //   browser.pause(1000);
-    //   browser.click(elementSelector + ' .EntityHeader__icon');
-    //   browser.pause(1000);
-    //   browser.doubleClick();
-    //   browser.pause(200);
-    //   browser.click(elementSelector + ' .EntityHeader__icon');
-    // });
-    //
-    // browser.pause(1000);
-    //
-    // browser.expect.element('.quadrant:first-child .Entity.expanded.editable.DataSource:last-child').to.be.present;
-    //
-    // browser.pause(200);
-
     browser.setValue(propertySelector + ':first-child .EntityProperty__field--input input', 'test url');
     browser.setValue(propertySelector + ':nth-child(2) .EntityProperty__field--input input', 'test schema');
     browser.setValue(propertySelector + ':nth-child(3) .EntityProperty__field--input input', 'test username');

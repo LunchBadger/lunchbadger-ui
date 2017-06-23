@@ -74,6 +74,9 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
+    if (entity.connector === 'memory') {
+      return null;
+    }
     const mainProperties = [
       {
         name: 'url',

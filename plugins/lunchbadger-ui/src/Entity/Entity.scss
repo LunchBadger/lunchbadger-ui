@@ -66,6 +66,9 @@
   }
   &__extra {
     padding-bottom: 20px;
+    .Entity.DataSource.memory:not(.editable) & {
+      padding-bottom: 0;
+    }
   }
 }
 

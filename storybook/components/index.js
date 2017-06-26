@@ -1,9 +1,11 @@
+import MockContextualInformationWrapper from './MockContextualInformationWrapper';
 import MockHeader from './MockHeader';
 import MockPage from './MockPage';
-import MockContextualInformationWrapper from './MockContextualInformationWrapper';
+import MockPageForSystemInformationMessages from './MockPageForSystemInformationMessages';
 
 export {
+  MockContextualInformationWrapper,
   MockHeader,
   MockPage,
-  MockContextualInformationWrapper,
+  MockPageForSystemInformationMessages,
 };

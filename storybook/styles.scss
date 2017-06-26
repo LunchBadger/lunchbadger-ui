@@ -64,6 +64,9 @@ body {
     position: relative;
     background-color: rgba(100, 100, 100, 0.75);
   }
+  &__mockPageForAside {
+    margin-left: 60px;
+  }
   &__mockContextualInformationWrapper {
     background-color: #888;
     width: 30px;

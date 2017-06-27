@@ -35,7 +35,7 @@ class ModelPropertyDetails extends Component {
             name={`properties[${index}][id]`}
           />
           <Input
-            className="details-panel__input details-key"
+            className={`details-panel__input details-key property-${property.id}`}
             value={property.name}
             name={`properties[${index}][name]`}
           />

@@ -156,6 +156,14 @@ class Model extends Component {
     }));
   }
 
+  onAddRootProperty = () => {
+    this.onAddProperty('')();
+    setTimeout(() => {
+      const input = Array.from(this.refs.properties.querySelectorAll('.EntityProperty__field--input input')).slice(-1)[0];
+      input && input.focus();
+    });
+  }
+
   onRemoveProperty = (property) => {
     this.onRemoveItem('properties', property);
   }
@@ -223,7 +231,7 @@ class Model extends Component {
         {this.renderMainProperties()}
         <EntitySubElements
           title="Properties"
-          onAdd={this.onAddProperty('')}
+          onAdd={this.onAddRootProperty}
           main
         >
           {this.state.properties.length > 0 && (

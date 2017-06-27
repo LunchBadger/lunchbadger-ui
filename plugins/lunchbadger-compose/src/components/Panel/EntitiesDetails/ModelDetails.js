@@ -159,13 +159,6 @@ class ModelDetails extends Component {
     });
   }
 
-  _focusLastDetailsRowInput() {
-    // FIXME
-    // const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
-    //
-    // input && input.focus();
-  }
-
   onAddProperty = (parentId) => () => {
     this.onAddItem('properties', ModelProperty.create({
       parentId,
@@ -175,7 +168,6 @@ class ModelDetails extends Component {
       required: false,
       index: false,
     }));
-    setTimeout(() => this._focusLastDetailsRowInput());
   }
 
   onRemoveProperty = (property) => {

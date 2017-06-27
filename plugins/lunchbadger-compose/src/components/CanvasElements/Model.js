@@ -154,7 +154,6 @@ class Model extends Component {
       required: false,
       index: false,
     }));
-    // setTimeout(() => this._focusLastInput()); // FIXME
   }
 
   onRemoveProperty = (property) => {
@@ -165,11 +164,6 @@ class Model extends Component {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
     this.setState({properties});
-  }
-
-  _focusLastInput() {
-    const input = Array.from(this.refs.properties.querySelectorAll('input.model-property__input')).slice(-1)[0];
-    input && input.focus();
   }
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});

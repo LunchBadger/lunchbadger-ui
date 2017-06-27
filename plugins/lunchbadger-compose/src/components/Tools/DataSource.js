@@ -26,7 +26,10 @@ const wizardFunc = (label) => () => {
   //TODO: implement datasource wizard
 };
 
-const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+const getWizardFunc = label => {
+  if (!LunchBadgerCore.isDataSourceFeature) return undefined;
+  return dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+}
 
 const DataSource = ({editedElement}) => {
   const selected = dataSources.includes(editedElement);

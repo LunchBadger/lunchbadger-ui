@@ -7,7 +7,7 @@ machine:
 
 dependencies:
   post:
-    - pip install docker-compose
+    - pip install docker-compose==1.14.0
     - "`aws ecr get-login --region us-west-2`"
 
 test:

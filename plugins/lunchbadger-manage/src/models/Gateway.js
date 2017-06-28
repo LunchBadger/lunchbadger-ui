@@ -51,4 +51,14 @@ export default class Gateway extends BaseModel {
   addPipeline(pipeline) {
     this._pipelines.push(pipeline);
   }
+
+  /**
+   * @param pipeline {Pipeline}
+   */
+  removePipeline(pipeline) {
+    _.remove(this._pipelines, function (_pipeline) {
+      return _pipeline.id === pipeline.id
+    });
+  }
+
 }

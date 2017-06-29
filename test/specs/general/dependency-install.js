@@ -35,7 +35,7 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
-    page.waitForElementVisible(elementSelector + '.rest.editable', 5000);
+    page.waitForElementVisible(elementSelector + '.rest.editable button[type=submit]', 5000);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
@@ -46,14 +46,17 @@ module.exports = {
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    page.waitForElementVisible(elementSelector + '.soap.editable', 5000);
+    page.waitForElementVisible(elementSelector + '.soap.editable button[type=submit]', 5000);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.editable button[type=submit]');
+    page.waitForElementVisible('.SystemDefcon1', 120000);
+    page.click('.SystemDefcon1 button');
+    page.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    page.waitForElementVisible(elementSelector + '.mongodb.editable', 5000);
+    page.waitForElementVisible(elementSelector + '.mongodb.editable button[type=submit]', 5000);
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');

@@ -32,7 +32,7 @@ module.exports = {
       .mouseButtonUp(0)
       .pause(1500);
 
-    page.expect.element(publicEndpointSelector + '.editable').to.be.present;
+    page.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('FooBarPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('foobar');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');

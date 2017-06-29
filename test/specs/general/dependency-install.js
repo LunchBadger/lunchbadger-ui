@@ -55,6 +55,7 @@ module.exports = {
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.pause(1500);
+    browser.moveToElement(elementSelector + '.soap.editable button[type=submit]', 5, 5);
     browser.click(elementSelector + '.soap.editable button[type=submit]');
     browser.waitForElementPresent('.SystemDefcon1', 120000);
     browser.click('.SystemDefcon1 button');
@@ -67,6 +68,7 @@ module.exports = {
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.pause(1500);
+    browser.moveToElement(elementSelector + '.soap.editable button[type=submit]', 5, 5);
     browser.click(elementSelector + '.mongodb.editable button[type=submit]');
     expectInstall(browser, page, 'failure', '?wsdl')
   },

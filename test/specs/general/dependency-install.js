@@ -35,14 +35,14 @@ module.exports = {
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
-    browser.click('.workspace-status span');
+    page.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
     page.waitForElementVisible(elementSelector + '.rest.editable button[type=submit]', 5000);
     page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.click(elementSelector + '.rest.editable button[type=submit]');
+    page.click(elementSelector + '.rest.editable button[type=submit]');
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
@@ -54,7 +54,9 @@ module.exports = {
     page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.click(elementSelector + '.soap.editable button[type=submit]');
+    browser.pause(1500);
+    page.waitForElementVisible(elementSelector + '.soap.editable button[type=submit]', 5000);
+    page.click(elementSelector + '.soap.editable button[type=submit]');
     page.waitForElementVisible('.SystemDefcon1', 120000);
     page.click('.SystemDefcon1 button');
     page.waitForElementNotPresent('.SystemDefcon1', 5000);
@@ -65,7 +67,9 @@ module.exports = {
     page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.click(elementSelector + '.mongodb.editable button[type=submit]');
+    browser.pause(1500);
+    page.waitForElementVisible(elementSelector + '.mongodb.editable button[type=submit]', 5000);
+    page.click(elementSelector + '.mongodb.editable button[type=submit]');
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

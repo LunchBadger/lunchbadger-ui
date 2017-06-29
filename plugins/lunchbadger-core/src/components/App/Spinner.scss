@@ -2,21 +2,21 @@
 $foreground: #000;
 $background: #fff;
 
-#spinner__overlay {
+.spinner__overlay {
   width: 100vw;
   height: 100vh;
   z-index: 1000;
   position: absolute;
 }
 
-#spinner,
-#spinner:after {
+.spinner,
+.spinner:after {
   border-radius:50%;
   width:10em;
   height:10em;
 }
 
-#spinner {
+.spinner {
   font-size: 10px;
   position: relative;
   margin: 30vh auto;

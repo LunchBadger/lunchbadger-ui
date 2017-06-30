@@ -7,13 +7,13 @@ module.exports = {
     var publicEndpointSelector = '.quadrant:nth-child(4) .Entity.PublicEndpoint:last-child';
     page.open();
     page.addElementFromTooltip('endpoint', 'privateendpoint');
-    browser.waitForElementPresent(privateEndpointSelector + '.editable:not(.wip)', 30000);
+    browser.waitForElementVisible(privateEndpointSelector + '.editable:not(.wip)', 30000);
     browser.clearValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input');
     browser.setValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input', 'FooBar');
     browser.submitForm(privateEndpointSelector + '.editable form');
     browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     page.addElement('gateway');
-    browser.waitForElementPresent(gatewaySelector + '.editable:not(.wip)', 30000);
+    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip)', 30000);
     browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input');
     browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
     browser.submitForm(gatewaySelector + '.editable form');

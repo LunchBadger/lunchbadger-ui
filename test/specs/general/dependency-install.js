@@ -37,7 +37,7 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
-    browser.waitForElementPresent(elementSelector + '.rest.editable', 5000);
+    browser.waitForElementVisible(elementSelector + '.rest.editable', 5000);
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
@@ -48,17 +48,17 @@ module.exports = {
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    browser.waitForElementPresent(elementSelector + '.soap.editable:not(.wip) form', 5000);
+    browser.waitForElementVisible(elementSelector + '.soap.editable:not(.wip) form', 5000);
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.submitForm(elementSelector + '.soap.editable form');
-    browser.waitForElementPresent('.SystemDefcon1', 120000);
+    browser.waitForElementVisible('.SystemDefcon1', 120000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    browser.waitForElementPresent(elementSelector + '.mongodb.editable:not(.wip) form', 5000);
+    browser.waitForElementVisible(elementSelector + '.mongodb.editable:not(.wip) form', 5000);
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
@@ -72,7 +72,7 @@ module.exports = {
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click(elementSelector);
     browser.pause(1500);
-    browser.waitForElementPresent(elementSelector + ' .Toolbox__button--delete', 50000);
+    browser.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
     browser.click(elementSelector + ' .Toolbox__button--delete');
     browser.pause(1500);
     browser.click('.modal__actions__button.modal__actions__button--confirm');

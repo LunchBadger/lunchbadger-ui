@@ -17,6 +17,10 @@ class Gateway extends BaseStore {
           action.gateway.addPipeline(Pipeline.create({name: action.name}));
           this.emitChange();
           break;
+        case 'RemovePipeline':
+          action.gateway.removePipeline(action.pipeline);
+          this.emitChange();
+          break;
         case 'DeployGateway':
           Gateways.push(action.gateway);
           action.gateway.itemOrder = Gateways.length - 1;
@@ -24,7 +28,6 @@ class Gateway extends BaseStore {
           break;
         case 'DeployGatewaySuccess':
           const gateway = this.findEntityByGateway(action.gateway);
-
           if (gateway) {
             gateway.ready = true;
             this.emitChange();

@@ -37,6 +37,7 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
+    browser.waitForElementVisible('.canvas__container.canvas__container--editing', 5000);
     browser.waitForElementVisible(elementSelector + '.rest.editable', 5000);
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
@@ -48,6 +49,7 @@ module.exports = {
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
+    browser.waitForElementVisible('.canvas__container.canvas__container--editing', 5000);
     browser.waitForElementVisible(elementSelector + '.soap.editable:not(.wip) form', 5000);
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
@@ -58,6 +60,7 @@ module.exports = {
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
+    browser.waitForElementVisible('.canvas__container.canvas__container--editing', 5000);
     browser.waitForElementVisible(elementSelector + '.mongodb.editable:not(.wip) form', 5000);
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');

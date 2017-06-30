@@ -1,6 +1,6 @@
 var page;
 
-const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource:last-child';
+const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource';
 const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage';
 
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
@@ -73,10 +73,10 @@ module.exports = {
   'Connector uninstallation: remove datasource': function(browser) {
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.click(elementSelector);
+    browser.click(elementSelector + ':last-child');
     browser.pause(1500);
-    browser.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
-    browser.click(elementSelector + ' .Toolbox__button--delete');
+    browser.waitForElementVisible(elementSelector + ':last-child .Toolbox__button--delete', 50000);
+    browser.click(elementSelector + ':last-child .Toolbox__button--delete');
     browser.pause(1500);
     browser.click('.modal__actions__button.modal__actions__button--confirm');
     expectInstall(browser, page, 'failure', '?wsdl');

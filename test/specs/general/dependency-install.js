@@ -55,23 +55,17 @@ module.exports = {
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.waitForElementVisible(elementSelector + '.soap.editable .submit', 5 * 60 * 1000);
-    browser.moveToElement(elementSelector + '.soap.editable .submit', 5, 5, function() {
-      browser.click(elementSelector + '.soap.editable .submit');
-    });
-    browser.waitForElementPresent('.SystemDefcon1', 5 * 60 * 1000);
+    browser.submitForm(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input');
+    browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
+    browser.waitForElementNotVisible('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb.editable .submit', 5 * 60 * 1000);
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.waitForElementVisible(elementSelector + '.mongodb.editable .submit', 5 * 60 * 1000);
-    browser.moveToElement(elementSelector + '.mongodb.editable .submit', 5, 5, function() {
-      browser.click(elementSelector + '.mongodb.editable .submit');
-    });
+    browser.submitForm(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input');
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

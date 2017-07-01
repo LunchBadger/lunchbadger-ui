@@ -14,7 +14,7 @@ module.exports = {
     });
     browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     page.addElement('gateway');
-    browser.waitForElementVisible(gatewaySelector + '.editable .submit', 60000);
+    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip) .submit', 60000);
     browser.waitForElementVisible(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 60000);
     browser.setValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
     browser.moveToElement(gatewaySelector + '.editable .submit', 5, 5, function() {

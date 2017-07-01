@@ -13,7 +13,7 @@ module.exports = {
     browser.submitForm(privateEndpointSelector + '.editable form');
     browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     page.addElement('gateway');
-    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip)', 120000);
+    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip)', 5 * 60 * 1000);
     browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input');
     browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
     browser.submitForm(gatewaySelector + '.editable form');

@@ -1,6 +1,6 @@
 var page;
 
-const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource:last-child';
+const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource';
 const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage';
 
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
@@ -41,6 +41,7 @@ module.exports = {
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.waitForElementVisible(elementSelector + '.rest.editable .submit', 5 * 60 * 1000);
     browser.moveToElement(elementSelector + '.rest.editable .submit', 5, 5, function() {
       browser.click(elementSelector + '.rest.editable .submit');
     });
@@ -54,7 +55,7 @@ module.exports = {
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.waitForElementVisible(elementSelector + '.soap.editable .submit', 5000);
+    browser.waitForElementVisible(elementSelector + '.soap.editable .submit', 5 * 60 * 1000);
     browser.moveToElement(elementSelector + '.soap.editable .submit', 5, 5, function() {
       browser.click(elementSelector + '.soap.editable .submit');
     });
@@ -77,10 +78,10 @@ module.exports = {
   'Connector uninstallation: remove datasource': function(browser) {
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.click(elementSelector);
+    browser.click(elementSelector + '.mongodb');
     browser.pause(1500);
-    browser.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
-    browser.click(elementSelector + ' .Toolbox__button--delete');
+    browser.waitForElementVisible(elementSelector + '.mongodb .Toolbox__button--delete', 50000);
+    browser.click(elementSelector + '.mongodb .Toolbox__button--delete');
     browser.pause(1500);
     browser.click('.modal__actions__button.modal__actions__button--confirm');
     expectInstall(browser, page, 'failure', '?wsdl');

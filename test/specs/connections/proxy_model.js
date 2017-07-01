@@ -32,7 +32,7 @@ module.exports = {
     page.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('NewModelPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('newmodeltest-model');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gatewayblip-bloop.customer.lunchbadger.com/test-model');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gatewayblip-bloop.customer.lunchbadger.com/newmodeltest-model');
     page.close();
   }
 };

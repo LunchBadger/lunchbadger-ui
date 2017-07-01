@@ -58,7 +58,7 @@ module.exports = {
     browser.moveToElement(elementSelector + '.soap.editable .submit', 5, 5, function() {
       browser.click(elementSelector + '.soap.editable .submit');
     });
-    browser.waitForElementPresent('.SystemDefcon1', 120000);
+    browser.waitForElementPresent('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');

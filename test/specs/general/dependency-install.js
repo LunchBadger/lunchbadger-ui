@@ -48,8 +48,8 @@ module.exports = {
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    browser.waitForElementPresent(elementSelector + '.soap.editable button[type=submit]', 5000);
-    browser.pause(1500);
+    browser.waitForElementVisible(elementSelector + '.soap.editable button[type=submit]', 5000);
+    browser.pause(5000);
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
@@ -61,8 +61,8 @@ module.exports = {
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    browser.waitForElementPresent(elementSelector + '.mongodb.editable button[type=submit]', 5000);
-    browser.pause(1500);
+    browser.waitForElementVisible(elementSelector + '.mongodb.editable button[type=submit]', 5000);
+    browser.pause(5000);
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
@@ -78,7 +78,7 @@ module.exports = {
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click(elementSelector);
     browser.pause(1500);
-    browser.waitForElementPresent(elementSelector + ' .Toolbox__button--delete', 50000);
+    browser.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
     browser.click(elementSelector + ' .Toolbox__button--delete');
     browser.pause(1500);
     browser.click('.modal__actions__button.modal__actions__button--confirm');

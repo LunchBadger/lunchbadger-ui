@@ -5,23 +5,23 @@ module.exports = {
     var modelSelector = '.quadrant:nth-child(2) .Entity.Model:last-child';
     var gatewaySelector = '.quadrant:nth-child(3) .Entity.Gateway:last-child';
     var publicEndpointSelector = '.quadrant:nth-child(4) .Entity.PublicEndpoint:last-child';
-
     page.open();
-
     page.addElement('model');
-    browser.pause(1000);
+    browser.waitForElementVisible(modelSelector + '.editable .submit', 60000);
     browser.clearValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input');
     browser.setValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'test-model');
-    browser.click(modelSelector + '.editable button[type=submit]');
-    browser.pause(1000);
-
+    browser.moveToElement(modelSelector + '.editable .submit', 5, 5, function() {
+      browser.click(modelSelector + '.editable .submit');
+    });
+    browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     page.addElement('gateway');
-    browser.pause(3500);
+    browser.waitForElementVisible(gatewaySelector + '.editable .submit', 60000);
     browser.clearValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input');
     browser.setValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
-    browser.click(gatewaySelector + '.editable button[type=submit]');
-    browser.pause(2000);
-
+    browser.moveToElement(gatewaySelector + '.editable .submit', 5, 5, function() {
+      browser.click(gatewaySelector + '.editable .submit');
+    });
+    browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     browser
       .pause(1000)
       .useCss()
@@ -30,15 +30,10 @@ module.exports = {
       .moveToElement(gatewaySelector + ' .port-in > .port__anchor > .port__inside', null, null)
       .mouseButtonUp(0)
       .pause(1000);
-
     page.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('NewModelPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('test-model');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/test-model');
-
-
-    browser.pause(1500);
-
     page.close();
   }
 };

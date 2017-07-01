@@ -17,7 +17,6 @@ module.exports = {
     page.addElement('gateway');
     browser.waitForElementVisible(gatewaySelector + '.editable .submit', 60000);
     browser.waitForElementVisible(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 60000);
-    browser.clearValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input');
     browser.setValue(gatewaySelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
     browser.moveToElement(gatewaySelector + '.editable .submit', 5, 5, function() {
       browser.click(gatewaySelector + '.editable .submit');
@@ -34,7 +33,7 @@ module.exports = {
     page.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('NewModelPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('test-model');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/test-model');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gatewayblip-bloop.customer.lunchbadger.com/test-model');
     page.close();
   }
 };

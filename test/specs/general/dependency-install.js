@@ -4,8 +4,7 @@ const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource:last-child';
 const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage';
 
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
-  page.expect.element('.workspace-status span').to.have.attribute('class')
-    .which.contains('workspace-status__progress').before(10000);
+  browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
   if (!skipUpdatingDependenciesCheck) {
     page.moveToElement('.logotype', 5, 5);
     browser.click('.logotype');

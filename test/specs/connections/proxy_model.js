@@ -8,7 +8,6 @@ module.exports = {
     page.open();
     page.addElement('model');
     browser.waitForElementVisible(modelSelector + '.editable .submit', 60000);
-    browser.clearValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input');
     browser.setValue(modelSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'test-model');
     browser.moveToElement(modelSelector + '.editable .submit', 5, 5, function() {
       browser.click(modelSelector + '.editable .submit');
@@ -32,7 +31,7 @@ module.exports = {
       .pause(1000);
     page.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('NewModelPublicEndpoint');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('test-model');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('newmodeltest-model');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gatewayblip-bloop.customer.lunchbadger.com/test-model');
     page.close();
   }

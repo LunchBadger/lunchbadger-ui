@@ -4,8 +4,7 @@ const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource:last-child';
 const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage';
 
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
-  page.expect.element('.workspace-status span').to.have.attribute('class')
-    .which.contains('workspace-status__progress').before(10000);
+  browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
   if (!skipUpdatingDependenciesCheck) {
     page.moveToElement('.logotype', 5, 5);
     browser.click('.logotype');
@@ -37,33 +36,39 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
-    browser.waitForElementVisible(elementSelector + '.rest.editable', 5000);
+    browser.waitForElementPresent(elementSelector + '.rest.editable .submit', 5000);
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.submitForm(elementSelector + '.rest.editable form');
+    browser.moveToElement(elementSelector + '.rest.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.rest.editable .submit');
+    });
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    browser.waitForElementVisible(elementSelector + '.soap.editable:not(.wip) form', 5000);
+    browser.waitForElementVisible(elementSelector + '.soap.editable .submit', 5000);
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.submitForm(elementSelector + '.soap.editable form');
-    browser.waitForElementVisible('.SystemDefcon1', 120000);
+    browser.moveToElement(elementSelector + '.soap.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.soap.editable .submit');
+    });
+    browser.waitForElementPresent('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    browser.waitForElementVisible(elementSelector + '.mongodb.editable:not(.wip) form', 5000);
+    browser.waitForElementVisible(elementSelector + '.mongodb.editable .submit', 5000);
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.submitForm(elementSelector + '.mongodb.editable form');
+    browser.moveToElement(elementSelector + '.mongodb.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.mongodb.editable .submit');
+    });
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

@@ -42,10 +42,7 @@ module.exports = {
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    page.moveToElement(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', 5,  5, function () {
-      browser.pause(500);
-      browser.sendKeys(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
-    });
+    browser.sendKeys(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
@@ -57,10 +54,7 @@ module.exports = {
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    page.moveToElement(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', 5,  5, function () {
-      browser.pause(500);
-      browser.sendKeys(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
-    });
+    browser.sendKeys(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
     browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
@@ -71,10 +65,7 @@ module.exports = {
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    page.moveToElement(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', 5,  5, function () {
-      browser.pause(500);
-      browser.sendKeys(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
-    });
+    browser.sendKeys(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', browser.Keys.ENTER);
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 
@@ -83,10 +74,7 @@ module.exports = {
     browser.pause(1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    page.moveToElement(elementSelector + '.mongodb', 0,  -15, function () {
-      browser.pause(500);
-      browser.click(elementSelector + '.mongodb');
-    });
+    browser.click(elementSelector + '.mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb .Toolbox__button--delete', 50000);
     browser.click(elementSelector + '.mongodb .Toolbox__button--delete');
     browser.pause(1500);

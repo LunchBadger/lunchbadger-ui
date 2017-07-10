@@ -29,6 +29,20 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
   }
 }
 
+function setField(browser, page, type, nth, value) {
+  const fieldSelector = elementSelector + '.' + type + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
+  browser.execute(function () {
+    document.querySelector(fieldSelector).scrollIntoView();
+  }, []);
+  page.setValueSlow(fieldSelector, value);
+  browser.getValue(fieldSelector, function(result) {
+    this.assert.equal(result.value, value);
+  });
+  if (nth === 4) {
+    page.sendKeys(fieldSelector, browser.Keys.ENTER);
+  }
+}
+
 module.exports = {
   // '@disabled': true,
   'Connector installation: data source add': function(browser) {
@@ -37,71 +51,29 @@ module.exports = {
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
     browser.waitForElementVisible(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', 5000);
-    browser.pause(5000);
-    page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
-    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpUrl');
-    });
-    page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpDatabase');
-    });
-    page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpUsername');
-    });
-    page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpPassword');
-    });
-    page.sendKeys(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
+    setField(browser, page, 'rest', 1, 'dumpUrl');
+    setField(browser, page, 'rest', 2, 'dumpDatabase');
+    setField(browser, page, 'rest', 3, 'dumpUsername');
+    setField(browser, page, 'rest', 4, 'dumpPassword');
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
     browser.waitForElementVisible(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    browser.pause(5000);
-    page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
-    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpUrl');
-    });
-    page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpDatabase');
-    });
-    page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpUsername');
-    });
-    page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpPassword');
-    });
-    page.sendKeys(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
+    setField(browser, page, 'soap', 1, 'dumpUrl');
+    setField(browser, page, 'soap', 2, 'dumpDatabase');
+    setField(browser, page, 'soap', 3, 'dumpUsername');
+    setField(browser, page, 'soap', 4, 'dumpPassword');
     browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    browser.pause(5000);
-    page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
-    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'mongodb://dumpUrl');
-    });
-    page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpDatabase');
-    });
-    page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpUsername');
-    });
-    page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
-    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
-      this.assert.equal(result.value, 'dumpPassword');
-    });
-    page.sendKeys(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
+    setField(browser, page, 'mongodb', 1, 'mongodb://dumpUrl');
+    setField(browser, page, 'mongodb', 2, 'dumpDatabase');
+    setField(browser, page, 'mongodb', 3, 'dumpUsername');
+    setField(browser, page, 'mongodb', 4, 'dumpPassword');
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

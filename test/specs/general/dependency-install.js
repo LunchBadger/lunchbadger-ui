@@ -56,7 +56,7 @@ module.exports = {
     browser.submitForm(elementSelector + '.soap.editable form');
     browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
-    browser.waitForElementNotVisible('.SystemDefcon1', 5000);
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb.editable form', 5 * 60 * 1000);
     browser.pause(5000);

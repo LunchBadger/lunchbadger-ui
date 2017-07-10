@@ -39,9 +39,21 @@ module.exports = {
     browser.waitForElementVisible(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', 5000);
     browser.pause(5000);
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpUrl');
+    });
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpDatabase');
+    });
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpUsername');
+    });
     page.setValueSlow(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.getValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpPassword');
+    });
     page.sendKeys(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
@@ -51,9 +63,21 @@ module.exports = {
     browser.waitForElementVisible(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
     browser.pause(5000);
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpUrl');
+    });
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpDatabase');
+    });
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpUsername');
+    });
     page.setValueSlow(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.getValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpPassword');
+    });
     page.sendKeys(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
     browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
@@ -62,9 +86,21 @@ module.exports = {
     browser.waitForElementVisible(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
     browser.pause(5000);
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
+    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'mongodb://dumpUrl');
+    });
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpDatabase');
+    });
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpUsername');
+    });
     page.setValueSlow(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.getValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', function(result) {
+      this.assert.equal(result.value, 'dumpPassword');
+    });
     page.sendKeys(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', browser.Keys.ENTER);
     expectInstall(browser, page, 'failure', '?wsdl')
   },

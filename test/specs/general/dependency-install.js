@@ -54,7 +54,7 @@ function setFields(browser, page, type) {
 }
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();

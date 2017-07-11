@@ -35,6 +35,11 @@ function setField(browser, page, type, nth, value) {
     document.querySelector(fieldSelector).scrollIntoView();
   }, []);
   page.setValueSlow(fieldSelector, value);
+  if (nth === 4 && type === 'soap') {
+    browser.getValue(fieldSelector, function(result) {
+      this.assert.equal(JSON.stringify(result), value);
+    });
+  }
   browser.getValue(fieldSelector, function(result) {
     this.assert.equal(result.value, value);
   });

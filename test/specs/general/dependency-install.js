@@ -46,11 +46,11 @@ function setFields(browser, page, type) {
     }
     scrollToField(browser, fieldSelector);
     page.setValueSlow(fieldSelector, value);
-    browser.pause(1000);
   }
   const formSelector = elementSelector + '.' + type + '.editable form'
   scrollToField(browser, formSelector);
   browser.submitForm(formSelector);
+  browser.waitForElementNotPresent(formSelector, 60000);
 }
 
 module.exports = {

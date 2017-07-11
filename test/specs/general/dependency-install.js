@@ -41,10 +41,7 @@ function setFields(browser, page, type) {
     browser.execute(function () {
       document.querySelector(fieldSelector).scrollIntoView();
     }, []);
-    page.setValue(fieldSelector, value);
-    if (nth === 4) {
-      page.sendKeys(fieldSelector, browser.Keys.ENTER);
-    }
+    page.setValue(fieldSelector, nth === 4 ? [value, browser.Keys.ENTER] : value);
   }
 }
 

@@ -29,22 +29,19 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
   }
 }
 
-function setField(browser, page, type, nth, value) {
-  const fieldSelector = elementSelector + '.' + type + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
-  browser.execute(function () {
-    document.querySelector(fieldSelector).scrollIntoView();
-  }, []);
-  page.setValueSlow(fieldSelector, value);
-  if (nth === 4 && type === 'soap') {
-    browser.getValue(fieldSelector, function(result) {
-      this.assert.equal(JSON.stringify(result), value);
-    });
-  }
-  browser.getValue(fieldSelector, function(result) {
-    this.assert.equal(result.value, value);
-  });
-  if (nth === 4) {
-    page.sendKeys(fieldSelector, browser.Keys.ENTER);
+function setFields(browser, page, type) {
+  let fieldSelector;
+  let value;
+  for (let nth = 1; nth <= 4; nth += 1) {
+    fieldSelector = elementSelector + '.' + type + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
+    value = Math.random() * 10e16;
+    if (type === 'mongodb' && nth === 1) {
+      value = 'mongodb://' + value;
+    }
+    page.setValue(fieldSelector, value);
+    if (nth === 4) {
+      page.sendKeys(fieldSelector, browser.Keys.ENTER);
+    }
   }
 }
 
@@ -56,29 +53,20 @@ module.exports = {
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
     browser.waitForElementVisible(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', 5000);
-    setField(browser, page, 'rest', 1, 'dumpUrl');
-    setField(browser, page, 'rest', 2, 'dumpDatabase');
-    setField(browser, page, 'rest', 3, 'dumpUsername');
-    setField(browser, page, 'rest', 4, 'dumpPassword');
+    setFields(browser, page, 'rest');
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
     browser.waitForElementVisible(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    setField(browser, page, 'soap', 1, 'dumpUrl');
-    setField(browser, page, 'soap', 2, 'dumpDatabase');
-    setField(browser, page, 'soap', 3, 'dumpUsername');
-    setField(browser, page, 'soap', 4, 'dumpPassword');
+    setFields(browser, page, 'soap');
     browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    setField(browser, page, 'mongodb', 1, 'mongodb://dumpUrl');
-    setField(browser, page, 'mongodb', 2, 'dumpDatabase');
-    setField(browser, page, 'mongodb', 3, 'dumpUsername');
-    setField(browser, page, 'mongodb', 4, 'dumpPassword');
+    setFields(browser, page, 'mongodb');
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 

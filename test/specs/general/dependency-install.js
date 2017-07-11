@@ -29,20 +29,28 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
   }
 }
 
+function scrollToField(browser, fieldSelector) {
+  browser.execute(function () {
+    document.querySelector(fieldSelector).scrollIntoView();
+  }, []);
+}
+
 function setFields(browser, page, type) {
   let fieldSelector;
   let value;
   for (let nth = 1; nth <= 4; nth += 1) {
     fieldSelector = elementSelector + '.' + type + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
-    value = Math.random() * 10e16;
+    value = 'x' + (Math.random() * 10e16);
     if (type === 'mongodb' && nth === 1) {
       value = 'mongodb://' + value;
     }
-    browser.execute(function () {
-      document.querySelector(fieldSelector).scrollIntoView();
-    }, []);
-    page.setValue(fieldSelector, nth === 4 ? [value, browser.Keys.ENTER] : value);
+    scrollToField(browser, fieldSelector);
+    page.setValueSlow(fieldSelector, value);
+    browser.pause(1000);
   }
+  const formSelector = elementSelector + '.' + type + '.editable form'
+  scrollToField(browser, formSelector);
+  browser.submitForm(formSelector);
 }
 
 module.exports = {

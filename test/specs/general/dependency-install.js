@@ -38,6 +38,9 @@ function setFields(browser, page, type) {
     if (type === 'mongodb' && nth === 1) {
       value = 'mongodb://' + value;
     }
+    browser.execute(function () {
+      document.querySelector(fieldSelector).scrollIntoView();
+    }, []);
     page.setValue(fieldSelector, value);
     if (nth === 4) {
       page.sendKeys(fieldSelector, browser.Keys.ENTER);

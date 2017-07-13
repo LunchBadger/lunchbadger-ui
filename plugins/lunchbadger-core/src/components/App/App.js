@@ -134,24 +134,34 @@ class App extends Component {
   renderHeader = () => {
     if (LunchBadgerCore.isMultiEnv) {
       return (
-        <HeaderMultiEnv ref="header"
-                appState={this.state.appState}
-                plugins={this.state.pluginsStore}
-                saveToServer={this.saveToServer}
-                clearServer={this.clearServer} />
+        <HeaderMultiEnv
+          ref="header"
+          appState={this.state.appState}
+          plugins={this.state.pluginsStore}
+          saveToServer={this.saveToServer}
+          clearServer={this.clearServer}
+        />
       );
     }
     return (
-      <Header ref="header"
-              appState={this.state.appState}
-              plugins={this.state.pluginsStore}
-              saveToServer={this.saveToServer}
-              clearServer={this.clearServer} />
+      <Header
+        ref="header"
+        appState={this.state.appState}
+        plugins={this.state.pluginsStore}
+        saveToServer={this.saveToServer}
+        clearServer={this.clearServer}
+      />
     );
   }
 
   render() {
-    const {systemDefcon1Visible, systemDefcon1Errors, multiEnvDelta, multiEnvIndex} = this.props;
+    const {
+      systemDefcon1Visible,
+      systemDefcon1Errors,
+      multiEnvDelta,
+      multiEnvIndex,
+      panelEditingStatus,
+    } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
@@ -172,11 +182,13 @@ class App extends Component {
             <div className="app__panel-wrapper">
               <SystemNotifications />
               <div style={multiEnvDeltaStyle}>
-                <PanelContainer plugins={this.state.pluginsStore}
-                                appState={this.state.appState}
-                                canvas={() => this.refs.canvas}
-                                header={() => this.refs.header}
-                                container={() => this.refs.container}/>
+                <PanelContainer
+                  plugins={this.state.pluginsStore}
+                  appState={this.state.appState}
+                  canvas={() => this.refs.canvas}
+                  header={() => this.refs.header}
+                  container={() => this.refs.container}
+                />
               </div>
             </div>
             <div style={multiEnvDeltaStyle}>
@@ -185,6 +197,7 @@ class App extends Component {
                 plugins={this.state.pluginsStore}
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
+                panelEditingStatus={panelEditingStatus}
               />
             </div>
           </div>
@@ -199,12 +212,17 @@ class App extends Component {
   }
 }
 
+App.propTypes = {
+  panelEditingStatus: PropTypes.bool,
+}
+
 const mapStateToProps = state => ({
   systemDefcon1Visible: state.ui.systemDefcon1.visible,
   systemDefcon1Errors: state.ui.systemDefcon1.errors,
   multiEnvIndex: state.ui.multiEnvironments.selected,
   multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   multiEnvAmount: state.ui.multiEnvironments.environments.length,
+  panelEditingStatus: state.core.appState.panelEditingStatus,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,62 +1,63 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import './CanvasOverlay.scss';
 
-export default class CanvasOverlay extends Component {
-  static propTypes = {
-    handleClick: PropTypes.func,
-    appState: PropTypes.object.isRequired
-  };
-
+class CanvasOverlay extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      isShowingModal: false
-    };
-
-    this.handleClose = () => {
-      this.setState({isShowingModal: false});
+      isShowingModal: false,
     };
   }
 
-  _handleClick = () => {
+  handleClose = () => {
+    this.setState({isShowingModal: false});
+  };
+
+  handleClick = () => {
     this.setState({isShowingModal: true});
-
-    if (typeof this.props.handleClick === 'function') {
-      this.props.handleClick();
-    }
-  }
-
-  _handleSave = () => {
-    const saveFunction = this.props.appState.getStateKey('panelEditingStatusSave');
-
-    if (typeof saveFunction === 'function') {
-      saveFunction();
-    }
-  }
-
-  _handleCancel = () => {
-    const cancelFunction = this.props.appState.getStateKey('panelEditingStatusDiscard');
-
-    if (typeof cancelFunction === 'function') {
-      cancelFunction();
-    }
+    this.props.handleClick();
   }
 
   render() {
+    const {panelEditingStatus, handleSave, handleCancel} = this.props;
+    if (!panelEditingStatus) return null;
+    const {isShowingModal} = this.state;
     return (
-      <div className="canvas-overlay" onClick={this._handleClick}>
-        {
-          this.state.isShowingModal &&
-          <TwoOptionModal onClose={this.handleClose}
-                          onSave={this._handleSave}
-                          onCancel={this._handleCancel}>
-            <span>You have unsaved changes!</span>
+      <div className="canvas-overlay" onClick={this.handleClick}>
+        {isShowingModal && (
+          <TwoOptionModal
+            onClose={this.handleClose}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          >
+            You have unsaved changes!
           </TwoOptionModal>
-        }
+        )}
       </div>
     )
   }
 }
+
+CanvasOverlay.propTypes = {
+  panelEditingStatus: PropTypes.bool.isRequired,
+  handleClick: PropTypes.func,
+  handleSave: PropTypes.func,
+  handleCancel: PropTypes.func,
+};
+
+CanvasOverlay.defaultProps = {
+  handleClick: () => {},
+  handleSave: () => {},
+  handleCancel: () => {},
+};
+
+const mapStateToProps = state => ({
+  panelEditingStatus: state.core.appState.panelEditingStatus,
+  handleSave: state.core.appState.panelEditingStatusSave,
+  handleCancel: state.core.appState.panelEditingStatusDiscard,
+});
+
+export default connect(mapStateToProps)(CanvasOverlay);

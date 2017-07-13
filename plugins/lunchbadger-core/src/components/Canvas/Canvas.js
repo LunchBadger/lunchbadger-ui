@@ -262,19 +262,18 @@ export default class Canvas extends Component {
   }
 
   render() {
-    const {appState, plugins} = this.props;
+    const {appState, plugins, panelEditingStatus} = this.props;
     const {connections, scrollLeft} = this.state;
     let {canvasHeight} = this.state;
     if (!appState.getStateKey('currentlyOpenedPanel')) {
       canvasHeight = null;
     }
-    const panelEditingStatus = appState.getStateKey('panelEditingStatus');
     return (
       <section
         className="canvas"
         onClick={() => !panelEditingStatus && appState.getStateKey('currentElement') && toggleHighlight(null)}
       >
-        {panelEditingStatus && <CanvasOverlay appState={appState}/> }
+        <CanvasOverlay />
         <div
           style={{height: canvasHeight}}
           className="canvas__wrapper"

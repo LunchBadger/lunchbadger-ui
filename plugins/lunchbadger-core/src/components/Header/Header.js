@@ -7,17 +7,18 @@ import Logo from './badger-logo.svg';
 
 export default class Header extends Component {
   render() {
-    const panelEditingStatus = this.props.appState.getStateKey('panelEditingStatus');
     return (
       <header className="header" ref="headerContainer">
-        {panelEditingStatus && <CanvasOverlay appState={this.props.appState} />}
+        <CanvasOverlay />
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
         <p className="logotype" >LunchBadger</p>
         <Breadcrumbs />
-        <HeaderMenu appState={this.props.appState}
-                    plugins={this.props.plugins}
-                    saveToServer={this.props.saveToServer}
-                    clearServer={this.props.clearServer} />
+        <HeaderMenu
+          appState={this.props.appState}
+          plugins={this.props.plugins}
+          saveToServer={this.props.saveToServer}
+          clearServer={this.props.clearServer}
+        />
       </header>
     );
   }

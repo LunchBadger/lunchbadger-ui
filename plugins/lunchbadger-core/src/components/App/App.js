@@ -97,10 +97,17 @@ class App extends Component {
   }
 
   saveToServer = () => {
-    let {config, loginManager, projectService} = this.props;
-
+    let {
+      config,
+      loginManager,
+      projectService,
+      currentlyOpenedPanel,
+    } = this.props;
+    const coreStates = {
+      currentlyOpenedPanel,
+    };
     this.setState({loaded: false});
-    let prm = saveToServer(config, loginManager, projectService).then(() => {
+    let prm = saveToServer(config, loginManager, projectService, coreStates).then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
@@ -132,6 +139,7 @@ class App extends Component {
   }
 
   renderHeader = () => {
+    const currentEditElement = this.state.appState.getStateKey('currentEditElement');
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
@@ -140,16 +148,18 @@ class App extends Component {
           plugins={this.state.pluginsStore}
           saveToServer={this.saveToServer}
           clearServer={this.clearServer}
+          disabledMultiEnvMenu={!!currentEditElement || !!this.props.currentlyOpenedPanel}
+          headerMenuDisabled={!!currentEditElement}
         />
       );
     }
     return (
       <Header
         ref="header"
-        appState={this.state.appState}
         plugins={this.state.pluginsStore}
         saveToServer={this.saveToServer}
         clearServer={this.clearServer}
+        headerMenuDisabled={!!currentEditElement}
       />
     );
   }
@@ -161,12 +171,14 @@ class App extends Component {
       multiEnvDelta,
       multiEnvIndex,
       panelEditingStatus,
+      currentlyOpenedPanel,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
     }
     const multiEnvNotDev = multiEnvIndex > 0;
+    const currentEditElement = this.state.appState.getStateKey('currentEditElement');
     return (
       <div>
         <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
@@ -174,9 +186,9 @@ class App extends Component {
           <Spinner loading={!this.state.loaded} />
           {this.renderHeader()}
           <Aside
-            appState={this.state.appState}
             plugins={this.state.pluginsStore}
-            disabled={multiEnvNotDev}
+            disabled={multiEnvNotDev || !!currentlyOpenedPanel || !!currentEditElement}
+            currentEditElement={currentEditElement}
           />
           <div ref="container" className="app__container">
             <div className="app__panel-wrapper">
@@ -198,6 +210,7 @@ class App extends Component {
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
                 panelEditingStatus={panelEditingStatus}
+                currentlyOpenedPanel={currentlyOpenedPanel}
               />
             </div>
           </div>
@@ -223,6 +236,7 @@ const mapStateToProps = state => ({
   multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   multiEnvAmount: state.ui.multiEnvironments.environments.length,
   panelEditingStatus: state.core.appState.panelEditingStatus,
+  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
 });
 
 const mapDispatchToProps = dispatch => ({

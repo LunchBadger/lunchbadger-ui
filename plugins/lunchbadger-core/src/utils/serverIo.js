@@ -3,6 +3,7 @@ import AppState from '../stores/AppState';
 import ConnectionStore from '../stores/Connection';
 import {waitForStores} from '../utils/waitForStores';
 import clearData from '../actions/Stores/clearData';
+import {initialize} from '../reduxActions';
 
 const EMPTY_PROJECT = {
   connections: [],
@@ -82,7 +83,7 @@ export function loadFromServer(config, loginManager, projectService) {
           }));
         }
       });
-
+      LunchBadgerCore.dispatchRedux(initialize(project.states));
       setTimeout(() => {
         LunchBadgerCore.actions.Stores.AppState.initialize(project.states);
       });
@@ -125,7 +126,7 @@ function initializeStores({project, models, dataSources}) {
   }
 }
 
-export function saveToServer(config, loginManager, projectService) {
+export function saveToServer(config, loginManager, projectService, coreStates) {
   let storesList = [
     ConnectionStore
   ];
@@ -189,7 +190,7 @@ export function saveToServer(config, loginManager, projectService) {
     });
   });
 
-  const states = AppState.getData();
+  const states = {...AppState.getData(), ...coreStates};
 
   // prepare appState
   if (states['currentlyOpenedPanel']) {

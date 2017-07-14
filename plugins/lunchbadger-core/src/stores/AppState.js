@@ -52,23 +52,23 @@ class AppState extends BaseStore {
         this.setStateKey('recentElement', action.element);
         break;
 
-      case 'TogglePanel':
-        const currentPanel = this.getStateKey('currentlyOpenedPanel');
-        let panel = action.panelKey;
-
-        if (currentPanel === panel) {
-          panel = null;
-        }
-
-        if (panel !== null) {
-          this.setStateKey('currentEditElement', null);
-        }
-
-        this.setStateKey('currentlyOpenedPanel', panel);
-        this.setStateKey('isPanelOpened', panel ? true : false);
-        this.emitChange();
-
-        break;
+      // case 'TogglePanel':
+      //   const currentPanel = this.getStateKey('currentlyOpenedPanel');
+      //   let panel = action.panelKey;
+      //
+      //   if (currentPanel === panel) {
+      //     panel = null;
+      //   }
+      //
+      //   if (panel !== null) {
+      //     this.setStateKey('currentEditElement', null);
+      //   }
+      //
+      //   this.setStateKey('currentlyOpenedPanel', panel);
+      //   this.setStateKey('isPanelOpened', panel ? true : false);
+      //   this.emitChange();
+      //
+      //   break;
 
       case 'ToggleHighlight':
         const currentSubelementsParent = this.getStateKey('currentlySelectedParent');
@@ -140,10 +140,9 @@ class AppState extends BaseStore {
       case 'InitializeAppState':
         const {serializedState} = action;
 
-        if (serializedState['currentlyOpenedPanel']) {
-          this.setStateKey('currentlyOpenedPanel', serializedState['currentlyOpenedPanel']);
-          this.setStateKey('isPanelOpened', true);
-        }
+        // if (serializedState['currentlyOpenedPanel']) {
+        //   this.setStateKey('isPanelOpened', true);
+        // }
 
         if (serializedState['currentElement']) {
           this.setStateKey('currentElement', serializedState['currentElement']);

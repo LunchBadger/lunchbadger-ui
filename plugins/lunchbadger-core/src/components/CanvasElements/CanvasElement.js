@@ -32,7 +32,7 @@ const boxTarget = {
       return;
     }
 
-    if (props.appState.getStateKey('isPanelOpened')) {
+    if (props.appState.getStateKey('isPanelOpened')) { // FIXME
       return;
     }
 
@@ -109,7 +109,6 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
-      this.currentOpenedPanel = null;
       this.state = {
         editable: true,
         expanded: true,
@@ -125,7 +124,6 @@ export default (ComposedComponent) => {
       this.multiEnvIndex = 0;
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.appState.getStateKey('currentElement');
-        this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
         if (currentElement && currentElement.id === this.props.entity.id) {
           if (!this.state.highlighted) {
             this.setState({highlighted: true});

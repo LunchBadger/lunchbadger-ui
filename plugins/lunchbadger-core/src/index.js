@@ -52,7 +52,6 @@ import Strategy from './models/Plugin/Strategy';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
-import togglePanel from './actions/togglePanel';
 import toggleHighlight from './actions/CanvasElements/toggleHighlight';
 import toggleEdit from './actions/CanvasElements/toggleEdit';
 import removeConnection from './actions/Connection/remove';
@@ -84,7 +83,6 @@ let LunchBadgerCore = {
   },
   actions: {
     registerPlugin: registerPlugin,
-    togglePanel: togglePanel,
     toggleHighlight: toggleHighlight,
     toggleEdit: toggleEdit,
     toggleSubelement: toggleSubelement,

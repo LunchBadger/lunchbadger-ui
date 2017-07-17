@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './PublicEndpoint.scss';
+import {connect} from 'react-redux';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
+import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
+import './PublicEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
-const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 
 const boxSource = {
   beginDrag(props) {
@@ -18,14 +19,11 @@ const boxSource = {
     return {entity, left, top, parent, handleEndDrag, subelement: true};
   },
   canDrag(props) {
-    const selectedParent = props.appState.getStateKey('currentlySelectedParent');
-    const selectedElements = props.appState.getStateKey('currentlySelectedSubelements');
-
-    if (selectedParent && selectedParent.id === props.parent.id && selectedElements.length) {
+    const {currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement} = props;
+    if (currentlySelectedParent && currentlySelectedParent.id === props.parent.id && currentlySelectedSubelements.length) {
       return false;
     }
-
-    return !props.appState.getStateKey('currentEditElement');
+    return !isCurrentEditElement;
   }
 };
 
@@ -33,7 +31,8 @@ const boxSource = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class PublicEndpoint extends Component {
+
+class PublicEndpoint extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -70,17 +69,19 @@ export default class PublicEndpoint extends Component {
     });
   }
 
-  render() {
-    const {connectDragSource} = this.props;
-    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
+  handleClick = () => {
+    const {parent, entity, toggleSubelement} = this.props;
+    toggleSubelement(parent, entity);
+  }
 
+  render() {
+    const {connectDragSource, currentlySelectedSubelements} = this.props;
     const elementClass = classNames({
       'public-endpoint': true,
-      'public-endpoint--selected': _.find(selectedElements, {id: this.props.id})
+      'public-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
     });
-
     return connectDragSource(
-      <div className={elementClass} onClick={() => toggleSubelement(this.props.parent, this.props.entity)}>
+      <div className={elementClass} onClick={this.handleClick}>
         <div className="public-endpoint__info">
           <div className="public-endpoint__icon">
             <i className="fa fa-globe"/>
@@ -95,3 +96,15 @@ export default class PublicEndpoint extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  currentlySelectedParent: state.core.appState.currentlySelectedParent,
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+  isCurrentEditElement: !!state.core.appState.currentEditElement,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleSubelement: (parent, subelement) => dispatch(toggleSubelement(parent, subelement)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublicEndpoint);

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
@@ -7,7 +8,7 @@ import PublicEndpoint from './SubPublicEndpoint';
 import {EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
 import './API.scss';
 
-const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
+// FIXME - handle toggleSubelement
 
 const boxSource = {
   beginDrag(props) {
@@ -19,12 +20,11 @@ const boxSource = {
     return {entity, left, top, parent, handleEndDrag, subelement: true};
   },
   canDrag(props) {
-    const selectedParent = props.appState.getStateKey('currentlySelectedParent');
-    const selectedElements = props.appState.getStateKey('currentlySelectedSubelements');
-    if (selectedParent && selectedParent.id === props.parent.id && selectedElements.length) {
+    const {currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement} = props;
+    if (currentlySelectedParent && currentlySelectedParent.id === props.parent.id && currentlySelectedSubelements.length) {
       return false;
     }
-    return !props.appState.getStateKey('currentEditElement');
+    return !isCurrentEditElement;
   }
 };
 
@@ -32,7 +32,8 @@ const boxSource = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
-export default class API extends Component {
+
+class API extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -82,8 +83,7 @@ export default class API extends Component {
   }
 
   render() {
-    const {connectDragSource} = this.props;
-    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
+    const {connectDragSource, currentlySelectedSubelements} = this.props;
     const elementClass = classNames({
       subapi: true,
       'subapi--opened': this.state.opened,
@@ -91,7 +91,7 @@ export default class API extends Component {
     });
     const apiInfoClass = classNames({
       'subapi__info': true,
-      'subapi__info--selected': _.find(selectedElements, {id: this.props.id})
+      'subapi__info--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
     });
     return connectDragSource(
       <div>
@@ -114,3 +114,11 @@ export default class API extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  currentlySelectedParent: state.core.appState.currentlySelectedParent,
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+  isCurrentEditElement: !!state.core.appState.currentEditElement,
+});
+
+export default connect(mapStateToProps)(API);

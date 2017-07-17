@@ -30,7 +30,9 @@ class PublicQuadrant extends Component {
                  hideSourceOnDrag={true}
                  itemOrder={entity.itemOrder}
                  moveEntity={this.moveEntity}
-                 entity={entity}/>
+                 entity={entity}
+                 ready={entity.ready}
+                 />
           );
         case 'Portal':
           return (
@@ -43,7 +45,8 @@ class PublicQuadrant extends Component {
                     itemOrder={entity.itemOrder}
                     ready={entity.ready}
                     moveEntity={this.moveEntity}
-                    entity={entity}/>
+                    entity={entity}
+                    />
           );
         case 'PublicEndpoint':
           return (
@@ -55,7 +58,9 @@ class PublicQuadrant extends Component {
                             hideSourceOnDrag={true}
                             itemOrder={entity.itemOrder}
                             moveEntity={this.moveEntity}
-                            entity={entity}/>
+                            entity={entity}
+                            ready={entity.ready}
+                            />
           );
       }
     })

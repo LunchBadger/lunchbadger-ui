@@ -6,7 +6,4 @@ export default (entity) => {
       id: entity.id
     });
   }
-  dispatch('RemoveEntity', {
-    entity
-  });
 }

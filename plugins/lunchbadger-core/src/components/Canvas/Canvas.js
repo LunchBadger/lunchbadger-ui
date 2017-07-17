@@ -7,7 +7,6 @@ import addConnection from '../../actions/Connection/add';
 import removeConnection from '../../actions/Connection/remove';
 import moveConnection from '../../actions/Connection/move';
 import Connection from '../../stores/Connection';
-import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
 import './Canvas.scss';
 
 export default class Canvas extends Component {
@@ -263,7 +262,7 @@ export default class Canvas extends Component {
   }
 
   render() {
-    const {appState, plugins, panelEditingStatus, currentlyOpenedPanel} = this.props;
+    const {appState, plugins, currentlyOpenedPanel, onClick} = this.props;
     const {connections, scrollLeft} = this.state;
     let {canvasHeight} = this.state;
     if (!currentlyOpenedPanel) {
@@ -272,7 +271,7 @@ export default class Canvas extends Component {
     return (
       <section
         className="canvas"
-        onClick={() => !panelEditingStatus && appState.getStateKey('currentElement') && toggleHighlight(null)}
+        onClick={onClick}
       >
         <CanvasOverlay />
         <div

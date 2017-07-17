@@ -8,12 +8,13 @@ import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
 import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
+import removePortal from '../../actions/CanvasElements/remove';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
 
-const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -44,15 +45,15 @@ class Portal extends Component {
   }
 
   componentDidMount() {
-    this.props.paper.bind('connectionDetached', (info) => {
+    const {paper, ready, toggleEdit, entity} = this.props;
+    paper.bind('connectionDetached', (info) => {
       this.previousConnection = info;
     });
-
-    if (!this.props.ready) {
-      toggleEdit(this.props.entity);
+    if (!ready) {
+      toggleEdit(entity);
     }
     const APIsOpened = {...this.state.APIsOpened};
-    this.props.entity.apis.forEach((item) => {
+    entity.apis.forEach((item) => {
       APIsOpened[item.id] = true;
     });
     this.setState({APIsOpened});
@@ -62,12 +63,10 @@ class Portal extends Component {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
     }
-
     if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
       const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
         return Connection.getConnectionsForTarget(publicEndpoint.id).length;
       });
-
       if (hasConnection) {
         this.setState({hasConnection: true});
       } else {
@@ -127,6 +126,8 @@ class Portal extends Component {
     this.setState({APIsOpened: {...this.state.APIsOpened, [APIId]: opened}});
   }
 
+  removeEntity = () => removePortal(this.props.entity);
+
   renderAPIs() {
     const APIsPublicEndpoints = {};
     this.props.entity.apis.forEach((endpoint) => {
@@ -179,7 +180,7 @@ class Portal extends Component {
   _handleMultipleUnbundle() {
     this.setState({
       isShowingModalMultiple: true,
-      bundledItems: this.props.appState.getStateKey('currentlySelectedSubelements')
+      bundledItems: this.props.currentlySelectedSubelements,
     });
   }
 
@@ -213,9 +214,8 @@ class Portal extends Component {
             iconClass="icon-icon-portal"
             entity={this.props.entity}
             groupEndDrag={() => this._handleMultipleUnbundle()}
-            appState={this.props.appState}
           >
-          {this.renderAPIs()}
+            {this.renderAPIs()}
           </DraggableGroup>
         </EntitySubElements>
         <div className="canvas-element__drop">
@@ -270,4 +270,12 @@ class Portal extends Component {
   }
 }
 
-export default CanvasElement(Portal);
+const mapStateToProps = state => ({
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleEdit: element => dispatch(toggleEdit(element)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CanvasElement(Portal));

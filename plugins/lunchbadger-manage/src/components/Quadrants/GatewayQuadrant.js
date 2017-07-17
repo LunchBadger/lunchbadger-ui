@@ -26,7 +26,8 @@ class GatewaysQuadrant extends Component {
                       itemOrder={entity.itemOrder}
                       moveEntity={this.moveEntity}
                       ready={entity.ready}
-                      entity={entity}/>;
+                      entity={entity}
+                      />;
     })
   }
 

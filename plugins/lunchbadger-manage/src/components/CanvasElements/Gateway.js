@@ -5,14 +5,15 @@ import cs from 'classnames';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
+import removeEntity from '../../actions/CanvasElements/remove';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
 import PipelineFactory from '../../models/Pipeline';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 
-const toggleEdit = LunchBadgerCore.actions.toggleEdit;
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -39,8 +40,9 @@ class Gateway extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.ready) {
-      toggleEdit(this.props.entity);
+    const {ready, toggleEdit, entity} = this.props;
+    if (!ready) {
+      toggleEdit(entity);
     }
   }
 
@@ -152,6 +154,8 @@ class Gateway extends Component {
     this.props.parent.triggerElementAutofocus();
   }
 
+  removeEntity = () => removeEntity(this.props.entity);
+
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   render() {
@@ -187,7 +191,10 @@ class Gateway extends Component {
           onAdd={this.onAddPipeline('Pipeline')}
           main
         >
-          <DraggableGroup iconClass="icon-icon-gateway" entity={this.props.entity} appState={this.props.appState}>
+          <DraggableGroup
+            iconClass="icon-icon-gateway"
+            entity={this.props.entity}
+          >
             {this.renderPipelines()}
           </DraggableGroup>
         </EntitySubElements>
@@ -196,4 +203,8 @@ class Gateway extends Component {
   }
 }
 
-export default CanvasElement(Gateway);
+const mapDispatchToProps = dispatch => ({
+  toggleEdit: element => dispatch(toggleEdit(element)),
+})
+
+export default connect(null, mapDispatchToProps)(CanvasElement(Gateway));

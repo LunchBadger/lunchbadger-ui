@@ -17,6 +17,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {toggleHighlight} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
@@ -102,9 +103,11 @@ class App extends Component {
       loginManager,
       projectService,
       currentlyOpenedPanel,
+      currentElement,
     } = this.props;
     const coreStates = {
       currentlyOpenedPanel,
+      currentElement,
     };
     this.setState({loaded: false});
     let prm = saveToServer(config, loginManager, projectService, coreStates).then(() => {
@@ -138,8 +141,15 @@ class App extends Component {
     });
   }
 
+  handleCanvasClick = () => {
+    const {canvasClickEnabled, toggleHighlight} = this.props;
+    if (canvasClickEnabled) {
+      toggleHighlight(null);
+    }
+  }
+
   renderHeader = () => {
-    const currentEditElement = this.state.appState.getStateKey('currentEditElement');
+    const {currentEditElement} = this.props;
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
@@ -172,13 +182,14 @@ class App extends Component {
       multiEnvIndex,
       panelEditingStatus,
       currentlyOpenedPanel,
+      toggleHighlight,
+      currentEditElement,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
     }
     const multiEnvNotDev = multiEnvIndex > 0;
-    const currentEditElement = this.state.appState.getStateKey('currentEditElement');
     return (
       <div>
         <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
@@ -209,8 +220,8 @@ class App extends Component {
                 plugins={this.state.pluginsStore}
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
-                panelEditingStatus={panelEditingStatus}
                 currentlyOpenedPanel={currentlyOpenedPanel}
+                onClick={this.handleCanvasClick}
               />
             </div>
           </div>
@@ -227,6 +238,7 @@ class App extends Component {
 
 App.propTypes = {
   panelEditingStatus: PropTypes.bool,
+  canvasClickEnabled: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
@@ -235,13 +247,16 @@ const mapStateToProps = state => ({
   multiEnvIndex: state.ui.multiEnvironments.selected,
   multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   multiEnvAmount: state.ui.multiEnvironments.environments.length,
-  panelEditingStatus: state.core.appState.panelEditingStatus,
+  canvasClickEnabled: !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
   currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
+  currentElement: state.core.appState.currentElement,
+  currentEditElement: state.core.appState.currentEditElement,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+  toggleHighlight: element => dispatch(toggleHighlight(element)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

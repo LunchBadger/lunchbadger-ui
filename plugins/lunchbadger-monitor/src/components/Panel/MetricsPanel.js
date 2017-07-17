@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import Metric from '../../stores/Metric';
@@ -10,20 +11,18 @@ import './MetricsPanel.scss';
 
 export const METRICS_PANEL = 'METRICS_PANEL';
 
-const boxTarget = {
-  drop(_props, monitor) {
-    const item = monitor.getItem();
-    const itemType = monitor.getItemType();
-    const delta = monitor.getSourceClientOffset();
+const Panel = LunchBadgerCore.components.Panel;
 
+const boxTarget = {
+  drop(props, monitor) {
+    const item = monitor.getItem();
+    const delta = monitor.getSourceClientOffset();
     if (!delta) {
       return;
     }
-
-    if (itemType === 'elementsGroup') {
-      return createBundle(item.appState.getStateKey('currentlySelectedSubelements'), delta.x - 60, delta.y - 60);
+    if (monitor.getItemType() === 'elementsGroup') {
+      return createBundle(props.currentlySelectedSubelements, delta.x - 60, delta.y - 60);
     }
-
     if (item.metric && Metric.findEntity(item.metric.id)) {
       update(item.metric, delta.x - 60, delta.y - 60);
     } else if (item.entity && !Metric.findByEntityId(item.entity.id)) {
@@ -31,18 +30,13 @@ const boxTarget = {
     }
   },
 
-  canDrop(_props, monitor) {
-    const item = monitor.getItem();
-    const itemType = monitor.getItemType();
-
-    if (itemType === 'elementsGroup') {
-      const items = item.appState.getStateKey('currentlySelectedSubelements');
-
-      if (items.length === 3 || items.length > 4) {
+  canDrop(props, monitor) {
+    const {currentlySelectedSubelements} = props;
+    if (monitor.getItemType() === 'elementsGroup') {
+      if (currentlySelectedSubelements.length === 3 || currentlySelectedSubelements.length > 4) {
         return false;
       }
     }
-
     return true;
   }
 };
@@ -50,13 +44,10 @@ const boxTarget = {
 class MetricsPanel extends Component {
   constructor(props) {
     super(props);
-
     props.parent.storageKey = METRICS_PANEL;
-
     this.state = {
       entities: []
     };
-
     this.onStoreUpdate = () => {
       setTimeout(() => this.setState({entities: Metric.getData()}));
     }
@@ -101,9 +92,19 @@ class MetricsPanel extends Component {
   }
 }
 
-export default LunchBadgerCore.components.Panel(DropTarget(['canvasElement', 'metric', 'elementsGroup'], boxTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  isOverCurrent: monitor.isOver({shallow: true})
-}))(MetricsPanel));
+const mapStateToProps = state => ({
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+});
+
+export default connect(mapStateToProps)(Panel(
+  DropTarget(
+    ['canvasElement', 'metric', 'elementsGroup'],
+    boxTarget,
+    (connect, monitor) => ({
+      connectDropTarget: connect.dropTarget(),
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+      isOverCurrent: monitor.isOver({shallow: true}),
+    }),
+  )(MetricsPanel),
+));

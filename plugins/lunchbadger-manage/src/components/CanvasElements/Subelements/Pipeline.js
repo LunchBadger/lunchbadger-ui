@@ -9,11 +9,12 @@ import Private from '../../../stores/Private';
 import {EntityProperty, EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
 import _ from 'lodash';
 
-const toggleSubelement = LunchBadgerCore.actions.toggleSubelement;
 const Connection = LunchBadgerCore.stores.Connection;
 const Port = LunchBadgerCore.components.Port;
 const AppState = LunchBadgerCore.stores.AppState;
 const Input = LunchBadgerCore.components.Input;
+
+// FIXME - handle toggleSubelement
 
 export default class Pipeline extends Component {
   static propTypes = {
@@ -141,14 +142,14 @@ export default class Pipeline extends Component {
   }
 
   render() {
-    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements');
+    // const {currentlySelectedSubelements} = this.props;
     const pipelineClass = classNames({
       pipeline: true,
       'pipeline--opened': this.state.opened
     });
     const pipelineInfoClass = classNames({
       pipeline__info: true,
-      'pipeline__info--selected': _.find(selectedElements, {id: this.props.entity.id})
+      // 'pipeline__info--selected': _.find(currentlySelectedSubelements, {id: this.props.entity.id})
     });
     const {index} = this.props;
     return (

@@ -36,7 +36,9 @@ class PrivateQuadrant extends Component {
                    itemOrder={entity.itemOrder}
                    moveEntity={this.moveEntity}
                    saveOrder={this.saveOrder}
-                   entity={entity}/>
+                   entity={entity}
+                   ready={entity.ready}
+                   />
           );
         case 'Microservice':
           return (
@@ -48,7 +50,9 @@ class PrivateQuadrant extends Component {
                    itemOrder={entity.itemOrder}
                    moveEntity={this.moveEntity}
                    saveOrder={this.saveOrder}
-                   entity={entity}/>
+                   entity={entity}
+                   ready={entity.ready}
+                   />
           );
         case 'PrivateEndpoint':
           return (
@@ -60,7 +64,9 @@ class PrivateQuadrant extends Component {
               hideSourceOnDrag={true}
               itemOrder={entity.itemOrder}
               moveEntity={this.moveEntity}
-              entity={entity}/>
+              entity={entity}
+              ready={entity.ready}
+              />
           );
       }
     });

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updatePrivateEndpoint from '../../actions/CanvasElements/PrivateEndpoint/update';
+import removeEntity from '../../actions/CanvasElements/remove';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -44,6 +45,8 @@ class PrivateEndpoint extends Component {
       this.props.onFieldUpdate(field, evt.target.value);
     }
   }
+
+  removeEntity = () => removeEntity(this.props.entity);
 
   renderPorts() {
     return this.props.entity.ports.map(port => (

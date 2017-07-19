@@ -27,15 +27,9 @@ class Microservice extends Component {
     parent: PropTypes.object
   };
 
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
-
     this.previousConnection = null;
-
     this.state = {
       hasTargetConnection: false,
       hasSourceConnection: false,
@@ -88,7 +82,7 @@ class Microservice extends Component {
     const {entity} = this.props;
     entity.models.forEach((modelId) => {
       const model = Private.findEntity(modelId);
-      model && removeModel(this.context.projectService, model);
+      model && removeModel(model);
     });
     removeEntity(entity);
   }
@@ -138,7 +132,7 @@ class Microservice extends Component {
       wasBundled: false
     };
     unbundleStart(item.parent);
-    updateModel(this.context.projectService, entity.lunchbadgerId || entity.id, modelData)
+    updateModel(entity.lunchbadgerId || entity.id, modelData)
       .then(() => unbundleFinish(item.parent, entity));
   }
 
@@ -153,7 +147,7 @@ class Microservice extends Component {
 
     bundleStart(microservice);
 
-    updateModel(this.context.projectService, bundledItem.id, modelData)
+    updateModel(bundledItem.id, modelData)
       .then(() => bundleFinish(microservice, bundledItem));
   }
 

@@ -124,7 +124,6 @@ export default class BaseStore extends EventEmitter {
 
   formatId(id) {
     const idSplit = id.split('_');
-
     return idSplit.slice(-1)[0];
   }
 

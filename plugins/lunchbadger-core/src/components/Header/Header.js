@@ -7,13 +7,13 @@ import './Header.scss';
 
 export default class Header extends Component {
   render() {
-    const {plugins, saveToServer, clearServer, headerMenuDisabled} = this.props;
+    const {plugins, saveToServer, clearServer, headerMenuDisabled, username, envId} = this.props;
     return (
       <header className="header" ref="headerContainer">
         <CanvasOverlay />
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
         <p className="logotype" >LunchBadger</p>
-        <Breadcrumbs />
+        <Breadcrumbs username={username} envId={envId}/>
         <HeaderMenu
           plugins={plugins}
           saveToServer={saveToServer}

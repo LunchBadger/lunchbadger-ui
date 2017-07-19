@@ -4,19 +4,17 @@ const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Connection = LunchBadgerCore.stores.Connection;
 const Private = LunchBadgerManage.stores.Private;
 const handleFatals = LunchBadgerCore.utils.handleFatals;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (connectionInfo, {projectService}) => {
+export default (connectionInfo) => {
   connectionInfo.connection.setType('wip');
-
   let {originalTargetId, newSourceId, newTargetId} = connectionInfo;
   let promise = Promise.resolve(null);
-
   if (originalTargetId !== newTargetId) {
     // Moved the model end, have to remove data source from original model
     let originalModel = Private.findEntity(Connection.formatId(originalTargetId));
-
     promise = promise.then(() => {
-      return projectService.upsertModelConfig({
+      return ProjectService.upsertModelConfig({
         name: originalModel.name,
         id: `server.${originalModel.name}`,
         facetName: 'server',
@@ -25,11 +23,9 @@ export default (connectionInfo, {projectService}) => {
       });
     });
   }
-
   let dataSource = Backend.findEntity(Connection.formatId(newSourceId));
   let model = Private.findEntity(Connection.formatId(newTargetId));
-
-  promise = promise.then(() => projectService.upsertModelConfig({
+  promise = promise.then(() => ProjectService.upsertModelConfig({
     name: model.name,
     id: `server.${model.name}`,
     facetName: 'server',
@@ -38,9 +34,7 @@ export default (connectionInfo, {projectService}) => {
   })).then(() => {
     connectionInfo.connection.removeType('wip');
   });
-
   handleFatals(promise);
-
   dispatch('MoveConnection', {
     from: connectionInfo.originalSourceId,
     to: connectionInfo.originalTargetId,

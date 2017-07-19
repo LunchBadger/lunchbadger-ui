@@ -107,10 +107,11 @@ class QuadrantContainer extends Component {
   }
 
   render() {
-    const {editing, canvasHeight, className, id} = this.props;
+    const {editing, canvasHeight, className, id, dataSources, models} = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
+    console.log(22, dataSources, models);
     return (
       <div
         style={{minHeight: canvasHeight}}
@@ -125,6 +126,8 @@ class QuadrantContainer extends Component {
 
 const mapStateToProps = state => ({
   editing: !!state.core.appState.currentEditElement,
+  dataSources: state.entities.dataSources,
+  models: state.entities.models,
 });
 
 export default connect(mapStateToProps)(QuadrantContainer);

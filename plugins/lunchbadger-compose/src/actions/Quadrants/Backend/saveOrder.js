@@ -2,11 +2,10 @@ import Backend from '../../../stores/Backend';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const handleFatals = LunchBadgerCore.utils.handleFatals;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (service) => {
+export default () => {
   let data = Backend.getData().filter(entity => entity.reordered);
-
-  handleFatals(service.upsertDataSource(data));
-
+  handleFatals(ProjectService.upsertDataSource(data));
   dispatch('SaveBackendOrder');
 };

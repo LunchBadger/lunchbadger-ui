@@ -124,7 +124,7 @@ class ModelDetails extends Component {
     );
     delete updateData.dataSource;
     delete updateData.userFields;
-    updateModel(this.context.projectService, this.props.entity.id, updateData, propsToRemove);
+    updateModel(this.props.entity.id, updateData, propsToRemove);
   }
 
   onAddItem(collection, item) {
@@ -325,10 +325,6 @@ class ModelDetails extends Component {
 
 ModelDetails.propTypes = {
   entity: PropTypes.object.isRequired,
-};
-
-ModelDetails.contextTypes = {
-  projectService: PropTypes.object,
 };
 
 export default BaseDetails(ModelDetails);

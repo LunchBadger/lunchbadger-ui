@@ -8,7 +8,6 @@ import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
 import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
-import './App.scss';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import PanelContainer from '../Panel/PanelContainer';
@@ -19,15 +18,15 @@ import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {toggleHighlight} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
+import {getUser} from '../../utils/auth';
+import Config from '../../../../../src/config';
+import './App.scss';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
   static childContextTypes = {
     lunchbadgerConfig: PropTypes.object,
     loginManager: PropTypes.object,
-    projectService: PropTypes.object,
-    configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
@@ -36,9 +35,6 @@ class App extends Component {
   static propTypes = {
     config: PropTypes.object,
     loginManager: PropTypes.object,
-    projectService: PropTypes.object,
-    configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
@@ -66,9 +62,6 @@ class App extends Component {
     return {
       lunchbadgerConfig: this.props.config,
       loginManager: this.props.loginManager,
-      projectService: this.props.projectService,
-      configStoreService: this.props.configStoreService,
-      workspaceUrl: this.props.workspaceUrl,
       multiEnvIndex: this.props.multiEnvIndex,
       multiEnvDelta: this.props.multiEnvDelta,
       multiEnvAmount: this.props.multiEnvAmount,
@@ -76,17 +69,12 @@ class App extends Component {
   }
 
   componentWillMount() {
-    let {config, loginManager, projectService, dispatch} = this.props;
-
-    LunchBadgerCore.dispatchRedux = dispatch;
-
+    LunchBadgerCore.dispatchRedux = this.props.dispatch;
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
-
-    let prm = loadFromServer(config, loginManager, projectService).then(() => {
+    let prm = loadFromServer().then(() => {
       this.setState({loaded: true});
-    })
-
+    });
     handleFatals(prm).catch(() => {
       this.setState({loaded: true});
     });
@@ -99,9 +87,6 @@ class App extends Component {
 
   saveToServer = () => {
     let {
-      config,
-      loginManager,
-      projectService,
       currentlyOpenedPanel,
       currentElement,
     } = this.props;
@@ -110,32 +95,27 @@ class App extends Component {
       currentElement,
     };
     this.setState({loaded: false});
-    let prm = saveToServer(config, loginManager, projectService, coreStates).then(() => {
+    let prm = saveToServer(coreStates).then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
       });
       this.setState({loaded: true});
     });
-
     handleFatals(prm).catch(() => {
       this.setState({loaded: true});
     });
   }
 
   clearServer = () => {
-    let {config, loginManager, projectService} = this.props;
-
     this.setState({loaded: false});
-
-    let prm = clearServer(config, loginManager, projectService).then(() => {
+    let prm = clearServer().then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data removed from server',
         type: 'success'
       });
       this.setState({loaded: true});
     });
-
     handleFatals(prm).catch(() => {
       this.setState({loaded: true});
     });
@@ -150,10 +130,12 @@ class App extends Component {
 
   renderHeader = () => {
     const {currentEditElement} = this.props;
+    const username = getUser().profile.preferred_username;
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
           ref="header"
+          username={username}
           appState={this.state.appState}
           plugins={this.state.pluginsStore}
           saveToServer={this.saveToServer}
@@ -166,6 +148,8 @@ class App extends Component {
     return (
       <Header
         ref="header"
+        username={username}
+        envId={Config.get('envId')}
         plugins={this.state.pluginsStore}
         saveToServer={this.saveToServer}
         clearServer={this.clearServer}

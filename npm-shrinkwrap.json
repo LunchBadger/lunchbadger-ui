@@ -3861,16 +3861,16 @@
       "resolved": "https://registry.npmjs.org/lodash.pickby/-/lodash.pickby-4.6.0.tgz",
       "dev": true
     },
-    "lodash.throttle": {
-      "version": "4.1.1",
-      "from": "lodash.throttle@>=4.1.1 <5.0.0",
-      "resolved": "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
-    },
     "lodash.sortby": {
       "version": "4.7.0",
       "from": "lodash.sortby@>=4.7.0 <5.0.0",
       "resolved": "https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz",
       "dev": true
+    },
+    "lodash.throttle": {
+      "version": "4.1.1",
+      "from": "lodash.throttle@>=4.1.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
     },
     "lodash.uniq": {
       "version": "4.5.0",
@@ -3939,18 +3939,6 @@
       "resolved": "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz",
       "dev": true
     },
-    "material-ui": {
-      "version": "0.18.1",
-      "from": "material-ui@latest",
-      "resolved": "https://registry.npmjs.org/material-ui/-/material-ui-0.18.1.tgz",
-      "dependencies": {
-        "keycode": {
-          "version": "2.1.9",
-          "from": "keycode@>=2.1.8 <3.0.0",
-          "resolved": "https://registry.npmjs.org/keycode/-/keycode-2.1.9.tgz"
-        }
-      }
-    },
     "markdown-to-react-components": {
       "version": "0.2.4",
       "from": "markdown-to-react-components@>=0.2.1 <0.3.0",
@@ -3968,6 +3956,18 @@
       "from": "material-colors@>=1.2.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/material-colors/-/material-colors-1.2.5.tgz",
       "dev": true
+    },
+    "material-ui": {
+      "version": "0.18.1",
+      "from": "material-ui@latest",
+      "resolved": "https://registry.npmjs.org/material-ui/-/material-ui-0.18.1.tgz",
+      "dependencies": {
+        "keycode": {
+          "version": "2.1.9",
+          "from": "keycode@>=2.1.8 <3.0.0",
+          "resolved": "https://registry.npmjs.org/keycode/-/keycode-2.1.9.tgz"
+        }
+      }
     },
     "math-expression-evaluator": {
       "version": "1.2.16",
@@ -5519,16 +5519,16 @@
       "from": "react-tooltip@>=2.0.3 <3.0.0",
       "resolved": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-2.0.3.tgz"
     },
+    "react-transition-group": {
+      "version": "1.1.3",
+      "from": "react-transition-group@>=1.1.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-transition-group/-/react-transition-group-1.1.3.tgz"
+    },
     "reactcss": {
       "version": "1.2.2",
       "from": "reactcss@>=1.2.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/reactcss/-/reactcss-1.2.2.tgz",
       "dev": true
-    },
-    "react-transition-group": {
-      "version": "1.1.3",
-      "from": "react-transition-group@>=1.1.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/react-transition-group/-/react-transition-group-1.1.3.tgz"
     },
     "read-pkg": {
       "version": "1.1.0",
@@ -5624,6 +5624,11 @@
       "version": "3.6.0",
       "from": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz",
       "resolved": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz"
+    },
+    "redux-thunk": {
+      "version": "2.2.0",
+      "from": "redux-thunk@latest",
+      "resolved": "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.2.0.tgz"
     },
     "regenerate": {
       "version": "1.3.2",
@@ -5751,6 +5756,11 @@
       "version": "1.0.0",
       "from": "requires-port@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
+    },
+    "reselect": {
+      "version": "3.0.1",
+      "from": "reselect@latest",
+      "resolved": "https://registry.npmjs.org/reselect/-/reselect-3.0.1.tgz"
     },
     "resolve": {
       "version": "1.1.7",

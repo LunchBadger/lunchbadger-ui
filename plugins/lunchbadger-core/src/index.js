@@ -67,7 +67,7 @@ import ConfigStoreService from './services/ConfigStoreService';
 import ApiClient from './utils/ApiClient';
 import * as URLParams from './utils/URLParamsBind';
 import {waitForStores} from './utils/waitForStores';
-import createLoginManager from './utils/auth';
+import LoginManager, {createLoginManager, getUser} from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
 import './utils/formValidators';
@@ -148,7 +148,9 @@ let LunchBadgerCore = {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer
     },
+    LoginManager: LoginManager,
     createLoginManager: createLoginManager,
+    getUser: getUser,
     propertyTypes: [
       {label: 'String', value: 'string'},
       {label: 'Number', value: 'number'},

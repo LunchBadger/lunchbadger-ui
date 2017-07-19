@@ -6,8 +6,9 @@ const {dispatchAsync} = LunchBadgerCore.dispatcher.AppDispatcher;
 const Private = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
 const handleFatals = LunchBadgerCore.utils.handleFatals;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (service, id, props, propsToRemove = []) => {
+export default (id, props, propsToRemove = []) => {
   let model = Private.findEntity(id);
   let promise = Promise.resolve(null);
 
@@ -18,9 +19,9 @@ export default (service, id, props, propsToRemove = []) => {
 
     // Workspace API does not support renaming, so we have to delete the old
     // entry before creating a new one.
-    promise = promise.then(() => service.deleteModel(workspaceId));
+    promise = promise.then(() => ProjectService.deleteModel(workspaceId));
     // If we renamed, then must also change the model-config file
-    promise = promise.then(() => service.deleteModelConfig(workspaceId));
+    promise = promise.then(() => ProjectService.deleteModelConfig(workspaceId));
   }
 
   if ((model.loaded && model.name !== props.name) ||
@@ -34,7 +35,7 @@ export default (service, id, props, propsToRemove = []) => {
       .filter(entity => entity instanceof DataSource);
     let dataSourceName = dataSources.length > 0 ? dataSources[0].name : null;
 
-    promise = promise.then(() => service.upsertModelConfig({
+    promise = promise.then(() => ProjectService.upsertModelConfig({
       name: props.name,
       id: `server.${props.name}`,
       facetName: 'server',
@@ -46,17 +47,17 @@ export default (service, id, props, propsToRemove = []) => {
   propsToRemove.forEach(prop => delete model[prop]);
 
   promise = promise
-    .then(() => service.upsertModel(_.merge(model, props)))
-    .then(() => service.deleteModelProperties(model.workspaceId))
+    .then(() => ProjectService.upsertModel(_.merge(model, props)))
+    .then(() => ProjectService.deleteModelProperties(model.workspaceId))
     .then(() => {
       if (props.properties) {
-        return service.upsertModelProperties(props.properties)
+        return ProjectService.upsertModelProperties(props.properties)
       }
     })
-    .then(() => service.deleteModelRelations(model.workspaceId))
+    .then(() => ProjectService.deleteModelRelations(model.workspaceId))
     .then(() => {
       if (props.relations) {
-        return service.upsertModelRelations(props.relations)
+        return ProjectService.upsertModelRelations(props.relations)
       }
     });
 

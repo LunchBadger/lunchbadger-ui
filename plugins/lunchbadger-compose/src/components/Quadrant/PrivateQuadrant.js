@@ -15,10 +15,6 @@ class PrivateQuadrant extends Component {
     paper: PropTypes.object
   };
 
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
   }
@@ -77,7 +73,7 @@ class PrivateQuadrant extends Component {
   }
 
   saveOrder = () => {
-    saveOrder(this.context.projectService);
+    saveOrder();
   }
 
   render() {

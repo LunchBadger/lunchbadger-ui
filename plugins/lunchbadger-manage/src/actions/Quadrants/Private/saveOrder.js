@@ -3,12 +3,11 @@ import Model from '../../../models/Model';
 
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
 const handleFatals = LunchBadgerCore.utils.handleFatals;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (service) => {
+export default () => {
   let data = Private.getData().filter(entity => entity.reordered);
-
-  let promise = service.upsertModel(data.filter(entity => entity instanceof Model));
+  let promise = ProjectService.upsertModel(data.filter(entity => entity instanceof Model));
   handleFatals(promise);
-
   dispatch('SavePrivateOrder');
 };

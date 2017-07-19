@@ -18,6 +18,12 @@ import initializePublic from './actions/Stores/Public/initialize';
 
 LunchBadgerCore.actions.registerPlugin(MonetizePlugin);
 
+import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+import plugs from './plugs';
+
+registerPlugin(reducers, plugs);
+
 // export
 let LunchBadgerMonetize = {
   components: {

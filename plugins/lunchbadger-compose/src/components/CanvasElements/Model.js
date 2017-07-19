@@ -80,7 +80,6 @@ class Model extends Component {
     const validations = this.validate(model);
     if (validations.isValid) {
       updateModel(
-        this.context.projectService,
         this.props.entity.id,
         Object.assign(model, data),
       );
@@ -178,7 +177,7 @@ class Model extends Component {
 
   removeEntity = () => {
     const {entity} = this.props;
-    removeModel(this.context.projectService, entity);
+    removeModel(entity);
     removeEntity(entity);
   }
 
@@ -250,10 +249,6 @@ class Model extends Component {
 Model.propTypes = {
   entity: PropTypes.object.isRequired,
   paper: PropTypes.object,
-};
-
-Model.contextTypes = {
-  projectService: PropTypes.object,
 };
 
 // const mapDispatchToProps = dispatch => ({

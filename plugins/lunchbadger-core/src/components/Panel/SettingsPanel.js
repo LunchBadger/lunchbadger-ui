@@ -5,28 +5,22 @@ import {connect} from 'react-redux';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
 import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
+import ConfigStoreService from '../../services/ConfigStoreService';
+import ProjectService from '../../services/ProjectService';
+import Config from '../../../../../src/config';
+import {getUser} from '../../utils/auth';
 
 class SettingsPanel extends Component {
   constructor(props) {
     super(props);
-
     props.parent.storageKey = panelKeys.SETTINGS_PANEL;
     this.state = {
       accessKey: null
     };
   }
 
-  static contextTypes = {
-    loginManager: PropTypes.object,
-    lunchbadgerConfig: PropTypes.object,
-    configStoreService: PropTypes.object,
-    projectService: PropTypes.object,
-    workspaceUrl: PropTypes.string
-  };
-
   componentWillMount() {
-    const userName = this.context.loginManager.user.profile.sub;
-    this.context.configStoreService.getAccessKey(userName).then(data => {
+    ConfigStoreService.getAccessKey().then(data => {
       this.setState({
         accessKey: data.body.key
       });
@@ -36,12 +30,10 @@ class SettingsPanel extends Component {
   }
 
   onRegenerate = () => {
-    const userName = this.context.loginManager.user.profile.sub;
     this.setState({
       accessKey: null
     });
-
-    this.context.configStoreService.regenerateAccessKey(userName).then(data => {
+    ConfigStoreService.regenerateAccessKey().then(data => {
       this.setState({
         accessKey: data.body.key
       });
@@ -51,28 +43,26 @@ class SettingsPanel extends Component {
   }
 
   onRestartWorkspace = () => {
-    this.context.projectService.restartWorkspace();
+    ProjectService.restartWorkspace();
   }
 
   onReinstall = () => {
-    this.context.projectService.reinstallDeps();
+    ProjectService.reinstallDeps();
   }
 
   render() {
-    const userName = this.context.loginManager.user.profile.sub;
-
     let cloneCommand;
     if (this.state.accessKey) {
       const anchor = document.createElement('a');
-      anchor.href = this.context.lunchbadgerConfig.gitBaseUrl;
-      anchor.pathname += `/${userName}.git`;
+      anchor.href = Config.get('gitBaseUrl');
+      anchor.pathname += `/${getUser().profile.sub}.git`;
       anchor.username = 'git';
       anchor.password = this.state.accessKey;
       cloneCommand = `git clone ${anchor.href}`;
     } else {
       cloneCommand = '...';
     }
-
+    const workspaceUrl = Config.get('workspaceUrl');
     return (
       <div className="panel__body">
         <div className="panel__title">
@@ -84,12 +74,12 @@ class SettingsPanel extends Component {
               Your application URLs
             </label>
             <div className="details-panel__static-field">
-              <a href={this.context.workspaceUrl} target="_blank">
-                {this.context.workspaceUrl}
+              <a href={workspaceUrl} target="_blank">
+                {workspaceUrl}
               </a> (root)
               <br />
-              <a href={this.context.workspaceUrl + '/explorer'} target="_blank">
-                {this.context.workspaceUrl + '/explorer'}
+              <a href={workspaceUrl + '/explorer'} target="_blank">
+                {workspaceUrl + '/explorer'}
               </a> (API explorer)
             </div>
           </div>

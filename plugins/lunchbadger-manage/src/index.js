@@ -26,6 +26,12 @@ import Gateway from './stores/Gateway';
 
 LunchBadgerCore.actions.registerPlugin(ManagePlugin);
 
+import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+import plugs from './plugs';
+
+registerPlugin(reducers, plugs);
+
 // export
 let LunchBadgerManage = {
   models: {

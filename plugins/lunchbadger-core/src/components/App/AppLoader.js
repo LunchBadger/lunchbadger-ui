@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
+import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import './AppLoader.scss';
 
 export default class AppLoader extends Component {
   static propTypes = {
-    configStoreService: PropTypes.object,
     config: PropTypes.object,
     loginManager: PropTypes.object
   }
 
   constructor(props) {
     super(props);
-
     this.state = {
-      projectService: null,
+      loaded: false,
       error: null
     };
   }
@@ -27,24 +26,12 @@ export default class AppLoader extends Component {
   }
 
   load() {
-    let {loginManager, config} = this.props;
-
-    let {workspaceApiUrl, projectApiUrl, envId} = config;
-    let userId = loginManager.user.profile.sub;
-    let idToken = loginManager.user.id_token;
-
-    let mkUrl = url => url.replace('{USER}', userId).replace('{ENV}', envId);
-
-    let projectService = new ProjectService(mkUrl(projectApiUrl),
-                                            mkUrl(workspaceApiUrl), idToken);
-    let workspaceUrl = mkUrl(config.workspaceUrl);
-
-    this.props.configStoreService.upsertProject(userId)
+    ConfigStoreService.upsertProject()
       .then(() => {
         return waitForProject(48, 2500);
       })
       .then(() => {
-        this.setState({projectService, workspaceUrl});
+        this.setState({loaded: true});
         // Setting the projectState will trigger the App render, which will
         // in turn trigger the remote call to the server. This creates some
         // Promises that do not get returned all the way here. As a result,
@@ -58,7 +45,7 @@ export default class AppLoader extends Component {
 
     function waitForProject(retries, waitTime) {
       //console.log('Pinging workspace');
-      return projectService
+      return ProjectService
         .ping()
         .catch(err => {
           if (![0, 404, 502, 504].includes(err.statusCode)) {
@@ -99,15 +86,14 @@ export default class AppLoader extends Component {
   }
 
   renderApp() {
-    return <App config={this.props.config}
-                loginManager={this.props.loginManager}
-                projectService={this.state.projectService}
-                configStoreService={this.props.configStoreService}
-                workspaceUrl={this.state.workspaceUrl} />;
+    return <App
+      config={this.props.config}
+      loginManager={this.props.loginManager}
+    />;
   }
 
   render() {
-    if (this.state.projectService) {
+    if (this.state.loaded) {
       return this.renderApp();
     } else if (this.state.error) {
       return this.renderError();

@@ -7,13 +7,10 @@ import addConnection from '../../actions/Connection/add';
 import removeConnection from '../../actions/Connection/remove';
 import moveConnection from '../../actions/Connection/move';
 import Connection from '../../stores/Connection';
+import ProjectService from '../../services/ProjectService';
 import './Canvas.scss';
 
 export default class Canvas extends Component {
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
 
@@ -131,9 +128,7 @@ export default class Canvas extends Component {
 
   _executeStrategies(strategies, info) {
     for (let strategy of strategies) {
-      let fulfilled = strategy.checkAndFulfill(info, {
-        projectService: this.context.projectService
-      });
+      let fulfilled = strategy.checkAndFulfill(info);
       if (fulfilled != null) {
         return fulfilled;
       }

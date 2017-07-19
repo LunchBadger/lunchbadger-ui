@@ -19,6 +19,11 @@ import APIForecast from './models/APIForecast';
 
 LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 
+import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+
+registerPlugin(reducers, {services: [ForecastService]});
+
 // try to load all forecasts
 const AppState = LunchBadgerCore.stores.AppState;
 const waitForStores = LunchBadgerCore.utils.waitForStores;
@@ -27,10 +32,9 @@ waitForStores([AppState]).then(() => {
   setTimeout(() => {
 
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
-    const forecastService = new ForecastService(LUNCHBADGER_CONFIG.forecastApiUrl, ID_TOKEN);
 
     if (apiForecastInformation) {
-      forecastService.getByForecast(apiForecastInformation.id).then((data) => {
+      ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
         if (data.body) {
           const forecast = APIForecast.create(Object.assign({}, data.body, {
               left: apiForecastInformation.left || 0,

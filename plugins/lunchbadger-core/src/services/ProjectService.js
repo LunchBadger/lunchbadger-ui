@@ -1,18 +1,22 @@
 import ApiClient from '../utils/ApiClient';
-import {bindParams} from '../utils/URLParamsBind';
+import Config from '../../../../src/config';
+import {getUser} from '../utils/auth';
 
-export default class ProjectService {
-  constructor(projectUrl, workspaceUrl, idToken) {
-    this._projectClient = new ApiClient(projectUrl, idToken);
-    this._workspaceClient = new ApiClient(workspaceUrl, idToken);
+class ProjectService {
+  initialize() {
+    const idToken = getUser().idToken;
+    this._projectClient = new ApiClient(Config.get('projectApiUrl'), idToken);
+    this._workspaceClient = new ApiClient(Config.get('workspaceApiUrl'), idToken);
   }
 
-  get(userName, envId) {
-    let projectId = `${userName}-${envId}`;
+  getProjectId() {
+    return `${getUser().profile.sub}-${Config.get('envId')}`;
+  }
 
+  get() {
     return Promise.all([
       this._projectClient
-        .get(bindParams('Projects/:id', {id: projectId}))
+        .get(`Projects/${this.getProjectId()}`)
         .catch(err => {
           if (err.statusCode === 404) {
             return {body: null};
@@ -25,22 +29,20 @@ export default class ProjectService {
     ]);
   }
 
-  upsertDataSource(data) {
-    return this._workspaceClient.post('DataSourceDefinitions', { body: data });
+  upsertDataSource(body) {
+    return this._workspaceClient.post('DataSourceDefinitions', {body});
   }
 
   deleteDataSource(id) {
-    return this._workspaceClient.delete(
-      bindParams('DataSourceDefinitions/:id', {id}));
+    return this._workspaceClient.delete(`DataSourceDefinitions/${id}`);
   }
 
-  upsertModel(data) {
-    return this._workspaceClient.post('ModelDefinitions', { body: data });
+  upsertModel(body) {
+    return this._workspaceClient.post('ModelDefinitions', {body});
   }
 
   deleteModel(id) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id', {id}));
+    return this._workspaceClient.delete(`ModelDefinitions/${id}`);
   }
 
   upsertModelConfig(data) {
@@ -48,39 +50,34 @@ export default class ProjectService {
   }
 
   deleteModelConfig(id) {
-    return this._workspaceClient.delete(bindParams('ModelConfigs/:id', {id}));
+    return this._workspaceClient.delete(`ModelConfigs/${id}`);
   }
 
-  upsertModelProperties(data) {
-    return this._workspaceClient.post('ModelProperties', { body: data });
+  upsertModelProperties(body) {
+    return this._workspaceClient.post('ModelProperties', {body});
   }
 
   deleteModelProperties(modelId) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id/properties', {id: modelId}));
+    return this._workspaceClient.delete(`ModelDefinitions/${modelId}/properties`);
   }
 
-  upsertModelRelations(data) {
-    return this._workspaceClient.post('ModelRelations', { body: data });
+  upsertModelRelations(body) {
+    return this._workspaceClient.post('ModelRelations', {body});
   }
 
   deleteModelRelations(modelId) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id/relations', {id: modelId}));
+    return this._workspaceClient.delete(`ModelDefinitions/${modelId}/relations`);
   }
 
-  save(userName, envId, data) {
-    let projectId = `${userName}-${envId}`;
-    return this._projectClient.patch('Projects', { body: {
-      id: projectId,
-      ...data
+  save(data) {
+    return this._projectClient.patch('Projects', {body: {
+      id: this.getProjectId(),
+      ...data,
     }});
   }
 
-  clearProject(userName, envId) {
-    let projectId = `${userName}-${envId}`;
-    return this._projectClient.post(
-      bindParams('Projects/:id/clear', { id: projectId }));
+  clearProject() {
+    return this._projectClient.post(`Projects/${this.getProjectId()}/clear`);
   }
 
   monitorStatus() {
@@ -99,3 +96,5 @@ export default class ProjectService {
     return this._projectClient.post('/WorkspaceStatus/reinstall');
   }
 }
+
+export default new ProjectService();

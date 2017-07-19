@@ -1,0 +1,69 @@
+import {addDataSource, addModel} from '../reduxActions';
+import AddDataSource from '../actions/CanvasElements/DataSource/add';
+import AddModel from '../actions/CanvasElements/Model/add';
+import AddMicroservice from '../actions/CanvasElements/Microservice/add';
+
+const dataSources = [
+  'Memory',
+  'REST',
+  'SOAP',
+  'MongoDB',
+  'Redis',
+  'MySQL',
+  'Ethereum',
+  'Salesforce',
+];
+
+const dataSourcesWizard = [
+  'MongoDB',
+  'Redis',
+  'MySQL',
+];
+
+const getDataSourceConnector = label => label === 'Ethereum' ? 'web3' : label.toLowerCase();
+
+const wizardFunc = label => () => {}; //TODO: implement datasource wizard
+
+const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+
+const dataSourceAction = label => dispatch => {
+  dispatch(addDataSource(label, getDataSourceConnector(label)));
+  AddDataSource(label, getDataSourceConnector(label));
+};
+
+const modelAction = dispatch => {
+  // dispatch(addModel('NewModel'));
+  AddModel();
+};
+
+const microserviceAction = dispatch => {
+  // dispatch(AddMicroservice());
+  AddMicroservice();
+};
+
+export default {
+  0: [
+    {
+      icon: 'iconDataSource',
+      tooltip: 'Data Source',
+      submenu: dataSources.map(label => ({
+        label,
+        name: label.toLowerCase(),
+        icon: `iconDataSource${label}`,
+        action: dataSourceAction(label),
+        wizard: getWizardFunc(label),
+        wizardTooltip: 'Create and connect to a new data source',
+      })),
+    },
+    {
+      icon: 'iconModel',
+      tooltip: 'Model',
+      action: modelAction,
+    },
+    {
+      icon: 'iconMicroservice',
+      tooltip: 'Microservice',
+      action: microserviceAction,
+    },
+  ],
+};

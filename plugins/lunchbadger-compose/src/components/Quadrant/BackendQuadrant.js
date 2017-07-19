@@ -13,10 +13,6 @@ class BackendQuadrant extends Component {
     paper: PropTypes.object
   };
 
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
   }
@@ -42,7 +38,7 @@ class BackendQuadrant extends Component {
   }
 
   saveOrder = () => {
-    saveOrder(this.context.projectService);
+    saveOrder();
   }
 
   render() {

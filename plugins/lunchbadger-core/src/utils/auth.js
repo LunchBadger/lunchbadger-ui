@@ -1,5 +1,6 @@
 /*eslint no-console:0 */
 import {UserManager} from 'oidc-client';
+import Config from '../../../../src/config';
 
 export class LoginManager {
   constructor(config) {
@@ -38,6 +39,7 @@ export class LoginManager {
         console.debug('logged in:', user);
         window.location = '#';
         this.user = user;
+        Config.apiUrlsReplacements(this.user.profile.sub);
         return true;
       })
       .catch(err => {
@@ -69,6 +71,7 @@ export class DummyLoginManager {
   }
 
   checkAuth() {
+    Config.apiUrlsReplacements(this.user.profile.sub);
     return Promise.resolve(this.user);
   }
 
@@ -77,10 +80,17 @@ export class DummyLoginManager {
   }
 }
 
-export default function createLoginManager(config) {
-  if (config.user) {
-    return new DummyLoginManager(config.user);
+let loginManager;
+
+export const createLoginManager = () => {
+  if (Config.get('user')) {
+    loginManager = new DummyLoginManager(Config.get('user'));
   } else {
-    return new LoginManager(config.oauth);
+    loginManager = new LoginManager(Config.get('oauth'));
   }
+  return loginManager;
 }
+
+export default () => loginManager;
+
+export const getUser = () => loginManager.user;

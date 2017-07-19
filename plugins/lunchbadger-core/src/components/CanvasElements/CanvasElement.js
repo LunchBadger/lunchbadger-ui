@@ -184,7 +184,7 @@ export default (ComposedComponent) => {
     }
 
     componentWillUnmount() {
-      this.handleChangeListeners('removeEventListener');
+      this.handleChangeListeners('removeChangeListener');
     }
 
     handleChangeListeners = (action) => {

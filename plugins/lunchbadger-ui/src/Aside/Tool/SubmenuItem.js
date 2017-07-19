@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import cs from 'classnames';
 import MenuItem from 'material-ui/MenuItem';
 import {IconSVG, ContextualInformationMessage} from '../../';
-import {iconWand} from '../../../../../src/icons';
+import * as icons from '../../../../../src/icons';
 import {tooltipSet} from '../../actions';
 import './Tool.scss';
 
@@ -19,11 +19,11 @@ class SubmenuItem extends Component {
   }
 
   onClick = (event) => {
-    const {onMenuItemClick, onClick, setTooltip} = this.props;
+    const {onMenuItemClick, onClick, setTooltip, action} = this.props;
     setTooltip(null);
     onMenuItemClick();
     if (event.target.closest('.Tool__wizard') === null) {
-      onClick();
+      onClick(action);
     }
   }
 
@@ -52,7 +52,7 @@ class SubmenuItem extends Component {
             onMouseEnter={this.toggleTooltip('labelDOM', true, tooltip)}
             onMouseLeave={this.toggleTooltip('labelDOM', false)}
           >
-            <IconSVG className={cs('Tool__icon', 'submenu', {plain})} svg={icon} />
+            <IconSVG className={cs('Tool__icon', 'submenu', {plain})} svg={icons[icon]} />
             <div className={cs('Tool__label', {plain})}>{label}</div>
           </span>
         </div>
@@ -64,7 +64,7 @@ class SubmenuItem extends Component {
             onMouseEnter={this.toggleTooltip('wizardDOM', true, wizardTooltip)}
             onMouseLeave={this.toggleTooltip('wizardDOM', false)}
           >
-            <IconSVG className="Tool__wizard__icon" svg={iconWand} />
+            <IconSVG className="Tool__wizard__icon" svg={icons.iconWand} />
           </span>
         )}
       </MenuItem>

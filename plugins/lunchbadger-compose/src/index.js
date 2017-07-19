@@ -19,6 +19,12 @@ import detachConnection from './actions/Connection/detach';
 
 LunchBadgerCore.actions.registerPlugin(ComposePlugin);
 
+import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+import plugs from './plugs';
+
+registerPlugin(reducers, plugs);
+
 // export
 let LunchBadgerCompose = {
   components: {

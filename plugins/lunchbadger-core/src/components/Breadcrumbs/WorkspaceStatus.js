@@ -3,17 +3,13 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import classnames from 'classnames';
-import './WorkspaceStatus.scss';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
 import {addSystemDefcon1, toggleSystemDefcon1} from '../../../../lunchbadger-ui/src/actions';
-
+import ProjectService from '../../services/ProjectService';
+import './WorkspaceStatus.scss';
 
 class WorkspaceStatus extends Component {
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
   constructor() {
     super();
     this.state = {
@@ -27,7 +23,7 @@ class WorkspaceStatus extends Component {
   }
 
   componentDidMount() {
-    this.es = this.context.projectService.monitorStatus();
+    this.es = ProjectService.monitorStatus();
     this.es.addEventListener('data', this.onStatusReceived);
     this.es.addEventListener('open', this.onConnected);
     this.es.addEventListener('error', this.onDisconnected);

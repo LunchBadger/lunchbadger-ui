@@ -17,18 +17,10 @@ class DataSource extends Component {
     paper: PropTypes.object
   };
 
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
-  constructor(props) {
-    super(props);
-  }
-
   update(model) {
     const validations = this.validate(model);
     if (validations.isValid) {
-      updateDataSource(this.context.projectService, this.props.entity.id, model);
+      updateDataSource(this.props.entity.id, model);
     }
     return validations;
   }
@@ -58,7 +50,7 @@ class DataSource extends Component {
 
   removeEntity = () => {
     const {entity} = this.props;
-    removeDataSource(this.context.projectService, entity);
+    removeDataSource(entity);
     removeEntity(entity);
   }
 

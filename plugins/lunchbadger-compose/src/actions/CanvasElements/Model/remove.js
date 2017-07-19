@@ -1,9 +1,10 @@
 const handleFatals = LunchBadgerCore.utils.handleFatals;
+const ProjectService = LunchBadgerCore.services.ProjectService;
 
-export default (service, entity) => {
+export default (entity) => {
   if (entity.loaded) {
-    let promise = service.deleteModel(entity.workspaceId).then(() => {
-      return service.deleteModelConfig(entity.workspaceId);
+    let promise = ProjectService.deleteModel(entity.workspaceId).then(() => {
+      return ProjectService.deleteModelConfig(entity.workspaceId);
     });
     handleFatals(promise);
   }

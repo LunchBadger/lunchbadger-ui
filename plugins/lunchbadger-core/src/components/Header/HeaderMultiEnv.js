@@ -6,10 +6,10 @@ import {TopBar, PanelBar} from '../../../../lunchbadger-ui/src';
 
 export default class HeaderMultiEnv extends Component {
   render() {
-    const {appState, plugins, saveToServer, clearServer, disabledMultiEnvMenu, headerMenuDisabled} = this.props;
+    const {appState, plugins, saveToServer, clearServer, disabledMultiEnvMenu, headerMenuDisabled, username} = this.props;
     return (
       <header className="header" ref="headerContainer">
-        <TopBar />
+        <TopBar username={username} />
         <PanelBar disabledMultiEnvMenu={disabledMultiEnvMenu}>
           <HeaderMenu
             plugins={plugins}

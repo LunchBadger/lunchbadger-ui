@@ -12,7 +12,6 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
-import config from 'config';
 import reducers from './reducers';
 
 // Needed for onTouchTap
@@ -27,14 +26,12 @@ const muiTheme = getMuiTheme({
   }
 });
 
-
-global.LUNCHBADGER_CONFIG = config;
 const AppLoader = LunchBadgerCore.components.AppLoader;
 LunchBadgerCore.multiEnvIndex = 0;
 
 console.info('Application started..!');
 
-let loginManager = LunchBadgerCore.utils.createLoginManager();
+const loginManager = LunchBadgerCore.utils.createLoginManager();
 
 loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) {
@@ -71,10 +68,7 @@ loginManager.checkAuth().then(loggedIn => {
   ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider muiTheme={muiTheme}>
-        <AppLoader
-          config={config}
-          loginManager={loginManager}
-        />
+        <AppLoader />
       </MuiThemeProvider>
     </Provider>,
     document.getElementById('app')

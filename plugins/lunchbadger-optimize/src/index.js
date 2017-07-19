@@ -1,6 +1,4 @@
 /*eslint no-console:0 */
-/*global LUNCHBADGER_CONFIG */
-/*global ID_TOKEN */
 // Let's register plugins inside the Core, yay!
 import ForecastsPanel from './plugs/ForecastsPanel';
 

@@ -42,18 +42,12 @@ export default class APIForecast extends Component {
     isExpanded: PropTypes.bool.isRequired
   };
 
-  static contextTypes = {
-    lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
     const date = new Date();
     this.currentDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
     this.forecastUpdated = () => {
       const currentForecast = AppState.getStateKey('currentForecast');
-
       if (currentForecast && currentForecast.forecast.id === this.props.entity.id) {
         this._updateForecast(currentForecast);
       }

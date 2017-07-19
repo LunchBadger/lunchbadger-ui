@@ -8,16 +8,11 @@ import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import './AppLoader.scss';
 
 export default class AppLoader extends Component {
-  static propTypes = {
-    config: PropTypes.object,
-    loginManager: PropTypes.object
-  }
-
   constructor(props) {
     super(props);
     this.state = {
       loaded: false,
-      error: null
+      error: null,
     };
   }
 
@@ -86,10 +81,7 @@ export default class AppLoader extends Component {
   }
 
   renderApp() {
-    return <App
-      config={this.props.config}
-      loginManager={this.props.loginManager}
-    />;
+    return <App />;
   }
 
   render() {

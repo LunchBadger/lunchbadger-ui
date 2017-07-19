@@ -25,16 +25,12 @@ import './App.scss';
 @DragDropContext(HTML5Backend)
 class App extends Component {
   static childContextTypes = {
-    lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
   }
 
   static propTypes = {
-    config: PropTypes.object,
-    loginManager: PropTypes.object,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
@@ -60,8 +56,6 @@ class App extends Component {
 
   getChildContext() {
     return {
-      lunchbadgerConfig: this.props.config,
-      loginManager: this.props.loginManager,
       multiEnvIndex: this.props.multiEnvIndex,
       multiEnvDelta: this.props.multiEnvDelta,
       multiEnvAmount: this.props.multiEnvAmount,

@@ -1,3 +1,7 @@
+import apis from './apis';
+import portals from './portals';
+
 export default {
-  monetize: (state = {}, action) => state,
+  apis,
+  portals,
 };

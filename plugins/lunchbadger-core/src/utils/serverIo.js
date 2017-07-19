@@ -78,7 +78,7 @@ export function loadFromServer() {
           }));
         }
       });
-      LunchBadgerCore.dispatchRedux(initialize(project.states, revisions));
+      LunchBadgerCore.dispatchRedux(initialize(project.states, revisions, {project, models, dataSources}));
       setTimeout(() => {
         LunchBadgerCore.actions.Stores.AppState.initialize(project.states);
       });

@@ -1,3 +1,9 @@
+import gateways from './gateways';
+import privateEndpoints from './privateEndpoints';
+import publicEndpoints from './publicEndpoints';
+
 export default {
-  manage: (state = {}, action) => state,
+  gateways,
+  privateEndpoints,
+  publicEndpoints,
 };

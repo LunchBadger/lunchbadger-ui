@@ -20,26 +20,32 @@ class SettingsPanel extends Component {
   }
 
   componentWillMount() {
-    ConfigStoreService.getAccessKey().then(data => {
-      this.setState({
-        accessKey: data.body.key
-      });
-    }).catch(err => {
-      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
-    });
+    this.getAccessKey();
   }
 
-  onRegenerate = () => {
-    this.setState({
-      accessKey: null
-    });
-    ConfigStoreService.regenerateAccessKey().then(data => {
+  getAccessKey = async () => {
+    try {
+      const data = await ConfigStoreService.getAccessKey();
       this.setState({
-        accessKey: data.body.key
+        accessKey: data.body.key,
       });
-    }).catch(err => {
-      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
+    } catch (err) {
+      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
+    };
+  }
+
+  onRegenerate = async () => {
+    this.setState({
+      accessKey: null,
     });
+    try {
+      const data = await ConfigStoreService.regenerateAccessKey();
+      this.setState({
+        accessKey: data.body.key,
+      });
+    } catch (err) {
+      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
+    };
   }
 
   onRestartWorkspace = () => {

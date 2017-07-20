@@ -11,13 +11,9 @@ class ConfigStoreService {
     return this._client.post('producers', {body: {id: getUser().profile.sub}});
   }
 
-  getAccessKey() {
-    return this._client.get(`producers/${getUser().profile.sub}/accesskey`);
-  }
+  getAccessKey = () => this._client.get(`producers/${getUser().profile.sub}/accesskey`);
 
-  regenerateAccessKey() {
-    return this._client.post(`producers/${getUser().profile.sub}/accesskey`);
-  }
+  regenerateAccessKey = () => this._client.post(`producers/${getUser().profile.sub}/accesskey`);
 }
 
 export default new ConfigStoreService();

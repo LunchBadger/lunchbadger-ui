@@ -10,10 +10,10 @@ export default (state = [], action) => {
         ...item,
       }));
     case 'ADD_DATASOURCE':
-      newState.push({
-        name: action.name,
-        connector: action.connector,
-      });
+      newState.push(DataSource.create({
+        name: action.name || 'DataSource',
+        connector: action.connector || 'memory',
+      }));
       return newState;
     default:
       return state;

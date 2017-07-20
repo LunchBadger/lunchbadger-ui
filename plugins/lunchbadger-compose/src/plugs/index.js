@@ -1,15 +1,9 @@
 import tools from './tools';
+import quadrants from './quadrants';
+import canvasElements from './canvasElements';
 
 export default {
   tools,
-  quadrants: {
-    0: {
-      name: 'Backend',
-      entities: ['dataSources'],
-    },
-    1: {
-      name: 'Private',
-      entities: ['models', 'microservices'],
-    },
-  },
+  quadrants,
+  canvasElements,
 };

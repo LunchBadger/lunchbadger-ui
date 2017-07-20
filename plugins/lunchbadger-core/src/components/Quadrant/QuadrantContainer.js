@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import classNames from 'classnames';
+import QuadrantNew from './QuadrantNew';
 
 class QuadrantContainer extends Component {
   static propTypes = {
@@ -106,28 +108,64 @@ class QuadrantContainer extends Component {
     });
   }
 
+  renderQuadrantsNew = () => {
+    const {appState, paper, scrollLeft, quadrants, components} = this.props;
+    const {quadrantWidths} = this.state;
+    return quadrants.map(({name, entities}, idx) => (
+      <QuadrantNew
+        key={idx}
+        title={name}
+        appState={appState}
+        paper={paper}
+        resizable={idx < quadrants.length - 1}
+        index={idx}
+        width={quadrantWidths[idx]}
+        scrollLeft={scrollLeft}
+        recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
+        entities={entities}
+        components={components}
+      />
+    ));
+  }
+
   render() {
-    const {editing, canvasHeight, className, id, dataSources, models} = this.props;
+    const {editing, canvasHeight, className, id} = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
-    console.log(22, dataSources, models);
     return (
       <div
         style={{minHeight: canvasHeight}}
         className={`${className} ${containerClass}`}
         id={id}
       >
-        {this.renderQuadrants()}
+        {this.renderQuadrantsNew()}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  editing: !!state.core.appState.currentEditElement,
-  dataSources: state.entities.dataSources,
-  models: state.entities.models,
-});
+const selector = createSelector(
+  state => !!state.core.appState.currentEditElement,
+  state => state.plugins.quadrants,
+  state => state.entities,
+  state => state.plugins.canvasElements,
+  (editing, config, entities, components) => {
+    const quadrants = [];
+    Object.keys(config).forEach((key) => {
+      const quadrant = {name: config[key].name, entities: []};
+      config[key].entities.forEach((type) => {
+        if (entities[type]) {
+          quadrant.entities = [
+            ...quadrant.entities,
+            ...entities[type],
+          ];
+        }
+      });
+      quadrants.push(quadrant);
+    });
+    return {editing, quadrants, components};
+  }
+);
 
-export default connect(mapStateToProps)(QuadrantContainer);
+export default connect(selector)(QuadrantContainer);

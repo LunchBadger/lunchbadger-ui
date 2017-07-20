@@ -19,8 +19,9 @@ LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 
 import {registerPlugin} from '../../../src/reducers';
 import reducers from './reducers';
+import plugs from './plugs';
 
-registerPlugin(reducers, {services: [ForecastService]});
+registerPlugin(reducers, plugs);
 
 // try to load all forecasts
 const AppState = LunchBadgerCore.stores.AppState;
@@ -32,6 +33,7 @@ waitForStores([AppState]).then(() => {
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
 
     if (apiForecastInformation) {
+      console.log(ForecastService);
       ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
         if (data.body) {
           const forecast = APIForecast.create(Object.assign({}, data.body, {
@@ -47,7 +49,7 @@ waitForStores([AppState]).then(() => {
         return console.warn(error);
       });
     }
-  });
+  }, 5000); // FIXME
 });
 
 // export

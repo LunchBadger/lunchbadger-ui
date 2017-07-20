@@ -40,6 +40,13 @@ export const registerPlugin = (reducers, plugs) => {
         ...plugs.services
       ];
     }
+    if (plugs.canvasElements) {
+      if (!plugins.canvasElements) plugins.canvasElements = {};
+      plugins.canvasElements = {
+        ...plugins.canvasElements,
+        ...plugs.canvasElements
+      };
+    }
   }
 };
 

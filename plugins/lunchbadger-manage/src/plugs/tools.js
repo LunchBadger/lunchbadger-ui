@@ -1,5 +1,5 @@
 // import {addDataSource, addModel} from '../reduxActions';
-import AddGateway from '../actions/CanvasElements/Gateway/add';
+import DeployGateway from '../actions/CanvasElements/Gateway/deploy';
 import AddPrivateEndpoint from '../actions/CanvasElements/PrivateEndpoint/add';
 import AddPublicEndpoint from '../actions/CanvasElements/PublicEndpoint/add';
 
@@ -27,7 +27,7 @@ export default {
     {
       icon: 'iconGateway',
       tooltip: 'Gateway',
-      action: () => AddGateway(),
+      action: () => DeployGateway(),
     },
   ],
 };

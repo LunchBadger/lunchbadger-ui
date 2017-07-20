@@ -2,22 +2,14 @@ import PrivateEndpoint from '../models/PrivateEndpoint';
 
 const {actionTypes} = LunchBadgerCore.utils;
 
-const initialState = {
-  loaded: false,
-  data: [],
-};
-
-export default (state = initialState, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case actionTypes.loadProjectSuccess:
-      return {
+      return action.payload.body.privateEndpoints.map((item, itemOrder) => PrivateEndpoint.create({
+        itemOrder,
         loaded: true,
-        data: action.payload.body.privateEndpoints.map((item, itemOrder) => PrivateEndpoint.create({
-          itemOrder,
-          loaded: true,
-          ...item,
-        })),
-      };
+        ...item,
+      }));
     default:
       return state;
   }

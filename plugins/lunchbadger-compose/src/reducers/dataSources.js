@@ -1,22 +1,14 @@
 import DataSource from '../models/DataSource';
 import {actionTypes} from '../reduxActions/actions';
 
-const initialState = {
-  loaded: false,
-  data: [],
-};
-
-export default (state = initialState, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case actionTypes.loadDataSourcesSuccess:
-      return {
+      return action.payload.body.map((item, itemOrder) => DataSource.create({
+        itemOrder,
         loaded: true,
-        data: action.payload.body.map((item, itemOrder) => DataSource.create({
-          itemOrder,
-          loaded: true,
-          ...item,
-        })),
-      };
+        ...item,
+      }));
     default:
       return state;
   }

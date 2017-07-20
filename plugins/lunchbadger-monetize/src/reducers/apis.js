@@ -2,22 +2,14 @@ import API from '../models/API';
 
 const {actionTypes} = LunchBadgerCore.utils;
 
-const initialState = {
-  loaded: false,
-  data: [],
-};
-
-export default (state = initialState, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case actionTypes.loadProjectSuccess:
-      return {
+      return action.payload.body.apis.map((item, itemOrder) => API.create({
+        itemOrder,
         loaded: true,
-        data: action.payload.body.apis.map((item, itemOrder) => API.create({
-          itemOrder,
-          loaded: true,
-          ...item,
-        })),
-      };
+        ...item,
+      }));
     default:
       return state;
   }

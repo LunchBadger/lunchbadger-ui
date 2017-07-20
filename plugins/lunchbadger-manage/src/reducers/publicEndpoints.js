@@ -2,22 +2,14 @@ import PublicEndpoint from '../models/PublicEndpoint';
 
 const {actionTypes} = LunchBadgerCore.utils;
 
-const initialState = {
-  loaded: false,
-  data: [],
-};
-
-export default (state = initialState, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case actionTypes.loadProjectSuccess:
-      return {
+      return action.payload.body.publicEndpoints.map((item, itemOrder) => PublicEndpoint.create({
+        itemOrder,
         loaded: true,
-        data: action.payload.body.publicEndpoints.map((item, itemOrder) => PublicEndpoint.create({
-          itemOrder,
-          loaded: true,
-          ...item,
-        })),
-      };
+        ...item,
+      }));
     default:
       return state;
   }

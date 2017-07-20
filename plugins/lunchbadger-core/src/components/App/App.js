@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
@@ -42,7 +43,6 @@ class App extends Component {
     this.state = {
       pluginsStore: Pluggable,
       appState: AppState,
-      loaded: false
     };
 
     this.reloadPlugins = () => {
@@ -68,10 +68,8 @@ class App extends Component {
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
     // let prm = loadFromServer().then(() => {
-    //   this.setState({loaded: true});
     // });
     // handleFatals(prm).catch(() => {
-    //   this.setState({loaded: true});
     // });
   }
 
@@ -89,30 +87,24 @@ class App extends Component {
       currentlyOpenedPanel,
       currentElement,
     };
-    this.setState({loaded: false});
     let prm = saveToServer(coreStates).then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
       });
-      this.setState({loaded: true});
     });
     handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
     });
   }
 
   clearServer = () => {
-    this.setState({loaded: false});
     let prm = clearServer().then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data removed from server',
         type: 'success'
       });
-      this.setState({loaded: true});
     });
     handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
     });
   }
 
@@ -163,6 +155,7 @@ class App extends Component {
       currentlyOpenedPanel,
       toggleHighlight,
       currentEditElement,
+      loading,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -173,7 +166,7 @@ class App extends Component {
       <div>
         <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
         <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
-          <Spinner loading={!this.state.loaded} />
+          <Spinner loading={loading} />
           {this.renderHeader()}
           <Aside
             plugins={this.state.pluginsStore}
@@ -220,17 +213,46 @@ App.propTypes = {
   canvasClickEnabled: PropTypes.bool,
 }
 
-const mapStateToProps = state => ({
-  systemDefcon1Visible: state.ui.systemDefcon1.visible,
-  systemDefcon1Errors: state.ui.systemDefcon1.errors,
-  multiEnvIndex: state.ui.multiEnvironments.selected,
-  multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
-  multiEnvAmount: state.ui.multiEnvironments.environments.length,
-  canvasClickEnabled: !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
-  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
-  currentElement: state.core.appState.currentElement,
-  currentEditElement: state.core.appState.currentEditElement,
-});
+const isLoadingEntities = (quadrants, entities) => {
+  // console.log(222, quadrants, entities);
+  return false;
+}
+
+const selector = createSelector(
+  state => state.ui.systemDefcon1.visible,
+  state => state.ui.systemDefcon1.errors,
+  state => state.ui.multiEnvironments.selected,
+  state => state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
+  state => state.ui.multiEnvironments.environments.length,
+  state => !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
+  state => state.core.appState.currentlyOpenedPanel,
+  state => state.core.appState.currentElement,
+  state => state.core.appState.currentEditElement,
+  state => state.core.loadingProject > 0,
+  (
+    systemDefcon1Visible,
+    systemDefcon1Errors,
+    multiEnvIndex,
+    multiEnvDelta,
+    multiEnvAmount,
+    canvasClickEnabled,
+    currentlyOpenedPanel,
+    currentElement,
+    currentEditElement,
+    loading,
+  ) => ({
+    systemDefcon1Visible,
+    systemDefcon1Errors,
+    multiEnvIndex,
+    multiEnvDelta,
+    multiEnvAmount,
+    canvasClickEnabled,
+    currentlyOpenedPanel,
+    currentElement,
+    currentEditElement,
+    loading,
+  }),
+);
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
@@ -238,4 +260,4 @@ const mapDispatchToProps = dispatch => ({
   toggleHighlight: element => dispatch(toggleHighlight(element)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(selector, mapDispatchToProps)(App);

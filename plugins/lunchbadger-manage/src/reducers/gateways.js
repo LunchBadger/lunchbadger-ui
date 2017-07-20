@@ -1,15 +1,25 @@
 import Gateway from '../models/Gateway';
 
-export default (state = [], action) => {
-  // const newState = [...state];
+const {actionTypes} = LunchBadgerCore.utils;
+
+const initialState = {
+  loaded: false,
+  data: [],
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'APP_STATE/INITIALIZE':
-      return action.data.project.gateways.map((item, itemOrder) => Gateway.create({
-        itemOrder,
+    case actionTypes.loadProjectSuccess:
+      return {
         loaded: true,
-        ready: true,
-        ...item,
-      }));
+        data: action.payload.body.gateways.map((item, itemOrder) => Gateway.create({
+          itemOrder,
+          loaded: true,
+          ready: true,
+          ...item,
+          pipelines: [], // FIXME
+        })),
+      };
     default:
       return state;
   }

@@ -1,15 +1,24 @@
 import Portal from '../models/Portal';
 
-export default (state = [], action) => {
-  // const newState = [...state];
+const {actionTypes} = LunchBadgerCore.utils;
+
+const initialState = {
+  loaded: false,
+  data: [],
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'APP_STATE/INITIALIZE':
-      return action.data.project.portals.map((item, itemOrder) => Portal.create({
-        itemOrder,
+    case actionTypes.loadProjectSuccess:
+      return {
         loaded: true,
-        ready: true,
-        ...item,
-      }));
+        data: action.payload.body.portals.map((item, itemOrder) => Portal.create({
+          itemOrder,
+          loaded: true,
+          ready: true,
+          ...item,
+        })),
+      };
     default:
       return state;
   }

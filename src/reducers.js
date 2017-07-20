@@ -47,6 +47,13 @@ export const registerPlugin = (reducers, plugs) => {
         ...plugs.canvasElements
       };
     }
+    if (plugs.onAppLoad) {
+      if (!plugins.onAppLoad) plugins.onAppLoad = [];
+      plugins.onAppLoad = [
+        ...plugins.onAppLoad,
+        ...plugs.onAppLoad
+      ];
+    }
   }
 };
 

@@ -1,19 +1,24 @@
+import {actionTypes} from '../reduxActions/actions';
+
 const Model = LunchBadgerManage.models.Model;
 
-export default (state = [], action) => {
-  const newState = [...state];
+const initialState = {
+  loaded: false,
+  data: [],
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'APP_STATE/INITIALIZE':
-      return action.data.models.map((item, itemOrder) => Model.create({
-        itemOrder,
+    case actionTypes.loadModelsSuccess:
+      return {
         loaded: true,
-        ...item,
-      }));
-    case 'ADD_MODEL':
-      newState.push({
-        name: action.name,
-      });
-      return newState;
+        data: action.payload.body.map((item, itemOrder) => Model.create({
+          itemOrder,
+          loaded: true,
+          ...item,
+          properties: [], // FIXME
+        })),
+      };
     default:
       return state;
   }

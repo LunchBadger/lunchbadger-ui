@@ -1,15 +1,24 @@
 import Microservice from '../models/Microservice';
 
-export default (state = [], action) => {
-  // const newState = [...state];
+const {actionTypes} = LunchBadgerCore.utils;
+
+const initialState = {
+  loaded: false,
+  data: [],
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'APP_STATE/INITIALIZE':
-      return action.data.project.microServices.map((item, itemOrder) => Microservice.create({
-        itemOrder,
+    case actionTypes.loadProjectSuccess:
+      return {
         loaded: true,
-        ready: true,
-        ...item,
-      }));
+        data: action.payload.body.microServices.map((item, itemOrder) => Microservice.create({
+          itemOrder,
+          loaded: true,
+          ready: true,
+          ...item,
+        })),
+      };
     default:
       return state;
   }

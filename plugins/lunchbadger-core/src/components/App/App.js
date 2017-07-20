@@ -16,7 +16,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleHighlight} from '../../reduxActions';
+import {toggleHighlight, project} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
@@ -63,15 +63,16 @@ class App extends Component {
   }
 
   componentWillMount() {
+    this.props.dispatch(project.load(32));
     LunchBadgerCore.dispatchRedux = this.props.dispatch;
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);
-    let prm = loadFromServer().then(() => {
-      this.setState({loaded: true});
-    });
-    handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
-    });
+    // let prm = loadFromServer().then(() => {
+    //   this.setState({loaded: true});
+    // });
+    // handleFatals(prm).catch(() => {
+    //   this.setState({loaded: true});
+    // });
   }
 
   componentWillUnmount() {

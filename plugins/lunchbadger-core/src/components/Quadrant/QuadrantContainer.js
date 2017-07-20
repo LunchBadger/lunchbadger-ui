@@ -158,7 +158,7 @@ const selector = createSelector(
         if (entities[type]) {
           quadrant.entities = [
             ...quadrant.entities,
-            ...entities[type],
+            ...entities[type].data,
           ];
         }
       });

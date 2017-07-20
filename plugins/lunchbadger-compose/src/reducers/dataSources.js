@@ -1,20 +1,22 @@
 import DataSource from '../models/DataSource';
+import {actionTypes} from '../reduxActions/actions';
 
-export default (state = [], action) => {
-  const newState = [...state];
+const initialState = {
+  loaded: false,
+  data: [],
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'APP_STATE/INITIALIZE':
-      return action.data.dataSources.map((item, itemOrder) => DataSource.create({
-        itemOrder,
+    case actionTypes.loadDataSourcesSuccess:
+      return {
         loaded: true,
-        ...item,
-      }));
-    case 'ADD_DATASOURCE':
-      newState.push(DataSource.create({
-        name: action.name || 'DataSource',
-        connector: action.connector || 'memory',
-      }));
-      return newState;
+        data: action.payload.body.map((item, itemOrder) => DataSource.create({
+          itemOrder,
+          loaded: true,
+          ...item,
+        })),
+      };
     default:
       return state;
   }

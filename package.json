@@ -118,6 +118,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "react-tooltip": "^2.0.3",
     "redux": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz",
+    "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
     "request": "2.65.0",
     "reselect": "^3.0.1",

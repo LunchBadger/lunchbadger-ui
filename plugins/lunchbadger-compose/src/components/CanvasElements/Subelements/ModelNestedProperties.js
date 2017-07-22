@@ -12,7 +12,7 @@ class ModelNestedProperties extends Component {
   }
 
   onAddProperty = (parentId) => () => {
-    this.nestedDOM[parentId].toggleCollapse(false);
+    this.nestedDOM[parentId] && this.nestedDOM[parentId].toggleCollapse(false);
     this.props.onAddProperty(parentId)();
   }
 

@@ -104,6 +104,7 @@ export default class Pipeline extends Component {
   }
 
   renderPorts() {
+    return null;
     let pipelinesOffsetTop = 102;
     let stopLoop = false;
     Object.keys(this.props.pipelinesOpened).forEach((key) => {

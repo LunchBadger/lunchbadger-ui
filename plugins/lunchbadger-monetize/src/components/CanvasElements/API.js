@@ -73,8 +73,8 @@ class API extends Component {
         id={api.id}
         entity={api}
         paper={this.props.paper}
-        left={api.left}
-        top={api.top}
+        left={api.left || 0}
+        top={api.top || 0}
         handleEndDrag={(item) => this._handleEndDrag(item)}
         hideSourceOnDrag={true}
         index={index}

@@ -5,6 +5,7 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
     'deleteDataSource',
     'loadModels',
     'loadModelConfigs',
+    // 'loadMicroservices',
   ],
   [
     'addDataSource',

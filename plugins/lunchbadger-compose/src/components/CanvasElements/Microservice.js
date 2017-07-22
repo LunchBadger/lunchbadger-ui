@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-// import {connect} from 'react-redux';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
@@ -88,30 +89,21 @@ class Microservice extends Component {
   }
 
   renderModels() {
-    let index = -1;
-    return this.props.entity.models.map((modelId) => {
-      const entity = Private.findEntity(modelId);
-      if (!entity) {
-        return null;
-      }
-      index += 1;
-      return (
-        <Model
-          key={entity.id}
-          {...this.props}
-          parent={this.props.entity}
-          key={entity.id}
-          id={entity.id}
-          entity={entity}
-          paper={this.props.paper}
-          left={entity.left}
-          top={entity.top}
-          handleEndDrag={(item) => this.handleEndDrag(item)}
-          hideSourceOnDrag={true}
-          index={index}
-        />
-      );
-    });
+    return this.props.models.map((entity, idx) => (
+      <Model
+        key={idx}
+        {...this.props}
+        parent={this.props.entity}
+        id={entity.data.id}
+        entity={entity}
+        paper={this.props.paper}
+        left={entity.metadata.left}
+        top={entity.metadata.top}
+        handleEndDrag={(item) => this.handleEndDrag(item)}
+        hideSourceOnDrag={true}
+        index={idx}
+      />
+    ));
   }
 
   handleEndDrag(item) {
@@ -207,8 +199,10 @@ class Microservice extends Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-// });
+const connector = createSelector(
+  (_, props) => props.entity.data.models,
+  state => state.entities.models,
+  (ids, models) => ({models: models.filter(({data: {lunchbadgerId}}) => ids.includes(lunchbadgerId))}),
+);
 
-// export default connect(null, mapDispatchToProps)(CanvasElement(Microservice));
-export default CanvasElement(Microservice);
+export default connect(connector)(CanvasElement(Microservice));

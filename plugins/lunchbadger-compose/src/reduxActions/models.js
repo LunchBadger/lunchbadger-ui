@@ -7,6 +7,7 @@ const loadModels = () => async (dispatch) => {
     const data = await ModelService.load();
     dispatch(actions.loadModelsSuccess(data));
   } catch (err) {
+    console.log('ERROR loadModelsFailure', err);
     dispatch(actions.loadModelsFailure(err));
   }
 };

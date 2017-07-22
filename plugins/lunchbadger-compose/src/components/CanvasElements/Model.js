@@ -23,40 +23,47 @@ const {defaultEntityNames} = LunchBadgerCore.utils;
 class Model extends Component {
   constructor(props) {
     super(props);
-    const stateFromStores = (newProps) => {
-      const data = {
-        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
-      };
-      if (!newProps.entity.privateModelProperties) {
-         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
-      }
-      return data;
-    };
     this.state = {
       ...this.initState(props),
-      ...stateFromStores(props),
-    };
-    this.onStoreUpdate = (props = this.props) => {
-      this.setState({...stateFromStores(props)});
     };
   }
 
-  componentDidMount() {
-    PrivateStore.addChangeListener(this.onStoreUpdate);
-  }
+  // constructor(props) {
+  //   super(props);
+  //   const stateFromStores = (newProps) => {
+  //     const data = {
+  //       properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
+  //     };
+  //     if (!newProps.entity.privateModelProperties) {
+  //        addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+  //     }
+  //     return data;
+  //   };
+  //   this.state = {
+  //     ...this.initState(props),
+  //     ...stateFromStores(props),
+  //   };
+  //   this.onStoreUpdate = (props = this.props) => {
+  //     this.setState({...stateFromStores(props)});
+  //   };
+  // }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.entity.id !== this.props.entity.id) {
-      this.onStoreUpdate(nextProps);
-    }
-    if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
-      this.setState(this.initState());
-    }
-  }
-
-  componentWillUnmount() {
-    PrivateStore.removeChangeListener(this.onStoreUpdate);
-  }
+  // componentDidMount() {
+  //   PrivateStore.addChangeListener(this.onStoreUpdate);
+  // }
+  //
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.entity.id !== this.props.entity.id) {
+  //     this.onStoreUpdate(nextProps);
+  //   }
+  //   if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
+  //     this.setState(this.initState());
+  //   }
+  // }
+  //
+  // componentWillUnmount() {
+  //   PrivateStore.removeChangeListener(this.onStoreUpdate);
+  // }
 
   initState = (props = this.props) => {
     const {contextPath, name} = props.entity;
@@ -68,8 +75,8 @@ class Model extends Component {
 
   discardChanges() {
     // revert properties
-    this.onStoreUpdate();
-    this.setState(this.initState());
+    // this.onStoreUpdate();
+    // this.setState(this.initState());
   }
 
   update(model) {
@@ -184,19 +191,21 @@ class Model extends Component {
   }
 
   renderPorts = () => {
-    return this.props.entity.ports.map((port) => (
-      <Port
-        key={`port-${port.portType}-${port.id}`}
-        paper={this.props.paper}
-        way={port.portType}
-        elementId={this.props.entity.id}
-        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-        scope={port.portGroup}
-      />
-    ));
+    return null; // FIXME
+    // return this.props.entity.ports.map((port) => (
+    //   <Port
+    //     key={`port-${port.portType}-${port.id}`}
+    //     paper={this.props.paper}
+    //     way={port.portType}
+    //     elementId={this.props.entity.id}
+    //     className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+    //     scope={port.portGroup}
+    //   />
+    // ));
   }
 
   renderProperties = () => {
+    return null;
     return (
       <ModelNestedProperties
         title="Properties"
@@ -237,7 +246,7 @@ class Model extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          {this.state.properties.length > 0 && (
+          {this.props.entity.properties.length > 0 && (
             <div ref="properties">
               {this.renderProperties()}
             </div>

@@ -49,6 +49,7 @@ class PrivateEndpoint extends Component {
   removeEntity = () => removeEntity(this.props.entity);
 
   renderPorts() {
+    return null;
     return this.props.entity.ports.map(port => (
       <Port
         key={`port-${port.portType}-${port.id}`}

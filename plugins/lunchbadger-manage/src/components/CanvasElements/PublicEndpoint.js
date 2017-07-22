@@ -61,6 +61,7 @@ class PublicEndpoint extends Component {
   onPathChange = event => this.setState({path: event.target.value});
 
   renderPorts() {
+    return null;
     return this.props.entity.ports.map(port => (
       <Port
         key={`port-${port.portType}-${port.id}`}

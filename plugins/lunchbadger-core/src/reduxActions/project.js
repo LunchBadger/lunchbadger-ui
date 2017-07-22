@@ -15,6 +15,7 @@ export const loadProject = () => async (dispatch) => {
     const data = await ProjectService.load();
     dispatch(actions.loadProjectSuccess(data));
   } catch (err) {
+    console.log('ERROR loadProjectFailure', err);
     dispatch(actions.loadProjectFailure(err));
   }
 }

@@ -52,20 +52,21 @@ class Model extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      const key = `port-${port.portType}-${port.id}`;
-      return (
-        <Port key={key}
-              paper={this.props.paper}
-              way={port.portType}
-              middle={true}
-              elementId={`${this.props.entity.id}`}
-              ref={`port-${port.portType}`}
-              scope={this.props.expanded ? port.portGroup : key}
-              offsetTop={85 + this.props.index * 24}
-        />
-      );
-    });
+    return null;
+    // return this.props.entity.ports.map((port) => {
+    //   const key = `port-${port.portType}-${port.id}`;
+    //   return (
+    //     <Port key={key}
+    //           paper={this.props.paper}
+    //           way={port.portType}
+    //           middle={true}
+    //           elementId={`${this.props.entity.id}`}
+    //           ref={`port-${port.portType}`}
+    //           scope={this.props.expanded ? port.portGroup : key}
+    //           offsetTop={85 + this.props.index * 24}
+    //     />
+    //   );
+    // });
   }
 
   handleClick = () => {
@@ -77,7 +78,7 @@ class Model extends Component {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
     const elementClass = classNames({
       'model': true,
-      'model--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
+      'model--selected': _.find(currentlySelectedSubelements, {data: {id: this.props.id}})
     });
     return connectDragSource(
       <div className={elementClass} onClick={this.handleClick}>
@@ -86,7 +87,7 @@ class Model extends Component {
             <i className="fa fa-plug"/>
           </div>
           <div className="model__name">
-            {this.props.entity.name}
+            {this.props.entity.data.name}
           </div>
           {this.renderPorts()}
         </div>

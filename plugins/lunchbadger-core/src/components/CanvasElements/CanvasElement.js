@@ -115,7 +115,7 @@ export default (ComposedComponent) => {
       this.multiEnvIndex = 0;
       this.checkHighlightAndEditableState = (props) => {
         const currentElement = props.currentElement;
-        if (currentElement && currentElement.id === this.props.entity.id) {
+        if (currentElement && currentElement.data.id === this.props.entity.data.id) {
           if (!this.state.highlighted) {
             this.setState({highlighted: true});
           }

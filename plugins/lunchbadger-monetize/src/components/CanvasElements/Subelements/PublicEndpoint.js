@@ -53,6 +53,7 @@ class PublicEndpoint extends Component {
   }
 
   renderPorts() {
+    return null;
     return this.props.entity.ports.map((port) => {
       const key = `port-${port.portType}-${port.id}`;
       return (

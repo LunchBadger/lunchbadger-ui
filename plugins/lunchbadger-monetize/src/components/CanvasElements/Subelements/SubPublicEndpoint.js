@@ -18,6 +18,7 @@ export default class PublicEndpoint extends Component {
   }
 
   renderPorts() {
+    return null;
     let APIsOffsetTop = 0;
     let stopLoop = false;
     Object.keys(this.props.APIsOpened).forEach((key, index) => {

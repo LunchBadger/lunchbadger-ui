@@ -63,16 +63,16 @@ class Portal extends Component {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
     }
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-      });
-      if (hasConnection) {
-        this.setState({hasConnection: true});
-      } else {
-        this.setState({hasConnection: false});
-      }
-    }
+    // if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+    //   const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
+    //     return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+    //   });
+    //   if (hasConnection) {
+    //     this.setState({hasConnection: true});
+    //   } else {
+    //     this.setState({hasConnection: false});
+    //   }
+    // }
     const APIsOpened = {...this.state.APIsOpened};
     let isChange = false;
     nextProps.entity.apis.forEach((item) => {
@@ -143,8 +143,8 @@ class Portal extends Component {
           id={endpoint.id}
           entity={endpoint}
           paper={this.props.paper}
-          left={endpoint.left}
-          top={endpoint.top}
+          left={endpoint.left || 0}
+          top={endpoint.top || 0}
           handleEndDrag={(item) => this._handleEndDrag(item)}
           hideSourceOnDrag={true}
           onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}

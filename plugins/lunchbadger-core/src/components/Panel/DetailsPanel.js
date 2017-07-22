@@ -14,7 +14,7 @@ class DetailsPanel extends Component {
     };
 
     this.appStateUpdate = () => {
-      this.setState({element: AppState.getStateKey('currentElement')});
+      this.setState({element: this.getSelectedElement()});
     }
   }
 
@@ -22,12 +22,20 @@ class DetailsPanel extends Component {
     if (nextProps.opened && !this.props.opened) {
       AppState.addChangeListener(this.appStateUpdate);
 
-      this.setState({element: AppState.getStateKey('currentElement')});
+      this.setState({element: this.getSelectedElement()});
     }
 
     if (!nextProps.opened && this.props.opened) {
       AppState.removeChangeListener(this.appStateUpdate);
     }
+  }
+
+  getSelectedElement = () => {
+    const subelements = AppState.getStateKey('currentlySelectedSubelements');
+    if (subelements && subelements.length === 1) {
+      return subelements[0];
+    }
+    return AppState.getStateKey('currentElement');
   }
 
   renderDetails() {

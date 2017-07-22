@@ -159,23 +159,20 @@ class ModelDetails extends Component {
     });
   }
 
-  _focusLastDetailsRowInput() {
-    // FIXME
-    // const input = Array.from(this.refs.properties.querySelectorAll('input.details-key')).slice(-1)[0];
-    //
-    // input && input.focus();
-  }
-
   onAddProperty = (parentId) => () => {
-    this.onAddItem('properties', ModelProperty.create({
+    const property = ModelProperty.create({
       parentId,
       default_: '',
       type: 'string',
       description: '',
       required: false,
       index: false,
-    }));
-    setTimeout(() => this._focusLastDetailsRowInput());
+    });
+    this.onAddItem('properties', property);
+    setTimeout(() => {
+      const input = Array.from(document.querySelectorAll(`.details-panel__input.details-key.property-${property.id} input`)).slice(-1)[0];
+      input && input.focus();
+    });
   }
 
   onRemoveProperty = (property) => {

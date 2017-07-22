@@ -10,6 +10,7 @@ const initialModel = {
     type: 'PublicEndpoint',
     loaded: true,
     ready: true,
+    editable: false,
   },
 }
 

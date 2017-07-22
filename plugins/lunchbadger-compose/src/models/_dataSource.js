@@ -18,6 +18,7 @@ const initialModel = {
     loaded: true,
     ready: true,
     ports: [],
+    editable: false,
   },
 }
 

@@ -9,7 +9,7 @@ export default (state = [], action) => {
     case actionTypes.addDataSource:
       return [
         ...state,
-        DataSource.create(action.payload, {loaded: false}),
+        DataSource.create(action.payload, {loaded: false, editable: true}),
       ];
     case actionTypes.updateDataSourceRequest:
       return [

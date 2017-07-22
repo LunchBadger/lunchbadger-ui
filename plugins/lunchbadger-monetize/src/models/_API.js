@@ -10,6 +10,7 @@ const initialModel = {
     type: 'API',
     loaded: true,
     ready: true,
+    editable: false,
     top: 0,
     left: 0,
   },

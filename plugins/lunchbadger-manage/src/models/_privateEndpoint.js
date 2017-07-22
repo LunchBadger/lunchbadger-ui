@@ -10,6 +10,7 @@ const initialModel = {
     type: 'PrivateEndpoint',
     loaded: true,
     ready: true,
+    editable: false,
   },
 }
 

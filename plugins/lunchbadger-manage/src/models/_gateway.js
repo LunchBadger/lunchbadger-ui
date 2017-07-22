@@ -11,6 +11,7 @@ const initialModel = {
     type: 'Gateway',
     loaded: true,
     ready: true,
+    editable: false,
   },
 }
 

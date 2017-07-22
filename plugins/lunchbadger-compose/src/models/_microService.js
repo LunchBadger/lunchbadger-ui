@@ -10,6 +10,7 @@ const initialModel = {
     type: 'Microservice',
     loaded: true,
     ready: true,
+    editable: false,
   },
 }
 

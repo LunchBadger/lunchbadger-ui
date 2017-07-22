@@ -413,22 +413,22 @@ export default (ComposedComponent) => {
 
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
-      const {ready} = this.props;
+      const {ready, entity} = this.props;
+      const {metadata} = entity;
       const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
       const {validations} = this.state;
       const elementClass = classNames({
         'canvas-element': true,
-        editable: this.state.editable && ready,
+        editable: metadata.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        highlighted: this.state.highlighted || this.state.editable,
+        highlighted: this.state.highlighted || metadata.editable,
         dragging: isDragging,
         wip: !ready,
         invalid: !validations.isValid
       });
       const opacity = isDragging ? 0.2 : 1;
       const entityDevelopment = {...this.state.modelEnv_0};
-      const entity = this.props.entity;
       const mask = ['pipelines'];
       // FIXME - refactor below for multi env, because it cannot overwrite entity properties
       // if (this.state[`modelEnv_${multiEnvIndex}`]) {
@@ -470,10 +470,10 @@ export default (ComposedComponent) => {
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.metadata.type}
               connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.data.connector : undefined}
-              editable={this.state.editable}
+              editable={metadata.editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}
-              highlighted={this.state.highlighted || this.state.editable}
+              highlighted={this.state.highlighted || metadata.editable}
               dragging={isDragging}
               wip={!ready}
               invalid={validations.isValid}

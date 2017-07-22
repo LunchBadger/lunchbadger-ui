@@ -11,6 +11,7 @@ const initialModel = {
     type: 'Portal',
     loaded: true,
     ready: true,
+    editable: false,
   },
 }
 

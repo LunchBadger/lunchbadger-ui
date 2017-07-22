@@ -1,8 +1,8 @@
-import {registerPlugin as aaa} from '../../../src/reducers';
-// import reducers from './reducers';
+import {registerPlugin as registerPluginNew} from '../../../src/reducers';
+import reducers from './reducers/reducers';
 import plugs from './plugs';
 
-aaa({}, plugs);
+registerPluginNew({}, plugs, reducers);
 
 /**
  * This file is entry point for each plugin

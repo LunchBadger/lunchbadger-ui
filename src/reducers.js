@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import core from '../plugins/lunchbadger-core/src/reducers';
 import ui from '../plugins/lunchbadger-ui/src/reducers';
 
+let reducers = {};
 let entities = {};
 const plugins = {};
 
@@ -40,11 +41,15 @@ const registerObjects = (plugins, plugs) => {
   });
 }
 
-export const registerPlugin = (reducers, plugs) => {
+export const registerPlugin = (_entities, plugs, _reducers = {}) => {
   entities = {
     ...entities,
-    ...reducers
+    ..._entities
   };
+  reducers = {
+    ...reducers,
+    ..._reducers
+  }
   if (plugs) {
     if (plugs.tools) {
       if (!plugins.tools) plugins.tools = {};
@@ -76,6 +81,7 @@ export const registerPlugin = (reducers, plugs) => {
 export default () => combineReducers({
   core,
   ui,
+  ...reducers,
   entities: combineReducers(entities),
   plugins: (state = plugins) => state
 });

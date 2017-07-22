@@ -162,6 +162,7 @@ const selector = createSelector(
           ];
         }
       });
+      quadrant.entities = quadrant.entities.sort((a, b) => a.data.itemOrder > b.data.itemOrder);
       quadrants.push(quadrant);
     });
     return {editing, quadrants, components};

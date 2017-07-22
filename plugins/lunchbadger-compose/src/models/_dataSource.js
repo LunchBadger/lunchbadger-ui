@@ -13,8 +13,8 @@ const initialModel = {
   },
   metadata: {
     type: 'DataSource',
-    loaded: false,
-    ready: false,
+    loaded: true,
+    ready: true,
   },
 }
 

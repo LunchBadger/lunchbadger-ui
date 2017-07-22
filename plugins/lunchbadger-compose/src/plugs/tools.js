@@ -1,4 +1,4 @@
-// import {addDataSource, addModel} from '../reduxActions';
+import {addDataSource, addModel} from '../reduxActions/dataSources';
 // import AddDataSource from '../actions/CanvasElements/DataSource/add';
 // import AddModel from '../actions/CanvasElements/Model/add';
 // import AddMicroservice from '../actions/CanvasElements/Microservice/add';
@@ -28,7 +28,7 @@ const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(la
 
 const dataSourceAction = label => dispatch => {
   console.log('new ds', label, getDataSourceConnector(label));
-  // dispatch(addDataSource(label, getDataSourceConnector(label)));
+  dispatch(addDataSource(label, getDataSourceConnector(label)));
   // AddDataSource(label, getDataSourceConnector(label));
 };
 

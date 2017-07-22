@@ -5,6 +5,41 @@ import ui from '../plugins/lunchbadger-ui/src/reducers';
 let entities = {};
 const plugins = {};
 
+const arraysToRegister = [
+  'services',
+  'onAppLoad'
+];
+
+const objectsToRegister = [
+  'canvasElements',
+  'onUpdate',
+  'onDelete'
+];
+
+const registerArrays = (plugins, plugs) => {
+  arraysToRegister.forEach((key) => {
+    if (plugs[key]) {
+      if (!plugins[key]) plugins[key] = [];
+      plugins[key] = [
+        ...plugins[key],
+        ...plugs[key]
+      ];
+    }
+  });
+}
+
+const registerObjects = (plugins, plugs) => {
+  objectsToRegister.forEach((key) => {
+    if (plugs[key]) {
+      if (!plugins[key]) plugins[key] = {};
+      plugins[key] = {
+        ...plugins[key],
+        ...plugs[key]
+      };
+    }
+  });
+}
+
 export const registerPlugin = (reducers, plugs) => {
   entities = {
     ...entities,
@@ -33,27 +68,8 @@ export const registerPlugin = (reducers, plugs) => {
         ];
       });
     }
-    if (plugs.services) {
-      if (!plugins.services) plugins.services = [];
-      plugins.services = [
-        ...plugins.services,
-        ...plugs.services
-      ];
-    }
-    if (plugs.canvasElements) {
-      if (!plugins.canvasElements) plugins.canvasElements = {};
-      plugins.canvasElements = {
-        ...plugins.canvasElements,
-        ...plugs.canvasElements
-      };
-    }
-    if (plugs.onAppLoad) {
-      if (!plugins.onAppLoad) plugins.onAppLoad = [];
-      plugins.onAppLoad = [
-        ...plugins.onAppLoad,
-        ...plugs.onAppLoad
-      ];
-    }
+    registerArrays(plugins, plugs);
+    registerObjects(plugins, plugs);
   }
 };
 

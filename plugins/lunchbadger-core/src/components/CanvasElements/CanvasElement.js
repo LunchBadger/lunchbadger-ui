@@ -95,6 +95,7 @@ export default (ComposedComponent) => {
       multiEnvIndex: PropTypes.number,
       multiEnvDelta: PropTypes.bool,
       multiEnvAmount: PropTypes.number,
+      store: PropTypes.object,
     };
 
     constructor(props) {
@@ -189,13 +190,13 @@ export default (ComposedComponent) => {
 
     handleChangeListeners = (action) => {
       // FIXME - replace with plugins redux
-      LunchBadgerCompose.stores.Backend[action](this.refresh);
-      LunchBadgerCore.stores.Pluggable[action](this.refresh);
-      LunchBadgerCore.stores.Connection[action](this.refresh);
-      LunchBadgerManage.stores.Public[action](this.refresh);
-      LunchBadgerManage.stores.Gateway[action](this.refresh);
-      LunchBadgerManage.stores.Private[action](this.refresh);
-      LunchBadgerOptimize.stores.Forecast[action](this.refresh);
+      // LunchBadgerCompose.stores.Backend[action](this.refresh);
+      // LunchBadgerCore.stores.Pluggable[action](this.refresh);
+      // LunchBadgerCore.stores.Connection[action](this.refresh);
+      // LunchBadgerManage.stores.Public[action](this.refresh);
+      // LunchBadgerManage.stores.Gateway[action](this.refresh);
+      // LunchBadgerManage.stores.Private[action](this.refresh);
+      // LunchBadgerOptimize.stores.Forecast[action](this.refresh);
     }
 
     refresh = () => {
@@ -225,7 +226,10 @@ export default (ComposedComponent) => {
       const element = this.element.decoratedComponentInstance || this.element;
       let updated;
       if (typeof element.update === 'function') {
-        updated = element.update(model);
+        // updated = element.update(model);
+        const {store: {dispatch, getState}} = this.context;
+        const {entity} = this.props;
+        dispatch(getState().plugins.onUpdate[entity.metadata.type](entity, model));
         this.setState({
           modelBeforeEdit: model,
           [`modelEnv_${multiEnvIndex}`]: model,
@@ -328,11 +332,14 @@ export default (ComposedComponent) => {
     }
 
     _handleRemove = () => {
-      const {removeEntity, entity} = this.props;
-      if (this.element.removeEntity) {
-        this.element.removeEntity();
-      }
-      removeEntity(entity.data.id);
+      // const {removeEntity, entity} = this.props;
+      // if (this.element.removeEntity) {
+      //   this.element.removeEntity();
+      // }
+      // removeEntity(entity.data.id);
+      const {entity} = this.props;
+      const {store: {dispatch, getState}} = this.context;
+      dispatch(getState().plugins.onDelete[entity.metadata.type](entity));
     }
 
     _handleEdit = (evt) => {

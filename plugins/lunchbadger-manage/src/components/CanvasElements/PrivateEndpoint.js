@@ -63,12 +63,12 @@ class PrivateEndpoint extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {entity: {data: {url}}, validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'url',
         title: 'URL',
-        value: entity.url,
+        value: url,
         invalid: data.url,
         onBlur: this.handleFieldChange('url'),
       },

@@ -33,12 +33,12 @@ class Gateway extends Component {
     this.state = {
       hasInConnection: null,
       hasOutConnection: null,
-      dnsPrefix: props.entity.dnsPrefix,
+      dnsPrefix: props.entity.data.dnsPrefix,
       pipelinesOpened: {},
       showRemovingModal: false,
       pipelineToRemove: null,
     };
-    props.entity.pipelines.forEach((item) => {
+    props.entity.data.pipelines.forEach((item) => {
       this.state.pipelinesOpened[item.id] = false;
     });
   }
@@ -55,7 +55,7 @@ class Gateway extends Component {
       this._onDeploy();
     }
     if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-      const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
+      const hasInConnection = nextProps.entity.data.pipelines.some((pipeline) => {
         return Connection.getConnectionsForTarget(pipeline.id).length;
       });
       if (hasInConnection) {
@@ -65,7 +65,7 @@ class Gateway extends Component {
       }
     }
     if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-      const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
+      const hasOutConnection = nextProps.entity.data.pipelines.some((pipeline) => {
         return Connection.getConnectionsForSource(pipeline.id).length;
       });
       if (hasOutConnection) {
@@ -75,11 +75,11 @@ class Gateway extends Component {
       }
     }
     if (!this.props.parent.state.editable) {
-      this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
+      this.setState({dnsPrefix: nextProps.entity.data.dnsPrefix});
     }
     const pipelinesOpened = {...this.state.pipelinesOpened};
     let pipelinesAdded = false;
-    nextProps.entity.pipelines.forEach(({id}) => {
+    nextProps.entity.data.pipelines.forEach(({id}) => {
       if (typeof pipelinesOpened[id] === 'undefined') {
         pipelinesOpened[id] = false;
         pipelinesAdded = true;
@@ -95,7 +95,7 @@ class Gateway extends Component {
   }
 
   renderPipelines = () => {
-    return this.props.entity.pipelines.map((pipeline, index) => (
+    return this.props.entity.data.pipelines.map((pipeline, index) => (
       <Pipeline
         key={pipeline.id}
         {...this.props}
@@ -188,7 +188,7 @@ class Gateway extends Component {
       {
         name: 'dnsPrefix',
         title: 'DNS prefix',
-        value: this.props.entity.dnsPrefix,
+        value: this.props.entity.data.dnsPrefix,
         editableOnly: true,
         invalid: data.dnsPrefix,
         onChange: this.onPrefixChange,

@@ -496,7 +496,7 @@ export default (ComposedComponent) => {
                 parent={this}
                 {...this.props}
                 {...this.state}
-                entity={entity.data}
+                entity={entity}
                 entityDevelopment={entityDevelopment}
                 onFieldUpdate={this._handleFieldUpdate}
                 onResetField={this._handleResetField}

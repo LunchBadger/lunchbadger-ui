@@ -53,7 +53,7 @@ class Portal extends Component {
       toggleEdit(entity);
     }
     const APIsOpened = {...this.state.APIsOpened};
-    entity.apis.forEach((item) => {
+    entity.data.apis.forEach((item) => {
       APIsOpened[item.id] = true;
     });
     this.setState({APIsOpened});
@@ -75,7 +75,7 @@ class Portal extends Component {
     // }
     const APIsOpened = {...this.state.APIsOpened};
     let isChange = false;
-    nextProps.entity.apis.forEach((item) => {
+    nextProps.entity.data.apis.forEach((item) => {
       if (typeof APIsOpened[item.id] === 'undefined') {
         APIsOpened[item.id] = true;
         isChange = true;
@@ -130,10 +130,10 @@ class Portal extends Component {
 
   renderAPIs() {
     const APIsPublicEndpoints = {};
-    this.props.entity.apis.forEach((endpoint) => {
+    this.props.entity.data.apis.forEach((endpoint) => {
       APIsPublicEndpoints[endpoint.id] = endpoint.publicEndpoints.length;
     });
-    return this.props.entity.apis.map((endpoint, index) => {
+    return this.props.entity.data.apis.map((endpoint, index) => {
       return (
         <API
           key={endpoint.id}
@@ -197,7 +197,7 @@ class Portal extends Component {
       {
         name: 'rootUrl',
         title: 'root URL',
-        value: this.props.entity.rootUrl,
+        value: this.props.entity.data.rootUrl,
         invalid: data.rootUrl,
         onBlur: this.handleFieldChange('rootUrl'),
       },

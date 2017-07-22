@@ -55,51 +55,55 @@ class DataSource extends Component {
   }
 
   renderPorts() {
-    return null;
-    // return this.props.entity.ports.map((port) => {
-    //   return (
-    //     <Port
-    //       key={`port-${port.portType}-${port.id}`}
-    //       paper={this.props.paper}
-    //       way={port.portType}
-    //       elementId={this.props.entity.id}
-    //       scope={port.portGroup}
-    //     />
-    //   );
-    // });
+    return this.props.entity.metadata.ports.map((port) => {
+      return (
+        <Port
+          key={`port-${port.portType}-${port.id}`}
+          paper={this.props.paper}
+          way={port.portType}
+          elementId={this.props.entity.data.id}
+          scope={port.portGroup}
+        />
+      );
+    });
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
-    if (entity.connector === 'memory') {
+    const {
+      entity: {data: {connector, url, database, username, password}},
+      validations: {data},
+      entityDevelopment,
+      onResetField,
+    } = this.props;
+    if (connector === 'memory') {
       return null;
     }
     const mainProperties = [
       {
         name: 'url',
         title: 'URL',
-        value: entity.url,
+        value: url,
         invalid: data.url,
         onBlur: this.handleFieldChange('url')
       },
       {
         name: 'database',
         title: 'database',
-        value: entity.database,
+        value: database,
         invalid: data.database,
         onBlur: this.handleFieldChange('database')
       },
       {
         name: 'username',
         title: 'username',
-        value: entity.username,
+        value: username,
         invalid: data.username,
         onBlur: this.handleFieldChange('username'),
       },
       {
         name: 'password',
         title: 'password',
-        value: entity.password,
+        value: password,
         invalid: data.password,
         onBlur: this.handleFieldChange('password'),
         password: true,

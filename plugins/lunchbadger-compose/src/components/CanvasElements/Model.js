@@ -66,7 +66,7 @@ class Model extends Component {
   // }
 
   initState = (props = this.props) => {
-    const {contextPath, name} = props.entity;
+    const {contextPath, name} = props.entity.data;
     return {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
@@ -111,7 +111,7 @@ class Model extends Component {
 
   getEntityDiffProps = (model) => {
     if (!model) return null;
-    const {name, contextPath} = this.props.entity;
+    const {name, contextPath} = this.props.entity.data;
     if (name === model.name && contextPath === model.contextPath) return null;
     return {
       ...model,
@@ -191,17 +191,16 @@ class Model extends Component {
   }
 
   renderPorts = () => {
-    return null; // FIXME
-    // return this.props.entity.ports.map((port) => (
-    //   <Port
-    //     key={`port-${port.portType}-${port.id}`}
-    //     paper={this.props.paper}
-    //     way={port.portType}
-    //     elementId={this.props.entity.id}
-    //     className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
-    //     scope={port.portGroup}
-    //   />
-    // ));
+    return this.props.entity.metadata.ports.map((port) => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        paper={this.props.paper}
+        way={port.portType}
+        elementId={this.props.entity.data.id}
+        className={`port-${this.props.entity.metadata.type} port-${port.portGroup}`}
+        scope={port.portGroup}
+      />
+    ));
   }
 
   renderProperties = () => {
@@ -246,7 +245,7 @@ class Model extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          {this.props.entity.properties.length > 0 && (
+          {this.props.entity.data.properties.length > 0 && (
             <div ref="properties">
               {this.renderProperties()}
             </div>

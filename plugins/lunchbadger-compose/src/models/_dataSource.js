@@ -1,5 +1,7 @@
 import uuid from 'uuid';
 
+const portGroups = LunchBadgerCore.constants.portGroups;
+
 const initialModel = {
   data: {
     facetName: 'server',
@@ -15,20 +17,31 @@ const initialModel = {
     type: 'DataSource',
     loaded: true,
     ready: true,
+    ports: [],
   },
 }
 
 export default {
-  create: (model, metadata) => ({
-    data: {
-      ...initialModel.data,
-      ...model,
-      id: `server.${model.name}`,
-      lunchbadgerId: model.lunchbadgerId || uuid.v4(),
-    },
-    metadata: {
-      ...initialModel.metadata,
-      ...metadata,
-    },
-  }),
+  create: (model, metadata) => {
+    const id = model.lunchbadgerId || uuid.v4();
+    return {
+      data: {
+        ...initialModel.data,
+        ...model,
+        id: `server.${model.name}`,
+        lunchbadgerId: id,
+      },
+      metadata: {
+        ...initialModel.metadata,
+        ports: [
+          {
+            id,
+            portGroup: portGroups.PRIVATE,
+            portType: 'out',
+          },
+        ],
+        ...metadata,
+      },
+    };
+  }
 };

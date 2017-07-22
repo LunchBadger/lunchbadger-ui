@@ -45,7 +45,7 @@ class Microservice extends Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
+      const hasConnection = nextProps.entity.data.models.some((modelId) => {
         return Connection.getConnectionsForTarget(modelId).length;
       });
 
@@ -57,7 +57,7 @@ class Microservice extends Component {
     }
 
     if (nextState === null || this.state.hasSourceConnection !== nextState.hasSourceConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
+      const hasConnection = nextProps.entity.data.models.some((modelId) => {
         return Connection.getConnectionsForSource(modelId).length;
       });
 

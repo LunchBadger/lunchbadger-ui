@@ -1,3 +1,9 @@
+import {registerPlugin as aaa} from '../../../src/reducers';
+// import reducers from './reducers';
+import plugs from './plugs';
+
+aaa({}, plugs);
+
 /**
  * This file is entry point for each plugin
  * You need to import this file to get access to core api and base elements

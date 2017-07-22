@@ -1,7 +1,7 @@
-import {addDataSource, addModel} from '../reduxActions';
-import AddDataSource from '../actions/CanvasElements/DataSource/add';
-import AddModel from '../actions/CanvasElements/Model/add';
-import AddMicroservice from '../actions/CanvasElements/Microservice/add';
+// import {addDataSource, addModel} from '../reduxActions';
+// import AddDataSource from '../actions/CanvasElements/DataSource/add';
+// import AddModel from '../actions/CanvasElements/Model/add';
+// import AddMicroservice from '../actions/CanvasElements/Microservice/add';
 
 const dataSources = [
   'Memory',
@@ -27,18 +27,19 @@ const wizardFunc = label => () => {}; //TODO: implement datasource wizard
 const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
 
 const dataSourceAction = label => dispatch => {
-  dispatch(addDataSource(label, getDataSourceConnector(label)));
-  AddDataSource(label, getDataSourceConnector(label));
+  console.log('new ds', label, getDataSourceConnector(label));
+  // dispatch(addDataSource(label, getDataSourceConnector(label)));
+  // AddDataSource(label, getDataSourceConnector(label));
 };
 
 const modelAction = dispatch => {
   // dispatch(addModel('NewModel'));
-  AddModel();
+  // AddModel();
 };
 
 const microserviceAction = dispatch => {
   // dispatch(AddMicroservice());
-  AddMicroservice();
+  // AddMicroservice();
 };
 
 export default {

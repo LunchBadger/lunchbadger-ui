@@ -55,17 +55,18 @@ class DataSource extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port
-          key={`port-${port.portType}-${port.id}`}
-          paper={this.props.paper}
-          way={port.portType}
-          elementId={this.props.entity.id}
-          scope={port.portGroup}
-        />
-      );
-    });
+    return null;
+    // return this.props.entity.ports.map((port) => {
+    //   return (
+    //     <Port
+    //       key={`port-${port.portType}-${port.id}`}
+    //       paper={this.props.paper}
+    //       way={port.portType}
+    //       elementId={this.props.entity.id}
+    //       scope={port.portGroup}
+    //     />
+    //   );
+    // });
   }
 
   renderMainProperties = () => {

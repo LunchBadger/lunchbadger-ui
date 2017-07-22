@@ -7,7 +7,9 @@ import {
   toggleSubelement,
   removeEntity,
 } from './appState';
-import project from './project';
+import {
+  loadFromServer,
+} from './project';
 
 export {
   initialize,
@@ -17,5 +19,5 @@ export {
   toggleHighlight,
   toggleSubelement,
   removeEntity,
-  project,
+  loadFromServer,
 };

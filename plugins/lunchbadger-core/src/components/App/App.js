@@ -14,10 +14,10 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
-import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
+import {saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleHighlight, project} from '../../reduxActions';
+import {toggleHighlight, loadFromServer} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
@@ -63,7 +63,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(project.load(32));
+    this.props.dispatch(loadFromServer());
     LunchBadgerCore.dispatchRedux = this.props.dispatch;
     Pluggable.addChangeListener(this.reloadPlugins);
     AppState.addChangeListener(this.appStateChange);

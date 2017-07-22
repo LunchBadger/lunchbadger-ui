@@ -52,7 +52,7 @@ const boxTarget = {
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
-    return _.includes(props.entity.accept, item.entity.constructor.type);
+    return _.includes(props.entity.accept, item.entity.metadata.type);
   },
 
   drop(props, monitor, component) {
@@ -132,7 +132,7 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       this.handleChangeListeners('addChangeListener');
-      if (this.props.entity.wasBundled) {
+      if (this.props.entity.metadata.wasBundled) {
         this.setState({
           editable: false,
           expanded: false,
@@ -140,7 +140,7 @@ export default (ComposedComponent) => {
         });
         return;
       }
-      if (this.props.entity.loaded) {
+      if (this.props.entity.metadata.loaded) {
         this.setState({
           editable: false,
           // expanded: false,
@@ -148,12 +148,12 @@ export default (ComposedComponent) => {
           modelBeforeEdit: this.entityRef.getFormRef().getModel(),
           modelEnv_0: this.entityRef.getFormRef().getModel(),
         });
-      } else if (this.props.entity.ready) {
+      } else if (this.props.entity.metadata.ready) {
         this.triggerElementAutofocus();
         this.props.toggleEdit(this.props.entity);
       }
       this.checkHighlightAndEditableState(this.props);
-      this.props.entity.elementDOM = this.elementDOM;
+      this.props.entity.metadata.elementDOM = this.elementDOM;
     }
 
     componentDidUpdate() {
@@ -167,7 +167,7 @@ export default (ComposedComponent) => {
           });
         }
       }
-      this.props.entity.elementDOM = this.elementDOM;
+      this.props.entity.metadata.elementDOM = this.elementDOM;
       const {multiEnvIndex} = this.context;
       if (this.multiEnvIndex !== multiEnvIndex) {
         LunchBadgerCore.multiEnvIndex = multiEnvIndex;
@@ -332,7 +332,7 @@ export default (ComposedComponent) => {
       if (this.element.removeEntity) {
         this.element.removeEntity();
       }
-      removeEntity(entity.id);
+      removeEntity(entity.data.id);
     }
 
     _handleEdit = (evt) => {
@@ -461,8 +461,8 @@ export default (ComposedComponent) => {
       return (
             <Entity
               ref={(r) => {this.entityRef = r}}
-              type={this.props.entity.constructor.type}
-              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
+              type={this.props.entity.metadata.type}
+              connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.data.connector : undefined}
               editable={this.state.editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}
@@ -472,7 +472,7 @@ export default (ComposedComponent) => {
               invalid={validations.isValid}
               toolboxConfig={toolboxConfig}
               onToggleExpand={this.toggleExpandedState}
-              name={this.props.entity.name}
+              name={this.props.entity.data.name}
               onNameChange={this.updateName}
               onCancel={this._handleCancel}
               validations={validations}
@@ -489,7 +489,7 @@ export default (ComposedComponent) => {
                 parent={this}
                 {...this.props}
                 {...this.state}
-                entity={entity}
+                entity={entity.data}
                 entityDevelopment={entityDevelopment}
                 onFieldUpdate={this._handleFieldUpdate}
                 onResetField={this._handleResetField}

@@ -7,6 +7,7 @@ const loadDataSources = () => async (dispatch, getState) => {
     const data = await DataSourceService.load();
     dispatch(actions.loadDataSourcesSuccess(data));
   } catch (err) {
+    console.log('ERROR loadDataSourcesFailure', err);
     dispatch(actions.loadDataSourcesFailure(err));
   }
 };

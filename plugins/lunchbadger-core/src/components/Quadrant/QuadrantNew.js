@@ -81,7 +81,7 @@ export default class Quadrant extends Component {
         </div>
         <div className="quadrant__body">
           {entities.map((entity, idx) => {
-            const Component = components[entity.constructor.type];
+            const Component = components[entity.metadata.type];
             return (
               <Component
                 icon=""
@@ -90,10 +90,10 @@ export default class Quadrant extends Component {
                 paper={paper}
                 entity={entity}
                 hideSourceOnDrag={true}
-                itemOrder={entity.itemOrder}
+                itemOrder={entity.data.itemOrder}
                 moveEntity={() => {}}
                 saveOrder={() => {}}
-                ready={entity.ready}
+                ready={entity.metadata.ready}
               />
             )
           })}

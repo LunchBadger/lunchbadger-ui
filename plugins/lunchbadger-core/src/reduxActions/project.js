@@ -1,8 +1,15 @@
 import {actions} from './actions';
 import ProjectService from '../services/ProjectService';
 
-const load = () => async (dispatch, getState) => {
+export const loadFromServer = () => async (dispatch, getState) => {
   getState().plugins.onAppLoad.forEach(func => dispatch(func()));
+};
+
+export const saveToServer = () => (dispatch) => {
+
+};
+
+export const loadProject = () => async (dispatch) => {
   dispatch(actions.loadProjectRequest());
   try {
     const data = await ProjectService.load();
@@ -10,13 +17,4 @@ const load = () => async (dispatch, getState) => {
   } catch (err) {
     dispatch(actions.loadProjectFailure(err));
   }
-};
-
-const save = () => (dispatch) => {
-
-};
-
-export default {
-  load,
-  save,
-};
+}

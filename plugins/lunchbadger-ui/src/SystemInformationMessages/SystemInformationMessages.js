@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux'
 import SystemInformationMessage from './SystemInformationMessage';
 import {removeSystemInformationMessages} from '../actions';
@@ -41,6 +42,11 @@ class SystemInformationMessages extends Component {
     );
   }
 }
+
+SystemInformationMessages.propTypes = {
+  messages: PropTypes.array,
+  removeMessages: PropTypes.func,
+};
 
 const mapStateToProps = state => ({
   messages: state.ui.systemInformationMessages,

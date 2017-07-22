@@ -13,12 +13,12 @@ class ModelPropertyDetails extends Component {
     onRemove(property);
   }
 
-  // FIXME - restore this functionality after discussion, how it should works with nested properties
-  // _checkTabButton = (event) => {
-  //   if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
-  //     this.props.addAction();
-  //   }
-  // }
+  checkTabButton = (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
+      const {parentId, addAction} = this.props;
+      addAction(parentId)();
+    }
+  }
 
   onPropertyTypeChange = (type) => {
     const {property, onPropertyTypeChange} = this.props;
@@ -51,7 +51,6 @@ class ModelPropertyDetails extends Component {
           type="hidden"
           value={property.description}
           name={`properties[${index}][description]`}
-          // handleKeyDown={this._checkTabButton} // FIXME
         />
         {!isNested && (
           <Input
@@ -85,6 +84,7 @@ class ModelPropertyDetails extends Component {
             <Select
               value={type || 'string'}
               handleChange={this.onPropertyTypeChange}
+              handleKeyDown={this.checkTabButton}
               name={`properties[${index}][type]`}
               options={propertyTypes}
               className="EntityProperty__field--input"

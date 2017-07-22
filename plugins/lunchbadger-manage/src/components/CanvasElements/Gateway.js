@@ -6,6 +6,7 @@ import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
 import removeEntity from '../../actions/CanvasElements/remove';
+import removePipeline from '../../actions/CanvasElements/Gateway/removePipeline';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
 import PipelineFactory from '../../models/Pipeline';
@@ -18,6 +19,7 @@ const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
+const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
 class Gateway extends Component {
   static propTypes = {
@@ -33,6 +35,8 @@ class Gateway extends Component {
       hasOutConnection: null,
       dnsPrefix: props.entity.dnsPrefix,
       pipelinesOpened: {},
+      showRemovingModal: false,
+      pipelineToRemove: null,
     };
     props.entity.pipelines.forEach((item) => {
       this.state.pipelinesOpened[item.id] = false;
@@ -101,6 +105,7 @@ class Gateway extends Component {
         entity={pipeline}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
+        onRemove={this.onRemovePipeline(pipeline)}
       />
     ));
   }
@@ -144,6 +149,15 @@ class Gateway extends Component {
   }
 
   onAddPipeline = name => () => addPipeline(this.props.entity, name);
+
+  onRemovePipeline = pipelineToRemove => () => {
+    this.setState({
+      showRemovingModal: true,
+      pipelineToRemove,
+    });
+  }
+
+  removePipeline = () => removePipeline(this.props.entity, this.state.pipelineToRemove);
 
   _onDeploy() {
     const dispatchRedux = LunchBadgerCore.dispatchRedux;
@@ -198,6 +212,20 @@ class Gateway extends Component {
             {this.renderPipelines()}
           </DraggableGroup>
         </EntitySubElements>
+        {this.state.showRemovingModal && (
+          <TwoOptionModal
+            onClose={() => this.setState({showRemovingModal: false})}
+            onSave={this.removePipeline}
+            onCancel={() => this.setState({showRemovingModal: false})}
+            title="Remove pipeline"
+            confirmText="Remove"
+            discardText="Cancel"
+          >
+            <span>
+              Do you really want to remove that pipeline?
+            </span>
+          </TwoOptionModal>
+        )}
       </div>
     );
   }

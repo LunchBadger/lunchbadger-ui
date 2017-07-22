@@ -5,8 +5,8 @@
  */
 exports.command = function (dragTarget, dropTarget) {
   return init(this)
-    .waitForElementPresent(dragTarget, 1500)
-    .waitForElementPresent(dropTarget, 1500)
+    .waitForElementPresent(dragTarget, 15000)
+    .waitForElementPresent(dropTarget, 15000)
     .executeAsync(function (source, dest, done) {
         var drag = document.querySelector(source);
         var drop = document.querySelector(dest);

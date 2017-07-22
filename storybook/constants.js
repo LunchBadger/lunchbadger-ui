@@ -138,11 +138,18 @@ export const entityTypes = {
   Portal: 'Portal',
 };
 
-export const importPath = (component, path, isDefault = true) => (
+export const importPaths = paths => (
   <div className="storyCode">
     <h1>Import</h1>
-    <pre>
-      {`import ${!isDefault ? component : `{${component}}`} from '/${path}';`}
-    </pre>
+    {paths.map((item, idx) => {
+      const [component, path, isDefault = true] = item;
+      return (
+        <pre key={idx}>
+          {`import ${!isDefault ? component : `{${component}}`} from '/${path};`}
+        </pre>
+      );
+    })}
   </div>
 );
+
+export const importPath = (component, path, isDefault = true) => importPaths([[component, path, isDefault]]);

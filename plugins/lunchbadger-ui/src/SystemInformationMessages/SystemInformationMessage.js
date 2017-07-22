@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {IconSVG} from '../';
 import iconDelete from '../../../../src/icons/icon-delete.svg';
 import './SystemInformationMessages.scss';
@@ -11,5 +12,10 @@ const SystemInformationMessage = ({message, onRemove}) => (
     {message}
   </div>
 );
+
+SystemInformationMessage.propTypes = {
+  message: PropTypes.node,
+  onRemove: PropTypes.func,
+};
 
 export default SystemInformationMessage;

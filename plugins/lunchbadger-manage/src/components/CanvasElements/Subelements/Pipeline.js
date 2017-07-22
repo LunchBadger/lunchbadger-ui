@@ -151,7 +151,7 @@ export default class Pipeline extends Component {
       pipeline__info: true,
       // 'pipeline__info--selected': _.find(currentlySelectedSubelements, {id: this.props.entity.id})
     });
-    const {index} = this.props;
+    const {index, onRemove} = this.props;
     return (
       <CollapsibleProperties
         ref={(r) => {this.collapsiblePropertiesDOM = r;}}
@@ -160,7 +160,7 @@ export default class Pipeline extends Component {
             name={`pipelines[${index}][name]`}
             value={this.props.entity.name}
             hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
-            onDelete={() => {console.log('TODO')}}
+            onDelete={onRemove}
             onViewModeClick={this.toggleCollapsibleProperties}
           />
         }

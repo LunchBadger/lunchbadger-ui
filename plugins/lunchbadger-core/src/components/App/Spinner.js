@@ -51,8 +51,8 @@ export default class Spinner extends Component {
   render() {
     if (this.state.graceElapsed) {
       return (
-        <div id="spinner__overlay">
-          <div id="spinner"></div>
+        <div className="spinner__overlay">
+          <div className="spinner"></div>
         </div>
       );
     } else {

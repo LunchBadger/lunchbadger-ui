@@ -64,6 +64,7 @@ loginManager.checkAuth().then(loggedIn => {
   );
 
   LunchBadgerCore.isMultiEnv = document.location.search === '?multi';
+  LunchBadgerCore.isDataSourceFeature = document.location.search === '?ds';
 
   // Render the main component into the dom
   ReactDOM.render(

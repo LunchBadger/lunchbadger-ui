@@ -26,6 +26,7 @@ export default class PrivateEndpoint extends BaseModel {
       id: this.id,
       name: this.name,
       url: this.url,
+      contextPath: this.contextPath,
       itemOrder: this.itemOrder
     }
   }
@@ -43,4 +44,6 @@ export default class PrivateEndpoint extends BaseModel {
   get contextPath() {
     return this.name.toLowerCase().replace(/ /g, '-');
   }
+
+  set contextPath(contextPath) {}
 }

@@ -33,7 +33,7 @@ class Tool extends Component {
   onMenuItemClick = () => this.toggleOpen(false);
 
   render() {
-    const {children, icon, selected, onClick, submenu, plain, tooltip, name} = this.props;
+    const {icon, selected, onClick, submenu, plain, tooltip, name} = this.props;
     const {opened, tooltipVisible} = this.state;
     const style = {
       width: '100%',
@@ -89,7 +89,6 @@ class Tool extends Component {
 }
 
 Tool.propTypes = {
-  children: PropTypes.node,
   icon: PropTypes.string,
   selected: PropTypes.bool,
   onClick: PropTypes.func,

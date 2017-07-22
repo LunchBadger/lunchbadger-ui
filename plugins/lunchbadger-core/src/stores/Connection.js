@@ -7,7 +7,6 @@ let connections = [];
 class Connection extends BaseStore {
   constructor() {
     super();
-
     this.subscribe(() => this._registerEvents);
   }
 
@@ -21,25 +20,20 @@ class Connection extends BaseStore {
           toId: toId,
           info: action.info
         });
-
         this.addConnection(connection);
         this.emitChange();
-
         break;
       case 'RemoveConnection':
         this._handleConnectionRemoval(action);
         this.emitChange();
         break;
-
       case 'MoveConnection':
         this._handleConnectionReplace(action);
         this.emitChange();
         break;
-
       case 'RemoveEntity':
         this._handleConnectionRemoval({from: action.entity.id});
         this._handleConnectionRemoval({to: action.entity.id});
-
         if (action.entity.constructor.type === 'API') {
           action.entity.publicEndpoints.forEach((endpoint) => {
             this._handleConnectionRemoval({from: endpoint.id});
@@ -51,7 +45,11 @@ class Connection extends BaseStore {
             this._handleConnectionRemoval({to: pipeline.id});
           });
         }
-
+        this.emitChange();
+        break;
+      case 'RemovePipeline':
+        this._handleConnectionRemoval({from: action.pipeline.id});
+        this._handleConnectionRemoval({to: action.pipeline.id});
         this.emitChange();
         break;
       case 'ClearData':
@@ -115,12 +113,10 @@ class Connection extends BaseStore {
    */
   updateConnection(connection, attributes) {
     const index = this.findEntityIndex(connection.id);
-
     if (index > -1) {
       Object.keys(attributes).forEach((attributeKey) => {
         connections[index][attributeKey] = attributes[attributeKey];
       });
-
       this.emitChange();
     }
   }
@@ -132,14 +128,12 @@ class Connection extends BaseStore {
       }
     } else if (action.to) {
       const connections = this.getConnectionsForTarget(action.to);
-
       if (connections.length) {
         this.removeMultipleConnections(connections);
         this.emitChange();
       }
     } else if (action.from) {
       const connections = this.getConnectionsForSource(action.from);
-
       if (connections.length) {
         this.removeMultipleConnections(connections);
         this.emitChange();
@@ -149,10 +143,8 @@ class Connection extends BaseStore {
 
   _handleConnectionReplace(action) {
     const currentConnectionIndex = this.findEntityIndexBySourceAndTarget(action.from, action.to);
-
     if (currentConnectionIndex > -1) {
       this.removeConnection(currentConnectionIndex);
-
       const fromId = this.formatId(action.newFrom);
       const toId = this.formatId(action.newTo);
       const connection = ConnectionFactory.create({
@@ -160,7 +152,6 @@ class Connection extends BaseStore {
         toId: toId,
         info: action.info
       });
-
       this.addConnection(connection);
     }
   }

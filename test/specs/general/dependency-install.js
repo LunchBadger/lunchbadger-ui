@@ -8,9 +8,9 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
     .which.contains('workspace-status__progress').before(10000);
   if (!skipUpdatingDependenciesCheck) {
     page.moveToElement('.logotype', 5, 5);
-    page.click('.logotype');
+    browser.click('.logotype');
     page.moveToElement('.workspace-status', 5, 5, function () {
-      page.waitForElementVisible(workspaceStatusSelector, 5000);
+      browser.waitForElementVisible(workspaceStatusSelector, 5000);
       page.expect.element(workspaceStatusSelector).text.to.contain('Updating dependencies');
     });
   }
@@ -18,13 +18,13 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
     .which.contains(`workspace-status__${finalStatus}`).before(120000);
   if (finalStatus === 'success') {
     page.moveToElement('.workspace-status', 5, 5, function () {
-      page.waitForElementVisible(workspaceStatusSelector, 5000);
+      browser.waitForElementVisible(workspaceStatusSelector, 5000);
       page.expect.element(workspaceStatusSelector).text.to.contain(finalMsg);
     });
   } else {
-    page.click('.workspace-status span');
-    page.waitForElementVisible('.SystemDefcon1', 5000);
-    page.click('.SystemDefcon1__box__content__details--link');
+    browser.click('.workspace-status span');
+    browser.waitForElementPresent('.SystemDefcon1', 5000);
+    browser.click('.SystemDefcon1__box__content__details--link');
     browser.pause(1000);
     page.expect.element('.SystemDefcon1 .SystemDefcon1__box__content__details--box').text.to.contain(finalMsg);
   }
@@ -37,52 +37,58 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
-    page.waitForElementVisible(elementSelector + '.rest.editable button[type=submit]', 5000);
-    page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
-    page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    page.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.waitForElementPresent(elementSelector + '.rest.editable button[type=submit]', 5000);
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
     browser.click(elementSelector + '.rest.editable button[type=submit]');
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    page.waitForElementVisible(elementSelector + '.soap.editable button[type=submit]', 5000);
-    page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
-    page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    page.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.waitForElementPresent(elementSelector + '.soap.editable button[type=submit]', 5000);
+    browser.pause(1500);
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.pause(1500);
+    browser.moveToElement(elementSelector + '.soap.editable button[type=submit]', 5, 5);
     browser.click(elementSelector + '.soap.editable button[type=submit]');
-    page.waitForElementVisible('.SystemDefcon1', 120000);
-    page.click('.SystemDefcon1 button');
-    page.waitForElementNotPresent('.SystemDefcon1', 5000);
+    browser.waitForElementPresent('.SystemDefcon1', 120000);
+    browser.click('.SystemDefcon1 button');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    page.waitForElementVisible(elementSelector + '.mongodb.editable button[type=submit]', 5000);
-    page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
-    page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
-    page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
-    page.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.waitForElementPresent(elementSelector + '.mongodb.editable button[type=submit]', 5000);
+    browser.pause(1500);
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.pause(1500);
+    browser.moveToElement(elementSelector + '.mongodb.editable button[type=submit]', 5, 5);
     browser.click(elementSelector + '.mongodb.editable button[type=submit]');
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 
   'Connector uninstallation: remove datasource': function(browser) {
-    page.click('.SystemDefcon1 button');
-    page.waitForElementNotPresent('.SystemDefcon1', 5000);
-    page.click(elementSelector);
+    browser.click('.SystemDefcon1 button');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
+    browser.click(elementSelector);
     browser.pause(1500);
-    page.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
-    page.click(elementSelector + ' .Toolbox__button--delete');
+    browser.waitForElementPresent(elementSelector + ' .Toolbox__button--delete', 50000);
+    browser.click(elementSelector + ' .Toolbox__button--delete');
     browser.pause(1500);
-    page.click('.modal__actions__button.modal__actions__button--confirm');
+    browser.click('.modal__actions__button.modal__actions__button--confirm');
     expectInstall(browser, page, 'failure', '?wsdl');
   },
 
   'Connector uninstallation: trash workspace': function(browser) {
-    page.click('.SystemDefcon1 button');
-    page.waitForElementNotPresent('.SystemDefcon1', 5000);
-    page.click('.header__menu__element .fa-trash-o');
+    browser.click('.SystemDefcon1 button');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
+    browser.click('.header__menu__element .fa-trash-o');
     expectInstall(browser, page, 'success', 'Workspace OK', true);
   },
 

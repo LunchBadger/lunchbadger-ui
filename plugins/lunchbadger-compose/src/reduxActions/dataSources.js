@@ -6,7 +6,11 @@ export const loadDataSources = () => async (dispatch, getState) => {
   dispatch(actions.loadDataSourcesRequest());
   try {
     const data = await DataSourceService.load();
-    dispatch(actions.loadDataSourcesSuccess(data));
+    const entities = data.body.reduce((map, item) => {
+      map[item.lunchbadgerId] = DataSource.create(item);
+      return map;
+    }, {});
+    dispatch(actions.loadDataSourcesSuccess({entities}));
   } catch (err) {
     console.log('ERROR loadDataSourcesFailure', err);
     dispatch(actions.loadDataSourcesFailure(err));

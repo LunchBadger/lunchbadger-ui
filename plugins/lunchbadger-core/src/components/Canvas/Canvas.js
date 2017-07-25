@@ -278,7 +278,7 @@ export default class Canvas extends Component {
             <div className="canvas__label canvas__label--left">Producers</div>
             <div className="canvas__label canvas__label--right">Consumers</div>
           </div>
-          <QuadrantContainer
+          {/*}<QuadrantContainer
             appState={appState}
             plugins={plugins}
             paper={this.paper}
@@ -287,7 +287,7 @@ export default class Canvas extends Component {
             className="canvas__container"
             id="canvas"
             scrollLeft={scrollLeft}
-          />
+          />*/}
         </div>
       </section>
     );

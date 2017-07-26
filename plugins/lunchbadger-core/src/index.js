@@ -77,7 +77,7 @@ import LoginManager, {createLoginManager, getUser} from './utils/auth';
 import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
-import {actionTypes} from './reduxActions/actions';
+import {actions, actionTypes} from './reduxActions/actions';
 
 import './utils/formValidators';
 
@@ -154,6 +154,7 @@ let LunchBadgerCore = {
     waitForStores: waitForStores,
     handleFatals: handleFatals,
     actionsCreator,
+    actions,
     actionTypes,
     serverIo: {
       loadFromServer: loadFromServer,

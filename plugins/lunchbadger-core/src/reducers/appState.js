@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {actionTypes} from '../reduxActions/actions';
 
 const initialState = {
   currentlyOpenedPanel: null,
@@ -68,11 +69,8 @@ const appState = (state = initialState, action) => {
       newState.panelEditingStatusSave = action.saveAction || null;
       newState.panelEditingStatusDiscard = action.discardAction || null;
       return newState;
-    case 'APP_STATE/REMOVE_ENTITY':
-      const {currentElement} = newState;
-      if (currentElement && currentElement.id === action.id) {
-        newState.currentElement = null;
-      }
+    case actionTypes.removeEntity:
+      newState.currentElement = null;
       newState.currentEditElement = null;
       return newState;
     default:

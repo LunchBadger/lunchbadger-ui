@@ -2,7 +2,7 @@ import DataSource from '../models/_dataSource';
 import {actionTypes} from '../reduxActions/actions';
 
 export default (state = {}, action) => {
-  // const newState = [...state];
+  const newState = {...state};
   switch (action.type) {
     case actionTypes.loadDataSourcesSuccess:
       return action.payload.entities;
@@ -12,21 +12,16 @@ export default (state = {}, action) => {
         ...state,
         [entity.data.lunchbadgerId]: entity,
       };
-    // case actionTypes.updateDataSourceRequest:
-    //   return [
-    //     ...state.filter(({data: {lunchbadgerId}}) => lunchbadgerId !== action.payload.lunchbadgerId),
-    //     DataSource.create(action.payload.entity, {ready: false}),
-    //   ];
-    // case actionTypes.updateDataSourceSuccess:
-    //   return [
-    //     ...state.filter(({data: {lunchbadgerId}}) => lunchbadgerId !== action.payload.lunchbadgerId),
-    //     DataSource.create(action.payload.entity),
-    //   ];
+    case actionTypes.updateDataSourceRequest:
+    case actionTypes.updateDataSourceSuccess:
+      newState[action.payload.entity.data.lunchbadgerId] = action.payload.entity;
+      return newState;
     // case actionTypes.deleteDataSourceRequest:
     //   newState.find(({data: {lunchbadgerId}}) => lunchbadgerId === action.payload.lunchbadgerId).metadata.ready = false;
     //   return newState;
-    // case actionTypes.deleteDataSourceSuccess:
-    //   return state.filter(({data: {lunchbadgerId}}) => lunchbadgerId !== action.payload.lunchbadgerId);
+    case actionTypes.deleteDataSourceSuccess:
+      delete newState[action.payload.lunchbadgerId];
+      return newState;
     default:
       return state;
   }

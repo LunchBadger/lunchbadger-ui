@@ -2,6 +2,8 @@ import {actions} from './actions';
 import {DataSourceService} from '../services';
 import DataSource from '../models/_dataSource';
 
+const coreActions = LunchBadgerCore.utils.actions;
+
 export const loadDataSources = () => async (dispatch, getState) => {
   dispatch(actions.loadDataSourcesRequest());
   try {
@@ -24,14 +26,14 @@ export const addDataSource = (name, connector) => (dispatch, getState) => {
   dispatch(actions.addDataSource({name, connector, itemOrder}));
 }
 
-export const updateDataSource = (entity, model) => async (dispatch) => {
-  const {data, metadata} = entity;
+export const updateDataSource = ({data, metadata}) => async (dispatch, getState) => {
   const {id, lunchbadgerId, name} = data;
   const {loaded} = metadata;
-  const newEntity = DataSource.create({...data, ...model}).data;
-  dispatch(actions.updateDataSourceRequest({lunchbadgerId, entity: newEntity}));
+  const entity = DataSource.create(data, {ready: false});
+  dispatch(actions.updateDataSourceRequest({entity}));
   try {
-    if (loaded && name !== model.name) {
+    if (loaded && name !== getState().entities.dataSources[lunchbadgerId].data.name) {
+      console.log('DELETE!')
       await DataSourceService.delete(id);
       // ConnectionStore
       //   .getConnectionsForSource(oldId)
@@ -46,13 +48,8 @@ export const updateDataSource = (entity, model) => async (dispatch) => {
       //     }));
       //   });
     }
-    // entity.update({...model, loaded: true});
-    // const toSave = entity.toJSON();
-    // delete toSave.lunchbadgerId;
-    // console.log(123, data, model, );
-    // console.log({toSave});
-    const {body} = await DataSourceService.upsert(newEntity);
-    dispatch(actions.updateDataSourceSuccess({lunchbadgerId, entity: body}));
+    const {body} = await DataSourceService.upsert(entity.data);
+    dispatch(actions.updateDataSourceSuccess({entity: DataSource.create(body)}));
   } catch (err) {
     console.log('ERROR updateDataSourceFailure', err);
     dispatch(actions.updateDataSourceFailure(err));
@@ -70,3 +67,14 @@ export const deleteDataSource = entity => async (dispatch) => {
     dispatch(actions.deleteDataSourceFailure(err));
   }
 };
+
+export const discardDataSourceChanges = entity => (dispatch) => {
+  console.log('discardDataSourceChanges', entity);
+  const {lunchbadgerId, id} = entity.data;
+  dispatch(coreActions.removeEntity({id}));
+  if (entity.metadata.loaded) {
+
+  } else {
+    dispatch(actions.deleteDataSourceSuccess({lunchbadgerId}));
+  }
+}

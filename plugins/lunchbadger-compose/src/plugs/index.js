@@ -5,6 +5,7 @@ import services from './services';
 import onAppLoad from './onAppLoad';
 import onUpdate from './onUpdate';
 import onDelete from './onDelete';
+import onDiscardChanges from './onDiscardChanges';
 
 export default {
   tools,
@@ -14,4 +15,5 @@ export default {
   onAppLoad,
   onUpdate,
   onDelete,
+  onDiscardChanges,
 };

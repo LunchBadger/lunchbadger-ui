@@ -248,8 +248,8 @@ export default (ComposedComponent) => {
       if (typeof element.update === 'function') {
         // updated = element.update(model);
         const {store: {dispatch, getState}} = this.context;
-        const {entity} = this.props;
-        dispatch(getState().plugins.onUpdate[entity.metadata.type](entity, model));
+        const entity = _.merge({}, this.props.entity, {data: model});
+        dispatch(getState().plugins.onUpdate[entity.metadata.type](entity));
         this.setState({
           modelBeforeEdit: model,
           [`modelEnv_${multiEnvIndex}`]: model,
@@ -375,8 +375,13 @@ export default (ComposedComponent) => {
 
     _handleCancel = (evt) => {
       evt.persist();
+      const {store: {dispatch, getState}} = this.context;
+      const {entity} = this.props;
+      const a = dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
+      console.log('111', a);
+      return;
       if (this.state.modelBeforeEdit === null) {
-        this._handleRemove();
+        // this._handleRemove();
         evt.preventDefault();
         evt.stopPropagation();
         return;

@@ -17,7 +17,7 @@ import AppState from '../../stores/AppState';
 import {saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleHighlight, loadFromServer} from '../../reduxActions';
+import {loadFromServer} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
@@ -108,13 +108,6 @@ class App extends Component {
     });
   }
 
-  handleCanvasClick = () => {
-    const {canvasClickEnabled, toggleHighlight} = this.props;
-    if (canvasClickEnabled) {
-      toggleHighlight(null);
-    }
-  }
-
   renderHeader = () => {
     const {currentEditElement} = this.props;
     const username = getUser().profile.preferred_username;
@@ -151,9 +144,7 @@ class App extends Component {
       systemDefcon1Errors,
       multiEnvDelta,
       multiEnvIndex,
-      panelEditingStatus,
       currentlyOpenedPanel,
-      toggleHighlight,
       currentEditElement,
       loading,
     } = this.props;
@@ -191,7 +182,6 @@ class App extends Component {
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
                 currentlyOpenedPanel={currentlyOpenedPanel}
-                onClick={this.handleCanvasClick}
               />
             </div>
           </div>
@@ -206,23 +196,12 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  panelEditingStatus: PropTypes.bool,
-  canvasClickEnabled: PropTypes.bool,
-}
-
-const isLoadingEntities = (quadrants, entities) => {
-  // console.log(222, quadrants, entities);
-  return false;
-}
-
 const selector = createSelector(
   state => state.ui.systemDefcon1.visible,
   state => state.ui.systemDefcon1.errors,
   state => state.ui.multiEnvironments.selected,
   state => state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   state => state.ui.multiEnvironments.environments.length,
-  state => !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
   state => state.core.appState.currentlyOpenedPanel,
   state => state.core.appState.currentElement,
   state => state.core.appState.currentEditElement,
@@ -233,7 +212,6 @@ const selector = createSelector(
     multiEnvIndex,
     multiEnvDelta,
     multiEnvAmount,
-    canvasClickEnabled,
     currentlyOpenedPanel,
     currentElement,
     currentEditElement,
@@ -244,7 +222,6 @@ const selector = createSelector(
     multiEnvIndex,
     multiEnvDelta,
     multiEnvAmount,
-    canvasClickEnabled,
     currentlyOpenedPanel,
     currentElement,
     currentEditElement,
@@ -255,7 +232,6 @@ const selector = createSelector(
 const mapDispatchToProps = dispatch => ({
   dispatch,
   displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
-  toggleHighlight: element => dispatch(toggleHighlight(element)),
 });
 
 export default connect(selector, mapDispatchToProps)(App);

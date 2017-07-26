@@ -6,7 +6,7 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import {toggleHighlight, toggleEdit, removeEntity} from '../../reduxActions';
+import {toggleHighlight, toggleEdit, removeEntity, setCurrentElement} from '../../reduxActions';
 import _ from 'lodash';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
@@ -310,15 +310,15 @@ export default (ComposedComponent) => {
     }
 
     toggleHighlighted() {
-      if (!this.props.highlighted) {
-        this.props.toggleHighlight(this.props.entity);
-      } else {
-        setTimeout(() => {
-          if (!this.state.editable && !this.state.expanded) {
-            this.props.toggleHighlight(null);
-          }
-        });
-      }
+      // if (!this.props.highlighted) {
+      //   this.props.toggleHighlight(this.props.entity);
+      // } else {
+      //   setTimeout(() => {
+      //     if (!this.state.editable && !this.state.expanded) {
+      //       this.props.toggleHighlight(null);
+      //     }
+      //   });
+      // }
     }
 
     _focusClosestInput(target) {
@@ -434,6 +434,11 @@ export default (ComposedComponent) => {
       this.update(model);
     }
 
+    handleClick = (event) => {
+      this.context.store.dispatch(setCurrentElement(this.props.entity));
+      event.stopPropagation();
+    }
+
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
     render() {
@@ -510,7 +515,7 @@ export default (ComposedComponent) => {
               validations={validations}
               onFieldClick={this._handleValidationFieldClick}
               onValidSubmit={this.update}
-              onClick={(evt) => {this.toggleHighlighted(); evt.stopPropagation()}}
+              onClick={this.handleClick}
               onDoubleClick={this._handleEdit}
               connectDragSource={connectDragSource}
               connectDropTarget={connectDropTarget}
@@ -546,12 +551,20 @@ export default (ComposedComponent) => {
   }
 
   const connector = createSelector(
-    state => state.core.appState.currentElement,
+    state => state.states.currentElement,
     state => state.core.appState.currentEditElement,
     state => !!state.core.appState.currentlyOpenedPanel,
     (_, props) => props.entity.data.id,
-    (currentElement, currentEditElement, isPanelOpened, id) =>
-      ({currentEditElement, isPanelOpened, highlighted: !!currentElement && currentElement.data.id === id}),
+    (
+      currentElement,
+      currentEditElement,
+      isPanelOpened,
+      id,
+    ) => ({
+      currentEditElement,
+      isPanelOpened,
+      highlighted: !!currentElement && currentElement.data.id === id,
+    }),
   );
 
   const mapDispatchToProps = dispatch => ({

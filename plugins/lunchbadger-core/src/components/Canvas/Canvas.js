@@ -8,9 +8,14 @@ import removeConnection from '../../actions/Connection/remove';
 import moveConnection from '../../actions/Connection/move';
 import Connection from '../../stores/Connection';
 import ProjectService from '../../services/ProjectService';
+import {clearCurrentElement} from '../../reduxActions';
 import './Canvas.scss';
 
 export default class Canvas extends Component {
+  static contextTypes = {
+    store: PropTypes.object,
+  }
+
   constructor(props) {
     super(props);
 
@@ -256,8 +261,10 @@ export default class Canvas extends Component {
   //   });
   // }
 
+  handleClick = () => this.context.store.dispatch(clearCurrentElement());
+
   render() {
-    const {currentlyOpenedPanel, onClick} = this.props;
+    const {currentlyOpenedPanel} = this.props;
     const {scrollLeft} = this.state;
     let {canvasHeight} = this.state;
     if (!currentlyOpenedPanel) {
@@ -266,7 +273,7 @@ export default class Canvas extends Component {
     return (
       <section
         className="canvas"
-        onClick={onClick}
+        onClick={this.handleClick}
       >
         <CanvasOverlay />
         <div

@@ -10,6 +10,10 @@ import {
 import {
   loadFromServer,
 } from './project';
+import {
+  setCurrentElement,
+  clearCurrentElement,
+} from './states';
 
 export {
   initialize,
@@ -20,4 +24,6 @@ export {
   toggleSubelement,
   removeEntity,
   loadFromServer,
+  setCurrentElement,
+  clearCurrentElement,
 };

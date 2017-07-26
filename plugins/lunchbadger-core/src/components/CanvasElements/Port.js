@@ -13,7 +13,7 @@ export default class Port extends Component {
     elementId: PropTypes.string.isRequired,
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
-    paper: PropTypes.object.isRequired,
+    paper: PropTypes.object,
     middle: PropTypes.bool,
     className: PropTypes.string
   };
@@ -54,17 +54,17 @@ export default class Port extends Component {
       scope: this.props.scope
     };
 
-    this.props.paper.makeSource(portDOM, {
-      endpoint: ['Dot', {radius: 4}],
-      allowLoopback: false,
-      deleteEndpointsOnDetach: true
-    }, endpointOptions);
-
-    this.props.paper.makeTarget(portDOM, {
-      endpoint: ['Dot', {radius: 4}],
-      allowLoopback: false,
-      deleteEndpointsOnDetach: true
-    }, endpointOptions);
+    // this.props.paper.makeSource(portDOM, {
+    //   endpoint: ['Dot', {radius: 4}],
+    //   allowLoopback: false,
+    //   deleteEndpointsOnDetach: true
+    // }, endpointOptions);
+    //
+    // this.props.paper.makeTarget(portDOM, {
+    //   endpoint: ['Dot', {radius: 4}],
+    //   allowLoopback: false,
+    //   deleteEndpointsOnDetach: true
+    // }, endpointOptions);
 
     if (this.props.way === 'in') {
       this._checkAndReattachTargetConnections();
@@ -82,8 +82,8 @@ export default class Port extends Component {
     }
     if (nextProps.scope !== this.props.scope) {
       const portDOM = findDOMNode(this.refs.port);
-      this.props.paper.setTargetScope(portDOM, nextProps.scope);
-      this.props.paper.setSourceScope(portDOM, nextProps.scope);
+      // this.props.paper.setTargetScope(portDOM, nextProps.scope);
+      // this.props.paper.setSourceScope(portDOM, nextProps.scope);
     }
   }
 
@@ -97,25 +97,25 @@ export default class Port extends Component {
       - portWrapDOM.closest('.Entity__extra').getBoundingClientRect().top;
   }
 
-  componentWillUnmount() {
-    const portDOM = findDOMNode(this.refs.port);
-    const connectionsOut = this.props.paper.select({source: portDOM});
-    const connectionsIn = this.props.paper.select({target: portDOM});
-
-    connectionsIn.each((connection) => {
-      this.props.paper.detach(connection, {
-        fireEvent: false,
-        forceDetach: false
-      });
-    });
-
-    connectionsOut.each((connection) => {
-      this.props.paper.detach(connection, {
-        fireEvent: false,
-        forceDetach: false
-      });
-    });
-  }
+  // componentWillUnmount() {
+  //   const portDOM = findDOMNode(this.refs.port);
+  //   const connectionsOut = this.props.paper.select({source: portDOM});
+  //   const connectionsIn = this.props.paper.select({target: portDOM});
+  //
+  //   connectionsIn.each((connection) => {
+  //     this.props.paper.detach(connection, {
+  //       fireEvent: false,
+  //       forceDetach: false
+  //     });
+  //   });
+  //
+  //   connectionsOut.each((connection) => {
+  //     this.props.paper.detach(connection, {
+  //       fireEvent: false,
+  //       forceDetach: false
+  //     });
+  //   });
+  // }
 
   _checkAndReattachTargetConnections() {
     const connections = Connection.getConnectionsForTarget(this.props.elementId);
@@ -127,10 +127,10 @@ export default class Port extends Component {
         source = document.querySelector(`#${connection.info.sourceId}`);
       }
       removeConnection(connection.fromId, connection.toId);
-      this.props.paper.connect({
-        source: source,
-        target: findDOMNode(this.refs.port)
-      });
+      // this.props.paper.connect({
+      //   source: source,
+      //   target: findDOMNode(this.refs.port)
+      // });
     });
   }
 
@@ -144,10 +144,10 @@ export default class Port extends Component {
         target = document.querySelector(`#${connection.info.targetId}`);
       }
       removeConnection(connection.fromId, connection.toId);
-      this.props.paper.connect({
-        source: findDOMNode(this.refs.port),
-        target: target
-      });
+      // this.props.paper.connect({
+      //   source: findDOMNode(this.refs.port),
+      //   target: target
+      // });
     });
   }
 

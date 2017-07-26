@@ -59,7 +59,7 @@ class DataSource extends Component {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
-          paper={this.props.paper}
+          paper={null}
           way={port.portType}
           elementId={this.props.entity.data.id}
           scope={port.portGroup}

@@ -39,9 +39,9 @@ class Microservice extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.paper.bind('connectionDetached', this.onConnectionDetached);
-  }
+  // componentDidMount() {
+  //   this.props.paper.bind('connectionDetached', this.onConnectionDetached);
+  // }
 
   componentWillReceiveProps(nextProps, nextState) {
     if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
@@ -69,9 +69,9 @@ class Microservice extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.paper.unbind('connectionDetached', this.onConnectionDetached);
-  }
+  // componentWillUnmount() {
+  //   this.props.paper.unbind('connectionDetached', this.onConnectionDetached);
+  // }
 
   onConnectionDetached = (info) => {
     this.previousConnection = info;
@@ -89,6 +89,7 @@ class Microservice extends Component {
   }
 
   renderModels() {
+    return null;
     return this.props.models.map((entity, idx) => (
       <Model
         key={idx}
@@ -96,7 +97,7 @@ class Microservice extends Component {
         parent={this.props.entity}
         id={entity.data.id}
         entity={entity}
-        paper={this.props.paper}
+        paper={null}
         left={entity.metadata.left}
         top={entity.metadata.top}
         handleEndDrag={(item) => this.handleEndDrag(item)}
@@ -202,7 +203,7 @@ class Microservice extends Component {
 const connector = createSelector(
   (_, props) => props.entity.data.models,
   state => state.entities.models,
-  (ids, models) => ({models: models.filter(({data: {lunchbadgerId}}) => ids.includes(lunchbadgerId))}),
+  (ids, models) => ({ids}), //models.filter(({data: {lunchbadgerId}}) => ids.includes(lunchbadgerId))}),
 );
 
 export default connect(connector)(CanvasElement(Microservice));

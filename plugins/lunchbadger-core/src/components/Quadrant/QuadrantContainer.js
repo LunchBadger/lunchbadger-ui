@@ -1,15 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import classNames from 'classnames';
 import QuadrantNew from './QuadrantNew';
 
-class QuadrantContainer extends Component {
+class QuadrantContainer extends PureComponent {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    paper: PropTypes.object,
     canvasHeight: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   };
 
@@ -82,48 +81,45 @@ class QuadrantContainer extends Component {
       }
     }
     this.setState({quadrantWidths});
-    this.props.paper.repaintEverything();
+    // this.props.paper.repaintEverything();
   }
 
-  renderQuadrants() {
-    const {plugins, appState, paper, scrollLeft} = this.props;
-    const pluggedQuadrants = plugins.getQuadrants();
-    const {quadrantWidths} = this.state;
-    return pluggedQuadrants.map((plugin, index) => {
-      const QuadrantComponent = plugin.component;
-      return (
-        <QuadrantComponent
-          key={`plugged-quadrant-${index}-${plugin.title}`}
-          appState={appState}
-          paper={paper}
-          data={plugin.dataStore}
-          resizable={index < pluggedQuadrants.length - 1}
-          index={index}
-          width={quadrantWidths[index]}
-          title={plugin.title}
-          scrollLeft={scrollLeft}
-          recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
-        />
-      );
-    });
-  }
+  // renderQuadrants() {
+  //   const {plugins, appState, paper, scrollLeft} = this.props;
+  //   const pluggedQuadrants = plugins.getQuadrants();
+  //   const {quadrantWidths} = this.state;
+  //   return pluggedQuadrants.map((plugin, index) => {
+  //     const QuadrantComponent = plugin.component;
+  //     return (
+  //       <QuadrantComponent
+  //         key={`plugged-quadrant-${index}-${plugin.title}`}
+  //         appState={appState}
+  //         paper={paper}
+  //         data={plugin.dataStore}
+  //         resizable={index < pluggedQuadrants.length - 1}
+  //         index={index}
+  //         width={quadrantWidths[index]}
+  //         title={plugin.title}
+  //         scrollLeft={scrollLeft}
+  //         recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
+  //       />
+  //     );
+  //   });
+  // }
 
   renderQuadrantsNew = () => {
-    const {appState, paper, scrollLeft, quadrants, components} = this.props;
+    const {scrollLeft, quadrants} = this.props;
     const {quadrantWidths} = this.state;
     return quadrants.map(({name, entities}, idx) => (
       <QuadrantNew
         key={idx}
         title={name}
-        appState={appState}
-        paper={paper}
         resizable={idx < quadrants.length - 1}
         index={idx}
         width={quadrantWidths[idx]}
         scrollLeft={scrollLeft}
-        recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
-        entities={entities}
-        components={components}
+
+        types={entities}
       />
     ));
   }
@@ -133,6 +129,7 @@ class QuadrantContainer extends Component {
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
+    // console.log('RENDER QuadrantContainer');
     return (
       <div
         style={{minHeight: canvasHeight}}
@@ -148,25 +145,7 @@ class QuadrantContainer extends Component {
 const selector = createSelector(
   state => !!state.core.appState.currentEditElement,
   state => state.plugins.quadrants,
-  state => state.entities,
-  state => state.plugins.canvasElements,
-  (editing, config, entities, components) => {
-    const quadrants = [];
-    Object.keys(config).forEach((key) => {
-      const quadrant = {name: config[key].name, entities: []};
-      config[key].entities.forEach((type) => {
-        if (entities[type]) {
-          quadrant.entities = [
-            ...quadrant.entities,
-            ...entities[type].filter(item => !item.data.wasBundled),
-          ];
-        }
-      });
-      quadrant.entities = quadrant.entities.sort((a, b) => a.data.itemOrder > b.data.itemOrder);
-      quadrants.push(quadrant);
-    });
-    return {editing, quadrants, components};
-  }
+  (editing, quadrants) => ({editing, quadrants: Object.keys(quadrants).map(key => quadrants[key])}),
 );
 
 export default connect(selector)(QuadrantContainer);

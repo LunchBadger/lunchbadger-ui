@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
@@ -12,23 +13,22 @@ import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../.
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 
 const boxSource = {
-  beginDrag(props) {
-    const {entity, itemOrder} = props;
-    return {entity, itemOrder};
+  beginDrag: (props) => {
+    const {entity, id, itemOrder} = props;
+    return {entity, id, itemOrder};
   },
-
-  canDrag(props) {
+  canDrag: (props) => {
     return !props.currentEditElement;
   }
 };
 
 const boxTarget = {
-  hover(props, monitor, component) {
+  hover: _.debounce((props, monitor, component) => { //FIXME
     const dragIndex = monitor.getItem().itemOrder;
     const hoverIndex = props.itemOrder;
-    if (dragIndex === hoverIndex) {
-      return;
-    }
+    // if (dragIndex === hoverIndex) {
+    //   return;
+    // }
     if (props.isPanelOpened) {
       return;
     }
@@ -46,9 +46,9 @@ const boxTarget = {
     if (item.subelement) {
       return;
     }
-    props.moveEntity(item.entity, dragIndex || 0, hoverIndex || 0);
-    monitor.getItem().itemOrder = hoverIndex;
-  },
+    props.moveEntity(item.id, dragIndex || 0, hoverIndex || 0);
+    // monitor.getItem().itemOrder = hoverIndex;
+  }, 300),
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
@@ -58,11 +58,9 @@ const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     const element = component.element.decoratedComponentInstance || component.element;
-
     if (props.isPanelOpened) {
       return;
     }
-
     if (typeof element.onDrop === 'function') {
       setTimeout(() => element.onDrop(item));
     }
@@ -73,11 +71,13 @@ const boxTarget = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
+
 @DropTarget('canvasElement', boxTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
 }))
+
 export default (ComposedComponent) => {
   class CanvasElement extends Component {
     static propTypes = {
@@ -113,23 +113,43 @@ export default (ComposedComponent) => {
         modelEnv_0: null,
       };
       this.multiEnvIndex = 0;
-      this.checkHighlightAndEditableState = (props) => {
-        const currentElement = props.currentElement;
-        if (currentElement && currentElement.data.id === this.props.entity.data.id) {
-          if (!this.state.highlighted) {
-            this.setState({highlighted: true});
-          }
-        } else {
-          this.setState({highlighted: false});
-        }
-      };
+      // this.checkHighlightAndEditableState = (props) => {
+      //   const currentElement = props.currentElement;
+      //   if (currentElement && currentElement.data.id === this.props.entity.data.id) {
+      //     if (!this.state.highlighted) {
+      //       console.log(111, currentElement.data.id, this.props.entity.data.id);
+      //       this.setState({highlighted: true});
+      //     }
+      //   } else {
+      //     this.setState({highlighted: false});
+      //   }
+      // };
     }
 
     componentWillReceiveProps(props) {
       this._handleOnOver(props);
       this._handleDrop(props);
-      this.checkHighlightAndEditableState(props);
+      // this.checkHighlightAndEditableState(props);
     }
+
+    // componentWillUpdate(props, state) {
+    //   // if (JSON.stringify(props) !== JSON.stringify(this.props)) {
+    //     // console.log('DIFF PROPS', this.props.entity.data.name);
+    //   //   Object.keys(props).forEach((key) => {
+    //   //     if (props[key] !== this.props[key]) {
+    //   //       console.log('DIFF props', this.props.entity.data.name, key, props[key], this.props[key]);
+    //   //     }
+    //   //   });
+    //   // // }
+    //   // // if (JSON.stringify(state) !== JSON.stringify(this.state)) {
+    //   //   // console.log('DIFF STATE', this.props.entity.data.name);
+    //   //   Object.keys(state).forEach((key) => {
+    //   //     if (state[key] !== this.state[key]) {
+    //   //       console.log('DIFF state', this.props.entity.data.name, key, state[key], this.state[key]);
+    //   //     }
+    //   //   });
+    //   // }
+    // }
 
     componentDidMount() {
       this.handleChangeListeners('addChangeListener');
@@ -153,7 +173,7 @@ export default (ComposedComponent) => {
         this.triggerElementAutofocus();
         this.props.toggleEdit(this.props.entity);
       }
-      this.checkHighlightAndEditableState(this.props);
+      // this.checkHighlightAndEditableState(this.props);
       this.props.entity.metadata.elementDOM = this.elementDOM;
     }
 
@@ -290,7 +310,7 @@ export default (ComposedComponent) => {
     }
 
     toggleHighlighted() {
-      if (!this.state.highlighted) {
+      if (!this.props.highlighted) {
         this.props.toggleHighlight(this.props.entity);
       } else {
         setTimeout(() => {
@@ -415,19 +435,18 @@ export default (ComposedComponent) => {
       const {multiEnvIndex, multiEnvDelta} = this.context;
       const {ready, entity} = this.props;
       const {metadata} = entity;
-      const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
+      const {connectDragSource, connectDropTarget, dragging, icon} = this.props;
       const {validations} = this.state;
       const elementClass = classNames({
         'canvas-element': true,
         editable: metadata.editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        highlighted: this.state.highlighted || metadata.editable,
-        dragging: isDragging,
+        highlighted: this.props.highlighted || metadata.editable,
+        dragging,
         wip: !ready,
         invalid: !validations.isValid
       });
-      const opacity = isDragging ? 0.2 : 1;
       const entityDevelopment = {...this.state.modelEnv_0};
       const mask = ['pipelines'];
       // FIXME - refactor below for multi env, because it cannot overwrite entity properties
@@ -465,6 +484,7 @@ export default (ComposedComponent) => {
           onClick: this._handleEdit,
         });
       }
+      // console.log('RENDER CANVAS', this.props.entity.data.name);
       return (
             <Entity
               ref={(r) => {this.entityRef = r}}
@@ -473,8 +493,8 @@ export default (ComposedComponent) => {
               editable={metadata.editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}
-              highlighted={this.state.highlighted || metadata.editable}
-              dragging={isDragging}
+              highlighted={this.props.highlighted || metadata.editable}
+              dragging={dragging}
               wip={!ready}
               invalid={validations.isValid}
               toolboxConfig={toolboxConfig}
@@ -520,11 +540,14 @@ export default (ComposedComponent) => {
     }
   }
 
-  const mapStateToProps = state => ({
-    currentElement: state.core.appState.currentElement,
-    currentEditElement: state.core.appState.currentEditElement,
-    isPanelOpened: !!state.core.appState.currentlyOpenedPanel,
-  });
+  const connector = createSelector(
+    state => state.core.appState.currentElement,
+    state => state.core.appState.currentEditElement,
+    state => !!state.core.appState.currentlyOpenedPanel,
+    (_, props) => props.entity.data.id,
+    (currentElement, currentEditElement, isPanelOpened, id) =>
+      ({currentEditElement, isPanelOpened, highlighted: !!currentElement && currentElement.data.id === id}),
+  );
 
   const mapDispatchToProps = dispatch => ({
     toggleHighlight: element => dispatch(toggleHighlight(element)),
@@ -532,5 +555,5 @@ export default (ComposedComponent) => {
     removeEntity: id => dispatch(removeEntity(id)),
   });
 
-  return connect(mapStateToProps, mapDispatchToProps)(CanvasElement);
+  return connect(connector, mapDispatchToProps)(CanvasElement);
 }

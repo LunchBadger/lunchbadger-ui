@@ -188,8 +188,6 @@ class App extends Component {
             </div>
             <div style={multiEnvDeltaStyle}>
               <Canvas
-                appState={this.state.appState}
-                plugins={this.state.pluginsStore}
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
                 currentlyOpenedPanel={currentlyOpenedPanel}

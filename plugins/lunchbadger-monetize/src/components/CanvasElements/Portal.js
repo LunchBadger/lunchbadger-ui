@@ -46,9 +46,9 @@ class Portal extends Component {
 
   componentDidMount() {
     const {paper, ready, toggleEdit, entity} = this.props;
-    paper.bind('connectionDetached', (info) => {
-      this.previousConnection = info;
-    });
+    // paper.bind('connectionDetached', (info) => {
+    //   this.previousConnection = info;
+    // });
     if (!ready) {
       toggleEdit(entity);
     }

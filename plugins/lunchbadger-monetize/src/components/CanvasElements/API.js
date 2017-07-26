@@ -36,9 +36,9 @@ class API extends Component {
   }
 
   componentDidMount() {
-    this.props.paper.bind('connectionDetached', (info) => {
-      this.previousConnection = info;
-    });
+    // this.props.paper.bind('connectionDetached', (info) => {
+    //   this.previousConnection = info;
+    // });
   }
 
   componentWillReceiveProps(nextProps, nextState) {

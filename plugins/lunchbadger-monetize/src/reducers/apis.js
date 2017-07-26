@@ -4,8 +4,11 @@ const {actionTypes} = LunchBadgerCore.utils;
 
 export default (state = {}, action) => {
   switch (action.type) {
-    // case actionTypes.loadProjectSuccess:
-    //   return action.payload.body.apis.map(item => API.create(item));
+    case actionTypes.loadProjectSuccess:
+      return action.payload.body.apis.reduce((map, item) => {
+        map[item.id] = API.create(item);
+        return map;
+      }, {});
     default:
       return state;
   }

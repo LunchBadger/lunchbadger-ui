@@ -27,9 +27,7 @@ const wizardFunc = label => () => {}; //TODO: implement datasource wizard
 const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
 
 const dataSourceAction = label => dispatch => {
-  console.log('new ds', label, getDataSourceConnector(label));
   dispatch(addDataSource(label, getDataSourceConnector(label)));
-  // AddDataSource(label, getDataSourceConnector(label));
 };
 
 const modelAction = dispatch => {

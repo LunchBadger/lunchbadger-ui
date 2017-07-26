@@ -17,8 +17,11 @@ export const loadDataSources = () => async (dispatch, getState) => {
   }
 };
 
-export const addDataSource = (name, connector) => (dispatch) => {
-  dispatch(actions.addDataSource({name, connector}));
+export const addDataSource = (name, connector) => (dispatch, getState) => {
+  const {entities, plugins: {quadrants}} = getState();
+  const types = quadrants[0].entities;
+  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  dispatch(actions.addDataSource({name, connector, itemOrder}));
 }
 
 export const updateDataSource = (entity, model) => async (dispatch) => {

@@ -6,11 +6,12 @@ export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.loadDataSourcesSuccess:
       return action.payload.entities;
-    // case actionTypes.addDataSource:
-    //   return [
-    //     ...state,
-    //     DataSource.create(action.payload, {loaded: false, editable: true}),
-    //   ];
+    case actionTypes.addDataSource:
+      const entity = DataSource.create(action.payload, {loaded: false, editable: true});
+      return {
+        ...state,
+        [entity.data.lunchbadgerId]: entity,
+      };
     // case actionTypes.updateDataSourceRequest:
     //   return [
     //     ...state.filter(({data: {lunchbadgerId}}) => lunchbadgerId !== action.payload.lunchbadgerId),

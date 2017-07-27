@@ -4,7 +4,6 @@ import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import Aside from '../Aside/Aside';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
 import HeaderMultiEnv from '../Header/HeaderMultiEnv';
@@ -18,7 +17,7 @@ import {saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {loadFromServer} from '../../reduxActions';
-import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
+import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
 import './App.scss';
@@ -109,7 +108,7 @@ class App extends Component {
   }
 
   renderHeader = () => {
-    const {currentEditElement} = this.props;
+    const {isEntityEditable} = this.props;
     const username = getUser().profile.preferred_username;
     if (LunchBadgerCore.isMultiEnv) {
       return (
@@ -120,8 +119,8 @@ class App extends Component {
           plugins={this.state.pluginsStore}
           saveToServer={this.saveToServer}
           clearServer={this.clearServer}
-          disabledMultiEnvMenu={!!currentEditElement || !!this.props.currentlyOpenedPanel}
-          headerMenuDisabled={!!currentEditElement}
+          disabledMultiEnvMenu={isEntityEditable || !!this.props.currentlyOpenedPanel}
+          headerMenuDisabled={isEntityEditable}
         />
       );
     }
@@ -133,7 +132,7 @@ class App extends Component {
         plugins={this.state.pluginsStore}
         saveToServer={this.saveToServer}
         clearServer={this.clearServer}
-        headerMenuDisabled={!!currentEditElement}
+        headerMenuDisabled={isEntityEditable}
       />
     );
   }
@@ -145,7 +144,7 @@ class App extends Component {
       multiEnvDelta,
       multiEnvIndex,
       currentlyOpenedPanel,
-      currentEditElement,
+      isEntityEditable,
       loading,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
@@ -160,9 +159,7 @@ class App extends Component {
           <Spinner loading={loading} />
           {this.renderHeader()}
           <Aside
-            plugins={this.state.pluginsStore}
-            disabled={multiEnvNotDev || !!currentlyOpenedPanel || !!currentEditElement}
-            currentEditElement={currentEditElement}
+            disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
           />
           <div ref="container" className="app__container">
             <div className="app__panel-wrapper">
@@ -204,7 +201,7 @@ const selector = createSelector(
   state => state.ui.multiEnvironments.environments.length,
   state => state.core.appState.currentlyOpenedPanel,
   state => state.core.appState.currentElement,
-  state => state.core.appState.currentEditElement,
+  state => !!state.states.currentEditElement,
   state => state.core.loadingProject > 0,
   (
     systemDefcon1Visible,
@@ -214,7 +211,7 @@ const selector = createSelector(
     multiEnvAmount,
     currentlyOpenedPanel,
     currentElement,
-    currentEditElement,
+    isEntityEditable,
     loading,
   ) => ({
     systemDefcon1Visible,
@@ -224,7 +221,7 @@ const selector = createSelector(
     multiEnvAmount,
     currentlyOpenedPanel,
     currentElement,
-    currentEditElement,
+    isEntityEditable,
     loading,
   }),
 );

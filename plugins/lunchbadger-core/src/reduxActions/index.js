@@ -13,6 +13,7 @@ import {
 import {
   setCurrentElement,
   clearCurrentElement,
+  setCurrentEditElement,
 } from './states';
 
 export {
@@ -26,4 +27,5 @@ export {
   loadFromServer,
   setCurrentElement,
   clearCurrentElement,
+  setCurrentEditElement,
 };

@@ -143,7 +143,7 @@ class QuadrantContainer extends PureComponent {
 }
 
 const selector = createSelector(
-  state => !!state.core.appState.currentEditElement,
+  state => !!state.states.currentEditElement,
   state => state.plugins.quadrants,
   (editing, quadrants) => ({editing, quadrants: Object.keys(quadrants).map(key => quadrants[key])}),
 );

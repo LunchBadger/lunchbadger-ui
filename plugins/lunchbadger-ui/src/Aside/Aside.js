@@ -7,10 +7,23 @@ import cs from 'classnames';
 import './Aside.scss';
 
 class Aside extends Component {
-  handleClick = action => action(this.props.dispatch);
+  static propTypes = {
+    disabled: PropTypes.bool,
+    groups: PropTypes.array,
+  }
+
+  static defaultProps = {
+    disabled: false,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
+  }
+
+  handleClick = action => action(this.context.store.dispatch);
 
   render() {
-    const {disabled, groups, dispatch} = this.props;
+    const {disabled, groups} = this.props;
     return (
       <aside className={cs('Aside', {disabled})}>
         {groups.map((group, idx) => (
@@ -25,14 +38,6 @@ class Aside extends Component {
   }
 }
 
-Aside.propTypes = {
-  disabled: PropTypes.bool,
-};
-
-Aside.defaultProps = {
-  disabled: false,
-};
-
 const selector = createSelector(
   state => state.plugins.tools || [],
   tools => ({
@@ -40,8 +45,4 @@ const selector = createSelector(
   }),
 );
 
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-});
-
-export default connect(selector, mapDispatchToProps)(Aside);
+export default connect(selector)(Aside);

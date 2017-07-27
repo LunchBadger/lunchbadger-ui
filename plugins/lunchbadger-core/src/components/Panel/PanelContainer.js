@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import DetailsPanel from './DetailsPanel';
 import SettingsPanel from './SettingsPanel';
 import classNames from 'classnames';
@@ -57,8 +58,9 @@ class PanelContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  disabled: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => !!state.states.currentEditElement,
+  disabled => ({disabled}),
+);
 
-export default connect(mapStateToProps)(PanelContainer);
+export default connect(selector)(PanelContainer);

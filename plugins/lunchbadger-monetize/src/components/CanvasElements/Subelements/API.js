@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
@@ -115,10 +116,19 @@ class API extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-  isCurrentEditElement: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => state.core.appState.currentlySelectedParent,
+  state => state.core.appState.currentlySelectedSubelements,
+  state => !!state.core.appState.currentEditElement,
+  (
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  ) => ({
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  }),
+);
 
-export default connect(mapStateToProps)(API);
+export default connect(selector)(API);

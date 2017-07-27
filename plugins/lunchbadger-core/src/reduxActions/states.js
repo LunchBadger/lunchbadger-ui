@@ -13,3 +13,9 @@ export const clearCurrentElement = () => (dispatch, getState) => {
   if (panelEditingStatus || currentElement === null) return;
   dispatch(actions.setStates({key: 'currentElement', value: null}));
 }
+
+export const setCurrentEditElement = value => (dispatch, getState) => {
+  const {currentEditElement} = getState().states;
+  if (currentEditElement && currentEditElement.data.id === value.data.id) return;
+  dispatch(actions.setStates({key: 'currentEditElement', value}));
+}

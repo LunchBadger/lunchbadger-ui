@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -96,14 +97,23 @@ class Model extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-  isCurrentEditElement: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => state.core.appState.currentlySelectedParent,
+  state => state.core.appState.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
+  (
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  ) => ({
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  }),
+);
 
 const mapDispatchToProps = dispatch => ({
   toggleSubelement: (parent, subelement) => dispatch(toggleSubelement(parent, subelement)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Model);
+export default connect(selector, mapDispatchToProps)(Model);

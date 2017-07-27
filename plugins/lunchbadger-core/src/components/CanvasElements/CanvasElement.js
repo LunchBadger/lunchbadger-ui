@@ -6,7 +6,7 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import {toggleHighlight, toggleEdit, removeEntity, setCurrentElement} from '../../reduxActions';
+import {toggleHighlight, toggleEdit, removeEntity, setCurrentElement, setCurrentEditElement} from '../../reduxActions';
 import _ from 'lodash';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
@@ -351,26 +351,20 @@ export default (ComposedComponent) => {
       }
     }
 
-    _handleRemove = () => {
-      // const {removeEntity, entity} = this.props;
-      // if (this.element.removeEntity) {
-      //   this.element.removeEntity();
-      // }
-      // removeEntity(entity.data.id);
+    handleRemove = () => {
       const {entity} = this.props;
       const {store: {dispatch, getState}} = this.context;
       dispatch(getState().plugins.onDelete[entity.metadata.type](entity));
     }
 
-    _handleEdit = (evt) => {
+    handleEdit = (event) => {
       const {multiEnvIndex, multiEnvDelta} = this.context;
       if (multiEnvDelta && multiEnvIndex > 0) {
-        evt.stopPropagation();
+        event.stopPropagation();
         return;
       }
-      this.toggleEditableState(evt);
-      this.setState({expanded: true});
-      evt.stopPropagation();
+      this.context.store.dispatch(setCurrentEditElement(this.props.entity));
+      event.stopPropagation();
     }
 
     _handleCancel = (evt) => {
@@ -378,10 +372,9 @@ export default (ComposedComponent) => {
       const {store: {dispatch, getState}} = this.context;
       const {entity} = this.props;
       const a = dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
-      console.log('111', a);
-      return;
+      return; // FIXME
       if (this.state.modelBeforeEdit === null) {
-        // this._handleRemove();
+        // this.handleRemove();
         evt.preventDefault();
         evt.stopPropagation();
         return;
@@ -443,16 +436,15 @@ export default (ComposedComponent) => {
 
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
-      const {ready, entity} = this.props;
+      const {ready, entity, connectDragSource, connectDropTarget, dragging, icon, editable, highlighted} = this.props;
       const {metadata} = entity;
-      const {connectDragSource, connectDropTarget, dragging, icon} = this.props;
       const {validations} = this.state;
       const elementClass = classNames({
         'canvas-element': true,
-        editable: metadata.editable && ready,
+        editable: editable && ready,
         expanded: this.state.expanded && ready,
         collapsed: !this.state.expanded,
-        highlighted: this.props.highlighted || metadata.editable,
+        highlighted,
         dragging,
         wip: !ready,
         invalid: !validations.isValid
@@ -491,7 +483,7 @@ export default (ComposedComponent) => {
         toolboxConfig.push({
           action: 'edit',
           svg: iconEdit,
-          onClick: this._handleEdit,
+          onClick: this.handleEdit,
         });
       }
       // console.log('RENDER CANVAS', this.props.entity.data.name);
@@ -500,10 +492,10 @@ export default (ComposedComponent) => {
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.metadata.type}
               connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.data.connector : undefined}
-              editable={metadata.editable}
+              editable={editable}
               expanded={this.state.expanded}
               collapsed={!this.state.expanded}
-              highlighted={this.props.highlighted || metadata.editable}
+              highlighted={highlighted}
               dragging={dragging}
               wip={!ready}
               invalid={validations.isValid}
@@ -516,7 +508,7 @@ export default (ComposedComponent) => {
               onFieldClick={this._handleValidationFieldClick}
               onValidSubmit={this.update}
               onClick={this.handleClick}
-              onDoubleClick={this._handleEdit}
+              onDoubleClick={this.handleEdit}
               connectDragSource={connectDragSource}
               connectDropTarget={connectDropTarget}
               isDelta={isDelta}
@@ -534,7 +526,7 @@ export default (ComposedComponent) => {
               {this.state.showRemovingModal && (
                 <TwoOptionModal
                   onClose={() => this.setState({showRemovingModal: false})}
-                  onSave={this._handleRemove}
+                  onSave={this.handleRemove}
                   onCancel={() => this.setState({showRemovingModal: false})}
                   title="Remove entity"
                   confirmText="Remove"
@@ -552,7 +544,7 @@ export default (ComposedComponent) => {
 
   const connector = createSelector(
     state => state.states.currentElement,
-    state => state.core.appState.currentEditElement,
+    state => state.states.currentEditElement,
     state => !!state.core.appState.currentlyOpenedPanel,
     (_, props) => props.entity.data.id,
     (
@@ -564,6 +556,7 @@ export default (ComposedComponent) => {
       currentEditElement,
       isPanelOpened,
       highlighted: !!currentElement && currentElement.data.id === id,
+      editable: !!currentEditElement && currentEditElement.data.id === id,
     }),
   );
 

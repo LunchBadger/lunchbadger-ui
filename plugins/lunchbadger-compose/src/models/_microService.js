@@ -28,5 +28,20 @@ export default {
         id,
       },
     };
-  }
+  },
+  validate: ({data, metadata}, model, state) => {
+    const invalid = {};
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.microservices)
+        .filter(id => id !== metadata.id)
+        .filter(id => state.entities.microservices[id].data.name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = messages.duplicatedEntityName('Microservice');
+      }
+    }
+    checkFields(['name'], model, invalid);
+    return invalid;
+  },
 };

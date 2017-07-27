@@ -12,9 +12,9 @@ export default (state = {}, action) => {
         return map;
       }, {});
     case actionTypes.addMicroservice:
-    // case actionTypes.deleteModelRequest:
-    // case actionTypes.updateModelRequest:
-    // case actionTypes.updateModelSuccess:
+    case actionTypes.updateMicroserviceRequest:
+    case actionTypes.updateMicroserviceSuccess:
+    case actionTypes.deleteMicroserviceRequest:
       newState[action.payload.entity.metadata.id] = action.payload.entity;
       return newState;
     case actionTypes.deleteMicroserviceSuccess:

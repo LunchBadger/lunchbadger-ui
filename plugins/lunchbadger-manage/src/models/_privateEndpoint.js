@@ -3,7 +3,8 @@ import uuid from 'uuid';
 const initialModel = {
   data: {
     itemOrder: 0,
-    name: '',
+    name: 'PrivateEndpoint',
+    contextPath: '',
     url: 'https://private/endpoint',
   },
   metadata: {
@@ -16,12 +17,13 @@ const initialModel = {
 export default {
   create: (model, metadata) => {
     const id = model.id || uuid.v4();
+    const contextPath = (model.name || initialModel.data.name).toLowerCase();
     return {
       data: {
         ...initialModel.data,
         ...model,
         id,
-        contextPath: model.name.toLowerCase(),
+        contextPath,
       },
       metadata: {
         ...initialModel.metadata,
@@ -29,5 +31,20 @@ export default {
         id,
       },
     };
+  },
+  validate: ({data, metadata}, model, state) => {
+    const invalid = {};
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.privateEndpoints)
+        .filter(id => id !== metadata.id)
+        .filter(id => state.entities.privateEndpoints[id].data.name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = messages.duplicatedEntityName('Private Endpoint');
+      }
+    }
+    checkFields(['name', 'url'], model, invalid);
+    return invalid;
   },
 };

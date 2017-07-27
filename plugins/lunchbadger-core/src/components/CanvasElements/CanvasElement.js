@@ -336,6 +336,7 @@ export default (ComposedComponent) => {
       const {entity} = this.props;
       const {store: {dispatch, getState}} = this.context;
       dispatch(getState().plugins.onDelete[entity.metadata.type](entity));
+      dispatch(clearCurrentElement());
     }
 
     handleEdit = (event) => {

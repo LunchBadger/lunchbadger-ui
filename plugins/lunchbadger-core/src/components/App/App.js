@@ -178,7 +178,6 @@ class App extends Component {
               <Canvas
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
-                currentlyOpenedPanel={currentlyOpenedPanel}
               />
             </div>
           </div>

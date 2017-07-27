@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
 import addConnection from '../../actions/Connection/add';
@@ -11,7 +12,7 @@ import ProjectService from '../../services/ProjectService';
 import {clearCurrentElement} from '../../reduxActions';
 import './Canvas.scss';
 
-export default class Canvas extends Component {
+class Canvas extends Component {
   static contextTypes = {
     store: PropTypes.object,
   }
@@ -264,12 +265,9 @@ export default class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {currentlyOpenedPanel} = this.props;
+    const {isPanelClosed} = this.props;
     const {scrollLeft} = this.state;
-    let {canvasHeight} = this.state;
-    if (!currentlyOpenedPanel) {
-      canvasHeight = null;
-    }
+    const canvasHeight = isPanelClosed ? null : this.state.canvasHeight;
     return (
       <section
         className="canvas"
@@ -296,3 +294,10 @@ export default class Canvas extends Component {
     );
   }
 }
+
+const selector = createSelector(
+  state => !state.core.appState.currentlyOpenedPanel,
+  (isPanelClosed) => ({isPanelClosed}),
+);
+
+export default connect(selector)(Canvas);

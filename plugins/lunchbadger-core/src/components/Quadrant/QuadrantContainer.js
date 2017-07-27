@@ -107,28 +107,12 @@ class QuadrantContainer extends PureComponent {
   //   });
   // }
 
-  renderQuadrantsNew = () => {
-    const {scrollLeft, quadrants} = this.props;
-    const {quadrantWidths} = this.state;
-    return quadrants.map(({name, entities}, idx) => (
-      <QuadrantNew
-        key={idx}
-        title={name}
-        resizable={idx < quadrants.length - 1}
-        index={idx}
-        width={quadrantWidths[idx]}
-        scrollLeft={scrollLeft}
-
-        types={entities}
-      />
-    ));
-  }
-
   render() {
-    const {editing, canvasHeight, className, id} = this.props;
+    const {editing, canvasHeight, className, id, scrollLeft, quadrants} = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
+    const {quadrantWidths} = this.state;
     // console.log('RENDER QuadrantContainer');
     return (
       <div
@@ -136,7 +120,17 @@ class QuadrantContainer extends PureComponent {
         className={`${className} ${containerClass}`}
         id={id}
       >
-        {this.renderQuadrantsNew()}
+        {quadrants.map(({name, entities}, idx) => (
+          <QuadrantNew
+            key={idx}
+            title={name}
+            resizable={idx < quadrants.length - 1}
+            index={idx}
+            width={quadrantWidths[idx]}
+            scrollLeft={scrollLeft}
+            types={entities}
+          />
+        ))}
       </div>
     );
   }
@@ -145,7 +139,13 @@ class QuadrantContainer extends PureComponent {
 const selector = createSelector(
   state => !!state.states.currentEditElement,
   state => state.plugins.quadrants,
-  (editing, quadrants) => ({editing, quadrants: Object.keys(quadrants).map(key => quadrants[key])}),
+  (
+    editing,
+    quadrants,
+  ) => ({
+    editing,
+    quadrants: Object.keys(quadrants).map(key => quadrants[key]),
+  }),
 );
 
 export default connect(selector)(QuadrantContainer);

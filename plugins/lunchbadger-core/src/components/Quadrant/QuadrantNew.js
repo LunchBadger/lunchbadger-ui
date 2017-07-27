@@ -96,13 +96,14 @@ class Quadrant extends PureComponent {
   }
 
   render() {
-    const {title, connectDropTarget, scrollLeft, resizable, width, components} = this.props;
+    const {title, connectDropTarget, scrollLeft, resizable, width, components, loadingProject} = this.props;
     const styles = {width};
     const titleStyles = {
       ...styles,
       transform: `translateX(-${scrollLeft}px)`,
     }
     const {orderedIds, draggingId} = this.state;
+    const ids = loadingProject ? [] : orderedIds;
     // console.log('RENDER QuadrantNew', title, orderedIds);
     return (
       <div
@@ -115,7 +116,7 @@ class Quadrant extends PureComponent {
           {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
         </div>
         <div className="quadrant__body">
-          {orderedIds.map(({id, type}, idx) => {
+          {ids.map(({id, type}, idx) => {
             const entity = this.props[type][id];
             const Component = components[entity.metadata.type];
             return (
@@ -145,10 +146,12 @@ const selector = createSelector(
   state => state.entities,
   (_, props) => props.types,
   state => state.plugins.canvasElements,
-  (entities, types, components) => {
+  state => state.loadingProject > 0,
+  (entities, types, components, loadingProject) => {
     const result = {
       types,
       components,
+      loadingProject,
     };
     types.forEach((type) => {
       result[type] = entities[type];

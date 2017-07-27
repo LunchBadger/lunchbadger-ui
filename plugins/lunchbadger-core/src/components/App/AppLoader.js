@@ -64,7 +64,7 @@ export default class AppLoader extends Component {
   renderLoadingScreen() {
     return (
       <div className='app'>
-        <Spinner />
+        <Spinner force />
         <div className='app__loading-message'>
           Baking your workspace, please wait...
         </div>

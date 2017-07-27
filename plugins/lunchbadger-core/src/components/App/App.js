@@ -145,7 +145,6 @@ class App extends Component {
       multiEnvIndex,
       currentlyOpenedPanel,
       isEntityEditable,
-      loading,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -156,7 +155,7 @@ class App extends Component {
       <div>
         <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
         <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
-          <Spinner loading={loading} />
+          <Spinner />
           {this.renderHeader()}
           <Aside
             disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
@@ -201,7 +200,6 @@ const selector = createSelector(
   state => state.core.appState.currentlyOpenedPanel,
   state => state.core.appState.currentElement,
   state => !!state.states.currentEditElement,
-  state => state.core.loadingProject > 0,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -211,7 +209,6 @@ const selector = createSelector(
     currentlyOpenedPanel,
     currentElement,
     isEntityEditable,
-    loading,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -221,7 +218,6 @@ const selector = createSelector(
     currentlyOpenedPanel,
     currentElement,
     isEntityEditable,
-    loading,
   }),
 );
 

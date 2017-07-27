@@ -7,9 +7,9 @@ export default (state = {}, action) => {
     case actionTypes.loadDataSourcesSuccess:
       return action.payload.entities;
     case actionTypes.addDataSource:
-    case actionTypes.deleteDataSourceRequest:
     case actionTypes.updateDataSourceRequest:
     case actionTypes.updateDataSourceSuccess:
+    case actionTypes.deleteDataSourceRequest:
       newState[action.payload.entity.metadata.id] = action.payload.entity;
       return newState;
     case actionTypes.deleteDataSourceSuccess:

@@ -33,46 +33,6 @@ class ProjectService {
     throw err;
   });
 
-  // upsertDataSource(body) {
-  //   return this._workspaceClient.post('DataSourceDefinitions', {body});
-  // }
-  //
-  // deleteDataSource(id) {
-  //   return this._workspaceClient.delete(`DataSourceDefinitions/${id}`);
-  // }
-  //
-  // upsertModel(body) {
-  //   return this._workspaceClient.post('ModelDefinitions', {body});
-  // }
-  //
-  // deleteModel(id) {
-  //   return this._workspaceClient.delete(`ModelDefinitions/${id}`);
-  // }
-  //
-  // upsertModelConfig(data) {
-  //   return this._workspaceClient.post('ModelConfigs', { body: data });
-  // }
-  //
-  // deleteModelConfig(id) {
-  //   return this._workspaceClient.delete(`ModelConfigs/${id}`);
-  // }
-  //
-  // upsertModelProperties(body) {
-  //   return this._workspaceClient.post('ModelProperties', {body});
-  // }
-  //
-  // deleteModelProperties(modelId) {
-  //   return this._workspaceClient.delete(`ModelDefinitions/${modelId}/properties`);
-  // }
-  //
-  // upsertModelRelations(body) {
-  //   return this._workspaceClient.post('ModelRelations', {body});
-  // }
-  //
-  // deleteModelRelations(modelId) {
-  //   return this._workspaceClient.delete(`ModelDefinitions/${modelId}/relations`);
-  // }
-
   save(data) {
     return this.api.patch('Projects', {body: {
       id: this.getProjectId(),

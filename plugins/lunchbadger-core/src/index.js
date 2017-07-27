@@ -79,6 +79,7 @@ import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
 import messages from './utils/messages';
+import checkFields from './utils/checkFields';
 
 import './utils/formValidators';
 
@@ -184,6 +185,7 @@ let LunchBadgerCore = {
       Model: 'NewModel',
     },
     messages,
+    checkFields,
   },
 };
 

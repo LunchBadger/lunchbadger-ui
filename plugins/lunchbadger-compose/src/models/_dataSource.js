@@ -47,13 +47,14 @@ export default {
   },
   validate: ({data, metadata}, model, state) => {
     const invalid = {};
+    const {messages, checkFields} = LunchBadgerCore.utils;
     if (model.name !== '') {
       const isDuplicateName = Object.keys(state.entities.dataSources)
         .filter(id => id !== metadata.id)
-        .filter(id => state.entities.dataSources[id].data.name === model.name)
+        .filter(id => state.entities.dataSources[id].data.name.toLowerCase() === model.name.toLowerCase())
         .length > 0;
       if (isDuplicateName) {
-        invalid.name = LunchBadgerCore.utils.messages.duplicatedEntityName('Data Source');
+        invalid.name = messages.duplicatedEntityName('Data Source');
       }
     }
     const fields = ['name', 'url', 'database', 'username', 'password'];
@@ -61,10 +62,3 @@ export default {
     return invalid;
   },
 };
-
-const checkFields = (fields, model, invalid) => {
-  const {fieldCannotBeEmpty} = LunchBadgerCore.utils.messages;
-  fields.forEach((field) => {
-    if (model[field] === '') invalid[field] = fieldCannotBeEmpty;
-  });
-}

@@ -66,7 +66,7 @@ class Model extends Component {
   // }
 
   initState = (props = this.props) => {
-    const {contextPath, name} = props.entity.data;
+    const {http: {path: contextPath}, name} = props.entity.data;
     return {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
@@ -222,12 +222,12 @@ class Model extends Component {
     const {contextPath} = this.state;
     const mainProperties = [
       {
-        name: 'contextPath',
+        name: 'http[path]',
         title: 'context path',
         value: contextPath,
         invalid: data.contextPath,
         onChange: this.updateContextPath,
-        onBlur: this.handleFieldChange('contextPath')
+        onBlur: this.handleFieldChange('contextPath'),
       }
     ];
     mainProperties[0].isDelta = contextPath !== entityDevelopment.contextPath;

@@ -7,9 +7,9 @@ export default (state = {}, action) => {
     case actionTypes.loadModelsSuccess:
       return action.payload.entities;
     case actionTypes.addModel:
-    // case actionTypes.deleteModelRequest:
-    // case actionTypes.updateModelRequest:
-    // case actionTypes.updateModelSuccess:
+    case actionTypes.updateModelRequest:
+    case actionTypes.updateModelSuccess:
+    case actionTypes.deleteModelRequest:
       newState[action.payload.entity.metadata.id] = action.payload.entity;
       return newState;
     case actionTypes.deleteModelSuccess:

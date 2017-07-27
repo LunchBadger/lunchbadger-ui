@@ -354,6 +354,9 @@ export default (ComposedComponent) => {
       const {entity} = this.props;
       dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
       if (entity.metadata.loaded) {
+        if (!this.state.isValid) {
+          this.setState({validations: {isValid: true, data: {}}});
+        }
         if (this.entityRef.getFormRef()) {
           this.entityRef.getFormRef().reset(entity.data);
         }

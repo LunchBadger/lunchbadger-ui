@@ -31,13 +31,15 @@ const initialModel = {
 export default {
   create: (model, metadata) => {
     const id = model.lunchbadgerId || uuid.v4();
+    const name = model.name || 'NewModel';
     return {
       data: {
         ...initialModel.data,
         ...model,
-        id: `server.${model.name}`,
+        id: `server.${name}`,
         lunchbadgerId: id,
-        contextPath: model.name.toLowerCase(),
+        name,
+        contextPath: name.toLowerCase(),
       },
       metadata: {
         ...initialModel.metadata,

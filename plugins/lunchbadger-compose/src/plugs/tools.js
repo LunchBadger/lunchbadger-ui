@@ -1,4 +1,6 @@
-import {addDataSource, addModel} from '../reduxActions/dataSources';
+import {addDataSource} from '../reduxActions/dataSources';
+import {addModel} from '../reduxActions/models';
+import {addMicroservice} from '../reduxActions/microservices';
 // import AddDataSource from '../actions/CanvasElements/DataSource/add';
 // import AddModel from '../actions/CanvasElements/Model/add';
 // import AddMicroservice from '../actions/CanvasElements/Microservice/add';
@@ -28,15 +30,9 @@ const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(la
 
 const dataSourceAction = label => () => dispatch => dispatch(addDataSource(label, getDataSourceConnector(label)));
 
-const modelAction = dispatch => {
-  // dispatch(addModel('NewModel'));
-  // AddModel();
-};
+const modelAction = () => dispatch => dispatch(addModel());
 
-const microserviceAction = dispatch => {
-  // dispatch(AddMicroservice());
-  // AddMicroservice();
-};
+const microserviceAction = () => dispatch => dispatch(addMicroservice());
 
 export default {
   0: [

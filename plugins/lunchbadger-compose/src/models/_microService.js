@@ -3,7 +3,7 @@ import uuid from 'uuid';
 const initialModel = {
   data: {
     itemOrder: 0,
-    name: '',
+    name: 'Microservice',
     models: [],
   },
   metadata: {

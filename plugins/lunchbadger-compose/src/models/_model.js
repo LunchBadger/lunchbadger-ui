@@ -22,8 +22,7 @@ const initialModel = {
   metadata: {
     type: 'Model',
     loaded: true,
-    ready: true,
-    editable: false,
+    processing: false,
     top: 0,
     left: 0,
   },
@@ -55,6 +54,7 @@ export default {
           },
         ],
         ...metadata,
+        id,
       },
     };
   },

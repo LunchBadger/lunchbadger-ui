@@ -16,6 +16,7 @@ export const clearCurrentElement = () => (dispatch, getState) => {
 
 export const setCurrentEditElement = value => (dispatch, getState) => {
   const {currentEditElement} = getState().states;
-  if (currentEditElement && currentEditElement.data.id === value.data.id) return;
+  if (currentEditElement && value && currentEditElement.data.id === value.data.id) return;
+  if (currentEditElement === null && currentEditElement === value) return;
   dispatch(actions.setStates({key: 'currentEditElement', value}));
 }

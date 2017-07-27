@@ -9,23 +9,26 @@ const initialModel = {
   metadata: {
     type: 'API',
     loaded: true,
-    ready: true,
-    editable: false,
+    processing: false,
     top: 0,
     left: 0,
   },
 }
 
 export default {
-  create: (model, metadata) => ({
-    data: {
-      ...initialModel.data,
-      ...model,
-      id: model.id || uuid.v4(),
-    },
-    metadata: {
-      ...initialModel.metadata,
-      ...metadata,
-    },
-  }),
+  create: (model, metadata) => {
+    const id = model.id || uuid.v4();
+    return {
+      data: {
+        ...initialModel.data,
+        ...model,
+        id: model.id || uuid.v4(),
+      },
+      metadata: {
+        ...initialModel.metadata,
+        ...metadata,
+        id,
+      },
+    };
+  },
 };

@@ -130,7 +130,6 @@ class Quadrant extends PureComponent {
                 itemOrder={idx}
                 moveEntity={this.moveEntity}
                 saveOrder={this.saveOrder}
-                ready={entity.metadata.ready}
                 dragging={draggingId === id}
               />
             );

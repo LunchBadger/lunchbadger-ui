@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import EntityHeader from './EntityHeader/EntityHeader';
@@ -7,10 +7,25 @@ import EntityActionButtons from './EntityActionButtons/EntityActionButtons';
 import {SmoothCollapse, Toolbox, Form} from '../';
 import './Entity.scss';
 
-class Entity extends Component {
+class Entity extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: true,
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (!this.props.editable && props.editable && !this.state.expanded) {
+      this.setState({expanded: true});
+    }
+  }
+
   getInputNameRef = () => this.entityHeaderRef.getInputNameRef();
 
   getFormRef = () => this.refs.form;
+
+  handleToggleExpand = () => this.setState({expanded: !this.state.expanded});
 
   render() {
     const {
@@ -18,14 +33,11 @@ class Entity extends Component {
       type,
       connector,
       editable,
-      expanded,
-      collapsed,
       highlighted,
       dragging,
       wip,
       invalid,
       toolboxConfig,
-      onToggleExpand,
       name,
       onNameChange,
       validations,
@@ -38,6 +50,8 @@ class Entity extends Component {
       connectDropTarget,
     } = this.props;
     const opacity = dragging ? 0.2 : 1;
+    const {expanded} = this.state;
+    const collapsed = !expanded;
     return connectDragSource(connectDropTarget(
       <div
         className={cs('Entity', type, connector, {editable, expanded, collapsed, highlighted, dragging, wip, invalid})}
@@ -50,7 +64,7 @@ class Entity extends Component {
           <EntityHeader
             ref={(r) => {this.entityHeaderRef = r;}}
             type={type}
-            onToggleExpand={onToggleExpand}
+            onToggleExpand={this.handleToggleExpand}
             name={name}
             onNameChange={onNameChange}
           />
@@ -77,14 +91,11 @@ class Entity extends Component {
 Entity.propTypes = {
   children: PropTypes.node.isRequired,
   editable: PropTypes.bool.isRequired,
-  expanded: PropTypes.bool.isRequired,
-  collapsed: PropTypes.bool.isRequired,
   highlighted: PropTypes.bool.isRequired,
   dragging: PropTypes.bool.isRequired,
   wip: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired,
   toolboxConfig: PropTypes.array.isRequired,
-  onToggleExpand: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   onNameChange: PropTypes.func.isRequired,
   validations: PropTypes.object.isRequired,

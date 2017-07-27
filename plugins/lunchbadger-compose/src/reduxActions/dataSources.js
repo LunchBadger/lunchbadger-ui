@@ -23,18 +23,18 @@ export const addDataSource = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[0].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  dispatch(actions.addDataSource({name, connector, itemOrder}));
+  const entity = DataSource.create({name, connector, itemOrder}, {loaded: false});
+  dispatch(actions.addDataSource({entity}));
+  return entity;
 }
 
 export const updateDataSource = ({data, metadata}) => async (dispatch, getState) => {
-  const {id, lunchbadgerId, name} = data;
-  const {loaded} = metadata;
-  const entity = DataSource.create(data, {ready: false});
+  const isDifferent = metadata.loaded && data.name !== getState().entities.dataSources[metadata.id].data.name;
+  let entity = DataSource.create(data, {...metadata, processing: true});
   dispatch(actions.updateDataSourceRequest({entity}));
   try {
-    if (loaded && name !== getState().entities.dataSources[lunchbadgerId].data.name) {
-      console.log('DELETE!')
-      await DataSourceService.delete(id);
+    if (isDifferent) {
+      await DataSourceService.delete(data.id);
       // ConnectionStore
       //   .getConnectionsForSource(oldId)
       //   .map(conn => PrivateStore.findEntity(conn.toId))
@@ -49,32 +49,29 @@ export const updateDataSource = ({data, metadata}) => async (dispatch, getState)
       //   });
     }
     const {body} = await DataSourceService.upsert(entity.data);
-    dispatch(actions.updateDataSourceSuccess({entity: DataSource.create(body)}));
+    entity = DataSource.create(body);
+    dispatch(actions.updateDataSourceSuccess({entity}));
+    return entity;
   } catch (err) {
     console.log('ERROR updateDataSourceFailure', err);
     dispatch(actions.updateDataSourceFailure(err));
   }
 };
 
-export const deleteDataSource = entity => async (dispatch) => {
-  const {lunchbadgerId, id} = entity.data;
-  dispatch(actions.deleteDataSourceRequest({lunchbadgerId}));
+export const deleteDataSource = ({data, metadata}) => async (dispatch) => {
+  const entity = DataSource.create(data, {...metadata, processing: true});
+  dispatch(actions.deleteDataSourceRequest({entity}));
   try {
-    await DataSourceService.delete(id);
-    dispatch(actions.deleteDataSourceSuccess({lunchbadgerId}));
+    await DataSourceService.delete(entity.data.id);
+    dispatch(actions.deleteDataSourceSuccess({id: entity.metadata.id}));
   } catch (err) {
-    console.log(111, {err});
+    console.log('ERROR deleteDataSourceFailure', err);
     dispatch(actions.deleteDataSourceFailure(err));
   }
 };
 
-export const discardDataSourceChanges = entity => (dispatch) => {
-  console.log('discardDataSourceChanges', entity);
-  const {lunchbadgerId, id} = entity.data;
-  dispatch(coreActions.removeEntity({id}));
-  if (entity.metadata.loaded) {
-
-  } else {
-    dispatch(actions.deleteDataSourceSuccess({lunchbadgerId}));
+export const discardDataSourceChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+  if (!loaded) {
+    dispatch(actions.deleteDataSourceSuccess({id}));
   }
 }

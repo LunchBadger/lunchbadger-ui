@@ -49,9 +49,9 @@ class Portal extends Component {
     // paper.bind('connectionDetached', (info) => {
     //   this.previousConnection = info;
     // });
-    if (!ready) {
-      toggleEdit(entity);
-    }
+    // if (!ready) {
+    //   toggleEdit(entity);
+    // }
     const APIsOpened = {...this.state.APIsOpened};
     entity.data.apis.forEach((item) => {
       APIsOpened[item.id] = true;

@@ -15,7 +15,8 @@ const objectsToRegister = [
   'canvasElements',
   'onUpdate',
   'onDelete',
-  'onDiscardChanges'
+  'onDiscardChanges',
+  'onValidate'
 ];
 
 const registerArrays = (plugins, plugs) => {

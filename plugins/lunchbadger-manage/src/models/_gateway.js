@@ -10,21 +10,24 @@ const initialModel = {
   metadata: {
     type: 'Gateway',
     loaded: true,
-    ready: true,
-    editable: false,
+    processing: false,
   },
 }
 
 export default {
-  create: (model, metadata) => ({
-    data: {
-      ...initialModel.data,
-      ...model,
-      id: model.id || uuid.v4(),
-    },
-    metadata: {
-      ...initialModel.metadata,
-      ...metadata,
-    },
-  }),
+  create: (model, metadata) => {
+    const id = model.id || uuid.v4();
+    return {
+      data: {
+        ...initialModel.data,
+        ...model,
+        id,
+      },
+      metadata: {
+        ...initialModel.metadata,
+        ...metadata,
+        id,
+      },
+    };
+  },
 };

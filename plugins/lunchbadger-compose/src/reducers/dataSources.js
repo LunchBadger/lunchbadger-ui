@@ -7,20 +7,13 @@ export default (state = {}, action) => {
     case actionTypes.loadDataSourcesSuccess:
       return action.payload.entities;
     case actionTypes.addDataSource:
-      const entity = DataSource.create(action.payload, {loaded: false, editable: true});
-      return {
-        ...state,
-        [entity.data.lunchbadgerId]: entity,
-      };
+    case actionTypes.deleteDataSourceRequest:
     case actionTypes.updateDataSourceRequest:
     case actionTypes.updateDataSourceSuccess:
-      newState[action.payload.entity.data.lunchbadgerId] = action.payload.entity;
+      newState[action.payload.entity.metadata.id] = action.payload.entity;
       return newState;
-    // case actionTypes.deleteDataSourceRequest:
-    //   newState.find(({data: {lunchbadgerId}}) => lunchbadgerId === action.payload.lunchbadgerId).metadata.ready = false;
-    //   return newState;
     case actionTypes.deleteDataSourceSuccess:
-      delete newState[action.payload.lunchbadgerId];
+      delete newState[action.payload.id];
       return newState;
     default:
       return state;

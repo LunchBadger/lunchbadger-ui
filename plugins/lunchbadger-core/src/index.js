@@ -78,6 +78,7 @@ import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
+import messages from './utils/messages';
 
 import './utils/formValidators';
 
@@ -182,6 +183,7 @@ let LunchBadgerCore = {
     defaultEntityNames: {
       Model: 'NewModel',
     },
+    messages,
   },
 };
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import {setCurrentElement, setCurrentEditElement} from '../../../lunchbadger-core/src/reduxActions';
 import Tool from './Tool/Tool';
 import cs from 'classnames';
 import './Aside.scss';
@@ -20,7 +21,12 @@ class Aside extends Component {
     store: PropTypes.object,
   }
 
-  handleClick = action => action(this.context.store.dispatch);
+  handleClick = action => {
+    const {store: {dispatch}} = this.context;
+    const entity = dispatch(action());
+    dispatch(setCurrentElement(entity));
+    dispatch(setCurrentEditElement(entity));
+  }
 
   render() {
     const {disabled, groups} = this.props;

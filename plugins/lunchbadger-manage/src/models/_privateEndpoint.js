@@ -9,22 +9,25 @@ const initialModel = {
   metadata: {
     type: 'PrivateEndpoint',
     loaded: true,
-    ready: true,
-    editable: false,
+    processing: false,
   },
 }
 
 export default {
-  create: (model, metadata) => ({
-    data: {
-      ...initialModel.data,
-      ...model,
-      id: model.id || uuid.v4(),
-      contextPath: model.name.toLowerCase(),
-    },
-    metadata: {
-      ...initialModel.metadata,
-      ...metadata,
-    },
-  }),
+  create: (model, metadata) => {
+    const id = model.id || uuid.v4();
+    return {
+      data: {
+        ...initialModel.data,
+        ...model,
+        id,
+        contextPath: model.name.toLowerCase(),
+      },
+      metadata: {
+        ...initialModel.metadata,
+        ...metadata,
+        id,
+      },
+    };
+  },
 };

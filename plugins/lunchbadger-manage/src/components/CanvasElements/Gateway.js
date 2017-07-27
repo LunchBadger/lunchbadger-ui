@@ -44,10 +44,10 @@ class Gateway extends Component {
   }
 
   componentDidMount() {
-    const {ready, toggleEdit, entity} = this.props;
-    if (!ready) {
-      toggleEdit(entity);
-    }
+    // const {ready, toggleEdit, entity} = this.props;
+    // if (!ready) {
+    //   toggleEdit(entity);
+    // }
   }
 
   componentWillReceiveProps(nextProps, nextState) {

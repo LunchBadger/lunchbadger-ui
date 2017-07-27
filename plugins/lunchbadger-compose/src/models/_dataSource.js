@@ -16,9 +16,8 @@ const initialModel = {
   metadata: {
     type: 'DataSource',
     loaded: true,
-    ready: true,
+    processing: false,
     ports: [],
-    editable: false,
   },
 }
 
@@ -42,7 +41,30 @@ export default {
           },
         ],
         ...metadata,
+        id,
       },
     };
-  }
+  },
+  validate: ({data, metadata}, model, state) => {
+    const invalid = {};
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.dataSources)
+        .filter(id => id !== metadata.id)
+        .filter(id => state.entities.dataSources[id].data.name === model.name)
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = LunchBadgerCore.utils.messages.duplicatedEntityName('Data Source');
+      }
+    }
+    const fields = ['name', 'url', 'database', 'username', 'password'];
+    checkFields(fields, model, invalid);
+    return invalid;
+  },
 };
+
+const checkFields = (fields, model, invalid) => {
+  const {fieldCannotBeEmpty} = LunchBadgerCore.utils.messages;
+  fields.forEach((field) => {
+    if (model[field] === '') invalid[field] = fieldCannotBeEmpty;
+  });
+}

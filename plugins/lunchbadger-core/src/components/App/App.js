@@ -130,10 +130,6 @@ class App extends Component {
         ref="header"
         username={username}
         envId={Config.get('envId')}
-        plugins={this.state.pluginsStore}
-        saveToServer={this.saveToServer}
-        clearServer={this.clearServer}
-        headerMenuDisabled={isEntityEditable}
       />
     );
   }

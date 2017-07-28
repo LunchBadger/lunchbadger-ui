@@ -29,7 +29,7 @@ class HeaderMenuLink extends PureComponent {
 }
 
 const selector = createSelector(
-  (_, props) => props.panel,
+  (_, props) => props.panel || '',
   state => state.states.currentlyOpenedPanel,
   (panel, currentlyOpenedPanel) => ({pressed: panel === currentlyOpenedPanel}),
 );

@@ -20,3 +20,8 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
   if (currentEditElement === null && currentEditElement === value) return;
   dispatch(actions.setStates({key: 'currentEditElement', value}));
 }
+
+export const togglePanel = panel => (dispatch, getState) => {
+  const value = getState().states.currentlyOpenedPanel === panel ? null : panel;
+  dispatch(actions.setStates({key: 'currentlyOpenedPanel', value}));
+}

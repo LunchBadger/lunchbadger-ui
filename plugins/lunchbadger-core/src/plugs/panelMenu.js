@@ -1,14 +1,25 @@
+import {clearServer, saveToServer} from '../reduxActions/project';
+import {togglePanel} from '../reduxActions/states';
+import {iconDetails} from '../../../../src/icons';
+
 export default {
   0: {
-    icon: 'clear',
-    action: () => console.log('clear'),
+    icon: 'fa-trash-o',
+    hidden: true,
+    action: clearServer(),
   },
   1: {
-    icon: 'save',
-    action: () => console.log('save'),
+    icon: 'fa-floppy-o',
+    action: saveToServer(),
+  },
+  2: {
+    svg: iconDetails,
+    panel: 'DETAILS_PANEL',
+    action: togglePanel('DETAILS_PANEL'),
   },
   10: {
-    icon: 'settings',
-    action: () => console.log('settings'),
+    icon: 'icon-icon-settings',
+    panel:'SETTINGS_PANEL',
+    action: togglePanel('SETTINGS_PANEL'),
   },
 };

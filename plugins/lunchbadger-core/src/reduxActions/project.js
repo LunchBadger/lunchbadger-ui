@@ -5,10 +5,6 @@ export const loadFromServer = () => async (dispatch, getState) => {
   getState().plugins.onAppLoad.forEach(func => dispatch(func()));
 };
 
-export const saveToServer = () => (dispatch) => {
-
-};
-
 export const loadProject = () => async (dispatch) => {
   dispatch(actions.loadProjectRequest());
   try {
@@ -19,3 +15,11 @@ export const loadProject = () => async (dispatch) => {
     dispatch(actions.loadProjectFailure(err));
   }
 }
+
+export const saveToServer = () => (dispatch) => {
+  console.log('saveToServer');
+};
+
+export const clearServer = () => (dispatch) => {
+  console.log('clearServer');
+};

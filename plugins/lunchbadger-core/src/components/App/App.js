@@ -28,36 +28,37 @@ class App extends Component {
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
+    paper: PropTypes.object,
   }
 
   static propTypes = {
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
+    paper: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
-
     this.state = {
       pluginsStore: Pluggable,
       appState: AppState,
     };
-
     this.reloadPlugins = () => {
       this.setState({pluginsStore: Pluggable});
     };
-
     this.appStateChange = () => {
       this.setState({appState: AppState});
     };
   }
 
   getChildContext() {
+    const {multiEnvIndex, multiEnvDelta, multiEnvAmount, paper} = this.props;
     return {
-      multiEnvIndex: this.props.multiEnvIndex,
-      multiEnvDelta: this.props.multiEnvDelta,
-      multiEnvAmount: this.props.multiEnvAmount,
+      multiEnvIndex,
+      multiEnvDelta,
+      multiEnvAmount,
+      paper,
     };
   }
 

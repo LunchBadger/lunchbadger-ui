@@ -5,6 +5,7 @@ import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
+import paper from '../../utils/paper';
 import './AppLoader.scss';
 
 export default class AppLoader extends Component {
@@ -81,7 +82,7 @@ export default class AppLoader extends Component {
   }
 
   renderApp() {
-    return <App />;
+    return <App paper={paper} />;
   }
 
   render() {

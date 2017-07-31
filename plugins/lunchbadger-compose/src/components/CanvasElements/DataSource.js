@@ -55,13 +55,12 @@ class DataSource extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.metadata.ports.map((port) => {
+    return this.props.entity.metadata.ports.map((port, idx) => {
       return (
         <Port
-          key={`port-${port.portType}-${port.id}`}
-          paper={null}
+          key={idx}
           way={port.portType}
-          elementId={this.props.entity.data.id}
+          elementId={this.props.entity.metadata.id}
           scope={port.portGroup}
         />
       );

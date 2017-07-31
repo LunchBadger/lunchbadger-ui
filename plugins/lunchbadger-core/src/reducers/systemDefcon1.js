@@ -9,7 +9,7 @@ const systemDefcon1 = (state = initialState, action) => {
   const newState = {...state};
   switch (action.type) {
     case actionTypes.addSystemDefcon1:
-      const error = action.payload.message || action.payload;
+      const error = action.payload.stack || action.payload.message || action.payload;
       if (!newState.errors.includes(error)) {
         newState.errors = [error, ...newState.errors];
       }

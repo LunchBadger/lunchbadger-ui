@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
@@ -8,14 +10,17 @@ import uuid from 'uuid';
 import Connection from '../../stores/Connection';
 import _ from 'lodash';
 
-export default class Port extends Component {
+class Port extends PureComponent {
   static propTypes = {
     elementId: PropTypes.string.isRequired,
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
-    paper: PropTypes.object,
     middle: PropTypes.bool,
     className: PropTypes.string
+  };
+
+  static contextTypes = {
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -24,6 +29,7 @@ export default class Port extends Component {
   }
 
   componentWillMount() {
+    this.paper = this.context.paper.getInstance();
     this.tempId = uuid.v4();
   }
 
@@ -51,27 +57,27 @@ export default class Port extends Component {
         // [0.5, 1, 0, 1, 0, 0, 'bottom'],
         [0, 0.5, -1, 0, 11, 2, 'left']
       ],
-      scope: this.props.scope
+      scope: this.props.scope,
     };
 
-    // this.props.paper.makeSource(portDOM, {
-    //   endpoint: ['Dot', {radius: 4}],
-    //   allowLoopback: false,
-    //   deleteEndpointsOnDetach: true
-    // }, endpointOptions);
-    //
-    // this.props.paper.makeTarget(portDOM, {
-    //   endpoint: ['Dot', {radius: 4}],
-    //   allowLoopback: false,
-    //   deleteEndpointsOnDetach: true
-    // }, endpointOptions);
+    this.paper.makeSource(portDOM, {
+      endpoint: ['Dot', {radius: 4}],
+      allowLoopback: false,
+      deleteEndpointsOnDetach: true
+    }, endpointOptions);
 
-    if (this.props.way === 'in') {
-      this._checkAndReattachTargetConnections();
-    }
-    if (this.props.way === 'out') {
-      this._checkAndReattachSourceConnections();
-    }
+    this.paper.makeTarget(portDOM, {
+      endpoint: ['Dot', {radius: 4}],
+      allowLoopback: false,
+      deleteEndpointsOnDetach: true
+    }, endpointOptions);
+
+    // if (this.props.way === 'in') {
+    //   this._checkAndReattachTargetConnections();
+    // }
+    // if (this.props.way === 'out') {
+    //   this._checkAndReattachSourceConnections();
+    // }
     this.calculatePortTopOffsets();
   }
 
@@ -82,8 +88,8 @@ export default class Port extends Component {
     }
     if (nextProps.scope !== this.props.scope) {
       const portDOM = findDOMNode(this.refs.port);
-      // this.props.paper.setTargetScope(portDOM, nextProps.scope);
-      // this.props.paper.setSourceScope(portDOM, nextProps.scope);
+      // this.paper.setTargetScope(portDOM, nextProps.scope);
+      // this.paper.setSourceScope(portDOM, nextProps.scope);
     }
   }
 
@@ -99,88 +105,106 @@ export default class Port extends Component {
 
   // componentWillUnmount() {
   //   const portDOM = findDOMNode(this.refs.port);
-  //   const connectionsOut = this.props.paper.select({source: portDOM});
-  //   const connectionsIn = this.props.paper.select({target: portDOM});
+  //   const connectionsOut = this.paper.select({source: portDOM});
+  //   const connectionsIn = this.paper.select({target: portDOM});
   //
   //   connectionsIn.each((connection) => {
-  //     this.props.paper.detach(connection, {
+  //     this.paper.detach(connection, {
   //       fireEvent: false,
-  //       forceDetach: false
+  //       forceDetach: false,
   //     });
   //   });
   //
   //   connectionsOut.each((connection) => {
-  //     this.props.paper.detach(connection, {
+  //     this.paper.detach(connection, {
   //       fireEvent: false,
-  //       forceDetach: false
+  //       forceDetach: false,
   //     });
   //   });
   // }
 
-  _checkAndReattachTargetConnections() {
-    const connections = Connection.getConnectionsForTarget(this.props.elementId);
-    _.forEach(connections, (connection) => {
-      let source = null;
-      if (connection.info.source) {
-        source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
-      } else {
-        source = document.querySelector(`#${connection.info.sourceId}`);
-      }
-      removeConnection(connection.fromId, connection.toId);
-      // this.props.paper.connect({
-      //   source: source,
-      //   target: findDOMNode(this.refs.port)
-      // });
-    });
-  }
-
-  _checkAndReattachSourceConnections() {
-    const connections = Connection.getConnectionsForSource(this.props.elementId);
-    _.forEach(connections, (connection) => {
-      let target = null;
-      if (connection.info.target) {
-        target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
-      } else {
-        target = document.querySelector(`#${connection.info.targetId}`);
-      }
-      removeConnection(connection.fromId, connection.toId);
-      // this.props.paper.connect({
-      //   source: findDOMNode(this.refs.port),
-      //   target: target
-      // });
-    });
-  }
+  // _checkAndReattachTargetConnections() {
+  //   const connections = this.props.targetConnections;
+  //   _.forEach(connections, (connection) => {
+  //     let source = null;
+  //     if (connection.info && connection.info.source) {
+  //       source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
+  //     } else {
+  //       source = document.querySelector(`#port_anchor_out_${connection.fromId}`);
+  //     }
+  //     // removeConnection(connection.fromId, connection.toId);
+  //     // console.log(990, {
+  //     //   source,
+  //     //   target: findDOMNode(this.refs.port),
+  //     // });
+  //     this.paper.connect({
+  //       source,
+  //       target: findDOMNode(this.refs.port),
+  //     });
+  //   });
+  // }
+  //
+  // _checkAndReattachSourceConnections() {
+  //   const connections = this.props.sourceConnections; //Connection.getConnectionsForSource(this.props.elementId);
+  //   _.forEach(connections, (connection) => {
+  //     let target = null;
+  //     if (connection.info && connection.info.target) {
+  //       target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
+  //     } else {
+  //       target = document.querySelector(`#port_anchor_in_${connection.toId}`);
+  //     }
+  //     // removeConnection(connection.fromId, connection.toId);
+  //     // console.log(991, {
+  //     //   source: findDOMNode(this.refs.port),
+  //     //   target,
+  //     // });
+  //     this.paper.connect({
+  //       source: findDOMNode(this.refs.port),
+  //       target,
+  //     });
+  //   });
+  // }
 
   render() {
+    const {way, middle, elementId, isConnected, className} = this.props;
     const portClass = classNames({
-      'canvas-element__port--out': this.props.way === 'out',
-      'canvas-element__port--in': this.props.way === 'in',
-      'canvas-element__port': true,
       'port': true,
-      'port__middle': this.props.middle
+      'canvas-element__port': true,
+      'canvas-element__port--out': way === 'out',
+      'canvas-element__port--in': way === 'in',
+      'port__middle': middle,
     });
-    let isConnected = false;
-    if (this.props.way === 'out') {
-      isConnected = Connection.search({fromId: this.props.elementId}).length;
-    } else if (this.props.way === 'in') {
-      isConnected = Connection.search({toId: this.props.elementId}).length;
-    }
+    // if (this.props.way === 'out') {
+    //   isConnected = this.props.sourceConnections.length > 0; //Connection.search({fromId: this.props.elementId}).length;
+    // } else if (this.props.way === 'in') {
+    //   isConnected = this.props.targetConnections.length > 0; //Connection.search({toId: this.props.elementId}).length;
+    // }
     const portAnchorClass = classNames({
-      port__anchor: true,
-      'port__anchor--connected': isConnected
+      'port__anchor': true,
+      'port__anchor--connected': isConnected,
     });
     return (
       <div ref="port__wrap">
-        <div id={`port_${this.props.way}_${this.props.elementId}`}
-             className={`port-${this.props.way} ${portClass} ${this.props.className || ''}`}
-             style={{top: this.portTopOffsets[this.props.elementId]}}
+        <div
+          id={`port_${way}_${elementId}`}
+          className={`port-${way} ${portClass} ${className || ''}`}
+          style={{top: this.portTopOffsets[elementId]}}
         >
-          <div className={portAnchorClass} ref="port" id={`port_${this.props.way}_${this.tempId}_${this.props.elementId}`}>
-            <div className="port__inside">
-            </div>
+          <div className={portAnchorClass} ref="port" id={`port_anchor_${way}_${elementId}`}>
+            <div className="port__inside" />
           </div>
         </div>
       </div>
     );
   }
 }
+
+const selector = createSelector(
+  state => state.connections,
+  (_, props) => props.elementId,
+  (connections, id) => ({
+    isConnected: connections.filter(({fromId, toId}) => [fromId, toId].includes(id)).length > 0,
+  }),
+);
+
+export default connect(selector)(Port);

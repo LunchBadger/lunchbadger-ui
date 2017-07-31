@@ -191,12 +191,11 @@ class Model extends Component {
   }
 
   renderPorts = () => {
-    return this.props.entity.metadata.ports.map((port) => (
+    return this.props.entity.metadata.ports.map((port, idx) => (
       <Port
-        key={`port-${port.portType}-${port.id}`}
-        paper={this.props.paper}
+        key={idx}
         way={port.portType}
-        elementId={this.props.entity.data.id}
+        elementId={this.props.entity.metadata.id}
         className={`port-${this.props.entity.metadata.type} port-${port.portGroup}`}
         scope={port.portGroup}
       />

@@ -31,7 +31,7 @@ class ApiClient {
           return reject(error);
         }
         if (response.statusCode >= 400) {
-          const message = body.error ? (body.error.message + '\n' + body.error.stack) : body;
+          const message = (body.error && body.error.stack) ? body.error.stack : body;
           return reject(new ApiError(response.statusCode, message));
         }
         if (response.statusCode === 0) {

@@ -21,7 +21,7 @@ class Spinner extends Component {
 
 const selector = createSelector(
   (_, props) => props.force,
-  state => state.loadingProject > 0,
+  state => state.loadingProject,
   (force, loading) => ({visible: force || loading}),
 );
 

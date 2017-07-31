@@ -2,7 +2,7 @@ import {actions} from './actions';
 import ProjectService from '../services/ProjectService';
 
 export const loadFromServer = () => async (dispatch, getState) => {
-  
+  dispatch(actions.setLoadingProject(true));
   const {onAppLoad} = getState().plugins;
   try {
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
@@ -10,6 +10,7 @@ export const loadFromServer = () => async (dispatch, getState) => {
   } catch (err) {
     dispatch(actions.addSystemDefcon1(err));
   }
+  dispatch(actions.setLoadingProject(false));
 };
 
 export const saveToServer = () => (dispatch) => {

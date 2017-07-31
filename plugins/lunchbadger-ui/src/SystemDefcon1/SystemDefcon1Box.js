@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse, IconSVG} from '../';
 import {iconDelete} from '../../../../src/icons';
+import {toggleSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
@@ -16,11 +18,11 @@ class SystemDefcon1Box extends Component {
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
   handleClose = () => {
-    const {onClose, server} = this.props;
+    const {dispatch, server} = this.props;
     if (server) {
       document.location.reload();
     } else {
-      onClose();
+      dispatch(toggleSystemDefcon1());
     }
   }
 
@@ -79,13 +81,11 @@ class SystemDefcon1Box extends Component {
 SystemDefcon1Box.propTypes = {
   server: PropTypes.bool,
   errors: PropTypes.array,
-  onClose: PropTypes.func,
 };
 
 SystemDefcon1Box.defaultProps = {
   server: false,
   errors: [],
-  onClose: () => {},
 };
 
-export default SystemDefcon1Box;
+export default connect(null)(SystemDefcon1Box);

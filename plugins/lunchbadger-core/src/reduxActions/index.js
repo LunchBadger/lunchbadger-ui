@@ -15,6 +15,10 @@ import {
   clearCurrentElement,
   setCurrentEditElement,
 } from './states';
+import {
+  addSystemDefcon1,
+  toggleSystemDefcon1,
+} from './systemDefcon1';
 
 export {
   initialize,
@@ -24,8 +28,13 @@ export {
   toggleHighlight,
   toggleSubelement,
   removeEntity,
+
   loadFromServer,
+  
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+
+  addSystemDefcon1,
+  toggleSystemDefcon1,
 };

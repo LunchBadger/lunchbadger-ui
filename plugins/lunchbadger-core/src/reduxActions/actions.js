@@ -9,6 +9,8 @@ const {actions, actionTypes} = actionsCreator(
     'removeEntity',
     'setStates',
     'onLoadProject',
+    'addSystemDefcon1',
+    'toggleSystemDefcon1',
   ],
 );
 

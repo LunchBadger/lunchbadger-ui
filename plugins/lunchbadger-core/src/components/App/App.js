@@ -189,8 +189,8 @@ class App extends Component {
 }
 
 const selector = createSelector(
-  state => state.ui.systemDefcon1.visible,
-  state => state.ui.systemDefcon1.errors,
+  state => state.systemDefcon1.visible,
+  state => state.systemDefcon1.errors,
   state => state.ui.multiEnvironments.selected,
   state => state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   state => state.ui.multiEnvironments.environments.length,

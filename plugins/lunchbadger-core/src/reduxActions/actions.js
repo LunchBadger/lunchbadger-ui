@@ -8,6 +8,7 @@ const {actions, actionTypes} = actionsCreator(
   [
     'removeEntity',
     'setStates',
+    'onLoadProject',
   ],
 );
 

@@ -6,7 +6,7 @@ const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case coreActionTypes.loadProjectSuccess:
+    case coreActionTypes.onLoadProject:
       return action.payload.body.privateEndpoints.reduce((map, item) => {
         map[item.id] = PrivateEndpoint.create(item);
         return map;

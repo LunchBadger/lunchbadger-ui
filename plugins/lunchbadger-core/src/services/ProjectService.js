@@ -6,9 +6,7 @@ class ProjectService {
   initialize = () => this.api = new ApiClient(Config.get('projectApiUrl'), getUser().idToken);
   // this._workspaceClient = new ApiClient(Config.get('workspaceApiUrl'), idToken);
 
-  getProjectId() {
-    return `${getUser().profile.sub}-${Config.get('envId')}`;
-  }
+  getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
 
   // get() {
   //   return Promise.all([
@@ -26,39 +24,20 @@ class ProjectService {
   //   ]);
   // }
 
-  load = () => this.api.get(`Projects/${this.getProjectId()}`).catch(err => {
-    if (err.statusCode === 404) {
-      return {body: null};
-    }
-    throw err;
-  });
+  load = () => this.api.get(`Projects/${this.getProjectId()}`);
 
-  save(data) {
-    return this.api.patch('Projects', {body: {
-      id: this.getProjectId(),
-      ...data,
-    }});
-  }
+  save = data => this.api.patch('Projects', {body: {id: this.getProjectId(), ...data}});
 
-  clearProject() {
-    return this.api.post(`Projects/${this.getProjectId()}/clear`);
-  }
+  clearProject = () => this.api.post(`Projects/${this.getProjectId()}/clear`);
 
-  monitorStatus() {
-    return this.api.eventSource('/WorkspaceStatus/change-stream');
-  }
+  monitorStatus = () => this.api.eventSource('/WorkspaceStatus/change-stream');
 
-  ping() {
-    return this.api.get('/WorkspaceStatus/ping');
-  }
+  ping = () => this.api.get('/WorkspaceStatus/ping');
 
-  restartWorkspace() {
-    return this.api.post('/WorkspaceStatus/restart');
-  }
+  restartWorkspace = () => this.api.post('/WorkspaceStatus/restart');
 
-  reinstallDeps() {
-    return this.api.post('/WorkspaceStatus/reinstall');
-  }
+  reinstallDeps = () => this.api.post('/WorkspaceStatus/reinstall');
+
 }
 
 export default new ProjectService();

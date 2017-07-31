@@ -42,7 +42,19 @@ const connectionTypes = {
   },
 };
 
-const instance = jsPlumb.getInstance(jsPlumbConfig);
-instance.registerConnectionTypes(connectionTypes);
+class Paper {
 
-export default instance;
+  initialize = () => {
+    this.instance = jsPlumb.getInstance(jsPlumbConfig);
+    this.instance.registerConnectionTypes(connectionTypes);
+    this.repaint = setInterval(this.instance.repaintEverything, 50);
+    return this.instance;
+  }
+
+  getInstance = () => this.instance;
+
+  stopRepaintingEverything = () => clearInterval(this.repaint);
+
+}
+
+export default new Paper();

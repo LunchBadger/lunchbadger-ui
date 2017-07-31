@@ -30,22 +30,14 @@ class ApiClient {
         if (error) {
           return reject(error);
         }
-
         if (response.statusCode >= 400) {
-          return reject(new ApiError(response.statusCode,
-                                     body.error ? body.error.message : body));
+          const message = body.error ? (body.error.message + '\n' + body.error.stack) : body;
+          return reject(new ApiError(response.statusCode, message));
         }
-
         if (response.statusCode === 0) {
           return reject(new ApiError(0, 'Error communicating with API'));
         }
-
-        const responseData = {
-          response: response,
-          body: body
-        };
-
-        return resolve(responseData);
+        return resolve({response, body});
       });
     });
   }

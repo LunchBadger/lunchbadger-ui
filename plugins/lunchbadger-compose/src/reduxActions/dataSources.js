@@ -2,23 +2,6 @@ import {actions} from './actions';
 import {DataSourceService} from '../services';
 import DataSource from '../models/_dataSource';
 
-const coreActions = LunchBadgerCore.utils.actions;
-
-export const loadDataSources = () => async (dispatch, getState) => {
-  dispatch(actions.loadDataSourcesRequest());
-  try {
-    const data = await DataSourceService.load();
-    const entities = data.body.reduce((map, item) => {
-      map[item.lunchbadgerId] = DataSource.create(item);
-      return map;
-    }, {});
-    dispatch(actions.loadDataSourcesSuccess({entities}));
-  } catch (err) {
-    console.log('ERROR loadDataSourcesFailure', err);
-    dispatch(actions.loadDataSourcesFailure(err));
-  }
-};
-
 export const addDataSource = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[0].entities;

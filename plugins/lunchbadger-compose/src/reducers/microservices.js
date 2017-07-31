@@ -6,11 +6,11 @@ const {actionTypes: coreActions} = LunchBadgerCore.utils;
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case coreActions.loadProjectSuccess:
-      return action.payload.body.microServices.reduce((map, item) => {
-        map[item.id] = Microservice.create(item);
-        return map;
-      }, {});
+    case coreActions.onLoadProject:
+    return action.payload.body.microServices.reduce((map, item) => {
+      map[item.id] = Microservice.create(item);
+      return map;
+    }, {});
     case actionTypes.addMicroservice:
     case actionTypes.updateMicroserviceRequest:
     case actionTypes.updateMicroserviceSuccess:

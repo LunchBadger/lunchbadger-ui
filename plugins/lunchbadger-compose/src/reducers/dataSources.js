@@ -4,8 +4,11 @@ import {actionTypes} from '../reduxActions/actions';
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case actionTypes.loadDataSourcesSuccess:
-      return action.payload.entities;
+    case actionTypes.onLoadDataSources:
+      return action.payload.body.reduce((map, item) => {
+        map[item.lunchbadgerId] = DataSource.create(item);
+        return map;
+      }, {});
     case actionTypes.addDataSource:
     case actionTypes.updateDataSourceRequest:
     case actionTypes.updateDataSourceSuccess:

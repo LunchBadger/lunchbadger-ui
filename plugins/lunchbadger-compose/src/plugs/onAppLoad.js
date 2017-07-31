@@ -1,9 +1,19 @@
-import {loadDataSources} from '../reduxActions/dataSources';
-import {loadModels} from '../reduxActions/models';
-import {loadModelConfigs} from '../reduxActions/modelConfigs';
+import {DataSourceService} from '../services';
+import {ModelService} from '../services';
+import {ModelConfigsService} from '../services';
+import {actions} from '../reduxActions/actions';
 
 export default [
-  loadDataSources,
-  loadModels,
-  loadModelConfigs,
+  {
+    request: DataSourceService.load,
+    callback: actions.onLoadDataSources,
+  },
+  {
+    request: ModelService.load,
+    callback: actions.onLoadModels,
+  },
+  {
+    request: ModelConfigsService.load,
+    callback: actions.onLoadModelConfigs,
+  },
 ];

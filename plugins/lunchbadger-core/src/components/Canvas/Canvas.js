@@ -15,22 +15,20 @@ import './Canvas.scss';
 class Canvas extends Component {
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
-
     this.state = {
       lastUpdate: new Date(),
       canvasHeight: null,
       connections: [],
       scrollLeft: 0,
     };
-
     // this.connectionsChanged = () => {
     //   this.setState({connections: Connection.getData()});
     // }
-
     this.dropped = false;
   }
 
@@ -44,6 +42,7 @@ class Canvas extends Component {
 
   componentDidMount() {
     this.canvasWrapperDOM.addEventListener('scroll', this.onCanvasScroll);
+    this.paper = this.context.paper.initialize();
     // jsPlumb has to be instantiated here, not in componentWillMount, because
     // the canvas element has to already be rendered in order for it to work.
     // this.paper = jsPlumb.getInstance({
@@ -82,7 +81,7 @@ class Canvas extends Component {
 
   componentWillUnmount() {
     this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
-    // clearInterval(this.repaint);
+    this.paper.stopRepaintingEverything();
 
     // Connection.removeChangeListener(this.connectionsChanged);
   }

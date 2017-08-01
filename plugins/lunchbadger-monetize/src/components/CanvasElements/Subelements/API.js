@@ -57,19 +57,17 @@ class API extends Component {
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api, index) => {
+    return this.props.entity.publicEndpoints.map((api, idx) => {
       return (
         <PublicEndpoint
-          key={api.id}
+          key={idx}
           parent={this.props.entity}
           {...this.props}
-          key={api.id}
           id={api.id}
           entity={api}
-          paper={this.props.paper}
           APIsOpened={this.props.APIsOpened}
           APIId={this.props.entity.id}
-          index={index}
+          index={idx}
           indexAPI={this.props.index}
           APIsPublicEndpoints={this.props.APIsPublicEndpoints}
           expanded={this.state.opened}

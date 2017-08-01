@@ -64,20 +64,17 @@ class API extends Component {
   }
 
   renderEndpoints = () => {
-    return this.props.entity.publicEndpoints.map((api, index) => (
+    return this.props.entity.publicEndpoints.map((api, idx) => (
       <PublicEndpoint
-        key={api.id}
-        {...this.props}
+        key={idx}
         parent={this.props.entity}
-        key={api.id}
         id={api.id}
         entity={api}
-        paper={this.props.paper}
         left={api.left || 0}
         top={api.top || 0}
         handleEndDrag={(item) => this._handleEndDrag(item)}
         hideSourceOnDrag={true}
-        index={index}
+        index={idx}
       />
     ));
   }

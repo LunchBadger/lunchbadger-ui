@@ -1,5 +1,7 @@
 import uuid from 'uuid';
 
+const portGroups = LunchBadgerCore.constants.portGroups;
+
 const initialModel = {
   itemOrder: 0,
   name: '',
@@ -8,6 +10,7 @@ const initialModel = {
     type: 'PublicEndpoint',
     loaded: true,
     processing: false,
+    ports: [],
   },
 }
 
@@ -20,6 +23,13 @@ export default {
       id,
       metadata: {
         ...initialModel.metadata,
+        ports: [
+          {
+            id,
+            portGroup: portGroups.PUBLIC,
+            portType: 'in',
+          },
+        ],
         ...metadata,
         id,
       },

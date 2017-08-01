@@ -1,5 +1,7 @@
 import uuid from 'uuid';
 
+const {PublicEndpoint} = LunchBadgerManage.models;
+
 const initialModel = {
   itemOrder: 0,
   plans: [],
@@ -19,6 +21,7 @@ export default {
     return {
       ...initialModel,
       ...model,
+      publicEndpoints: model.publicEndpoints.map(item => PublicEndpoint.create(item)),
       id,
       metadata: {
         ...initialModel.metadata,

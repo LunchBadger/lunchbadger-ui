@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import Pipeline from './_pipeline';
 
 const initialModel = {
   dnsPrefix: '',
@@ -18,6 +19,7 @@ export default {
     return {
       ...initialModel,
       ...model,
+      pipelines: model.pipelines.map(item => Pipeline.create(item)),
       id,
       metadata: {
         ...initialModel.metadata,

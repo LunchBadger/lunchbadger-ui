@@ -18,7 +18,6 @@ export default class PublicEndpoint extends Component {
   }
 
   renderPorts() {
-    return null;
     let APIsOffsetTop = 0;
     let stopLoop = false;
     Object.keys(this.props.APIsOpened).forEach((key, index) => {
@@ -35,17 +34,18 @@ export default class PublicEndpoint extends Component {
         APIsOffsetTop += 34 + this.props.APIsPublicEndpoints[key] * 26;
       }
     });
-    return this.props.entity.ports.map((port) => {
+    return this.props.entity.metadata.ports.map((port, idx) => {
       const key = `port-${port.portType}-${port.id}`;
       return (
-        <Port key={key}
-              paper={this.props.paper}
-              way={port.portType}
-              middle={true}
-              elementId={`${this.props.entity.id}`}
-              ref={`port-${port.portType}`}
-              scope={this.props.expanded ? port.portGroup : key}
-              offsetTop={98 + APIsOffsetTop + this.props.indexAPI * 40}
+        <Port
+          key={idx}
+          paper={this.props.paper}
+          way={port.portType}
+          middle={true}
+          elementId={`${this.props.entity.id}`}
+          ref={`port-${port.portType}`}
+          scope={this.props.expanded ? port.portGroup : key}
+          offsetTop={98 + APIsOffsetTop + this.props.indexAPI * 40}
         />
       );
     });
@@ -60,7 +60,6 @@ export default class PublicEndpoint extends Component {
         <div className="public-endpoint__name">
           {this.props.entity.name}
         </div>
-
         {this.renderPorts()}
       </div>
     );

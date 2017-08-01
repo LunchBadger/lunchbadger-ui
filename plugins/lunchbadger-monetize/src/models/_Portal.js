@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import API from './_API';
 
 const initialModel = {
   apis: [],
@@ -18,6 +19,7 @@ export default {
     return {
       ...initialModel,
       ...model,
+      apis: model.apis.map(item => API.create(item)),
       id,
       metadata: {
         ...initialModel.metadata,

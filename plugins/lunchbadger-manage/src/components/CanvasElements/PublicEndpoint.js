@@ -61,11 +61,9 @@ class PublicEndpoint extends Component {
   onPathChange = event => this.setState({path: event.target.value});
 
   renderPorts() {
-    return null;
-    return this.props.entity.ports.map(port => (
+    return this.props.entity.metadata.ports.map((port, idx) => (
       <Port
-        key={`port-${port.portType}-${port.id}`}
-        paper={this.props.paper}
+        key={idx}
         way={port.portType}
         elementId={this.props.entity.id}
         className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}

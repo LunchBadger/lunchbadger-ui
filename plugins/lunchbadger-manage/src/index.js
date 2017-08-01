@@ -2,7 +2,7 @@
 import ManagePlugin from './plugs/ManagePlugin';
 
 // models
-import PublicEndpoint from './models/PublicEndpoint';
+import PublicEndpoint from './models/_publicEndpoint';
 import Model from './models/Model';
 import ModelProperty from './models/ModelProperty';
 import ModelRelation from './models/ModelRelation';

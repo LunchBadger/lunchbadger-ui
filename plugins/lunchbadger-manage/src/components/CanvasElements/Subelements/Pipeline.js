@@ -104,7 +104,6 @@ export default class Pipeline extends Component {
   }
 
   renderPorts() {
-    return null;
     let pipelinesOffsetTop = 102;
     let stopLoop = false;
     Object.keys(this.props.pipelinesOpened).forEach((key) => {
@@ -116,13 +115,12 @@ export default class Pipeline extends Component {
         pipelinesOffsetTop += 171;
       }
     });
-    return this.props.entity.ports.map(port => {
+    return this.props.entity.metadata.ports.map((port, idx) => {
       const key = `port-${port.portType}-${port.id}`;
       return (
         <Port
-          key={key}
+          key={idx}
           ref={`port-${port.portType}`}
-          paper={this.props.paper}
           way={port.portType}
           elementId={this.props.entity.id}
           middle={true}

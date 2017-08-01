@@ -72,12 +72,12 @@ class Port extends PureComponent {
       deleteEndpointsOnDetach: true
     }, endpointOptions);
 
-    // if (this.props.way === 'in') {
-    //   this._checkAndReattachTargetConnections();
-    // }
-    // if (this.props.way === 'out') {
-    //   this._checkAndReattachSourceConnections();
-    // }
+    if (this.props.way === 'in') {
+      this._checkAndReattachTargetConnections();
+    }
+    if (this.props.way === 'out') {
+      this._checkAndReattachSourceConnections();
+    }
     this.calculatePortTopOffsets();
   }
 
@@ -88,8 +88,8 @@ class Port extends PureComponent {
     }
     if (nextProps.scope !== this.props.scope) {
       const portDOM = findDOMNode(this.refs.port);
-      // this.paper.setTargetScope(portDOM, nextProps.scope);
-      // this.paper.setSourceScope(portDOM, nextProps.scope);
+      this.paper.setTargetScope(portDOM, nextProps.scope);
+      this.paper.setSourceScope(portDOM, nextProps.scope);
     }
   }
 
@@ -103,67 +103,67 @@ class Port extends PureComponent {
       - portWrapDOM.closest('.Entity__extra').getBoundingClientRect().top;
   }
 
-  // componentWillUnmount() {
-  //   const portDOM = findDOMNode(this.refs.port);
-  //   const connectionsOut = this.paper.select({source: portDOM});
-  //   const connectionsIn = this.paper.select({target: portDOM});
-  //
-  //   connectionsIn.each((connection) => {
-  //     this.paper.detach(connection, {
-  //       fireEvent: false,
-  //       forceDetach: false,
-  //     });
-  //   });
-  //
-  //   connectionsOut.each((connection) => {
-  //     this.paper.detach(connection, {
-  //       fireEvent: false,
-  //       forceDetach: false,
-  //     });
-  //   });
-  // }
+  componentWillUnmount() {
+    const portDOM = findDOMNode(this.refs.port);
+    const connectionsOut = this.paper.select({source: portDOM});
+    const connectionsIn = this.paper.select({target: portDOM});
 
-  // _checkAndReattachTargetConnections() {
-  //   const connections = this.props.targetConnections;
-  //   _.forEach(connections, (connection) => {
-  //     let source = null;
-  //     if (connection.info && connection.info.source) {
-  //       source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
-  //     } else {
-  //       source = document.querySelector(`#port_anchor_out_${connection.fromId}`);
-  //     }
-  //     // removeConnection(connection.fromId, connection.toId);
-  //     // console.log(990, {
-  //     //   source,
-  //     //   target: findDOMNode(this.refs.port),
-  //     // });
-  //     this.paper.connect({
-  //       source,
-  //       target: findDOMNode(this.refs.port),
-  //     });
-  //   });
-  // }
-  //
-  // _checkAndReattachSourceConnections() {
-  //   const connections = this.props.sourceConnections; //Connection.getConnectionsForSource(this.props.elementId);
-  //   _.forEach(connections, (connection) => {
-  //     let target = null;
-  //     if (connection.info && connection.info.target) {
-  //       target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
-  //     } else {
-  //       target = document.querySelector(`#port_anchor_in_${connection.toId}`);
-  //     }
-  //     // removeConnection(connection.fromId, connection.toId);
-  //     // console.log(991, {
-  //     //   source: findDOMNode(this.refs.port),
-  //     //   target,
-  //     // });
-  //     this.paper.connect({
-  //       source: findDOMNode(this.refs.port),
-  //       target,
-  //     });
-  //   });
-  // }
+    connectionsIn.each((connection) => {
+      this.paper.detach(connection, {
+        fireEvent: false,
+        forceDetach: false,
+      });
+    });
+
+    connectionsOut.each((connection) => {
+      this.paper.detach(connection, {
+        fireEvent: false,
+        forceDetach: false,
+      });
+    });
+  }
+
+  _checkAndReattachTargetConnections() {
+    const connections = this.props.targetConnections;
+    _.forEach(connections, (connection) => {
+      let source = null;
+      if (connection.info && connection.info.source) {
+        source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
+      } else {
+        source = document.querySelector(`#port_anchor_out_${connection.fromId}`);
+      }
+      // removeConnection(connection.fromId, connection.toId);
+      // console.log(990, {
+      //   source,
+      //   target: findDOMNode(this.refs.port),
+      // });
+      this.paper.connect({
+        source,
+        target: findDOMNode(this.refs.port),
+      });
+    });
+  }
+
+  _checkAndReattachSourceConnections() {
+    const connections = this.props.sourceConnections; //Connection.getConnectionsForSource(this.props.elementId);
+    _.forEach(connections, (connection) => {
+      let target = null;
+      if (connection.info && connection.info.target) {
+        target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
+      } else {
+        target = document.querySelector(`#port_anchor_in_${connection.toId}`);
+      }
+      // removeConnection(connection.fromId, connection.toId);
+      // console.log(991, {
+      //   source: findDOMNode(this.refs.port),
+      //   target,
+      // });
+      this.paper.connect({
+        source: findDOMNode(this.refs.port),
+        target,
+      });
+    });
+  }
 
   render() {
     const {way, middle, elementId, isConnected, className} = this.props;
@@ -174,11 +174,6 @@ class Port extends PureComponent {
       'canvas-element__port--in': way === 'in',
       'port__middle': middle,
     });
-    // if (this.props.way === 'out') {
-    //   isConnected = this.props.sourceConnections.length > 0; //Connection.search({fromId: this.props.elementId}).length;
-    // } else if (this.props.way === 'in') {
-    //   isConnected = this.props.targetConnections.length > 0; //Connection.search({toId: this.props.elementId}).length;
-    // }
     const portAnchorClass = classNames({
       'port__anchor': true,
       'port__anchor--connected': isConnected,
@@ -202,9 +197,15 @@ class Port extends PureComponent {
 const selector = createSelector(
   state => state.connections,
   (_, props) => props.elementId,
-  (connections, id) => ({
-    isConnected: connections.filter(({fromId, toId}) => [fromId, toId].includes(id)).length > 0,
-  }),
+  (connections, id) => {
+    const sourceConnections = connections.filter(({fromId}) => fromId === id);
+    const targetConnections = connections.filter(({toId}) => toId === id);
+    return {
+      sourceConnections,
+      targetConnections,
+      isConnected: sourceConnections.length > 0 || targetConnections.length > 0,
+    };
+  },
 );
 
 export default connect(selector)(Port);

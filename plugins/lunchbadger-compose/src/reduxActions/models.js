@@ -11,13 +11,13 @@ export const addModel = () => (dispatch, getState) => {
   return entity;
 }
 
-export const updateModel = ({data, metadata}) => async (dispatch, getState) => {
-  const isDifferent = metadata.loaded && data.name !== getState().entities.models[metadata.id].data.name;
-  let entity = Model.create(data, {...metadata, processing: true});
+export const updateModel = props => async (dispatch, getState) => {
+  const isDifferent = props.metadata.loaded && props.name !== getState().entities.models[props.metadata.id].name;
+  let entity = Model.create(props, {...props.metadata, processing: true});
   dispatch(actions.updateModelRequest({entity}));
   try {
     if (isDifferent) {
-      await ModelService.delete(data.id);
+      await ModelService.delete(props.id);
       // ConnectionStore
       //   .getConnectionsForSource(oldId)
       //   .map(conn => PrivateStore.findEntity(conn.toId))
@@ -31,7 +31,7 @@ export const updateModel = ({data, metadata}) => async (dispatch, getState) => {
       //     }));
       //   });
     }
-    const {body} = await ModelService.upsert(entity.data);
+    const {body} = await ModelService.upsert(Model.toJSON(entity));
     entity = Model.create(body);
     dispatch(actions.updateModelSuccess({entity}));
     return entity;
@@ -41,11 +41,11 @@ export const updateModel = ({data, metadata}) => async (dispatch, getState) => {
   }
 };
 
-export const deleteModel = ({data, metadata}) => async (dispatch) => {
-  const entity = Model.create(data, {...metadata, processing: true});
+export const deleteModel = props => async (dispatch) => {
+  const entity = Model.create(props, {...props.metadata, processing: true});
   dispatch(actions.deleteModelRequest({entity}));
   try {
-    await ModelService.delete(entity.data.id);
+    await ModelService.delete(props.id);
     dispatch(actions.deleteModelSuccess({id: entity.metadata.id}));
   } catch (err) {
     console.log('ERROR deleteModelFailure', err);

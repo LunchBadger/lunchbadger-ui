@@ -45,7 +45,7 @@ class Microservice extends Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
-      const hasConnection = nextProps.entity.data.models.some((modelId) => {
+      const hasConnection = nextProps.entity.models.some((modelId) => {
         return Connection.getConnectionsForTarget(modelId).length;
       });
 
@@ -57,7 +57,7 @@ class Microservice extends Component {
     }
 
     if (nextState === null || this.state.hasSourceConnection !== nextState.hasSourceConnection) {
-      const hasConnection = nextProps.entity.data.models.some((modelId) => {
+      const hasConnection = nextProps.entity.models.some((modelId) => {
         return Connection.getConnectionsForSource(modelId).length;
       });
 
@@ -95,7 +95,7 @@ class Microservice extends Component {
         key={idx}
         {...this.props}
         parent={this.props.entity}
-        id={entity.data.id}
+        id={entity.id}
         entity={entity}
         paper={null}
         left={entity.metadata.left}
@@ -201,7 +201,7 @@ class Microservice extends Component {
 }
 
 const connector = createSelector(
-  (_, props) => props.entity.data.models,
+  (_, props) => props.entity.models,
   state => state.entities.models,
   (ids, models) => ({ids}), //models.filter(({data: {lunchbadgerId}}) => ids.includes(lunchbadgerId))}),
 );

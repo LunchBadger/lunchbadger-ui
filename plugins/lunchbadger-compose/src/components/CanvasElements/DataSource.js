@@ -69,7 +69,7 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {data: {connector, url, database, username, password}},
+      entity: {connector, url, database, username, password},
       validations: {data},
       entityDevelopment,
       onResetField,

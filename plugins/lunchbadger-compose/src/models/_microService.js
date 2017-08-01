@@ -1,11 +1,9 @@
 import uuid from 'uuid';
 
 const initialModel = {
-  data: {
-    itemOrder: 0,
-    name: 'Microservice',
-    models: [],
-  },
+  itemOrder: 0,
+  name: 'Microservice',
+  models: [],
   metadata: {
     type: 'Microservice',
     loaded: true,
@@ -17,11 +15,9 @@ export default {
   create: (model, metadata) => {
     const id = model.id || uuid.v4();
     return {
-      data: {
-        ...initialModel.data,
-        ...model,
-        id,
-      },
+      ...initialModel,
+      ...model,
+      id,
       metadata: {
         ...initialModel.metadata,
         ...metadata,
@@ -29,13 +25,18 @@ export default {
       },
     };
   },
-  validate: ({data, metadata}, model, state) => {
+  toJSON: entity => {
+    const json = {...entity};
+    delete json.metadata;
+    return json;
+  },
+  validate: (entity, model, state) => {
     const invalid = {};
     const {messages, checkFields} = LunchBadgerCore.utils;
     if (model.name !== '') {
       const isDuplicateName = Object.keys(state.entities.microservices)
-        .filter(id => id !== metadata.id)
-        .filter(id => state.entities.microservices[id].data.name.toLowerCase() === model.name.toLowerCase())
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.microservices[id].name.toLowerCase() === model.name.toLowerCase())
         .length > 0;
       if (isDuplicateName) {
         invalid.name = messages.duplicatedEntityName('Microservice');

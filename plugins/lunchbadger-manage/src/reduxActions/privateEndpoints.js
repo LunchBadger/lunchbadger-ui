@@ -10,11 +10,11 @@ export const addPrivateEndpoint = () => (dispatch, getState) => {
   return entity;
 }
 
-export const updatePrivateEndpoint = ({data, metadata}) => async (dispatch, getState) => {
-  let entity = PrivateEndpoint.create(data, {processing: true});
+export const updatePrivateEndpoint = props => async (dispatch, getState) => {
+  let entity = PrivateEndpoint.create(props, {...props.metadata, processing: true});
   dispatch(actions.updatePrivateEndpointRequest({entity}));
   try {
-    entity = PrivateEndpoint.create(data);
+    entity = PrivateEndpoint.create(props);
     dispatch(actions.updatePrivateEndpointSuccess({entity}));
     return entity;
   } catch (err) {
@@ -23,11 +23,11 @@ export const updatePrivateEndpoint = ({data, metadata}) => async (dispatch, getS
   }
 };
 
-export const deletePrivateEndpoint = ({data, metadata}) => async (dispatch) => {
-  const entity = PrivateEndpoint.create(data, {...metadata, processing: true});
+export const deletePrivateEndpoint = props => async (dispatch) => {
+  const entity = PrivateEndpoint.create(props, {...props.metadata, processing: true});
   dispatch(actions.deletePrivateEndpointRequest({entity}));
   try {
-    dispatch(actions.deletePrivateEndpointSuccess({id: entity.metadata.id}));
+    dispatch(actions.deletePrivateEndpointSuccess({id: props.metadata.id}));
   } catch (err) {
     console.log('ERROR deletePrivateEndpointFailure', err);
     dispatch(actions.deletePrivateEndpointFailure(err));

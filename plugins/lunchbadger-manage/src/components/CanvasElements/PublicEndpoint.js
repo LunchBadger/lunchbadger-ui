@@ -19,14 +19,14 @@ class PublicEndpoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      path: props.entity.data.path
+      path: props.entity.path
     };
   }
 
   update(model) {
     const validations = this.validate(model);
     if (validations.isValid) {
-      updatePublicEndpoint(this.props.entity.data.id, model);
+      updatePublicEndpoint(this.props.entity.id, model);
     }
     return validations;
   }
@@ -52,7 +52,7 @@ class PublicEndpoint extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.parent.state.editable) {
-      this.setState({path: nextProps.entity.data.path});
+      this.setState({path: nextProps.entity.path});
     }
   }
 
@@ -80,13 +80,13 @@ class PublicEndpoint extends Component {
       {
         name: 'url',
         title: 'URL',
-        value: getPublicEndpointUrl(entity.data.id, this.state.path),
+        value: getPublicEndpointUrl(entity.id, this.state.path),
         fake: true,
       },
       {
         name: 'path',
         title: 'path',
-        value: entity.data.path,
+        value: entity.path,
         invalid: data.path,
         onChange: this.onPathChange,
         onBlur: this.handleFieldChange('path'),

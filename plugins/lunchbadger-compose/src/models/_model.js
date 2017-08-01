@@ -3,22 +3,20 @@ import uuid from 'uuid';
 const portGroups = LunchBadgerCore.constants.portGroups;
 
 const initialModel = {
-  data: {
-    base: '',
-    facetName: 'server',
-    http: {
-      path: 'newmodel',
-    },
-    itemOrder: 0,
-    name: 'NewModel',
-    plurar: '',
-    properties: [],
-    public: true,
-    readonly: false,
-    relations: [],
-    strict: false,
-    wasBundled: false,
+  base: '',
+  facetName: 'server',
+  http: {
+    path: 'newmodel',
   },
+  itemOrder: 0,
+  name: 'NewModel',
+  plurar: '',
+  properties: [],
+  public: true,
+  readonly: false,
+  relations: [],
+  strict: false,
+  wasBundled: false,
   metadata: {
     type: 'Model',
     loaded: true,
@@ -31,14 +29,12 @@ const initialModel = {
 export default {
   create: (model, metadata) => {
     const id = model.lunchbadgerId || uuid.v4();
-    const name = model.name || initialModel.data.name;
+    const name = model.name || initialModel.name;
     return {
-      data: {
-        ...initialModel.data,
-        ...model,
-        id: `server.${name}`,
-        lunchbadgerId: id,
-      },
+      ...initialModel,
+      ...model,
+      id: `server.${name}`,
+      lunchbadgerId: id,
       metadata: {
         ...initialModel.metadata,
         ports: [
@@ -58,13 +54,18 @@ export default {
       },
     };
   },
-  validate: ({data, metadata}, model, state) => {
+  toJSON: entity => {
+    const json = {...entity};
+    delete json.metadata;
+    return json;
+  },
+  validate: (entity, model, state) => {
     const invalid = {};
     const {messages, checkFields} = LunchBadgerCore.utils;
     if (model.name !== '') {
       const isDuplicateName = Object.keys(state.entities.models)
-        .filter(id => id !== metadata.id)
-        .filter(id => state.entities.models[id].data.name.toLowerCase() === model.name.toLowerCase())
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.models[id].name.toLowerCase() === model.name.toLowerCase())
         .length > 0;
       if (isDuplicateName) {
         invalid.name = messages.duplicatedEntityName('Model');

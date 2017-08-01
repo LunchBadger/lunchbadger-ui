@@ -3,16 +3,14 @@ import uuid from 'uuid';
 const portGroups = LunchBadgerCore.constants.portGroups;
 
 const initialModel = {
-  data: {
-    facetName: 'server',
-    name: '',
-    connector: '',
-    url: '',
-    database: '',
-    username: '',
-    password: '',
-    itemOrder: 0,
-  },
+  facetName: 'server',
+  name: '',
+  connector: '',
+  url: '',
+  database: '',
+  username: '',
+  password: '',
+  itemOrder: 0,
   metadata: {
     type: 'DataSource',
     loaded: true,
@@ -25,12 +23,10 @@ export default {
   create: (model, metadata) => {
     const id = model.lunchbadgerId || uuid.v4();
     return {
-      data: {
-        ...initialModel.data,
-        ...model,
-        id: `server.${model.name}`,
-        lunchbadgerId: id,
-      },
+      ...initialModel,
+      ...model,
+      id: `server.${model.name}`,
+      lunchbadgerId: id,
       metadata: {
         ...initialModel.metadata,
         ports: [
@@ -45,13 +41,18 @@ export default {
       },
     };
   },
-  validate: ({data, metadata}, model, state) => {
+  toJSON: entity => {
+    const json = {...entity};
+    delete json.metadata;
+    return json;
+  },
+  validate: (entity, model, state) => {
     const invalid = {};
     const {messages, checkFields} = LunchBadgerCore.utils;
     if (model.name !== '') {
       const isDuplicateName = Object.keys(state.entities.dataSources)
-        .filter(id => id !== metadata.id)
-        .filter(id => state.entities.dataSources[id].data.name.toLowerCase() === model.name.toLowerCase())
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.dataSources[id].name.toLowerCase() === model.name.toLowerCase())
         .length > 0;
       if (isDuplicateName) {
         invalid.name = messages.duplicatedEntityName('Data Source');

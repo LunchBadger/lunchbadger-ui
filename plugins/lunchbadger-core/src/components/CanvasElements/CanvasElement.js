@@ -224,20 +224,20 @@ export default (ComposedComponent) => {
       this.forceUpdate();
     }
 
-    update = async (data) => {
+    update = async (model) => {
       const {store: {dispatch, getState}} = this.context;
       const state = getState();
       const {plugins} = state;
       const {entity} = this.props;
       const {type} = entity.metadata;
       const onValidate = plugins.onValidate[type];
-      const invalid = onValidate(entity, data, state);
+      const invalid = onValidate(entity, model, state);
       const isValid = Object.keys(invalid).length === 0;
       this.setState({validations: {isValid, data: invalid}});
       if (!isValid) return;
       dispatch(setCurrentEditElement(null));
       const onUpdate = plugins.onUpdate[type];
-      const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, {data})));
+      const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
       dispatch(setCurrentElement(updatedEntity));
       // update currentElement
 
@@ -359,7 +359,7 @@ export default (ComposedComponent) => {
           this.setState({validations: {isValid: true, data: {}}});
         }
         if (this.entityRef.getFormRef()) {
-          this.entityRef.getFormRef().reset(entity.data);
+          this.entityRef.getFormRef().reset(entity);
         }
       } else {
         dispatch(clearCurrentElement());
@@ -482,14 +482,14 @@ export default (ComposedComponent) => {
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={this.props.entity.metadata.type}
-              connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.data.connector : undefined}
+              connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={editable}
               highlighted={highlighted}
               dragging={dragging}
               wip={processing}
               invalid={!validations.isValid}
               toolboxConfig={toolboxConfig}
-              name={this.props.entity.data.name}
+              name={this.props.entity.name}
               onNameChange={this.updateName}
               onCancel={this.handleCancel}
               validations={validations}

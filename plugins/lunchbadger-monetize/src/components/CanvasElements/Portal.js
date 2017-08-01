@@ -53,7 +53,7 @@ class Portal extends Component {
     //   toggleEdit(entity);
     // }
     const APIsOpened = {...this.state.APIsOpened};
-    entity.data.apis.forEach((item) => {
+    entity.apis.forEach((item) => {
       APIsOpened[item.id] = true;
     });
     this.setState({APIsOpened});
@@ -75,7 +75,7 @@ class Portal extends Component {
     // }
     const APIsOpened = {...this.state.APIsOpened};
     let isChange = false;
-    nextProps.entity.data.apis.forEach((item) => {
+    nextProps.entity.apis.forEach((item) => {
       if (typeof APIsOpened[item.id] === 'undefined') {
         APIsOpened[item.id] = true;
         isChange = true;
@@ -130,10 +130,10 @@ class Portal extends Component {
 
   renderAPIs() {
     const APIsPublicEndpoints = {};
-    this.props.entity.data.apis.forEach((endpoint) => {
+    this.props.entity.apis.forEach((endpoint) => {
       APIsPublicEndpoints[endpoint.id] = endpoint.publicEndpoints.length;
     });
-    return this.props.entity.data.apis.map((endpoint, index) => {
+    return this.props.entity.apis.map((endpoint, index) => {
       return (
         <API
           key={endpoint.id}
@@ -197,7 +197,7 @@ class Portal extends Component {
       {
         name: 'rootUrl',
         title: 'root URL',
-        value: this.props.entity.data.rootUrl,
+        value: this.props.entity.rootUrl,
         invalid: data.rootUrl,
         onBlur: this.handleFieldChange('rootUrl'),
       },
@@ -222,7 +222,7 @@ class Portal extends Component {
           <ElementsBundler
             {...this.props}
             canDropCheck={
-              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
+              (item) => _.includes(this.props.entity.accept, item.entity.metadata.type)
               && !_.includes(this.props.entity.apis, item.entity)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}

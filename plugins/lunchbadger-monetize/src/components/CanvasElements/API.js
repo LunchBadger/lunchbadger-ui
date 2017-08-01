@@ -43,7 +43,7 @@ class API extends Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.data.publicEndpoints.some((publicEndpoint) => {
+      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
         return Connection.getConnectionsForTarget(publicEndpoint.id).length;
       });
 
@@ -60,11 +60,11 @@ class API extends Component {
   }
 
   renderPlans = () => {
-    return this.props.entity.data.plans.map(plan => <Plan key={plan.id} entity={plan} />);
+    return this.props.entity.plans.map(plan => <Plan key={plan.id} entity={plan} />);
   }
 
   renderEndpoints = () => {
-    return this.props.entity.data.publicEndpoints.map((api, index) => (
+    return this.props.entity.publicEndpoints.map((api, index) => (
       <PublicEndpoint
         key={api.id}
         {...this.props}
@@ -108,7 +108,7 @@ class API extends Component {
     });
     return (
       <div className={elementClass}>
-        {this.props.entity.data.plans.length > 0 && (
+        {this.props.entity.plans.length > 0 && (
           <EntitySubElements
             title="Plans"
           >

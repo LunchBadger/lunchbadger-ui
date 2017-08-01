@@ -2,7 +2,7 @@ import {actions} from './actions';
 
 export const setCurrentElement = value => (dispatch, getState) => {
   const {currentElement} = getState().states;
-  if (currentElement && currentElement.data.id === value.data.id) return;
+  if (currentElement && currentElement.id === value.id) return;
   dispatch(actions.setStates({key: 'currentElement', value}));
 };
 
@@ -16,7 +16,7 @@ export const clearCurrentElement = () => (dispatch, getState) => {
 
 export const setCurrentEditElement = value => (dispatch, getState) => {
   const {currentEditElement} = getState().states;
-  if (currentEditElement && value && currentEditElement.data.id === value.data.id) return;
+  if (currentEditElement && value && currentEditElement.id === value.id) return;
   if (currentEditElement === null && currentEditElement === value) return;
   dispatch(actions.setStates({key: 'currentEditElement', value}));
 };

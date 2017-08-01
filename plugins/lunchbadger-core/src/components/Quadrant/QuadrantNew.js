@@ -73,7 +73,7 @@ class Quadrant extends PureComponent {
         ...Object.keys(props[type]).map(id => ({
           id,
           type,
-          itemOrder: props[type][id].data.itemOrder,
+          itemOrder: props[type][id].itemOrder,
         })),
       ]), [])
     .sort((a, b) => a.itemOrder > b.itemOrder)

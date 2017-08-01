@@ -10,11 +10,11 @@ export const addMicroservice = () => (dispatch, getState) => {
   return entity;
 }
 
-export const updateMicroservice = ({data, metadata}) => async (dispatch, getState) => {
-  let entity = Microservice.create(data, {processing: true});
+export const updateMicroservice = props => async (dispatch, getState) => {
+  let entity = Microservice.create(props, {...props.metadata, processing: true});
   dispatch(actions.updateMicroserviceRequest({entity}));
   try {
-    entity = Microservice.create(data);
+    entity = Microservice.create(props);
     dispatch(actions.updateMicroserviceSuccess({entity}));
     return entity;
   } catch (err) {
@@ -23,11 +23,11 @@ export const updateMicroservice = ({data, metadata}) => async (dispatch, getStat
   }
 };
 
-export const deleteMicroservice = ({data, metadata}) => async (dispatch) => {
-  const entity = Microservice.create(data, {...metadata, processing: true});
+export const deleteMicroservice = props => async (dispatch) => {
+  const entity = Microservice.create(props, {...props.metadata, processing: true});
   dispatch(actions.deleteMicroserviceRequest({entity}));
   try {
-    dispatch(actions.deleteMicroserviceSuccess({id: entity.metadata.id}));
+    dispatch(actions.deleteMicroserviceSuccess({id: props.metadata.id}));
   } catch (err) {
     console.log('ERROR deleteMicroserviceFailure', err);
     dispatch(actions.deleteMicroserviceFailure(err));

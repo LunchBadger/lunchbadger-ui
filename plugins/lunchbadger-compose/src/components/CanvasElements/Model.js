@@ -66,7 +66,7 @@ class Model extends Component {
   // }
 
   initState = (props = this.props) => {
-    const {http: {path: contextPath}, name} = props.entity.data;
+    const {http: {path: contextPath}, name} = props.entity;
     return {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
@@ -244,7 +244,7 @@ class Model extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          {this.props.entity.data.properties.length > 0 && (
+          {this.props.entity.properties.length > 0 && (
             <div ref="properties">
               {this.renderProperties()}
             </div>

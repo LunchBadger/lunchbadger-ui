@@ -53,21 +53,20 @@ class Model extends Component {
   }
 
   renderPorts() {
-    return null;
-    // return this.props.entity.ports.map((port) => {
-    //   const key = `port-${port.portType}-${port.id}`;
-    //   return (
-    //     <Port key={key}
-    //           paper={this.props.paper}
-    //           way={port.portType}
-    //           middle={true}
-    //           elementId={`${this.props.entity.id}`}
-    //           ref={`port-${port.portType}`}
-    //           scope={this.props.expanded ? port.portGroup : key}
-    //           offsetTop={85 + this.props.index * 24}
-    //     />
-    //   );
-    // });
+    return this.props.entity.metadata.ports.map((port, idx) => {
+      const key = `port-${port.portType}-${port.id}`;
+      return (
+        <Port
+          key={idx}
+          way={port.portType}
+          middle={true}
+          elementId={`${this.props.entity.metadata.id}`}
+          ref={`port-${port.portType}`}
+          scope={this.props.expanded ? port.portGroup : key}
+          offsetTop={85 + this.props.index * 24}
+        />
+      );
+    });
   }
 
   handleClick = () => {

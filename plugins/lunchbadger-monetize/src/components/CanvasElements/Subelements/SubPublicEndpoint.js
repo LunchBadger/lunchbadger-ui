@@ -42,7 +42,7 @@ export default class PublicEndpoint extends Component {
           paper={this.props.paper}
           way={port.portType}
           middle={true}
-          elementId={`${this.props.entity.id}`}
+          elementId={port.id}
           ref={`port-${port.portType}`}
           scope={this.props.expanded ? port.portGroup : key}
           offsetTop={98 + APIsOffsetTop + this.props.indexAPI * 40}

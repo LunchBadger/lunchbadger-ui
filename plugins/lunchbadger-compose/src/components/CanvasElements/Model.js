@@ -195,7 +195,7 @@ class Model extends Component {
       <Port
         key={idx}
         way={port.portType}
-        elementId={this.props.entity.metadata.id}
+        elementId={port.id}
         className={`port-${this.props.entity.metadata.type} port-${port.portGroup}`}
         scope={port.portGroup}
       />

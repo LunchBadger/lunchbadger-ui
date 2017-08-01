@@ -60,7 +60,7 @@ class DataSource extends Component {
         <Port
           key={idx}
           way={port.portType}
-          elementId={this.props.entity.metadata.id}
+          elementId={port.id}
           scope={port.portGroup}
         />
       );

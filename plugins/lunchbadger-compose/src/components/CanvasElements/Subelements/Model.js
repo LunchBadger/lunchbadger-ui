@@ -60,7 +60,7 @@ class Model extends Component {
           key={idx}
           way={port.portType}
           middle={true}
-          elementId={`${this.props.entity.metadata.id}`}
+          elementId={port.id}
           ref={`port-${port.portType}`}
           scope={this.props.expanded ? port.portGroup : key}
           offsetTop={85 + this.props.index * 24}

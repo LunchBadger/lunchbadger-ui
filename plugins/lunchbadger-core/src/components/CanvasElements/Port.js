@@ -73,10 +73,10 @@ class Port extends PureComponent {
     }, endpointOptions);
 
     if (this.props.way === 'in') {
-      this._checkAndReattachTargetConnections();
+      // this._checkAndReattachTargetConnections();
     }
     if (this.props.way === 'out') {
-      this._checkAndReattachSourceConnections();
+      // this._checkAndReattachSourceConnections();
     }
     this.calculatePortTopOffsets();
   }
@@ -123,7 +123,7 @@ class Port extends PureComponent {
     });
   }
 
-  _checkAndReattachTargetConnections() {
+  _checkAndReattachTargetConnections = () => {
     const connections = this.props.targetConnections;
     _.forEach(connections, (connection) => {
       let source = null;
@@ -144,7 +144,7 @@ class Port extends PureComponent {
     });
   }
 
-  _checkAndReattachSourceConnections() {
+  _checkAndReattachSourceConnections = () => {
     const connections = this.props.sourceConnections; //Connection.getConnectionsForSource(this.props.elementId);
     _.forEach(connections, (connection) => {
       let target = null;

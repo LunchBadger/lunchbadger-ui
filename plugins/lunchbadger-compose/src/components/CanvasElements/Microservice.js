@@ -89,17 +89,14 @@ class Microservice extends Component {
   }
 
   renderModels() {
-    return null;
-    return this.props.models.map((entity, idx) => (
+    return this.props.models.map((model, idx) => (
       <Model
         key={idx}
-        {...this.props}
         parent={this.props.entity}
-        id={entity.id}
-        entity={entity}
-        paper={null}
-        left={entity.metadata.left}
-        top={entity.metadata.top}
+        id={model.id}
+        entity={model}
+        left={0}
+        top={0}
         handleEndDrag={(item) => this.handleEndDrag(item)}
         hideSourceOnDrag={true}
         index={idx}
@@ -202,8 +199,10 @@ class Microservice extends Component {
 
 const connector = createSelector(
   (_, props) => props.entity.models,
-  state => state.entities.models,
-  (ids, models) => ({ids}), //models.filter(({data: {lunchbadgerId}}) => ids.includes(lunchbadgerId))}),
+  state => state.entities.modelsBundled,
+  (ids, models) => ({
+    models: ids.map(id => models[id]).filter(item => !!item),
+  }),
 );
 
 export default connect(connector)(CanvasElement(Microservice));

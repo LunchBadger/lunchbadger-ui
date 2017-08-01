@@ -88,7 +88,7 @@ class Model extends Component {
             <i className="fa fa-plug"/>
           </div>
           <div className="model__name">
-            {this.props.entity.data.name}
+            {this.props.entity.name}
           </div>
           {this.renderPorts()}
         </div>

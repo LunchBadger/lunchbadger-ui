@@ -1,11 +1,25 @@
 import uuid from 'uuid';
+import APIPlan from './_APIPlan';
 
 const {PublicEndpoint} = LunchBadgerManage.models;
 
 const initialModel = {
   name: 'API',
   itemOrder: 0,
-  plans: [],
+  plans: [
+    {
+      name: 'Free',
+      icon: 'fa-paper-plane',
+    },
+    {
+      name: 'Developer',
+      icon: 'fa-plane',
+    },
+    {
+      name: 'Professional',
+      icon: 'fa-fighter-jet',
+    },
+  ],
   publicEndpoints: [],
   metadata: {
     type: 'API',
@@ -20,9 +34,11 @@ export default {
   create: (model, metadata) => {
     const id = model.id || uuid.v4();
     const publicEndpoints = model.publicEndpoints || initialModel.publicEndpoints;
+    const plans = model.plans || initialModel.plans;
     return {
       ...initialModel,
       ...model,
+      plans: plans.map(item => APIPlan.create(item)),
       publicEndpoints: publicEndpoints.map(item => PublicEndpoint.create(item)),
       id,
       metadata: {

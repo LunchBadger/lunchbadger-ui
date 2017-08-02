@@ -15,6 +15,7 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
     'addPublicEndpoint',
 
     'addGateway',
+    'addPipeline',
   ],
 );
 

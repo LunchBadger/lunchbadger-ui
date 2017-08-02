@@ -5,7 +5,11 @@ const initialModel = {
   dnsPrefix: 'gateway',
   itemOrder: 0,
   name: 'Gateway',
-  pipelines: [],
+  pipelines: [
+    {
+      name: 'Pipeline',
+    },
+  ],
   metadata: {
     type: 'Gateway',
     loaded: true,
@@ -32,6 +36,9 @@ export default {
   toJSON: entity => {
     const json = {...entity};
     delete json.metadata;
+    json.pipelines.forEach(pipeline => {
+      delete pipeline.metadata;
+    });
     return json;
   },
   validate: (entity, model, state) => {

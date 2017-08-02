@@ -1,5 +1,6 @@
 import Gateway from '../models/_gateway';
 import {actionTypes} from '../reduxActions/actions';
+import Pipeline from '../models/_pipeline';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
@@ -22,6 +23,12 @@ export default (state = {}, action) => {
       return newState;
     case coreActionTypes.clearProject:
       return {};
+    case actionTypes.addPipeline:
+      newState[action.payload].pipelines = [
+        ...newState[action.payload].pipelines,
+        Pipeline.create(),
+      ];
+      return newState;
     default:
       return state;
   }

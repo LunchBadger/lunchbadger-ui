@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
-import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
+import {addPipeline} from '../../reduxActions/gateways';
 import removePipeline from '../../actions/CanvasElements/Gateway/removePipeline';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
@@ -23,6 +23,10 @@ class Gateway extends Component {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
     parent: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -132,7 +136,11 @@ class Gateway extends Component {
     }
   }
 
-  onAddPipeline = name => () => addPipeline(this.props.entity, name);
+  onAddPipeline = () => {
+    const {store: {dispatch}} = this.context;
+    const {entity} = this.props;
+    dispatch(addPipeline(entity.metadata.id));
+  }
 
   onRemovePipeline = pipelineToRemove => () => {
     this.setState({
@@ -184,7 +192,7 @@ class Gateway extends Component {
         <EntityProperties properties={mainProperties} />
         <EntitySubElements
           title="Pipelines"
-          onAdd={this.onAddPipeline('Pipeline')}
+          onAdd={this.onAddPipeline}
           main
         >
           <DraggableGroup

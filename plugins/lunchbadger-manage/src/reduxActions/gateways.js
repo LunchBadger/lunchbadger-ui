@@ -1,5 +1,6 @@
 import {actions} from './actions';
 import Gateway from '../models/_gateway';
+import Pipeline from '../models/_pipeline';
 
 export const addGateway = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -10,7 +11,7 @@ export const addGateway = () => (dispatch, getState) => {
   return entity;
 }
 
-export const updateGateway = props => async (dispatch, getState) => {
+export const updateGateway = props => async (dispatch) => {
   let entity = Gateway.create(props, {...props.metadata, processing: true});
   dispatch(actions.updateGatewayRequest({entity}));
   try {
@@ -22,6 +23,13 @@ export const updateGateway = props => async (dispatch, getState) => {
     dispatch(actions.updateGatewayFailure(err));
   }
 };
+
+export const addPipeline = id => (dispatch, getState) => {
+  const props = getState().entities.gateways[id];
+  props.pipelines.push(Pipeline.create());
+  const entity = Gateway.create(props);
+  dispatch(actions.updateGatewaySuccess({entity}));
+}
 
 export const deleteGateway = props => async (dispatch) => {
   const entity = Gateway.create(props, {...props.metadata, processing: true});

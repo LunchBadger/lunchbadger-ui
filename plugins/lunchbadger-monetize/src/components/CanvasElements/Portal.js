@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import cs from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import updatePortal from '../../actions/CanvasElements/Portal/update';
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
 import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
-import removePortal from '../../actions/CanvasElements/remove';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 import _ from 'lodash';
@@ -16,10 +13,8 @@ import './API.scss';
 import API from './Subelements/API';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const Input = LunchBadgerCore.components.Input;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 
 class Portal extends Component {
@@ -95,27 +90,6 @@ class Portal extends Component {
     this.props.parent.triggerElementAutofocus();
   }
 
-  update(model) {
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updatePortal(this.props.entity.id, model);
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.rootUrl === '') validations.data.rootUrl = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
-
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
@@ -125,8 +99,6 @@ class Portal extends Component {
   handleToggleAPIOpen = APIId => opened => {
     this.setState({APIsOpened: {...this.state.APIsOpened, [APIId]: opened}});
   }
-
-  removeEntity = () => removePortal(this.props.entity);
 
   renderAPIs() {
     const APIsPublicEndpoints = {};

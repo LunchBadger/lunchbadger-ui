@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
-import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
-import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const Port = LunchBadgerCore.components.Port;
 
 class PublicEndpoint extends Component {
@@ -23,27 +19,6 @@ class PublicEndpoint extends Component {
     };
   }
 
-  update(model) {
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updatePublicEndpoint(this.props.entity.id, model);
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.path === '') validations.data.path = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
-
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
@@ -55,8 +30,6 @@ class PublicEndpoint extends Component {
       this.setState({path: nextProps.entity.path});
     }
   }
-
-  removeEntity = () => removeEntity(this.props.entity);
 
   onPathChange = event => this.setState({path: event.target.value});
 

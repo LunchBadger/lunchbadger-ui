@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // import {connect} from 'react-redux';
-import cs from 'classnames';
 import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
-import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
-import removeModel from '../../actions/CanvasElements/Model/remove';
-import removeEntity from '../../actions/CanvasElements/remove';
 import slug from 'slug';
 import addPropertiesToData from '../addPropertiesToData';
 import addNestedProperties from '../addNestedProperties';
@@ -17,8 +13,6 @@ import './Model.scss';
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
-const PrivateStore = LunchBadgerManage.stores.Private;
-const {defaultEntityNames} = LunchBadgerCore.utils;
 
 class Model extends Component {
   constructor(props) {
@@ -79,35 +73,20 @@ class Model extends Component {
     // this.setState(this.initState());
   }
 
-  update(model) {
-    const data = {
-      properties: [],
-    };
-    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updateModel(
-        this.props.entity.id,
-        Object.assign(model, data),
-      );
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.name === 'Model') validations.data.name = 'Model name cannot be "Model"';
-    if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
-    if (model.contextPath === '') validations.data.contextPath = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
+  // update(model) {
+  //   const data = {
+  //     properties: [],
+  //   };
+  //   addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
+  //   const validations = this.validate(model);
+  //   if (validations.isValid) {
+  //     updateModel(
+  //       this.props.entity.id,
+  //       Object.assign(model, data),
+  //     );
+  //   }
+  //   return validations;
+  // }
 
   getEntityDiffProps = (model) => {
     if (!model) return null;
@@ -183,12 +162,6 @@ class Model extends Component {
   }
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
-
-  removeEntity = () => {
-    const {entity} = this.props;
-    removeModel(entity);
-    removeEntity(entity);
-  }
 
   renderPorts = () => {
     return this.props.entity.metadata.ports.map((port, idx) => (

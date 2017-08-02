@@ -4,12 +4,10 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
-import updateAPI from '../../actions/CanvasElements/API/update';
 import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
 import bundleAPI from '../../actions/CanvasElements/API/bundle';
 import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
-import removeAPI from '../../actions/CanvasElements/remove';
-import {EntityPropertyLabel, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
@@ -55,10 +53,6 @@ class API extends Component {
     }
   }
 
-  update(model) {
-    updateAPI(this.props.entity.id, model);
-  }
-
   renderPlans = () => {
     return this.props.entity.plans.map(plan => <Plan key={plan.id} entity={plan} />);
   }
@@ -96,8 +90,6 @@ class API extends Component {
   _handleClose = () => {
     this.setState({isShowingModal: false});
   }
-
-  removeEntity = () => removeAPI(this.props.entity);
 
   render() {
     const elementClass = classNames({

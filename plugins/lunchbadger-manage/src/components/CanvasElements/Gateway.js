@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import cs from 'classnames';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
-import removeEntity from '../../actions/CanvasElements/remove';
 import removePipeline from '../../actions/CanvasElements/Gateway/removePipeline';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
@@ -17,7 +15,6 @@ import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 
 const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
@@ -110,37 +107,24 @@ class Gateway extends Component {
     ));
   }
 
-  update(model) {
-    let data = {
-      pipelines: (model.pipelines || []).map(pipeline => {
-        let policies = pipeline.policies || [];
-        delete pipeline.policies;
-
-        return PipelineFactory.create({
-          ...pipeline,
-          policies: policies.map(policy => Policy.create(policy))
-        });
-      })
-    };
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      redeployGateway(this.props.entity, _.merge(model, data));
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.dnsPrefix === '') validations.data.dnsPrefix = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
+  // update(model) {
+  //   let data = {
+  //     pipelines: (model.pipelines || []).map(pipeline => {
+  //       let policies = pipeline.policies || [];
+  //       delete pipeline.policies;
+  //
+  //       return PipelineFactory.create({
+  //         ...pipeline,
+  //         policies: policies.map(policy => Policy.create(policy))
+  //       });
+  //     })
+  //   };
+  //   const validations = this.validate(model);
+  //   if (validations.isValid) {
+  //     redeployGateway(this.props.entity, _.merge(model, data));
+  //   }
+  //   return validations;
+  // }
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
@@ -167,8 +151,6 @@ class Gateway extends Component {
     }));
     this.props.parent.triggerElementAutofocus();
   }
-
-  removeEntity = () => removeEntity(this.props.entity);
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 

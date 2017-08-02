@@ -6,19 +6,15 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
-import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
 import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
 import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
-import removeModel from '../../actions/CanvasElements/Model/remove';
 import updateModel from '../../actions/CanvasElements/Model/update';
-import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Private = LunchBadgerManage.stores.Private;
 const Connection = LunchBadgerCore.stores.Connection;
 
 class Microservice extends Component {
@@ -76,17 +72,6 @@ class Microservice extends Component {
   onConnectionDetached = (info) => {
     this.previousConnection = info;
   };
-
-  update = model => updateMicroservice(this.props.entity.id, model);
-
-  removeEntity = () => {
-    const {entity} = this.props;
-    entity.models.forEach((modelId) => {
-      const model = Private.findEntity(modelId);
-      model && removeModel(model);
-    });
-    removeEntity(entity);
-  }
 
   renderModels() {
     return this.props.models.map((model, idx) => (

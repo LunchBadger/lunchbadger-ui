@@ -73,6 +73,8 @@ export default {
     }
     const fields = ['name'];
     checkFields(fields, model, invalid);
+    if (model.name.toLowerCase() === 'model') invalid.name = 'Model name cannot be "Model"';
+    if ((/\s/g).test(model.name)) invalid.name = 'Model name cannot have spaces';
     if (model.http.path === '') {
       invalid.contextPath = messages.fieldCannotBeEmpty;
     }

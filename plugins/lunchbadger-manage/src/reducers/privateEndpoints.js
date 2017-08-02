@@ -20,6 +20,8 @@ export default (state = {}, action) => {
     case actionTypes.deletePrivateEndpointSuccess:
       delete newState[action.payload.id];
       return newState;
+    case coreActionTypes.clearProject:
+      return {};
     default:
       return state;
   }

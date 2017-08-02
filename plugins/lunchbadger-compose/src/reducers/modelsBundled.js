@@ -1,6 +1,8 @@
 import Model from '../models/_model.js';
 import {actionTypes} from '../reduxActions/actions';
 
+const {actionTypes: coreActions} = LunchBadgerCore.utils;
+
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
@@ -19,6 +21,8 @@ export default (state = {}, action) => {
     // case actionTypes.deleteModelSuccess:
     //   delete newState[action.payload.id];
     //   return newState;
+    case coreActions.clearProject:
+      return {};
     default:
       return state;
   }

@@ -1,6 +1,8 @@
 import DataSource from '../models/_dataSource';
 import {actionTypes} from '../reduxActions/actions';
 
+const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
+
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
@@ -18,6 +20,8 @@ export default (state = {}, action) => {
     case actionTypes.deleteDataSourceSuccess:
       delete newState[action.payload.id];
       return newState;
+    case coreActionTypes.clearProject:
+      return {};
     default:
       return state;
   }

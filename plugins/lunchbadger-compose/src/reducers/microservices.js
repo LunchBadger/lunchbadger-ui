@@ -1,12 +1,12 @@
 import Microservice from '../models/_microService';
 import {actionTypes} from '../reduxActions/actions';
 
-const {actionTypes: coreActions} = LunchBadgerCore.utils;
+const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case coreActions.onLoadProject:
+    case coreActionTypes.onLoadProject:
     return action.payload.body.microServices.reduce((map, item) => {
       map[item.id] = Microservice.create(item);
       return map;
@@ -20,6 +20,8 @@ export default (state = {}, action) => {
     case actionTypes.deleteMicroserviceSuccess:
       delete newState[action.payload.id];
       return newState;
+    case coreActionTypes.clearProject:
+      return {};
     default:
       return state;
   }

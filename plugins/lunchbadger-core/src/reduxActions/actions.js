@@ -16,6 +16,8 @@ const {actions, actionTypes} = actionsCreator(
     'setLoadingProject',
 
     'setPortDOMElement',
+
+    'clearProject',
   ],
 );
 

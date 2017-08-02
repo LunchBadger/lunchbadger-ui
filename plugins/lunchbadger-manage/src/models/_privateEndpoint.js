@@ -55,7 +55,8 @@ export default {
         invalid.name = messages.duplicatedEntityName('Private Endpoint');
       }
     }
-    checkFields(['name', 'url'], model, invalid);
+    const fields = ['name', 'url'];
+    checkFields(fields, model, invalid);
     return invalid;
   },
 };

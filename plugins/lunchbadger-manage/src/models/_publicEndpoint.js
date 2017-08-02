@@ -4,7 +4,7 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 
 const initialModel = {
   itemOrder: 0,
-  name: '',
+  name: 'PublicEndpoint',
   path: '/endpoint',
   metadata: {
     type: 'PublicEndpoint',
@@ -42,18 +42,18 @@ export default {
   },
   validate: (entity, model, state) => {
     const invalid = {};
-    // const {messages, checkFields} = LunchBadgerCore.utils;
-    // if (model.name !== '') {
-    //   const isDuplicateName = Object.keys(state.entities.dataSources)
-    //     .filter(id => id !== entity.metadata.id)
-    //     .filter(id => state.entities.dataSources[id].name.toLowerCase() === model.name.toLowerCase())
-    //     .length > 0;
-    //   if (isDuplicateName) {
-    //     invalid.name = messages.duplicatedEntityName('Data Source');
-    //   }
-    // }
-    // const fields = ['name', 'url', 'database', 'username', 'password'];
-    // checkFields(fields, model, invalid);
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.publicEndpoints)
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.publicEndpoints[id].name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = messages.duplicatedEntityName('Public Endpoint');
+      }
+    }
+    const fields = ['name', 'path'];
+    checkFields(fields, model, invalid);
     return invalid;
   },
 };

@@ -2,9 +2,9 @@ import uuid from 'uuid';
 import API from './_API';
 
 const initialModel = {
+  name: 'Portal',
   apis: [],
   itemOrder: 0,
-  name: '',
   rootUrl: 'http://',
   metadata: {
     type: 'Portal',
@@ -16,10 +16,11 @@ const initialModel = {
 export default {
   create: (model, metadata) => {
     const id = model.id || uuid.v4();
+    const apis = model.apis || initialModel.apis;
     return {
       ...initialModel,
       ...model,
-      apis: model.apis.map(item => API.create(item)),
+      apis: apis.map(item => API.create(item)),
       id,
       metadata: {
         ...initialModel.metadata,
@@ -35,18 +36,18 @@ export default {
   },
   validate: (entity, model, state) => {
     const invalid = {};
-    // const {messages, checkFields} = LunchBadgerCore.utils;
-    // if (model.name !== '') {
-    //   const isDuplicateName = Object.keys(state.entities.dataSources)
-    //     .filter(id => id !== entity.metadata.id)
-    //     .filter(id => state.entities.dataSources[id].name.toLowerCase() === model.name.toLowerCase())
-    //     .length > 0;
-    //   if (isDuplicateName) {
-    //     invalid.name = messages.duplicatedEntityName('Data Source');
-    //   }
-    // }
-    // const fields = ['name', 'url', 'database', 'username', 'password'];
-    // checkFields(fields, model, invalid);
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.portals)
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.portals[id].name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = messages.duplicatedEntityName('Portal');
+      }
+    }
+    const fields = ['name', 'rootUrl'];
+    checkFields(fields, model, invalid);
     return invalid;
   },
 };

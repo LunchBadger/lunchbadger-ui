@@ -42,7 +42,8 @@ export default {
         invalid.name = messages.duplicatedEntityName('Microservice');
       }
     }
-    checkFields(['name'], model, invalid);
+    const fields = ['name'];
+    checkFields(fields, model, invalid);
     return invalid;
   },
 };

@@ -2,9 +2,9 @@ import uuid from 'uuid';
 import Pipeline from './_pipeline';
 
 const initialModel = {
-  dnsPrefix: '',
+  dnsPrefix: 'gateway',
   itemOrder: 0,
-  name: '',
+  name: 'Gateway',
   pipelines: [],
   metadata: {
     type: 'Gateway',
@@ -16,10 +16,11 @@ const initialModel = {
 export default {
   create: (model, metadata) => {
     const id = model.id || uuid.v4();
+    const pipelines = model.pipelines || initialModel.pipelines;
     return {
       ...initialModel,
       ...model,
-      pipelines: model.pipelines.map(item => Pipeline.create(item)),
+      pipelines: pipelines.map(item => Pipeline.create(item)),
       id,
       metadata: {
         ...initialModel.metadata,
@@ -35,18 +36,18 @@ export default {
   },
   validate: (entity, model, state) => {
     const invalid = {};
-    // const {messages, checkFields} = LunchBadgerCore.utils;
-    // if (model.name !== '') {
-    //   const isDuplicateName = Object.keys(state.entities.dataSources)
-    //     .filter(id => id !== entity.metadata.id)
-    //     .filter(id => state.entities.dataSources[id].name.toLowerCase() === model.name.toLowerCase())
-    //     .length > 0;
-    //   if (isDuplicateName) {
-    //     invalid.name = messages.duplicatedEntityName('Data Source');
-    //   }
-    // }
-    // const fields = ['name', 'url', 'database', 'username', 'password'];
-    // checkFields(fields, model, invalid);
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(state.entities.gateways)
+        .filter(id => id !== entity.metadata.id)
+        .filter(id => state.entities.gateways[id].name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        invalid.name = messages.duplicatedEntityName('Gateway');
+      }
+    }
+    const fields = ['name', 'dnsPrefix'];
+    checkFields(fields, model, invalid);
     return invalid;
   },
 };

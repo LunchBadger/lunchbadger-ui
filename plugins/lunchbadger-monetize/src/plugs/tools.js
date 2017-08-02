@@ -1,18 +1,17 @@
-// import {addDataSource, addModel} from '../reduxActions';
-import AddAPI from '../actions/CanvasElements/API/add';
-import AddPortal from '../actions/CanvasElements/Portal/add';
+import {addAPI} from '../reduxActions/apis';
+import {addPortal} from '../reduxActions/portals';
 
 export default {
   2: [
     {
       icon: 'iconApi',
       tooltip: 'API',
-      action: () => AddAPI(),
+      action: addAPI,
     },
     {
       icon: 'iconPortal',
       tooltip: 'Portal',
-      action: () => AddPortal(),
+      action: addPortal,
     },
   ],
 };

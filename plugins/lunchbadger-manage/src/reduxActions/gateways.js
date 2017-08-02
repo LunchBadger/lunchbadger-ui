@@ -1,0 +1,41 @@
+import {actions} from './actions';
+import Gateway from '../models/_gateway';
+
+export const addGateway = () => (dispatch, getState) => {
+  const {entities, plugins: {quadrants}} = getState();
+  const types = quadrants[1].entities;
+  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  const entity = Gateway.create({itemOrder}, {loaded: false});
+  dispatch(actions.addGateway({entity}));
+  return entity;
+}
+
+export const updateGateway = props => async (dispatch, getState) => {
+  let entity = Gateway.create(props, {...props.metadata, processing: true});
+  dispatch(actions.updateGatewayRequest({entity}));
+  try {
+    entity = Gateway.create(props);
+    dispatch(actions.updateGatewaySuccess({entity}));
+    return entity;
+  } catch (err) {
+    console.log('ERROR updateGatewayFailure', err);
+    dispatch(actions.updateGatewayFailure(err));
+  }
+};
+
+export const deleteGateway = props => async (dispatch) => {
+  const entity = Gateway.create(props, {...props.metadata, processing: true});
+  dispatch(actions.deleteGatewayRequest({entity}));
+  try {
+    dispatch(actions.deleteGatewaySuccess({id: props.metadata.id}));
+  } catch (err) {
+    console.log('ERROR deleteGatewayFailure', err);
+    dispatch(actions.deleteGatewayFailure(err));
+  }
+};
+
+export const discardGatewayChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+  if (!loaded) {
+    dispatch(actions.deleteGatewaySuccess({id}));
+  }
+}

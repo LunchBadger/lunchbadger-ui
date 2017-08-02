@@ -1,7 +1,6 @@
 import {addPrivateEndpoint} from '../reduxActions/privateEndpoints';
-// import DeployGateway from '../actions/CanvasElements/Gateway/deploy';
-// import AddPrivateEndpoint from '../actions/CanvasElements/PrivateEndpoint/add';
-// import AddPublicEndpoint from '../actions/CanvasElements/PublicEndpoint/add';
+import {addPublicEndpoint} from '../reduxActions/publicEndpoints';
+import {addGateway} from '../reduxActions/gateways';
 
 export default {
   1: [
@@ -20,14 +19,14 @@ export default {
           label: 'Public',
           name: 'publicendpoint',
           icon: 'iconEndpoint',
-          action: () => AddPublicEndpoint(),
+          action: addPublicEndpoint,
         },
       ],
     },
     {
       icon: 'iconGateway',
       tooltip: 'Gateway',
-      action: () => DeployGateway(),
+      action: addGateway,
     },
   ],
 };

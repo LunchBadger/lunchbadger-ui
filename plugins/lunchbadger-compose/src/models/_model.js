@@ -71,7 +71,8 @@ export default {
         invalid.name = messages.duplicatedEntityName('Model');
       }
     }
-    checkFields(['name'], model, invalid);
+    const fields = ['name'];
+    checkFields(fields, model, invalid);
     if (model.http.path === '') {
       invalid.contextPath = messages.fieldCannotBeEmpty;
     }

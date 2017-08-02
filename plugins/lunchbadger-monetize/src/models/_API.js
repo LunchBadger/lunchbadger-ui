@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import _ from 'lodash';
 import APIPlan from './_APIPlan';
 
 const {PublicEndpoint} = LunchBadgerManage.models;
@@ -49,7 +50,7 @@ export default {
     };
   },
   toJSON: entity => {
-    const json = {...entity};
+    const json = _.merge({}, entity);
     delete json.metadata;
     json.plans.forEach(plan => {
       delete plan.metadata;

@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import _ from 'lodash';
 
 const portGroups = LunchBadgerCore.constants.portGroups;
 
@@ -55,7 +56,7 @@ export default {
     };
   },
   toJSON: entity => {
-    const json = {...entity};
+    const json = _.merge({}, entity);
     delete json.metadata;
     return json;
   },

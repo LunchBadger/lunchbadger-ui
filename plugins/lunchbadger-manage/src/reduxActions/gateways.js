@@ -24,9 +24,16 @@ export const updateGateway = props => async (dispatch) => {
   }
 };
 
-export const addPipeline = id => (dispatch, getState) => {
-  const props = getState().entities.gateways[id];
-  props.pipelines.push(Pipeline.create());
+export const addPipeline = gatewayId => (dispatch, getState) => {
+  const props = {...getState().entities.gateways[gatewayId]};
+  props.pipelines = [...props.pipelines, Pipeline.create()];
+  const entity = Gateway.create(props);
+  dispatch(actions.updateGatewaySuccess({entity}));
+}
+
+export const removePipeline = (gatewayId, pipelineId) => (dispatch, getState) => {
+  const props = {...getState().entities.gateways[gatewayId]};
+  props.pipelines = props.pipelines.filter(p => p.id !== pipelineId);
   const entity = Gateway.create(props);
   dispatch(actions.updateGatewaySuccess({entity}));
 }

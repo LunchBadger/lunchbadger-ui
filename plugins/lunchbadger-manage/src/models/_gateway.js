@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import _ from 'lodash';
 import Pipeline from './_pipeline';
 
 const initialModel = {
@@ -34,7 +35,7 @@ export default {
     };
   },
   toJSON: entity => {
-    const json = {...entity};
+    const json = _.merge({}, entity);
     delete json.metadata;
     json.pipelines.forEach(pipeline => {
       delete pipeline.metadata;

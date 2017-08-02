@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Pipeline from './Subelements/Pipeline';
 import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
-import {addPipeline} from '../../reduxActions/gateways';
-import removePipeline from '../../actions/CanvasElements/Gateway/removePipeline';
+import {addPipeline, removePipeline} from '../../reduxActions/gateways';
 import classNames from 'classnames';
 import Policy from '../../models/Policy';
 import PipelineFactory from '../../models/Pipeline';
@@ -106,7 +105,7 @@ class Gateway extends Component {
         entity={pipeline}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(pipeline)}
+        onRemove={this.onRemovePipeline(pipeline.id)}
       />
     ));
   }
@@ -149,7 +148,11 @@ class Gateway extends Component {
     });
   }
 
-  removePipeline = () => removePipeline(this.props.entity, this.state.pipelineToRemove);
+  removePipeline = () => {
+    const {store: {dispatch}} = this.context;
+    const {entity} = this.props;
+    dispatch(removePipeline(entity.metadata.id, this.state.pipelineToRemove));
+  }
 
   _onDeploy() {
     const dispatchRedux = LunchBadgerCore.dispatchRedux;

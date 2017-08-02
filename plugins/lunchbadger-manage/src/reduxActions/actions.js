@@ -16,6 +16,7 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
 
     'addGateway',
     'addPipeline',
+    'removePipeline',
   ],
 );
 

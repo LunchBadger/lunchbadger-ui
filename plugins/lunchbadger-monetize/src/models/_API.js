@@ -51,6 +51,9 @@ export default {
   toJSON: entity => {
     const json = {...entity};
     delete json.metadata;
+    json.plans.forEach(plan => {
+      delete plan.metadata;
+    });
     return json;
   },
   validate: (entity, model, state) => {

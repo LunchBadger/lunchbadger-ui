@@ -8,7 +8,8 @@ const plugins = {};
 
 const arraysToRegister = [
   'services',
-  'onAppLoad'
+  'onAppLoad',
+  'onProjectSave'
 ];
 
 const objectsToRegister = [

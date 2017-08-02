@@ -15,8 +15,18 @@ export const loadFromServer = () => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(false));
 };
 
-export const saveToServer = () => (dispatch) => {
-  console.log('saveToServer');
+export const saveToServer = () => async (dispatch, getState) => {
+  dispatch(actions.setLoadingProject(true));
+  const state = getState();
+  const {onProjectSave} = state.plugins;
+  const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
+  try {
+    await ProjectService.save(data);
+  } catch (err) {
+    console.error(err);
+    dispatch(actions.addSystemDefcon1(err));
+  }
+  dispatch(actions.setLoadingProject(false));
 };
 
 export const clearServer = () => async (dispatch) => {

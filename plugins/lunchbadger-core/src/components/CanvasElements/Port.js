@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import removeConnection from '../../actions/Connection/remove';
 import uuid from 'uuid';
 import Connection from '../../stores/Connection';
+import {setPortDOMElement} from '../../reduxActions';
 import _ from 'lodash';
 
 class Port extends PureComponent {
@@ -34,6 +35,8 @@ class Port extends PureComponent {
   }
 
   componentDidMount() {
+    const {way, elementId, dispatch} = this.props;
+    const id = `port_anchor_${way}_${elementId}`;
     const portDOM = findDOMNode(this.refs.port);
 
     const endpointOptions = {
@@ -72,13 +75,14 @@ class Port extends PureComponent {
       deleteEndpointsOnDetach: true
     }, endpointOptions);
 
-    if (this.props.way === 'in') {
-      // this._checkAndReattachTargetConnections();
-    }
-    if (this.props.way === 'out') {
-      // this._checkAndReattachSourceConnections();
-    }
+    // if (this.props.way === 'in') {
+    //   // this._checkAndReattachTargetConnections();
+    // }
+    // if (this.props.way === 'out') {
+    //   // this._checkAndReattachSourceConnections();
+    // }
     this.calculatePortTopOffsets();
+    dispatch(setPortDOMElement(id));
   }
 
   componentWillUpdate(nextProps) {

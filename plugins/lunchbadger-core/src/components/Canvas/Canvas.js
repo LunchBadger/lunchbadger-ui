@@ -10,6 +10,7 @@ import moveConnection from '../../actions/Connection/move';
 import Connection from '../../stores/Connection';
 import ProjectService from '../../services/ProjectService';
 import {clearCurrentElement} from '../../reduxActions';
+import Connections from './Connections';
 import './Canvas.scss';
 
 class Canvas extends Component {
@@ -72,11 +73,11 @@ class Canvas extends Component {
 
     // LunchBadgerCore.utils.paper = this.paper;
     //
-    // this._attachPaperEvents();
+    this._attachPaperEvents();
     // this._registerConnectionTypes();
     //
     //
-    // jsPlumb.fire('canvasLoaded', this.paper);
+    jsPlumb.fire('canvasLoaded', this.paper);
   }
 
   componentWillUnmount() {
@@ -90,18 +91,18 @@ class Canvas extends Component {
     this.setState({scrollLeft: event.target.scrollLeft});
   }
 
-  // _disconnect(connection) {
-  //   this.paper.detach(connection, {
-  //     fireEvent: false
-  //   });
-  // }
+  _disconnect(connection) {
+    this.paper.detach(connection, {
+      fireEvent: false
+    });
+  }
 
-  // _flipConnection(info) {
-  //   this.paper.connect({
-  //     source: info.target,
-  //     target: info.source
-  //   });
-  // }
+  _flipConnection(info) {
+    this.paper.connect({
+      source: info.target,
+      target: info.source
+    });
+  }
 
   // _isConnectionValid(source, sourceId, target, targetId) {
   //   if (sourceId === targetId) {
@@ -141,41 +142,40 @@ class Canvas extends Component {
   //   return null;
   // }
 
-  // _attachPaperEvents() {
-  //   this.paper.bind('connection', (info) => {
-  //     const {source, connection} = info;
-  //
-  //     if (source.parentElement.classList.contains('port-in')) {
-  //       this._flipConnection(info);
-  //       this._disconnect(connection);
-  //
-  //       return;
-  //     }
-  //
-  //     let dropped = this.dropped;
-  //     this.dropped = false;
-  //
-  //     // This is set when a connection is being moved (connect event is also
-  //     // triggered). We want to handle this in 'connectionMoved' handler. Note
-  //     // that this is *not* set when a connection is picked up and then dropped
-  //     // in the same place.
-  //     if (connection.suspendedElement) {
-  //       return;
-  //     }
-  //
-  //     let fulfilled = null;
-  //
-  //     if (dropped) {
-  //       let strategies = this.props.plugins.getConnectionCreatedStrategies();
-  //       fulfilled = this._executeStrategies(strategies, info);
-  //     }
-  //
-  //     if (fulfilled === null) {
-  //       addConnection(info);
-  //     } else if (fulfilled === false) {
-  //       this._disconnect(connection);
-  //     }
-  //   });
+  _attachPaperEvents() {
+    // this.paper.bind('connection', (info) => {
+    //   const {source, connection} = info;
+    //   if (source.parentElement.classList.contains('port-in')) {
+    //     this._flipConnection(info);
+    //     this._disconnect(connection);
+    //
+    //     return;
+    //   }
+    //
+    //   let dropped = this.dropped;
+    //   this.dropped = false;
+    //
+    //   // This is set when a connection is being moved (connect event is also
+    //   // triggered). We want to handle this in 'connectionMoved' handler. Note
+    //   // that this is *not* set when a connection is picked up and then dropped
+    //   // in the same place.
+    //   if (connection.suspendedElement) {
+    //     return;
+    //   }
+    //
+    //   let fulfilled = null;
+    //
+    //   if (dropped) {
+    //     let strategies = this.props.plugins.getConnectionCreatedStrategies();
+    //     fulfilled = this._executeStrategies(strategies, info);
+    //   }
+    //
+    //   if (fulfilled === null) {
+    //     // addConnection(info);
+    //   } else if (fulfilled === false) {
+    //     this._disconnect(connection);
+    //   }
+    // });
   //
   //   this.paper.bind('connectionMoved', (info) => {
   //     let {originalSourceEndpoint, originalTargetEndpoint, connection} = info;
@@ -259,7 +259,7 @@ class Canvas extends Component {
   //       this.paper.detach(connection);
   //     }
   //   });
-  // }
+  }
 
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
@@ -289,6 +289,7 @@ class Canvas extends Component {
             scrollLeft={scrollLeft}
           />
         </div>
+        <Connections />
       </section>
     );
   }

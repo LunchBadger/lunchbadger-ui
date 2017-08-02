@@ -124,7 +124,7 @@ export default class Pipeline extends Component {
           way={port.portType}
           elementId={port.id}
           middle={true}
-          scope={this.props.expanded ? port.portGroup : key}
+          scope={port.portGroup}
           offsetTop={pipelinesOffsetTop + this.props.index * 48}
         />
       );

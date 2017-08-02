@@ -62,7 +62,7 @@ class PublicEndpoint extends Component {
           middle={true}
           elementId={port.id}
           ref={`port-${port.portType}`}
-          scope={this.props.expanded ? port.portGroup : key}
+          scope={port.portGroup}
           offsetTop={96 + this.props.index * 32}
         />
       );

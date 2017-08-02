@@ -19,6 +19,9 @@ import {
   addSystemDefcon1,
   toggleSystemDefcon1,
 } from './systemDefcon1';
+import {
+  setPortDOMElement,
+} from './ports';
 
 export {
   initialize,
@@ -30,11 +33,13 @@ export {
   removeEntity,
 
   loadFromServer,
-  
+
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
 
   addSystemDefcon1,
   toggleSystemDefcon1,
+
+  setPortDOMElement,
 };

@@ -74,9 +74,9 @@ class Gateway extends Component {
         this.setState({hasOutConnection: false});
       }
     }
-    if (!this.props.parent.state.editable) {
-      this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
-    }
+    // if (!this.props.parent.state.editable) { //FIXME
+    //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
+    // }
     const pipelinesOpened = {...this.state.pipelinesOpened};
     let pipelinesAdded = false;
     nextProps.entity.pipelines.forEach(({id}) => {

@@ -25,11 +25,11 @@ class PublicEndpoint extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.parent.state.editable) {
-      this.setState({path: nextProps.entity.path});
-    }
-  }
+  // componentWillReceiveProps(nextProps) { // FIXME
+  //   if (!this.props.parent.state.editable) {
+  //     this.setState({path: nextProps.entity.path});
+  //   }
+  // }
 
   onPathChange = event => this.setState({path: event.target.value});
 

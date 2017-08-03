@@ -53,8 +53,14 @@ export const deleteModel = props => async (dispatch) => {
   }
 };
 
-export const discardModelChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardModelChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deleteModelSuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = Model.create(props);
+    dispatch(actions.updateModelSuccess({entity}));
+    return Model.toJSON(entity);
   }
 }

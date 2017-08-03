@@ -6,12 +6,13 @@ import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
+import _ from 'lodash';
 import {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
 } from '../../reduxActions';
-import _ from 'lodash';
+import getFlatModel from '../../utils/getFlatModel';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
@@ -352,14 +353,15 @@ export default (ComposedComponent) => {
     handleCancel = (event) => {
       event.persist();
       const {store: {dispatch, getState}} = this.context;
-      const {entity} = this.props;
-      dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
+      const state = getState();
+      const entity = state.states.currentEditElement;
+      const json = dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
       if (entity.metadata.loaded) {
         if (!this.state.isValid) {
           this.setState({validations: {isValid: true, data: {}}});
         }
         if (this.entityRef.getFormRef()) {
-          this.entityRef.getFormRef().reset(entity);
+          this.entityRef.getFormRef().reset(getFlatModel(json));
         }
       } else {
         dispatch(clearCurrentElement());

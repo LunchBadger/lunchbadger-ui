@@ -34,8 +34,13 @@ export const deletePortal = props => async (dispatch) => {
   }
 };
 
-export const discardPortalChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardPortalChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deletePortalSuccess({id}));
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = Portal.create(props);
+    dispatch(actions.updatePortalSuccess({entity}));
+    return Portal.toJSON(entity);
   }
 }

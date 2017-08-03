@@ -34,8 +34,14 @@ export const deletePublicEndpoint = props => async (dispatch) => {
   }
 };
 
-export const discardPublicEndpointChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardPublicEndpointChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deletePublicEndpointSuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = PublicEndpoint.create(props);
+    dispatch(actions.updatePublicEndpointSuccess({entity}));
+    return PublicEndpoint.toJSON(entity);
   }
 }

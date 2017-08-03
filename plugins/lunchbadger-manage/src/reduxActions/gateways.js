@@ -49,8 +49,14 @@ export const deleteGateway = props => async (dispatch) => {
   }
 };
 
-export const discardGatewayChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardGatewayChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deleteGatewaySuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = Gateway.create(props);
+    dispatch(actions.updateGatewaySuccess({entity}));
+    return Gateway.toJSON(entity);
   }
 }

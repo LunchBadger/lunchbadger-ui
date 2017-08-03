@@ -53,8 +53,14 @@ export const deleteDataSource = props => async (dispatch) => {
   }
 };
 
-export const discardDataSourceChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardDataSourceChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deleteDataSourceSuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = DataSource.create(props);
+    dispatch(actions.updateDataSourceSuccess({entity}));
+    return DataSource.toJSON(entity);
   }
 }

@@ -34,8 +34,14 @@ export const deleteAPI = props => async (dispatch) => {
   }
 };
 
-export const discardAPIChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardAPIChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deleteAPISuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = API.create(props);
+    dispatch(actions.updateAPISuccess({entity}));
+    return API.toJSON(entity);
   }
 }

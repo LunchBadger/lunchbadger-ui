@@ -34,8 +34,14 @@ export const deleteMicroservice = props => async (dispatch) => {
   }
 };
 
-export const discardMicroserviceChanges = ({metadata: {loaded, id}}) => (dispatch) => {
+export const discardMicroserviceChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
   if (!loaded) {
     dispatch(actions.deleteMicroserviceSuccess({id}));
+    return {};
+  } else {
+    const props = getState().states.currentEditElement;
+    const entity = Microservice.create(props);
+    dispatch(actions.updateMicroserviceSuccess({entity}));
+    return Microservice.toJSON(entity);
   }
 }

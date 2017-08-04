@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import Policy from './Policy';
 import classNames from 'classnames';
 import './Pipeline.scss';
@@ -150,28 +151,30 @@ export default class Pipeline extends Component {
       pipeline__info: true,
       'pipeline__info--selected': _.find(selectedElements, {id: this.props.entity.id})
     });
-    const {index, onRemove} = this.props;
+    const {index, onRemove, markedRemove} = this.props;
     return (
-      <CollapsibleProperties
-        ref={(r) => {this.collapsiblePropertiesDOM = r;}}
-        bar={
-          <EntityProperty
-            name={`pipelines[${index}][name]`}
-            value={this.props.entity.name}
-            hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
-            onDelete={onRemove}
-            onViewModeClick={this.toggleCollapsibleProperties}
-          />
-        }
-        collapsible={
-          <div>
-            <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
-            {this.renderPolicies()}
-            {this.renderPorts()}
-          </div>
-        }
-        onToggleCollapse={this.toggleOpenState}
-      />
+      <div className={cs('Pipeline', {markedRemove})}>
+        <CollapsibleProperties
+          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
+          bar={
+            <EntityProperty
+              name={`pipelines[${index}][name]`}
+              value={this.props.entity.name}
+              hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
+              onDelete={onRemove}
+              onViewModeClick={this.toggleCollapsibleProperties}
+            />
+          }
+          collapsible={
+            <div>
+              <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
+              {this.renderPolicies()}
+              {this.renderPorts()}
+            </div>
+          }
+          onToggleCollapse={this.toggleOpenState}
+        />
+      </div>
     );
   }
 }

@@ -1,7 +1,6 @@
 import _ from 'lodash';
-
+import removePipeline from './removePipeline';
 const {dispatch} = LunchBadgerCore.dispatcher.AppDispatcher;
-const removeEntity = LunchBadgerCore.actions.removeEntity;
 
 export default (gateway, newProps) => {
   setTimeout(() => {
@@ -13,7 +12,7 @@ export default (gateway, newProps) => {
 
   _.differenceBy(gateway.pipelines, newProps.pipelines, pl => pl.id)
     .forEach(pipeline => {
-      removeEntity(pipeline);
+      removePipeline(gateway, pipeline);
     });
 
   dispatch('UpdateGateway', {

@@ -30,7 +30,7 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
 }
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();

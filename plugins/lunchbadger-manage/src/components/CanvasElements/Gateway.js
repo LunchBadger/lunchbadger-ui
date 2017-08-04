@@ -18,7 +18,6 @@ const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
 class Gateway extends Component {
   static propTypes = {
@@ -34,8 +33,8 @@ class Gateway extends Component {
       hasOutConnection: null,
       dnsPrefix: props.entity.dnsPrefix,
       pipelinesOpened: {},
-      showRemovingModal: false,
-      pipelineToRemove: null,
+      markedRemovePipelines: {},
+      pipelinesBeforeEdit: props.entity.pipelines.map(pl => pl.id),
     };
     props.entity.pipelines.forEach((item) => {
       this.state.pipelinesOpened[item.id] = false;
@@ -86,6 +85,15 @@ class Gateway extends Component {
     if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
+  discardChanges = () => {
+    const {entity} = this.props;
+    const {pipelines} = entity;
+    pipelines.filter(pl => !this.state.pipelinesBeforeEdit.includes(pl.id)).forEach((pipeline) => {
+      removePipeline(entity, pipeline);
+    });
+    this.setState({markedRemovePipelines: {}});
+  };
+
   handleTogglePipelineOpen = pipelineId => opened => {
     const pipelinesOpened = {...this.state.pipelinesOpened};
     pipelinesOpened[pipelineId] = opened;
@@ -103,12 +111,21 @@ class Gateway extends Component {
         entity={pipeline}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(pipeline)}
+        onRemove={this.markRemovePipeline(pipeline)}
+        markedRemove={this.state.markedRemovePipelines[pipeline.id]}
       />
     ));
   }
 
+  getModelAfterUpdate = (model) => {
+    const marked = Object.keys(this.state.markedRemovePipelines);
+    model.pipelines = model.pipelines.filter(pipeline => !marked.includes(pipeline.id));
+    return model;
+  }
+
   update(model) {
+    const marked = Object.keys(this.state.markedRemovePipelines);
+    model.pipelines = model.pipelines.filter(pipeline => !marked.includes(pipeline.id));
     let data = {
       pipelines: (model.pipelines || []).map(pipeline => {
         let policies = pipeline.policies || [];
@@ -124,6 +141,7 @@ class Gateway extends Component {
     if (validations.isValid) {
       redeployGateway(this.props.entity, _.merge(model, data));
     }
+    this.setState({pipelinesBeforeEdit: model.pipelines.map(pl => pl.id)});
     return validations;
   }
 
@@ -148,14 +166,18 @@ class Gateway extends Component {
 
   onAddPipeline = name => () => addPipeline(this.props.entity, name);
 
-  onRemovePipeline = pipelineToRemove => () => {
-    this.setState({
-      showRemovingModal: true,
-      pipelineToRemove,
-    });
+  markRemovePipeline = pipeline => () => {
+    if (this.state.pipelinesBeforeEdit.includes(pipeline.id)) {
+      this.setState({
+        markedRemovePipelines: {
+          ...this.state.markedRemovePipelines,
+          [pipeline.id]: true,
+        },
+      });
+    } else {
+      removePipeline(this.props.entity, pipeline);
+    }
   }
-
-  removePipeline = () => removePipeline(this.props.entity, this.state.pipelineToRemove);
 
   _onDeploy() {
     const dispatchRedux = LunchBadgerCore.dispatchRedux;
@@ -205,20 +227,6 @@ class Gateway extends Component {
             {this.renderPipelines()}
           </DraggableGroup>
         </EntitySubElements>
-        {this.state.showRemovingModal && (
-          <TwoOptionModal
-            onClose={() => this.setState({showRemovingModal: false})}
-            onSave={this.removePipeline}
-            onCancel={() => this.setState({showRemovingModal: false})}
-            title="Remove pipeline"
-            confirmText="Remove"
-            discardText="Cancel"
-          >
-            <span>
-              Do you really want to remove that pipeline?
-            </span>
-          </TwoOptionModal>
-        )}
       </div>
     );
   }

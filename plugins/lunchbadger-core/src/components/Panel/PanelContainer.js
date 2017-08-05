@@ -15,14 +15,12 @@ class PanelContainer extends Component {
   };
 
   renderPanels() {
-    const {plugins, appState, canvas, header, container} = this.props;
-    return plugins.getPanels().map((panel) => {
-      const PanelComponent = panel.panel.component;
+    const {panels, canvas, header, container} = this.props;
+    return panels.map((panel, idx) => {
+      const PanelComponent = panel;
       return (
         <PanelComponent
-          key={`${panel.panelButton.panelKey}-panel-plugin`}
-          appState={appState}
-          plugins={plugins}
+          key={idx}
           canvas={canvas}
           header={header}
           container={container}
@@ -60,7 +58,8 @@ class PanelContainer extends Component {
 
 const selector = createSelector(
   state => !!state.states.currentEditElement,
-  disabled => ({disabled}),
+  state => state.plugins.panels,
+  (disabled, panels) => ({disabled, panels}),
 );
 
 export default connect(selector)(PanelContainer);

@@ -1,7 +1,6 @@
 import {
   initialize,
   toggleEdit,
-  togglePanel,
   changePanelStatus,
   toggleHighlight,
   toggleSubelement,
@@ -14,6 +13,7 @@ import {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+  togglePanel,
 } from './states';
 import {
   addSystemDefcon1,

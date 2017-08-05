@@ -225,13 +225,18 @@ export default (ComposedComponent) => {
       this.forceUpdate();
     }
 
-    update = async (model) => {
+    update = async (props) => {
       const {store: {dispatch, getState}} = this.context;
       const state = getState();
       const {plugins} = state;
       const {entity} = this.props;
       const {type} = entity.metadata;
       const onValidate = plugins.onValidate[type];
+      let model = props;
+      const element = this.element.decoratedComponentInstance || this.element;
+      if (typeof element.processModel === 'function') {
+        model = element.processModel(model);
+      }
       const invalid = onValidate(entity, model, state);
       const isValid = Object.keys(invalid).length === 0;
       this.setState({validations: {isValid, data: invalid}});

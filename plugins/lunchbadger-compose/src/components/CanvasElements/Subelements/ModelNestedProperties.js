@@ -37,7 +37,7 @@ class ModelNestedProperties extends Component {
           return (
             <ModelPropertyCollapsed
               ref={(r) => {this.nestedDOM[property.id] = r;}}
-              key={`ModelPropertyCollapsed-${property.id}`}
+              key={index}
               level={level}
               collapsable={isNested}
               nested={isNested ?

@@ -4,56 +4,48 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
-import addProperty from '../../actions/CanvasElements/Model/addProperty';
 import slug from 'slug';
 import addPropertiesToData from '../addPropertiesToData';
 import addNestedProperties from '../addNestedProperties';
+import ModelProperty from '../../models/_modelProperty';
 import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const ModelProperty = LunchBadgerManage.models.ModelProperty;
 
 class Model extends Component {
   constructor(props) {
     super(props);
+    const stateFromStores = (newProps) => {
+      const data = {
+        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
+      };
+      if (!newProps.entity.privateModelProperties) {
+         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      }
+      return data;
+    };
     this.state = {
       ...this.initState(props),
+      ...stateFromStores(props),
+    };
+    this.onStoreUpdate = (props = this.props) => {
+      this.setState({...stateFromStores(props)});
     };
   }
-
-  // constructor(props) {
-  //   super(props);
-  //   const stateFromStores = (newProps) => {
-  //     const data = {
-  //       properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
-  //     };
-  //     if (!newProps.entity.privateModelProperties) {
-  //        addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
-  //     }
-  //     return data;
-  //   };
-  //   this.state = {
-  //     ...this.initState(props),
-  //     ...stateFromStores(props),
-  //   };
-  //   this.onStoreUpdate = (props = this.props) => {
-  //     this.setState({...stateFromStores(props)});
-  //   };
-  // }
 
   // componentDidMount() {
   //   PrivateStore.addChangeListener(this.onStoreUpdate);
   // }
   //
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.entity.id !== this.props.entity.id) {
-  //     this.onStoreUpdate(nextProps);
-  //   }
-  //   if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
-  //     this.setState(this.initState());
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.entity.properties !== this.props.entity.properties) {
+      this.onStoreUpdate(nextProps);
+    }
+    // if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
+    //   this.setState(this.initState());
+    // }
+  }
   //
   // componentWillUnmount() {
   //   PrivateStore.removeChangeListener(this.onStoreUpdate);
@@ -87,6 +79,14 @@ class Model extends Component {
   //   }
   //   return validations;
   // }
+
+  processModel = (model) => {
+    const data = {
+      properties: [],
+    };
+    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
+    return _.merge({}, model, data);
+  }
 
   getEntityDiffProps = (model) => {
     if (!model) return null;
@@ -133,14 +133,7 @@ class Model extends Component {
   }
 
   onAddProperty = (parentId) => () => {
-    this.onAddItem('properties', ModelProperty.create({
-      parentId,
-      default_: '',
-      type: 'string',
-      description: '',
-      required: false,
-      index: false,
-    }));
+    this.onAddItem('properties', ModelProperty.create({parentId}));
   }
 
   onAddRootProperty = () => {
@@ -176,7 +169,6 @@ class Model extends Component {
   }
 
   renderProperties = () => {
-    return null;
     return (
       <ModelNestedProperties
         title="Properties"
@@ -217,11 +209,9 @@ class Model extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          {this.props.entity.properties.length > 0 && (
-            <div ref="properties">
-              {this.renderProperties()}
-            </div>
-          )}
+          <div ref="properties">
+            {this.renderProperties()}
+          </div>
         </EntitySubElements>
       </div>
     );

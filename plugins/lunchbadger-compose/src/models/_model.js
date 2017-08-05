@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import _ from 'lodash';
+import ModelProperty from './_modelProperty';
 
 const portGroups = LunchBadgerCore.constants.portGroups;
 
@@ -31,11 +32,14 @@ export default {
   create: (model, metadata) => {
     const id = model.lunchbadgerId || uuid.v4();
     const name = model.name || initialModel.name;
+    const modelId = `server.${name}`;
+    const properties = model.properties || initialModel.properties;
     return {
       ...initialModel,
       ...model,
-      id: `server.${name}`,
+      id: modelId,
       lunchbadgerId: id,
+      properties: properties.map(item => ModelProperty.create(item)),
       metadata: {
         ...initialModel.metadata,
         ports: [
@@ -58,6 +62,7 @@ export default {
   toJSON: entity => {
     const json = _.merge({}, entity);
     delete json.metadata;
+    json.properties = json.properties.map(item => ModelProperty.toJSON(json.id, item));
     return json;
   },
   validate: (entity, model, state) => {

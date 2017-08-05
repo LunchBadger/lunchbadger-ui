@@ -1,6 +1,7 @@
 import {actions} from './actions';
 import {ModelService} from '../services';
 import Model from '../models/_model';
+import ModelProperty from '../models/_modelProperty';
 
 export const addModel = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -33,6 +34,12 @@ export const updateModel = props => async (dispatch, getState) => {
     }
     const {body} = await ModelService.upsert(Model.toJSON(entity));
     entity = Model.create(body);
+    await ModelService.deleteProperties(entity.id);
+    if (props.properties.length > 0) {
+      const upsertProperties = props.properties.map(item => ModelProperty.toJSON(entity.id, item));
+      const {body: properties} = await ModelService.upsertProperties(upsertProperties);
+      entity.properties = properties.map(item => ModelProperty.create(item));
+    }
     dispatch(actions.updateModelSuccess({entity}));
     return entity;
   } catch (err) {
@@ -40,6 +47,13 @@ export const updateModel = props => async (dispatch, getState) => {
     dispatch(actions.updateModelFailure(err));
   }
 };
+
+// export const addProperty = modelId => (dispatch, getState) => {
+//   const props = {...getState().entities.models[modelId]};
+//   props.properties = [...props.properties, ModelProperty.create()];
+//   const entity = Model.create(props);
+//   dispatch(actions.updateModelSuccess({entity}));
+// }
 
 export const deleteModel = props => async (dispatch) => {
   const entity = Model.create(props, {...props.metadata, processing: true});

@@ -26,6 +26,14 @@ const baseModelTypes = [
 ];
 
 class ModelDetails extends Component {
+  static propTypes = {
+    entity: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     const stateFromStores = (newProps) => {
@@ -61,18 +69,10 @@ class ModelDetails extends Component {
     }
   }
 
-  componentDidMount() {
-    PrivateStore.addChangeListener(this.onStoreUpdate);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity.id !== this.props.entity.id) {
       this.onStoreUpdate(nextProps);
     }
-  }
-
-  componentWillUnmount() {
-    PrivateStore.removeChangeListener(this.onStoreUpdate);
   }
 
   discardChanges() {
@@ -319,9 +319,5 @@ class ModelDetails extends Component {
     )
   }
 }
-
-ModelDetails.propTypes = {
-  entity: PropTypes.object.isRequired,
-};
 
 export default BaseDetails(ModelDetails);

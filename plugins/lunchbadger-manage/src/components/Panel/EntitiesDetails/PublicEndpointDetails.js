@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import getPublicEndpointUrl from '../../../utils/getPublicEndpointUrl';
-import updatePublicEndpoint from '../../../actions/CanvasElements/PublicEndpoint/update';
-import PublicStore from '../../../stores/Public';
+import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
@@ -13,28 +12,31 @@ class PublicEndpointDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
       path: props.entity.path
     };
   }
 
-  update(model) {
-    updatePublicEndpoint(this.props.entity.id, model);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity.path !== nextProps.entity.path) {
+      this.setState({path: nextProps.entity.path});
+    }
   }
 
-  onStoreUpdate = () => {
-    this.setState({path: this.props.entity.path});
-  }
-
-  componentDidMount() {
-    PublicStore.addChangeListener(this.onStoreUpdate);
-  }
-
-  componentWillUnmount() {
-    PublicStore.removeChangeListener(this.onStoreUpdate);
+  update = async (model) => {
+    const {entity} = this.props;
+    const {store: {dispatch, getState}} = this.context;
+    const plugins = getState().plugins;
+    const onUpdate = plugins.onUpdate.PublicEndpoint;
+    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+    const {coreActions} = LunchBadgerCore.utils;
+    dispatch(coreActions.setCurrentElement(updatedEntity));
   }
 
   onPathChange = (event) => {
@@ -44,16 +46,17 @@ class PublicEndpointDetails extends Component {
   render() {
     const {entity} = this.props;
     const url = getPublicEndpointUrl(entity.id, this.state.path);
-
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
           <div className="details-panel__fieldset">
             <span className="details-panel__label">Path</span>
-            <Input className="details-panel__input"
-                   value={entity.path}
-                   name="path"
-                   handleChange={this.onPathChange}/>
+            <Input
+              className="details-panel__input"
+              value={entity.path}
+              name="path"
+              handleChange={this.onPathChange}
+            />
           </div>
           <div className="details-panel__fieldset">
             <span className="details-panel__label">URL</span>

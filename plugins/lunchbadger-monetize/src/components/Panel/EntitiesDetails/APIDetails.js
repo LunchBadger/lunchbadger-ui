@@ -6,7 +6,7 @@ const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
 class APIDetails extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
   };
 
   static contextTypes = {
@@ -24,9 +24,7 @@ class APIDetails extends Component {
   }
 
   render() {
-    return (
-      <h2>{this.props.name}</h2>
-    )
+    return null;
   }
 }
 

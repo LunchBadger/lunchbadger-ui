@@ -19,17 +19,17 @@ class PublicEndpoint extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity.path !== nextProps.entity.path) {
+      this.setState({path: nextProps.entity.path});
+    }
+  }
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
     }
   }
-
-  // componentWillReceiveProps(nextProps) { // FIXME
-  //   if (!this.props.parent.state.editable) {
-  //     this.setState({path: nextProps.entity.path});
-  //   }
-  // }
 
   onPathChange = event => this.setState({path: event.target.value});
 

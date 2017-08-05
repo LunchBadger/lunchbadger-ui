@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import updateDataSource from '../../../actions/CanvasElements/DataSource/update';
+import _ from 'lodash';
 
 const Input = LunchBadgerCore.components.Input;
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -11,17 +11,24 @@ class DataSourceDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
-  update(model) {
-    updateDataSource(this.props.entity.id, model);
+  update = async (model) => {
+    const {entity} = this.props;
+    const {store: {dispatch, getState}} = this.context;
+    const plugins = getState().plugins;
+    const onUpdate = plugins.onUpdate.DataSource;
+    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+    const {coreActions} = LunchBadgerCore.utils;
+    dispatch(coreActions.setCurrentElement(updatedEntity));
   }
 
   render() {
     const {entity} = this.props;
-
+    const {connector} = entity;
+    if (connector === 'memory') return null;
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">

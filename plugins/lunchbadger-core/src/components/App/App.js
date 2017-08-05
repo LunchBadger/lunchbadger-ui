@@ -194,8 +194,8 @@ const selector = createSelector(
   state => state.ui.multiEnvironments.selected,
   state => state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   state => state.ui.multiEnvironments.environments.length,
-  state => state.core.appState.currentlyOpenedPanel,
-  state => state.core.appState.currentElement,
+  state => state.states.currentlyOpenedPanel,
+  state => state.states.currentElement,
   state => !!state.states.currentEditElement,
   (
     systemDefcon1Visible,

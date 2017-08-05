@@ -14,6 +14,7 @@ const arraysToRegister = [
 
 const objectsToRegister = [
   'canvasElements',
+  'panelDetailsElements',
   'onUpdate',
   'onDelete',
   'onDiscardChanges',

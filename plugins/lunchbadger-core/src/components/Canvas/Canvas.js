@@ -296,7 +296,7 @@ class Canvas extends Component {
 }
 
 const selector = createSelector(
-  state => !state.core.appState.currentlyOpenedPanel,
+  state => !state.states.currentlyOpenedPanel,
   (isPanelClosed) => ({isPanelClosed}),
 );
 

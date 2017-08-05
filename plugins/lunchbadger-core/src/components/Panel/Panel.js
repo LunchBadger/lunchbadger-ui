@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
@@ -145,9 +146,10 @@ export default (ComposedComponent) => {
     }
   }
 
-  const mapStateToProps = state => ({
-    currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
-  });
+  const selector = createSelector(
+    state => state.states.currentlyOpenedPanel,
+    currentlyOpenedPanel => ({currentlyOpenedPanel}),
+  );
 
-  return connect(mapStateToProps)(Panel);
+  return connect(selector)(Panel);
 }

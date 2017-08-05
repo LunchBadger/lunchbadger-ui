@@ -540,7 +540,7 @@ export default (ComposedComponent) => {
   const connector = createSelector(
     state => state.states.currentElement,
     state => state.states.currentEditElement,
-    state => !!state.core.appState.currentlyOpenedPanel,
+    state => !!state.states.currentlyOpenedPanel,
     (_, props) => props.entity.metadata.id,
     (
       currentElement,

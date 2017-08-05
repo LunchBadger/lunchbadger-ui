@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import AppState from '../../stores/AppState';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
@@ -11,12 +12,11 @@ class DetailsPanel extends Component {
   }
 
   renderDetails() {
-    const {currentElement} = this.props;
+    const {currentElement, panels} = this.props;
     if (currentElement) {
-      const type = currentElement.constructor.name === 'Object' ? currentElement.type : currentElement.constructor.type;
-      const panel = this.props.plugins.getDetailsPanel(type);
-      if (panel.length) {
-        const DetailsPanelComponent = panel[0].component;
+      const {type} = currentElement.metadata;
+      const DetailsPanelComponent = panels[type];
+      if (DetailsPanelComponent) {
         return <DetailsPanelComponent entity={currentElement}/>;
       }
     }
@@ -34,8 +34,10 @@ class DetailsPanel extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentElement: state.core.appState.currentElement,
-});
+const selector = createSelector(
+  state => state.states.currentElement,
+  state => state.plugins.panelDetailsElements,
+  (currentElement, panels) => ({currentElement, panels}),
+);
 
-export default connect(mapStateToProps)(Panel(DetailsPanel));
+export default connect(selector)(Panel(DetailsPanel));

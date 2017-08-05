@@ -2,7 +2,7 @@ import {actions} from './actions';
 
 export const setCurrentElement = value => (dispatch, getState) => {
   const {currentElement} = getState().states;
-  if (currentElement && currentElement.id === value.id) return;
+  if (currentElement && currentElement === value) return;
   dispatch(actions.setStates({key: 'currentElement', value}));
 };
 

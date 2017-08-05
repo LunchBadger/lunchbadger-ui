@@ -14,7 +14,7 @@ import {
 } from '../../reduxActions';
 import getFlatModel from '../../utils/getFlatModel';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
-import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
+import {Entity} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 
 const boxSource = {

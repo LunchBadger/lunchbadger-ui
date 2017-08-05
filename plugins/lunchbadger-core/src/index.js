@@ -78,6 +78,7 @@ import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
+import * as coreActions from './reduxActions';
 import messages from './utils/messages';
 import checkFields from './utils/checkFields';
 
@@ -158,6 +159,7 @@ let LunchBadgerCore = {
     actionsCreator,
     actions,
     actionTypes,
+    coreActions,
     serverIo: {
       loadFromServer: loadFromServer,
       saveToServer: saveToServer

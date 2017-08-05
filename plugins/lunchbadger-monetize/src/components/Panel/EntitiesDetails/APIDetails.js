@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import updateAPI from '../../../actions/CanvasElements/API/update';
+import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
@@ -9,12 +9,18 @@ class APIDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
-  update(model) {
-    updateAPI(this.props.entity.id, model);
+  update = async (model) => {
+    const {entity} = this.props;
+    const {store: {dispatch, getState}} = this.context;
+    const plugins = getState().plugins;
+    const onUpdate = plugins.onUpdate.API;
+    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+    const {coreActions} = LunchBadgerCore.utils;
+    dispatch(coreActions.setCurrentElement(updatedEntity));
   }
 
   render() {
@@ -25,4 +31,3 @@ class APIDetails extends Component {
 }
 
 export default BaseDetails(APIDetails);
-

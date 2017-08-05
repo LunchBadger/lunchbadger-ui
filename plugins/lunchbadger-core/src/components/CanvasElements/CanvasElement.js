@@ -28,7 +28,7 @@ const boxSource = {
 };
 
 const boxTarget = {
-  hover: _.debounce((props, monitor, component) => { //FIXME
+  hover: (props, monitor, component) => { //FIXME
     const dragIndex = monitor.getItem().itemOrder;
     const hoverIndex = props.itemOrder;
     // if (dragIndex === hoverIndex) {
@@ -53,7 +53,7 @@ const boxTarget = {
     }
     props.moveEntity(item.id, dragIndex || 0, hoverIndex || 0);
     // monitor.getItem().itemOrder = hoverIndex;
-  }, 300),
+  },
 
   canDrop(props, monitor) {
     const item = monitor.getItem();

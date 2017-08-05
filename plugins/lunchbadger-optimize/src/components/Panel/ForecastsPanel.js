@@ -16,18 +16,18 @@ const AppState = LunchBadgerCore.stores.AppState;
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    if (item.entity.constructor.type === 'API') {
+    if (item.entity.metadata.type === 'API') {
       const delta = monitor.getSourceClientOffset();
       if (!Forecast.findEntityByApiId(item.entity.id)) {
         addAPIForecast(item.entity, delta.x, delta.y - 30);
         component.setState({hasDropped: true});
       }
-    } else if (item.entity.constructor.type === 'APIForecast') {
+    } else if (item.entity.metadata.type === 'APIForecast') {
       const delta = monitor.getDifferenceFromInitialOffset();
       const left = Math.round(item.entity.left + delta.x);
       const top = Math.round(item.entity.top + delta.y);
       component.moveEntity(item.entity, left, top);
-    } else if (item.entity.constructor.type === 'Portal') {
+    } else if (item.entity.metadata.type === 'Portal') {
       const delta = monitor.getSourceClientOffset();
       const {currentlySelectedSubelements} = props;
       if (!Forecast.findEntityByApiId(currentlySelectedSubelements[0].id)) { // FIXME - handle Portal selectable APIs
@@ -40,9 +40,9 @@ const boxTarget = {
   canDrop(props, monitor) {
     const item = monitor.getItem();
     const {currentlySelectedSubelements} = props;
-    return item.entity.constructor.type === 'API' ||
-      item.entity.constructor.type === 'APIForecast' ||
-      item.entity.constructor.type === 'Portal'  && currentlySelectedSubelements.length === 1;
+    return item.entity.metadata.type === 'API' ||
+      item.entity.metadata.type === 'APIForecast' ||
+      item.entity.metadata.type === 'Portal'  && currentlySelectedSubelements.length === 1;
   }
 };
 

@@ -94,3 +94,25 @@ export const bundle = (microservice, model) => async (dispatch) => {
   dispatch(actions.updateModelBundled(updatedModel));
   dispatch(actions.removeModel(updatedModel));
 };
+
+export const unbundle = (microservice, model) => async (dispatch) => {
+  let updatedMicroservice = microservice.recreate();
+  updatedMicroservice.ready = false;
+  dispatch(actions.updateMicroservice(updatedMicroservice));
+  const updatedModel = model.recreate();
+  updatedModel.wasBundled = false;
+  await ModelService.upsert(updatedModel);
+  updatedMicroservice = microservice.recreate();
+  updatedMicroservice.removeModel(updatedModel);
+  dispatch(actions.updateMicroservice(updatedMicroservice));
+  dispatch(actions.updateModel(updatedModel));
+  dispatch(actions.removeModelBundled(updatedModel));
+}
+
+export const rebundle = (fromMicroservice, toMicroservice, model) => async (dispatch) => {
+  const updatedMicroserviceFrom = fromMicroservice.recreate();
+  updatedMicroserviceFrom.removeModel(model);
+  const updatedMicroserviceTo = toMicroservice.recreate();
+  updatedMicroserviceTo.addModel(model);
+  dispatch(actions.updateMicroservices([updatedMicroserviceFrom, updatedMicroserviceTo]));
+}

@@ -7,31 +7,31 @@ import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
 import './Quadrant.scss';
 
-// const boxTarget = {
-//   drop(_props, monitor, component) {
-//     // const hasDroppedOnChild = monitor.didDrop();
-//     // const item = monitor.getItem();
-//     // if (!hasDroppedOnChild) {
-//     //   if (item.subelement) {
-//     //     if (typeof item.handleEndDrag === 'function') {
-//     //       item.handleEndDrag(item);
-//     //     }
-//     //   } else if (item.appState) {
-//     //     if (typeof item.groupEndDrag === 'function') {
-//     //       item.groupEndDrag();
-//     //     }
-//     //   }
-//     // }
-//     // component.setState({
-//     //   hasDropped: true,
-//     //   hasDroppedOnChild: hasDroppedOnChild
-//     // });
-//   }
-// };
-//
-// @DropTarget(['canvasElement', 'elementsGroup'], boxTarget, connect => ({
-//   connectDropTarget: connect.dropTarget()
-// }))
+const boxTarget = {
+  drop(_, monitor, component) {
+    const hasDroppedOnChild = monitor.didDrop();
+    const item = monitor.getItem();
+    if (!hasDroppedOnChild) {
+      if (item.subelement) {
+        if (typeof item.handleEndDrag === 'function') {
+          item.handleEndDrag(item);
+        }
+      } else if (item.appState) {
+        if (typeof item.groupEndDrag === 'function') {
+          item.groupEndDrag();
+        }
+      }
+    }
+    component.setState({
+      hasDropped: true,
+      hasDroppedOnChild: hasDroppedOnChild
+    });
+  }
+};
+
+@DropTarget(['canvasElement', 'elementsGroup'], boxTarget, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))
 
 class Quadrant extends PureComponent {
   static propTypes = {
@@ -111,7 +111,7 @@ class Quadrant extends PureComponent {
     }
     const {orderedIds, draggingId} = this.state;
     // console.log('RENDER QuadrantNew', title, orderedIds.map(a => a.type));
-    return (
+    return connectDropTarget(
       <div
         className="quadrant"
         ref={(ref) => this.quadrantDOM = ref}

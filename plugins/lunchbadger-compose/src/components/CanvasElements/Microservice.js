@@ -6,11 +6,11 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
-import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
-import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
-import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
-import updateModel from '../../actions/CanvasElements/Model/update';
-import {bundle} from '../../reduxActions/models';
+// import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
+// import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
+// import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
+// import updateModel from '../../actions/CanvasElements/Model/update';
+import {bundle, unbundle, rebundle} from '../../reduxActions/models';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -106,14 +106,11 @@ class Microservice extends Component {
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
-    const modelData = {
-      name: entity.name,
-      contextPath: entity.contextPath,
-      wasBundled: false
-    };
-    unbundleStart(item.parent);
-    updateModel(entity.lunchbadgerId || entity.id, modelData)
-      .then(() => unbundleFinish(item.parent, entity));
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, entity));
+    // unbundleStart(item.parent);
+    // updateModel(entity.lunchbadgerId || entity.id, modelData)
+    //   .then(() => unbundleFinish(item.parent, entity));
   }
 
   handleModalClose = () => this.setState({isShowingModal: false});
@@ -130,6 +127,11 @@ class Microservice extends Component {
     // bundleStart(microservice);
     // updateModel(bundledItem.id, modelData)
     //   .then(() => bundleFinish(microservice, bundledItem));
+  }
+
+  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundle(fromMicroservice, toMicroservice, model));
   }
 
   render() {
@@ -160,7 +162,7 @@ class Microservice extends Component {
             }
             onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
             onAdd={this.bundleMicroservice}
-            onMove={moveBetweenMicroservice}
+            onMove={this.moveBetweenMicroservice}
             dropText="Drag Models Here"
             modalTitle="Bundle Microservice"
             parent={this.props.parent}

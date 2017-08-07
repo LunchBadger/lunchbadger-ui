@@ -194,7 +194,7 @@ class Portal extends Component {
           <ElementsBundler
             {...this.props}
             canDropCheck={
-              (item) => _.includes(this.props.entity.accept, item.entity.metadata.type)
+              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
               && !_.includes(this.props.entity.apis, item.entity)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}

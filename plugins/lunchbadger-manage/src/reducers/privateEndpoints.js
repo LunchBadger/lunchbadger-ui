@@ -1,4 +1,4 @@
-import PrivateEndpoint from '../models/_privateEndpoint';
+import PrivateEndpoint from '../models/PrivateEndpoint';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -11,13 +11,10 @@ export default (state = {}, action) => {
         map[item.id] = PrivateEndpoint.create(item);
         return map;
       }, {});
-    case actionTypes.addPrivateEndpoint:
-    case actionTypes.updatePrivateEndpointRequest:
-    case actionTypes.updatePrivateEndpointSuccess:
-    case actionTypes.deletePrivateEndpointRequest:
-      newState[action.payload.entity.metadata.id] = action.payload.entity;
+    case actionTypes.updatePrivateEndpoint:
+      newState[action.payload.id] = action.payload;
       return newState;
-    case actionTypes.deletePrivateEndpointSuccess:
+    case actionTypes.removePrivateEndpoint:
       delete newState[action.payload.id];
       return newState;
     case coreActionTypes.clearProject:

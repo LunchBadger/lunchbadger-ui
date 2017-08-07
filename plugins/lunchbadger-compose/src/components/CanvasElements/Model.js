@@ -52,7 +52,7 @@ class Model extends Component {
   // }
 
   initState = (props = this.props) => {
-    const {http: {path: contextPath}, name} = props.entity;
+    const {contextPath, name} = props.entity;
     return {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
@@ -157,12 +157,12 @@ class Model extends Component {
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   renderPorts = () => {
-    return this.props.entity.metadata.ports.map((port, idx) => (
+    return this.props.entity.ports.map((port, idx) => (
       <Port
         key={idx}
         way={port.portType}
         elementId={port.id}
-        className={`port-${this.props.entity.metadata.type} port-${port.portGroup}`}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
         scope={port.portGroup}
       />
     ));

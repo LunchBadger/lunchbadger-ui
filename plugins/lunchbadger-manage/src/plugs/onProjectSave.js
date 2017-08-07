@@ -1,16 +1,12 @@
-import PrivateEndpoint from '../models/_privateEndpoint';
-import PublicEndpoint from '../models/_publicEndpoint';
-import Gateway from '../models/_gateway';
-
 export default [
   state => {
     const {entities} = state;
     const privateEndpoints = Object.keys(entities.privateEndpoints)
-      .map(key => PrivateEndpoint.toJSON(entities.privateEndpoints[key]));
+      .map(key => entities.privateEndpoints[key].toJSON());
     const publicEndpoints = Object.keys(entities.publicEndpoints)
-      .map(key => PublicEndpoint.toJSON(entities.publicEndpoints[key]));
+      .map(key => entities.publicEndpoints[key].toJSON());
     const gateways = Object.keys(entities.gateways)
-      .map(key => Gateway.toJSON(entities.gateways[key]));
+      .map(key => entities.gateways[key].toJSON());
     return {
       privateEndpoints,
       publicEndpoints,

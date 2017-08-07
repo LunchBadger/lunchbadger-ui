@@ -1,4 +1,4 @@
-import PublicEndpoint from '../models/_publicEndpoint';
+import PublicEndpoint from '../models/PublicEndpoint';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -11,13 +11,10 @@ export default (state = {}, action) => {
         map[item.id] = PublicEndpoint.create(item);
         return map;
       }, {});
-    case actionTypes.addPublicEndpoint:
-    case actionTypes.updatePublicEndpointRequest:
-    case actionTypes.updatePublicEndpointSuccess:
-    case actionTypes.deletePublicEndpointRequest:
-      newState[action.payload.entity.metadata.id] = action.payload.entity;
+    case actionTypes.updatePublicEndpoint:
+      newState[action.payload.id] = action.payload;
       return newState;
-    case actionTypes.deletePublicEndpointSuccess:
+    case actionTypes.removePublicEndpoint:
       delete newState[action.payload.id];
       return newState;
     case coreActionTypes.clearProject:

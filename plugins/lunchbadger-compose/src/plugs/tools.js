@@ -1,6 +1,6 @@
-import {addDataSource} from '../reduxActions/dataSources';
-import {addModel} from '../reduxActions/models';
-import {addMicroservice} from '../reduxActions/microservices';
+import {add as addDataSource} from '../reduxActions/dataSources';
+import {add as addModel} from '../reduxActions/models';
+import {add as addMicroservice} from '../reduxActions/microservices';
 // import AddDataSource from '../actions/CanvasElements/DataSource/add';
 // import AddModel from '../actions/CanvasElements/Model/add';
 // import AddMicroservice from '../actions/CanvasElements/Microservice/add';

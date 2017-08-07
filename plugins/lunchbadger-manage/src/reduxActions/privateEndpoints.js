@@ -1,47 +1,21 @@
 import {actions} from './actions';
-import PrivateEndpoint from '../models/_privateEndpoint';
+import PrivateEndpoint from '../models/PrivateEndpoint';
 
-export const addPrivateEndpoint = () => (dispatch, getState) => {
+export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = PrivateEndpoint.create({itemOrder}, {loaded: false});
-  dispatch(actions.addPrivateEndpoint({entity}));
+  const entity = PrivateEndpoint.create({name: 'PrivateEndpoint', itemOrder, loaded: false});
+  dispatch(actions.updatePrivateEndpoint(entity));
   return entity;
 }
 
-export const updatePrivateEndpoint = props => async (dispatch, getState) => {
-  let entity = PrivateEndpoint.create(props, {...props.metadata, processing: true});
-  dispatch(actions.updatePrivateEndpointRequest({entity}));
-  try {
-    entity = PrivateEndpoint.create(props);
-    dispatch(actions.updatePrivateEndpointSuccess({entity}));
-    return entity;
-  } catch (err) {
-    console.log('ERROR updatePrivateEndpointFailure', err);
-    dispatch(actions.updatePrivateEndpointFailure(err));
-  }
+export const update = (entity, model) => (dispatch) => {
+  let updatedEntity = PrivateEndpoint.create({...entity.toJSON(), ...model});
+  dispatch(actions.updatePrivateEndpoint(updatedEntity));
+  return updatedEntity;
 };
 
-export const deletePrivateEndpoint = props => async (dispatch) => {
-  const entity = PrivateEndpoint.create(props, {...props.metadata, processing: true});
-  dispatch(actions.deletePrivateEndpointRequest({entity}));
-  try {
-    dispatch(actions.deletePrivateEndpointSuccess({id: props.metadata.id}));
-  } catch (err) {
-    console.log('ERROR deletePrivateEndpointFailure', err);
-    dispatch(actions.deletePrivateEndpointFailure(err));
-  }
+export const remove = entity => (dispatch) => {
+  dispatch(actions.removePrivateEndpoint(entity));
 };
-
-export const discardPrivateEndpointChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
-  if (!loaded) {
-    dispatch(actions.deletePrivateEndpointSuccess({id}));
-    return {};
-  } else {
-    const props = getState().states.currentEditElement;
-    const entity = PrivateEndpoint.create(props);
-    dispatch(actions.updatePrivateEndpointSuccess({entity}));
-    return PrivateEndpoint.toJSON(entity);
-  }
-}

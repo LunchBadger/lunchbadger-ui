@@ -1,4 +1,4 @@
-import Model from '../models/_model.js';
+import Model from '../models/Model';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActions} = LunchBadgerCore.utils;
@@ -12,13 +12,10 @@ export default (state = {}, action) => {
         map[item.lunchbadgerId] = Model.create(item);
         return map;
       }, {});
-    case actionTypes.addModel:
-    case actionTypes.updateModelRequest:
-    case actionTypes.updateModelSuccess:
-    case actionTypes.deleteModelRequest:
-      newState[action.payload.entity.metadata.id] = action.payload.entity;
+    case actionTypes.updateModel:
+      newState[action.payload.id] = action.payload;
       return newState;
-    case actionTypes.deleteModelSuccess:
+    case actionTypes.removeModel:
       delete newState[action.payload.id];
       return newState;
     case coreActions.clearProject:

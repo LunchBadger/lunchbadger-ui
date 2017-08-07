@@ -14,7 +14,7 @@ class DetailsPanel extends Component {
   renderDetails() {
     const {currentElement, panels} = this.props;
     if (currentElement) {
-      const {type} = currentElement.metadata;
+      const {type} = currentElement.constructor;
       const DetailsPanelComponent = panels[type];
       if (DetailsPanelComponent) {
         return <DetailsPanelComponent entity={currentElement}/>;

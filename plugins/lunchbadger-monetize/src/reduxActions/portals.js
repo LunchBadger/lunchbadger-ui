@@ -1,46 +1,21 @@
 import {actions} from './actions';
-import Portal from '../models/_Portal';
+import Portal from '../models/Portal';
 
-export const addPortal = () => (dispatch, getState) => {
+export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Portal.create({itemOrder}, {loaded: false});
-  dispatch(actions.addPortal({entity}));
+  const entity = Portal.create({name: 'Portal', itemOrder, loaded: false});
+  dispatch(actions.updatePortal(entity));
   return entity;
 }
 
-export const updatePortal = props => async (dispatch, getState) => {
-  let entity = Portal.create(props, {...props.metadata, processing: true});
-  dispatch(actions.updatePortalRequest({entity}));
-  try {
-    entity = Portal.create(props);
-    dispatch(actions.updatePortalSuccess({entity}));
-    return entity;
-  } catch (err) {
-    console.log('ERROR updatePortalFailure', err);
-    dispatch(actions.updatePortalFailure(err));
-  }
+export const update = (entity, model) => (dispatch) => {
+  let updatedEntity = Portal.create({...entity.toJSON(), ...model});
+  dispatch(actions.updatePortal(updatedEntity));
+  return updatedEntity;
 };
 
-export const deletePortal = props => async (dispatch) => {
-  const entity = Portal.create(props, {...props.metadata, processing: true});
-  dispatch(actions.deletePortalRequest({entity}));
-  try {
-    dispatch(actions.deletePortalSuccess({id: props.metadata.id}));
-  } catch (err) {
-    console.log('ERROR deletePortalFailure', err);
-    dispatch(actions.deletePortalFailure(err));
-  }
+export const remove = entity => (dispatch) => {
+  dispatch(actions.removePortal(entity));
 };
-
-export const discardPortalChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
-  if (!loaded) {
-    dispatch(actions.deletePortalSuccess({id}));
-  } else {
-    const props = getState().states.currentEditElement;
-    const entity = Portal.create(props);
-    dispatch(actions.updatePortalSuccess({entity}));
-    return Portal.toJSON(entity);
-  }
-}

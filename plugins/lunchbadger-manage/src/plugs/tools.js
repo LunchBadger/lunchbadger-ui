@@ -1,6 +1,6 @@
-import {addPrivateEndpoint} from '../reduxActions/privateEndpoints';
-import {addPublicEndpoint} from '../reduxActions/publicEndpoints';
-import {addGateway} from '../reduxActions/gateways';
+import {add as addPrivateEndpoint} from '../reduxActions/privateEndpoints';
+import {add as addPublicEndpoint} from '../reduxActions/publicEndpoints';
+import {add as addGateway} from '../reduxActions/gateways';
 
 export default {
   1: [

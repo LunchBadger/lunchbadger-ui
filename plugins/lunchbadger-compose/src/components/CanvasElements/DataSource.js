@@ -18,7 +18,7 @@ class DataSource extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.metadata.ports.map((port, idx) => {
+    return this.props.entity.ports.map((port, idx) => {
       return (
         <Port
           key={idx}

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {update, remove} from '../reduxActions/apis';
 import APIPlan from './APIPlan';
 
 const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
@@ -107,4 +108,27 @@ export default class API extends BaseModel {
   get accept() {
     return this._accept;
   }
+
+  validate = model => (_, getState) => {
+    const validations = {data: {}};
+    const entities = getState().entities.apis;
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(entities)
+        .filter(id => id !== this.id)
+        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        validations.data.name = messages.duplicatedEntityName('API');
+      }
+    }
+    const fields = ['name'];
+    checkFields(fields, model, validations.data);
+    validations.isValid = Object.keys(validations.data).length === 0;
+    return validations;
+  }
+
+  update = model => async dispatch => await dispatch(update(this, model));
+
+  remove = () => async dispatch => await dispatch(remove(this));
 }

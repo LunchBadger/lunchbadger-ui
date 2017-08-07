@@ -57,7 +57,7 @@ const boxTarget = {
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
-    return _.includes(props.entity.accept, item.entity.metadata.type);
+    return _.includes(props.entity.accept, item.entity.constructor.type);
   },
 
   drop(props, monitor, component) {
@@ -226,24 +226,20 @@ export default (ComposedComponent) => {
     }
 
     update = async (props) => {
-      const {store: {dispatch, getState}} = this.context;
-      const state = getState();
-      const {plugins} = state;
+      const {store: {dispatch}} = this.context;
       const {entity} = this.props;
-      const {type} = entity.metadata;
-      const onValidate = plugins.onValidate[type];
       let model = props;
       const element = this.element.decoratedComponentInstance || this.element;
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);
       }
-      const invalid = onValidate(entity, model, state);
-      const isValid = Object.keys(invalid).length === 0;
-      this.setState({validations: {isValid, data: invalid}});
-      if (!isValid) return;
+      const validations = dispatch(entity.validate(model));
+      this.setState({validations});
+      if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
-      const onUpdate = plugins.onUpdate[type];
-      const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+      // const onUpdate = entity.update;
+      // const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+      const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
       // update currentElement
 
@@ -341,7 +337,8 @@ export default (ComposedComponent) => {
     handleRemove = () => {
       const {entity} = this.props;
       const {store: {dispatch, getState}} = this.context;
-      dispatch(getState().plugins.onDelete[entity.metadata.type](entity));
+      // dispatch(getState().plugins.onDelete[entity.constructor.type](entity));
+      dispatch(entity.remove());
       dispatch(clearCurrentElement());
     }
 
@@ -357,19 +354,18 @@ export default (ComposedComponent) => {
 
     handleCancel = (event) => {
       event.persist();
-      const {store: {dispatch, getState}} = this.context;
-      const state = getState();
-      const entity = state.states.currentEditElement;
-      const json = dispatch(getState().plugins.onDiscardChanges[entity.metadata.type](entity));
-      if (entity.metadata.loaded) {
+      const {store: {dispatch}} = this.context;
+      const {entity} = this.props;
+      if (!entity.loaded) {
+        dispatch(entity.remove());
+        dispatch(clearCurrentElement());
+      } else {
         if (!this.state.isValid) {
           this.setState({validations: {isValid: true, data: {}}});
         }
         if (this.entityRef.getFormRef()) {
-          this.entityRef.getFormRef().reset(getFlatModel(json));
+          this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
         }
-      } else {
-        dispatch(clearCurrentElement());
       }
       dispatch(setCurrentEditElement(null));
       // if (this.state.modelBeforeEdit === null) {
@@ -436,17 +432,10 @@ export default (ComposedComponent) => {
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
       const {entity, connectDragSource, connectDropTarget, dragging, icon, editable, highlighted} = this.props;
-      const {metadata} = entity;
-      const {processing} = metadata;
+      const {ready} = entity;
+      // const {processing} = metadata;
+      const processing = !ready;
       const {validations} = this.state;
-      const elementClass = classNames({
-        'canvas-element': true,
-        editable: editable && !processing,
-        highlighted,
-        dragging,
-        wip: processing,
-        invalid: !validations.isValid,
-      });
       const entityDevelopment = {...this.state.modelEnv_0};
       const mask = ['pipelines'];
       // FIXME - refactor below for multi env, because it cannot overwrite entity properties
@@ -484,12 +473,12 @@ export default (ComposedComponent) => {
           onClick: this.handleEdit,
         });
       }
-      // console.log('RENDER CANVASELEMENT', this.props.entity.data.name);
+      // console.log('RENDER CANVASELEMENT', this.props.entity.name);
       return (
             <Entity
               ref={(r) => {this.entityRef = r}}
-              type={this.props.entity.metadata.type}
-              connector={this.props.entity.metadata.type === 'DataSource' ? this.props.entity.connector : undefined}
+              type={this.props.entity.constructor.type}
+              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={editable}
               highlighted={highlighted}
               dragging={dragging}
@@ -541,15 +530,15 @@ export default (ComposedComponent) => {
     state => state.states.currentElement,
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
-    (_, props) => props.entity.metadata.id,
+    (_, props) => props.entity.id,
     (
       currentElement,
       currentEditElement,
       isPanelOpened,
       id,
     ) => {
-      const highlighted = !!currentElement && currentElement.metadata.id === id;
-      const editable = !!currentEditElement && currentEditElement.metadata.id === id;
+      const highlighted = !!currentElement && currentElement.id === id;
+      const editable = !!currentEditElement && currentEditElement.id === id;
       return {
         isPanelOpened,
         highlighted,

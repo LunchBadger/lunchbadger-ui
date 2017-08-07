@@ -1,27 +1,32 @@
 import {actions} from './actions';
-import Gateway from '../models/_gateway';
-import Pipeline from '../models/_pipeline';
+import Gateway from '../models/Gateway';
+import Pipeline from '../models/Pipeline';
+import Policy from '../models/Policy';
 
-export const addGateway = () => (dispatch, getState) => {
+export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
-  const types = quadrants[1].entities;
+  const types = quadrants[2].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Gateway.create({itemOrder}, {loaded: false});
-  dispatch(actions.addGateway({entity}));
+  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false});
+  dispatch(actions.updateGateway(entity));
   return entity;
 }
 
-export const updateGateway = props => async (dispatch) => {
-  let entity = Gateway.create(props, {...props.metadata, processing: true});
-  dispatch(actions.updateGatewayRequest({entity}));
-  try {
-    entity = Gateway.create(props);
-    dispatch(actions.updateGatewaySuccess({entity}));
-    return entity;
-  } catch (err) {
-    console.log('ERROR updateGatewayFailure', err);
-    dispatch(actions.updateGatewayFailure(err));
-  }
+export const update = (entity, model) => (dispatch) => {
+  let updatedEntity = Gateway.create({
+    ...entity.toJSON(),
+    ...model,
+    pipelines: model.pipelines.map(pipeline => Pipeline.create({
+      ...pipeline,
+      policies: pipeline.policies.map(policy => Policy.create(policy)),
+    })),
+  });
+  dispatch(actions.updateGateway(updatedEntity));
+  return updatedEntity;
+};
+
+export const remove = entity => (dispatch) => {
+  dispatch(actions.removeGateway(entity));
 };
 
 export const addPipeline = gatewayId => (dispatch, getState) => {
@@ -36,27 +41,4 @@ export const removePipeline = (gatewayId, pipelineId) => (dispatch, getState) =>
   props.pipelines = props.pipelines.filter(p => p.id !== pipelineId);
   const entity = Gateway.create(props);
   dispatch(actions.updateGatewaySuccess({entity}));
-}
-
-export const deleteGateway = props => async (dispatch) => {
-  const entity = Gateway.create(props, {...props.metadata, processing: true});
-  dispatch(actions.deleteGatewayRequest({entity}));
-  try {
-    dispatch(actions.deleteGatewaySuccess({id: props.metadata.id}));
-  } catch (err) {
-    console.log('ERROR deleteGatewayFailure', err);
-    dispatch(actions.deleteGatewayFailure(err));
-  }
-};
-
-export const discardGatewayChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
-  if (!loaded) {
-    dispatch(actions.deleteGatewaySuccess({id}));
-    return {};
-  } else {
-    const props = getState().states.currentEditElement;
-    const entity = Gateway.create(props);
-    dispatch(actions.updateGatewaySuccess({entity}));
-    return Gateway.toJSON(entity);
-  }
 }

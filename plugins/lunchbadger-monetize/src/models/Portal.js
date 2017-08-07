@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {update, remove} from '../reduxActions/portals';
 import API from './API';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -22,9 +23,7 @@ export default class Portal extends BaseModel {
 
   constructor(id, name, url = 'http://') {
     super(id);
-
     this.name = name;
-    this.ready = false;
     this.rootUrl = url;
   }
 
@@ -82,4 +81,27 @@ export default class Portal extends BaseModel {
   set rootUrl(url) {
     this._rootUrl = url;
   }
+
+  validate = model => (_, getState) => {
+    const validations = {data: {}};
+    const entities = getState().entities.portals;
+    const {messages, checkFields} = LunchBadgerCore.utils;
+    if (model.name !== '') {
+      const isDuplicateName = Object.keys(entities)
+        .filter(id => id !== this.id)
+        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+        .length > 0;
+      if (isDuplicateName) {
+        validations.data.name = messages.duplicatedEntityName('Portal');
+      }
+    }
+    const fields = ['name', 'rootUrl'];
+    checkFields(fields, model, validations.data);
+    validations.isValid = Object.keys(validations.data).length === 0;
+    return validations;
+  }
+
+  update = model => async dispatch => await dispatch(update(this, model));
+
+  remove = () => async dispatch => await dispatch(remove(this));
 }

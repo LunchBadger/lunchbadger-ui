@@ -138,7 +138,7 @@ class Gateway extends Component {
   onAddPipeline = () => {
     const {store: {dispatch}} = this.context;
     const {entity} = this.props;
-    dispatch(addPipeline(entity.metadata.id));
+    dispatch(addPipeline(entity.id));
   }
 
   onRemovePipeline = pipelineToRemove => () => {
@@ -151,7 +151,7 @@ class Gateway extends Component {
   removePipeline = () => {
     const {store: {dispatch}} = this.context;
     const {entity} = this.props;
-    dispatch(removePipeline(entity.metadata.id, this.state.pipelineToRemove));
+    dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
   }
 
   _onDeploy() {

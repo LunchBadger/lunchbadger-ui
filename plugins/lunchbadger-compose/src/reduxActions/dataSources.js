@@ -1,23 +1,23 @@
 import {actions} from './actions';
 import {DataSourceService} from '../services';
-import DataSource from '../models/_dataSource';
+import DataSource from '../models/DataSource';
 
-export const addDataSource = (name, connector) => (dispatch, getState) => {
+export const add = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[0].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = DataSource.create({name, connector, itemOrder}, {loaded: false});
-  dispatch(actions.addDataSource({entity}));
+  const entity = DataSource.create({name, connector, itemOrder, loaded: false});
+  dispatch(actions.updateDataSource(entity));
   return entity;
 }
 
-export const updateDataSource = props => async (dispatch, getState) => {
-  const isDifferent = props.metadata.loaded && props.name !== getState().entities.dataSources[props.metadata.id].name;
-  let entity = DataSource.create(props, {...props.metadata, processing: true});
-  dispatch(actions.updateDataSourceRequest({entity}));
+export const update = (entity, model) => async (dispatch, getState) => {
+  const isDifferent = entity.loaded && model.name !== getState().entities.dataSources[entity.id].name;
+  let updatedEntity = DataSource.create({...entity.toJSON(), ...model, ready: false});
+  dispatch(actions.updateDataSource(updatedEntity));
   try {
     if (isDifferent) {
-      await DataSourceService.delete(props.id);
+      await DataSourceService.delete(entity.workspaceId);
       // ConnectionStore
       //   .getConnectionsForSource(oldId)
       //   .map(conn => PrivateStore.findEntity(conn.toId))
@@ -31,36 +31,22 @@ export const updateDataSource = props => async (dispatch, getState) => {
       //     }));
       //   });
     }
-    const {body} = await DataSourceService.upsert(DataSource.toJSON(entity));
-    entity = DataSource.create(body);
-    dispatch(actions.updateDataSourceSuccess({entity}));
-    return entity;
+    const {body} = await DataSourceService.upsert(updatedEntity.toJSON());
+    updatedEntity = DataSource.create(body);
+    dispatch(actions.updateDataSource(updatedEntity));
+    return updatedEntity;
   } catch (err) {
     console.log('ERROR updateDataSourceFailure', err);
     dispatch(actions.updateDataSourceFailure(err));
   }
 };
 
-export const deleteDataSource = props => async (dispatch) => {
-  const entity = DataSource.create(props, {...props.metadata, processing: true});
-  dispatch(actions.deleteDataSourceRequest({entity}));
+export const remove = entity => async (dispatch) => {
+  dispatch(actions.removeDataSource(entity));
   try {
-    await DataSourceService.delete(props.id);
-    dispatch(actions.deleteDataSourceSuccess({id: entity.metadata.id}));
+    await DataSourceService.delete(entity.workspaceId);
   } catch (err) {
     console.log('ERROR deleteDataSourceFailure', err);
     dispatch(actions.deleteDataSourceFailure(err));
   }
 };
-
-export const discardDataSourceChanges = ({metadata: {loaded, id}}) => (dispatch, getState) => {
-  if (!loaded) {
-    dispatch(actions.deleteDataSourceSuccess({id}));
-    return {};
-  } else {
-    const props = getState().states.currentEditElement;
-    const entity = DataSource.create(props);
-    dispatch(actions.updateDataSourceSuccess({entity}));
-    return DataSource.toJSON(entity);
-  }
-}

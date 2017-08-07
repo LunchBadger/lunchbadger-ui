@@ -1,5 +1,5 @@
-import {addAPI} from '../reduxActions/apis';
-import {addPortal} from '../reduxActions/portals';
+import {add as addAPI} from '../reduxActions/apis';
+import {add as addPortal} from '../reduxActions/portals';
 
 export default {
   2: [

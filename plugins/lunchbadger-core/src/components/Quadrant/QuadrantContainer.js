@@ -129,6 +129,7 @@ class QuadrantContainer extends PureComponent {
             width={quadrantWidths[idx]}
             scrollLeft={scrollLeft}
             types={entities}
+            recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
           />
         ))}
       </div>

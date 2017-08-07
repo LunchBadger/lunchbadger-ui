@@ -1,15 +1,13 @@
 const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
   [
-    'updateAPI',
-    'deleteAPI',
 
-    'updatePortal',
-    'deletePortal',
   ],
   [
-    'addAPI',
+    'updateAPI',
+    'removeAPI',
 
-    'addPortal',
+    'updatePortal',
+    'removePortal',
   ],
 );
 

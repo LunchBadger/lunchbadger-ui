@@ -18,12 +18,12 @@ class PrivateEndpoint extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.metadata.ports.map((port, idx) => (
+    return this.props.entity.ports.map((port, idx) => (
       <Port
         key={idx}
         way={port.portType}
         elementId={port.id}
-        className={`port-${this.props.entity.metadata.type} port-${port.portGroup}`}
+        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
         scope={port.portGroup}
       />
     ));

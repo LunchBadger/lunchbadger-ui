@@ -1,13 +1,10 @@
-import API from '../models/_API';
-import Portal from '../models/_Portal';
-
 export default [
   state => {
     const {entities} = state;
     const apis = Object.keys(entities.apis)
-      .map(key => API.toJSON(entities.apis[key]));
+      .map(key => entities.apis[key].toJSON());
     const portals = Object.keys(entities.portals)
-      .map(key => Portal.toJSON(entities.portals[key]));
+      .map(key => entities.portals[key].toJSON());
     return {
       apis,
       portals,

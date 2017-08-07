@@ -1,4 +1,4 @@
-import API from '../models/_API';
+import API from '../models/API';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -11,13 +11,10 @@ export default (state = {}, action) => {
         map[item.id] = API.create(item);
         return map;
       }, {});
-    case actionTypes.addAPI:
-    case actionTypes.updateAPIRequest:
-    case actionTypes.updateAPISuccess:
-    case actionTypes.deleteAPIRequest:
-      newState[action.payload.entity.metadata.id] = action.payload.entity;
+    case actionTypes.updateAPI:
+      newState[action.payload.id] = action.payload;
       return newState;
-    case actionTypes.deleteAPISuccess:
+    case actionTypes.removeAPI:
       delete newState[action.payload.id];
       return newState;
     case coreActionTypes.clearProject:

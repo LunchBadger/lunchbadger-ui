@@ -1,4 +1,4 @@
-import DataSource from '../models/_dataSource';
+import DataSource from '../models/DataSource';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -11,13 +11,10 @@ export default (state = {}, action) => {
         map[item.lunchbadgerId] = DataSource.create(item);
         return map;
       }, {});
-    case actionTypes.addDataSource:
-    case actionTypes.updateDataSourceRequest:
-    case actionTypes.updateDataSourceSuccess:
-    case actionTypes.deleteDataSourceRequest:
-      newState[action.payload.entity.metadata.id] = action.payload.entity;
+    case actionTypes.updateDataSource:
+      newState[action.payload.id] = action.payload;
       return newState;
-    case actionTypes.deleteDataSourceSuccess:
+    case actionTypes.removeDataSource:
       delete newState[action.payload.id];
       return newState;
     case coreActionTypes.clearProject:

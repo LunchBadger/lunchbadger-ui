@@ -10,6 +10,7 @@ import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservi
 import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
 import updateModel from '../../actions/CanvasElements/Model/update';
+import {bundle} from '../../reduxActions/models';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -22,6 +23,10 @@ class Microservice extends Component {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
     parent: PropTypes.object
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -114,16 +119,17 @@ class Microservice extends Component {
   handleModalClose = () => this.setState({isShowingModal: false});
 
   bundleMicroservice = (microservice, bundledItem) => {
-    const modelData = {
-      name: bundledItem.name,
-      contextPath: bundledItem.contextPath,
-      wasBundled: true
-    };
-
-    bundleStart(microservice);
-
-    updateModel(bundledItem.id, modelData)
-      .then(() => bundleFinish(microservice, bundledItem));
+    const {store: {dispatch}} = this.context;
+    dispatch(bundle(microservice, bundledItem));
+    // return;
+    // const modelData = {
+    //   name: bundledItem.name,
+    //   contextPath: bundledItem.contextPath,
+    //   wasBundled: true
+    // };
+    // bundleStart(microservice);
+    // updateModel(bundledItem.id, modelData)
+    //   .then(() => bundleFinish(microservice, bundledItem));
   }
 
   render() {

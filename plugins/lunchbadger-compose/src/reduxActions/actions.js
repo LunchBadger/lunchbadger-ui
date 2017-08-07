@@ -10,8 +10,10 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
 
     'onLoadModels',
     'updateModel',
+    'updateModelBundled',
     'updateModels',
     'removeModel',
+    'removeModelBundled',
 
     'onLoadModelConfigs',
     'updateMicroservice',

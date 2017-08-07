@@ -80,3 +80,17 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
     ModelService.upsert(reordered);
   }
 };
+
+export const bundle = (microservice, model) => async (dispatch) => {
+  let updatedMicroservice = microservice.recreate();
+  updatedMicroservice.ready = false;
+  dispatch(actions.updateMicroservice(updatedMicroservice));
+  const updatedModel = model.recreate();
+  updatedModel.wasBundled = true;
+  await ModelService.upsert(updatedModel);
+  updatedMicroservice = microservice.recreate();
+  updatedMicroservice.addModel(updatedModel);
+  dispatch(actions.updateMicroservice(updatedMicroservice));
+  dispatch(actions.updateModelBundled(updatedModel));
+  dispatch(actions.removeModel(updatedModel));
+};

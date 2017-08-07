@@ -29,6 +29,21 @@ export const remove = entity => (dispatch) => {
   dispatch(actions.removeGateway(entity));
 };
 
+export const saveOrder = orderedIds => (dispatch, getState) => {
+  const entities = getState().entities.gateways;
+  const reordered = [];
+  orderedIds.forEach((id, idx) => {
+    if (entities[id] && entities[id].itemOrder !== idx) {
+      const entity = entities[id].recreate();
+      entity.itemOrder = idx;
+      reordered.push(entity);
+    }
+  });
+  if (reordered.length > 0) {
+    dispatch(actions.updateGateways(reordered));
+  }
+};
+
 export const addPipeline = gatewayId => (dispatch, getState) => {
   const props = {...getState().entities.gateways[gatewayId]};
   props.pipelines = [...props.pipelines, Pipeline.create()];

@@ -10,7 +10,8 @@ const arraysToRegister = [
   'services',
   'onAppLoad',
   'onProjectSave',
-  'panels'
+  'panels',
+  'onSaveOrder'
 ];
 
 const objectsToRegister = [

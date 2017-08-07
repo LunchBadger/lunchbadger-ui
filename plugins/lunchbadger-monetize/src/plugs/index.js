@@ -7,6 +7,7 @@ import onDelete from './onDelete';
 import onDiscardChanges from './onDiscardChanges';
 import onValidate from './onValidate';
 import onProjectSave from './onProjectSave';
+import onSaveOrder from './onSaveOrder';
 
 export default {
   tools,
@@ -18,4 +19,5 @@ export default {
   onDiscardChanges,
   onValidate,
   onProjectSave,
+  onSaveOrder,
 };

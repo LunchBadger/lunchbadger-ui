@@ -27,6 +27,8 @@ export default class Portal extends BaseModel {
     this.rootUrl = url;
   }
 
+  recreate = () => Portal.create(this);
+
   toJSON() {
     return {
       id: this.id,

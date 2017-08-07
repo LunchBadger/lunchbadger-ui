@@ -8,6 +8,7 @@ import {
 } from './appState';
 import {
   loadFromServer,
+  saveOrder,
 } from './project';
 import {
   setCurrentElement,
@@ -33,6 +34,7 @@ export {
   removeEntity,
 
   loadFromServer,
+  saveOrder,
 
   setCurrentElement,
   clearCurrentElement,

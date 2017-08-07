@@ -23,6 +23,8 @@ export default class PrivateEndpoint extends BaseModel {
     ];
   }
 
+  recreate = () => PrivateEndpoint.create(this);
+
   toJSON() {
     return {
       id: this.id,

@@ -14,6 +14,11 @@ export default (state = {}, action) => {
     case actionTypes.updatePortal:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updatePortals:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removePortal:
       delete newState[action.payload.id];
       return newState;

@@ -24,6 +24,8 @@ export default class PublicEndpoint extends BaseModel {
     ];
   }
 
+  recreate = () => PublicEndpoint.create(this);
+
   toJSON() {
     return {
       id: this.id,

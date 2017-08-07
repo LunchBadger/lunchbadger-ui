@@ -19,3 +19,18 @@ export const update = (entity, model) => (dispatch) => {
 export const remove = entity => (dispatch) => {
   dispatch(actions.removePublicEndpoint(entity));
 };
+
+export const saveOrder = orderedIds => (dispatch, getState) => {
+  const entities = getState().entities.publicEndpoints;
+  const reordered = [];
+  orderedIds.forEach((id, idx) => {
+    if (entities[id] && entities[id].itemOrder !== idx) {
+      const entity = entities[id].recreate();
+      entity.itemOrder = idx;
+      reordered.push(entity);
+    }
+  });
+  if (reordered.length > 0) {
+    dispatch(actions.updatePublicEndpoints(reordered));
+  }
+};

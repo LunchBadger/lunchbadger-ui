@@ -14,6 +14,11 @@ export default (state = {}, action) => {
     case actionTypes.updatePublicEndpoint:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updatePublicEndpoints:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removePublicEndpoint:
       delete newState[action.payload.id];
       return newState;

@@ -14,6 +14,11 @@ export default (state = {}, action) => {
     case actionTypes.updateMicroservice:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updateMicroservices:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removeMicroservice:
       delete newState[action.payload.id];
       return newState;

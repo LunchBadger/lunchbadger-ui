@@ -59,6 +59,8 @@ export default class DataSource extends BaseModel {
     ];
   }
 
+  recreate = () => DataSource.create(this);
+
   static get idField() {
     return 'lunchbadgerId';
   }

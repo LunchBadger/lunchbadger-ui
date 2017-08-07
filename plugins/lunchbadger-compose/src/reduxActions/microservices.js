@@ -1,5 +1,5 @@
 import {actions} from './actions';
-import Microservice from '../models/MicroService';
+import Microservice from '../models/Microservice';
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -18,4 +18,19 @@ export const update = (entity, model) => (dispatch) => {
 
 export const remove = entity => (dispatch) => {
   dispatch(actions.removeMicroservice(entity));
+};
+
+export const saveOrder = orderedIds => (dispatch, getState) => {
+  const entities = getState().entities.microservices;
+  const reordered = [];
+  orderedIds.forEach((id, idx) => {
+    if (entities[id] && entities[id].itemOrder !== idx) {
+      const entity = entities[id].recreate();
+      entity.itemOrder = idx;
+      reordered.push(entity);
+    }
+  });
+  if (reordered.length > 0) {
+    dispatch(actions.updateMicroservices(reordered));
+  }
 };

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
+import {saveOrder} from '../../reduxActions';
 import './Quadrant.scss';
 
 // const boxTarget = {
@@ -42,6 +43,10 @@ class Quadrant extends PureComponent {
     index: PropTypes.number,
     scrollLeft: PropTypes.number,
     recalculateQuadrantsWidths: PropTypes.func,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -92,6 +97,8 @@ class Quadrant extends PureComponent {
   }
 
   saveOrder = () => {
+    const {store: {dispatch}} = this.context;
+    dispatch(saveOrder(this.state.orderedIds.map(item => item.id)));
     this.setState({draggingId: ''});
   }
 
@@ -103,7 +110,7 @@ class Quadrant extends PureComponent {
       transform: `translateX(-${scrollLeft}px)`,
     }
     const {orderedIds, draggingId} = this.state;
-    // console.log('RENDER QuadrantNew', title, orderedIds);
+    // console.log('RENDER QuadrantNew', title, orderedIds.map(a => a.type));
     return (
       <div
         className="quadrant"
@@ -122,7 +129,7 @@ class Quadrant extends PureComponent {
               <Component
                 id={id}
                 icon=""
-                key={idx}
+                key={entity.id}
                 appState={null}
                 paper={null}
                 entity={entity}

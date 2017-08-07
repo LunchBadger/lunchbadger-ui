@@ -20,6 +20,8 @@ export default class Gateway extends BaseModel {
     this.name = name;
   }
 
+  recreate = () => Gateway.create(this);
+
   toJSON() {
     return {
       id: this.id,

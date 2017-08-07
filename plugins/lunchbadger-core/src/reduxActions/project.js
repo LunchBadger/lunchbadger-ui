@@ -40,3 +40,7 @@ export const clearServer = () => async (dispatch) => {
   }
   dispatch(actions.setLoadingProject(false));
 };
+
+export const saveOrder = orderedIds => (dispatch, getState) => {
+  getState().plugins.onSaveOrder.forEach(action => dispatch(action(orderedIds)));
+};

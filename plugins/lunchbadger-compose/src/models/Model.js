@@ -73,6 +73,8 @@ export default class Model extends BaseModel {
     ];
   }
 
+  recreate = () => Model.create(this);
+
   static get idField() {
     // The loopback-workspace API ties the name of an entity to its ID. This
     // means that renaming a Model would change its ID. So we store the actual

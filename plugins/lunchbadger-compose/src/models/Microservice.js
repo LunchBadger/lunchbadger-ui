@@ -19,6 +19,8 @@ export default class Microservice extends BaseModel {
     this.name = name;
   }
 
+  recreate = () => Microservice.create(this);
+
   toJSON() {
     return {
       id: this.id,

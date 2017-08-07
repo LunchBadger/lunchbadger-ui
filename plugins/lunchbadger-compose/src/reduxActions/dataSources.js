@@ -50,3 +50,19 @@ export const remove = entity => async (dispatch) => {
     dispatch(actions.deleteDataSourceFailure(err));
   }
 };
+
+export const saveOrder = orderedIds => (dispatch, getState) => {
+  const entities = getState().entities.dataSources;
+  const reordered = [];
+  orderedIds.forEach((id, idx) => {
+    if (entities[id] && entities[id].itemOrder !== idx) {
+      const entity = entities[id].recreate();
+      entity.itemOrder = idx;
+      reordered.push(entity);
+    }
+  });
+  if (reordered.length > 0) {
+    dispatch(actions.updateDataSources(reordered));
+    DataSourceService.upsert(reordered);
+  }
+};

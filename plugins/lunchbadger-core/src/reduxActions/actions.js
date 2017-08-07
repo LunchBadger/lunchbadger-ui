@@ -18,6 +18,8 @@ const {actions, actionTypes} = actionsCreator(
     'setPortDOMElement',
 
     'clearProject',
+
+    'updateOrder',
   ],
 );
 

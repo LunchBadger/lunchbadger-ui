@@ -28,32 +28,25 @@ const boxSource = {
 };
 
 const boxTarget = {
-  hover: (props, monitor, component) => { //FIXME
-    const dragIndex = monitor.getItem().itemOrder;
+  hover: _.debounce((props, monitor, component) => {
+    const item = monitor.getItem();
+    if (!item) return;
+    const dragIndex = item.itemOrder;
     const hoverIndex = props.itemOrder;
     // if (dragIndex === hoverIndex) {
     //   return;
     // }
-    if (props.isPanelOpened) {
-      return;
-    }
+    if (props.isPanelOpened) return;
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
     // const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
     const clientOffset = monitor.getClientOffset();
     // const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-    if (dragIndex < hoverIndex && clientOffset.y < hoverBoundingRect.bottom - 15) {
-      return;
-    }
-    if (dragIndex > hoverIndex && clientOffset.y > hoverBoundingRect.top + 15) {
-      return;
-    }
-    const item = monitor.getItem();
-    if (item.subelement) {
-      return;
-    }
+    if (dragIndex < hoverIndex && clientOffset.y < hoverBoundingRect.bottom - 15) return;
+    if (dragIndex > hoverIndex && clientOffset.y > hoverBoundingRect.top + 15) return;
+    if (item.subelement) return;
     props.moveEntity(item.id, dragIndex || 0, hoverIndex || 0);
     // monitor.getItem().itemOrder = hoverIndex;
-  },
+  }, 300),
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
@@ -431,7 +424,7 @@ export default (ComposedComponent) => {
 
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
-      const {entity, connectDragSource, connectDropTarget, dragging, icon, editable, highlighted} = this.props;
+      const {entity, connectDragSource, connectDropTarget, isDragging, icon, editable, highlighted} = this.props;
       const {ready} = entity;
       // const {processing} = metadata;
       const processing = !ready;
@@ -481,7 +474,7 @@ export default (ComposedComponent) => {
               connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={editable}
               highlighted={highlighted}
-              dragging={dragging}
+              dragging={isDragging}
               wip={processing}
               invalid={!validations.isValid}
               toolboxConfig={toolboxConfig}

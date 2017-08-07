@@ -14,6 +14,11 @@ export default (state = {}, action) => {
     case actionTypes.updateDataSource:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updateDataSources:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removeDataSource:
       delete newState[action.payload.id];
       return newState;

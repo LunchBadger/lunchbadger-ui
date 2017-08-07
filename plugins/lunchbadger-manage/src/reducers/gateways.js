@@ -22,6 +22,11 @@ export default (state = {}, action) => {
     case actionTypes.updateGateway:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updateGateways:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removeGateway:
       delete newState[action.payload.id];
       return newState;

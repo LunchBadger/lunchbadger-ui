@@ -1,7 +1,7 @@
 import Model from '../models/Model';
 import {actionTypes} from '../reduxActions/actions';
 
-const {actionTypes: coreActions} = LunchBadgerCore.utils;
+const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
 export default (state = {}, action) => {
   const newState = {...state};
@@ -15,10 +15,15 @@ export default (state = {}, action) => {
     case actionTypes.updateModel:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updateModels:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removeModel:
       delete newState[action.payload.id];
       return newState;
-    case coreActions.clearProject:
+    case coreActionTypes.clearProject:
       return {};
     default:
       return state;

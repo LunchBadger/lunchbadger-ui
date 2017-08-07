@@ -35,6 +35,8 @@ export default class API extends BaseModel {
     this.plans = defaultPlans.slice();
   }
 
+  recreate = () => API.create(this);
+
   toJSON() {
     return {
       id: this.id,

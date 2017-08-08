@@ -3,10 +3,12 @@ import _ from 'lodash';
 export const formatId = id => id.split('_').slice(-1)[0];
 
 export const isInQuadrant = (state, quadrantIdx, id) =>
-  state.plugins.quadrants[quadrantIdx].connectionEntities
-    .map(type => Object.keys(state.entities[type]))
-    .reduce((arr, item) => arr.concat(item), [])
-    .includes(formatId(id));
+  _.find(
+    state.plugins.quadrants[quadrantIdx].connectionEntities
+      .map(type => Object.keys(state.entities[type]))
+      .reduce((arr, item) => arr.concat(item), []),
+    id => id === formatId(id),
+  );
 
 export const findEntity = (state, quadrantIdx, id) =>
   state.plugins.quadrants[quadrantIdx].connectionEntities

@@ -5,9 +5,8 @@ import {createSelector} from 'reselect';
 import './Port.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
-import removeConnection from '../../actions/Connection/remove';
+import {removeConnection} from '../../reduxActions/connections';
 import uuid from 'uuid';
-import Connection from '../../stores/Connection';
 import _ from 'lodash';
 
 class Port extends PureComponent {
@@ -21,8 +20,8 @@ class Port extends PureComponent {
 
   static contextTypes = {
     paper: PropTypes.object,
+    store: PropTypes.object,
   };
-
 
   constructor(props) {
     super(props);
@@ -124,6 +123,7 @@ class Port extends PureComponent {
   }
 
   _checkAndReattachTargetConnections() {
+    const {store: {dispatch}} = this.context;
     const {connections, elementId} = this.props;
     const targetConnections = connections.filter(({toId}) => toId === elementId); //Connection.getConnectionsForTarget(this.props.elementId);
     _.forEach(targetConnections, (connection) => {
@@ -133,7 +133,7 @@ class Port extends PureComponent {
       } else {
         source = document.querySelector(`#${connection.info.sourceId}`);
       }
-      removeConnection(connection.fromId, connection.toId);
+      dispatch(removeConnection(connection.fromId, connection.toId));
       this.paper.connect({
         source: source,
         target: findDOMNode(this.refs.port)
@@ -142,6 +142,7 @@ class Port extends PureComponent {
   }
 
   _checkAndReattachSourceConnections() {
+    const {store: {dispatch}} = this.context;
     const {connections, elementId} = this.props;
     const sourceConnections = connections.filter(({fromId}) => fromId === elementId); //Connection.getConnectionsForSource(this.props.elementId);
     _.forEach(sourceConnections, (connection) => {
@@ -151,7 +152,7 @@ class Port extends PureComponent {
       } else {
         target = document.querySelector(`#${connection.info.targetId}`);
       }
-      removeConnection(connection.fromId, connection.toId);
+      dispatch(removeConnection(connection.fromId, connection.toId));
       this.paper.connect({
         source: findDOMNode(this.refs.port),
         target: target

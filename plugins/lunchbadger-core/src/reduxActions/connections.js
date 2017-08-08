@@ -22,5 +22,5 @@ export const moveConnection = info => (dispatch) => {
 export const removeConnection = (from, to) => (dispatch) => {
   const fromId = formatId(from);
   const toId = formatId(to);
-  dispatch(actions.removeConnection({fromId,toId}));
+  dispatch(actions.removeConnection({fromId, toId}));
 };

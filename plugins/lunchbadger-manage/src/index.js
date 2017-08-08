@@ -2,7 +2,7 @@
 import ManagePlugin from './plugs/ManagePlugin';
 
 // models
-import PublicEndpoint from './models/_publicEndpoint';
+import PublicEndpoint from './models/PublicEndpoint';
 import Model from './models/Model';
 import ModelProperty from './models/ModelProperty';
 import ModelRelation from './models/ModelRelation';
@@ -18,6 +18,8 @@ import saveOrderPrivate from './actions/Quadrants/Private/saveOrder';
 import initializeGateway from './actions/Stores/Gateway/initialize';
 import initializePublic from './actions/Stores/Public/initialize';
 import initializePrivate from './actions/Stores/Private/initialize';
+
+import {actions} from './reduxActions/actions';
 
 // stores
 import Public from './stores/Public';
@@ -70,7 +72,10 @@ let LunchBadgerManage = {
     Public: Public,
     Gateway: Gateway,
     Private: Private
-  }
+  },
+  utils: {
+    actions,
+  },
 };
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {

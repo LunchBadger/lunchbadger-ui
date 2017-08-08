@@ -1,6 +1,8 @@
 import {actions} from './actions';
 import API from '../models/API';
 
+const {actions: manageActions} = LunchBadgerManage.utils;
+
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
@@ -33,4 +35,27 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   if (reordered.length > 0) {
     dispatch(actions.updateAPIs(reordered));
   }
+};
+
+export const bundle = (api, endpoint) => (dispatch) => {
+  const updatedApi = api.recreate();
+  updatedApi.addEndpoint(endpoint);
+  dispatch(actions.updateAPI(updatedApi));
+  dispatch(manageActions.removePublicEndpoint(endpoint));
+};
+
+export const unbundle = (api, endpoint) => (dispatch) => {
+  const updatedApi = api.recreate();
+  updatedApi.removeEndpoint(endpoint);
+  dispatch(actions.updateAPI(updatedApi));
+  endpoint.wasBundled = false;
+  dispatch(manageActions.updatePublicEndpoint(endpoint));
+};
+
+export const rebundle = (fromApi, toApi, endpoint) => (dispatch) => {
+  const updatedFromApi = fromApi.recreate();
+  updatedFromApi.removeEndpoint(endpoint);
+  const updatedToApi = toApi.recreate();
+  updatedToApi.addEndpoint(endpoint);
+  dispatch(actions.updateAPIs([updatedFromApi, updatedToApi]));
 };

@@ -65,4 +65,5 @@ export default class PublicEndpoint extends BaseModel {
   update = model => async dispatch => await dispatch(update(this, model));
 
   remove = () => async dispatch => await dispatch(remove(this));
+
 }

@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
-import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
-import bundleAPI from '../../actions/CanvasElements/API/bundle';
-import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
+import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
@@ -21,6 +19,10 @@ class API extends Component {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object,
     parent: PropTypes.object
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -82,13 +84,24 @@ class API extends Component {
     }
   }
 
-  _handleModalConfirm = () => {
-    const item = this.state.bundledItem;
-    unbundleAPI(item.parent, item.entity);
-  }
-
   _handleClose = () => {
     this.setState({isShowingModal: false});
+  }
+
+  bundle = (api, endpoint) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(bundle(api, endpoint));
+  }
+
+  rebundle = (fromApi, toApi, endpoint) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundle(fromApi, toApi, endpoint));
+  }
+
+  unbundle = () => {
+    const item = this.state.bundledItem;
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, item.entity));
   }
 
   render() {
@@ -124,8 +137,8 @@ class API extends Component {
                 && !_.includes(this.props.entity.publicEndpoints, item.entity)
               }
               onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
-              onAdd={bundleAPI}
-              onMove={moveBetweenAPIs}
+              onAdd={this.bundle}
+              onMove={this.rebundle}
               parent={this.props.parent}
               entity={this.props.entity}
             />
@@ -137,7 +150,7 @@ class API extends Component {
             confirmText="Yes"
             discardText="No"
             onClose={this._handleClose}
-            onSave={this._handleModalConfirm}
+            onSave={this.unbundle}
           >
             <span>
               Are you sure you want to unbundle

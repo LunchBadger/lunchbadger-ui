@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
-import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
 import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
@@ -130,13 +128,7 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirm = () => {
-    const item = this.state.bundledItem;
-    const {store: {dispatch}} = this.context;
-    dispatch(unbundle(item.parent, item.entity));
-  }
-
-  _handleClose = () => {
+  handleCloseModal = () => {
     this.setState({
       isShowingModal: false,
       isShowingModalMultiple: false
@@ -159,18 +151,25 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirmMultiple = () => {
-    this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
-  }
-
-  bundlePortal = (portal, api) => {
+  bundle = (portal, api) => {
     const {store: {dispatch}} = this.context;
     dispatch(bundle(portal, api));
   }
 
-  rebundlePortal = (fromPortal, toPortal, api) => {
+  rebundle = (fromPortal, toPortal, api) => {
     const {store: {dispatch}} = this.context;
     dispatch(rebundle(fromPortal, toPortal, api));
+  }
+
+  unbundle = () => {
+    const item = this.state.bundledItem;
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, item.entity));
+  }
+
+  unbundleMultiple = () => {
+    const {store: {dispatch}} = this.context;
+    this.state.bundledItems.forEach(item => dispatch(unbundle(this.props.entity, item)));
   }
 
   render() {
@@ -211,8 +210,8 @@ class Portal extends Component {
               && !_.includes(this.props.entity.apis, item.entity)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
-            onAdd={this.bundlePortal}
-            onMove={this.rebundlePortal}
+            onAdd={this.bundle}
+            onMove={this.rebundle}
             dropText={'Drag APIs here'}
             parent={this.props.parent}
             entity={this.props.entity}
@@ -223,8 +222,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose}
-            onSave={this._handleModalConfirm}
+            onClose={this.handleCloseModal}
+            onSave={this.unbundle}
           >
             <span>
               Are you sure you want to unbundle
@@ -239,8 +238,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose}
-            onSave={this._handleModalConfirmMultiple}
+            onClose={this.handleCloseModal}
+            onSave={this.unbundleMultiple}
           >
             <span>
               Are you sure you want to unbundle

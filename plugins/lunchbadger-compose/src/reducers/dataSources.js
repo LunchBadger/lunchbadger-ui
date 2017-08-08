@@ -6,8 +6,8 @@ const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case actionTypes.onLoadDataSources:
-      return action.payload.body.reduce((map, item) => {
+    case actionTypes.onLoadCompose:
+      return action.payload[0].body.reduce((map, item) => {
         map[item.lunchbadgerId] = DataSource.create(item);
         return map;
       }, {});

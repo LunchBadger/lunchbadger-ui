@@ -20,6 +20,12 @@ const {actions, actionTypes} = actionsCreator(
     'clearProject',
 
     'updateOrder',
+
+    'addInitialConnections',
+    'addConnection',
+    'moveConnection',
+    'removeConnection',
+    'removeConnections',
   ],
 );
 

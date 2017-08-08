@@ -23,17 +23,14 @@ export default class Strategy {
     this._checkAction = action;
   }
 
-  checkAndFulfill(...params) {
-    const checkAction = this.checkAction(...params);
-
+  checkAndFulfill = (...params) => (dispatch) => {
+    const checkAction = dispatch(this.checkAction(...params));
     if (checkAction) {
-      this.fulfilledAction(...params);
-
+      dispatch(this.fulfilledAction(...params));
       return true;
     } else if (checkAction === false) {
       return false;
     }
-
     return null;
   }
 }

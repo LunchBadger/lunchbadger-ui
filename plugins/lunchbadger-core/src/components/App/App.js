@@ -174,6 +174,7 @@ class App extends Component {
               <Canvas
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
+                plugins={this.state.pluginsStore}
               />
             </div>
           </div>

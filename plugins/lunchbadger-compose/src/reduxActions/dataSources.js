@@ -1,6 +1,9 @@
 import {actions} from './actions';
-import {DataSourceService} from '../services';
+import {DataSourceService, ModelService} from '../services';
 import DataSource from '../models/DataSource';
+import Model from '../models/Model';
+
+const {actions: coreActions, storeUtils} = LunchBadgerCore.utils;
 
 export const add = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -12,24 +15,25 @@ export const add = (name, connector) => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const isDifferent = entity.loaded && model.name !== getState().entities.dataSources[entity.id].name;
+  const state = getState();
+  const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;
   let updatedEntity = DataSource.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions.updateDataSource(updatedEntity));
   try {
     if (isDifferent) {
       await DataSourceService.delete(entity.workspaceId);
-      // ConnectionStore
-      //   .getConnectionsForSource(oldId)
-      //   .map(conn => PrivateStore.findEntity(conn.toId))
-      //   .filter(item => item instanceof Model)
-      //   .forEach(model => {
-      //     promise = promise.then(() => ProjectService.upsertModelConfig({
-      //       name: model.name,
-      //       id: model.workspaceId,
-      //       facetName: 'server',
-      //       dataSource: props.name
-      //     }));
-      //   });
+      storeUtils.filterConnections(state, {fromId: entity.id})
+        .map(conn => storeUtils.findEntity(state, 1, conn.toId))
+        .filter(item => item instanceof Model)
+        .forEach(modelEntity => {
+          ModelService.upsertModelConfig({
+            name: modelEntity.name,
+            id: modelEntity.workspaceId,
+            facetName: 'server',
+            dataSource: model.name,
+            public: modelEntity.public,
+          });
+        });
     }
     const {body} = await DataSourceService.upsert(updatedEntity.toJSON());
     updatedEntity = DataSource.create(body);
@@ -41,10 +45,24 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
 };
 
-export const remove = entity => async (dispatch) => {
+export const remove = entity => async (dispatch, getState) => {
+  const state = getState();
   dispatch(actions.removeDataSource(entity));
   try {
-    await DataSourceService.delete(entity.workspaceId);
+    DataSourceService.delete(entity.workspaceId);
+    storeUtils.filterConnections(state, {fromId: entity.id})
+      .map(conn => storeUtils.findEntity(state, 1, conn.toId))
+      .filter(item => item instanceof Model)
+      .forEach(model => {
+        ModelService.upsertModelConfig({
+          name: model.name,
+          id: model.workspaceId,
+          facetName: 'server',
+          dataSource: null,
+          public: model.public,
+        });
+      });
+    dispatch(coreActions.removeConnections([{fromId: entity.id}]));
   } catch (err) {
     console.log('ERROR deleteDataSourceFailure', err);
     dispatch(actions.deleteDataSourceFailure(err));

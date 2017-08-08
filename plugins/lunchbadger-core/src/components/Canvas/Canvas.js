@@ -4,11 +4,8 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
-import addConnection from '../../actions/Connection/add';
-import removeConnection from '../../actions/Connection/remove';
-import moveConnection from '../../actions/Connection/move';
+import {addConnection, moveConnection, removeConnection} from '../../reduxActions/connections';
 import Connection from '../../stores/Connection';
-import ProjectService from '../../services/ProjectService';
 import {clearCurrentElement} from '../../reduxActions';
 import Connections from './Connections';
 import './Canvas.scss';
@@ -80,11 +77,34 @@ class Canvas extends Component {
     jsPlumb.fire('canvasLoaded', this.paper);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.loadingProject && !nextProps.loadingProject && !this.connectionsHandled) {
+      this.connectionsHandled = true;
+      setTimeout(this.handleInitialConnections);
+    }
+  }
+
   componentWillUnmount() {
     this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
     this.paper.stopRepaintingEverything();
-
     // Connection.removeChangeListener(this.connectionsChanged);
+  }
+
+  handleInitialConnections = () => {
+    const {store: {getState}} = this.context;
+    getState().initialConnections.forEach((connection) => {
+      const portOut = document.getElementById(`port_out_${connection.fromId}`);
+      const portIn = document.getElementById(`port_in_${connection.toId}`);
+      if (portOut && portIn) {
+        this.paper.connect({
+          source: portOut.querySelector('.port__anchor'),
+          target: portIn.querySelector('.port__anchor'),
+          parameters: {
+            existing: 1,
+          },
+        });
+      }
+    });
   }
 
   onCanvasScroll = (event) => {
@@ -104,24 +124,19 @@ class Canvas extends Component {
     });
   }
 
-  // _isConnectionValid(source, sourceId, target, targetId) {
-  //   if (sourceId === targetId) {
-  //     return false;
-  //   }
-  //
-  //   if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
-  //     (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
-  //     return false;
-  //   }
-  //
-  //   // Only one connection between two entities is allowed.
-  //   if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 ||
-  //       Connection.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0) {
-  //     return false;
-  //   }
-  //
-  //   return true;
-  // }
+  _isConnectionValid(source, sourceId, target, targetId) {
+    if (sourceId === targetId) return false;
+    if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
+      (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
+      return false;
+    }
+    // Only one connection between two entities is allowed.
+    if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 ||
+        Connection.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0) {
+      return false;
+    }
+    return true;
+  }
 
   // _registerConnectionTypes() {
   //   this.paper.registerConnectionTypes({
@@ -132,133 +147,114 @@ class Canvas extends Component {
   //   });
   // }
 
-  // _executeStrategies(strategies, info) {
-  //   for (let strategy of strategies) {
-  //     let fulfilled = strategy.checkAndFulfill(info);
-  //     if (fulfilled != null) {
-  //       return fulfilled;
-  //     }
-  //   }
-  //   return null;
-  // }
+  _executeStrategies(strategies, info) {
+    const {store: {dispatch}} = this.context;
+    for (let strategy of strategies) {
+      let fulfilled = dispatch(strategy.checkAndFulfill(info));
+      if (fulfilled != null) {
+        return fulfilled;
+      }
+    }
+    return null;
+  }
 
   _attachPaperEvents() {
-    // this.paper.bind('connection', (info) => {
-    //   const {source, connection} = info;
-    //   if (source.parentElement.classList.contains('port-in')) {
-    //     this._flipConnection(info);
-    //     this._disconnect(connection);
-    //
-    //     return;
-    //   }
-    //
-    //   let dropped = this.dropped;
-    //   this.dropped = false;
-    //
-    //   // This is set when a connection is being moved (connect event is also
-    //   // triggered). We want to handle this in 'connectionMoved' handler. Note
-    //   // that this is *not* set when a connection is picked up and then dropped
-    //   // in the same place.
-    //   if (connection.suspendedElement) {
-    //     return;
-    //   }
-    //
-    //   let fulfilled = null;
-    //
-    //   if (dropped) {
-    //     let strategies = this.props.plugins.getConnectionCreatedStrategies();
-    //     fulfilled = this._executeStrategies(strategies, info);
-    //   }
-    //
-    //   if (fulfilled === null) {
-    //     // addConnection(info);
-    //   } else if (fulfilled === false) {
-    //     this._disconnect(connection);
-    //   }
-    // });
-  //
-  //   this.paper.bind('connectionMoved', (info) => {
-  //     let {originalSourceEndpoint, originalTargetEndpoint, connection} = info;
-  //
-  //     let strategies = this.props.plugins.getConnectionMovedStrategies();
-  //     let fulfilled = this._executeStrategies(strategies, info);
-  //
-  //     if (fulfilled === null) {
-  //       moveConnection(info);
-  //     } else if (fulfilled === false) {
-  //       // Have to save these values and call on next event loop iteration
-  //       // because jsPlumb needs the connection to be intact to finish
-  //       // processing this event after this handler is done.
-  //       let {suspendedElementType, suspendedElement} = connection;
-  //
-  //       setTimeout(() => {
-  //         this._disconnect(connection);
-  //
-  //         if (suspendedElementType === 'target') {
-  //           this.paper.connect({
-  //             source: originalSourceEndpoint.element,
-  //             target: suspendedElement
-  //           }, {
-  //             fireEvent: false
-  //           });
-  //         } else {
-  //           this.paper.connect({
-  //             source: suspendedElement,
-  //             target: originalTargetEndpoint.element
-  //           }, {
-  //             fireEvent: false
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  //
-  //   this.paper.bind('connectionDetached', (info) => {
-  //     let strategies = this.props.plugins.getConnectionDeletedStrategies();
-  //     let fulfilled = this._executeStrategies(strategies, info);
-  //
-  //     if (fulfilled === null) {
-  //       removeConnection(info.sourceId, info.targetId);
-  //     } else if (fulfilled === false) {
-  //       this.paper.connect({
-  //         source: info.source,
-  //         target: info.target,
-  //         fireEvent: false
-  //       });
-  //     }
-  //   });
-  //
-  //   this.paper.bind('beforeDrop', (info) => {
-  //     const {sourceId, targetId} = info;
-  //
-  //     const sourceElement = document.querySelector(`#${sourceId}`);
-  //     const targetElement = document.querySelector(`#${targetId}`);
-  //
-  //     if (!this._isConnectionValid(sourceElement, sourceId, targetElement, targetId)) {
-  //       return false;
-  //     }
-  //
-  //     // Save the fact that the connection was dropped. This is used in the
-  //     // 'connect' event handler. This is the only way for it to know that
-  //     // the connection was created by the user, vs programmatically, e.g. when
-  //     // loading from the server.
-  //     this.dropped = true;
-  //     return true;
-  //   });
-  //
-  //   this.paper.bind('beforeDrag', () => {
-  //     return true;
-  //   });
-  //
-  //   this.paper.bind('connectionAborted', () => {
-  //     return true;
-  //   });
-  //
-  //   this.paper.bind('click', (connection, event) => {
-  //     if (event.target.classList.contains('remove-button')) {
-  //       this.paper.detach(connection);
-  //     }
-  //   });
+    const {store: {dispatch, getState}} = this.context;
+
+    this.paper.bind('connection', (info) => {
+      const {source, connection} = info;
+      if (source.parentElement.classList.contains('port-in')) {
+        this._flipConnection(info);
+        this._disconnect(connection);
+        return;
+      }
+      let dropped = this.dropped;
+      this.dropped = false;
+      // This is set when a connection is being moved (connect event is also
+      // triggered). We want to handle this in 'connectionMoved' handler. Note
+      // that this is *not* set when a connection is picked up and then dropped
+      // in the same place.
+      if (connection.suspendedElement) return;
+      let fulfilled = null;
+      if (dropped) {
+        // let strategies = this.props.plugins.getConnectionCreatedStrategies();
+        fulfilled = this._executeStrategies(getState().plugins.onConnectionCreatedStrategy, info);
+      }
+      if (fulfilled === null) {
+        dispatch(addConnection(info));
+      } else if (fulfilled === false) {
+        this._disconnect(connection);
+      }
+    });
+
+    this.paper.bind('connectionMoved', (info) => {
+      let {originalSourceEndpoint, originalTargetEndpoint, connection} = info;
+      let fulfilled = this._executeStrategies(getState().plugins.onConnectionMovedStrategy, info);
+      if (fulfilled === null) {
+        dispatch(moveConnection(info));
+      } else if (fulfilled === false) {
+        // Have to save these values and call on next event loop iteration
+        // because jsPlumb needs the connection to be intact to finish
+        // processing this event after this handler is done.
+        let {suspendedElementType, suspendedElement} = connection;
+        setTimeout(() => {
+          this._disconnect(connection);
+          if (suspendedElementType === 'target') {
+            this.paper.connect({
+              source: originalSourceEndpoint.element,
+              target: suspendedElement
+            }, {
+              fireEvent: false
+            });
+          } else {
+            this.paper.connect({
+              source: suspendedElement,
+              target: originalTargetEndpoint.element,
+            }, {
+              fireEvent: false,
+            });
+          }
+        });
+      }
+    });
+
+    this.paper.bind('connectionDetached', (info) => {
+      let fulfilled = this._executeStrategies(getState().plugins.onConnectionDeletedStrategy, info);
+      if (fulfilled === null) {
+        dispatch(removeConnection(info.sourceId, info.targetId));
+      } else if (fulfilled === false) {
+        this.paper.connect({
+          source: info.source,
+          target: info.target,
+          fireEvent: false,
+        });
+      }
+    });
+
+    this.paper.bind('beforeDrop', (info) => {
+      const {sourceId, targetId} = info;
+      const sourceElement = document.querySelector(`#${sourceId}`);
+      const targetElement = document.querySelector(`#${targetId}`);
+      if (!this._isConnectionValid(sourceElement, sourceId, targetElement, targetId)) {
+        return false;
+      }
+      // Save the fact that the connection was dropped. This is used in the
+      // 'connect' event handler. This is the only way for it to know that
+      // the connection was created by the user, vs programmatically, e.g. when
+      // loading from the server.
+      this.dropped = true;
+      return true;
+    });
+
+    this.paper.bind('beforeDrag', () => true);
+
+    this.paper.bind('connectionAborted', () => true);
+
+    this.paper.bind('click', (connection, event) => {
+      if (event.target.classList.contains('remove-button')) {
+        this.paper.detach(connection);
+      }
+    });
   }
 
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
@@ -297,7 +293,8 @@ class Canvas extends Component {
 
 const selector = createSelector(
   state => !state.states.currentlyOpenedPanel,
-  (isPanelClosed) => ({isPanelClosed}),
+  state => state.loadingProject,
+  (isPanelClosed, loadingProject) => ({isPanelClosed, loadingProject}),
 );
 
 export default connect(selector)(Canvas);

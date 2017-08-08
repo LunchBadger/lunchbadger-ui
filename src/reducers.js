@@ -11,7 +11,10 @@ const arraysToRegister = [
   'onAppLoad',
   'onProjectSave',
   'panels',
-  'onSaveOrder'
+  'onSaveOrder',
+  'onConnectionCreatedStrategy',
+  'onConnectionMovedStrategy',
+  'onConnectionDeletedStrategy'
 ];
 
 const objectsToRegister = [
@@ -77,6 +80,11 @@ export const registerPlugin = (_entities, plugs, _reducers = {}) => {
         plugins.quadrants[key].entities = [
           ...plugins.quadrants[key].entities,
           ...plugs.quadrants[key].entities
+        ];
+        if (!plugins.quadrants[key].connectionEntities) plugins.quadrants[key].connectionEntities = [];
+        plugins.quadrants[key].connectionEntities = [
+          ...plugins.quadrants[key].connectionEntities,
+          ...plugs.quadrants[key].connectionEntities
         ];
       });
     }

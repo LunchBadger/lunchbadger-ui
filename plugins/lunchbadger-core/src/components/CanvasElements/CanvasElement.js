@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
-import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import _ from 'lodash';
 import {

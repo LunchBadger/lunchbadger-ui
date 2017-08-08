@@ -3,19 +3,18 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
 
   ],
   [
-    'onLoadDataSources',
+    'onLoadCompose',
+
     'updateDataSource',
     'updateDataSources',
     'removeDataSource',
 
-    'onLoadModels',
     'updateModel',
     'updateModelBundled',
     'updateModels',
     'removeModel',
     'removeModelBundled',
 
-    'onLoadModelConfigs',
     'updateMicroservice',
     'updateMicroservices',
     'removeMicroservice',

@@ -69,10 +69,10 @@ const appState = (state = initialState, action) => {
       newState.panelEditingStatusSave = action.saveAction || null;
       newState.panelEditingStatusDiscard = action.discardAction || null;
       return newState;
-    case actionTypes.removeEntity:
-      newState.currentElement = null;
-      newState.currentEditElement = null;
-      return newState;
+    // case actionTypes.removeEntity:
+    //   newState.currentElement = null;
+    //   newState.currentEditElement = null;
+    //   return newState;
     default:
       return state;
   }

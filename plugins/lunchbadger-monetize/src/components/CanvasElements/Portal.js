@@ -5,7 +5,7 @@ import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/sr
 import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
 import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
-import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
+import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 import _ from 'lodash';
@@ -24,11 +24,13 @@ class Portal extends Component {
     parent: PropTypes.object
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.previousConnection = null;
-
     this.state = {
       hasConnection: null,
       isShowingModal: false,
@@ -130,7 +132,8 @@ class Portal extends Component {
 
   _handleModalConfirm = () => {
     const item = this.state.bundledItem;
-    unbundlePortal(item.parent, item.entity);
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, item.entity));
   }
 
   _handleClose = () => {
@@ -158,6 +161,16 @@ class Portal extends Component {
 
   _handleModalConfirmMultiple = () => {
     this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
+  }
+
+  bundlePortal = (portal, api) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(bundle(portal, api));
+  }
+
+  rebundlePortal = (fromPortal, toPortal, api) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundle(fromPortal, toPortal, api));
   }
 
   render() {
@@ -198,8 +211,8 @@ class Portal extends Component {
               && !_.includes(this.props.entity.apis, item.entity)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
-            onAdd={bundlePortal}
-            onMove={moveBetweenPortals}
+            onAdd={this.bundlePortal}
+            onMove={this.rebundlePortal}
             dropText={'Drag APIs here'}
             parent={this.props.parent}
             entity={this.props.entity}

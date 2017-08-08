@@ -34,3 +34,26 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
     dispatch(actions.updatePortals(reordered));
   }
 };
+
+export const bundle = (portal, api) => (dispatch) => {
+  const updatedPortal = portal.recreate();
+  updatedPortal.addAPI(api);
+  dispatch(actions.updatePortal(updatedPortal));
+  dispatch(actions.removeAPI(api));
+};
+
+export const unbundle = (portal, api) => (dispatch) => {
+  const updatedPortal = portal.recreate();
+  updatedPortal.removeAPI(api);
+  dispatch(actions.updatePortal(updatedPortal));
+  api.wasBundled = false;
+  dispatch(actions.updateAPI(api));
+};
+
+export const rebundle = (fromPortal, toPortal, api) => (dispatch) => {
+  const updatedFromPortal = fromPortal.recreate();
+  updatedFromPortal.removeAPI(api);
+  const updatedToPortal = toPortal.recreate();
+  updatedToPortal.addAPI(api);
+  dispatch(actions.updatePortals([updatedFromPortal, updatedToPortal]));
+};

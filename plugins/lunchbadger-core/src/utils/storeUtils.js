@@ -2,12 +2,12 @@ import _ from 'lodash';
 
 export const formatId = id => id.split('_').slice(-1)[0];
 
-export const isInQuadrant = (state, quadrantIdx, id) =>
+export const isInQuadrant = (state, quadrantIdx, entityId) =>
   _.find(
     state.plugins.quadrants[quadrantIdx].connectionEntities
       .map(type => Object.keys(state.entities[type]))
       .reduce((arr, item) => arr.concat(item), []),
-    id => id === formatId(id),
+    id => id === formatId(entityId),
   );
 
 export const findEntity = (state, quadrantIdx, id) =>

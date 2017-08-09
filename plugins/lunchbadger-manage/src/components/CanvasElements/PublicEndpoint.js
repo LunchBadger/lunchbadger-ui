@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import _ from 'lodash';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
-import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
+const {storeUtils} = LunchBadgerCore.utils;
 
 class PublicEndpoint extends Component {
   static propTypes = {
@@ -46,12 +49,12 @@ class PublicEndpoint extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {entity, validations: {data}, entityDevelopment, onResetField, gatewayPath} = this.props;
     const mainProperties = [
       {
         name: 'url',
         title: 'URL',
-        value: getPublicEndpointUrl(entity.id, this.state.path),
+        value: `${gatewayPath}${this.state.path}`,
         fake: true,
       },
       {
@@ -79,4 +82,16 @@ class PublicEndpoint extends Component {
   }
 }
 
-export default CanvasElement(PublicEndpoint);
+const selector = createSelector(
+  (_, props) => props.id,
+  state => state,
+  (id, state) => {
+    const conn = _.find(state.connections, {toId: id});
+    if (!conn) return {gatewayPath: ''};
+    const gateway = storeUtils.findGatewayByPipelineId(state, conn.fromId);
+    if (!gateway) return {gatewayPath: ''};
+    return {gatewayPath: 'http://' + gateway.dnsPrefix + '.customer.lunchbadger.com/'};
+  },
+);
+
+export default connect(selector)(CanvasElement(PublicEndpoint));

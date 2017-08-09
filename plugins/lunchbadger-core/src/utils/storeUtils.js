@@ -16,6 +16,12 @@ export const findEntity = (state, quadrantIdx, id) =>
     .reduce((arr, item) => arr.concat(item), [])
     .find(item => item.id === formatId(id));
 
+export const findGatewayByPipelineId = (state, id) =>
+  state.plugins.quadrants[2].connectionEntities
+    .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))
+    .reduce((arr, item) => arr.concat(item), [])
+    .find(item => item.pipelines.map(p => p.id).includes(formatId(id)));
+
 export const findEntityByName = (state, quadrantIdx, name) =>
   state.plugins.quadrants[quadrantIdx].connectionEntities
     .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))

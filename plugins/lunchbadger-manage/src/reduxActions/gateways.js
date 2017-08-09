@@ -45,15 +45,13 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 };
 
 export const addPipeline = gatewayId => (dispatch, getState) => {
-  const props = {...getState().entities.gateways[gatewayId]};
-  props.pipelines = [...props.pipelines, Pipeline.create()];
-  const entity = Gateway.create(props);
-  dispatch(actions.updateGatewaySuccess({entity}));
+  const entity = getState().entities.gateways[gatewayId].recreate();
+  entity.addPipeline(Pipeline.create({name: 'Aaa'}));
+  dispatch(actions.updateGateway(entity));
 }
 
-export const removePipeline = (gatewayId, pipelineId) => (dispatch, getState) => {
-  const props = {...getState().entities.gateways[gatewayId]};
-  props.pipelines = props.pipelines.filter(p => p.id !== pipelineId);
-  const entity = Gateway.create(props);
-  dispatch(actions.updateGatewaySuccess({entity}));
+export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
+  const entity = getState().entities.gateways[gatewayId].recreate();
+  entity.removePipeline(pipeline);
+  dispatch(actions.updateGateway(entity));
 }

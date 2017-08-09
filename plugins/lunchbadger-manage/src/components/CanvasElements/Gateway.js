@@ -32,8 +32,8 @@ class Gateway extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasInConnection: null,
-      hasOutConnection: null,
+      // hasInConnection: null,
+      // hasOutConnection: null,
       dnsPrefix: props.entity.dnsPrefix,
       pipelinesOpened: {},
       showRemovingModal: false,
@@ -44,37 +44,37 @@ class Gateway extends Component {
     });
   }
 
-  componentDidMount() {
-    // const {ready, toggleEdit, entity} = this.props;
-    // if (!ready) {
-    //   toggleEdit(entity);
-    // }
-  }
+  // componentDidMount() {
+  //   // const {ready, toggleEdit, entity} = this.props;
+  //   // if (!ready) {
+  //   //   toggleEdit(entity);
+  //   // }
+  // }
 
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextProps.ready && !this.props.ready) {
-      this._onDeploy();
-    }
-    if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-      const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
-        return Connection.getConnectionsForTarget(pipeline.id).length;
-      });
-      if (hasInConnection) {
-        this.setState({hasInConnection: true});
-      } else {
-        this.setState({hasInConnection: false});
-      }
-    }
-    if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-      const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
-        return Connection.getConnectionsForSource(pipeline.id).length;
-      });
-      if (hasOutConnection) {
-        this.setState({hasOutConnection: true});
-      } else {
-        this.setState({hasOutConnection: false});
-      }
-    }
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.ready && !this.props.ready) {
+    //   this._onDeploy();
+    // }
+    // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
+    //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
+    //     return Connection.getConnectionsForTarget(pipeline.id).length;
+    //   });
+    //   if (hasInConnection) {
+    //     this.setState({hasInConnection: true});
+    //   } else {
+    //     this.setState({hasInConnection: false});
+    //   }
+    // }
+    // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
+    //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
+    //     return Connection.getConnectionsForSource(pipeline.id).length;
+    //   });
+    //   if (hasOutConnection) {
+    //     this.setState({hasOutConnection: true});
+    //   } else {
+    //     this.setState({hasOutConnection: false});
+    //   }
+    // }
     // if (!this.props.parent.state.editable) { //FIXME
     //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
     // }
@@ -115,7 +115,7 @@ class Gateway extends Component {
         entity={pipeline}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(pipeline.id)}
+        onRemove={this.onRemovePipeline(pipeline)}
       />
     ));
   }
@@ -164,21 +164,21 @@ class Gateway extends Component {
     dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
   }
 
-  _onDeploy() {
-    const dispatchRedux = LunchBadgerCore.dispatchRedux;
-    dispatchRedux(addSystemInformationMessage({
-      message: 'Gateway successfully deployed',
-      type: 'success'
-    }));
-    this.props.parent.triggerElementAutofocus();
-  }
+  // _onDeploy() {
+  //   const dispatchRedux = LunchBadgerCore.dispatchRedux;
+  //   dispatchRedux(addSystemInformationMessage({
+  //     message: 'Gateway successfully deployed',
+  //     type: 'success'
+  //   }));
+  //   this.props.parent.triggerElementAutofocus();
+  // }
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   render() {
     const elementClass = classNames({
-      'has-connection-in': this.state.hasInConnection,
-      'has-connection-out': this.state.hasOutConnection
+      // 'has-connection-in': this.state.hasInConnection,
+      // 'has-connection-out': this.state.hasOutConnection
     });
     const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [

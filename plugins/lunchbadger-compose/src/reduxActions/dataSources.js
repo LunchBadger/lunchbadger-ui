@@ -62,7 +62,6 @@ export const remove = entity => async (dispatch, getState) => {
           public: model.public,
         });
       });
-    dispatch(coreActions.removeConnections([{fromId: entity.id}]));
   } catch (err) {
     console.log('ERROR deleteDataSourceFailure', err);
     dispatch(actions.deleteDataSourceFailure(err));

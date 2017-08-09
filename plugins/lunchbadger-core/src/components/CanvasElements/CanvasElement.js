@@ -11,6 +11,7 @@ import {
   clearCurrentElement,
   setCurrentEditElement,
 } from '../../reduxActions';
+import {actions} from '../../reduxActions/actions';
 import getFlatModel from '../../utils/getFlatModel';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
@@ -331,6 +332,7 @@ export default (ComposedComponent) => {
       const {store: {dispatch, getState}} = this.context;
       // dispatch(getState().plugins.onDelete[entity.constructor.type](entity));
       dispatch(entity.remove());
+      dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
     }
 
@@ -350,6 +352,7 @@ export default (ComposedComponent) => {
       const {entity} = this.props;
       if (!entity.loaded) {
         dispatch(entity.remove());
+        dispatch(actions.removeEntity(entity));
         dispatch(clearCurrentElement());
       } else {
         if (!this.state.isValid) {

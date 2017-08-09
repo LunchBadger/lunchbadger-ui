@@ -7,7 +7,7 @@ import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProp
 import slug from 'slug';
 import addPropertiesToData from '../addPropertiesToData';
 import addNestedProperties from '../addNestedProperties';
-import ModelProperty from '../../models/_modelProperty';
+import ModelProperty from '../../models/ModelProperty';
 import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
@@ -133,7 +133,10 @@ class Model extends Component {
   }
 
   onAddProperty = (parentId) => () => {
-    this.onAddItem('properties', ModelProperty.create({parentId}));
+    this.onAddItem('properties', ModelProperty.create({
+      parentId,
+      type: 'string',
+    }));
   }
 
   onAddRootProperty = () => {

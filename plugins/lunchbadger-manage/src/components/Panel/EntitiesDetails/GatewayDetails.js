@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import update from 'react-addons-update';
-import Pipeline from '../../../models/_pipeline';
-import Policy from '../../../models/_policy';
+import Pipeline from '../../../models/Pipeline';
+import Policy from '../../../models/Policy';
 import GatewayPolicyDetails from './GatewayPolicyDetails';
 import _ from 'lodash';
 

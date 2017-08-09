@@ -1,4 +1,4 @@
-import ModelProperty from '../models/_modelProperty';
+import ModelProperty from '../models/ModelProperty';
 
 export default (model, entity, properties, stateProperties) => {
   const rootProperties = [];
@@ -8,9 +8,6 @@ export default (model, entity, properties, stateProperties) => {
     const property = model.properties[key];
     if (property.name.trim().length === 0) return;
     const prop = ModelProperty.create(property);
-    prop.modelId = entity.id;
-    prop.default = prop.default_;
-    delete prop.default_;
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
     const [parentId] = key.split('/');
@@ -36,9 +33,6 @@ export default (model, entity, properties, stateProperties) => {
   const fallbackProperties = {};
   stateProperties.forEach((property) => {
     const prop = ModelProperty.create(property);
-    prop.modelId = entity.id;
-    prop.default = prop.default_;
-    delete prop.default_;
     fallbackProperties[prop.id] = prop;
     if (prop.type === 'object') {
       prop.type = {};
@@ -60,6 +54,7 @@ export default (model, entity, properties, stateProperties) => {
       prop.type = fallbackProperties[key].type;
       delete prop.isNull;
     }
+    prop.attach(entity);
     if (rootProperties.includes(key)) {
       properties.push(prop);
     }

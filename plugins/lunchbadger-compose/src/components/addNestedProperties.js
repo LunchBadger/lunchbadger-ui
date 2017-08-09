@@ -1,9 +1,10 @@
-import ModelProperty from '../models/_modelProperty';
+import ModelProperty from '../models/ModelProperty';
 
 const addNestedProperties = (entity, props, properties, parentId) => {
   properties.forEach((property) => {
     const prop = ModelProperty.create(property);
     prop.parentId = parentId;
+    prop.attach(entity);
     props.push(prop);
     if (typeof prop.type === 'object') {
       const nestedProperties = [];

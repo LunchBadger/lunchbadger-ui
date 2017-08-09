@@ -38,7 +38,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (model.properties.length > 0) {
       const upsertProperties = model.properties.map(item => item.toJSON());
       const {body: properties} = await ModelService.upsertProperties(upsertProperties);
-      updatedEntity.properties = properties.map(item => ModelProperty.create(item));
+      updatedEntity.properties = properties.map((item) => {
+        const property = ModelProperty.create(item);
+        property.attach(updatedEntity);
+        return property;
+      });
     }
     dispatch(actions.updateModel(updatedEntity));
     return updatedEntity;

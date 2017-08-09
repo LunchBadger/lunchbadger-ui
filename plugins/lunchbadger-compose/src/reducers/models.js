@@ -1,4 +1,5 @@
 import Model from '../models/Model';
+import ModelProperty from '../models/ModelProperty';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -9,7 +10,11 @@ export default (state = {}, action) => {
     case actionTypes.onLoadCompose:
       return action.payload[1].body.reduce((map, item) => {
         if (item.wasBundled) return map;
-        map[item.lunchbadgerId] = Model.create(item);
+        const properties = item.properties || [];
+        delete item.properties;
+        const model = Model.create(item);
+        properties.forEach(property => model.addProperty(ModelProperty.create(property)));
+        map[item.lunchbadgerId] = model;
         return map;
       }, {});
     case actionTypes.updateModel:

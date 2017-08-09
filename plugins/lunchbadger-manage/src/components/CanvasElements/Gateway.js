@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Pipeline from './Subelements/Pipeline';
-import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
+// import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import {addPipeline, removePipeline} from '../../reduxActions/gateways';
 import classNames from 'classnames';
-import Policy from '../../models/Policy';
-import PipelineFactory from '../../models/Pipeline';
+// import Policy from '../../models/Policy';
+// import PipelineFactory from '../../models/Pipeline';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
@@ -16,6 +16,7 @@ const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
+const {actions: coreActions} = LunchBadgerCore.utils;
 
 class Gateway extends Component {
   static propTypes = {
@@ -86,6 +87,15 @@ class Gateway extends Component {
       }
     });
     if (pipelinesAdded) this.setState({pipelinesOpened});
+  }
+
+  componentWillUnmount() {
+    const {store: {dispatch}} = this.context;
+    const {pipelines} = this.props.entity;
+    const connections = pipelines.map(({id}) => ({fromId: id, toId: id}));
+    if (connections.length > 0) {
+      dispatch(coreActions.removeConnections(connections));
+    }
   }
 
   handleTogglePipelineOpen = pipelineId => opened => {

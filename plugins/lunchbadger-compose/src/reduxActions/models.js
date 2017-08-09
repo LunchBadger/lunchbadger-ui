@@ -2,6 +2,9 @@ import {actions} from './actions';
 import {ModelService} from '../services';
 import Model from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
+import DataSource from '../models/DataSource';
+
+const {storeUtils} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -13,24 +16,24 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const isDifferent = entity.loaded && model.name !== getState().entities.models[entity.id].name;
+  const state = getState();
+  const isDifferent = entity.loaded && model.name !== state.entities.models[entity.id].name;
   let updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions.updateModel(updatedEntity));
   try {
     if (isDifferent) {
       await ModelService.delete(entity.workspaceId);
-      // ConnectionStore
-      //   .getConnectionsForSource(oldId)
-      //   .map(conn => PrivateStore.findEntity(conn.toId))
-      //   .filter(item => item instanceof Model)
-      //   .forEach(model => {
-      //     promise = promise.then(() => ProjectService.upsertModelConfig({
-      //       name: model.name,
-      //       id: model.workspaceId,
-      //       facetName: 'server',
-      //       dataSource: props.name
-      //     }));
-      //   });
+      await ModelService.deleteModelConfig(entity.workspaceId);
+      const dataSource = storeUtils.filterConnections(state, {toId: entity.id})
+        .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
+        .find(item => item instanceof DataSource);
+      await ModelService.upsertModelConfig({
+        name: updatedEntity.name,
+        id: updatedEntity.workspaceId,
+        facetName: 'server',
+        dataSource: dataSource ? dataSource.name : null,
+        public: updatedEntity.public,
+      });
     }
     const {body} = await ModelService.upsert(updatedEntity.toJSON());
     updatedEntity = Model.create(body);

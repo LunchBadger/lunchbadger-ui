@@ -3,7 +3,7 @@ import {DataSourceService, ModelService} from '../services';
 import DataSource from '../models/DataSource';
 import Model from '../models/Model';
 
-const {actions: coreActions, storeUtils} = LunchBadgerCore.utils;
+const {storeUtils} = LunchBadgerCore.utils;
 
 export const add = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();

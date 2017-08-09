@@ -12,9 +12,7 @@ export default class PublicEndpoint extends BaseModel {
 
   constructor(id, name) {
     super(id);
-
     this.name = name;
-
     this.ports = [
       Port.create({
         id: this.id,
@@ -24,7 +22,9 @@ export default class PublicEndpoint extends BaseModel {
     ];
   }
 
-  recreate = () => PublicEndpoint.create(this);
+  recreate() {
+    return PublicEndpoint.create(this);
+  }
 
   toJSON() {
     return {
@@ -43,27 +43,33 @@ export default class PublicEndpoint extends BaseModel {
     this._ports = ports;
   }
 
-  validate = model => (_, getState) => {
-    const validations = {data: {}};
-    const entities = getState().entities.publicEndpoints;
-    const {messages, checkFields} = LunchBadgerCore.utils;
-    if (model.name !== '') {
-      const isDuplicateName = Object.keys(entities)
-        .filter(id => id !== this.id)
-        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
-        .length > 0;
-      if (isDuplicateName) {
-        validations.data.name = messages.duplicatedEntityName('Public Endpoint');
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.publicEndpoints;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Public Endpoint');
+        }
       }
+      const fields = ['name', 'path'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
     }
-    const fields = ['name', 'path'];
-    checkFields(fields, model, validations.data);
-    validations.isValid = Object.keys(validations.data).length === 0;
-    return validations;
   }
 
-  update = model => async dispatch => await dispatch(update(this, model));
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
 
-  remove = () => async dispatch => await dispatch(remove(this));
+  remove() {
+    return async dispatch => await dispatch(remove(this));
+  }
 
 }

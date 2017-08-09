@@ -46,10 +46,8 @@ export default class DataSource extends BaseModel {
 
   constructor(id, name, connector) {
     super(id);
-
     this.name = name;
     this.connector = connector;
-
     this.ports = [
       Port.create({
         id: this.id,
@@ -59,7 +57,9 @@ export default class DataSource extends BaseModel {
     ];
   }
 
-  recreate = () => DataSource.create(this);
+  recreate() {
+    return DataSource.create(this);
+  }
 
   static get idField() {
     return 'lunchbadgerId';
@@ -132,27 +132,33 @@ export default class DataSource extends BaseModel {
     this._connector = connector;
   }
 
-  validate = model => (_, getState) => {
-    const validations = {data: {}};
-    const entities = getState().entities.dataSources;
-    const {messages, checkFields} = LunchBadgerCore.utils;
-    if (model.name !== '') {
-      const isDuplicateName = Object.keys(entities)
-        .filter(id => id !== this.id)
-        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
-        .length > 0;
-      if (isDuplicateName) {
-        validations.data.name = messages.duplicatedEntityName('Data Source');
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.dataSources;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Data Source');
+        }
       }
+      const fields = ['name', 'url', 'database', 'username', 'password'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
     }
-    const fields = ['name', 'url', 'database', 'username', 'password'];
-    checkFields(fields, model, validations.data);
-    validations.isValid = Object.keys(validations.data).length === 0;
-    return validations;
   }
 
-  update = model => async dispatch => await dispatch(update(this, model));
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
 
-  remove = () => async dispatch => await dispatch(remove(this));
+  remove() {
+    return async dispatch => await dispatch(remove(this));
+  }
 
 }

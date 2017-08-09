@@ -19,7 +19,9 @@ export default class Microservice extends BaseModel {
     this.name = name;
   }
 
-  recreate = () => Microservice.create(this);
+  recreate() {
+    return Microservice.create(this);
+  }
 
   toJSON() {
     return {
@@ -62,26 +64,32 @@ export default class Microservice extends BaseModel {
     return this._accept;
   }
 
-  validate = model => (_, getState) => {
-    const validations = {data: {}};
-    const entities = getState().entities.microservices;
-    const {messages, checkFields} = LunchBadgerCore.utils;
-    if (model.name !== '') {
-      const isDuplicateName = Object.keys(entities)
-        .filter(id => id !== this.id)
-        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
-        .length > 0;
-      if (isDuplicateName) {
-        validations.data.name = messages.duplicatedEntityName('Microservice');
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.microservices;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Microservice');
+        }
       }
+      const fields = ['name'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
     }
-    const fields = ['name'];
-    checkFields(fields, model, validations.data);
-    validations.isValid = Object.keys(validations.data).length === 0;
-    return validations;
   }
 
-  update = model => async dispatch => await dispatch(update(this, model));
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
 
-  remove = () => async dispatch => await dispatch(remove(this));
+  remove() {
+    return async dispatch => await dispatch(remove(this));
+  }
 }

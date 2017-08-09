@@ -80,13 +80,7 @@ class Model extends Component {
   //   return validations;
   // }
 
-  processModel = (model) => {
-    const data = {
-      properties: [],
-    };
-    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-    return _.merge({}, model, data);
-  }
+  processModel = model => this.props.entity.processModel(model, this.state.properties);
 
   getEntityDiffProps = (model) => {
     if (!model) return null;

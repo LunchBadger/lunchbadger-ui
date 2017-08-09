@@ -5,6 +5,7 @@ import _ from 'lodash';
 const Input = LunchBadgerCore.components.Input;
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
+const {coreActions} = LunchBadgerCore.utils;
 
 class DataSourceDetails extends Component {
   static propTypes = {
@@ -17,11 +18,8 @@ class DataSourceDetails extends Component {
 
   update = async (model) => {
     const {entity} = this.props;
-    const {store: {dispatch, getState}} = this.context;
-    const plugins = getState().plugins;
-    const onUpdate = plugins.onUpdate.DataSource;
-    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
-    const {coreActions} = LunchBadgerCore.utils;
+    const {store: {dispatch}} = this.context;
+    const updatedEntity = await dispatch(entity.update(model));
     dispatch(coreActions.setCurrentElement(updatedEntity));
   }
 

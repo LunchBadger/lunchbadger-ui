@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/models';
+import addPropertiesToData from '../components/addPropertiesToData';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -73,7 +74,9 @@ export default class Model extends BaseModel {
     ];
   }
 
-  recreate = () => Model.create(this);
+  recreate() {
+    return Model.create(this);
+  }
 
   static get idField() {
     // The loopback-workspace API ties the name of an entity to its ID. This
@@ -208,32 +211,47 @@ export default class Model extends BaseModel {
     return 'string';
   }
 
-  validate = model => (_, getState) => {
-    const validations = {data: {}};
-    const entities = getState().entities.models;
-    const {messages, checkFields} = LunchBadgerCore.utils;
-    if (model.name !== '') {
-      const isDuplicateName = Object.keys(entities)
-        .filter(id => id !== this.id)
-        .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
-        .length > 0;
-      if (isDuplicateName) {
-        validations.data.name = messages.duplicatedEntityName('Model');
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.models;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Model');
+        }
       }
+      const fields = ['name'];
+      checkFields(fields, model, validations.data);
+      if (model.name.toLowerCase() === 'model') validations.data.name = 'Model name cannot be "Model"';
+      if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
+      if (model.http.path === '') {
+        validations.data.contextPath = messages.fieldCannotBeEmpty;
+      }
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
     }
-    const fields = ['name'];
-    checkFields(fields, model, validations.data);
-    if (model.name.toLowerCase() === 'model') validations.data.name = 'Model name cannot be "Model"';
-    if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
-    if (model.http.path === '') {
-      validations.data.contextPath = messages.fieldCannotBeEmpty;
-    }
-    validations.isValid = Object.keys(validations.data).length === 0;
-    return validations;
   }
 
-  update = model => async dispatch => await dispatch(update(this, model));
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
 
-  remove = () => async dispatch => await dispatch(remove(this));
+  remove() {
+    return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model, properties) {
+    const data = {
+      properties: [],
+    };
+    addPropertiesToData(model, this, data.properties, properties);
+    console.log(9, model, properties, data.properties);
+    return _.merge({}, model, data);
+  }
 
 }

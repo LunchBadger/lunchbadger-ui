@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {Form} from '../../../../../lunchbadger-ui/src';
 import InputField from './InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
-import {changePanelStatus} from '../../../reduxActions';
+import {changePanelStatus, setCurrentEditElement, setCurrentElement} from '../../../reduxActions';
 import './BaseDetails.scss';
 
 export default (ComposedComponent) => {
-  class BaseDetails extends Component {
+  return class BaseDetails extends Component {
+    static propTypes = {
+      entity: PropTypes.object.isRequired
+    };
+
+    static contextTypes = {
+      store: PropTypes.object,
+    };
+
     constructor(props) {
       super(props);
       this.state = {
@@ -23,18 +30,24 @@ export default (ComposedComponent) => {
       if (typeof element.discardChanges === 'function') {
         element.discardChanges();
       }
-      this.refs.form.reset();
+      this.refs.form.reset(this.props.entity.toJSON());
       this.forceUpdate();
     }
 
-    update = (model) => {
-      const element = this.element;
-      if (!model) {
-        model = this.refs.form.getModel();
+    update = async (props = this.refs.form.getModel()) => {
+      const {store: {dispatch}} = this.context;
+      const {entity} = this.props;
+      const {element} = this;
+      let model = props;
+      if (typeof element.processModel === 'function') {
+        model = element.processModel(model);
       }
-      if (typeof element.update === 'function') {
-        element.update(model);
-      }
+      // const validations = dispatch(entity.validate(model)); //TODO
+      // this.setState({validations});
+      // if (!validations.isValid) return;
+      dispatch(setCurrentEditElement(null));
+      const updatedEntity = await dispatch(entity.update(model));
+      dispatch(setCurrentElement(updatedEntity));
       this.setState({isPristine: true});
     }
 
@@ -62,7 +75,8 @@ export default (ComposedComponent) => {
 
     componentWillUpdate(_nextProps, nextState) {
       if (this.state.isPristine !== nextState.isPristine) {
-        this.props.changePanelStatus(!nextState.isPristine, this.update, this.discardChanges);
+        const {store: {dispatch}} = this.context;
+        dispatch(changePanelStatus(!nextState.isPristine, this.update, this.discardChanges));
       }
     }
 
@@ -111,12 +125,4 @@ export default (ComposedComponent) => {
       )
     }
   }
-  BaseDetails.propTypes = {
-    entity: PropTypes.object.isRequired,
-    changePanelStatus: PropTypes.func,
-  };
-  const mapDispatchToProps = dispatch => ({
-    changePanelStatus: (status, saveAction, discardAction) => dispatch(changePanelStatus(status, saveAction, discardAction)),
-  });
-  return connect(null, mapDispatchToProps)(BaseDetails);
 }

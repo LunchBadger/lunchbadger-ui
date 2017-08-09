@@ -19,6 +19,7 @@ const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
+const {coreActions} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
@@ -75,57 +76,63 @@ class ModelDetails extends Component {
     }
   }
 
+  processModel = model => this.props.entity.processModel(model, this.state.properties);
+
   discardChanges() {
     // revert properties
     this.onStoreUpdate();
   }
 
-  update(model) {
-    const data = {
-      properties: [],
-      relations: [],
-    };
-    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-    model.relations && model.relations.forEach((relation) => {
-      let rel = ModelRelation.create(relation);
-      rel.attach(this.props.entity);
-      data.relations.push(rel);
-    });
-    model.userFields && model.userFields.forEach(field => {
-      const value = field.value;
-      let output = value;
-      if (field.type === 'object') {
-        output = JSON.parse(value);
-      } else if (field.type === 'number') {
-        output = Number(value);
-      }
-      data[field.name] = output;
-    });
-    const currDsConn = this._getBackendConnection();
-    const currDsId = currDsConn ? currDsConn.fromId : null;
-    const dsId = model.dataSource === 'none' ? null : model.dataSource;
-    if (dsId !== currDsId) {
-      if (!dsId) {
-        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
-      } else if (currDsConn) {
-        LunchBadgerCore.utils.paper.setSource(
-          currDsConn.info.connection,
-          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-        );
-      }
-    }
-    const updateData = Object.assign({}, model, data);
-    if (!updateData.userFields) {
-      updateData.userFields = [];
-    }
-    const propsToRemove = _.difference(
-      Object.keys(this.props.entity.userFields),
-      updateData.userFields.map(field => field.name)
-    );
-    delete updateData.dataSource;
-    delete updateData.userFields;
-    updateModel(this.props.entity.id, updateData, propsToRemove);
-  }
+  // update = async (model) => {
+  //   const {entity} = this.props;
+  //   const {store: {dispatch}} = this.context;
+  //   const updatedEntity = await dispatch(entity.update(model));
+  //   dispatch(coreActions.setCurrentElement(updatedEntity));
+  //   // const data = {
+  //   //   properties: [],
+  //   //   relations: [],
+  //   // };
+  //   // addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
+  //   // model.relations && model.relations.forEach((relation) => {
+  //   //   let rel = ModelRelation.create(relation);
+  //   //   rel.attach(this.props.entity);
+  //   //   data.relations.push(rel);
+  //   // });
+  //   // model.userFields && model.userFields.forEach(field => {
+  //   //   const value = field.value;
+  //   //   let output = value;
+  //   //   if (field.type === 'object') {
+  //   //     output = JSON.parse(value);
+  //   //   } else if (field.type === 'number') {
+  //   //     output = Number(value);
+  //   //   }
+  //   //   data[field.name] = output;
+  //   // });
+  //   // const currDsConn = this._getBackendConnection();
+  //   // const currDsId = currDsConn ? currDsConn.fromId : null;
+  //   // const dsId = model.dataSource === 'none' ? null : model.dataSource;
+  //   // if (dsId !== currDsId) {
+  //   //   if (!dsId) {
+  //   //     LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
+  //   //   } else if (currDsConn) {
+  //   //     LunchBadgerCore.utils.paper.setSource(
+  //   //       currDsConn.info.connection,
+  //   //       document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+  //   //     );
+  //   //   }
+  //   // }
+  //   // const updateData = Object.assign({}, model, data);
+  //   // if (!updateData.userFields) {
+  //   //   updateData.userFields = [];
+  //   // }
+  //   // const propsToRemove = _.difference(
+  //   //   Object.keys(this.props.entity.userFields),
+  //   //   updateData.userFields.map(field => field.name)
+  //   // );
+  //   // delete updateData.dataSource;
+  //   // delete updateData.userFields;
+  //   // updateModel(this.props.entity.id, updateData, propsToRemove);
+  // }
 
   onAddItem(collection, item) {
     const items = this.state[collection];

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import uuid from 'uuid';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
 import ModelRelation from './ModelRelation';
@@ -188,6 +189,7 @@ export default class Model extends BaseModel {
   get extendedUserFields() {
     return this._getUserFieldsKeys().map(key => {
       return {
+        id: uuid.v4(),
         name: key,
         type: Model._assumeUserFieldType(this[key]),
         value: this[key]
@@ -256,6 +258,27 @@ export default class Model extends BaseModel {
         data.relations.push(relation);
       });
     }
+    if (model.userFields) {
+      model.userFields.forEach(field => {
+        const value = field.value;
+        let output = value;
+        if (field.type === 'object') {
+          output = JSON.parse(value);
+        } else if (field.type === 'number') {
+          output = Number(value);
+        }
+        data[field.name] = output;
+      });
+    } else {
+      model.userFields = [];
+    }
+    const propsToRemove = _.difference(
+      Object.keys(this.userFields),
+      model.userFields.map(field => field.name),
+    );
+    propsToRemove.forEach(prop => delete this[prop]);
+    delete model.dataSource;
+    delete model.userFields;
     return _.merge({}, model, data);
   }
 

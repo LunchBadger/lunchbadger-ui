@@ -40,7 +40,10 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity = Model.create(body);
     await ModelService.deleteProperties(updatedEntity.workspaceId);
     if (model.properties.length > 0) {
-      const upsertProperties = model.properties.map(item => item.toJSON());
+      const upsertProperties = model.properties.map((item) => {
+        item.attach(updatedEntity);
+        return item.toJSON();
+      });
       const {body: properties} = await ModelService.upsertProperties(upsertProperties);
       updatedEntity.properties = properties.map((item) => {
         const property = ModelProperty.create(item);
@@ -51,7 +54,10 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (model.relations) {
       await ModelService.deleteRelations(updatedEntity.workspaceId);
       if (model.relations.length > 0) {
-        const upsertRelations = model.relations.map(item => item.toJSON());
+        const upsertRelations = model.relations.map((item) => {
+          item.attach(updatedEntity);
+          return item.toJSON();
+        });
         const {body: relations} = await ModelService.upsertRelations(upsertRelations);
         updatedEntity.relations = relations.map((item) => {
           const relation = ModelRelation.create(item);

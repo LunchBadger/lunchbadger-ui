@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import slug from 'slug';
 import _ from 'lodash';
+import uuid from 'uuid';
 import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
@@ -173,17 +174,15 @@ class ModelDetails extends PureComponent {
   //   // updateModel(this.props.entity.id, updateData, propsToRemove);
   // }
 
-  onAddItem(collection, item) {
+  onAddItem = (collection, item) => {
     this.setState({
       [collection]: [...this.state[collection], item],
     });
-    this.setState({changed: true}, () => {
-      this.props.parent.checkPristine();
-    });
+    this.setState({changed: true}, () => this.props.parent.checkPristine());
   }
 
-  onRemoveItem(collection, item) {
-    const items = this.state[collection];
+  onRemoveItem = (collection, item) => {
+    const items = [...this.state[collection]];
     _.remove(items, function (i) {
       if (item.id) {
         return i.id === item.id;
@@ -219,25 +218,15 @@ class ModelDetails extends PureComponent {
     });
   }
 
-  onRemoveProperty = (property) => {
-    this.onRemoveItem('properties', property);
-  }
+  onRemoveProperty = (property) => this.onRemoveItem('properties', property);
 
-  onAddRelation() {
-    this.onAddItem('relations', ModelRelation.create({}));
-  }
+  onAddRelation = () => this.onAddItem('relations', ModelRelation.create({}));
 
-  onRemoveRelation = (relation) => {
-    this.onRemoveItem('relations', relation);
-  }
+  onRemoveRelation = relation => this.onRemoveItem('relations', relation);
 
-  onAddUserField() {
-    this.onAddItem('userFields', {name: '', type: '', value: ''});
-  }
+  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: '', value: ''});
 
-  onRemoveUserField(field) {
-    this.onRemoveItem('userFields', field);
-  }
+  onRemoveUserField = field => this.onRemoveItem('userFields', field);
 
   onPropertyTypeChange = (id, type) => {
     const properties = [...this.state.properties];
@@ -263,10 +252,10 @@ class ModelDetails extends PureComponent {
       return (
         <ModelUserFieldsDetails
           index={index}
-          addAction={() => this.onAddUserField()}
+          addAction={this.onAddUserField}
           fieldsCount={this.state.userFields.length}
-          key={`user-field-${index}`}
-          onRemove={(userField) => this.onRemoveUserField(userField)}
+          key={field.id}
+          onRemove={this.onRemoveUserField}
           field={field}
         />
       );
@@ -318,7 +307,7 @@ class ModelDetails extends PureComponent {
               <th>Type</th>
               <th>
                 Foreign Key
-                <a onClick={() => this.onAddRelation()} className="details-panel__add">
+                <a onClick={this.onAddRelation} className="details-panel__add">
                   <i className="fa fa-plus"/>
                   Add relation
                 </a>
@@ -348,7 +337,7 @@ class ModelDetails extends PureComponent {
               <th>Data type</th>
               <th>
                 Value
-                <a onClick={() => this.onAddUserField()} className="details-panel__add">
+                <a onClick={this.onAddUserField} className="details-panel__add">
                   <i className="fa fa-plus"/>
                   Add field
                 </a>

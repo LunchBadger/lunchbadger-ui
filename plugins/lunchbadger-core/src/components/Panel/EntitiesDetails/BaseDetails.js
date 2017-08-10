@@ -45,10 +45,10 @@ export default (ComposedComponent) => {
       // const validations = dispatch(entity.validate(model)); //TODO
       // this.setState({validations});
       // if (!validations.isValid) return;
+      this.setState({isPristine: true});
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
-      this.setState({isPristine: true});
     }
 
     checkPristine = (_model, changed) => {

@@ -21,15 +21,13 @@ export default class ModelUserFieldsDetails extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
+      type: props.field.type,
       inputType: props.field.type === 'object' ? 'textarea' : 'input'
     };
   }
 
-  onRemove(field) {
-    this.props.onRemove(field);
-  }
+  onRemove = field => () => this.props.onRemove(field);
 
   _checkTabButton = (event) => {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.fieldsCount === this.props.index + 1) {
@@ -37,30 +35,21 @@ export default class ModelUserFieldsDetails extends Component {
     }
   }
 
-  _changeFieldType = (value) => {
-    if (value === 'object') {
-      this.setState({inputType: 'textarea'});
-    } else {
-      this.setState({inputType: 'input'});
-    }
-  }
+  _changeFieldType = type => this.setState({type, inputType: type === 'object' ? 'textarea' : 'input'});
 
   _prepareValue(value) {
     const {field} = this.props;
     const {type} = field;
-
     if (type === 'object') {
       return JSON.stringify(value);
     } else if (type === 'number') {
       return String(value);
     }
-
     return value;
   }
 
   renderInput() {
     const {field, index} = this.props;
-
     if (this.state.inputType === 'textarea') {
       return (
         <Textarea className="details-panel__textarea"
@@ -71,11 +60,13 @@ export default class ModelUserFieldsDetails extends Component {
         />
       );
     } else {
+      const validations = this.state.type === 'number' ? 'isNumeric' : undefined;
       return (
         <Input className="details-panel__input"
                value={this._prepareValue(field.value)}
                handleKeyDown={this._checkTabButton}
                name={`userFields[${index}][value]`}
+               validations={validations}
         />
       );
     }
@@ -83,7 +74,6 @@ export default class ModelUserFieldsDetails extends Component {
 
   render() {
     const {field, index} = this.props;
-
     return (
       <tr>
         <td>
@@ -105,7 +95,7 @@ export default class ModelUserFieldsDetails extends Component {
           {this.renderInput()}
         </td>
         <td className="details-panel__table__cell details-panel__table__cell--empty">
-          <i className="fa fa-remove details-panel__table__action" onClick={() => this.onRemove(field)}/>
+          <i className="fa fa-remove details-panel__table__action" onClick={this.onRemove(field)}/>
         </td>
       </tr>
     );

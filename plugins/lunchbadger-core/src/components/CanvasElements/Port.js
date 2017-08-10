@@ -107,7 +107,6 @@ class Port extends PureComponent {
     const portDOM = findDOMNode(this.refs.port);
     const connectionsOut = this.paper.select({source: portDOM});
     const connectionsIn = this.paper.select({target: portDOM});
-    console.log({connectionsOut, connectionsIn});
     connectionsIn.each((connection) => {
       this.paper.detach(connection, {
         fireEvent: false,

@@ -18,11 +18,9 @@ class Model extends Component {
     super(props);
     const stateFromStores = (newProps) => {
       const data = {
-        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
+        properties: [],
       };
-      if (!newProps.entity.privateModelProperties) {
-         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
-      }
+      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
     this.state = {

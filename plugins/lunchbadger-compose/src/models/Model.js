@@ -57,9 +57,7 @@ export default class Model extends BaseModel {
 
   constructor(id, name) {
     super(id);
-
     this.name = name;
-
     this.ports = [
       Port.create({
         id: this.id,
@@ -181,9 +179,7 @@ export default class Model extends BaseModel {
 
   get userFields() {
     const fields = {};
-
     this._getUserFieldsKeys().forEach(key => fields[key] = this[key]);
-
     return fields;
   }
 
@@ -250,7 +246,6 @@ export default class Model extends BaseModel {
       properties: [],
     };
     addPropertiesToData(model, this, data.properties, properties);
-    console.log(9, model, properties, data.properties);
     return _.merge({}, model, data);
   }
 

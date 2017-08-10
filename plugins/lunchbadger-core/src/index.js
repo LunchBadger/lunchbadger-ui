@@ -82,6 +82,7 @@ import * as coreActions from './reduxActions';
 import messages from './utils/messages';
 import checkFields from './utils/checkFields';
 import * as storeUtils from './utils/storeUtils';
+import diff from './diff';
 
 import './utils/formValidators';
 
@@ -190,6 +191,7 @@ let LunchBadgerCore = {
     messages,
     checkFields,
     storeUtils,
+    diff,
   },
 };
 

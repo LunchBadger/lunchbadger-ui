@@ -1,11 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import slug from 'slug';
+import _ from 'lodash';
 import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import ModelNestedProperties from './ModelNestedProperties';
 import BackendStore from '../../../stores/Backend';
-import _ from 'lodash';
 import addPropertiesToData from '../../addPropertiesToData';
 import addNestedProperties from '../../addNestedProperties';
 
@@ -19,40 +22,57 @@ const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const PrivateStore = LunchBadgerManage.stores.Private;
 const ConnectionStore = LunchBadgerCore.stores.Connection;
-const {coreActions} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, diff} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
 
-class ModelDetails extends Component {
+class ModelDetails extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     const stateFromStores = (newProps) => {
       const data = {
-        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
-        relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
+        properties: [],
+        relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
-        changed: false
       };
-      if (!newProps.entity.privateModelProperties) {
-         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
-      }
+      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
-    this.state = Object.assign({}, stateFromStores(props));
+    this.state = {
+      ...this.initState(props),
+      ...stateFromStores(props),
+    };
     this.onStoreUpdate = (props = this.props) => {
-      this.setState(stateFromStores(props));
+      this.setState({...stateFromStores(props)});
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {id, properties} = this.props.entity;
+    if (nextProps.entity.id !== id || nextProps.entity.properties !== properties) {
+      this.onStoreUpdate(nextProps);
     }
+  }
+
+  initState = (props = this.props) => {
+    const {contextPath, name} = props.entity;
+    return {
+      changed: false,
+      contextPath,
+      contextPathDirty: slug(name, {lower: true}) !== contextPath,
+    };
   }
 
   _getBackendConnection() {
@@ -70,13 +90,44 @@ class ModelDetails extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.entity.id !== this.props.entity.id) {
-      this.onStoreUpdate(nextProps);
-    }
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   diff(this.props, nextProps, this.state, nextState);
+  //   return true;
+  // }
 
-  processModel = model => this.props.entity.processModel(model, this.state.properties);
+  processModel = model => {
+    const {entity} = this.props;
+    if (model.hasOwnProperty('dataSource')) {
+      const dsId = model.dataSource === 'none' ? null : model.dataSource;
+      const {store: {getState}, paper: paperRef} = this.context;
+      const paper = paperRef.getInstance();
+      const state = getState();
+      const currDsConn = storeUtils.filterConnections(state, {toId: entity.id});
+      const currDsId = currDsConn.length > 0 ? currDsConn[0].fromId : null;
+      if (dsId !== currDsId) {
+        if (!dsId) {
+          paper.detach(currDsConn[0].info.connection);
+        } else if (currDsId) {
+          paper.setSource(
+            currDsConn[0].info.connection,
+            document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+          );
+        } else {
+          paper.connect({
+            source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+            target: document.getElementById(`port_in_${entity.id}`).querySelector('.port__anchor'),
+            parameters: {
+              forceDropped: true,
+            }
+          }, {
+            fireEvent: true,
+          });
+        }
+      }
+      delete model.dataSource;
+    }
+    return entity.processModel(model, this.state.properties);
+  }
 
   discardChanges() {
     // revert properties
@@ -237,8 +288,10 @@ class ModelDetails extends Component {
   }
 
   render() {
-    const {entity} = this.props;
-    const dataSources = BackendStore.getData().map((item, idx) => ({label: item.name, value: item.id}));
+    const {entity, dataSources, currentDsId} = this.props;
+    const dataSourceOptions = Object.keys(dataSources)
+      .map(key => dataSources[key])
+      .map(({name: label, id: value}) => ({label, value}));
     return (
       <div>
         <CollapsableDetails title="Details">
@@ -261,8 +314,8 @@ class ModelDetails extends Component {
               <Select
                 className="details-panel__input"
                 name="dataSource"
-                value={this._getCurrentBackend()}
-                options={[{label: '[None]', value: 'none'}, ...dataSources]}
+                value={currentDsId}
+                options={[{label: '[None]', value: 'none'}, ...dataSourceOptions]}
               />
             </div>
             <CheckboxField label="Read only" propertyName="readOnly" entity={entity} />
@@ -327,4 +380,14 @@ class ModelDetails extends Component {
   }
 }
 
-export default BaseDetails(ModelDetails);
+const selector = createSelector(
+  state => state.entities.dataSources,
+  (_, props) => props.entity.id,
+  state => state.connections,
+  (dataSources, id, connections) => ({
+    dataSources,
+    currentDsId: (connections.find(item => item.toId === id) || {fromId: 'none'}).fromId,
+  }),
+);
+
+export default connect(selector)(BaseDetails(ModelDetails));

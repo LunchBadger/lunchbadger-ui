@@ -168,7 +168,7 @@ class Canvas extends Component {
         this._disconnect(connection);
         return;
       }
-      let dropped = this.dropped;
+      let dropped = info.connection.getParameter('forceDropped') || this.dropped;
       this.dropped = false;
       // This is set when a connection is being moved (connect event is also
       // triggered). We want to handle this in 'connectionMoved' handler. Note

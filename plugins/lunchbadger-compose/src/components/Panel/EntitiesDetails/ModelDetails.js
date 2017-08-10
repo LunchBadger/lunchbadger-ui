@@ -55,7 +55,10 @@ class ModelDetails extends PureComponent {
       ...stateFromStores(props),
     };
     this.onStoreUpdate = (props = this.props) => {
-      this.setState({...stateFromStores(props)});
+      this.setState({
+        ...this.initState(props),
+        ...stateFromStores(props),
+      });
     };
   }
 
@@ -73,21 +76,6 @@ class ModelDetails extends PureComponent {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
     };
-  }
-
-  _getBackendConnection() {
-    const entity = this.props.entity;
-    const connections = ConnectionStore.getConnectionsForTarget(entity.id);
-    return connections.length ? connections[0] : null;
-  }
-
-  _getCurrentBackend() {
-    const connection = this._getBackendConnection();
-    if (connection) {
-      return BackendStore.findEntity(connection.fromId).id;
-    } else {
-      return 'none';
-    }
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -318,7 +306,7 @@ class ModelDetails extends PureComponent {
                 options={[{label: '[None]', value: 'none'}, ...dataSourceOptions]}
               />
             </div>
-            <CheckboxField label="Read only" propertyName="readOnly" entity={entity} />
+            <CheckboxField label="Read only" propertyName="readonly" entity={entity} />
             <CheckboxField label="Strict schema" propertyName="strict" entity={entity} />
             <CheckboxField label="Exposed as REST" propertyName="public" entity={entity} />
           </div>

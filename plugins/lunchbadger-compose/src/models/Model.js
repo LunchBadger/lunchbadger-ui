@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
+import ModelRelation from './ModelRelation';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -160,6 +161,7 @@ export default class Model extends BaseModel {
    */
   addRelation(relation) {
     this._relations.push(relation);
+    relation.attach(this);
   }
 
   /**
@@ -246,6 +248,14 @@ export default class Model extends BaseModel {
       properties: [],
     };
     addPropertiesToData(model, this, data.properties, properties);
+    if (model.relations) {
+      data.relations = [];
+      model.relations.forEach((item) => {
+        const relation = ModelRelation.create(item);
+        relation.attach(this);
+        data.relations.push(relation);
+      });
+    }
     return _.merge({}, model, data);
   }
 

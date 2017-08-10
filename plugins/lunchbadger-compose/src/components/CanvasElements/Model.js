@@ -197,7 +197,7 @@ class Model extends Component {
   }
 
   render() {
-    console.log('RENDER Model', this.props.entity.name, this.state.properties);
+    // console.log('RENDER Model', this.props.entity.name, this.state.properties);
     return (
       <div>
         {this.renderPorts()}

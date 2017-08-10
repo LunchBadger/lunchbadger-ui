@@ -174,10 +174,8 @@ class ModelDetails extends PureComponent {
   // }
 
   onAddItem(collection, item) {
-    const items = this.state[collection];
-    items.push(item);
     this.setState({
-      [collection]: items
+      [collection]: [...this.state[collection], item],
     });
     this.setState({changed: true}, () => {
       this.props.parent.checkPristine();
@@ -193,7 +191,7 @@ class ModelDetails extends PureComponent {
       return i.name === item.name;
     });
     this.setState({
-      [collection]: items
+      [collection]: items,
     });
     if (!_.isEqual(items, this.props.entity[collection])) {
       this.setState({changed: true});

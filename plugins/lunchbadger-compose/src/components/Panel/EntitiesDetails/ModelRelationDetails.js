@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 const {Input, Select} = LunchBadgerCore.components;
-const Private = LunchBadgerManage.stores.Private;
-const Model = LunchBadgerManage.models.Model;
 
 const relationTypeOptions = [
   {label: 'hasMany', value: 'hasMany'},
@@ -11,25 +11,18 @@ const relationTypeOptions = [
   {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
 ];
 
-export default class ModelRelationDetails extends Component {
+class ModelRelationDetails extends Component {
   static propTypes = {
     relation: PropTypes.object.isRequired,
     onRemove: PropTypes.func.isRequired
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   onRemove(relation) {
     this.props.onRemove(relation);
   }
 
   render() {
-    const {relation, index} = this.props;
-    let models = Private.getData()
-      .filter(entity => entity instanceof Model)
-    const modelOptions = models.map(model => ({label: model.name, value: model.name}));
+    const {relation, index, modelOptions} = this.props;
     return (
       <tr>
         <td>
@@ -39,7 +32,7 @@ export default class ModelRelationDetails extends Component {
         </td>
         <td>
           <Select className="details-panel__input details-panel__select"
-                value={relation.model || models[0].name}
+                value={relation.model || modelOptions[0].value}
                 name={`relations[${index}][model]`}
                 options={modelOptions}
           />
@@ -63,3 +56,15 @@ export default class ModelRelationDetails extends Component {
     );
   }
 }
+
+const selector = createSelector(
+  state => state.entities.models,
+  state => state.entities.modelsBundled,
+  (models, modelsBundled) => ({
+    modelOptions: Object.keys(models).map(key => models[key].name)
+      .concat(Object.keys(modelsBundled).map(key => modelsBundled[key].name))
+      .map(label => ({label, value: label})),
+  }),
+);
+
+export default connect(selector)(ModelRelationDetails);

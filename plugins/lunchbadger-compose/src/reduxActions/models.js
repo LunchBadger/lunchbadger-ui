@@ -2,6 +2,7 @@ import {actions} from './actions';
 import {ModelService} from '../services';
 import Model from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
+import ModelRelation from '../models/ModelRelation';
 import DataSource from '../models/DataSource';
 
 const {storeUtils} = LunchBadgerCore.utils;
@@ -46,6 +47,18 @@ export const update = (entity, model) => async (dispatch, getState) => {
         property.attach(updatedEntity);
         return property;
       });
+    }
+    if (model.relations) {
+      await ModelService.deleteRelations(updatedEntity.workspaceId);
+      if (model.relations.length > 0) {
+        const upsertRelations = model.relations.map(item => item.toJSON());
+        const {body: relations} = await ModelService.upsertRelations(upsertRelations);
+        updatedEntity.relations = relations.map((item) => {
+          const relation = ModelRelation.create(item);
+          relation.attach(updatedEntity);
+          return relation;
+        });
+      }
     }
     dispatch(actions.updateModel(updatedEntity));
     return updatedEntity;

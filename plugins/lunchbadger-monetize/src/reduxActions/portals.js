@@ -1,6 +1,8 @@
 import {actions} from './actions';
 import Portal from '../models/Portal';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
+
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
@@ -17,6 +19,13 @@ export const update = (entity, model) => (dispatch) => {
 };
 
 export const remove = entity => (dispatch) => {
+  const connections = [];
+  entity.apis.forEach((api) => {
+    api.publicEndpoints.forEach(({id: toId}) => {
+      connections.push({toId});
+    })
+  })
+  dispatch(coreActions.removeConnections(connections));
   dispatch(actions.removePortal(entity));
 };
 

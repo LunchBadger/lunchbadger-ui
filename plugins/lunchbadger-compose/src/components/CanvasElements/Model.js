@@ -28,7 +28,10 @@ class Model extends Component {
       ...stateFromStores(props),
     };
     this.onStoreUpdate = (props = this.props) => {
-      this.setState({...stateFromStores(props)});
+      this.setState({
+        ...this.initState(props),
+        ...stateFromStores(props),
+      });
     };
   }
 
@@ -58,8 +61,7 @@ class Model extends Component {
   }
 
   discardChanges() {
-    // revert properties
-    // this.onStoreUpdate();
+    this.onStoreUpdate();
     // this.setState(this.initState());
   }
 
@@ -195,6 +197,7 @@ class Model extends Component {
   }
 
   render() {
+    console.log('RENDER Model', this.props.entity.name, this.state.properties);
     return (
       <div>
         {this.renderPorts()}

@@ -358,7 +358,12 @@ export default (ComposedComponent) => {
         if (!this.state.isValid) {
           this.setState({validations: {isValid: true, data: {}}});
         }
+        const element = this.element.decoratedComponentInstance || this.element;
+        if (typeof element.discardChanges === 'function') {
+          element.discardChanges();
+        }
         if (this.entityRef.getFormRef()) {
+          console.log(222, getFlatModel(entity.toJSON()));
           this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
         }
       }

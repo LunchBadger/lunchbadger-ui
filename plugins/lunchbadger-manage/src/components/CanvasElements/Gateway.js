@@ -52,6 +52,14 @@ class Gateway extends Component {
   // }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.entity !== this.props.entity) {
+      this.setState({
+        dnsPrefix: nextProps.entity.dnsPrefix,
+        pipelinesOpened: {},
+        showRemovingModal: false,
+        pipelineToRemove: null,
+      });
+    }
     // if (nextProps.ready && !this.props.ready) {
     //   this._onDeploy();
     // }

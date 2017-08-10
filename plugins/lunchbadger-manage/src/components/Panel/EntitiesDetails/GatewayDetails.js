@@ -23,21 +23,31 @@ class GatewayDetails extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      dnsPrefix: props.entity.dnsPrefix,
-      pipelines: props.entity.pipelines.slice(),
-      changed: false,
-    };
+    // this.state = {
+    //   dnsPrefix: props.entity.dnsPrefix,
+    //   pipelines: props.entity.pipelines.slice(),
+    //   changed: false,
+    // };
+    this.state = {...this.stateFromStores(props)};
+
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
-      this.setState({
-        dnsPrefix: nextProps.entity.dnsPrefix,
-        pipelines: nextProps.entity.pipelines.slice(),
-        changed: false,
-      });
+      this.onStoreUpdate(nextProps);
     }
+  }
+
+  stateFromStores = props => ({
+    changed: false,
+    dnsPrefix: props.entity.dnsPrefix,
+    pipelines: props.entity.pipelines.slice(),
+  });
+
+  onStoreUpdate = (props = this.props) => this.setState({...this.stateFromStores(props)});
+
+  discardChanges() {
+    this.onStoreUpdate();
   }
 
   // update(model) {
@@ -55,16 +65,16 @@ class GatewayDetails extends Component {
   //   redeployGateway(this.props.entity, _.merge(model, data));
   // }
 
-  update = async (model) => {
-    const entity = _.merge({}, this.props.entity);
-    const {store: {dispatch, getState}} = this.context;
-    const plugins = getState().plugins;
-    const onUpdate = plugins.onUpdate.Gateway;
-    entity.pipelines = [];
-    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
-    const {coreActions} = LunchBadgerCore.utils;
-    dispatch(coreActions.setCurrentElement(updatedEntity));
-  }
+  // update = async (model) => {
+  //   const entity = _.merge({}, this.props.entity);
+  //   const {store: {dispatch, getState}} = this.context;
+  //   const plugins = getState().plugins;
+  //   const onUpdate = plugins.onUpdate.Gateway;
+  //   entity.pipelines = [];
+  //   const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+  //   const {coreActions} = LunchBadgerCore.utils;
+  //   dispatch(coreActions.setCurrentElement(updatedEntity));
+  // }
 
   _setPipelineState(pipelines) {
     this.setState({

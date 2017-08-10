@@ -363,7 +363,6 @@ export default (ComposedComponent) => {
           element.discardChanges();
         }
         if (this.entityRef.getFormRef()) {
-          console.log(222, getFlatModel(entity.toJSON()));
           this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
         }
       }

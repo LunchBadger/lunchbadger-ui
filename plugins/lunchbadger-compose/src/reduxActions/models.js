@@ -85,6 +85,7 @@ export const remove = entity => async (dispatch) => {
   dispatch(actions.removeModel(entity));
   try {
     await ModelService.delete(entity.workspaceId);
+    await ModelService.deleteModelConfig(entity.workspaceId);
   } catch (err) {
     console.log('ERROR deleteModelFailure', err);
     dispatch(actions.deleteModelFailure(err));

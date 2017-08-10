@@ -97,14 +97,14 @@ class Gateway extends Component {
     if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
-  componentWillUnmount() {
-    const {store: {dispatch}} = this.context;
-    const {pipelines} = this.props.entity;
-    const connections = pipelines.map(({id}) => ({fromId: id, toId: id}));
-    if (connections.length > 0) {
-      dispatch(coreActions.removeConnections(connections));
-    }
-  }
+  // componentWillUnmount() {
+  //   const {store: {dispatch}} = this.context;
+  //   const {pipelines} = this.props.entity;
+  //   const connections = pipelines.map(({id}) => ({fromId: id, toId: id}));
+  //   if (connections.length > 0) {
+  //     dispatch(coreActions.removeConnections(connections));
+  //   }
+  // }
 
   handleTogglePipelineOpen = pipelineId => opened => {
     const pipelinesOpened = {...this.state.pipelinesOpened};

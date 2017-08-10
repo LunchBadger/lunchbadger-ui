@@ -3,6 +3,8 @@ import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import Policy from '../models/Policy';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
+
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[2].entities;
@@ -26,6 +28,7 @@ export const update = (entity, model) => (dispatch) => {
 };
 
 export const remove = entity => (dispatch) => {
+  dispatch(coreActions.removeConnections(entity.pipelines.map(({id}) => ({fromId: id, toId: id}))));
   dispatch(actions.removeGateway(entity));
 };
 
@@ -52,6 +55,8 @@ export const addPipeline = gatewayId => (dispatch, getState) => {
 
 export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
+  const {id} = pipeline;
+  dispatch(coreActions.removeConnections([{fromId: id, toId: id}]));
   entity.removePipeline(pipeline);
   dispatch(actions.updateGateway(entity));
 }

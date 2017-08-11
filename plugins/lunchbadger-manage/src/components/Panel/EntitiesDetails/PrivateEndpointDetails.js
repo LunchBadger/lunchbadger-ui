@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
@@ -10,20 +9,6 @@ class PrivateEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
-
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
-  update = async (model) => {
-    const {entity} = this.props;
-    const {store: {dispatch, getState}} = this.context;
-    const plugins = getState().plugins;
-    const onUpdate = plugins.onUpdate.PrivateEndpoint;
-    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
-    const {coreActions} = LunchBadgerCore.utils;
-    dispatch(coreActions.setCurrentElement(updatedEntity));
-  }
 
   render() {
     const {entity} = this.props;

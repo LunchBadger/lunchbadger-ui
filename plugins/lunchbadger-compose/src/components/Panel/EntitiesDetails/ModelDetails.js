@@ -5,12 +5,11 @@ import {createSelector} from 'reselect';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import updateModel from '../../../actions/CanvasElements/Model/update';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import ModelNestedProperties from './ModelNestedProperties';
-import BackendStore from '../../../stores/Backend';
-import addPropertiesToData from '../../addPropertiesToData';
+// import BackendStore from '../../../stores/Backend';
+// import addPropertiesToData from '../../addPropertiesToData';
 import addNestedProperties from '../../addNestedProperties';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -21,9 +20,9 @@ const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
-const PrivateStore = LunchBadgerManage.stores.Private;
-const ConnectionStore = LunchBadgerCore.stores.Connection;
-const {storeUtils, coreActions, diff} = LunchBadgerCore.utils;
+// const PrivateStore = LunchBadgerManage.stores.Private;
+// const ConnectionStore = LunchBadgerCore.stores.Connection;
+const {storeUtils} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},

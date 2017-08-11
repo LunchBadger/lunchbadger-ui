@@ -174,7 +174,6 @@ class GatewayDetails extends Component {
   render() {
     const entity = this.props.entity;
     const url = `http://${this.state.dnsPrefix}.customer.lunchbadger.com`;
-
     return (
       <div>
         <CollapsableDetails title="Details" class="details-panel__columns">

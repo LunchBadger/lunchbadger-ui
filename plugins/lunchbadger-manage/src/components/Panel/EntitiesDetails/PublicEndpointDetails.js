@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import selector from '../../../utils/selectorPublicEndpoint';
-import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
@@ -13,10 +12,6 @@ class PublicEndpointDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -25,19 +20,9 @@ class PublicEndpointDetails extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.entity.path !== nextProps.entity.path) {
+    if (this.props.entity !== nextProps.entity) {
       this.setState({path: nextProps.entity.path});
     }
-  }
-
-  update = async (model) => {
-    const {entity} = this.props;
-    const {store: {dispatch, getState}} = this.context;
-    const plugins = getState().plugins;
-    const onUpdate = plugins.onUpdate.PublicEndpoint;
-    const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
-    const {coreActions} = LunchBadgerCore.utils;
-    dispatch(coreActions.setCurrentElement(updatedEntity));
   }
 
   onPathChange = (event) => {

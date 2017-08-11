@@ -27,8 +27,10 @@ export const addAndConnect = (privateEndpointId, fromId, outPort) => (dispatch, 
     loaded: false,
   });
   dispatch(actions.updatePublicEndpoint(entity));
-  dispatch(coreActions.setStates({key: 'currentElement', value: entity}));
-  dispatch(coreActions.setStates({key: 'currentEditElement', value: entity}));
+  dispatch(coreActions.setStates([
+    {key: 'currentElement', value: entity},
+    {key: 'currentEditElement', value: entity},
+  ]));
   dispatch(coreActions.addConnection(Connection.create({
     fromId,
     toId: entity.id,

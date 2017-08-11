@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {togglePanel} from '../../reduxActions';
 
@@ -9,22 +8,24 @@ class CloseButton extends Component {
     showConfirmation: PropTypes.bool,
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    togglePanel: PropTypes.func.isRequired,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isShowingModal: false
+      isShowingModal: false,
     };
   }
 
   handleClick = () => {
-    const {showConfirmation, togglePanel} = this.props;
-    if (showConfirmation) {
+    if (this.props.showConfirmation) {
       this.setState({isShowingModal: true});
     } else {
-      togglePanel(null);
+      this.clearPanel();
     }
   };
 
@@ -33,16 +34,16 @@ class CloseButton extends Component {
   };
 
   handleSave = () => {
-    const {onSave, togglePanel} = this.props;
-    onSave();
-    togglePanel(null);
+    this.props.onSave();
+    this.clearPanel();
   }
 
   handleCancel = () => {
-    const {onCancel, togglePanel} = this.props;
-    onCancel();
-    togglePanel(null);
+    this.props.onCancel();
+    this.clearPanel();
   }
+
+  clearPanel = () => this.context.store.dispatch(togglePanel(null));
 
   render() {
     return (
@@ -62,8 +63,4 @@ class CloseButton extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  togglePanel: panel => dispatch(togglePanel(panel)),
-});
-
-export default connect(null, mapDispatchToProps)(CloseButton);
+export default CloseButton;

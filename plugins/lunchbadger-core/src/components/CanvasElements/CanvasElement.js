@@ -166,7 +166,6 @@ export default (ComposedComponent) => {
       //   });
       // } else if (this.props.entity.metadata.ready) {
       //   this.triggerElementAutofocus();
-      //   this.props.toggleEdit(this.props.entity);
       // }
       // // this.checkHighlightAndEditableState(this.props);
       // this.props.entity.metadata.elementDOM = this.elementDOM;
@@ -275,7 +274,6 @@ export default (ComposedComponent) => {
       //     }
       //   }
       //   this.setState({editable: false, validations: {isValid: true, data:{}}});
-      //   this.props.toggleEdit(null);
       // }
     }
 
@@ -380,7 +378,6 @@ export default (ComposedComponent) => {
       // if (typeof element.discardChanges === 'function') {
       //   element.discardChanges();
       // }
-      // this.props.toggleEdit(null);
       // this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
       //   this.toggleHighlighted();
       // });

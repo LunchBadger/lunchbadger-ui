@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import Pipeline from './Subelements/Pipeline';
 // import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import {addPipeline, removePipeline} from '../../reduxActions/gateways';
@@ -10,13 +9,10 @@ import classNames from 'classnames';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const {actions: coreActions} = LunchBadgerCore.utils;
 
 class Gateway extends Component {
   static propTypes = {
@@ -43,13 +39,6 @@ class Gateway extends Component {
       this.state.pipelinesOpened[item.id] = false;
     });
   }
-
-  // componentDidMount() {
-  //   // const {ready, toggleEdit, entity} = this.props;
-  //   // if (!ready) {
-  //   //   toggleEdit(entity);
-  //   // }
-  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
@@ -242,8 +231,4 @@ class Gateway extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  toggleEdit: element => dispatch(toggleEdit(element)),
-})
-
-export default connect(null, mapDispatchToProps)(CanvasElement(Gateway));
+export default CanvasElement(Gateway);

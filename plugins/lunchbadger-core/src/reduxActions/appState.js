@@ -12,21 +12,6 @@ export const changePanelStatus = (status, saveAction, discardAction) => ({
   discardAction,
 });
 
-export const togglePanel = panel => ({
-  type: 'APP_STATE/TOGGLE_PANEL',
-  panel,
-});
-
-export const toggleEdit = element => ({
-  type: 'APP_STATE/TOGGLE_EDIT',
-  element,
-});
-
-export const toggleHighlight = element => ({
-  type: 'APP_STATE/TOGGLE_HIGHLIGHT',
-  element,
-});
-
 export const toggleSubelement = (parent, subelement) => ({
   type: 'APP_STATE/TOGGLE_SUBELEMENT',
   parent,

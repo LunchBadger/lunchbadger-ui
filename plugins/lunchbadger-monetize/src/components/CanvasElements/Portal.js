@@ -5,7 +5,6 @@ import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/sr
 import classNames from 'classnames';
 import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
@@ -28,7 +27,6 @@ class Portal extends Component {
 
   constructor(props) {
     super(props);
-    this.previousConnection = null;
     this.state = {
       hasConnection: null,
       isShowingModal: false,
@@ -40,13 +38,7 @@ class Portal extends Component {
   }
 
   componentDidMount() {
-    const {paper, ready, toggleEdit, entity} = this.props;
-    // paper.bind('connectionDetached', (info) => {
-    //   this.previousConnection = info;
-    // });
-    // if (!ready) {
-    //   toggleEdit(entity);
-    // }
+    const {entity} = this.props;
     const APIsOpened = {...this.state.APIsOpened};
     entity.apis.forEach((item) => {
       APIsOpened[item.id] = true;
@@ -54,7 +46,7 @@ class Portal extends Component {
     this.setState({APIsOpened});
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.ready && !this.props.ready) {
       this._onDeploy();
     }
@@ -255,11 +247,7 @@ class Portal extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements, // FIXME
 });
 
-const mapDispatchToProps = dispatch => ({
-  toggleEdit: element => dispatch(toggleEdit(element)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CanvasElement(Portal));
+export default connect(mapStateToProps)(CanvasElement(Portal));

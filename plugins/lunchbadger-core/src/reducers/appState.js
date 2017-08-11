@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import {actionTypes} from '../reduxActions/actions';
 
 const initialState = {
   currentlyOpenedPanel: null,
@@ -24,28 +23,6 @@ const appState = (state = initialState, action) => {
       });
       newState.revisions = action.revisions;
       return newState;
-    case 'APP_STATE/TOGGLE_EDIT':
-      newState.currentEditElement = action.element;
-      return newState;
-    case 'APP_STATE/TOGGLE_PANEL':
-      let panel = action.panel;
-      if (newState.currentlyOpenedPanel === panel) {
-        panel = null;
-      }
-      if (panel !== null) {
-        newState.currentEditElement = null;
-      }
-      newState.currentlyOpenedPanel = panel;
-      return newState;
-    case 'APP_STATE/TOGGLE_HIGHLIGHT':
-      newState.currentElement = action.element;
-      if (action.element && currentlySelectedParent && currentlySelectedParent.id !== action.element.id) {
-        newState.currentlySelectedSubelements = [];
-      } else if (action.element === null) {
-        newState.currentlySelectedSubelements = [];
-        newState.currentlySelectedParent = null;
-      }
-      return newState;
     case 'APP_STATE/TOGGLE_SUBELEMENT':
       const {parent, subelement} = action;
       const {currentlySelectedSubelements} = newState;
@@ -69,10 +46,6 @@ const appState = (state = initialState, action) => {
       newState.panelEditingStatusSave = action.saveAction || null;
       newState.panelEditingStatusDiscard = action.discardAction || null;
       return newState;
-    // case actionTypes.removeEntity:
-    //   newState.currentElement = null;
-    //   newState.currentEditElement = null;
-    //   return newState;
     default:
       return state;
   }

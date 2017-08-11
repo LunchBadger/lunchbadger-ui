@@ -7,9 +7,7 @@ export const setCurrentElement = value => (dispatch, getState) => {
 };
 
 export const clearCurrentElement = () => (dispatch, getState) => {
-  const state = getState();
-  const {panelEditingStatus} = state.core.appState;
-  const {currentElement} = state.states;
+  const {currentElement, panelEditingStatus} = getState().states;
   if (panelEditingStatus || currentElement === null) return;
   dispatch(actions.setState({key: 'currentElement', value: null}));
 };
@@ -25,3 +23,10 @@ export const togglePanel = panel => (dispatch, getState) => {
   const value = getState().states.currentlyOpenedPanel === panel ? null : panel;
   dispatch(actions.setState({key: 'currentlyOpenedPanel', value}));
 };
+
+export const changePanelStatus = (status, saveAction, discardAction) => dispatch =>
+  dispatch(actions.setStates([
+    {key: 'panelEditingStatus', value: !!status},
+    {key: 'panelEditingStatusSave', value: saveAction || null},
+    {key: 'panelEditingStatusDiscard', value: discardAction || null},
+  ]));

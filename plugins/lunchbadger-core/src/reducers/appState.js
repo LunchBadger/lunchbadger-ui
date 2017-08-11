@@ -41,11 +41,6 @@ const appState = (state = initialState, action) => {
         newState.currentlySelectedSubelements = [subelement];
       }
       return newState;
-    case 'APP_STATE/CHANGE_PANEL_STATUS':
-      newState.panelEditingStatus = !!action.status;
-      newState.panelEditingStatusSave = action.saveAction || null;
-      newState.panelEditingStatusDiscard = action.discardAction || null;
-      return newState;
     default:
       return state;
   }

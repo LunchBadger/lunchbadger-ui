@@ -1,6 +1,5 @@
 import {
   initialize,
-  changePanelStatus,
   toggleSubelement,
   removeEntity,
 } from './appState';
@@ -13,6 +12,7 @@ import {
   clearCurrentElement,
   setCurrentEditElement,
   togglePanel,
+  changePanelStatus,
 } from './states';
 import {
   addSystemDefcon1,

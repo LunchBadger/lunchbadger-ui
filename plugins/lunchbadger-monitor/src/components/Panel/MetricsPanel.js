@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import Metric from '../../stores/Metric';
@@ -92,11 +93,12 @@ class MetricsPanel extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedSubelements,
+  currentlySelectedSubelements => ({currentlySelectedSubelements}),
+);
 
-export default connect(mapStateToProps)(Panel(
+export default connect(selector)(Panel(
   DropTarget(
     ['canvasElement', 'metric', 'elementsGroup'],
     boxTarget,

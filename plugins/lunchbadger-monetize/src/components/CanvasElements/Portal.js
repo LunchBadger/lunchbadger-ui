@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import classNames from 'classnames';
 import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
@@ -246,8 +247,9 @@ class Portal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements, // FIXME
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedSubelements, // FIXME
+  currentlySelectedSubelements => ({currentlySelectedSubelements}),
+);
 
-export default connect(mapStateToProps)(CanvasElement(Portal));
+export default connect(selector)(CanvasElement(Portal));

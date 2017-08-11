@@ -122,7 +122,7 @@ class ForecastsPanel extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+  currentlySelectedSubelements: state.states.currentlySelectedSubelements,
 });
 
 export default connect(mapStateToProps)(Panel(

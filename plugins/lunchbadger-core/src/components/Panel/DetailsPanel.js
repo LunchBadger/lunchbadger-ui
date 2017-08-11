@@ -36,8 +36,12 @@ class DetailsPanel extends Component {
 
 const selector = createSelector(
   state => state.states.currentElement,
+  state => state.states.currentlySelectedSubelements,
   state => state.plugins.panelDetailsElements,
-  (currentElement, panels) => ({currentElement, panels}),
+  (currentElement, subelements, panels) => ({
+    currentElement: subelements && subelements.length === 1 ? subelements[0] : currentElement,
+    panels,
+  }),
 );
 
 export default connect(selector)(Panel(DetailsPanel));

@@ -18,9 +18,15 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
-  const isDifferent = entity.loaded && model.name !== state.entities.models[entity.id].name;
+  let type = 'models';
+  let updateAction = 'updateModel';
+  if (entity.wasBundled) {
+    type += 'Bundled';
+    updateAction += 'Bundled';
+  }
+  const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
   let updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
-  dispatch(actions.updateModel(updatedEntity));
+  dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
       await ModelService.delete(entity.workspaceId);
@@ -66,7 +72,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
         });
       }
     }
-    dispatch(actions.updateModel(updatedEntity));
+    dispatch(actions[updateAction](updatedEntity));
     return updatedEntity;
   } catch (err) {
     console.log('ERROR updateModelFailure', err);

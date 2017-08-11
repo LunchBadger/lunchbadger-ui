@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
-import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './PublicEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
+const {coreActions} = LunchBadgerCore.utils;
 
 const boxSource = {
   beginDrag(props) {
@@ -48,12 +49,16 @@ class PublicEndpoint extends Component {
     expanded: PropTypes.bool,
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port, idx) => {
+    return this.props.entity.ports.map((port) => {
       const key = `port-${port.portType}-${port.id}`;
       return (
         <Port
@@ -70,8 +75,8 @@ class PublicEndpoint extends Component {
   }
 
   handleClick = () => {
-    const {parent, entity, toggleSubelement} = this.props;
-    toggleSubelement(parent, entity);
+    const {parent, entity} = this.props;
+    this.context.store.dispatch(coreActions.toggleSubelement(parent, entity));
   }
 
   render() {
@@ -97,14 +102,13 @@ class PublicEndpoint extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-  isCurrentEditElement: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
+  (currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement) => ({
+    currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement
+  }),
+);
 
-const mapDispatchToProps = dispatch => ({
-  toggleSubelement: (parent, subelement) => dispatch(toggleSubelement(parent, subelement)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PublicEndpoint);
+export default connect(selector)(PublicEndpoint);

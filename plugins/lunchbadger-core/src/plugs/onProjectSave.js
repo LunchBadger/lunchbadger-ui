@@ -6,9 +6,10 @@ const statesToSave = [
 const setStatesToSave = (state) => {
   const states = [];
   statesToSave.forEach((key) => {
-    const value = state.states[key];
     if (!state.states.hasOwnProperty(key)) return;
-    if (typeof value.toJSON === 'function') {
+    const value = state.states[key];
+    if (typeof value === 'undefined' || value === null) return;
+    if (value && value.toJSON && typeof value.toJSON === 'function') {
       states.push({key, value: {...value.toJSON(), type: value.constructor.type}});
     } else {
       states.push({key, value});

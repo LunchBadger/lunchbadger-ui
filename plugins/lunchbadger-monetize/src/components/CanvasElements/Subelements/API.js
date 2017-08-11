@@ -115,9 +115,9 @@ class API extends Component {
 }
 
 const selector = createSelector(
-  state => state.core.appState.currentlySelectedParent,
-  state => state.core.appState.currentlySelectedSubelements,
-  state => !!state.core.appState.currentEditElement,
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
   (
     currentlySelectedParent,
     currentlySelectedSubelements,

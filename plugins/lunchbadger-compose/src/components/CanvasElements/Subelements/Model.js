@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -33,7 +33,7 @@ const boxSource = {
   isDragging: monitor.isDragging()
 }))
 
-class Model extends Component {
+class Model extends PureComponent {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -46,6 +46,10 @@ class Model extends Component {
     hideSourceOnDrag: PropTypes.bool.isRequired,
     handleEndDrag: PropTypes.func,
     expanded: PropTypes.bool,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -70,15 +74,16 @@ class Model extends Component {
   }
 
   handleClick = () => {
-    const {parent, entity, toggleSubelement} = this.props;
-    toggleSubelement(parent, entity);
+    const {store: {dispatch}} = this.context;
+    const {parent, entity} = this.props;
+    dispatch(toggleSubelement(parent, entity));
   }
 
   render() {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
     const elementClass = classNames({
       'model': true,
-      'model--selected': _.find(currentlySelectedSubelements, {data: {id: this.props.id}})
+      'model--selected': _.find(currentlySelectedSubelements, {id: this.props.id}),
     });
     return connectDragSource(
       <div className={elementClass} onClick={this.handleClick}>
@@ -97,8 +102,8 @@ class Model extends Component {
 }
 
 const selector = createSelector(
-  state => state.core.appState.currentlySelectedParent,
-  state => state.core.appState.currentlySelectedSubelements,
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
   state => !!state.states.currentEditElement,
   (
     currentlySelectedParent,
@@ -111,8 +116,4 @@ const selector = createSelector(
   }),
 );
 
-const mapDispatchToProps = dispatch => ({
-  toggleSubelement: (parent, subelement) => dispatch(toggleSubelement(parent, subelement)),
-});
-
-export default connect(selector, mapDispatchToProps)(Model);
+export default connect(selector)(Model);

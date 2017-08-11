@@ -1,9 +1,4 @@
 import {
-  initialize,
-  toggleSubelement,
-  removeEntity,
-} from './appState';
-import {
   loadFromServer,
   saveOrder,
 } from './project';
@@ -13,6 +8,7 @@ import {
   setCurrentEditElement,
   togglePanel,
   changePanelStatus,
+  toggleSubelement,
 } from './states';
 import {
   addSystemDefcon1,
@@ -23,11 +19,9 @@ import {
 } from './ports';
 
 export {
-  initialize,
   togglePanel,
   changePanelStatus,
   toggleSubelement,
-  removeEntity,
 
   loadFromServer,
   saveOrder,

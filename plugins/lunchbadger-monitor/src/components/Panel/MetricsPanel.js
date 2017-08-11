@@ -56,8 +56,10 @@ class MetricsPanel extends Component {
   }
 
   handleWebTrafficInterval = () => {
-    const {dispatch} = this.props;
-    dispatch(simulateWebTraffic());
+    const {dispatch, metrics} = this.props;
+    if (Object.keys(metrics).length > 0) {
+      dispatch(simulateWebTraffic());
+    }
   }
 
   render() {

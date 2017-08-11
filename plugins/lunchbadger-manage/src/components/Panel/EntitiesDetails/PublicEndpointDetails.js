@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import getPublicEndpointUrl from '../../../utils/getPublicEndpointUrl';
+import {connect} from 'react-redux';
+import selector from '../../../utils/selectorPublicEndpoint';
 import _ from 'lodash';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -44,8 +45,8 @@ class PublicEndpointDetails extends Component {
   }
 
   render() {
-    const {entity} = this.props;
-    const url = getPublicEndpointUrl(entity.id, this.state.path);
+    const {entity, gatewayPath} = this.props;
+    const url = `${gatewayPath}${this.state.path}`;
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
@@ -70,4 +71,4 @@ class PublicEndpointDetails extends Component {
   }
 }
 
-export default BaseDetails(PublicEndpointDetails);
+export default connect(selector)(BaseDetails(PublicEndpointDetails));

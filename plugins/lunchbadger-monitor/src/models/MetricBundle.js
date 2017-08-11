@@ -63,7 +63,6 @@ export default class MetricBundle extends BaseModel {
     };
     this.pairs.forEach((pair) => {
       const pairSummary = pair.summarizePairDetails();
-
       Object.keys(summary).forEach((key) => {
         summary[key] += pairSummary[key];
       });

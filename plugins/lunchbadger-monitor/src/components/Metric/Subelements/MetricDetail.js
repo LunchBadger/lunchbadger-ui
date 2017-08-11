@@ -11,6 +11,14 @@ export default class MetricDetail extends Component {
     detail: PropTypes.string.isRequired
   };
 
+  componentDidMount() {
+    this.interval = setInterval(() => this.forceUpdate(), 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   getDetailTitle(key) {
     switch(key) {
       case APPS:

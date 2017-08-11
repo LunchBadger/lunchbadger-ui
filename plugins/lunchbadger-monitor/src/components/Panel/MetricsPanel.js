@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
-import {create, createBundle, update} from '../../reduxActions/metrics';
+import {create, createBundle, update, simulateWebTraffic} from '../../reduxActions/metrics';
 import findMetricByEntityId from '../../utils/findMetricByEntityId';
 import MetricComponent from '../Metric/Metric';
 import './MetricsPanel.scss';
@@ -26,7 +26,6 @@ const boxTarget = {
     if (item.metric && metrics[item.metric.id]) {
       dispatch(update(item.metric, delta.x - 60, delta.y - 60));
     } else if (item.entity && !findMetricByEntityId(metrics, item.entity.id)) {
-      // oldCreate(item.entity, delta.x - 60, delta.y - 60);
       dispatch(create(item.entity, delta.x - 60, delta.y - 60));
     }
   },
@@ -46,6 +45,19 @@ class MetricsPanel extends Component {
   constructor(props) {
     super(props);
     props.parent.storageKey = METRICS_PANEL;
+  }
+
+  componentDidMount() {
+    this.webTrafficInterval = setInterval(this.handleWebTrafficInterval, 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.webTrafficInterval);
+  }
+
+  handleWebTrafficInterval = () => {
+    const {dispatch} = this.props;
+    dispatch(simulateWebTraffic());
   }
 
   render() {

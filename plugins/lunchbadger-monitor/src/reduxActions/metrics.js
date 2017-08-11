@@ -1,4 +1,4 @@
-import Metric from '../models/Metric';
+import Metric, {getRandomInt} from '../models/Metric';
 import MetricBundle from '../models/MetricBundle';
 import MetricPair, {OR} from '../models/MetricPair';
 import {actions} from './actions';
@@ -86,4 +86,26 @@ export const changeType = (metric, pairId, type) => dispatch => {
     pair.type = type;
     dispatch(actions.updateMetric(updatedMetric));
   }
+};
+
+export const simulateWebTraffic = () => (dispatch, getState) => {
+  const {metrics} = getState().entities;
+  const updates = [];
+  Object.keys(metrics).forEach(key => {
+    const updatedMetric = metrics[key].recreate();
+    updatedMetric.pairs.forEach((pair) => {
+      if (pair.metricOne) {
+        pair.metricOne.details.forEach((detail) => {
+          detail.value += getRandomInt(0, 20);
+        });
+      }
+      if (pair.metricTwo) {
+        pair.metricTwo.details.forEach((detail) => {
+          detail.value += getRandomInt(0, 20);
+        });
+      }
+    });
+    updates.push(updatedMetric);
+  });
+  dispatch(actions.updatedMetrics(updates));
 };

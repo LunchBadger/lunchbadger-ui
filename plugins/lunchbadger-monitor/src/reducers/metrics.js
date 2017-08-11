@@ -8,6 +8,11 @@ export default (state = {}, action) => {
     case actionTypes.updateMetric:
       newState[action.payload.id] = action.payload;
       return newState;
+    case actionTypes.updateMetrics:
+      action.payload.forEach((item) => {
+        newState[item.id] = item;
+      });
+      return newState;
     case actionTypes.removeMetric:
       delete newState[action.payload.id];
       return newState;

@@ -22,18 +22,19 @@ export default class MetricDetail extends BaseModel {
 
   constructor(id, title, dateFrom, dateTo, value) {
     super(id);
-
     this.title = title;
     this.dateFrom = dateFrom;
     this.dateTo = dateTo;
     this.value = value;
-
     this.simulateWebTraffic();
+  }
+
+  recreate() {
+    return MetricDetail.create(this);
   }
 
   simulateWebTraffic() {
     const timeout = getRandomInt(5, 10);
-
     this.stopSimulation();
     this.simulationInterval = setInterval(() => {
       this.value += getRandomInt(0, 20);

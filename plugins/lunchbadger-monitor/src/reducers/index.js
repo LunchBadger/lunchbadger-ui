@@ -1,3 +1,5 @@
+import metrics from './metrics';
+
 export default {
-  monitor: (state = {}, action) => state,
+  metrics,
 };

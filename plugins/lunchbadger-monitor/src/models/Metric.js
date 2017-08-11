@@ -25,7 +25,6 @@ export default class Metric extends BaseModel {
 
   constructor(id, entity) {
     super(id);
-
     const defaultDetails = [
       MetricDetail.create({
         title: REQUESTS,
@@ -55,6 +54,10 @@ export default class Metric extends BaseModel {
 
     this.entity = entity;
     this.details = defaultDetails;
+  }
+
+  recreate() {
+    return Metric.create(this);
   }
 
   toJSON() {

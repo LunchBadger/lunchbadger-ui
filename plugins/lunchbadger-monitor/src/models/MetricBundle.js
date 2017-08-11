@@ -14,8 +14,11 @@ export default class MetricBundle extends BaseModel {
 
   constructor(id, pairs = []) {
     super(id);
-
     this.pairs = pairs;
+  }
+
+  recreate() {
+    return MetricBundle.create(this);
   }
 
   toJSON() {
@@ -37,10 +40,7 @@ export default class MetricBundle extends BaseModel {
 
   get metrics() {
     return this._pairs.reduce((metrics, pair) => {
-      if (pair.metrics.length > 0) {
-        return metrics.concat(pair.metrics);
-      }
-
+      if (pair.metrics.length > 0) return metrics.concat(pair.metrics);
       return metrics;
     }, []);
   }
@@ -61,7 +61,6 @@ export default class MetricBundle extends BaseModel {
       [REQUESTS]: 0,
       [PORTALS]: 0
     };
-
     this.pairs.forEach((pair) => {
       const pairSummary = pair.summarizePairDetails();
 
@@ -69,11 +68,11 @@ export default class MetricBundle extends BaseModel {
         summary[key] += pairSummary[key];
       });
     });
-
     return summary;
   }
 
   findPair(id) {
-    return _.find(this.pairs, {id: id});
+    return _.find(this.pairs, {id});
   }
+
 }

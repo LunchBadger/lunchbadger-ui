@@ -10,10 +10,6 @@ export default class MetricHeader extends Component {
     selectedPair: PropTypes.string
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   _handleMetricSelection = (pair) => {
     if (typeof this.props.metricSelection === 'function') {
       this.props.metricSelection(pair);

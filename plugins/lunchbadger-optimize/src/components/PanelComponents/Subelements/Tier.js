@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import removeTier from '../../../actions/APIForecast/removeTier';
-import saveTier from '../../../actions/APIForecast/saveTier';
-import './Tier.scss';
 import numeral from 'numeral';
 import moment from 'moment';
 import classNames from 'classnames';
+import {saveTier, removeTier} from '../../../reduxActions/forecasts';
+import './Tier.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
@@ -15,21 +14,24 @@ export default class Tier extends Component {
     tier: PropTypes.object.isRequired,
     date: PropTypes.string.isRequired,
     detail: PropTypes.object.isRequired,
-    plan: PropTypes.object.isRequired
+    plan: PropTypes.object.isRequired,
+    forecastId: PropTypes.string.isRequired,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-
     const {detail} = props;
-
     this.state = {
       type: detail.type,
       conditionFrom: detail.conditionFrom,
       conditionTo: detail.conditionTo,
       value: detail.value,
       editing: false,
-      isShowingModal: false
+      isShowingModal: false,
     }
   }
 
@@ -43,7 +45,6 @@ export default class Tier extends Component {
     if (this.state.editing) {
       return this.editCondition();
     }
-
     return this.showCondition();
   }
 
@@ -58,10 +59,8 @@ export default class Tier extends Component {
     const typeChangedClass = classNames({
       'tier__detail-changed': this.props.detail.type !== this.props.tier.type
     });
-
     switch (type) {
       case 'percentage':
-
         return (
           <div>
             <span className={typeChangedClass}>$0 total transactions / month</span>
@@ -70,25 +69,18 @@ export default class Tier extends Component {
       case 'throttle':
       case 'fixed':
       default:
-
         return (
           <div>
-            {
-              conditionTo > 0 && (
-                <span>
-                  <span className={conditionFromChanged}>{conditionFrom}</span>
-                  {' - '}
-                  <span className={conditionToChanged}>{conditionTo}</span>
-                </span>
-              )
-            }
-
-            {
-              conditionTo < 1 && (
-                <span className={conditionFromChanged}>{conditionFrom}+</span>
-              )
-            }
-
+            {conditionTo > 0 && (
+              <span>
+                <span className={conditionFromChanged}>{conditionFrom}</span>
+                {' - '}
+                <span className={conditionToChanged}>{conditionTo}</span>
+              </span>
+            )}
+            {conditionTo < 1 && (
+              <span className={conditionFromChanged}>{conditionFrom}+</span>
+            )}
             {' '}
             <span className={typeChangedClass}>total calls / hour</span>
           </div>
@@ -98,35 +90,33 @@ export default class Tier extends Component {
 
   editCondition() {
     const {conditionFrom, conditionTo, type} = this.state;
-
     return (
       <div className="tier__condition__edit">
-        {
-          type === 'percentage' && (
-            '>$0 total transactions / month'
-          )
-        }
-
-        {
-          type !== 'percentage' && (
-            <div>
-              <input type="text"
-                     className="tier__condition__input"
-                     placeholder="Condition from"
-                     name="conditionFrom"
-                     value={conditionFrom}
-                     onChange={(event) => this.setState({conditionFrom: parseInt(event.target.value, 10)})}/>
-              <span className="tier__condition__between">-</span>
-              <input type="text"
-                     className="tier__condition__input"
-                     placeholder="Condition to"
-                     name="conditionTo"
-                     value={conditionTo}
-                     onChange={(event) => this.setState({conditionTo: parseInt(event.target.value, 10) || 0})}/>
-              {' '} total calls / hour
-            </div>
-          )
-        }
+        {type === 'percentage' && (
+          '>$0 total transactions / month'
+        )}
+        {type !== 'percentage' && (
+          <div>
+            <input
+              type="text"
+              className="tier__condition__input"
+              placeholder="Condition from"
+              name="conditionFrom"
+              value={conditionFrom}
+              onChange={(event) => this.setState({conditionFrom: parseInt(event.target.value, 10)})}
+            />
+            <span className="tier__condition__between">-</span>
+            <input
+              type="text"
+              className="tier__condition__input"
+              placeholder="Condition to"
+              name="conditionTo"
+              value={conditionTo}
+              onChange={(event) => this.setState({conditionTo: parseInt(event.target.value, 10) || 0})}
+            />
+            {' '} total calls / hour
+          </div>
+        )}
       </div>
     );
   }
@@ -135,7 +125,6 @@ export default class Tier extends Component {
     if (this.state.editing) {
       return this.editCharge();
     }
-
     return this.showCharge();
   }
 
@@ -147,10 +136,8 @@ export default class Tier extends Component {
     const typeChangedClass = classNames({
       'tier__detail-changed': this.props.detail.type !== this.props.tier.type
     });
-
     switch (type) {
       case 'percentage':
-
         return (
           <div>
             <span className={typeChangedClass}>Charge</span>{' '}
@@ -159,7 +146,6 @@ export default class Tier extends Component {
           </div>
         );
       case 'throttle':
-
         return (
           <div>
             <span className={typeChangedClass}>Throttle to</span>{' '}
@@ -169,7 +155,6 @@ export default class Tier extends Component {
         );
       case 'fixed':
       default:
-
         return (
           <div>
             <span className={typeChangedClass}>Charge</span>{' '}
@@ -182,55 +167,56 @@ export default class Tier extends Component {
 
   editCharge() {
     const {value, type} = this.state;
-
     return (
       <div className="tier__charge__edit">
-        <select name="type"
-                className="tier__charge__select"
-                value={type}
-                onChange={(event) => this.setState({type: event.target.value})}>
+        <select
+          name="type"
+          className="tier__charge__select"
+          value={type}
+          onChange={(event) => this.setState({type: event.target.value})}
+        >
           <option value="percentage">Charge %</option>
           <option value="throttle">Throttle</option>
           <option value="fixed">Charge $</option>
         </select>
-
         {' '}
-
-        {
-          type === 'throttle' && (
-            <div className="tier__charge__value">
-              to <input type="text"
-                        name="value"
-                        value={value}
-                        className="tier__charge__input"
-                        onChange={(event) => this.setState({value: event.target.value})}/> per hour
-            </div>
-          )
-        }
-
-        {
-          type === 'percentage' && (
-            <div className="tier__charge__value">
-              <input type="text"
-                     name="value"
-                     value={value}
-                     className="tier__charge__input"
-                     onChange={(event) => this.setState({value: event.target.value})}/> of total $
-            </div>
-          )
-        }
-
-        {
-          type === 'fixed' && (
-            <div className="tier__charge__value">
-              <input type="text"
-                     name="value"
-                     value={value}
-                     className="tier__charge__input"
-                     onChange={(event) => this.setState({value: event.target.value})}/> per call
-            </div>
-          )
-        }
+        {type === 'throttle' && (
+          <div className="tier__charge__value">
+            to
+            <input
+              type="text"
+              name="value"
+              value={value}
+              className="tier__charge__input"
+              onChange={(event) => this.setState({value: event.target.value})}
+            />
+            per hour
+          </div>
+        )}
+        {type === 'percentage' && (
+          <div className="tier__charge__value">
+            <input
+              type="text"
+              name="value"
+              value={value}
+              className="tier__charge__input"
+              onChange={(event) => this.setState({value: event.target.value})}
+            />
+            of total $
+          </div>
+        )}
+        {type === 'fixed' && (
+          <div className="tier__charge__value">
+            <input
+              type="text"
+              name="value"
+              value={value}
+              className="tier__charge__input"
+              onChange={(event) => this.setState({value: event.target.value})}
+            />
+            per call
+          </div>
+        )}
       </div>
     )
   }
@@ -238,22 +224,16 @@ export default class Tier extends Component {
   renderActions() {
     return (
       <div>
-        {
-          this.state.editing && (
-            <a className="tier__action__save" onClick={this._handleSave}>
-              <i className="fa fa-floppy-o"/>
-            </a>
-          )
-        }
-
-        {
-          !this.state.editing && (
-            <a className="tier__action__edit" onClick={this._handleEdit}>
-              <i className="fa fa-pencil"/>
-            </a>
-          )
-        }
-
+        {this.state.editing && (
+          <a className="tier__action__save" onClick={this._handleSave}>
+            <i className="fa fa-floppy-o"/>
+          </a>
+        )}
+        {!this.state.editing && (
+          <a className="tier__action__edit" onClick={this._handleEdit}>
+            <i className="fa fa-pencil"/>
+          </a>
+        )}
         <a className="tier__action__remove" onClick={() => this.setState({isShowingModal: true})}>
           <i className="fa fa-times"/>
         </a>
@@ -262,13 +242,14 @@ export default class Tier extends Component {
   }
 
   _handleSave = () => {
-    saveTier(this.props.plan, this.props.tier, this.props.date, {
-      type: this.state.type,
-      conditionFrom: this.state.conditionFrom,
-      conditionTo: this.state.conditionTo,
-      value: this.state.value
-    });
-
+    const {plan, tier, date, forecastId} = this.props;
+    const {type, conditionFrom, conditionTo, value} = this.state;
+    this.context.store.dispatch(saveTier(forecastId, plan, tier, date, {
+      type,
+      conditionFrom,
+      conditionTo,
+      value,
+    }));
     this.setState({editing: false});
   }
 
@@ -277,7 +258,8 @@ export default class Tier extends Component {
   }
 
   _handleRemove = () => {
-    removeTier(this.props.plan, this.props.tier, this.props.date);
+    const {plan, tier, date, forecastId} = this.props;
+    this.context.store.dispatch(removeTier(forecastId, plan, tier, date));
   }
 
   render() {
@@ -286,7 +268,6 @@ export default class Tier extends Component {
       'tier__row': true,
       'tier__row--new': this.props.detail.new
     });
-
     return (
       <tr className={tierRowClass}>
         <td className="tier__cell">
@@ -299,21 +280,19 @@ export default class Tier extends Component {
           {this.renderCharge()}
         </td>
         <td className="tier__action">
-          {
-            date.isAfter(moment(), 'month') && this.renderActions()
-          }
-
-          {
-            this.state.isShowingModal &&
-            <TwoOptionModal onClose={() => this.setState({isShowingModal: false})}
-                            onSave={this._handleRemove}
-                            onCancel={() => this.setState({isShowingModal: false})}
-                            title="Remove tier"
-                            confirmText="Remove"
-                            discardText="Cancel">
+          {date.isAfter(moment(), 'month') && this.renderActions()}
+          {this.state.isShowingModal && (
+            <TwoOptionModal
+              onClose={() => this.setState({isShowingModal: false})}
+              onSave={this._handleRemove}
+              onCancel={() => this.setState({isShowingModal: false})}
+              title="Remove tier"
+              confirmText="Remove"
+              discardText="Cancel"
+            >
               <span>Do you really want to remove that tier?</span>
             </TwoOptionModal>
-          }
+          )}
         </td>
       </tr>
     )

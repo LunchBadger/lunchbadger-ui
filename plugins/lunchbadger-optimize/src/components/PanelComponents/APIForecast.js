@@ -1,11 +1,12 @@
 /*eslint no-console:0 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import classNames from 'classnames';
-import './APIForecast.scss';
-import updateForecast from '../../actions/APIForecast/update';
-import setForecast from '../../actions/AppState/setForecast';
+import moment from 'moment';
+import {updateAPIForecast, setForecast} from '../../reduxActions/forecasts';
 import ForecastDetails from './Subelements/ForecastDetails';
 import DateSlider from './Subelements/DateSlider';
 import ForecastService from '../../services/ForecastService';
@@ -14,9 +15,7 @@ import DateRangeBar from './Subelements/DateRangeBar';
 import ForecastNav from './Subelements/ForecastNav';
 import ForecastPlans from './Subelements/ForecastPlans';
 import ForecastResizeHandle from './Subelements/ForecastResizeHandle';
-import moment from 'moment';
-
-const AppState = LunchBadgerCore.stores.AppState;
+import './APIForecast.scss';
 
 const boxSource = {
   beginDrag(props) {
@@ -32,7 +31,8 @@ const boxSource = {
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview()
 }))
-export default class APIForecast extends Component {
+
+class APIForecast extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     left: PropTypes.number.isRequired,
@@ -42,16 +42,14 @@ export default class APIForecast extends Component {
     isExpanded: PropTypes.bool.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     const date = new Date();
     this.currentDate = `${date.getMonth() + 1}/${date.getFullYear()}`;
-    this.forecastUpdated = () => {
-      const currentForecast = AppState.getStateKey('currentForecast');
-      if (currentForecast && currentForecast.forecast.id === this.props.entity.id) {
-        this._updateForecast(currentForecast);
-      }
-    };
     this.state = {
       dragging: false,
       expanded: props.isExpanded,
@@ -61,31 +59,28 @@ export default class APIForecast extends Component {
       selectedRange: null,
       incomeSummary: [],
       selectedDate: this.currentDate,
-      scale: 1
+      scale: 1,
     };
   }
 
   componentDidMount() {
-    AppState.addChangeListener(this.forecastUpdated);
     this.setState({data: ForecastDataParser.prepareData(this.props.entity.toJSON())}, () => {
-      this._updateForecast(AppState.getStateKey('currentForecast'));
-      this._fetchForecastData().finally(() => this._updateForecast(AppState.getStateKey('currentForecast')));
+      this._updateForecast(this.props.currentForecast);
+      this._fetchForecastData().finally(() => this._updateForecast(this.props.currentForecast));
     });
   }
 
   componentWillReceiveProps(nextProps, nextState) {
     this.setState({data: ForecastDataParser.prepareData(nextProps.entity.toJSON())}, () => {
-      this._updateForecast(AppState.getStateKey('currentForecast'));
+      this._updateForecast(nextProps.currentForecast);
     });
-    const currentForecastInformation = AppState.getStateKey('currentForecastInformation');
+    const {currentForecastInformation} = nextProps;
     if (nextProps.isExpanded !== this.props.isExpanded) {
-      setForecast(nextProps.entity, currentForecastInformation.selectedDate || nextState.selectedDate || this.currentDate, nextProps.isExpanded);
+      this.setForecast(nextProps.entity, currentForecastInformation.selectedDate || nextState.selectedDate || this.currentDate, nextProps.isExpanded);
     }
   }
 
-  componentWillUnmount() {
-    AppState.removeChangeListener(this.forecastUpdated);
-  }
+  setForecast = (forecast, date, expanded) => this.context.store.dispatch(setForecast(forecast, date, expanded));
 
   _updateForecast(forecast = null) {
     const selectedDate = (forecast && forecast.selectedDate) ? forecast.selectedDate : this.currentDate;
@@ -104,17 +99,15 @@ export default class APIForecast extends Component {
       } else {
         forecastData = this.props.entity.toJSON();
       }
-      updateForecast(this.props.entity.id, forecastData);
+      this.context.store.dispatch(updateAPIForecast(this.props.entity.id, forecastData));
       this.setState({data: ForecastDataParser.prepareData(forecastData)}, () => {
         if (this.state.data.length) {
           const firstSetDateKeys = Object.keys(this.state.data[0]);
-
           this.setState({
             startDate: firstSetDateKeys[0],
             endDate: firstSetDateKeys[firstSetDateKeys.length - 1]
           });
-
-          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+          this.setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
         }
       });
     }).catch((error) => {
@@ -131,11 +124,11 @@ export default class APIForecast extends Component {
       const selectedDate = moment(this.state.selectedDate, 'M/YYYY');
       if (this.state.startDate.isAfter(selectedDate, 'month')) {
         this.setState({selectedDate: this.state.startDate.format('M/YYYY')}, () => {
-          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+          this.setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
         });
       } else if (this.state.endDate.isBefore(selectedDate, 'month')) {
         this.setState({selectedDate: this.state.endDate.format('M/YYYY')}, () => {
-          setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
+          this.setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
         });
       }
     });
@@ -247,3 +240,12 @@ export default class APIForecast extends Component {
     );
   }
 }
+
+const selector = createSelector(
+  state => state.states.currentForecast,
+  state => state.states.currentForecastInformation,
+  (currentForecast, currentForecastInformation) =>
+    ({currentForecast, currentForecastInformation}),
+);
+
+export default connect(selector)(APIForecast);

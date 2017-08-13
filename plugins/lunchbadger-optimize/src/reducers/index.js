@@ -1,3 +1,5 @@
+import forecasts from './forecasts';
+
 export default {
-  optimize: (state = {}, action) => state,
+  forecasts,
 };

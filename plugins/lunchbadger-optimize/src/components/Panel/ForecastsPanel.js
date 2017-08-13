@@ -1,25 +1,24 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DropTarget} from 'react-dnd';
+import classNames from 'classnames';
 import APIForecast from '../PanelComponents/APIForecast';
-import addAPIForecast from '../../actions/APIForecast/add';
-import updateAPIForecast from '../../actions/APIForecast/update';
+import {addAPIForecast, updateAPIForecast} from '../../reduxActions/forecasts';
 import Forecast from '../../stores/Forecast';
 import './ForecastsPanel.scss';
-import classNames from 'classnames';
 
 export const FORECASTS_PANEL = 'FORECASTS_PANEL';
 
 const Panel = LunchBadgerCore.components.Panel;
-const AppState = LunchBadgerCore.stores.AppState;
 
 const boxTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     if (item.entity.constructor.type === 'API') {
       const delta = monitor.getSourceClientOffset();
-      if (!Forecast.findEntityByApiId(item.entity.id)) {
-        addAPIForecast(item.entity, delta.x, delta.y - 30);
+      if (!props.forecasts[item.entity.id]) {
+        props.dispatch(addAPIForecast(item.entity, delta.x, delta.y - 30));
         component.setState({hasDropped: true});
       }
     } else if (item.entity.constructor.type === 'APIForecast') {
@@ -31,12 +30,11 @@ const boxTarget = {
       const delta = monitor.getSourceClientOffset();
       const {currentlySelectedSubelements} = props;
       if (!Forecast.findEntityByApiId(currentlySelectedSubelements[0].id)) { // FIXME - handle Portal selectable APIs
-        addAPIForecast(currentlySelectedSubelements[0], delta.x, delta.y - 30);
+        props.dispatch(addAPIForecast(currentlySelectedSubelements[0], delta.x, delta.y - 30));
         component.setState({hasDropped: true});
       }
     }
   },
-
   canDrop(props, monitor) {
     const item = monitor.getItem();
     const {currentlySelectedSubelements} = props;
@@ -52,28 +50,32 @@ class ForecastsPanel extends Component {
     props.parent.storageKey = FORECASTS_PANEL;
     this.state = {
       hasDropped: false,
-      entities: Forecast.getData(),
-      expanded: null
+      expanded: null,
     };
   }
 
-  moveEntity(entity, left, top) {
-    updateAPIForecast(entity.id, {left, top});
+  componentWillReceiveProps(nextProps) {
+    const {currentForecastInformation} = nextProps;
+    if (currentForecastInformation && currentForecastInformation.expanded) {
+      this.setState({expanded: currentForecastInformation.id});
+    }
   }
 
-  componentDidMount() {
-    Forecast.addChangeListener(() => {
-      this.setState({entities: Forecast.getData()});
-    });
+  moveEntity = (entity, left, top) => this.props.dispatch(updateAPIForecast(entity.id, {left, top}));
 
-    AppState.addChangeListener(() => {
-      const currentForecastInformation = AppState.getStateKey('currentForecastInformation');
-
-      if (currentForecastInformation && currentForecastInformation.expanded) {
-        this.setState({expanded: currentForecastInformation.id});
-      }
-    });
-  }
+  // componentDidMount() {
+  //   Forecast.addChangeListener(() => {
+  //     this.setState({entities: Forecast.getData()});
+  //   });
+  //
+  //   AppState.addChangeListener(() => {
+  //     const currentForecastInformation = AppState.getStateKey('currentForecastInformation');
+  //
+  //     if (currentForecastInformation && currentForecastInformation.expanded) {
+  //       this.setState({expanded: currentForecastInformation.id});
+  //     }
+  //   });
+  // }
 
   _handleExpand(forecastId) {
     if (this.state.expanded === forecastId) {
@@ -83,49 +85,49 @@ class ForecastsPanel extends Component {
     }
   }
 
-  renderEntities() {
-    return this.state.entities.map((entity) => {
-      return <APIForecast key={entity.id}
-                          onExpand={() => this._handleExpand(entity.id)}
-                          onClose={() => this.state.expanded === entity.id && this.setState({expanded: null})}
-                          isExpanded={this.state.expanded === entity.id}
-                          entity={entity}
-                          panelHeight={this.props.height}
-                          top={entity.top}
-                          left={entity.left}/>;
-    })
-  }
-
   render() {
-    const {connectDropTarget, isOver, canDrop} = this.props;
+    const {connectDropTarget, isOver, canDrop, forecasts, height} = this.props;
     const panelClass = classNames({
       'panel__forecast-drop': true,
       'panel__forecast-drop--over': isOver && canDrop
     });
-
+    const entities = Object.keys(forecasts).map(key => forecasts[key]);
+    const {expanded} = this.state;
     return connectDropTarget(
       <div className="panel__body">
-        {
-          this.state.entities.length === 0 && (
-            <div className={panelClass}>
-              <div className="panel__forecast-drop__inside">
-                Drag objects here to forecast them
-              </div>
+        {entities.length === 0 && (
+          <div className={panelClass}>
+            <div className="panel__forecast-drop__inside">
+              Drag objects here to forecast them
             </div>
-          )
-        }
-
-        {this.state.entities.length > 0 && this.renderEntities()}
+          </div>
+        )}
+        {entities.length > 0 && entities.map(entity => (
+          <APIForecast
+            key={entity.id}
+            onExpand={() => this._handleExpand(entity.id)}
+            onClose={() => expanded === entity.id && this.setState({expanded: null})}
+            isExpanded={expanded === entity.id}
+            entity={entity}
+            panelHeight={height}
+            top={entity.top}
+            left={entity.left}
+          />
+        ))}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.states.currentlySelectedSubelements,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedSubelements,
+  state => state.states.currentForecastInformation,
+  state => state.entities.forecasts,
+  (currentlySelectedSubelements, currentForecastInformation, forecasts) =>
+    ({currentlySelectedSubelements, currentForecastInformation, forecasts}),
+);
 
-export default connect(mapStateToProps)(Panel(
+export default connect(selector)(Panel(
   DropTarget(
     ['canvasElement', 'elementsGroup', 'forecastElement'],
     boxTarget,

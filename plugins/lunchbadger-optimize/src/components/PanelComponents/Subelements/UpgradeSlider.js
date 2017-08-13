@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './UpgradeSlider.scss';
-import Slider from 'rc-slider';
-import PlanInfoTooltip from './PlanInfoTooltip';
-import upgradePlan from '../../../actions/APIForecast/upgradePlan';
-import removeUpgrade from '../../../actions/APIForecast/removeUpgrade';
 import numeral from 'numeral';
 import moment from 'moment';
 import _ from 'lodash';
+import Slider from 'rc-slider';
+import PlanInfoTooltip from './PlanInfoTooltip';
+import {upgradePlan, removeUpgrade} from '../../../reduxActions/forecasts';
+import './UpgradeSlider.scss';
 
 export default class UpgradeSlider extends Component {
   static propTypes = {
@@ -16,31 +15,30 @@ export default class UpgradeSlider extends Component {
     upgrades: PropTypes.array.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
       movedUsers: 0,
       max: 10,
       value: props.upgrade.value,
-      maxChange: 0
+      maxChange: 0,
     }
   }
 
   componentWillMount() {
     const {forecast, upgrade} = this.props;
-
     this.fromPlan = forecast.api.findPlan({id: upgrade.fromPlanId});
     this.toPlan = forecast.api.findPlan({id: upgrade.toPlanId});
     this.planUsers = this.fromPlan.findDetail({date: upgrade.date}).subscribers.sum;
-
     const recalculatedUsers = this._recalculateUsers(upgrade.value);
-
     this.setState({
       movedUsers: recalculatedUsers,
-      max: Math.ceil((upgrade.value || 1) / 10) * 10
+      max: Math.ceil((upgrade.value || 1) / 10) * 10,
     });
-
     this._calculateChangeLimit(this.props.upgrades);
   }
 
@@ -50,15 +48,12 @@ export default class UpgradeSlider extends Component {
 
   _calculateChangeLimit(upgrades) {
     let maxChange = 100;
-
     const filteredDowngrades = _.filter(upgrades, (upgrade) => {
       return upgrade.fromPlanId === this.fromPlan.id && upgrade.downgrade && upgrade.id !== this.props.upgrade.id;
     });
-
     const filteredUpgrades = _.filter(upgrades, (upgrade) => {
       return upgrade.fromPlanId === this.fromPlan.id && !upgrade.downgrade && upgrade.id !== this.props.upgrade.id;
     });
-
     filteredDowngrades.forEach((downgrade) => {
       // churn
       if (downgrade.toPlanId === null) {
@@ -67,58 +62,46 @@ export default class UpgradeSlider extends Component {
         maxChange -= downgrade.value;
       }
     });
-
     filteredUpgrades.forEach((upgrade) => {
       maxChange -= upgrade.value;
     });
-
     this.setState({maxChange: maxChange});
   }
 
-  _recalculateUsers(value) {
-    return Math.round(this.planUsers * (value / 100));
-  }
+  _recalculateUsers = value=> Math.round(this.planUsers * (value / 100));
 
   _handleOnChange = (value) => {
     const {forecast, upgrade} = this.props;
     const {max} = this.state;
-
     // don't allow to change value to higher if no more users are available to transit between plans
     if (value >= this.state.maxChange && value > this.state.value) {
       value = this.state.maxChange;
     }
-
     const recalculatedUsers = this._recalculateUsers(value);
-
-    upgradePlan(forecast, {
+    this.context.store.dispatch(upgradePlan(forecast, {
       fromPlanId: upgrade.fromPlanId,
       toPlanId: upgrade.toPlanId,
       date: upgrade.date,
-      value: value
-    });
-
+      value: value,
+    }));
     this.setState({
       value: value,
-      movedUsers: recalculatedUsers
+      movedUsers: recalculatedUsers,
     });
-
     if (value === max && max < 100) {
       this.setState({max: max + 10});
     }
   }
 
   _handleRemove = () => {
-    removeUpgrade(this.props.forecast, this.props.upgrade);
+    const {forecast, upgrade} = this.props;
+    this.context.store.dispatch(removeUpgrade(forecast, upgrade));
   }
 
   render() {
     const minPercentage = 0;
     const maxPercentage = this.state.max;
-
-    const percentFormatter = (value) => {
-      return value.toFixed(2) + ' %';
-    };
-
+    const percentFormatter = value => value.toFixed(2) + ' %';
     return (
       <div className="upgrade-slider">
         <div className="upgrade-slider__legend">
@@ -148,7 +131,8 @@ export default class UpgradeSlider extends Component {
             onChange={_.throttle(this._handleOnChange, 600)}
             onAfterChange={this._handleOnChange}
             min={minPercentage}
-            max={maxPercentage}/>
+            max={maxPercentage}
+          />
           <div className="upgrade-slider__slider-legend">
             <div className="upgrade-slider__slider-legend__value upgrade-slider__slider-legend__value--left">
               {minPercentage}%

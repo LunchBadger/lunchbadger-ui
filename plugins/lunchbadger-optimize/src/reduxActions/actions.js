@@ -2,9 +2,9 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
   [
   ],
   [
-    'updateMetric',
-    'updateMetrics',
-    'removeMetric',
+    'updateForecast',
+    'updateForecasts',
+    'removeForecast',
   ],
 );
 

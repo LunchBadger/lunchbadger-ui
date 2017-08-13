@@ -107,5 +107,5 @@ export const simulateWebTraffic = () => (dispatch, getState) => {
     });
     updates.push(updatedMetric);
   });
-  dispatch(actions.updatedMetrics(updates));
+  dispatch(actions.updateMetrics(updates));
 };

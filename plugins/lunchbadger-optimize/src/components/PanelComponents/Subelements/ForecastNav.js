@@ -1,26 +1,25 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import removeAPIForecast from '../../../actions/APIForecast/remove';
+import {removeAPIForecast} from '../../../reduxActions/forecasts';
 
 export default class ForecastNav extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
-    onExpand: PropTypes.func.isRequired
+    onExpand: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
   remove = () => {
-    this.props.onClose();
-    removeAPIForecast(this.props.entity.id);
+    const {onClose, entity} = this.props;
+    onClose();
+    this.context.store.dispatch(removeAPIForecast(entity.id));
   }
 
-  toggleExpand = () => {
-    this.props.onExpand();
-  }
+  toggleExpand = () => this.props.onExpand();
 
   render() {
     return (

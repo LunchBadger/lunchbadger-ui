@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import setForecast from '../../../actions/AppState/setForecast';
+import {setForecast} from '../../../reduxActions/forecasts';
 import moment from 'moment';
 
 export default class DateSliderMark extends Component {
@@ -16,9 +16,12 @@ export default class DateSliderMark extends Component {
     selectedRange: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
       selected: props.selectedDate === this.formatMonth(props.month).format('M/YYYY')
     }
@@ -38,22 +41,16 @@ export default class DateSliderMark extends Component {
     });
   }
 
-  getWidth() {
-    return 100 / (this.props.count - 1);
-  }
+  getWidth = () => 100 / (this.props.count - 1);
 
-  getPosition() {
-    return this.props.position * this.getWidth() - this.getWidth() / 2;
-  }
+  getPosition = () => this.props.position * this.getWidth() - this.getWidth() / 2;
 
   toggleSelected = () => {
     const date = this.formatMonth(this.props.month);
-
     if (date.isAfter(this.props.selectedRange.endDate, 'month') || date.isBefore(this.props.selectedRange.startDate, 'month')) {
       return;
     }
-
-    setForecast(this.props.forecast, date.toDate());
+    this.context.store.dispatch(setForecast(this.props.forecast, date.toDate()));
   }
 
   formatMonth(month) {
@@ -82,7 +79,6 @@ export default class DateSliderMark extends Component {
       'date-slider__mark__bar-fragment': true,
       'date-slider__mark__bar-fragment--after': this.formatMonth(this.props.month).isAfter(moment(), 'month')
     });
-
     return (
       <div onClick={this.toggleSelected}
            className={`date-slider__mark ${elementClass}`}

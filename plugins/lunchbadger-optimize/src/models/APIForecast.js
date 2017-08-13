@@ -13,12 +13,14 @@ export default class APIForecast extends BaseModel {
 
   constructor(id, api, left, top) {
     super(id);
-
     this.api = api;
     this.left = left;
     this.top = top;
-
     this.upgrades = [];
+  }
+
+  recreate() {
+    return APIForecast.create(this);
   }
 
   toJSON() {
@@ -48,6 +50,7 @@ export default class APIForecast extends BaseModel {
       replace code below with:
         this._api = ForecastAPI.create(api);
     */
+    console.log(111);
     const mockApi = ForecastAPI.create(api);
     const id = this._api.id;
     mockApi.id = id;

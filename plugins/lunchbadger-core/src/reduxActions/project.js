@@ -23,7 +23,7 @@ export const saveToServer = () => async (dispatch, getState) => {
   const state = getState();
   const {onProjectSave} = state.plugins;
   const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
-  console.log('SAVE', data);
+  // console.log('SAVE', data);
   try {
     await ProjectService.save(data);
   } catch (err) {

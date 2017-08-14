@@ -5,7 +5,6 @@ import moment from 'moment';
 import {findDOMNode} from 'react-dom';
 import {setForecast} from '../../reduxActions/forecasts';
 import ForecastDataParser from '../../services/ForecastDataParser';
-import Forecast from '../../stores/Forecast';
 import './ForecastingChart.scss';
 
 export default class ForecastingChart extends Component {
@@ -23,18 +22,11 @@ export default class ForecastingChart extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      lastUpdate: new Date(),
-    };
-    this.forecastChanged = () => {
-      setTimeout(() => this.setState({lastUpdate: new Date()}));
-    };
     this.onWindowResize = () => this._renderChart();
   }
 
   componentDidMount() {
     this._renderChart();
-    Forecast.addChangeListener(this.forecastChanged);
     window.addEventListener('resize', this.onWindowResize);
   }
 
@@ -46,29 +38,17 @@ export default class ForecastingChart extends Component {
     this._renderChart();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const newData = nextProps.data;
     const oldData = this.props.data;
     if (nextProps.dateRange && this.props.dateRange && !_.isEqual(nextProps.dateRange, this.props.dateRange)) {
       return true;
     }
-    if (nextProps.selectedDate !== this.props.selectedDate) {
-      return true;
-    }
-    if (nextProps.expanded !== this.props.expanded) {
-      return true;
-    }
-    if (nextProps.panelHeight !== this.props.panelHeight) {
-      return true;
-    }
-    if (this.state.lastUpdate.toTimeString() !== nextState.lastUpdate.toTimeString()) {
-      return true;
-    }
-    return !_.isEqual(Object.keys(newData), Object.keys(oldData));
-  }
-
-  componentWillUnmount() {
-    Forecast.removeChangeListener(this.forecastChanged);
+    if (nextProps.selectedDate !== this.props.selectedDate) return true;
+    if (nextProps.expanded !== this.props.expanded) return true;
+    if (nextProps.panelHeight !== this.props.panelHeight) return true;
+    if (nextProps.forecast !== this.props.forecast) return true;
+    return !_.isEqual(Object.keys(newData[0]), Object.keys(oldData[0]));
   }
 
   _renderChart() {

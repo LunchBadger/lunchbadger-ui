@@ -33,7 +33,6 @@ waitForStores([AppState]).then(() => {
     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
 
     if (apiForecastInformation) {
-      console.log(ForecastService);
       ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
         if (data.body) {
           const forecast = APIForecast.create(Object.assign({}, data.body, {

@@ -5,7 +5,6 @@ import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import APIForecast from '../PanelComponents/APIForecast';
 import {addAPIForecast, updateAPIForecast} from '../../reduxActions/forecasts';
-import Forecast from '../../stores/Forecast';
 import './ForecastsPanel.scss';
 
 export const FORECASTS_PANEL = 'FORECASTS_PANEL';
@@ -27,12 +26,12 @@ const boxTarget = {
       const top = Math.round(item.entity.top + delta.y);
       component.moveEntity(item.entity, left, top);
     } else if (item.entity.constructor.type === 'Portal') {
-      const delta = monitor.getSourceClientOffset();
-      const {currentlySelectedSubelements} = props;
-      if (!Forecast.findEntityByApiId(currentlySelectedSubelements[0].id)) { // FIXME - handle Portal selectable APIs
-        props.dispatch(addAPIForecast(currentlySelectedSubelements[0], delta.x, delta.y - 30));
-        component.setState({hasDropped: true});
-      }
+      // const delta = monitor.getSourceClientOffset();
+      // const {currentlySelectedSubelements} = props;
+      // if (!Forecast.findEntityByApiId(currentlySelectedSubelements[0].id)) { // FIXME - handle Portal selectable APIs
+      //   props.dispatch(addAPIForecast(currentlySelectedSubelements[0], delta.x, delta.y - 30));
+      //   component.setState({hasDropped: true});
+      // }
     }
   },
   canDrop(props, monitor) {
@@ -120,7 +119,7 @@ class ForecastsPanel extends Component {
 }
 
 const selector = createSelector(
-  state => state.states.currentlySelectedSubelements,
+  state => state.states.currentlySelectedSubelements || [],
   state => state.states.currentForecastInformation,
   state => state.entities.forecasts,
   (currentlySelectedSubelements, currentForecastInformation, forecasts) =>

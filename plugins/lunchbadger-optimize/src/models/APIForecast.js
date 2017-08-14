@@ -50,7 +50,6 @@ export default class APIForecast extends BaseModel {
       replace code below with:
         this._api = ForecastAPI.create(api);
     */
-    console.log(111);
     const mockApi = ForecastAPI.create(api);
     const id = this._api.id;
     mockApi.id = id;

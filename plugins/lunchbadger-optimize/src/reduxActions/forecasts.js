@@ -59,6 +59,7 @@ export const setForecast = (forecast, date, expanded = null) => (dispatch, getSt
       selectedDate: forecastData.selectedDate,
     }},
   ]));
+  dispatch(actions.updateForecast(forecast.recreate()));
 };
 
 export const createForecast = (entity, date) => (dispatch) => {

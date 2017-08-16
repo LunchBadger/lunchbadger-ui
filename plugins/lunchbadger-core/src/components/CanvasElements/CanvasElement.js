@@ -281,8 +281,7 @@ export default (ComposedComponent) => {
 
     handleRemove = () => {
       const {entity} = this.props;
-      const {store: {dispatch, getState}} = this.context;
-      // dispatch(getState().plugins.onDelete[entity.constructor.type](entity));
+      const {store: {dispatch}} = this.context;
       dispatch(entity.remove());
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());

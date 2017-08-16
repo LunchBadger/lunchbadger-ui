@@ -2,7 +2,6 @@ import {actions} from './actions';
 import API from '../models/API';
 
 const {actions: manageActions} = LunchBadgerManage.utils;
-const {actions: coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {

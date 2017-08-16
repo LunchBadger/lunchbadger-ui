@@ -4,8 +4,6 @@ import canvasElements from './canvasElements';
 import panelDetailsElements from './panelDetailsElements';
 import services from './services';
 import onAppLoad from './onAppLoad';
-import onUpdate from './onUpdate';
-import onDiscardChanges from './onDiscardChanges';
 import onProjectSave from './onProjectSave';
 import onSaveOrder from './onSaveOrder';
 import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
@@ -19,8 +17,6 @@ export default {
   panelDetailsElements,
   services,
   onAppLoad,
-  onUpdate,
-  onDiscardChanges,
   onProjectSave,
   onSaveOrder,
   onConnectionCreatedStrategy,

@@ -14,16 +14,4 @@ export default [
     callback: actions.onLoadCompose,
     action: addModelConfigsToConnections,
   }
-  // {
-  //   request: DataSourceService.load,
-  //   callback: actions.onLoadDataSources,
-  // },
-  // {
-  //   request: ModelService.load,
-  //   callback: actions.onLoadModels,
-  // },
-  // {
-  //   request: ModelConfigsService.load,
-  //   callback: actions.onLoadModelConfigs,
-  // },
 ];

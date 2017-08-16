@@ -9,20 +9,17 @@ import uuid from 'uuid';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import ModelNestedProperties from './ModelNestedProperties';
-// import BackendStore from '../../../stores/Backend';
-// import addPropertiesToData from '../../addPropertiesToData';
 import addNestedProperties from '../../addNestedProperties';
+import ModelProperty from '../../../models/ModelProperty';
+import ModelRelation from '../../../models/ModelRelation';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
 const Select = LunchBadgerCore.components.Select;
 const SelectField = LunchBadgerCore.components.SelectField;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
-const ModelProperty = LunchBadgerManage.models.ModelProperty;
-const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const {Connections} = LunchBadgerCore.stores;
-// const ConnectionStore = LunchBadgerCore.stores.Connection;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},

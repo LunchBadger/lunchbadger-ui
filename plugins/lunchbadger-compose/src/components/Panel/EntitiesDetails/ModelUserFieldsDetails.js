@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import ModelClass from '../../../models/Model';
 
 const {Input, Select, Textarea} = LunchBadgerCore.components;
-const ModelClass = LunchBadgerManage.models.Model;
 
 const userFieldsTypeOptions = [
   {label: 'String', value: 'string'},

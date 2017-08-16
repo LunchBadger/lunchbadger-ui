@@ -2,26 +2,19 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import classNames from 'classnames';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
-// import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
-// import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
-// import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
-// import updateModel from '../../actions/CanvasElements/Model/update';
 import {bundle, unbundle, rebundle} from '../../reduxActions/models';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Connection = LunchBadgerCore.stores.Connection;
 
 class Microservice extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object
   };
 
@@ -31,52 +24,11 @@ class Microservice extends Component {
 
   constructor(props) {
     super(props);
-    this.previousConnection = null;
     this.state = {
-      hasTargetConnection: false,
-      hasSourceConnection: false,
       isShowingModal: false,
-      bundledItem: null
+      bundledItem: null,
     }
   }
-
-  // componentDidMount() {
-  //   this.props.paper.bind('connectionDetached', this.onConnectionDetached);
-  // }
-
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
-        return Connection.getConnectionsForTarget(modelId).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasTargetConnection: true});
-      } else {
-        this.setState({hasTargetConnection: false});
-      }
-    }
-
-    if (nextState === null || this.state.hasSourceConnection !== nextState.hasSourceConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
-        return Connection.getConnectionsForSource(modelId).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasSourceConnection: true});
-      } else {
-        this.setState({hasSourceConnection: false});
-      }
-    }
-  }
-
-  // componentWillUnmount() {
-  //   this.props.paper.unbind('connectionDetached', this.onConnectionDetached);
-  // }
-
-  onConnectionDetached = (info) => {
-    this.previousConnection = info;
-  };
 
   renderModels() {
     return this.props.models.map((model, idx) => (
@@ -98,7 +50,7 @@ class Microservice extends Component {
     if (item) {
       this.setState({
         isShowingModal: true,
-        bundledItem: item
+        bundledItem: item,
       });
     }
   }
@@ -106,42 +58,20 @@ class Microservice extends Component {
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
-    const {store: {dispatch}} = this.context;
-    dispatch(unbundle(item.parent, entity));
-    // unbundleStart(item.parent);
-    // updateModel(entity.lunchbadgerId || entity.id, modelData)
-    //   .then(() => unbundleFinish(item.parent, entity));
+    this.context.store.dispatch(unbundle(item.parent, entity));
   }
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
-  bundleModel = (microservice, model) => {
-    const {store: {dispatch}} = this.context;
-    dispatch(bundle(microservice, model));
-    // return;
-    // const modelData = {
-    //   name: bundledItem.name,
-    //   contextPath: bundledItem.contextPath,
-    //   wasBundled: true
-    // };
-    // bundleStart(microservice);
-    // updateModel(bundledItem.id, modelData)
-    //   .then(() => bundleFinish(microservice, bundledItem));
-  }
+  bundleModel = (microservice, model) =>
+    this.context.store.dispatch(bundle(microservice, model));
 
-  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) => {
-    const {store: {dispatch}} = this.context;
-    dispatch(rebundle(fromMicroservice, toMicroservice, model));
-  }
+  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) =>
+    this.context.store.dispatch(rebundle(fromMicroservice, toMicroservice, model));
 
   render() {
-    const elementClass = classNames({
-      'has-connection-in': this.state.hasTargetConnection,
-      'has-connection-out': this.state.hasSourceConnection
-    });
-
     return (
-      <div className={elementClass}>
+      <div>
         <EntitySubElements
           title="Models"
           main

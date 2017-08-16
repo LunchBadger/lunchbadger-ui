@@ -4,18 +4,14 @@ import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import {Provider} from 'mobx-react';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
 import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import {Provider} from 'mobx-react';
 import PanelContainer from '../Panel/PanelContainer';
-import Pluggable from '../../stores/Pluggable';
-import AppState from '../../stores/AppState';
-import {saveToServer, clearServer} from '../../utils/serverIo';
-import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {loadFromServer} from '../../reduxActions';
 import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
@@ -40,20 +36,6 @@ class App extends Component {
     paper: PropTypes.object,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      pluginsStore: Pluggable,
-      appState: AppState,
-    };
-    this.reloadPlugins = () => {
-      this.setState({pluginsStore: Pluggable});
-    };
-    this.appStateChange = () => {
-      this.setState({appState: AppState});
-    };
-  }
-
   getChildContext() {
     const {multiEnvIndex, multiEnvDelta, multiEnvAmount, paper} = this.props;
     return {
@@ -67,47 +49,6 @@ class App extends Component {
   componentWillMount() {
     this.props.dispatch(loadFromServer());
     LunchBadgerCore.dispatchRedux = this.props.dispatch;
-    Pluggable.addChangeListener(this.reloadPlugins);
-    AppState.addChangeListener(this.appStateChange);
-    // let prm = loadFromServer().then(() => {
-    // });
-    // handleFatals(prm).catch(() => {
-    // });
-  }
-
-  componentWillUnmount() {
-    Pluggable.removeChangeListener(this.reloadPlugins);
-    AppState.removeChangeListener(this.appStateChange);
-  }
-
-  saveToServer = () => {
-    let {
-      currentlyOpenedPanel,
-      currentElement,
-    } = this.props;
-    const coreStates = {
-      currentlyOpenedPanel,
-      currentElement,
-    };
-    let prm = saveToServer(coreStates).then(() => {
-      this.props.displaySystemInformationMessage({
-        message: 'All data has been synced with API',
-        type: 'success'
-      });
-    });
-    handleFatals(prm).catch(() => {
-    });
-  }
-
-  clearServer = () => {
-    let prm = clearServer().then(() => {
-      this.props.displaySystemInformationMessage({
-        message: 'All data removed from server',
-        type: 'success'
-      });
-    });
-    handleFatals(prm).catch(() => {
-    });
   }
 
   renderHeader = () => {
@@ -118,10 +59,6 @@ class App extends Component {
         <HeaderMultiEnv
           ref="header"
           username={username}
-          appState={this.state.appState}
-          plugins={this.state.pluginsStore}
-          saveToServer={this.saveToServer}
-          clearServer={this.clearServer}
           disabledMultiEnvMenu={isEntityEditable || !!this.props.currentlyOpenedPanel}
           headerMenuDisabled={isEntityEditable}
         />
@@ -165,8 +102,6 @@ class App extends Component {
                 <SystemNotifications />
                 <div style={multiEnvDeltaStyle}>
                   <PanelContainer
-                    plugins={this.state.pluginsStore}
-                    appState={this.state.appState}
                     canvas={() => this.refs.canvas}
                     header={() => this.refs.header}
                     container={() => this.refs.container}
@@ -177,7 +112,6 @@ class App extends Component {
                 <Canvas
                   ref="canvas"
                   multiEnvDelta={multiEnvDelta}
-                  plugins={this.state.pluginsStore}
                 />
               </div>
             </div>

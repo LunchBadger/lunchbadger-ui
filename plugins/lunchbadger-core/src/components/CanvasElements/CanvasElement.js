@@ -122,28 +122,8 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(props) {
-      // this._handleOnOver(props);
       this._handleDrop(props);
       // this.checkHighlightAndEditableState(props);
-    }
-
-    componentWillUpdate(props, state) {
-      // // if (JSON.stringify(props) !== JSON.stringify(this.props)) {
-      // //   console.log('DIFF PROPS', this.props.entity.data.name);
-      //   Object.keys(props).forEach((key) => {
-      //     if (props[key] !== this.props[key]) {
-      //       console.log('DIFF props', this.props.entity.data.name, key, props[key], this.props[key]);
-      //     }
-      //   });
-      // // }
-      // // if (JSON.stringify(state) !== JSON.stringify(this.state)) {
-      // //   console.log('DIFF STATE', this.props.entity.data.name);
-      //   Object.keys(state).forEach((key) => {
-      //     if (state[key] !== this.state[key]) {
-      //       console.log('DIFF state', this.props.entity.data.name, key, state[key], this.state[key]);
-      //     }
-      //   });
-      // // }
     }
 
     componentDidMount() {
@@ -198,20 +178,6 @@ export default (ComposedComponent) => {
       // }
     }
 
-    componentWillUnmount() {
-      // this.handleChangeListeners('removeChangeListener');
-    }
-
-    handleChangeListeners = (action) => {
-      // FIXME - replace with plugins redux
-      // LunchBadgerCompose.stores.Backend[action](this.refresh);
-      // LunchBadgerCore.stores.Pluggable[action](this.refresh);
-      // LunchBadgerCore.stores.Connection[action](this.refresh);
-      // LunchBadgerManage.stores.Public[action](this.refresh);
-      // LunchBadgerManage.stores.Gateway[action](this.refresh);
-      // LunchBadgerManage.stores.Private[action](this.refresh);
-      // LunchBadgerOptimize.stores.Forecast[action](this.refresh);
-    }
 
     refresh = () => {
       this.forceUpdate();
@@ -305,18 +271,6 @@ export default (ComposedComponent) => {
       } else if (closestInput) {
         closestInput.select();
       }
-    }
-
-    _handleOnOver(props) {
-      // if (!this.props.canDrop) {
-      //   return;
-      // }
-      // if (!this.props.isOver && props.isOver) {
-      //   this.setState({highlighted: true});
-      // }
-      // if (this.props.isOver && !props.isOver) {
-      //   this.setState({highlighted: false});
-      // }
     }
 
     _handleDrop(props) {

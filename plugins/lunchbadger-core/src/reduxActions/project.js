@@ -12,8 +12,11 @@ export const loadFromServer = () => async (dispatch, getState) => {
       item.action && dispatch(item.action(responses[idx]));
     });
   } catch (err) {
-    console.error(err);
-    dispatch(actions.addSystemDefcon1(err));
+    if (err.statusCode === 401) {
+      LoginManager().refreshLogin();
+    } else {
+      dispatch(actions.addSystemDefcon1(err));
+    }
   }
   dispatch(actions.setLoadingProject(false));
 };
@@ -23,12 +26,14 @@ export const saveToServer = () => async (dispatch, getState) => {
   const state = getState();
   const {onProjectSave} = state.plugins;
   const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
-  // console.log('SAVE', data);
   try {
     await ProjectService.save(data);
   } catch (err) {
-    console.error(err);
-    dispatch(actions.addSystemDefcon1(err));
+    if (err.statusCode === 401) {
+      LoginManager().refreshLogin();
+    } else {
+      dispatch(actions.addSystemDefcon1(err));
+    }
   }
   dispatch(actions.setLoadingProject(false));
 };
@@ -40,6 +45,8 @@ export const clearServer = () => async (dispatch) => {
   } catch (err) {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();
+    } else {
+      dispatch(actions.addSystemDefcon1(err));
     }
   }
   dispatch(actions.setLoadingProject(false));

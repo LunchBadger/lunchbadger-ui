@@ -5,7 +5,6 @@ import panelDetailsElements from './panelDetailsElements';
 import onUpdate from './onUpdate';
 import onDelete from './onDelete';
 import onDiscardChanges from './onDiscardChanges';
-import onValidate from './onValidate';
 import onProjectSave from './onProjectSave';
 import onSaveOrder from './onSaveOrder';
 import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
@@ -19,7 +18,6 @@ export default {
   onUpdate,
   onDelete,
   onDiscardChanges,
-  onValidate,
   onProjectSave,
   onSaveOrder,
   onConnectionCreatedStrategy,

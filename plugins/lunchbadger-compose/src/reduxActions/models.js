@@ -88,8 +88,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
 //   dispatch(actions.updateModelSuccess({entity}));
 // }
 
-export const remove = entity => async (dispatch) => {
-  dispatch(actions.removeModel(entity));
+export const remove = (entity, action = 'removeModel') => async (dispatch) => {
+  dispatch(actions[action](entity));
   try {
     await ModelService.delete(entity.workspaceId);
     await ModelService.deleteModelConfig(entity.workspaceId);

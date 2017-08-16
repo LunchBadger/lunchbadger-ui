@@ -1,5 +1,8 @@
 import {actions} from './actions';
 import Microservice from '../models/Microservice';
+import {remove as removeModel} from './models';
+
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -16,7 +19,13 @@ export const update = (entity, model) => (dispatch) => {
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => (dispatch, getState) => {
+  const modelsBundled = getState().entities.modelsBundled;
+  entity.models.forEach(async (id) => {
+    Connections.removeConnection(id);
+    Connections.removeConnection(null, id);
+    await dispatch(removeModel(modelsBundled[id], 'removeModelBundled'));
+  });
   dispatch(actions.removeMicroservice(entity));
 };
 

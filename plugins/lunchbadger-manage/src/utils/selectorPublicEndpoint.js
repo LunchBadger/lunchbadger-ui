@@ -1,15 +1,13 @@
 import {createSelector} from 'reselect';
-import _ from 'lodash';
 
 const {storeUtils} = LunchBadgerCore.utils;
 
 export default createSelector(
-  (_, props) => props.entity.id,
+  (_, props) => props.sourceConnections.filter(({toId}) => toId === props.entity.id),
   state => state,
-  (id, state) => {
-    const conn = _.find(state.connections, {toId: id});
-    if (!conn) return {gatewayPath: ''};
-    const gateway = storeUtils.findGatewayByPipelineId(state, conn.fromId);
+  (conn, state) => {
+    if (conn.length === 0) return {gatewayPath: ''};
+    const gateway = storeUtils.findGatewayByPipelineId(state, conn[0].fromId);
     if (!gateway) return {gatewayPath: ''};
     return {gatewayPath: 'http://' + gateway.dnsPrefix + '.customer.lunchbadger.com/'};
   },

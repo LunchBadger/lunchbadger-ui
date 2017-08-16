@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import _ from 'lodash';
 import Pipeline from './Subelements/Pipeline';
 // import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
 import {addPipeline, removePipeline} from '../../reduxActions/gateways';
-import classNames from 'classnames';
 // import Policy from '../../models/Policy';
 // import PipelineFactory from '../../models/Pipeline';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import _ from 'lodash';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -86,15 +86,6 @@ class Gateway extends Component {
     if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
-  // componentWillUnmount() {
-  //   const {store: {dispatch}} = this.context;
-  //   const {pipelines} = this.props.entity;
-  //   const connections = pipelines.map(({id}) => ({fromId: id, toId: id}));
-  //   if (connections.length > 0) {
-  //     dispatch(coreActions.removeConnections(connections));
-  //   }
-  // }
-
   handleTogglePipelineOpen = pipelineId => opened => {
     const pipelinesOpened = {...this.state.pipelinesOpened};
     pipelinesOpened[pipelineId] = opened;
@@ -102,17 +93,19 @@ class Gateway extends Component {
   }
 
   renderPipelines = () => {
-    return this.props.entity.pipelines.map((pipeline, index) => (
+    const {entity} = this.props;
+    return entity.pipelines.map((pipeline, index) => (
       <Pipeline
         key={pipeline.id}
         {...this.props}
         index={index}
-        parent={this.props.entity}
+        parent={entity}
         paper={this.props.paper}
         entity={pipeline}
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
         onRemove={this.onRemovePipeline(pipeline)}
+
       />
     ));
   }

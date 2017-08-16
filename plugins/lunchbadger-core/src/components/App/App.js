@@ -10,6 +10,7 @@ import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import {Provider} from 'mobx-react';
 import PanelContainer from '../Panel/PanelContainer';
 import Pluggable from '../../stores/Pluggable';
 import AppState from '../../stores/AppState';
@@ -20,6 +21,7 @@ import {loadFromServer} from '../../reduxActions';
 import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
+import Connections from '../../stores/Connections';
 import './App.scss';
 
 @DragDropContext(HTML5Backend)
@@ -149,42 +151,44 @@ class App extends Component {
     }
     const multiEnvNotDev = multiEnvIndex > 0;
     return (
-      <div>
-        <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
-        <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
-          <Spinner />
-          {this.renderHeader()}
-          <Aside
-            disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
-          />
-          <div ref="container" className="app__container">
-            <div className="app__panel-wrapper">
-              <SystemNotifications />
+      <Provider connectionsStore={Connections}>
+        <div>
+          <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
+          <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
+            <Spinner />
+            {this.renderHeader()}
+            <Aside
+              disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
+            />
+            <div ref="container" className="app__container">
+              <div className="app__panel-wrapper">
+                <SystemNotifications />
+                <div style={multiEnvDeltaStyle}>
+                  <PanelContainer
+                    plugins={this.state.pluginsStore}
+                    appState={this.state.appState}
+                    canvas={() => this.refs.canvas}
+                    header={() => this.refs.header}
+                    container={() => this.refs.container}
+                  />
+                </div>
+              </div>
               <div style={multiEnvDeltaStyle}>
-                <PanelContainer
+                <Canvas
+                  ref="canvas"
+                  multiEnvDelta={multiEnvDelta}
                   plugins={this.state.pluginsStore}
-                  appState={this.state.appState}
-                  canvas={() => this.refs.canvas}
-                  header={() => this.refs.header}
-                  container={() => this.refs.container}
                 />
               </div>
             </div>
-            <div style={multiEnvDeltaStyle}>
-              <Canvas
-                ref="canvas"
-                multiEnvDelta={multiEnvDelta}
-                plugins={this.state.pluginsStore}
-              />
-            </div>
+            <SystemInformationMessages />
+            {systemDefcon1Visible && (
+              <SystemDefcon1 errors={systemDefcon1Errors} />
+            )}
+            <TooltipWrapper />
           </div>
-          <SystemInformationMessages />
-          {systemDefcon1Visible && (
-            <SystemDefcon1 errors={systemDefcon1Errors} />
-          )}
-          <TooltipWrapper />
         </div>
-      </div>
+      </Provider>
     );
   }
 }

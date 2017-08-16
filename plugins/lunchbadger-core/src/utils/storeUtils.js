@@ -27,6 +27,3 @@ export const findEntityByName = (state, quadrantIdx, name) =>
     .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))
     .reduce((arr, item) => arr.concat(item), [])
     .find(item => item.name === name);
-
-export const filterConnections = (state, filter) =>
-  _.filter(state.connections, filter);

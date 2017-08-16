@@ -8,6 +8,8 @@ import onDiscardChanges from './onDiscardChanges';
 import onValidate from './onValidate';
 import onProjectSave from './onProjectSave';
 import onSaveOrder from './onSaveOrder';
+import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
+import onConnectionMovedStrategy from './onConnectionMovedStrategy';
 
 export default {
   tools,
@@ -20,4 +22,6 @@ export default {
   onValidate,
   onProjectSave,
   onSaveOrder,
+  onConnectionCreatedStrategy,
+  onConnectionMovedStrategy,
 };

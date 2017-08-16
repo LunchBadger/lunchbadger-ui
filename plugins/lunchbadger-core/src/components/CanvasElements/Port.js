@@ -1,15 +1,15 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
-import './Port.scss';
+import {inject, observer} from 'mobx-react';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
-import {removeConnection} from '../../reduxActions/connections';
+import Connections from '../../stores/Connections';
 import uuid from 'uuid';
 import _ from 'lodash';
+import './Port.scss';
 
-class Port extends PureComponent {
+@inject('connectionsStore') @observer
+export default class Port extends PureComponent {
   static propTypes = {
     elementId: PropTypes.string.isRequired,
     way: PropTypes.oneOf(['in', 'out']).isRequired,
@@ -20,7 +20,6 @@ class Port extends PureComponent {
 
   static contextTypes = {
     paper: PropTypes.object,
-    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -122,9 +121,8 @@ class Port extends PureComponent {
   }
 
   _checkAndReattachTargetConnections() {
-    const {store: {dispatch}} = this.context;
-    const {connections, elementId} = this.props;
-    const targetConnections = connections.filter(({toId}) => toId === elementId); //Connection.getConnectionsForTarget(this.props.elementId);
+    const {elementId, connectionsStore} = this.props;
+    const targetConnections = connectionsStore.getConnectionsForTarget(elementId);
     _.forEach(targetConnections, (connection) => {
       let source = null;
       if (connection.info.source) {
@@ -132,7 +130,7 @@ class Port extends PureComponent {
       } else {
         source = document.querySelector(`#${connection.info.sourceId}`);
       }
-      dispatch(removeConnection(connection.fromId, connection.toId));
+      Connections.removeConnection(connection.fromId, connection.toId);
       this.paper.connect({
         source: source,
         target: findDOMNode(this.refs.port)
@@ -141,9 +139,8 @@ class Port extends PureComponent {
   }
 
   _checkAndReattachSourceConnections() {
-    const {store: {dispatch}} = this.context;
-    const {connections, elementId} = this.props;
-    const sourceConnections = connections.filter(({fromId}) => fromId === elementId); //Connection.getConnectionsForSource(this.props.elementId);
+    const {elementId, connectionsStore} = this.props;
+    const sourceConnections = connectionsStore.getConnectionsForSource(elementId);
     _.forEach(sourceConnections, (connection) => {
       let target = null;
       if (connection.info.target) {
@@ -151,7 +148,7 @@ class Port extends PureComponent {
       } else {
         target = document.querySelector(`#${connection.info.targetId}`);
       }
-      dispatch(removeConnection(connection.fromId, connection.toId));
+      Connections.removeConnection(connection.fromId, connection.toId);
       this.paper.connect({
         source: findDOMNode(this.refs.port),
         target: target
@@ -160,7 +157,8 @@ class Port extends PureComponent {
   }
 
   render() {
-    const {way, elementId, middle, isConnected, className} = this.props;
+    const {way, elementId, middle, className, connectionsStore} = this.props;
+    const isConnected = connectionsStore.isPortConnected(way, elementId);
     const portClass = classNames({
       'canvas-element__port--out': way === 'out',
       'canvas-element__port--in': way === 'in',
@@ -187,16 +185,3 @@ class Port extends PureComponent {
     );
   }
 }
-
-const selector = createSelector(
-  (_, props) => props.elementId,
-  (_, props) => props.way,
-  state => state.connections,
-  (id, way, connections) => ({
-    connections,
-    isConnected: (way === 'out' && connections.map(({fromId}) => fromId).includes(id))
-      || (way === 'in' && connections.map(({toId}) => toId).includes(id)),
-  }),
-);
-
-export default connect(selector)(Port);

@@ -6,6 +6,7 @@ import ModelRelation from '../models/ModelRelation';
 import DataSource from '../models/DataSource';
 
 const {storeUtils} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -31,7 +32,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (isDifferent) {
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
-      const dataSource = storeUtils.filterConnections(state, {toId: entity.id})
+      const dataSource = Connections.search({toId: entity.id})
         .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
         .find(item => item instanceof DataSource);
       await ModelService.upsertModelConfig({

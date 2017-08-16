@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
@@ -20,15 +21,15 @@ const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const ModelProperty = LunchBadgerManage.models.ModelProperty;
 const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
-// const PrivateStore = LunchBadgerManage.stores.Private;
+const {Connections} = LunchBadgerCore.stores;
 // const ConnectionStore = LunchBadgerCore.stores.Connection;
-const {storeUtils} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
 
+@inject('connectionsStore') @observer
 class ModelDetails extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired
@@ -87,17 +88,16 @@ class ModelDetails extends PureComponent {
     const {entity} = this.props;
     if (model.hasOwnProperty('dataSource')) {
       const dsId = model.dataSource === 'none' ? null : model.dataSource;
-      const {store: {getState}, paper: paperRef} = this.context;
+      const {paper: paperRef} = this.context;
       const paper = paperRef.getInstance();
-      const state = getState();
-      const currDsConn = storeUtils.filterConnections(state, {toId: entity.id});
-      const currDsId = currDsConn.length > 0 ? currDsConn[0].fromId : null;
+      const currDsConn = Connections.find({toId: entity.id});
+      const currDsId = currDsConn ? currDsConn.fromId : null;
       if (dsId !== currDsId) {
         if (!dsId) {
-          paper.detach(currDsConn[0].info.connection);
+          paper.detach(currDsConn.info.connection);
         } else if (currDsId) {
           paper.setSource(
-            currDsConn[0].info.connection,
+            currDsConn.info.connection,
             document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
           );
         } else {
@@ -262,10 +262,11 @@ class ModelDetails extends PureComponent {
   }
 
   render() {
-    const {entity, dataSources, currentDsId} = this.props;
+    const {entity, dataSources, connectionsStore} = this.props;
     const dataSourceOptions = Object.keys(dataSources)
       .map(key => dataSources[key])
       .map(({name: label, id: value}) => ({label, value}));
+    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     return (
       <div>
         <CollapsableDetails title="Details">
@@ -356,12 +357,7 @@ class ModelDetails extends PureComponent {
 
 const selector = createSelector(
   state => state.entities.dataSources,
-  (_, props) => props.entity.id,
-  state => state.connections,
-  (dataSources, id, connections) => ({
-    dataSources,
-    currentDsId: (connections.find(item => item.toId === id) || {fromId: 'none'}).fromId,
-  }),
+  (dataSources) => ({dataSources}),
 );
 
 export default connect(selector)(BaseDetails(ModelDetails));

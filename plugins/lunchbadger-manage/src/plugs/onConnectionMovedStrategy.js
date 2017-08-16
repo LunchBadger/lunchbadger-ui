@@ -7,9 +7,9 @@ const {Connections} = LunchBadgerCore.stores;
 const checkMovedConnection = info => (_, getState) => {
   const state = getState();
   const {originalSourceId, newSourceId, newTargetId} = info;
-  const isBackend = storeUtils.isInQuadrant(state, 0, newSourceId);
-  const isPrivate = storeUtils.isInQuadrant(state, 1, newTargetId);
-  if (isBackend && isPrivate) {
+  const isPrivate = storeUtils.isInQuadrant(state, 1, newSourceId);
+  const isGateway = storeUtils.findGatewayByPipelineId(state, newTargetId);
+  if (isPrivate && isGateway) {
     const previousTargetConnections = Connections.search({toId: storeUtils.formatId(newTargetId)});
     const previousSourceConnections = Connections.search({fromId: storeUtils.formatId(newSourceId)});
     if (previousSourceConnections.length && previousTargetConnections.length) {

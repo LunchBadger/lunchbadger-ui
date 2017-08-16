@@ -3,6 +3,7 @@ import API from '../models/API';
 
 const {actions: manageActions} = LunchBadgerManage.utils;
 const {actions: coreActions} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -20,7 +21,9 @@ export const update = (entity, model) => (dispatch) => {
 };
 
 export const remove = entity => (dispatch) => {
-  dispatch(coreActions.removeConnections(entity.publicEndpoints.map(({id: toId}) => ({toId}))));
+  entity.publicEndpoints.forEach(({id}) => {
+    Connections.removeConnection(null, id);
+  });
   dispatch(actions.removeAPI(entity));
 };
 

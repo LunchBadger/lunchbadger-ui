@@ -1,4 +1,5 @@
 import {actionTypes} from '../reduxActions/actions';
+import Connections from '../stores/Connections';
 
 export default (state = [], action) => {
   switch (action.type) {
@@ -12,6 +13,11 @@ export default (state = [], action) => {
         ...state,
         ...action.payload,
       ];
+    case actionTypes.removeEntity:
+      const {id} = action.payload;
+      Connections.removeConnection(id);
+      Connections.removeConnection(null, id);
+      return state;
     default:
       return state;
   }

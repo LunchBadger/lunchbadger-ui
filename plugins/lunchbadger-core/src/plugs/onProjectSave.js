@@ -1,3 +1,6 @@
+import Connections from '../stores/Connections';
+import {isInQuadrant} from '../utils/storeUtils';
+
 const statesToSave = [
   'currentElement',
   'currentlyOpenedPanel',
@@ -40,7 +43,7 @@ const setStatesToSave = (state) => {
 export default [
   state => ({
     name: 'main',
-    connections: state.connections,
+    connections: Connections.toJSON().filter(({fromId}) => !isInQuadrant(state, 0, fromId)),
     states: setStatesToSave(state),
   }),
 ];

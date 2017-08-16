@@ -24,10 +24,6 @@ const {actions, actionTypes} = actionsCreator(
     'updateOrder',
 
     'addInitialConnections',
-    'addConnection',
-    'moveConnection',
-    'removeConnection',
-    'removeConnections',
   ],
 );
 

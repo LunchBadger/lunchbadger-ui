@@ -17,6 +17,7 @@ import BaseStore from './stores/BaseStore';
 import AppState from './stores/AppState';
 import Pluggable from './stores/Pluggable';
 import Connection from './stores/Connection';
+import Connections from './stores/Connections';
 
 // components
 import App from './components/App/App';
@@ -130,7 +131,8 @@ let LunchBadgerCore = {
     BaseStore: BaseStore,
     AppState: AppState,
     Pluggable: Pluggable,
-    Connection: Connection
+    Connection: Connection,
+    Connections,
   },
   models: {
     BaseModel: BaseModel,

@@ -1,20 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
-import Policy from './Policy';
-// import classNames from 'classnames';
-import './Pipeline.scss';
+import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
+import Policy from './Policy';
 import {addAndConnect as addPublicEndpointAndConnect} from '../../../reduxActions/publicEndpoints';
 import {EntityProperty, EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
-import _ from 'lodash';
+import './Pipeline.scss';
 
 const Port = LunchBadgerCore.components.Port;
 
 // FIXME - handle toggleSubelement
 
-class Pipeline extends Component {
+export default class Pipeline extends PureComponent {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -73,29 +70,22 @@ class Pipeline extends Component {
   //   // AppState.addInitListener(this.appStateReady);
   // }
 
-  componentWillReceiveProps(nextProps) {
-    const {connections} = nextProps;
-    const {id} = this.props.entity;
-    const {proxiedBy} = this.state;
-    const newProxiedBy = [];
-    const {store: {dispatch}} = this.context;
-    connections
-      .filter(({fromId, toId}) => toId === id && !proxiedBy.includes(fromId))
-      .forEach((conn) => {
-        newProxiedBy.push(conn.fromId);
-        if (conn.info.connection.getParameter('existing')) return;
-        dispatch(addPublicEndpointAndConnect(
-          conn.fromId,
-          // connectionEntity.name + 'PublicEndpoint',
-          // connectionEntity.contextPath,
-          id,
-          findDOMNode(this.refs['port-out']),
-        ));
-      });
-    if (newProxiedBy.length > 0) {
-      this.setState({proxiedBy: [...proxiedBy, ...newProxiedBy]});
-    }
-  }
+  // componentWillReact() {
+  //   const {connectionsStore} = this.props;
+  //   const {id} = this.props.entity;
+  //   const {proxiedBy} = this.state;
+  //   const connection = connectionsStore.getLastConnection();
+  //   console.log(22, connection);
+  //   if (connection && connection.toId === id && !proxiedBy.includes(connection.fromId)) {
+  //     if (connection.info.connection.getParameter('existing')) return;
+  //     this.context.store.dispatch(addPublicEndpointAndConnect(
+  //       connection.fromId,
+  //       id,
+  //       findDOMNode(this.refs['port-out']),
+  //     ));
+  //     this.setState({proxiedBy: [...proxiedBy, connection.fromId]});
+  //   };
+  // }
 
   // componentWillUnmount() {
   //   // if (typeof this.removeNewConnectionListener === 'function') {
@@ -195,10 +185,3 @@ class Pipeline extends Component {
     );
   }
 }
-
-const selector = createSelector(
-  state => state.connections,
-  connections => ({connections}),
-);
-
-export default connect(selector)(Pipeline);

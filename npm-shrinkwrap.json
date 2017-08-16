@@ -4061,9 +4061,20 @@
     },
     "mobx": {
       "version": "2.7.0",
-      "from": "mobx@>=2.3.4 <3.0.0",
-      "resolved": "https://registry.npmjs.org/mobx/-/mobx-2.7.0.tgz",
-      "dev": true
+      "from": "https://registry.npmjs.org/mobx/-/mobx-2.7.0.tgz",
+      "resolved": "https://registry.npmjs.org/mobx/-/mobx-2.7.0.tgz"
+    },
+    "mobx-react": {
+      "version": "4.2.2",
+      "from": "mobx-react@latest",
+      "resolved": "https://registry.npmjs.org/mobx-react/-/mobx-react-4.2.2.tgz",
+      "dependencies": {
+        "hoist-non-react-statics": {
+          "version": "1.2.0",
+          "from": "hoist-non-react-statics@>=1.2.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz"
+        }
+      }
     },
     "mocha": {
       "version": "2.5.3",

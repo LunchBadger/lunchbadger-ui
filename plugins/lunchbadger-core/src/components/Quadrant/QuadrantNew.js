@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import {inject, observer} from 'mobx-react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
@@ -33,6 +34,7 @@ const boxTarget = {
   connectDropTarget: connect.dropTarget()
 }))
 
+@inject('connectionsStore') @observer
 class Quadrant extends PureComponent {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -103,7 +105,7 @@ class Quadrant extends PureComponent {
   }
 
   render() {
-    const {title, connectDropTarget, scrollLeft, resizable, width, components} = this.props;
+    const {title, connectDropTarget, scrollLeft, resizable, width, components, connectionsStore} = this.props;
     const styles = {width};
     const titleStyles = {
       ...styles,
@@ -138,6 +140,8 @@ class Quadrant extends PureComponent {
                 moveEntity={this.moveEntity}
                 saveOrder={this.saveOrder}
                 dragging={draggingId === id}
+                sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
+                targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
               />
             );
           })}

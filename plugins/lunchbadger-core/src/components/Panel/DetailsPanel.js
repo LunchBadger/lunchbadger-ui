@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import AppState from '../../stores/AppState';
+import {inject, observer} from 'mobx-react';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
 
+@inject('connectionsStore') @observer
 class DetailsPanel extends Component {
   constructor(props) {
     super(props);
@@ -12,12 +13,16 @@ class DetailsPanel extends Component {
   }
 
   renderDetails() {
-    const {currentElement, panels} = this.props;
+    const {currentElement, panels, connectionsStore} = this.props;
     if (currentElement) {
       const {type} = currentElement.constructor;
       const DetailsPanelComponent = panels[type];
       if (DetailsPanelComponent) {
-        return <DetailsPanelComponent entity={currentElement}/>;
+        return <DetailsPanelComponent
+          entity={currentElement}
+          sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
+          targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
+        />;
       }
     }
   }

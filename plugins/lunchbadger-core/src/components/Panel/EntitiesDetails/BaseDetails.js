@@ -37,7 +37,7 @@ export default (ComposedComponent) => {
     update = async (props = this.refs.form.getModel()) => {
       const {store: {dispatch}} = this.context;
       const {entity} = this.props;
-      const {element} = this;
+      const element = this.element.wrappedInstance || this.element;
       let model = props;
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);

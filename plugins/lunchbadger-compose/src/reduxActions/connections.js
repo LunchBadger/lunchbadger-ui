@@ -1,6 +1,7 @@
 import ModelService from '../services/ModelService';
 
 const {storeUtils, actions: coreActions} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const addModelConfigsToConnections = response => (dispatch, getState) => {
   const state = getState();
@@ -13,15 +14,11 @@ export const addModelConfigsToConnections = response => (dispatch, getState) => 
   dispatch(coreActions.addInitialConnections(connections));
 }
 
-export const attach = info => async (dispatch, getState) => {
+export const attach = info => async (_, getState) => {
   info.connection.setType('wip');
   const state = getState();
+  Connections.addConnectionByInfo(info);
   const {sourceId, targetId} = info;
-  dispatch(coreActions.addConnection({
-    fromId: storeUtils.formatId(sourceId),
-    toId: storeUtils.formatId(targetId),
-    info,
-  }));
   const dataSource = storeUtils.findEntity(state, 0, sourceId);
   const model = storeUtils.findEntity(state, 1, targetId);
   const modelConfig = {
@@ -35,14 +32,11 @@ export const attach = info => async (dispatch, getState) => {
   info.connection.removeType('wip');
 };
 
-export const detach = info => async (dispatch, getState) => {
+export const detach = info => async (_, getState) => {
   const state = getState();
-  const {sourceId, targetId} = info;
-  dispatch(coreActions.removeConnection({
-    fromId: storeUtils.formatId(sourceId),
-    toId: storeUtils.formatId(targetId),
-  }));
-  const model = storeUtils.findEntity(state, 1, targetId);
+  const {sourceId: fromId, targetId: toId} = info;
+  Connections.removeConnection(fromId, toId);
+  const model = storeUtils.findEntity(state, 1, toId);
   const modelConfig = {
     name: model.name,
     id: `server.${model.name}`,
@@ -53,19 +47,12 @@ export const detach = info => async (dispatch, getState) => {
   await ModelService.upsertModelConfig(modelConfig);
 };
 
-export const reattach = info => async (dispatch, getState) => {
+export const reattach = info => async (_, getState) => {
   info.connection.setType('wip');
   const state = getState();
-  const {originalSourceId, originalTargetId, newSourceId, newTargetId} = info;
-  dispatch(coreActions.moveConnection({
-    fromId: storeUtils.formatId(originalSourceId),
-    toId: storeUtils.formatId(originalTargetId),
-    newFromId: storeUtils.formatId(newSourceId),
-    newToId: storeUtils.formatId(newTargetId),
-    info,
-  }));
+  const {originalTargetId, newSourceId, newTargetId} = info;
+  Connections.moveConnection(info);
   if (originalTargetId !== newTargetId) {
-    // Moved the model end, have to remove data source from original model
     const originalModel = storeUtils.findEntity(state, 1, originalTargetId);
     await ModelService.upsertModelConfig({
       name: originalModel.name,

@@ -3,7 +3,7 @@ import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import Policy from '../models/Policy';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -28,7 +28,10 @@ export const update = (entity, model) => (dispatch) => {
 };
 
 export const remove = entity => (dispatch) => {
-  dispatch(coreActions.removeConnections(entity.pipelines.map(({id}) => ({fromId: id, toId: id}))));
+  entity.pipelines.forEach(({id}) => {
+    Connections.removeConnection(id);
+    Connections.removeConnection(null, id);
+  });
   dispatch(actions.removeGateway(entity));
 };
 
@@ -49,14 +52,15 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 
 export const addPipeline = gatewayId => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
-  entity.addPipeline(Pipeline.create({name: 'Aaa'}));
+  entity.addPipeline(Pipeline.create({name: 'Pipeline'}));
   dispatch(actions.updateGateway(entity));
 }
 
 export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
   const {id} = pipeline;
-  dispatch(coreActions.removeConnections([{fromId: id, toId: id}]));
+  Connections.removeConnection(id);
+  Connections.removeConnection(null, id);
   entity.removePipeline(pipeline);
   dispatch(actions.updateGateway(entity));
 }

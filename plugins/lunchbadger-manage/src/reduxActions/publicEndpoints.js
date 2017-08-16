@@ -1,8 +1,8 @@
 import {actions} from './actions';
 import PublicEndpoint from '../models/PublicEndpoint';
 
-const {storeUtils, actions: coreActions} = LunchBadgerCore.utils;
-const {Connection} = LunchBadgerCore.models;
+const {actions: coreActions} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -13,10 +13,8 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const addAndConnect = (privateEndpointId, fromId, outPort) => (dispatch, getState) => {
+export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState) => {
   const state = getState();
-  const endpoint = storeUtils.findEntity(state, 1, privateEndpointId);
-  if (!endpoint) return;
   const {entities, plugins: {quadrants}} = state;
   const types = quadrants[3].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
@@ -26,18 +24,12 @@ export const addAndConnect = (privateEndpointId, fromId, outPort) => (dispatch, 
     itemOrder,
     loaded: false,
   });
+  Connections.addConnection(fromId, entity.id, {source: outPort});
   dispatch(actions.updatePublicEndpoint(entity));
   dispatch(coreActions.setStates([
     {key: 'currentElement', value: entity},
     {key: 'currentEditElement', value: entity},
   ]));
-  dispatch(coreActions.addConnection(Connection.create({
-    fromId,
-    toId: entity.id,
-    info: {
-      source: outPort,
-    },
-  })));
 }
 
 export const update = (entity, model) => (dispatch) => {

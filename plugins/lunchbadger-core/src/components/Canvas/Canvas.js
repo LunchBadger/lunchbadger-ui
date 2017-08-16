@@ -4,10 +4,8 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
-import {addConnection, moveConnection, removeConnection} from '../../reduxActions/connections';
-import Connection from '../../stores/Connection';
+import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
-import Connections from './Connections';
 import './Canvas.scss';
 
 class Canvas extends Component {
@@ -21,12 +19,8 @@ class Canvas extends Component {
     this.state = {
       lastUpdate: new Date(),
       canvasHeight: null,
-      connections: [],
       scrollLeft: 0,
     };
-    // this.connectionsChanged = () => {
-    //   this.setState({connections: Connection.getData()});
-    // }
     this.dropped = false;
   }
 
@@ -131,10 +125,10 @@ class Canvas extends Component {
       return false;
     }
     // Only one connection between two entities is allowed.
-    if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 ||
-        Connection.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0) {
-      return false;
-    }
+    // if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 || // FIXME
+    //     Connection.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0) {
+    //   return false;
+    // }
     return true;
   }
 
@@ -159,8 +153,7 @@ class Canvas extends Component {
   }
 
   _attachPaperEvents() {
-    const {store: {dispatch, getState}} = this.context;
-
+    const {store: {getState}} = this.context;
     this.paper.bind('connection', (info) => {
       const {source, connection} = info;
       if (source.parentElement.classList.contains('port-in')) {
@@ -181,7 +174,7 @@ class Canvas extends Component {
         fulfilled = this._executeStrategies(getState().plugins.onConnectionCreatedStrategy, info);
       }
       if (fulfilled === null) {
-        dispatch(addConnection(info));
+        Connections.addConnectionByInfo(info);
       } else if (fulfilled === false) {
         this._disconnect(connection);
       }
@@ -191,7 +184,7 @@ class Canvas extends Component {
       let {originalSourceEndpoint, originalTargetEndpoint, connection} = info;
       let fulfilled = this._executeStrategies(getState().plugins.onConnectionMovedStrategy, info);
       if (fulfilled === null) {
-        dispatch(moveConnection(info));
+        Connections.moveConnection(info);
       } else if (fulfilled === false) {
         // Have to save these values and call on next event loop iteration
         // because jsPlumb needs the connection to be intact to finish
@@ -221,7 +214,7 @@ class Canvas extends Component {
     this.paper.bind('connectionDetached', (info) => {
       let fulfilled = this._executeStrategies(getState().plugins.onConnectionDeletedStrategy, info);
       if (fulfilled === null) {
-        dispatch(removeConnection(info.sourceId, info.targetId));
+        Connections.removeConnection(info.sourceId, info.targetId);
       } else if (fulfilled === false) {
         this.paper.connect({
           source: info.source,
@@ -285,7 +278,6 @@ class Canvas extends Component {
             scrollLeft={scrollLeft}
           />
         </div>
-        <Connections />
       </section>
     );
   }

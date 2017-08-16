@@ -4,6 +4,7 @@ import DataSource from '../models/DataSource';
 import Model from '../models/Model';
 
 const {storeUtils} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export const add = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -22,7 +23,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   try {
     if (isDifferent) {
       await DataSourceService.delete(entity.workspaceId);
-      storeUtils.filterConnections(state, {fromId: entity.id})
+      Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))
         .filter(item => item instanceof Model)
         .forEach(modelEntity => {
@@ -50,7 +51,7 @@ export const remove = entity => async (dispatch, getState) => {
   dispatch(actions.removeDataSource(entity));
   try {
     DataSourceService.delete(entity.workspaceId);
-    storeUtils.filterConnections(state, {fromId: entity.id})
+    Connections.search({fromId: entity.id})
       .map(conn => storeUtils.findEntity(state, 1, conn.toId))
       .filter(item => item instanceof Model)
       .forEach(model => {

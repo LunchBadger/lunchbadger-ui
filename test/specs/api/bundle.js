@@ -6,7 +6,6 @@ module.exports = {
   // '@disabled': true,
   before: function (browser) {
     page = browser.page.lunchBadger();
-
     page.open();
   },
 

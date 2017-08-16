@@ -5,6 +5,7 @@ import {add as addGateway} from '../reduxActions/gateways';
 export default {
   1: [
     {
+      name: 'endpoint',
       icon: 'iconEndpoint',
       tooltip: 'Endpoint',
       plain: true,
@@ -24,6 +25,7 @@ export default {
       ],
     },
     {
+      name: 'gateway',
       icon: 'iconGateway',
       tooltip: 'Gateway',
       action: addGateway,

@@ -50,13 +50,11 @@ loginManager.checkAuth().then(loggedIn => {
     state: 'simple'
   };
 
-  const store = createStore(
-    reducers(),
-    compose(
-      applyMiddleware(thunk),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-  );
+  let middleware = compose(applyMiddleware(thunk));
+  if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+    middleware = compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__());
+  }
+  const store = createStore(reducers(), middleware);
 
   LunchBadgerCore.services.ConfigStoreService.initialize();
   LunchBadgerCore.services.ProjectService.initialize();

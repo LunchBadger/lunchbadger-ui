@@ -37,6 +37,7 @@ const microserviceAction = () => dispatch => dispatch(addMicroservice());
 export default {
   0: [
     {
+      name: 'dataSource',
       icon: 'iconDataSource',
       tooltip: 'Data Source',
       submenu: dataSources.map(label => ({
@@ -49,11 +50,13 @@ export default {
       })),
     },
     {
+      name: 'model',
       icon: 'iconModel',
       tooltip: 'Model',
       action: modelAction,
     },
     {
+      name: 'microservice',
       icon: 'iconMicroservice',
       tooltip: 'Microservice',
       action: microserviceAction,

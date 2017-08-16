@@ -1,5 +1,4 @@
-export default (props, nextProps, state, nextState) => {
-  console.log('DIFF', nextState);
+export default (props, nextProps, state = {}, nextState = {}) => {
   Object.keys(props).forEach((key) => {
     if (props[key] !== nextProps[key]) {
       console.log('DIFF PROPS', key, props[key], nextProps[key]);

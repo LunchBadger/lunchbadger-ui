@@ -62,7 +62,11 @@ class Quadrant extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.updateOrderedIds(this.getOrderedIds(nextProps));
+    const oldOrdering = this.getOrderedIds(this.props);
+    const newOrdering = this.getOrderedIds(nextProps);
+    if (oldOrdering.join(',') !== newOrdering.join(',')) {
+      this.updateOrderedIds(newOrdering);
+    }
   }
 
   updateOrderedIds = (orderedIds, draggingId) => {

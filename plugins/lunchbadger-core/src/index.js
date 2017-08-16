@@ -1,22 +1,4 @@
-import {registerPlugin as registerPluginNew} from '../../../src/reducers';
-import reducers from './reducers/reducers';
-import plugs from './plugs';
-
-registerPluginNew({}, plugs, reducers);
-
-/**
- * This file is entry point for each plugin
- * You need to import this file to get access to core api and base elements
- */
-
-// dispatcher
-import * as AppDispatcher from './dispatcher/AppDispatcher';
-
 // stores
-import BaseStore from './stores/BaseStore';
-import AppState from './stores/AppState';
-import Pluggable from './stores/Pluggable';
-import Connection from './stores/Connection';
 import Connections from './stores/Connections';
 
 // components
@@ -57,11 +39,6 @@ import ConnectionModel from './models/Connection';
 import PanelDetailsComponent from './models/Plugin/PanelDetailsComponent';
 import Strategy from './models/Plugin/Strategy';
 
-// actions
-import registerPlugin from './actions/registerPlugin';
-import removeConnection from './actions/Connection/remove';
-import initializeAppState from './actions/Stores/AppState/initialize';
-
 // constants
 import panelKeys from './constants/panelKeys';
 import portGroups from './constants/portGroups';
@@ -72,10 +49,10 @@ import ConfigStoreService from './services/ConfigStoreService';
 
 // utils
 import ApiClient from './utils/ApiClient';
-import * as URLParams from './utils/URLParamsBind';
-import {waitForStores} from './utils/waitForStores';
+// import * as URLParams from './utils/URLParamsBind';
+// import {waitForStores} from './utils/waitForStores';
 import LoginManager, {createLoginManager, getUser} from './utils/auth';
-import {loadFromServer, saveToServer} from './utils/serverIo';
+// import {loadFromServer, saveToServer} from './utils/serverIo';
 import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
@@ -87,21 +64,27 @@ import diff from './diff';
 
 import './utils/formValidators';
 
+import {registerPlugin as registerPluginNew} from '../../../src/reducers';
+import reducers from './reducers/reducers';
+import plugs from './plugs';
+
+registerPluginNew({}, plugs, reducers);
+
 let LunchBadgerCore = {
-  dispatcher: {
-    AppDispatcher: AppDispatcher
-  },
-  actions: {
-    registerPlugin: registerPlugin,
-    Connection: {
-      removeConnection: removeConnection
-    },
-    Stores: {
-      AppState: {
-        initialize: initializeAppState
-      }
-    }
-  },
+  // dispatcher: {
+  //   AppDispatcher: AppDispatcher
+  // },
+  // actions: {
+  //   registerPlugin: registerPlugin,
+  //   Connection: {
+  //     removeConnection: removeConnection
+  //   },
+  //   Stores: {
+  //     AppState: {
+  //       initialize: initializeAppState
+  //     }
+  //   }
+  // },
   components: {
     App: App,
     AppLoader: AppLoader,
@@ -128,10 +111,10 @@ let LunchBadgerCore = {
     ElementsBundler: ElementsBundler
   },
   stores: {
-    BaseStore: BaseStore,
-    AppState: AppState,
-    Pluggable: Pluggable,
-    Connection: Connection,
+    // BaseStore: BaseStore,
+    // AppState: AppState,
+    // Pluggable: Pluggable,
+    // Connection: Connection,
     Connections,
   },
   models: {
@@ -157,17 +140,17 @@ let LunchBadgerCore = {
   },
   utils: {
     ApiClient: ApiClient,
-    URLParams: URLParams,
-    waitForStores: waitForStores,
+    // URLParams: URLParams,
+    // waitForStores: waitForStores,
     handleFatals: handleFatals,
     actionsCreator,
     actions,
     actionTypes,
     coreActions,
-    serverIo: {
-      loadFromServer: loadFromServer,
-      saveToServer: saveToServer
-    },
+    // serverIo: {
+    //   loadFromServer: loadFromServer,
+    //   saveToServer: saveToServer
+    // },
     LoginManager: LoginManager,
     createLoginManager: createLoginManager,
     getUser: getUser,

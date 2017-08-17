@@ -1,16 +1,19 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
-import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemDefcon1} from '../../reduxActions/systemDefcon1';
 import ConfigStoreService from '../../services/ConfigStoreService';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import {getUser} from '../../utils/auth';
 
 class SettingsPanel extends Component {
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     props.parent.storageKey = panelKeys.SETTINGS_PANEL;
@@ -30,8 +33,8 @@ class SettingsPanel extends Component {
         accessKey: data.body.key,
       });
     } catch (err) {
-      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
-    };
+      this.context.store.dispatch(addSystemDefcon1(err));
+    }
   }
 
   onRegenerate = async () => {
@@ -44,7 +47,7 @@ class SettingsPanel extends Component {
         accessKey: data.body.key,
       });
     } catch (err) {
-      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
+      this.context.store.dispatch(addSystemDefcon1(err));
     };
   }
 
@@ -128,8 +131,4 @@ class SettingsPanel extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
-});
-
-export default connect(null, mapDispatchToProps)(Panel(SettingsPanel));
+export default Panel(SettingsPanel);

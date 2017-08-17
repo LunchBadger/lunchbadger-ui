@@ -17,6 +17,8 @@ import ForecastPlans from './Subelements/ForecastPlans';
 import ForecastResizeHandle from './Subelements/ForecastResizeHandle';
 import './APIForecast.scss';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
+
 const boxSource = {
   beginDrag(props) {
     const {entity, left, top} = props;
@@ -110,8 +112,8 @@ class APIForecast extends Component {
           this.setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
         }
       });
-    }).catch((error) => {
-      return console.error(error);
+    }).catch((err) => {
+      this.props.dispatch(coreActions.addSystemDefcon1(err));
     });
   }
 

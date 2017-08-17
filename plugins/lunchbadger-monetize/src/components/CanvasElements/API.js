@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import _ from 'lodash';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
@@ -9,7 +8,6 @@ import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
@@ -29,7 +27,6 @@ class API extends Component {
     super(props);
     this.previousConnection = null;
     this.state = {
-      hasConnection: null,
       isShowingModal: false,
       bundledItem: null
     }
@@ -39,20 +36,6 @@ class API extends Component {
     // this.props.paper.bind('connectionDetached', (info) => {
     //   this.previousConnection = info;
     // });
-  }
-
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasConnection: true});
-      } else {
-        this.setState({hasConnection: false});
-      }
-    }
   }
 
   renderPlans = () => {
@@ -105,11 +88,8 @@ class API extends Component {
   }
 
   render() {
-    const elementClass = classNames({
-      'has-connection': this.state.hasConnection
-    });
     return (
-      <div className={elementClass}>
+      <div>
         {this.props.entity.plans.length > 0 && (
           <EntitySubElements
             title="Plans"

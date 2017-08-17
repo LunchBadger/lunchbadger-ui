@@ -1,10 +1,12 @@
 /*eslint no-console:0 */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import classnames from 'classnames';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
-// import {addSystemDefcon1, toggleSystemDefcon1} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemDefcon1, toggleSystemDefcon1} from '../../reduxActions/systemDefcon1';
 import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
 
@@ -17,7 +19,7 @@ class WorkspaceStatus extends Component {
       output: '',
       instance: null,
       visible: false,
-      isShowingModal: false
+      isShowingModal: false,
     };
   }
 
@@ -36,8 +38,10 @@ class WorkspaceStatus extends Component {
   }
 
   onClick = () => {
-    if (this.state.status === 'crashed') {
-      // this.props.showSystemDefcon1(); // FIXME
+    const {isSystemDefcon1, dispatch} = this.props;
+    const {status} = this.state;
+    if (status === 'crashed' || isSystemDefcon1) {
+      dispatch(toggleSystemDefcon1());
     }
   }
 
@@ -47,67 +51,49 @@ class WorkspaceStatus extends Component {
     }
   }
 
-  onLeave = () => {
-    this.setState({visible: false});
-  }
+  onLeave = () => this.setState({visible: false});
 
   onStatusReceived = (message) => {
     let status = JSON.parse(message.data).data;
-
     console.log('Status from server', status);
-
     if (this.state.instance && this.state.instance !== status.instance) {
-      this.setState({
-        isShowingModal: true
-      });
+      this.setState({isShowingModal: true});
     }
-
     this.setState({
       connected: true,
       status: status.status,
       output: status.output,
-      instance: status.instance
+      instance: status.instance,
     });
-
     if (status.status === 'crashed') {
-      // this.props.displaySystemDefcon1(status.output); FIXME
+      this.props.dispatch(addSystemDefcon1(status.output));
     }
   }
 
-  onConnected = () => {
-    this.setState({
-      connected: true
-    });
-  }
+  onConnected = () => this.setState({connected: true});
 
-  onDisconnected = () => {
-    this.setState({
-      connected: false
-    });
-  }
+  onDisconnected = () => this.setState({connected: false});
 
-  onModalClose = () => {
-    location.reload();
-  }
+  onModalClose = () => location.reload();
 
   render() {
-    let classes = ['fa'];
+    const {isSystemDefcon1} = this.props;
+    const {connected, status, visible} = this.state;
+    const classes = ['fa'];
     let message = null;
-
-    if (!this.state.connected) {
+    if (!connected) {
       message = 'Error connecting to server';
       classes.push(...['fa-question-circle', 'workspace-status__unknown'])
-    } else if (this.state.status === 'running') {
-      message = 'Workspace OK';
-      classes.push(...['fa-check-circle', 'workspace-status__success']);
-    } else if (this.state.status === 'crashed') {
+    } else if (status === 'crashed' || isSystemDefcon1) {
       message = 'Workspace crashed';
       classes.push(...['fa-exclamation-triangle', 'workspace-status__failure']);
-    } else if (this.state.status === 'installing') {
+    } else if (status === 'running') {
+      message = 'Workspace OK';
+      classes.push(...['fa-check-circle', 'workspace-status__success']);
+    } else if (status === 'installing') {
       message = 'Updating dependencies';
       classes.push('workspace-status__progress');
     }
-    const {visible} = this.state;
     return (
       <span className="workspace-status">
         <span className={classnames(classes)}
@@ -136,4 +122,9 @@ class WorkspaceStatus extends Component {
   }
 }
 
-export default WorkspaceStatus;
+const selector = createSelector(
+  state => state.systemDefcon1.errors.length > 0,
+  isSystemDefcon1 => ({isSystemDefcon1}),
+);
+
+export default connect(selector)(WorkspaceStatus);

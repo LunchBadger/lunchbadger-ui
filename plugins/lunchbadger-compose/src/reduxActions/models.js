@@ -5,7 +5,7 @@ import ModelProperty from '../models/ModelProperty';
 import ModelRelation from '../models/ModelRelation';
 import DataSource from '../models/DataSource';
 
-const {storeUtils} = LunchBadgerCore.utils;
+const {storeUtils, actions: coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
@@ -76,8 +76,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actions[updateAction](updatedEntity));
     return updatedEntity;
   } catch (err) {
-    console.log('ERROR updateModelFailure', err);
-    dispatch(actions.updateModelFailure(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 };
 
@@ -94,12 +93,11 @@ export const remove = (entity, action = 'removeModel') => async (dispatch) => {
     await ModelService.delete(entity.workspaceId);
     await ModelService.deleteModelConfig(entity.workspaceId);
   } catch (err) {
-    console.log('ERROR deleteModelFailure', err);
-    dispatch(actions.deleteModelFailure(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 };
 
-export const saveOrder = orderedIds => (dispatch, getState) => {
+export const saveOrder = orderedIds => async (dispatch, getState) => {
   const entities = getState().entities.models;
   const reordered = [];
   orderedIds.forEach((id, idx) => {
@@ -111,36 +109,48 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   });
   if (reordered.length > 0) {
     dispatch(actions.updateModels(reordered));
-    ModelService.upsert(reordered);
+    try {
+      await ModelService.upsert(reordered);
+    } catch (err) {
+      dispatch(coreActions.addSystemDefcon1(err));
+    }
   }
 };
 
 export const bundle = (microservice, model) => async (dispatch) => {
-  let updatedMicroservice = microservice.recreate();
-  updatedMicroservice.ready = false;
-  dispatch(actions.updateMicroservice(updatedMicroservice));
-  const updatedModel = model.recreate();
-  updatedModel.wasBundled = true;
-  await ModelService.upsert(updatedModel);
-  updatedMicroservice = microservice.recreate();
-  updatedMicroservice.addModel(updatedModel);
-  dispatch(actions.updateMicroservice(updatedMicroservice));
-  dispatch(actions.updateModelBundled(updatedModel));
-  dispatch(actions.removeModel(updatedModel));
+  try {
+    let updatedMicroservice = microservice.recreate();
+    updatedMicroservice.ready = false;
+    dispatch(actions.updateMicroservice(updatedMicroservice));
+    const updatedModel = model.recreate();
+    updatedModel.wasBundled = true;
+    await ModelService.upsert(updatedModel);
+    updatedMicroservice = microservice.recreate();
+    updatedMicroservice.addModel(updatedModel);
+    dispatch(actions.updateMicroservice(updatedMicroservice));
+    dispatch(actions.updateModelBundled(updatedModel));
+    dispatch(actions.removeModel(updatedModel));
+  } catch (err) {
+    dispatch(coreActions.addSystemDefcon1(err));
+  }
 };
 
 export const unbundle = (microservice, model) => async (dispatch) => {
-  let updatedMicroservice = microservice.recreate();
-  updatedMicroservice.ready = false;
-  dispatch(actions.updateMicroservice(updatedMicroservice));
-  const updatedModel = model.recreate();
-  updatedModel.wasBundled = false;
-  await ModelService.upsert(updatedModel);
-  updatedMicroservice = microservice.recreate();
-  updatedMicroservice.removeModel(updatedModel);
-  dispatch(actions.updateMicroservice(updatedMicroservice));
-  dispatch(actions.updateModel(updatedModel));
-  dispatch(actions.removeModelBundled(updatedModel));
+  try {
+    let updatedMicroservice = microservice.recreate();
+    updatedMicroservice.ready = false;
+    dispatch(actions.updateMicroservice(updatedMicroservice));
+    const updatedModel = model.recreate();
+    updatedModel.wasBundled = false;
+    await ModelService.upsert(updatedModel);
+    updatedMicroservice = microservice.recreate();
+    updatedMicroservice.removeModel(updatedModel);
+    dispatch(actions.updateMicroservice(updatedMicroservice));
+    dispatch(actions.updateModel(updatedModel));
+    dispatch(actions.removeModelBundled(updatedModel));
+  } catch (err) {
+    dispatch(coreActions.addSystemDefcon1(err));
+  }
 }
 
 export const rebundle = (fromMicroservice, toMicroservice, model) => async (dispatch) => {

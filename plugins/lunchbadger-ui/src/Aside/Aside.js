@@ -29,13 +29,18 @@ class Aside extends Component {
   }
 
   render() {
-    const {disabled, groups} = this.props;
+    const {disabled, groups, currentType} = this.props;
     return (
       <aside className={cs('Aside', {disabled})}>
         {groups.map((group, idx) => (
           <div key={idx} className="Aside__toolGroup">
             {group.map((tool, idxTool) => (
-              <Tool key={idxTool} {...tool} onClick={this.handleClick} />
+              <Tool
+                key={idxTool}
+                {...tool}
+                onClick={this.handleClick}
+                selected={currentType.endsWith(tool.name.toLowerCase())}
+              />
             ))}
           </div>
         ))}
@@ -46,8 +51,10 @@ class Aside extends Component {
 
 const selector = createSelector(
   state => state.plugins.tools || [],
-  tools => ({
+  state => state.states.currentEditElement,
+  (tools, currentElement) => ({
     groups: Object.keys(tools).map(key => tools[key]),
+    currentType: currentElement && !currentElement.loaded ? currentElement.constructor.type.toLowerCase() : '',
   }),
 );
 

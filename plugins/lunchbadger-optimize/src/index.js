@@ -17,6 +17,8 @@
 //
 // LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 
+import {removeAPIForecast} from './reduxActions/forecasts';
+
 import {registerPlugin} from '../../../src/reducers';
 import reducers from './reducers';
 import plugs from './plugs';
@@ -52,17 +54,20 @@ registerPlugin(reducers, plugs);
 // });
 //
 // // export
-// let LunchBadgerOptimize = {
+let LunchBadgerOptimize = {
+  actions: {
+    removeAPIForecast,
+  },
 //   stores: {
 //     Forecast: Forecast
 //   },
 //   services: {
 //     ForecastService: ForecastService
 //   }
-// };
+};
 //
-// if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
-//   global.LunchBadgerOptimize = LunchBadgerOptimize;
-// }
-//
-// module.exports = LunchBadgerOptimize;
+if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
+  global.LunchBadgerOptimize = LunchBadgerOptimize;
+}
+
+module.exports = LunchBadgerOptimize;

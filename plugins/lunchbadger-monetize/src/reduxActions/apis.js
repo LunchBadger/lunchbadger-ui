@@ -23,6 +23,9 @@ export const remove = entity => (dispatch) => {
   entity.publicEndpoints.forEach(({id}) => {
     Connections.removeConnection(null, id);
   });
+  if (LunchBadgerOptimize) {
+    dispatch(LunchBadgerOptimize.actions.removeAPIForecast(entity.id));
+  }
   dispatch(actions.removeAPI(entity));
 };
 

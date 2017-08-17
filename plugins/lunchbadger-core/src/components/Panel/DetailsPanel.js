@@ -29,7 +29,7 @@ class DetailsPanel extends Component {
 
   render() {
     return (
-      <div className="panel__body">
+      <div className="panel__body details">
         <div className="panel__title">
           Details
           {this.renderDetails()}

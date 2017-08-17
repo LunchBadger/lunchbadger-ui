@@ -73,7 +73,7 @@ class SettingsPanel extends Component {
     }
     const workspaceUrl = Config.get('workspaceUrl');
     return (
-      <div className="panel__body">
+      <div className="panel__body settings">
         <div className="panel__title">
           Settings
         </div>

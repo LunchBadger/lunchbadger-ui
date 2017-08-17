@@ -93,7 +93,7 @@ class ForecastsPanel extends Component {
     const entities = Object.keys(forecasts).map(key => forecasts[key]);
     const {expanded} = this.state;
     return connectDropTarget(
-      <div className="panel__body">
+      <div className="panel__body forecasts">
         {entities.length === 0 && (
           <div className={panelClass}>
             <div className="panel__forecast-drop__inside">

@@ -70,7 +70,7 @@ class MetricsPanel extends Component {
     });
     const entities = Object.keys(metrics).map(key => metrics[key]);
     return connectDropTarget(
-      <div className="panel__body">
+      <div className="panel__body metrics">
         {entities.length === 0 && (
           <div className={panelClass}>
             <div className="panel__metrics-drop__inside">

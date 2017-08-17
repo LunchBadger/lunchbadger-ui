@@ -15,7 +15,7 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch) => {
+export const update = (entity, model) => async (dispatch) => {
   let updatedEntity = Gateway.create({
     ...entity.toJSON(),
     ...model,
@@ -23,7 +23,12 @@ export const update = (entity, model) => (dispatch) => {
       ...pipeline,
       policies: pipeline.policies.map(policy => Policy.create(policy)),
     })),
+    ready: false,
   });
+  dispatch(actions.updateGateway(updatedEntity));
+  await new Promise(r => setTimeout(() => r(), 1500));
+  updatedEntity = updatedEntity.recreate();
+  updatedEntity.ready = true;
   dispatch(actions.updateGateway(updatedEntity));
   dispatch(coreActions.addSystemInformationMessage({
     type: 'success',

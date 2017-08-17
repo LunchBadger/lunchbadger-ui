@@ -289,4 +289,4 @@ const selector = createSelector(
   (isPanelClosed, loadingProject) => ({isPanelClosed, loadingProject}),
 );
 
-export default connect(selector)(Canvas);
+export default connect(selector, null, null, {withRef: true})(Canvas);

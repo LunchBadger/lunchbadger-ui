@@ -28,7 +28,7 @@ export default (ComposedComponent) => {
       window.addEventListener('resize', this.handleWindowResize);
       setTimeout(() => {
         this.header = this.props.header().refs.headerContainer;
-        this.canvas = this.props.canvas();
+        this.canvas = this.props.canvas().getWrappedInstance();
         this.container = this.props.container();
         let panelDefaultHeight = '50vh';
 
@@ -59,17 +59,11 @@ export default (ComposedComponent) => {
       if (this.state.opened === prevState.opened && this.state.height === prevState.height) {
         return;
       }
-
       clearTimeout(this.openTimeout);
-
       if (this.state.opened && !prevState.opened) {
-        this.openTimeout = setTimeout(() => {
-          this.updateCanvasHeight();
-        }, 1500);
-
+        this.openTimeout = setTimeout(this.updateCanvasHeight);
         return;
       }
-
       if (this.state.opened) {
         this.updateCanvasHeight();
       } else {
@@ -77,7 +71,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    updateCanvasHeight() {
+    updateCanvasHeight = () => {
       const containerHeight = this.getContainerHeight();
       const heightToCalculation = this.state.height === '50vh' ? containerHeight / 2 : this.state.height;
       this.canvas.setState({canvasHeight: containerHeight - parseInt(heightToCalculation, 10)});

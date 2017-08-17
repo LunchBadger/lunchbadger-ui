@@ -30,48 +30,40 @@ class DataSource extends Component {
     });
   }
 
+  getMainProperty = (name) => {
+    const {entity, validations: {data}} = this.props;
+    const prop = {
+      name,
+      title: name,
+      value: entity[name].toString(),
+      invalid: data[name],
+      onBlur: this.handleFieldChange(name),
+    };
+    if (name === 'password') {
+      prop.password = true;
+      prop.contextual = 'Password should be at least 6 chars long';
+    }
+    return prop;
+  }
+
   renderMainProperties = () => {
     const {
-      entity: {connector, url, database, username, password},
-      validations: {data},
+      entity: {connector},
       entityDevelopment,
       onResetField,
     } = this.props;
-    if (connector === 'memory') {
-      return null;
+    if (connector === 'memory') return null;
+    const isMySql = connector === 'mysql';
+    const mainProperties = [];
+    if (isMySql) {
+      mainProperties.push(this.getMainProperty('host'));
+      mainProperties.push(this.getMainProperty('port'));
+    } else {
+      mainProperties.push(this.getMainProperty('url'));
     }
-    const mainProperties = [
-      {
-        name: 'url',
-        title: 'URL',
-        value: url,
-        invalid: data.url,
-        onBlur: this.handleFieldChange('url')
-      },
-      {
-        name: 'database',
-        title: 'database',
-        value: database,
-        invalid: data.database,
-        onBlur: this.handleFieldChange('database')
-      },
-      {
-        name: 'username',
-        title: 'username',
-        value: username,
-        invalid: data.username,
-        onBlur: this.handleFieldChange('username'),
-      },
-      {
-        name: 'password',
-        title: 'password',
-        value: password,
-        invalid: data.password,
-        onBlur: this.handleFieldChange('password'),
-        password: true,
-        contextual: 'Password should be at least 6 chars long',
-      },
-    ];
+    mainProperties.push(this.getMainProperty('database'));
+    mainProperties.push(this.getMainProperty(isMySql ? 'user' : 'username'));
+    mainProperties.push(this.getMainProperty('password'));
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
       mainProperties[idx].onResetField = onResetField;

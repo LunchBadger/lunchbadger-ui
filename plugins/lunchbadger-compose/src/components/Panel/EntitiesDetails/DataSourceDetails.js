@@ -7,41 +7,34 @@ const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class DataSourceDetails extends Component {
   static propTypes = {
-    entity: PropTypes.object.isRequired
+    entity: PropTypes.object.isRequired,
   };
+
+  renderField = name => (
+    <div className="details-panel__fieldset">
+      <span className="details-panel__label">{name.toUpperCase()}</span>
+      <Input
+        className="details-panel__input"
+        value={this.props.entity[name].toString()}
+        name={name}
+      />
+    </div>
+  );
 
   render() {
     const {entity} = this.props;
     const {connector} = entity;
     if (connector === 'memory') return null;
+    const isMySql = connector === 'mysql';
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
-          <div className="details-panel__fieldset">
-            <span className="details-panel__label">URL</span>
-            <Input className="details-panel__input"
-                   value={entity.url}
-                   name="url"/>
-          </div>
-          <div className="details-panel__fieldset">
-            <span className="details-panel__label">Database</span>
-            <Input className="details-panel__input"
-                   value={entity.database}
-                   name="database"/>
-          </div>
-          <div className="details-panel__fieldset">
-            <span className="details-panel__label">Username</span>
-            <Input className="details-panel__input"
-                   value={entity.username}
-                   name="username"/>
-          </div>
-          <div className="details-panel__fieldset">
-            <span className="details-panel__label">Password</span>
-            <Input className="details-panel__input"
-                   value={entity.password}
-                   type="password"
-                   name="password"/>
-          </div>
+          {isMySql && this.renderField('host')}
+          {isMySql && this.renderField('port')}
+          {!isMySql && this.renderField('url')}
+          {this.renderField('database')}
+          {this.renderField(isMySql ? 'user' : 'username')}
+          {this.renderField('password')}
         </div>
       </CollapsableDetails>
     )

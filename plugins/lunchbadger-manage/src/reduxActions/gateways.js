@@ -4,6 +4,7 @@ import Pipeline from '../models/Pipeline';
 import Policy from '../models/Policy';
 
 const {Connections} = LunchBadgerCore.stores;
+const {actions: coreActions} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -24,6 +25,10 @@ export const update = (entity, model) => (dispatch) => {
     })),
   });
   dispatch(actions.updateGateway(updatedEntity));
+  dispatch(coreActions.addSystemInformationMessage({
+    type: 'success',
+    message: 'Gateway successfully deployed',
+  }));
   return updatedEntity;
 };
 

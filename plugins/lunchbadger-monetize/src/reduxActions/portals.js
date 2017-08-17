@@ -2,6 +2,7 @@ import {actions} from './actions';
 import Portal from '../models/Portal';
 
 const {Connections} = LunchBadgerCore.stores;
+const {actions: coreActions} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -15,6 +16,10 @@ export const add = () => (dispatch, getState) => {
 export const update = (entity, model) => (dispatch) => {
   let updatedEntity = Portal.create({...entity.toJSON(), ...model});
   dispatch(actions.updatePortal(updatedEntity));
+  dispatch(coreActions.addSystemInformationMessage({
+    type: 'success',
+    message: 'Portal successfully deployed',
+  }));
   return updatedEntity;
 };
 

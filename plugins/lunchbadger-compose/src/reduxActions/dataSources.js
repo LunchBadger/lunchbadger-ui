@@ -46,22 +46,24 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch, getState) => {
-  const state = getState();
-  dispatch(actions.removeDataSource(entity));
   try {
-    await DataSourceService.delete(entity.workspaceId);
-    Connections.search({fromId: entity.id})
-      .map(conn => storeUtils.findEntity(state, 1, conn.toId))
-      .filter(item => item instanceof Model)
-      .forEach(async model => {
-        await ModelService.upsertModelConfig({
-          name: model.name,
-          id: model.workspaceId,
-          facetName: 'server',
-          dataSource: null,
-          public: model.public,
+    const state = getState();
+    dispatch(actions.removeDataSource(entity));
+    if (entity.loaded) {
+      await DataSourceService.delete(entity.workspaceId);
+      Connections.search({fromId: entity.id})
+        .map(conn => storeUtils.findEntity(state, 1, conn.toId))
+        .filter(item => item instanceof Model)
+        .forEach(async model => {
+          await ModelService.upsertModelConfig({
+            name: model.name,
+            id: model.workspaceId,
+            facetName: 'server',
+            dataSource: null,
+            public: model.public,
+          });
         });
-      });
+    }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

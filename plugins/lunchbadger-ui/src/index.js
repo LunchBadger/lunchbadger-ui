@@ -1,6 +1,5 @@
 import Aside from './Aside/Aside';
 import Tool from './Aside/Tool/Tool';
-import ToolGroup from './Aside/ToolGroup/ToolGroup';
 import Button from './Button/Button';
 import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties';
 import IconSVG from './IconSVG/IconSVG';
@@ -91,7 +90,6 @@ export {
   Tool,
   Toolbox,
   TooltipWrapper,
-  ToolGroup,
   TopBar,
   entityIcons,
   dataSourceIcons,

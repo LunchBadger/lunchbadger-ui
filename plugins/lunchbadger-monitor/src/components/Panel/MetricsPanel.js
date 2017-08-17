@@ -42,6 +42,8 @@ const boxTarget = {
 };
 
 class MetricsPanel extends Component {
+  static type = 'MetricsPanel';
+
   constructor(props) {
     super(props);
     props.parent.storageKey = METRICS_PANEL;

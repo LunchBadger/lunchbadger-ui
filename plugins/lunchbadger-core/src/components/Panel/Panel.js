@@ -117,16 +117,16 @@ export default (ComposedComponent) => {
 
     render() {
       let panelHeight = '0px';
-
       if (this.state.opened) {
         panelHeight = this.state.height;
       }
-
-      const containerClass = classNames({
-        'panel__container': true,
-        'panel__container--dragging': this.state.dragging
+      let type = '';
+      if (this.panel) {
+        type = (this.panel.wrappedInstance || this.panel.decoratedComponentInstance || this.panel).constructor.type;
+      }
+      const containerClass = classNames(type, 'panel__container', {
+        'panel__container--dragging': this.state.dragging,
       });
-
       return (
         <div className="panel">
           <div className={containerClass} style={{height: panelHeight}}>

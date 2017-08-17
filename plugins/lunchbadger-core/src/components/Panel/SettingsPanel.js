@@ -10,6 +10,8 @@ import Config from '../../../../../src/config';
 import {getUser} from '../../utils/auth';
 
 class SettingsPanel extends Component {
+  static type = 'SettingsPanel';
+
   static contextTypes = {
     store: PropTypes.object,
   };

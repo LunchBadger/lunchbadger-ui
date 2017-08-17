@@ -7,6 +7,8 @@ import panelKeys from '../../constants/panelKeys';
 
 @inject('connectionsStore') @observer
 class DetailsPanel extends Component {
+  static type = 'DetailsPanel';
+
   constructor(props) {
     super(props);
     props.parent.storageKey = panelKeys.DETAILS_PANEL;

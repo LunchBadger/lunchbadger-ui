@@ -56,13 +56,13 @@ module.exports = {
       selector: '.header__menu__element .header__menu__link.FORECASTS_PANEL'
     },
     forecasterPanel: {
-      selector: '.panel-container .panel__body.forecasts .panel__container'
+      selector: '.panel__container.ForecastsPanel'
     },
     details: {
       selector: '.header__menu__element .header__menu__link.DETAILS_PANEL'
     },
     detailsPanel: {
-      selector: '.panel-container .panel__body.details .panel__container'
+      selector: '.panel__container.DetailsPanel'
     }
   }
 };

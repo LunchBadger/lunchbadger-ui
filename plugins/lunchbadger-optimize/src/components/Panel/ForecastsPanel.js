@@ -44,6 +44,8 @@ const boxTarget = {
 };
 
 class ForecastsPanel extends Component {
+  static type = 'ForecastsPanel';
+
   constructor(props) {
     super(props);
     props.parent.storageKey = FORECASTS_PANEL;

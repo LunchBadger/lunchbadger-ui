@@ -36,13 +36,11 @@ export default class APIForecast extends BaseModel {
   set api(api) {
     if (!api) {
       this._api = ForecastAPI.create({});
-
       return;
     }
 
     if (api.constructor.type === ForecastAPI.type) {
       this._api = api;
-
       return;
     }
     /*

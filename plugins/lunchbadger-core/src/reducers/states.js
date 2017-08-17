@@ -14,6 +14,8 @@ export default (state = {}, action) => {
     case actionTypes.setStates:
       action.payload.forEach(({key, value}) => newState[key] = value);
       return newState;
+    case actionTypes.clearProject:
+      return {};
     default:
       return state;
   }

@@ -11,7 +11,7 @@ export default (state = {}, action) => {
       const currentForecast = action.payload.body.states.find(({key}) => key === 'currentForecast');
       if (currentForecast) {
         const {id, left = 0, top = 0} = currentForecast.value;
-        const api = ForecastAPI.create({id});
+        const api = ForecastAPI.create({id, name: 'API'});
         const forecast = APIForecast.create({id, api, left, top});
         newState[forecast.id] = forecast;
         return newState;

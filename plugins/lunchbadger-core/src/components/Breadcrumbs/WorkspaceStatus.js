@@ -81,7 +81,10 @@ class WorkspaceStatus extends Component {
     const {connected, status, visible} = this.state;
     const classes = ['fa'];
     let message = null;
-    if (!connected) {
+    if (status === 'installing') {
+      message = 'Updating dependencies';
+      classes.push('workspace-status__progress');
+    } else if (!connected) {
       message = 'Error connecting to server';
       classes.push(...['fa-question-circle', 'workspace-status__unknown'])
     } else if (status === 'crashed' || isSystemDefcon1) {
@@ -90,9 +93,6 @@ class WorkspaceStatus extends Component {
     } else if (status === 'running') {
       message = 'Workspace OK';
       classes.push(...['fa-check-circle', 'workspace-status__success']);
-    } else if (status === 'installing') {
-      message = 'Updating dependencies';
-      classes.push('workspace-status__progress');
     }
     return (
       <span className="workspace-status">

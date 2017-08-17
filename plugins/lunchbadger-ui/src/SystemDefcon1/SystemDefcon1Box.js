@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse, IconSVG} from '../';
 import {iconDelete} from '../../../../src/icons';
-import {toggleSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
+import {toggleSystemDefcon1, removeSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
@@ -26,6 +26,8 @@ class SystemDefcon1Box extends Component {
     }
   }
 
+  handleRemove = item => () => this.props.dispatch(removeSystemDefcon1(item));
+
   render() {
     const {server, errors} = this.props;
     const {visibleError} = this.state;
@@ -40,26 +42,32 @@ class SystemDefcon1Box extends Component {
         </div>
         <div className="SystemDefcon1__box__content">
           {content}
-          <div className="SystemDefcon1__box__content__details">
-            <div>
-              <span
-                className="SystemDefcon1__box__content__details--link"
-                onClick={this.toggleVisibleError}
-              >
-                {visibleError ? 'Hide' : 'Show'} server output details
-              </span>
-            </div>
-            <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
-              <div className="SystemDefcon1__box__content__details--box">
-                {errors.map((item, idx) => (
-                  <div key={idx}>
-                    {errors.length > 1 && <h3>Error {idx + 1}</h3>}
-                    <pre>{item}</pre>
-                  </div>
-                ))}
+          {errors.length > 0 && (
+            <div className="SystemDefcon1__box__content__details">
+              <div>
+                <span
+                  className="SystemDefcon1__box__content__details--link"
+                  onClick={this.toggleVisibleError}
+                >
+                  {visibleError ? 'Hide' : 'Show'} server output details
+                </span>
               </div>
-            </SmoothCollapse>
-          </div>
+              <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
+                <div className="SystemDefcon1__box__content__details--box">
+                  {errors.map((item, idx) => (
+                    <div key={idx}>
+                      <h3>
+                        Error {idx + 1}
+                        {' '}
+                        <small className="removeError" onClick={this.handleRemove(item)}>remove</small>
+                      </h3>
+                      <pre>{item}</pre>
+                    </div>
+                  ))}
+                </div>
+              </SmoothCollapse>
+            </div>
+          )}
         </div>
         <div className="SystemDefcon1__box__content">
           <button onClick={this.handleClose}>

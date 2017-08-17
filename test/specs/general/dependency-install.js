@@ -1,15 +1,15 @@
 var page;
 
-const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource:last-child';
+const elementSelector = '.quadrant:nth-child(1) .Entity.DataSource';
 const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage';
 
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
   browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
   if (!skipUpdatingDependenciesCheck) {
-    page.moveToElement('.logotype', 5, 5);
-    browser.click('.logotype');
+    // page.moveToElement('.logotype', 5, 5);
+    // browser.click('.logotype');
     page.moveToElement('.workspace-status', 5, 5, function () {
-      browser.waitForElementVisible(workspaceStatusSelector, 5000);
+      // browser.waitForElementVisible(workspaceStatusSelector, 5000);
       page.expect.element(workspaceStatusSelector).text.to.contain('Updating dependencies');
     });
   }
@@ -30,7 +30,7 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
 }
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Connector installation: data source add': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
@@ -75,12 +75,14 @@ module.exports = {
   'Connector uninstallation: remove datasource': function(browser) {
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.click(elementSelector);
-    browser.pause(1500);
-    browser.waitForElementVisible(elementSelector + ' .Toolbox__button--delete', 50000);
-    browser.click(elementSelector + ' .Toolbox__button--delete');
-    browser.pause(1500);
+    browser.click(elementSelector + '.mongodb');
+    browser.waitForElementVisible(elementSelector + '.mongodb .Toolbox__button--delete', 50000);
+    browser.click(elementSelector + '.mongodb .Toolbox__button--delete');
+    browser.waitForElementPresent('.modal__actions__button.modal__actions__button--confirm', 5000);
     browser.click('.modal__actions__button.modal__actions__button--confirm');
+    browser.waitForElementPresent('.SystemDefcon1', 5000);
+    browser.click('.SystemDefcon1 button');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     expectInstall(browser, page, 'failure', '?wsdl');
   },
 

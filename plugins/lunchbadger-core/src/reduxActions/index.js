@@ -13,6 +13,7 @@ import {
 import {
   addSystemDefcon1,
   toggleSystemDefcon1,
+  removeSystemDefcon1,
 } from './systemDefcon1';
 import {
   setPortDOMElement,
@@ -32,6 +33,7 @@ export {
 
   addSystemDefcon1,
   toggleSystemDefcon1,
+  removeSystemDefcon1,
 
   setPortDOMElement,
 };

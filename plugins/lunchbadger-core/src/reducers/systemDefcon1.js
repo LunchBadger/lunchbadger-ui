@@ -18,6 +18,12 @@ export default (state = initialState, action) => {
     case actionTypes.toggleSystemDefcon1:
       newState.visible = !newState.visible;
       return newState;
+    case actionTypes.removeSystemDefcon1:
+      newState.errors = newState.errors.filter(item => item !== action.payload);
+      if (newState.errors.length === 0) {
+        newState.visible = false;
+      }
+      return newState;
     default:
       return state;
   }

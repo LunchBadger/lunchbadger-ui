@@ -15,6 +15,9 @@ const {actions, actionTypes} = actionsCreator(
     'addSystemDefcon1',
     'toggleSystemDefcon1',
 
+    'addSystemInformationMessage',
+    'removeSystemInformationMessages',
+
     'setLoadingProject',
 
     'setPortDOMElement',

@@ -5,7 +5,7 @@ const initialState = {
   visible: false,
 }
 
-const systemDefcon1 = (state = initialState, action) => {
+export default (state = initialState, action) => {
   const newState = {...state};
   switch (action.type) {
     case actionTypes.addSystemDefcon1:
@@ -21,6 +21,4 @@ const systemDefcon1 = (state = initialState, action) => {
     default:
       return state;
   }
-}
-
-export default systemDefcon1;
+};

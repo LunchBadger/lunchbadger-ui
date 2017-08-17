@@ -35,6 +35,10 @@ export const saveToServer = () => async (dispatch, getState) => {
       dispatch(actions.addSystemDefcon1(err));
     }
   }
+  dispatch(actions.addSystemInformationMessage({
+    type: 'success',
+    message: 'All data has been synced with API',
+  }));
   dispatch(actions.setLoadingProject(false));
 };
 
@@ -49,6 +53,10 @@ export const clearServer = () => async (dispatch) => {
       dispatch(actions.addSystemDefcon1(err));
     }
   }
+  dispatch(actions.addSystemInformationMessage({
+    type: 'success',
+    message: 'All data removed from server',
+  }));
   dispatch(actions.setLoadingProject(false));
 };
 

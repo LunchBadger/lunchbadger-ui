@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import SystemInformationMessage from './SystemInformationMessage';
-import {removeSystemInformationMessages} from '../actions';
+import {removeSystemInformationMessages} from '../../../../plugins/lunchbadger-core/src/reduxActions/systemInformationMessages';
 import './SystemInformationMessages.scss';
 
 class SystemInformationMessages extends Component {
@@ -15,17 +16,17 @@ class SystemInformationMessages extends Component {
   }
 
   checkMessages = () => {
-    const {messages, removeMessages} = this.props;
+    const {messages, dispatch} = this.props;
     const messagesToRemove = [];
     messages.forEach((item) => {
       if (Date.now() >= item.validUntil) messagesToRemove.push(item.message);
     });
     if (messagesToRemove.length > 0) {
-      removeMessages(messagesToRemove);
+      dispatch(removeSystemInformationMessages(messagesToRemove));
     }
   }
 
-  onRemove = message => () => this.props.removeMessages([message]);
+  onRemove = message => () => this.props.dispatch(removeSystemInformationMessages([message]));
 
   render() {
     const {messages} = this.props;
@@ -48,12 +49,9 @@ SystemInformationMessages.propTypes = {
   removeMessages: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  messages: state.ui.systemInformationMessages,
-});
+const selector = createSelector(
+  state => state.systemInformationMessages,
+  messages => ({messages}),
+);
 
-const mapDispatchToProps = dispatch => ({
-  removeMessages: messages => dispatch(removeSystemInformationMessages(messages)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SystemInformationMessages);
+export default connect(selector)(SystemInformationMessages);

@@ -10,7 +10,6 @@ import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/sr
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
 class Gateway extends Component {
   static propTypes = {

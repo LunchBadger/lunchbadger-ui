@@ -26,7 +26,10 @@ const getDataSourceConnector = label => label === 'Ethereum' ? 'web3' : label.to
 
 const wizardFunc = label => () => {}; //TODO: implement datasource wizard
 
-const getWizardFunc = label => dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+const getWizardFunc = (label) => {
+  if (document.location.search !== '?ds') return undefined;
+  return dataSourcesWizard.includes(label) ? wizardFunc(label) : undefined;
+}
 
 const dataSourceAction = label => () => dispatch => dispatch(addDataSource(label, getDataSourceConnector(label)));
 

@@ -105,29 +105,9 @@ class Gateway extends Component {
         onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
         pipelinesOpened={this.state.pipelinesOpened}
         onRemove={this.onRemovePipeline(pipeline)}
-
       />
     ));
   }
-
-  // update(model) {
-  //   let data = {
-  //     pipelines: (model.pipelines || []).map(pipeline => {
-  //       let policies = pipeline.policies || [];
-  //       delete pipeline.policies;
-  //
-  //       return PipelineFactory.create({
-  //         ...pipeline,
-  //         policies: policies.map(policy => Policy.create(policy))
-  //       });
-  //     })
-  //   };
-  //   const validations = this.validate(model);
-  //   if (validations.isValid) {
-  //     redeployGateway(this.props.entity, _.merge(model, data));
-  //   }
-  //   return validations;
-  // }
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
@@ -153,15 +133,6 @@ class Gateway extends Component {
     const {entity} = this.props;
     dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
   }
-
-  // _onDeploy() {
-  //   const dispatchRedux = LunchBadgerCore.dispatchRedux;
-  //   dispatchRedux(addSystemInformationMessage({
-  //     message: 'Gateway successfully deployed',
-  //     type: 'success'
-  //   }));
-  //   this.props.parent.triggerElementAutofocus();
-  // }
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 

@@ -241,6 +241,30 @@ export default (ComposedComponent) => {
       //   }
       //   this.setState({editable: false, validations: {isValid: true, data:{}}});
       // }
+// =======
+//       let updated;
+//       if (typeof element.update === 'function') {
+//         updated = element.update(model);
+//       }
+//       if (typeof updated === 'undefined' || updated) {
+//         if (updated) {
+//           this.setState({validations: updated});
+//           if (!updated.isValid) {
+//             return;
+//           }
+//         }
+//         this.setState({editable: false, validations: {isValid: true, data:{}}});
+//         toggleEdit(null);
+//       }
+//       let modelBeforeEdit = this.entityRef.getFormRef().getModel();
+//       if (typeof element.getModelAfterUpdate === 'function') {
+//         modelBeforeEdit = element.getModelAfterUpdate(modelBeforeEdit);
+//       }
+//       this.setState({
+//         modelBeforeEdit,
+//         [`modelEnv_${multiEnvIndex}`]: modelBeforeEdit,
+//       });
+// >>>>>>> development
     }
 
     updateName = (evt) => {
@@ -339,6 +363,48 @@ export default (ComposedComponent) => {
       // }
       event.preventDefault();
       event.stopPropagation();
+// =======
+//     getFlatModel = () => {
+//       const model = {};
+//       this.feedFlatModel(this.state.modelBeforeEdit, model);
+//       return model;
+//     }
+//
+//     feedFlatModel = (json, data, prefix = '') => {
+//       Object.keys(json).forEach((key) => {
+//         const pfx = prefix ? `[${key}]` : key;
+//         if (Array.isArray(json[key])) {
+//           json[key].forEach((item, idx) => {
+//             this.feedFlatModel(item, data, `${prefix}${pfx}[${idx}]`);
+//           });
+//         } else {
+//           data[`${prefix}${pfx}`] = json[key];
+//         }
+//       });
+//     }
+//
+//     _handleCancel = (evt) => {
+//       evt.persist();
+//       if (this.state.modelBeforeEdit === null) {
+//         this._handleRemove();
+//         evt.preventDefault();
+//         evt.stopPropagation();
+//         return;
+//       }
+//       const element = this.element.decoratedComponentInstance || this.element;
+//       if (typeof element.discardChanges === 'function') {
+//         element.discardChanges();
+//       }
+//       if (this.entityRef.getFormRef()) {
+//         this.entityRef.getFormRef().reset(this.getFlatModel());
+//       }
+//       toggleEdit(null);
+//       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
+//         this.toggleHighlighted();
+//       });
+//       evt.preventDefault();
+//       evt.stopPropagation();
+// >>>>>>> development
     }
 
     handleFieldUpdate = (field, value) => {

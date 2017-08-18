@@ -1,7 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {findDOMNode} from 'react-dom';
+// import {findDOMNode} from 'react-dom';
 import Policy from './Policy';
 import {addAndConnect as addPublicEndpointAndConnect} from '../../../reduxActions/publicEndpoints';
 import {EntityProperty, EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
@@ -151,15 +151,6 @@ export default class Pipeline extends PureComponent {
   }
 
   render() {
-    // const {currentlySelectedSubelements} = this.props;
-    // const pipelineClass = classNames({
-    //   pipeline: true,
-    //   'pipeline--opened': this.state.opened
-    // });
-    // const pipelineInfoClass = classNames({
-    //   pipeline__info: true,
-    //   // 'pipeline__info--selected': _.find(currentlySelectedSubelements, {id: this.props.entity.id})
-    // });
     const {index, onRemove} = this.props;
     return (
       <CollapsibleProperties

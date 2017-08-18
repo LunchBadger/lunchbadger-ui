@@ -18,10 +18,10 @@ class DataSource extends Component {
   }
 
   renderPorts() {
-    return this.props.entity.ports.map((port, idx) => {
+    return this.props.entity.ports.map((port) => {
       return (
         <Port
-          key={idx}
+          key={`port-${port.portType}-${port.id}`}
           way={port.portType}
           elementId={port.id}
           scope={port.portGroup}

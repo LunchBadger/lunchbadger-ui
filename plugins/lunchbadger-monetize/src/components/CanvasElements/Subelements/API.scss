@@ -1,4 +1,9 @@
-.Portal__APIs__title {
-  line-height: 40px;
-  margin-left: 15px;
+.Portal__APIs {
+  &__title {
+    line-height: 40px;
+    margin-left: 15px;
+  }
+  .port {
+    margin-top: 3px;
+  }
 }

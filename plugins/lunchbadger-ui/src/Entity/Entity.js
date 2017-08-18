@@ -12,6 +12,7 @@ class Entity extends PureComponent {
     super(props);
     this.state = {
       expanded: true,
+      marginTopPorts: {},
     }
   }
 
@@ -25,7 +26,19 @@ class Entity extends PureComponent {
 
   getFormRef = () => this.refs.form;
 
-  handleToggleExpand = () => this.setState({expanded: !this.state.expanded});
+  handleToggleExpand = () => {
+    const expanded = !this.state.expanded;
+    this.refs.data.querySelectorAll('.port__middle').forEach((portRef) => {
+      if (!expanded) {
+        const marginTop = +window.getComputedStyle(portRef).marginTop.replace('px', '');
+        this.state.marginTopPorts[portRef.id] = marginTop;
+        portRef.style.marginTop = `${-portRef.offsetTop + marginTop + 13}px`;
+      } else {
+        portRef.style.marginTop = `${this.state.marginTopPorts[portRef.id]}px`;
+      }
+    });
+    this.setState({expanded});
+  }
 
   render() {
     const {
@@ -70,7 +83,7 @@ class Entity extends PureComponent {
           />
           <div className="Entity__data">
             <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
-              <div className="Entity__extra">
+              <div className="Entity__extra" ref="data">
                 <EntityValidationErrors
                   validations={validations}
                   onFieldClick={onFieldClick}

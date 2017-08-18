@@ -22,11 +22,6 @@ export default class Port extends PureComponent {
     paper: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.portTopOffsets = {};
-  }
-
   componentWillMount() {
     this.paper = this.context.paper.getInstance();
     this.tempId = uuid.v4();
@@ -77,29 +72,14 @@ export default class Port extends PureComponent {
     if (this.props.way === 'out') {
       this._checkAndReattachSourceConnections();
     }
-    this.calculatePortTopOffsets();
   }
 
   componentWillUpdate(nextProps) {
-    this.calculatePortTopOffsets();
-    if (nextProps.offsetTop !== this.props.offsetTop) {
-      this.forceUpdate();
-    }
     if (nextProps.scope !== this.props.scope) {
       const portDOM = findDOMNode(this.refs.port);
       this.paper.setTargetScope(portDOM, nextProps.scope);
       this.paper.setSourceScope(portDOM, nextProps.scope);
     }
-  }
-
-  calculatePortTopOffsets = () => {
-    const portWrapDOM = findDOMNode(this.refs.port__wrap);
-    const subElementOffsetTop = portWrapDOM.closest('.EntitySubElements__main')
-      ? portWrapDOM.closest('.EntitySubElements').getBoundingClientRect().top
-      : 0;
-    this.portTopOffsets[this.props.elementId] = (this.props.offsetTop || 0)
-      + subElementOffsetTop
-      - portWrapDOM.closest('.Entity__extra').getBoundingClientRect().top;
   }
 
   componentWillUnmount() {
@@ -109,13 +89,13 @@ export default class Port extends PureComponent {
     connectionsIn.each((connection) => {
       this.paper.detach(connection, {
         fireEvent: false,
-        forceDetach: false
+        forceDetach: false,
       });
     });
     connectionsOut.each((connection) => {
       this.paper.detach(connection, {
         fireEvent: false,
-        forceDetach: false
+        forceDetach: false,
       });
     });
   }
@@ -159,26 +139,22 @@ export default class Port extends PureComponent {
   render() {
     const {way, elementId, middle, className, connectionsStore} = this.props;
     const isConnected = connectionsStore.isPortConnected(way, elementId);
-    const portClass = classNames({
+    const portClass = classNames('canvas-element__port', 'port', {
       'canvas-element__port--out': way === 'out',
       'canvas-element__port--in': way === 'in',
-      'canvas-element__port': true,
-      'port': true,
-      'port__middle': middle
+      'port__middle': middle,
     });
-    const portAnchorClass = classNames({
-      port__anchor: true,
+    const portAnchorClass = classNames('port__anchor', {
       'port__anchor--connected': isConnected,
     });
     return (
       <div ref="port__wrap">
-        <div id={`port_${way}_${elementId}`}
-             className={`port-${way} ${portClass} ${className || ''}`}
-             style={{top: this.portTopOffsets[elementId]}}
+        <div
+          id={`port_${way}_${elementId}`}
+          className={`port-${way} ${portClass} ${className || ''}`}
         >
           <div className={portAnchorClass} ref="port" id={`port_${way}_${this.tempId}_${elementId}`}>
-            <div className="port__inside">
-            </div>
+            <div className="port__inside" />
           </div>
         </div>
       </div>

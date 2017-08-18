@@ -14,7 +14,6 @@ const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 class Gateway extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object.isRequired
   };
 
@@ -92,9 +91,7 @@ class Gateway extends Component {
     const newState = {
       dnsPrefix,
       pipelines: pipelines.slice(),
-      pipelinesOpened: pipelines.map(_ => false),
     };
-    // pipelines.forEach(item => newState.pipelinesOpened[item.id] = false);
     return newState;
   };
 
@@ -103,12 +100,6 @@ class Gateway extends Component {
 
   discardChanges = (callback) => {
     this.onStoreUpdate(this.props, callback);
-  }
-
-  handleTogglePipelineOpen = idx => opened => {
-    const pipelinesOpened = [...this.state.pipelinesOpened];
-    pipelinesOpened[idx] = opened;
-    this.setState({pipelinesOpened});
   }
 
   handleFieldChange = field => (evt) => {
@@ -153,18 +144,12 @@ class Gateway extends Component {
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   renderPipelines = () => {
-    const {entity} = this.props;
-    return this.state.pipelines.map((pipeline, index) => (
+    return this.state.pipelines.map((pipeline, idx) => (
       <PipelineComponent
-        key={`pipeline-${pipeline.id}`}
-
-        index={index}
-        parent={entity}
-
+        key={pipeline.id}
         entity={pipeline}
-        onToggleOpen={this.handleTogglePipelineOpen(index)}
-        pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(index)}
+        onRemove={this.onRemovePipeline(idx)}
+        index={idx}
       />
     ));
   }

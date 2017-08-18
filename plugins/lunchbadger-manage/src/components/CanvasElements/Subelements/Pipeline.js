@@ -13,54 +13,51 @@ const Port = LunchBadgerCore.components.Port;
 
 export default class Pipeline extends Component {
   static propTypes = {
-    parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
-    // paper: PropTypes.object,
     index: PropTypes.number.isRequired,
-    expanded: PropTypes.bool,
   };
 
   static contextTypes = {
     store: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      opened: false,
-      proxiedBy: []
-    };
-    // this.initializeProxyConnections = () => {
-    //   const inConnections = Connection.getConnectionsForTarget(this.props.entity.id);
-    //   const {proxiedBy} = this.state;
-    //   inConnections.forEach(connection => {
-    //     if (this.state.proxiedBy.indexOf(connection.fromId) < 0) {
-    //       proxiedBy.push(connection.fromId);
-    //     }
-    //   });
-    //   this.setState({proxiedBy: proxiedBy});
-    // };
-    // this.newConnectionListener = () => {
-    //   const connection = Connection.getLastConnection();
-    //   if (connection && connection.toId === this.props.entity.id
-    //     && this.state.proxiedBy.indexOf(connection.fromId) < 0) {
-    //     const {proxiedBy} = this.state;
-    //     if (connection.info.connection.getParameter('existing')) {
-    //       return;
-    //     }
-    //     this._handleReverseProxyConnection(connection);
-    //     proxiedBy.push(connection.fromId);
-    //     this.setState({proxiedBy: proxiedBy});
-    //   }
-    // };
-    // this.removeNewConnectionListener = () => {
-    //   Connection.removeChangeListener(this.newConnectionListener);
-    //   this.removeNewConnectionListener = null;
-    // };
-    // this.appStateReady = () => {
-    //   this.initializeProxyConnections();
-    // }
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     opened: false,
+  //     proxiedBy: []
+  //   };
+  //   // this.initializeProxyConnections = () => {
+  //   //   const inConnections = Connection.getConnectionsForTarget(this.props.entity.id);
+  //   //   const {proxiedBy} = this.state;
+  //   //   inConnections.forEach(connection => {
+  //   //     if (this.state.proxiedBy.indexOf(connection.fromId) < 0) {
+  //   //       proxiedBy.push(connection.fromId);
+  //   //     }
+  //   //   });
+  //   //   this.setState({proxiedBy: proxiedBy});
+  //   // };
+  //   // this.newConnectionListener = () => {
+  //   //   const connection = Connection.getLastConnection();
+  //   //   if (connection && connection.toId === this.props.entity.id
+  //   //     && this.state.proxiedBy.indexOf(connection.fromId) < 0) {
+  //   //     const {proxiedBy} = this.state;
+  //   //     if (connection.info.connection.getParameter('existing')) {
+  //   //       return;
+  //   //     }
+  //   //     this._handleReverseProxyConnection(connection);
+  //   //     proxiedBy.push(connection.fromId);
+  //   //     this.setState({proxiedBy: proxiedBy});
+  //   //   }
+  //   // };
+  //   // this.removeNewConnectionListener = () => {
+  //   //   Connection.removeChangeListener(this.newConnectionListener);
+  //   //   this.removeNewConnectionListener = null;
+  //   // };
+  //   // this.appStateReady = () => {
+  //   //   this.initializeProxyConnections();
+  //   // }
+  // }
 
   // componentDidMount() {
   //   // Connection.addChangeListener(this.newConnectionListener);
@@ -101,11 +98,11 @@ export default class Pipeline extends Component {
   // }
 
   renderPolicies() {
-    return this.props.entity.policies.map((policy, index) => {
+    return this.props.entity.policies.map((policy, idx) => {
       return (
         <Policy
           key={policy.id}
-          index={index}
+          index={idx}
           pipelineIndex={this.props.index}
           policy={policy}
         />
@@ -114,35 +111,17 @@ export default class Pipeline extends Component {
   }
 
   renderPorts() {
-    let pipelinesOffsetTop = 102;
-    let stopLoop = false;
-    this.props.pipelinesOpened.forEach((idx) => {
-      if (idx === this.props.index) {
-        stopLoop = true;
-      }
-      if (stopLoop) return;
-      if (this.props.pipelinesOpened[idx]) {
-        pipelinesOffsetTop += 171;
-      }
-    });
     return this.props.entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
-          ref={`port-${port.portType}`}
           way={port.portType}
           elementId={port.id}
           middle={true}
           scope={port.portGroup}
-          offsetTop={pipelinesOffsetTop + this.props.index * 48}
         />
       );
     });
-  }
-
-  toggleOpenState = () => {
-    this.setState({opened: !this.state.opened});
-    this.props.onToggleOpen(!this.state.opened);
   }
 
   toggleCollapsibleProperties = () => {
@@ -152,26 +131,27 @@ export default class Pipeline extends Component {
   render() {
     const {index, onRemove} = this.props;
     return (
-      <CollapsibleProperties
-        ref={(r) => {this.collapsiblePropertiesDOM = r;}}
-        bar={
-          <EntityProperty
-            name={`pipelines[${index}][name]`}
-            value={this.props.entity.name}
-            hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
-            onDelete={onRemove}
-            onViewModeClick={this.toggleCollapsibleProperties}
-          />
-        }
-        collapsible={
-          <div>
-            <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
-            {this.renderPolicies()}
-            {this.renderPorts()}
-          </div>
-        }
-        onToggleCollapse={this.toggleOpenState}
-      />
+      <div>
+        {this.renderPorts()}
+        <CollapsibleProperties
+          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
+          bar={
+            <EntityProperty
+              name={`pipelines[${index}][name]`}
+              value={this.props.entity.name}
+              hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
+              onDelete={onRemove}
+              onViewModeClick={this.toggleCollapsibleProperties}
+            />
+          }
+          collapsible={
+            <div>
+              <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
+              {this.renderPolicies()}
+            </div>
+          }
+        />
+      </div>
     );
   }
 }

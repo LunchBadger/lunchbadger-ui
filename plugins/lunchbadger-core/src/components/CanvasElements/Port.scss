@@ -16,9 +16,9 @@
     border-style: solid;
     border-color: $ui-dark-border;
   }
-  .collapsed & {
-    top: 13px !important;
-  }
+  // .collapsed & {
+  //   top: 13px !important;
+  // }
   .DataSource &,
   .Model &,
   .PrivateEndpoint &,
@@ -51,8 +51,8 @@
 }
 
 .port__middle {
-  top: 0;
-  margin-top: 0;
+  // top: 0;
+  // margin-top: 0;
 }
 
 .port__inside {

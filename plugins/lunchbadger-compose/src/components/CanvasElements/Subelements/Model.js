@@ -40,34 +40,25 @@ class Model extends PureComponent {
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
-    paper: PropTypes.object,
     left: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
     hideSourceOnDrag: PropTypes.bool.isRequired,
     handleEndDrag: PropTypes.func,
-    expanded: PropTypes.bool,
   };
 
   static contextTypes = {
     store: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   renderPorts() {
-    return this.props.entity.ports.map((port, idx) => {
-      const key = `port-${port.portType}-${port.id}`;
+    return this.props.entity.ports.map((port) => {
       return (
         <Port
-          key={idx}
+          key={`port-${port.portType}-${port.id}`}
           way={port.portType}
           middle={true}
           elementId={port.id}
-          ref={`port-${port.portType}`}
           scope={port.portGroup}
-          offsetTop={85 + this.props.index * 24}
         />
       );
     });
@@ -81,12 +72,12 @@ class Model extends PureComponent {
 
   render() {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames({
-      'model': true,
+    const elementClass = classNames('model', {
       'model--selected': _.find(currentlySelectedSubelements, {id: this.props.id}),
     });
     return connectDragSource(
       <div className={elementClass} onClick={this.handleClick}>
+        {this.renderPorts()}
         <div className="model__info">
           <div className="model__icon">
             <i className="fa fa-plug"/>
@@ -94,7 +85,6 @@ class Model extends PureComponent {
           <div className="model__name">
             {this.props.entity.name}
           </div>
-          {this.renderPorts()}
         </div>
       </div>
     );

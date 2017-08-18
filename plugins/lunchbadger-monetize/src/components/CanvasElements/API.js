@@ -15,7 +15,6 @@ const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 class API extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object
   };
 
@@ -43,9 +42,9 @@ class API extends Component {
   }
 
   renderEndpoints = () => {
-    return this.props.entity.publicEndpoints.map((api, idx) => (
+    return this.props.entity.publicEndpoints.map((api) => (
       <PublicEndpoint
-        key={idx}
+        key={api.id}
         parent={this.props.entity}
         id={api.id}
         entity={api}
@@ -53,7 +52,6 @@ class API extends Component {
         top={api.top || 0}
         handleEndDrag={(item) => this._handleEndDrag(item)}
         hideSourceOnDrag={true}
-        index={idx}
       />
     ));
   }

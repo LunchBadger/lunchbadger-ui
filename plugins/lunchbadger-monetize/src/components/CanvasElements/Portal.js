@@ -34,54 +34,28 @@ class Portal extends Component {
       isShowingModalMultiple: false,
       bundledItem: null,
       bundledItems: [],
-      APIsOpened: {},
     }
   }
 
-  componentDidMount() {
-    const {entity} = this.props;
-    const APIsOpened = {...this.state.APIsOpened};
-    entity.apis.forEach((item) => {
-      APIsOpened[item.id] = true;
-    });
-    this.setState({APIsOpened});
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.ready && !this.props.ready) {
+  //     this._onDeploy();
+  //   }
+  //   // if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+  //   //   const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
+  //   //     return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+  //   //   });
+  //   //   if (hasConnection) {
+  //   //     this.setState({hasConnection: true});
+  //   //   } else {
+  //   //     this.setState({hasConnection: false});
+  //   //   }
+  //   // }
+  // }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.ready && !this.props.ready) {
-      this._onDeploy();
-    }
-    // if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-    //   const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-    //     return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-    //   });
-    //   if (hasConnection) {
-    //     this.setState({hasConnection: true});
-    //   } else {
-    //     this.setState({hasConnection: false});
-    //   }
-    // }
-    const APIsOpened = {...this.state.APIsOpened};
-    let isChange = false;
-    nextProps.entity.apis.forEach((item) => {
-      if (typeof APIsOpened[item.id] === 'undefined') {
-        APIsOpened[item.id] = true;
-        isChange = true;
-      }
-    });
-    if (isChange) {
-      this.setState({APIsOpened});
-    }
-  }
-
-  _onDeploy() {
-    const dispatchRedux = LunchBadgerCore.dispatchRedux;
-    dispatchRedux(addSystemInformationMessage({
-      message: 'Portal successfully deployed',
-      type: 'success'
-    }));
-    this.props.parent.triggerElementAutofocus();
-  }
+  // _onDeploy() {
+  //   this.props.parent.triggerElementAutofocus(); // FIXME
+  // }
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
@@ -89,33 +63,18 @@ class Portal extends Component {
     }
   }
 
-  handleToggleAPIOpen = APIId => opened => {
-    this.setState({APIsOpened: {...this.state.APIsOpened, [APIId]: opened}});
-  }
-
   renderAPIs() {
-    const APIsPublicEndpoints = {};
-    this.props.entity.apis.forEach((endpoint) => {
-      APIsPublicEndpoints[endpoint.id] = endpoint.publicEndpoints.length;
-    });
-    return this.props.entity.apis.map((endpoint, index) => {
+    return this.props.entity.apis.map((endpoint) => {
       return (
         <API
           key={endpoint.id}
-          {...this.props}
           parent={this.props.entity}
-          key={endpoint.id}
           id={endpoint.id}
           entity={endpoint}
-          paper={this.props.paper}
           left={endpoint.left || 0}
           top={endpoint.top || 0}
           handleEndDrag={(item) => this._handleEndDrag(item)}
           hideSourceOnDrag={true}
-          onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}
-          APIsOpened={this.state.APIsOpened}
-          index={index}
-          APIsPublicEndpoints={APIsPublicEndpoints}
         />
       );
     });
@@ -167,7 +126,7 @@ class Portal extends Component {
 
   render() {
     const elementClass = classNames({
-      'has-connection': this.state.hasConnection
+      'has-connection': this.state.hasConnection,
     });
     const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [

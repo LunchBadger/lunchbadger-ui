@@ -154,9 +154,9 @@ class Model extends Component {
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   renderPorts = () => {
-    return this.props.entity.ports.map((port, idx) => (
+    return this.props.entity.ports.map((port) => (
       <Port
-        key={idx}
+        key={`port-${port.portType}-${port.id}`}
         way={port.portType}
         elementId={port.id}
         className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}

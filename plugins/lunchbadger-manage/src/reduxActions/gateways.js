@@ -1,4 +1,5 @@
 import {actions} from './actions';
+import _ from 'lodash';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import Policy from '../models/Policy';
@@ -16,10 +17,18 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch) => {
+  const removedPipelines = _.difference(
+    entity.pipelines.map(p => p.id),
+    (model.pipelines || []).map(p => p.id),
+  );
+  removedPipelines.forEach((id) => {
+    Connections.removeConnection(id);
+    Connections.removeConnection(null, id);
+  });
   let updatedEntity = Gateway.create({
     ...entity.toJSON(),
     ...model,
-    pipelines: model.pipelines.map(pipeline => Pipeline.create({
+    pipelines: (model.pipelines || []).map(pipeline => Pipeline.create({
       ...pipeline,
       policies: pipeline.policies.map(policy => Policy.create(policy)),
     })),

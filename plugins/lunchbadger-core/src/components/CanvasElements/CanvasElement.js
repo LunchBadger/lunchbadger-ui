@@ -335,10 +335,11 @@ export default (ComposedComponent) => {
         }
         const element = this.element.decoratedComponentInstance || this.element;
         if (typeof element.discardChanges === 'function') {
-          element.discardChanges();
-        }
-        if (this.entityRef.getFormRef()) {
-          this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
+          element.discardChanges(() => {
+            if (this.entityRef.getFormRef()) {
+              this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
+            }
+          });
         }
       }
       dispatch(setCurrentEditElement(null));

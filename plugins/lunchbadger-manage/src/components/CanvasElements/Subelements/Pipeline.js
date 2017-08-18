@@ -11,11 +11,11 @@ const Port = LunchBadgerCore.components.Port;
 
 // FIXME - handle toggleSubelement
 
-export default class Pipeline extends PureComponent {
+export default class Pipeline extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
+    // paper: PropTypes.object,
     index: PropTypes.number.isRequired,
     expanded: PropTypes.bool,
   };
@@ -116,20 +116,19 @@ export default class Pipeline extends PureComponent {
   renderPorts() {
     let pipelinesOffsetTop = 102;
     let stopLoop = false;
-    Object.keys(this.props.pipelinesOpened).forEach((key) => {
-      if (key === this.props.entity.id) {
+    this.props.pipelinesOpened.forEach((idx) => {
+      if (idx === this.props.index) {
         stopLoop = true;
       }
       if (stopLoop) return;
-      if (this.props.pipelinesOpened[key]) {
+      if (this.props.pipelinesOpened[idx]) {
         pipelinesOffsetTop += 171;
       }
     });
-    return this.props.entity.ports.map((port, idx) => {
-      const key = `port-${port.portType}-${port.id}`;
+    return this.props.entity.ports.map((port) => {
       return (
         <Port
-          key={idx}
+          key={`port-${port.portType}-${port.id}`}
           ref={`port-${port.portType}`}
           way={port.portType}
           elementId={port.id}

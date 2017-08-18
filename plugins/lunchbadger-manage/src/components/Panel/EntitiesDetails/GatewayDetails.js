@@ -118,11 +118,7 @@ class GatewayDetails extends Component {
     }));
   }
 
-  onPrefixChange = (event) => {
-    this.setState({
-      dnsPrefix: event.target.value
-    });
-  }
+  onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   renderPipelines() {
     return this.state.pipelines.map((pipeline, plIdx) => {

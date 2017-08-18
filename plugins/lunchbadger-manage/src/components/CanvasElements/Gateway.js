@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import _ from 'lodash';
-import Pipeline from './Subelements/Pipeline';
-// import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
+import update from 'react-addons-update';
+import Pipeline from '../../models/Pipeline';
+import PipelineComponent from './Subelements/Pipeline';
 import {addPipeline, removePipeline} from '../../reduxActions/gateways';
-// import Policy from '../../models/Policy';
-// import PipelineFactory from '../../models/Pipeline';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -27,86 +25,91 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      // hasInConnection: null,
-      // hasOutConnection: null,
-      dnsPrefix: props.entity.dnsPrefix,
-      pipelinesOpened: {},
-      showRemovingModal: false,
-      pipelineToRemove: null,
-    };
-    props.entity.pipelines.forEach((item) => {
-      this.state.pipelinesOpened[item.id] = false;
-    });
+    // this.state = {
+    //   // hasInConnection: null,
+    //   // hasOutConnection: null,
+    //   dnsPrefix: props.entity.dnsPrefix,
+    //   pipelinesOpened: {},
+    //   showRemovingModal: false,
+    //   pipelineToRemove: null,
+    // };
+    // props.entity.pipelines.forEach((item) => {
+    //   this.state.pipelinesOpened[item.id] = false;
+    // });
+    this.state = {...this.stateFromStores(props)};
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.entity !== this.props.entity) {
-      this.setState({
-        dnsPrefix: nextProps.entity.dnsPrefix,
-        pipelinesOpened: {},
-        showRemovingModal: false,
-        pipelineToRemove: null,
-      });
+    if (this.props.entity !== nextProps.entity) {
+      this.onStoreUpdate(nextProps);
     }
-    // if (nextProps.ready && !this.props.ready) {
-    //   this._onDeploy();
-    // }
-    // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-    //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
-    //     return Connection.getConnectionsForTarget(pipeline.id).length;
+    // if (nextProps.entity !== this.props.entity) {
+    //   this.setState({
+    //     dnsPrefix: nextProps.entity.dnsPrefix,
+    //     pipelinesOpened: {},
+    //     showRemovingModal: false,
+    //     pipelineToRemove: null,
     //   });
-    //   if (hasInConnection) {
-    //     this.setState({hasInConnection: true});
-    //   } else {
-    //     this.setState({hasInConnection: false});
+    // }
+    // // if (nextProps.ready && !this.props.ready) {
+    // //   this._onDeploy();
+    // // }
+    // // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
+    // //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
+    // //     return Connection.getConnectionsForTarget(pipeline.id).length;
+    // //   });
+    // //   if (hasInConnection) {
+    // //     this.setState({hasInConnection: true});
+    // //   } else {
+    // //     this.setState({hasInConnection: false});
+    // //   }
+    // // }
+    // // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
+    // //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
+    // //     return Connection.getConnectionsForSource(pipeline.id).length;
+    // //   });
+    // //   if (hasOutConnection) {
+    // //     this.setState({hasOutConnection: true});
+    // //   } else {
+    // //     this.setState({hasOutConnection: false});
+    // //   }
+    // // }
+    // // if (!this.props.parent.state.editable) { //FIXME
+    // //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
+    // // }
+    // const pipelinesOpened = {...this.state.pipelinesOpened};
+    // let pipelinesAdded = false;
+    // nextProps.entity.pipelines.forEach(({id}) => {
+    //   if (typeof pipelinesOpened[id] === 'undefined') {
+    //     pipelinesOpened[id] = false;
+    //     pipelinesAdded = true;
     //   }
-    // }
-    // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-    //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
-    //     return Connection.getConnectionsForSource(pipeline.id).length;
-    //   });
-    //   if (hasOutConnection) {
-    //     this.setState({hasOutConnection: true});
-    //   } else {
-    //     this.setState({hasOutConnection: false});
-    //   }
-    // }
-    // if (!this.props.parent.state.editable) { //FIXME
-    //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
-    // }
-    const pipelinesOpened = {...this.state.pipelinesOpened};
-    let pipelinesAdded = false;
-    nextProps.entity.pipelines.forEach(({id}) => {
-      if (typeof pipelinesOpened[id] === 'undefined') {
-        pipelinesOpened[id] = false;
-        pipelinesAdded = true;
-      }
-    });
-    if (pipelinesAdded) this.setState({pipelinesOpened});
+    // });
+    // if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
-  handleTogglePipelineOpen = pipelineId => opened => {
-    const pipelinesOpened = {...this.state.pipelinesOpened};
-    pipelinesOpened[pipelineId] = opened;
+  stateFromStores = props => {
+    const {dnsPrefix, pipelines} = props.entity;
+    const newState = {
+      dnsPrefix,
+      pipelines: pipelines.slice(),
+      pipelinesOpened: pipelines.map(_ => false),
+    };
+    // pipelines.forEach(item => newState.pipelinesOpened[item.id] = false);
+    return newState;
+  };
+
+  onStoreUpdate = (props = this.props, callback) =>
+    this.setState({...this.stateFromStores(props)}, () => callback && callback());
+
+  discardChanges = (callback) => {
+    this.onStoreUpdate(this.props, callback);
+  }
+
+  handleTogglePipelineOpen = idx => opened => {
+    const pipelinesOpened = [...this.state.pipelinesOpened];
+    pipelinesOpened[idx] = opened;
     this.setState({pipelinesOpened});
-  }
-
-  renderPipelines = () => {
-    const {entity} = this.props;
-    return entity.pipelines.map((pipeline, index) => (
-      <Pipeline
-        key={pipeline.id}
-        {...this.props}
-        index={index}
-        parent={entity}
-        paper={this.props.paper}
-        entity={pipeline}
-        onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
-        pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(pipeline)}
-      />
-    ));
   }
 
   handleFieldChange = field => (evt) => {
@@ -115,17 +118,31 @@ class Gateway extends Component {
     }
   }
 
+  // onAddPipeline = () => {
+  //   const {store: {dispatch}} = this.context;
+  //   const {entity} = this.props;
+  //   dispatch(addPipeline(entity.id));
+  // }
+
+  _setPipelineState = (pipelines) => this.setState({pipelines});
+
   onAddPipeline = () => {
-    const {store: {dispatch}} = this.context;
-    const {entity} = this.props;
-    dispatch(addPipeline(entity.id));
+    this._setPipelineState([...this.state.pipelines, Pipeline.create({
+      name: 'Pipeline'
+    })]);
   }
 
-  onRemovePipeline = pipelineToRemove => () => {
-    this.setState({
-      showRemovingModal: true,
-      pipelineToRemove,
-    });
+  // onRemovePipeline = pipelineToRemove => () => {
+  //   this.setState({
+  //     showRemovingModal: true,
+  //     pipelineToRemove,
+  //   });
+  // }
+
+  onRemovePipeline = (plIdx) => () => {
+    this._setPipelineState(update(this.state.pipelines, {
+      $splice: [[plIdx, 1]]
+    }));
   }
 
   removePipeline = () => {
@@ -135,6 +152,23 @@ class Gateway extends Component {
   }
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
+
+  renderPipelines = () => {
+    const {entity} = this.props;
+    return this.state.pipelines.map((pipeline, index) => (
+      <PipelineComponent
+        key={`pipeline-${pipeline.id}`}
+
+        index={index}
+        parent={entity}
+
+        entity={pipeline}
+        onToggleOpen={this.handleTogglePipelineOpen(index)}
+        pipelinesOpened={this.state.pipelinesOpened}
+        onRemove={this.onRemovePipeline(index)}
+      />
+    ));
+  }
 
   render() {
     const elementClass = classNames({
@@ -176,7 +210,7 @@ class Gateway extends Component {
             {this.renderPipelines()}
           </DraggableGroup>
         </EntitySubElements>
-        {this.state.showRemovingModal && (
+        {/*this.state.showRemovingModal && (
           <TwoOptionModal
             onClose={() => this.setState({showRemovingModal: false})}
             onSave={this.removePipeline}
@@ -189,7 +223,7 @@ class Gateway extends Component {
               Do you really want to remove that pipeline?
             </span>
           </TwoOptionModal>
-        )}
+        )*/}
       </div>
     );
   }

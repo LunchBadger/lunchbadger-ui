@@ -89,13 +89,6 @@ export default (ComposedComponent) => {
       canDrop: PropTypes.bool
     };
 
-    static contextTypes = {
-      multiEnvIndex: PropTypes.number,
-      multiEnvDelta: PropTypes.bool,
-      multiEnvAmount: PropTypes.number,
-      store: PropTypes.object,
-    };
-
     constructor(props) {
       super(props);
       this.state = {
@@ -184,8 +177,7 @@ export default (ComposedComponent) => {
     }
 
     update = async (props) => {
-      const {store: {dispatch}} = this.context;
-      const {entity} = this.props;
+      const {entity, dispatch} = this.props;
       let model = props;
       const element = this.element.decoratedComponentInstance || this.element;
       if (typeof element.processModel === 'function') {
@@ -304,27 +296,25 @@ export default (ComposedComponent) => {
     }
 
     handleRemove = () => {
-      const {entity} = this.props;
-      const {store: {dispatch}} = this.context;
+      const {entity, dispatch} = this.props;
       dispatch(entity.remove());
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
     }
 
     handleEdit = (event) => {
-      const {multiEnvIndex, multiEnvDelta} = this.context;
+      const {dispatch, multiEnvIndex, multiEnvDelta} = this.props;
       if (multiEnvDelta && multiEnvIndex > 0) {
         event.stopPropagation();
         return;
       }
-      this.context.store.dispatch(setCurrentEditElement(this.props.entity));
+      dispatch(setCurrentEditElement(this.props.entity));
       event.stopPropagation();
     }
 
     handleCancel = (event) => {
       event.persist();
-      const {store: {dispatch}} = this.context;
-      const {entity} = this.props;
+      const {entity, dispatch} = this.props;
       if (!entity.loaded) {
         dispatch(entity.remove());
         dispatch(actions.removeEntity(entity));
@@ -430,17 +420,18 @@ export default (ComposedComponent) => {
     }
 
     handleResetMultiEnvEntity = () => {
-      const {multiEnvIndex: index, entity} = this.props;
-      this.context.store.dispatch(actions.multiEnvironmentsUpdateEntity({index, entity}));
+      const {multiEnvIndex: index, entity, dispatch} = this.props;
+      dispatch(actions.multiEnvironmentsUpdateEntity({index, entity}));
     }
 
     handleResetMultiEnvEntityField = field => () => {
-      const {multiEnvIndex: index, entity: {id, [field]: value}} = this.props;
-      this.context.store.dispatch(actions.multiEnvironmentsResetEntityField({index, id, field, value}));
+      const {multiEnvIndex: index, entity: {id, [field]: value}, dispatch} = this.props;
+      dispatch(actions.multiEnvironmentsResetEntityField({index, id, field, value}));
     }
 
     handleClick = (event) => {
-      this.context.store.dispatch(setCurrentElement(this.props.entity));
+      const {entity, dispatch} = this.props;
+      dispatch(setCurrentElement(entity));
       event.stopPropagation();
     }
 

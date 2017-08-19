@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-// import {connect} from 'react-redux';
+import slug from 'slug';
+import cs from 'classnames';
 import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
-import slug from 'slug';
-import addPropertiesToData from '../addPropertiesToData';
 import addNestedProperties from '../addNestedProperties';
 import ModelProperty from '../../models/ModelProperty';
 import './Model.scss';
@@ -197,9 +196,9 @@ class Model extends Component {
   }
 
   render() {
-    // console.log('RENDER Model', this.props.entity.name, this.state.properties);
+    const {multiEnvIndex} = this.props;
     return (
-      <div>
+      <div className={cs('Model', {'multi': multiEnvIndex > 0})}>
         {this.renderPorts()}
         {this.renderMainProperties()}
         <EntitySubElements
@@ -207,7 +206,7 @@ class Model extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          <div ref="properties">
+          <div className="Model__properties" ref="properties">
             {this.renderProperties()}
           </div>
         </EntitySubElements>

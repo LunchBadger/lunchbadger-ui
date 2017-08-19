@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cs from 'classnames';
 import _ from 'lodash';
 import update from 'react-addons-update';
 import Pipeline from '../../models/Pipeline';
 import PipelineComponent from './Subelements/Pipeline';
-import {addPipeline, removePipeline} from '../../reduxActions/gateways';
+// import {removePipeline} from '../../reduxActions/gateways';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import './Gateway.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -17,9 +18,9 @@ class Gateway extends Component {
     parent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
+  // static contextTypes = {
+  //   store: PropTypes.object,
+  // };
 
   constructor(props) {
     super(props);
@@ -135,11 +136,11 @@ class Gateway extends Component {
     }));
   }
 
-  removePipeline = () => {
-    const {store: {dispatch}} = this.context;
-    const {entity} = this.props;
-    dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
-  }
+  // removePipeline = () => {
+  //   const {store: {dispatch}} = this.context;
+  //   const {entity} = this.props;
+  //   dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
+  // }
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
@@ -155,11 +156,12 @@ class Gateway extends Component {
   }
 
   render() {
-    const elementClass = classNames({
+    const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+    const elementClass = cs('Gateway', {
+      'multi': multiEnvIndex > 0,
       // 'has-connection-in': this.state.hasInConnection,
       // 'has-connection-out': this.state.hasOutConnection
     });
-    const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'rootURL',
@@ -187,12 +189,14 @@ class Gateway extends Component {
           onAdd={this.onAddPipeline}
           main
         >
-          <DraggableGroup
-            iconClass="icon-icon-gateway"
-            entity={this.props.entity}
-          >
-            {this.renderPipelines()}
-          </DraggableGroup>
+          <div className="Gateway__pipelines">
+            <DraggableGroup
+              iconClass="icon-icon-gateway"
+              entity={this.props.entity}
+            >
+              {this.renderPipelines()}
+            </DraggableGroup>
+          </div>
         </EntitySubElements>
         {/*this.state.showRemovingModal && (
           <TwoOptionModal

@@ -446,8 +446,8 @@ export default (ComposedComponent) => {
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
     render() {
-      const {multiEnvIndex, multiEnvDelta} = this.context;
-      const {entity, connectDragSource, connectDropTarget, isDragging, icon, editable, highlighted} = this.props;
+      const {multiEnvDelta} = this.context;
+      const {entity, connectDragSource, connectDropTarget, isDragging, editable, highlighted, multiEnvIndex} = this.props;
       const {ready} = entity;
       // const {processing} = metadata;
       const processing = !ready;
@@ -522,6 +522,7 @@ export default (ComposedComponent) => {
                 entityDevelopment={entityDevelopment}
                 onFieldUpdate={this.handleFieldUpdate}
                 onResetField={this._handleResetField}
+                multiEnvIndex={multiEnvIndex}
               />
               {this.state.showRemovingModal && (
                 <TwoOptionModal
@@ -543,11 +544,13 @@ export default (ComposedComponent) => {
   }
 
   const connector = createSelector(
+    state => state.ui.multiEnvironments.selected,
     state => state.states.currentElement,
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
     (_, props) => props.entity.id,
     (
+      multiEnvIndex,
       currentElement,
       currentEditElement,
       isPanelOpened,
@@ -556,6 +559,7 @@ export default (ComposedComponent) => {
       const highlighted = !!currentElement && currentElement.id === id;
       const editable = !!currentEditElement && currentEditElement.id === id;
       return {
+        multiEnvIndex,
         isPanelOpened,
         highlighted,
         editable,

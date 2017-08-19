@@ -34,6 +34,7 @@ export const remove = entity => (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
     await dispatch(removeModel(modelsBundled[id], 'removeModelBundled'));
+    dispatch(coreActions.removeEntity(modelsBundled[id]));
   });
   dispatch(actions.removeMicroservice(entity));
 };

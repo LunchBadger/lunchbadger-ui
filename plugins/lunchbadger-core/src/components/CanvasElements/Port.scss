@@ -70,3 +70,7 @@
 .port__icon {
   font-size: 14px;
 }
+
+.multiEnvNotDev .port {
+  pointer-events: none;
+}

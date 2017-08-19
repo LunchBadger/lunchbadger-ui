@@ -59,6 +59,12 @@ export default (state = initialState, action) => {
       entity[action.payload.field] = action.payload.value;
       newState.environments[action.payload.index].entities[action.payload.id] = entity;
       return newState;
+    case actionTypes.removeEntity:
+      newState.environments = [...newState.environments];
+      newState.environments.forEach((_, idx) => {
+        delete newState.environments[idx].entities[action.payload.id];
+      });
+      return newState;
     default:
       return state;
   }

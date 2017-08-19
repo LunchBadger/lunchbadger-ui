@@ -1,6 +1,8 @@
 import {actions} from './actions';
 import PrivateEndpoint from '../models/PrivateEndpoint';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
+
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
@@ -10,8 +12,16 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch) => {
-  let updatedEntity = PrivateEndpoint.create({...entity.toJSON(), ...model});
+export const update = (entity, model) => (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = PrivateEndpoint.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
+  updatedEntity = PrivateEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updatePrivateEndpoint(updatedEntity));
   return updatedEntity;
 };

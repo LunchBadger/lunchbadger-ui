@@ -19,6 +19,13 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = Model.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
   let type = 'models';
   let updateAction = 'updateModel';
   if (entity.wasBundled) {
@@ -26,7 +33,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updateAction += 'Bundled';
   }
   const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
-  let updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
+  updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {

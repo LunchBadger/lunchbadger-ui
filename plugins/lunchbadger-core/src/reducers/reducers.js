@@ -3,7 +3,7 @@ import loadingProject from './loadingProject';
 import initialConnections from './initialConnections';
 import systemDefcon1 from './systemDefcon1';
 import systemInformationMessages from './systemInformationMessages';
-import ports from './ports';
+import multiEnvironments from './multiEnvironments';
 
 export default {
   states,
@@ -11,5 +11,5 @@ export default {
   initialConnections,
   systemDefcon1,
   systemInformationMessages,
-  ports,
+  multiEnvironments,
 };

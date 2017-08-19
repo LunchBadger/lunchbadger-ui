@@ -130,9 +130,9 @@ class App extends Component {
 const selector = createSelector(
   state => state.systemDefcon1.visible,
   state => state.systemDefcon1.errors,
-  state => state.ui.multiEnvironments.selected,
-  state => state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
-  state => state.ui.multiEnvironments.environments.length,
+  state => state.multiEnvironments.selected,
+  state => state.multiEnvironments.environments[state.multiEnvironments.selected].delta,
+  state => state.multiEnvironments.environments.length,
   state => state.states.currentlyOpenedPanel,
   state => state.states.currentElement,
   state => !!state.states.currentEditElement,

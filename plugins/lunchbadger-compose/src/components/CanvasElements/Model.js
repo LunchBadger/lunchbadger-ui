@@ -39,7 +39,7 @@ class Model extends Component {
   // }
   //
   componentWillReceiveProps(nextProps) {
-    if (nextProps.entity.properties !== this.props.entity.properties) {
+    if (nextProps.entity !== this.props.entity) {
       this.onStoreUpdate(nextProps);
     }
     // if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
@@ -178,11 +178,12 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {validations: {data}, entity, entityDevelopment, onResetField} = this.props;
     const {contextPath} = this.state;
     const mainProperties = [
       {
         name: 'http[path]',
+        modelName: 'contextPath',
         title: 'context path',
         value: contextPath,
         invalid: data.contextPath,
@@ -190,7 +191,7 @@ class Model extends Component {
         onBlur: this.handleFieldChange('contextPath'),
       }
     ];
-    mainProperties[0].isDelta = contextPath !== entityDevelopment.contextPath;
+    mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }

@@ -17,8 +17,15 @@ export const add = (name, connector) => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = DataSource.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
   const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;
-  let updatedEntity = DataSource.create({...entity.toJSON(), ...model, ready: false});
+  updatedEntity = DataSource.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions.updateDataSource(updatedEntity));
   try {
     if (isDifferent) {

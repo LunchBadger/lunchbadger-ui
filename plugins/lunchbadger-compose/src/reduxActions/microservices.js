@@ -2,6 +2,7 @@ import {actions} from './actions';
 import Microservice from '../models/Microservice';
 import {remove as removeModel} from './models';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
@@ -13,8 +14,16 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch) => {
-  let updatedEntity = Microservice.create({...entity.toJSON(), ...model});
+export const update = (entity, model) => (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = Microservice.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
+  updatedEntity = Microservice.create({...entity.toJSON(), ...model});
   dispatch(actions.updateMicroservice(updatedEntity));
   return updatedEntity;
 };

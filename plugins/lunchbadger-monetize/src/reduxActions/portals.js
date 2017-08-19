@@ -13,8 +13,16 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch) => {
-  let updatedEntity = Portal.create({...entity.toJSON(), ...model});
+export const update = (entity, model) => (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = Portal.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
+  updatedEntity = Portal.create({...entity.toJSON(), ...model});
   dispatch(actions.updatePortal(updatedEntity));
   dispatch(coreActions.addSystemInformationMessage({
     type: 'success',

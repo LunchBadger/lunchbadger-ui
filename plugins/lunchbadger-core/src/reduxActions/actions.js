@@ -21,13 +21,19 @@ const {actions, actionTypes} = actionsCreator(
 
     'setLoadingProject',
 
-    'setPortDOMElement',
-
     'clearProject',
 
     'updateOrder',
 
     'addInitialConnections',
+
+    'multiEnvironmentsSetSelected',
+    'multiEnvironmentsAdd',
+    'multiEnvironmentsToggleDelta',
+    'multiEnvironmentsToggleNameEdit',
+    'multiEnvironmentsUpdateName',
+    'multiEnvironmentsUpdateEntity',
+    'multiEnvironmentsResetEntityField',
   ],
 );
 

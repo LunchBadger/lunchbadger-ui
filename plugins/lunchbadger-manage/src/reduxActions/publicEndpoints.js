@@ -32,8 +32,16 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
   ]));
 }
 
-export const update = (entity, model) => (dispatch) => {
-  let updatedEntity = PublicEndpoint.create({...entity.toJSON(), ...model});
+export const update = (entity, model) => (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = PublicEndpoint.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
+  updatedEntity = PublicEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updatePublicEndpoint(updatedEntity));
   return updatedEntity;
 };

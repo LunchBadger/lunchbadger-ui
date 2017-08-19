@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import cs from 'classnames';
-import {
-  selectMultiEnvironment,
-  addMultiEnvironment,
-  toggleMultiEnvironmentDelta,
-  toggleMultiEnvironmentNameEdit,
-  updateMultiEnvironmentName,
-} from '../../../actions';
 import {IconSVG, ContextualInformationMessage} from '../../../';
 import MultiEnvironment from './MultiEnvironment/MultiEnvironment';
 import {iconPlus, iconLeaf, iconMouse} from '../../../../../../src/icons';
+import {actions as coreActions} from '../../../../../../plugins/lunchbadger-core/src/reduxActions/actions';
 import './MultiEnvironments.scss';
 
 class MultiEnvironments extends Component {
+  static propTypes = {
+    environments: PropTypes.array,
+    selected: PropTypes.number,
+    select: PropTypes.func,
+    disabled: PropTypes.bool,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,19 +24,27 @@ class MultiEnvironments extends Component {
     };
   }
 
-  select = index => this.props.select(index);
+  handleSelect = index =>
+    this.props.dispatch(coreActions.multiEnvironmentsSetSelected(index));
 
-  toggleDelta = index => () => this.props.toggleDelta(index);
+  handleToggleDelta = index => () =>
+    this.props.dispatch(coreActions.multiEnvironmentsToggleDelta(index));
 
   toggleBalloon = balloonVisible => () => this.setState({balloonVisible});
 
+  handleToggleNameEdit = (index, edit) =>
+    this.props.dispatch(coreActions.multiEnvironmentsToggleNameEdit({index, edit}));
+
+  handleUpdateName = (index, name) =>
+    this.props.dispatch(coreActions.multiEnvironmentsUpdateName({index, name}));
+
   add = () => {
     this.toggleBalloon(false)();
-    this.props.add();
+    this.props.dispatch(coreActions.multiEnvironmentsAdd());
   }
 
   render() {
-    const {environments, selected, add, onToggleNameEdit, onUpdateName, disabled} = this.props;
+    const {environments, selected, disabled} = this.props;
     const {balloonVisible} = this.state;
     return (
       <div className={cs('MultiEnv', {disabled})}>
@@ -45,10 +55,10 @@ class MultiEnvironments extends Component {
             index={idx}
             selected={idx === selected}
             icon={idx === 0 ? iconLeaf : iconMouse}
-            onClick={this.select}
-            onToggleDelta={this.toggleDelta}
-            onToggleNameEdit={onToggleNameEdit}
-            onUpdateName={onUpdateName}
+            onClick={this.handleSelect}
+            onToggleDelta={this.handleToggleDelta}
+            onToggleNameEdit={this.handleToggleNameEdit}
+            onUpdateName={this.handleUpdateName}
           />
         ))}
         {environments.length <= 4 && (
@@ -71,24 +81,10 @@ class MultiEnvironments extends Component {
   }
 }
 
-MultiEnvironments.propTypes = {
-  environments: PropTypes.array,
-  selected: PropTypes.number,
-  select: PropTypes.func,
-  disabled: PropTypes.bool,
-}
+const selector = createSelector(
+  state => state.multiEnvironments.environments,
+  state => state.multiEnvironments.selected,
+  (environments, selected) => ({environments, selected}),
+);
 
-const mapStateToProps = state => ({
-  environments: state.ui.multiEnvironments.environments,
-  selected: state.ui.multiEnvironments.selected,
-});
-
-const mapDispatchToProps = dispatch => ({
-  select: index => dispatch(selectMultiEnvironment(index)),
-  add: () => dispatch(addMultiEnvironment()),
-  toggleDelta: index => dispatch(toggleMultiEnvironmentDelta(index)),
-  onToggleNameEdit: (index, edit) => dispatch(toggleMultiEnvironmentNameEdit(index, edit)),
-  onUpdateName: (index, name) => dispatch(updateMultiEnvironmentName(index, name)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MultiEnvironments);
+export default connect(selector)(MultiEnvironments);

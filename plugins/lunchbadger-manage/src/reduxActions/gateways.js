@@ -16,7 +16,22 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => async (dispatch) => {
+export const update = (entity, model) => async (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = Gateway.create({
+      ...entity.toJSON(),
+      ...model,
+      pipelines: (model.pipelines || []).map(pipeline => Pipeline.create({
+        ...pipeline,
+        policies: pipeline.policies.map(policy => Policy.create(policy)),
+      })),
+    });
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
   const removedPipelines = _.difference(
     entity.pipelines.map(p => p.id),
     (model.pipelines || []).map(p => p.id),
@@ -25,7 +40,7 @@ export const update = (entity, model) => async (dispatch) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  let updatedEntity = Gateway.create({
+  updatedEntity = Gateway.create({
     ...entity.toJSON(),
     ...model,
     pipelines: (model.pipelines || []).map(pipeline => Pipeline.create({

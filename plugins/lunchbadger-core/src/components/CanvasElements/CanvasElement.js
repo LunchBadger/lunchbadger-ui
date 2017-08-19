@@ -340,6 +340,10 @@ export default (ComposedComponent) => {
               this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
             }
           });
+        } else {
+          if (this.entityRef.getFormRef()) {
+            this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
+          }
         }
       }
       dispatch(setCurrentEditElement(null));
@@ -425,17 +429,14 @@ export default (ComposedComponent) => {
       }
     }
 
-    resetEnvEntity = () => {
-      this.update(this.state.modelEnv_0);
+    handleResetMultiEnvEntity = () => {
+      const {multiEnvIndex: index, entity} = this.props;
+      this.context.store.dispatch(actions.multiEnvironmentsUpdateEntity({index, entity}));
     }
 
-    _handleResetField = name => () => {
-      const {multiEnvIndex} = this.context;
-      const model = {
-        ...this.state[`modelEnv_${multiEnvIndex}`],
-        [name]: this.state.modelEnv_0[name],
-      };
-      this.update(model);
+    handleResetMultiEnvEntityField = field => () => {
+      const {multiEnvIndex: index, entity: {id, [field]: value}} = this.props;
+      this.context.store.dispatch(actions.multiEnvironmentsResetEntityField({index, id, field, value}));
     }
 
     handleClick = (event) => {
@@ -446,33 +447,18 @@ export default (ComposedComponent) => {
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
     render() {
-      const {multiEnvDelta} = this.context;
-      const {entity, connectDragSource, connectDropTarget, isDragging, editable, highlighted, multiEnvIndex} = this.props;
+      const {entity, connectDragSource, connectDropTarget, isDragging, editable, highlighted, multiEnvIndex, multiEnvDelta, multiEnvEntity} = this.props;
       const {ready} = entity;
-      // const {processing} = metadata;
       const processing = !ready;
       const {validations} = this.state;
-      const entityDevelopment = {...this.state.modelEnv_0};
-      const mask = ['pipelines'];
-      // FIXME - refactor below for multi env, because it cannot overwrite entity properties
-      // if (this.state[`modelEnv_${multiEnvIndex}`]) {
-      //   Object.keys(this.state[`modelEnv_${multiEnvIndex}`]).forEach((key) => {
-      //     if (!mask.includes(key)) {
-      //       entity[key] = this.state[`modelEnv_${multiEnvIndex}`][key];
-      //     }
-      //   });
-      // }
-      let isDelta = false;
-      Object.keys(entityDevelopment).forEach((key) => {
-        if (!mask.includes(key) && entityDevelopment[key] !== entity[key]) isDelta = true;
-      });
+      let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
       if (multiEnvDelta) {
         if (isDelta) {
           toolboxConfig.push({
             action: 'delete',
             svg: iconRevert,
-            onClick: this.resetEnvEntity,
+            onClick: this.handleResetMultiEnvEntity,
           });
         }
       } else {
@@ -518,10 +504,10 @@ export default (ComposedComponent) => {
                 parent={this}
                 {...this.props}
                 {...this.state}
-                entity={entity}
-                entityDevelopment={entityDevelopment}
+                entity={multiEnvEntity}
+                entityDevelopment={entity}
                 onFieldUpdate={this.handleFieldUpdate}
-                onResetField={this._handleResetField}
+                onResetField={this.handleResetMultiEnvEntityField}
                 multiEnvIndex={multiEnvIndex}
               />
               {this.state.showRemovingModal && (
@@ -544,22 +530,31 @@ export default (ComposedComponent) => {
   }
 
   const connector = createSelector(
-    state => state.ui.multiEnvironments.selected,
+    state => state.multiEnvironments,
     state => state.states.currentElement,
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
-    (_, props) => props.entity.id,
+    (_, props) => props.entity,
     (
-      multiEnvIndex,
+      multiEnvironments,
       currentElement,
       currentEditElement,
       isPanelOpened,
-      id,
+      entity,
     ) => {
+      const {id} = entity;
+      const multiEnvIndex = multiEnvironments.selected;
+      const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
+      let multiEnvEntity = entity;
+      if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
+        multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
+      }
       const highlighted = !!currentElement && currentElement.id === id;
       const editable = !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,
+        multiEnvDelta,
+        multiEnvEntity,
         isPanelOpened,
         highlighted,
         editable,

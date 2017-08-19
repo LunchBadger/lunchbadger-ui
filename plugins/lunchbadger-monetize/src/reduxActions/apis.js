@@ -1,6 +1,7 @@
 import {actions} from './actions';
 import API from '../models/API';
 
+const {actions: coreActions} = LunchBadgerCore.utils;
 const {actions: manageActions} = LunchBadgerManage.utils;
 const {Connections} = LunchBadgerCore.stores;
 
@@ -13,8 +14,16 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch) => {
-  let updatedEntity = API.create({...entity.toJSON(), ...model});
+export const update = (entity, model) => (dispatch, getState) => {
+  const state = getState();
+  const index = state.multiEnvironments.selected;
+  let updatedEntity;
+  if (index > 0) {
+    updatedEntity = API.create({...entity.toJSON(), ...model});
+    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    return updatedEntity;
+  }
+  updatedEntity = API.create({...entity.toJSON(), ...model});
   dispatch(actions.updateAPI(updatedEntity));
   return updatedEntity;
 };

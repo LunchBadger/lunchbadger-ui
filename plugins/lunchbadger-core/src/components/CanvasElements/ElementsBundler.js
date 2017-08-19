@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import './ElementsBundler.scss';
 
 const boxTarget = {
   canDrop(props, monitor) {

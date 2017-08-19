@@ -1,6 +1,16 @@
 import _ from 'lodash';
 import {actions} from './actions';
 
+export const createModelsFromJSON = response => (dispatch, getState) => {
+  const currentElement = response.body.states.find(({key}) => key === 'currentElement');
+  if (currentElement) {
+    const json = currentElement.value;
+    const {type} = json;
+    const entity = getState().plugins.models[type].create(json);
+    dispatch(actions.setState({key: 'currentElement', value: entity}));
+  }
+}
+
 export const setCurrentElement = value => (dispatch, getState) => {
   const {currentElement} = getState().states;
   if (currentElement && currentElement === value) return;

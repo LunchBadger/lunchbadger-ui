@@ -23,7 +23,8 @@ const objectsToRegister = [
   'onDelete',
   'onDiscardChanges',
   'onValidate',
-  'panelMenu'
+  'panelMenu',
+  'models'
 ];
 
 const registerArrays = (plugins, plugs) => {

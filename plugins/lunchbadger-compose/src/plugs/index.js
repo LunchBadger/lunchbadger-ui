@@ -1,6 +1,7 @@
 import tools from './tools';
 import quadrants from './quadrants';
 import canvasElements from './canvasElements';
+import models from './models';
 import panelDetailsElements from './panelDetailsElements';
 import services from './services';
 import onAppLoad from './onAppLoad';
@@ -14,6 +15,7 @@ export default {
   tools,
   quadrants,
   canvasElements,
+  models,
   panelDetailsElements,
   services,
   onAppLoad,

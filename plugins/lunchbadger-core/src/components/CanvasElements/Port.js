@@ -29,7 +29,6 @@ export default class Port extends PureComponent {
 
   componentDidMount() {
     const portDOM = findDOMNode(this.refs.port);
-
     const endpointOptions = {
       maxConnections: -1,
       paintStyle: {
@@ -53,19 +52,16 @@ export default class Port extends PureComponent {
       ],
       scope: this.props.scope,
     };
-
     this.paper.makeSource(portDOM, {
       endpoint: ['Dot', {radius: 4}],
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);
-
     this.paper.makeTarget(portDOM, {
       endpoint: ['Dot', {radius: 4}],
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);
-
     if (this.props.way === 'in') {
       this._checkAndReattachTargetConnections();
     }

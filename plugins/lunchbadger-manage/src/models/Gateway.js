@@ -1,5 +1,6 @@
 import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
+import Policy from './Policy';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -18,6 +19,16 @@ export default class Gateway extends BaseModel {
   constructor(id, name) {
     super(id);
     this.name = name;
+  }
+
+  static create(data) {
+    return super.create({
+      ...data,
+      pipelines: (data.pipelines || []).map(pipeline => Pipeline.create({
+        ...pipeline,
+        policies: pipeline.policies.map(policy => Policy.create(policy)),
+      })),
+    });
   }
 
   recreate() {

@@ -21,14 +21,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
-    updatedEntity = Gateway.create({
-      ...entity.toJSON(),
-      ...model,
-      pipelines: (model.pipelines || []).map(pipeline => Pipeline.create({
-        ...pipeline,
-        policies: pipeline.policies.map(policy => Policy.create(policy)),
-      })),
-    });
+    updatedEntity = Gateway.create({...entity.toJSON(), ...model});
     dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
@@ -40,15 +33,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  updatedEntity = Gateway.create({
-    ...entity.toJSON(),
-    ...model,
-    pipelines: (model.pipelines || []).map(pipeline => Pipeline.create({
-      ...pipeline,
-      policies: pipeline.policies.map(policy => Policy.create(policy)),
-    })),
-    ready: false,
-  });
+  updatedEntity = Gateway.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions.updateGateway(updatedEntity));
   await new Promise(r => setTimeout(() => r(), 1500));
   updatedEntity = updatedEntity.recreate();

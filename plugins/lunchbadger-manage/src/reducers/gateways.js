@@ -1,7 +1,6 @@
 import Gateway from '../models/Gateway';
 import {actionTypes} from '../reduxActions/actions';
 import Pipeline from '../models/Pipeline';
-import Policy from '../models/Policy';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
@@ -10,13 +9,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case coreActionTypes.onLoadProject:
       return action.payload.body.gateways.reduce((map, item) => {
-        map[item.id] = Gateway.create({
-          ...item,
-          pipelines: item.pipelines.map(pipeline => Pipeline.create({
-            ...pipeline,
-            policies: pipeline.policies.map(policy => Policy.create(policy)),
-          })),
-        });
+        map[item.id] = Gateway.create(item);
         return map;
       }, {});
     case actionTypes.updateGateway:

@@ -17,6 +17,8 @@ const initialState = {
 export default (state = initialState, action) => {
   const newState = {...state};
   switch (action.type) {
+    case actionTypes.multiEnvironmentsSetOnLoad:
+      return action.payload;
     case actionTypes.multiEnvironmentsSetSelected:
       return {
         ...state,

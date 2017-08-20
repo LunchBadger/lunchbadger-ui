@@ -27,6 +27,7 @@ const {actions, actionTypes} = actionsCreator(
 
     'addInitialConnections',
 
+    'multiEnvironmentsSetOnLoad',
     'multiEnvironmentsSetSelected',
     'multiEnvironmentsAdd',
     'multiEnvironmentsToggleDelta',

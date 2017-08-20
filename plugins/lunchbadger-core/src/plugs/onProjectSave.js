@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Connections from '../stores/Connections';
 import {isInQuadrant} from '../utils/storeUtils';
 
@@ -37,6 +38,20 @@ const setStatesToSave = (state) => {
       value: currentForecastInformation,
     });
   }
+  const multiEnvironments = _.cloneDeep(state.multiEnvironments);
+  multiEnvironments.environments.forEach((_, idx) => {
+    multiEnvironments.environments[idx].entities = {};
+    Object.keys(state.multiEnvironments.environments[idx].entities).forEach((id) => {
+      multiEnvironments.environments[idx].entities[id] = {
+        ...state.multiEnvironments.environments[idx].entities[id].toJSON(),
+        type: state.multiEnvironments.environments[idx].entities[id].constructor.type,
+      };
+    })
+  });
+  states.push({
+    key: 'multiEnvironments',
+    value: multiEnvironments,
+  });
   return states;
 }
 

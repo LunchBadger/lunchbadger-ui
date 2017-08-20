@@ -2,12 +2,25 @@ import _ from 'lodash';
 import {actions} from './actions';
 
 export const createModelsFromJSON = response => (dispatch, getState) => {
+  const {models} = getState().plugins;
   const currentElement = response.body.states.find(({key}) => key === 'currentElement');
+  let json;
   if (currentElement) {
-    const json = currentElement.value;
+    json = currentElement.value;
     const {type} = json;
-    const entity = getState().plugins.models[type].create(json);
+    const entity = models[type].create(json);
     dispatch(actions.setState({key: 'currentElement', value: entity}));
+  }
+  const multiEnvironments = response.body.states.find(({key}) => key === 'multiEnvironments');
+  if (multiEnvironments) {
+    json = multiEnvironments.value;
+    json.environments.forEach((_, idx) => {
+      const {entities} = json.environments[idx];
+      Object.keys(entities).forEach((id) => {
+        entities[id] = models[entities[id].type].create(entities[id]);
+      });
+    });
+    dispatch(actions.multiEnvironmentsSetOnLoad(json));
   }
 }
 

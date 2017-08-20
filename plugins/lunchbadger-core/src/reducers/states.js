@@ -5,6 +5,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.onLoadProject:
       action.payload.body.states.forEach((item) => {
+        if (item.key === 'multiEnvironments') return;
         newState[item.key] = item.value;
       });
       return newState;

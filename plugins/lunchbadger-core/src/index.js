@@ -53,22 +53,23 @@ import ApiClient from './utils/ApiClient';
 // import {waitForStores} from './utils/waitForStores';
 import LoginManager, {createLoginManager, getUser} from './utils/auth';
 // import {loadFromServer, saveToServer} from './utils/serverIo';
-import handleFatals from './utils/handleFatals';
+// import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
 import * as coreActions from './reduxActions';
 import messages from './utils/messages';
 import checkFields from './utils/checkFields';
 import * as storeUtils from './utils/storeUtils';
+import storeReducers, {registerPlugin} from './utils/storeReducers';
 import diff from './diff';
 
 import './utils/formValidators';
 
-import {registerPlugin as registerPluginNew} from '../../../src/reducers';
+// import {registerPlugin as registerPluginNew} from '../../../src/reducers';
 import reducers from './reducers/reducers';
 import plugs from './plugs';
 
-registerPluginNew({}, plugs, reducers);
+registerPlugin({}, plugs, reducers);
 
 let LunchBadgerCore = {
   // dispatcher: {
@@ -142,7 +143,7 @@ let LunchBadgerCore = {
     ApiClient: ApiClient,
     // URLParams: URLParams,
     // waitForStores: waitForStores,
-    handleFatals: handleFatals,
+    // handleFatals: handleFatals,
     actionsCreator,
     actions,
     actionTypes,
@@ -176,6 +177,8 @@ let LunchBadgerCore = {
     messages,
     checkFields,
     storeUtils,
+    storeReducers,
+    registerPlugin,
     diff,
   },
 };

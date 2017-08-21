@@ -12,7 +12,6 @@ import Header from '../Header/Header';
 import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
 import PanelContainer from '../Panel/PanelContainer';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import {loadFromServer} from '../../reduxActions';
 import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
@@ -48,7 +47,6 @@ class App extends Component {
 
   componentWillMount() {
     this.props.dispatch(loadFromServer());
-    LunchBadgerCore.dispatchRedux = this.props.dispatch;
   }
 
   renderHeader = () => {
@@ -157,9 +155,4 @@ const selector = createSelector(
   }),
 );
 
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
-});
-
-export default connect(selector, mapDispatchToProps)(App);
+export default connect(selector)(App);

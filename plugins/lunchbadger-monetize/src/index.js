@@ -5,10 +5,11 @@ import PlanSubscribers from './models/PlanSubscribers';
 import Tier from './models/Tier';
 import TierDetails from './models/TierDetails';
 
-import {registerPlugin} from '../../../src/reducers';
+// import {registerPlugin} from '../../../src/reducers';
 import reducers from './reducers';
 import plugs from './plugs';
 
+const {registerPlugin} = LunchBadgerCore.utils;
 registerPlugin(reducers, plugs);
 
 const LunchBadgerMonetize = {

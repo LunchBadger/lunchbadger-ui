@@ -12,7 +12,6 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
-import reducers from './reducers';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -27,6 +26,7 @@ const muiTheme = getMuiTheme({
 });
 
 const AppLoader = LunchBadgerCore.components.AppLoader;
+const storeReducers = LunchBadgerCore.utils.storeReducers;
 LunchBadgerCore.multiEnvIndex = 0;
 
 console.info('Application started..!');
@@ -54,7 +54,7 @@ loginManager.checkAuth().then(loggedIn => {
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {
     middleware = compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__());
   }
-  const store = createStore(reducers(), middleware);
+  const store = createStore(storeReducers(), middleware);
 
   LunchBadgerCore.services.ConfigStoreService.initialize();
   LunchBadgerCore.services.ProjectService.initialize();

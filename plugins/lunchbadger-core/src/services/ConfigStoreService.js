@@ -5,7 +5,7 @@ import {getUser} from '../utils/auth';
 class ConfigStoreService {
   initialize = () => this.api = new ApiClient(Config.get('configStoreApiUrl'), getUser().idToken);
 
-  upsertProject = () => this.api.post('producers', {body: {id: 'a'+getUser().profile.sub}});
+  upsertProject = () => this.api.post('producers', {body: {id: getUser().profile.sub}});
 
   getAccessKey = () => this.api.get(`producers/${getUser().profile.sub}/accesskey`);
 

@@ -11,16 +11,18 @@ export const createModelsFromJSON = response => (dispatch, getState) => {
     const entity = models[type].create(json);
     dispatch(actions.setState({key: 'currentElement', value: entity}));
   }
-  const multiEnvironments = response.body.states.find(({key}) => key === 'multiEnvironments');
-  if (multiEnvironments) {
-    json = multiEnvironments.value;
-    json.environments.forEach((_, idx) => {
-      const {entities} = json.environments[idx];
-      Object.keys(entities).forEach((id) => {
-        entities[id] = models[entities[id].type].create(entities[id]);
+  if (document.location.search === '?multi') {
+    const multiEnvironments = response.body.states.find(({key}) => key === 'multiEnvironments');
+    if (multiEnvironments) {
+      json = multiEnvironments.value;
+      json.environments.forEach((_, idx) => {
+        const {entities} = json.environments[idx];
+        Object.keys(entities).forEach((id) => {
+          entities[id] = models[entities[id].type].create(entities[id]);
+        });
       });
-    });
-    dispatch(actions.multiEnvironmentsSetOnLoad(json));
+      dispatch(actions.multiEnvironmentsSetOnLoad(json));
+    }
   }
 }
 

@@ -131,7 +131,7 @@ export default class Pipeline extends Component {
   render() {
     const {index, onRemove} = this.props;
     return (
-      <div>
+      <div className="Pipeline">
         {this.renderPorts()}
         <CollapsibleProperties
           ref={(r) => {this.collapsiblePropertiesDOM = r;}}

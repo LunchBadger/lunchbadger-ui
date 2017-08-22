@@ -7,7 +7,6 @@ export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
     case coreActionTypes.onLoadProject:
-      window.appDebug('microservices: ' + JSON.stringify(action.payload.body));
       return (action.payload.body.microServices || []).reduce((map, item) => {
         map[item.id] = Microservice.create(item);
         return map;

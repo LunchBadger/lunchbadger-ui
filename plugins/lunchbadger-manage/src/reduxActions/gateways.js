@@ -2,7 +2,7 @@ import {actions} from './actions';
 import _ from 'lodash';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
-import Policy from '../models/Policy';
+// import Policy from '../models/Policy';
 
 const {Connections} = LunchBadgerCore.stores;
 const {actions: coreActions} = LunchBadgerCore.utils;
@@ -11,7 +11,7 @@ export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[2].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false});
+  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false, pipelines: [Pipeline.create({name: 'Pipeline'})]});
   dispatch(actions.updateGateway(entity));
   return entity;
 }

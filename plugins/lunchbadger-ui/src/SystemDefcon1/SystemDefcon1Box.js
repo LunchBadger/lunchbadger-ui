@@ -11,7 +11,7 @@ class SystemDefcon1Box extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleError: false,
+      visibleError: true,
     }
   }
 

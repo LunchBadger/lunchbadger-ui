@@ -26,6 +26,7 @@ class ApiClient {
         json: true,
         headers: _.extend(this._getHeaders(), {})
       }, options);
+      window.appDebug(`${method}: ${req.baseUrl}/${req.url}`);
       request(req, (error, response, body) => {
         if (error) {
           return reject(error);
@@ -37,6 +38,7 @@ class ApiClient {
         if (response.statusCode === 0) {
           return reject(new ApiError(0, 'Error communicating with API'));
         }
+        window.appDebug(`BODY ${method}: ${req.baseUrl}/${req.url} ${JSON.stringify(body || {})}`);
         return resolve({response, body});
       });
     });

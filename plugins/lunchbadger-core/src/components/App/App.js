@@ -119,6 +119,7 @@ class App extends Component {
             )}
             <TooltipWrapper />
           </div>
+          <div className="Debug" id="appDebug">Debug:</div>
         </div>
       </Provider>
     );

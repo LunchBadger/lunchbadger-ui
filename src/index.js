@@ -50,6 +50,15 @@ loginManager.checkAuth().then(loggedIn => {
     state: 'simple'
   };
 
+  window.appDebug = (msg) => {
+    setTimeout(() => {
+      const el = document.getElementById('appDebug');
+      if (el) {
+        el.innerHTML += `<hr />${msg}`;
+      }
+    });
+  }
+
   let middleware = compose(applyMiddleware(thunk));
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {
     middleware = compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__());

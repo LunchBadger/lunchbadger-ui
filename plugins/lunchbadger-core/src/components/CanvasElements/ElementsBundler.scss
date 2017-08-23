@@ -15,13 +15,19 @@
     }
   }
   &__drop {
-    padding: 0 20px 20px;
+    margin: 0 20px 20px;
     opacity: 1;
-    transition: opacity 800ms;
+    transition: opacity 800ms, height 800ms ease;
+    height: 66px;
+    overflow: hidden;
   }
 }
 
 .multiEnvNotDev .canvas-element__drop {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.editable .canvas-element__drop {
+  height: 0;
 }

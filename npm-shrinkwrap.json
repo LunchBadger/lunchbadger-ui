@@ -5531,9 +5531,21 @@
       "resolved": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-2.0.3.tgz"
     },
     "react-transition-group": {
-      "version": "1.1.3",
-      "from": "react-transition-group@>=1.1.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/react-transition-group/-/react-transition-group-1.1.3.tgz"
+      "version": "1.2.0",
+      "from": "react-transition-group@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-transition-group/-/react-transition-group-1.2.0.tgz",
+      "dependencies": {
+        "js-tokens": {
+          "version": "3.0.2",
+          "from": "js-tokens@>=3.0.0 <4.0.0",
+          "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-3.0.2.tgz"
+        },
+        "loose-envify": {
+          "version": "1.3.1",
+          "from": "loose-envify@>=1.3.1 <2.0.0",
+          "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.3.1.tgz"
+        }
+      }
     },
     "reactcss": {
       "version": "1.2.2",

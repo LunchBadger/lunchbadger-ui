@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {CSSTransitionGroup} from 'react-transition-group';
 import ModelProperty from './ModelProperty';
 import ModelPropertyCollapsed from './ModelPropertyCollapsed';
 
@@ -31,7 +32,11 @@ class ModelNestedProperties extends Component {
     const filteredProperties = properties.filter(property => property.parentId === parentId);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     return (
-      <div>
+      <CSSTransitionGroup
+        transitionName="propertyTransition"
+        transitionEnterTimeout={800}
+        transitionLeaveTimeout={800}
+      >
         {filteredProperties.map((property, index) => {
           const isNested = ['array', 'object'].includes(property.type);
           return (
@@ -66,7 +71,7 @@ class ModelNestedProperties extends Component {
             </ModelPropertyCollapsed>
           )
         })}
-      </div>
+      </CSSTransitionGroup>
     );
   }
 }

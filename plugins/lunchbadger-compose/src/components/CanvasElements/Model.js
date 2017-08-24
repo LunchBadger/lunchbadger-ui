@@ -190,9 +190,10 @@ class Model extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations: {data}, entity, entityDevelopment, onResetField, nested, index} = this.props;
+    const {validations, validationsForced, entity, entityDevelopment, onResetField, nested, index} = this.props;
     const {contextPath} = this.state;
     const name = nested ? `models[${index}][http][path]` : 'http[path]';
+    const {data} = validationsForced || validations;
     const mainProperties = [
       {
         name,

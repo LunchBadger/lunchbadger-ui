@@ -12,7 +12,23 @@ export const add = () => (dispatch, getState) => {
   const entity = Microservice.create({name: 'Microservice', itemOrder, loaded: false});
   dispatch(actions.updateMicroservice(entity));
   return entity;
-}
+};
+
+export const removeNonExistentSubModels = () => (dispatch, getState) => {
+  const {microservices, modelsBundled} = getState().entities;
+  const updatedMicroservices = [];
+  Object.keys(microservices).forEach((id) => {
+    const updatedMicroservice = microservices[id].recreate();
+    const modelsAmount = updatedMicroservice.models.length;
+    updatedMicroservice.models = updatedMicroservice.models.filter(id => !!modelsBundled[id]);
+    if (updatedMicroservice.models.length !== modelsAmount) {
+      updatedMicroservices.push(updatedMicroservice);
+    }
+  });
+  if (updatedMicroservices.length > 0) {
+    dispatch(actions.updateMicroservices(updatedMicroservices));
+  }
+};
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();

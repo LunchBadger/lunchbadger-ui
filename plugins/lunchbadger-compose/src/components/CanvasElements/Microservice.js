@@ -28,23 +28,6 @@ class Microservice extends Component {
     this.modelsRefs = [];
   }
 
-  renderModels() {
-    return this.props.models.map((model, idx) => (
-      <Model
-        key={idx}
-        parent={this.props.entity}
-        id={model.id}
-        entity={model}
-        left={0}
-        top={0}
-        handleEndDrag={this.handleEndDrag}
-        hideSourceOnDrag={true}
-        index={idx}
-        ref={r => this.modelsRefs[idx] = r}
-      />
-    ));
-  }
-
   handleEndDrag = item => {
     if (item) {
       this.setState({
@@ -80,6 +63,26 @@ class Microservice extends Component {
         .element.processModel(item);
     });
     return model;
+  }
+
+  renderModels = () => {
+    const {entity, models, validations: {data: {models: data = {}}}} = this.props;
+    return models.map((model, idx) => {
+      const validations = data[model.id] ? {data: data[model.id], isValid: false} : {data: {}, isValid: true};
+      return <Model
+        key={idx}
+        parent={entity}
+        id={model.id}
+        entity={model}
+        left={0}
+        top={0}
+        handleEndDrag={this.handleEndDrag}
+        hideSourceOnDrag={true}
+        index={idx}
+        ref={r => this.modelsRefs[idx] = r}
+        validations={validations}
+      />;
+    });
   }
 
   render() {

@@ -75,7 +75,7 @@ class SubModel extends PureComponent {
     .updateName(event);
 
   render() {
-    const {connectDragSource, currentlySelectedSubelements, entity, index, id} = this.props;
+    const {connectDragSource, currentlySelectedSubelements, entity, index, id, validations} = this.props;
     return connectDragSource(
       <div className="SubModel">
         {this.renderPorts()}
@@ -89,9 +89,18 @@ class SubModel extends PureComponent {
               onClick={this.handleClick}
               selected={!!_.find(currentlySelectedSubelements, {id})}
               onChange={this.handleNameChange}
+              invalid={validations.data.name || ''}
             />
           }
-          collapsible={<Model ref="model" entity={entity} nested index={index} />}
+          collapsible={
+            <Model
+              ref="model"
+              entity={entity}
+              nested
+              index={index}
+              validationsForced={validations}
+            />
+          }
           defaultOpened
         />
       </div>

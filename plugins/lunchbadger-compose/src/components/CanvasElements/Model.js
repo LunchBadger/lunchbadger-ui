@@ -68,10 +68,7 @@ class Model extends Component {
     };
   }
 
-  discardChanges() {
-    this.onStoreUpdate();
-    // this.setState(this.initState());
-  }
+  discardChanges = () => this.onStoreUpdate();
 
   // update(model) {
   //   const data = {

@@ -67,12 +67,12 @@ export default class Microservice extends BaseModel {
   validate(model) {
     return (dispatch, getState) => {
       const validations = {data: {}};
-      const {microservices, modelsBundled} = getState().entities;
+      const entities = getState().entities.microservices;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
-        const isDuplicateName = Object.keys(microservices)
+        const isDuplicateName = Object.keys(entities)
           .filter(id => id !== this.id)
-          .filter(id => microservices[id].name.toLowerCase() === model.name.toLowerCase())
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
           validations.data.name = messages.duplicatedEntityName('Microservice');
@@ -80,12 +80,12 @@ export default class Microservice extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
-      const microserviceModels = this.models.map((id, idx) => ({
-        entity: modelsBundled[id],
-        model: model.models[idx],
+      const microserviceModels = model.models.map((entity) => ({
+        entity,
+        item: entity.toJSON(),
       }));
-      microserviceModels.forEach(({entity, model}) => {
-        const modelValidations = dispatch(entity.validate(model));
+      microserviceModels.forEach(({entity, item}) => {
+        const modelValidations = dispatch(entity.validate(item));
         if (!modelValidations.isValid) {
           if (!validations.data.models) {
             validations.data.models = {};
@@ -105,4 +105,5 @@ export default class Microservice extends BaseModel {
   remove() {
     return async dispatch => await dispatch(remove(this));
   }
+
 }

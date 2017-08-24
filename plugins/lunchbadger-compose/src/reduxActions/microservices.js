@@ -31,26 +31,25 @@ export const removeNonExistentSubModels = () => (dispatch, getState) => {
 };
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const state = getState();
-  const index = state.multiEnvironments.selected;
+  const {multiEnvironments, entities: {modelsBundled}} = getState();
+  const index = multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = Microservice.create({...entity.toJSON(), ...model});
     dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
-  if (model.models.length === 0) {
-    updatedEntity = Microservice.create({...entity.toJSON(), ...model});
-    dispatch(actions.updateMicroservice(updatedEntity));
-  } else {
-    updatedEntity = Microservice.create({...entity.toJSON(), ...model, models: entity.models, ready: false});
-    dispatch(actions.updateMicroservice(updatedEntity));
-    await Promise.all(entity.models.map((id, idx) =>
-      dispatch(updateModel(state.entities.modelsBundled[id], model.models[idx]))));
-    updatedEntity = updatedEntity.recreate();
-    updatedEntity.ready = true;
-    dispatch(actions.updateMicroservice(updatedEntity));
-  }
+  const models = model.models.map(({id}) => id);
+  updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
+  dispatch(actions.updateMicroservice(updatedEntity));
+  await Promise.all(entity.models.map((id) =>
+    models.includes(id)
+    ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.id === id).toJSON()))
+    : dispatch(removeModel(modelsBundled[id], 'removeModelBundled'))
+  ));
+  updatedEntity = updatedEntity.recreate();
+  updatedEntity.ready = true;
+  dispatch(actions.updateMicroservice(updatedEntity));
   return updatedEntity;
 };
 

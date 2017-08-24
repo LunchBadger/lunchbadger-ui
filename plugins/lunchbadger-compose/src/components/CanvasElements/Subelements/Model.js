@@ -75,7 +75,7 @@ class SubModel extends PureComponent {
     .updateName(event);
 
   render() {
-    const {connectDragSource, currentlySelectedSubelements, entity, index, id, validations} = this.props;
+    const {connectDragSource, currentlySelectedSubelements, entity, index, id, validations, handleDeleteModel} = this.props;
     return connectDragSource(
       <div className="SubModel">
         {this.renderPorts()}
@@ -85,11 +85,13 @@ class SubModel extends PureComponent {
             <EntityProperty
               name={`models[${index}][name]`}
               value={entity.name}
+              hiddenInputs={[{name: `models[${index}][lunchbadgerId]`, value: entity.id}]}
               onViewModeClick={this.toggleCollapsibleProperties}
               onClick={this.handleClick}
               selected={!!_.find(currentlySelectedSubelements, {id})}
               onChange={this.handleNameChange}
               invalid={validations.data.name || ''}
+              onDelete={handleDeleteModel(entity.id)}
             />
           }
           collapsible={

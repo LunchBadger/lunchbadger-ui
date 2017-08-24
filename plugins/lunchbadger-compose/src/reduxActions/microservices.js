@@ -39,7 +39,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
-  const models = model.models.map(({id}) => id);
+  const models = model.models.map(({lunchbadgerId}) => lunchbadgerId);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
   dispatch(actions.updateMicroservice(updatedEntity));
   entity.models.forEach((id) => {
@@ -47,7 +47,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   });
   await Promise.all(entity.models.map((id) =>
     models.includes(id)
-    ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.id === id).toJSON()))
+    ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.lunchbadgerId === id)))
     : dispatch(removeModel(modelsBundled[id], 'removeModelBundled'))
   ));
   updatedEntity = updatedEntity.recreate();

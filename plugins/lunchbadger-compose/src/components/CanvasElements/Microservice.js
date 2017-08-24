@@ -27,7 +27,7 @@ class Microservice extends Component {
       bundledItem: null,
       models: props.models,
     }
-    this.onStoreUpdate = (props = this.props) => this.setState({models: props.models});
+    this.onStoreUpdate = (props = this.props, callback) => this.setState({models: props.models}, callback);
     this.modelsRefs = {};
   }
 
@@ -71,17 +71,18 @@ class Microservice extends Component {
   processModel = model => {
     if (!model.models) model.models = [];
     model.models.forEach(({lunchbadgerId}, idx) => {
-      model.models[idx] = Model.create({
-        ...this.getSubModel(lunchbadgerId).processModel(model.models[idx]),
-        wasBundled: true,
-      });
+      model.models[idx] = this.getSubModel(lunchbadgerId).processModel(model.models[idx]);
     });
     return model;
   }
 
   handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
 
-  discardChanges = () => this.onStoreUpdate();
+  discardChanges = () => {
+    this.onStoreUpdate(this.props, () => {
+      this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
+    });
+  }
 
   renderModels = () => {
     const {entity, validations: {data: {models: data = {}}}} = this.props;

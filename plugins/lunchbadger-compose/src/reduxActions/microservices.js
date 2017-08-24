@@ -42,6 +42,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const models = model.models.map(({id}) => id);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
   dispatch(actions.updateMicroservice(updatedEntity));
+  entity.models.forEach((id) => {
+    if (!models.includes(id)) dispatch(coreActions.removeEntity(modelsBundled[id]));
+  });
   await Promise.all(entity.models.map((id) =>
     models.includes(id)
     ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.id === id).toJSON()))

@@ -1,3 +1,20 @@
+.Model {
+  .EntitySubElements {
+    margin-left: -10px;
+    margin-top: -10px;
+    &__elements {
+      margin-left: 5px;
+    }
+  }
+  &.nested {
+    margin-top: -15px;
+    .EntitySubElements {
+      border-top: none;
+      margin-top: -20px;
+    }
+  }
+}
+
 .editable .Model.multi {
   .EntitySubElements__title__add,
   .ModelProperty__action {

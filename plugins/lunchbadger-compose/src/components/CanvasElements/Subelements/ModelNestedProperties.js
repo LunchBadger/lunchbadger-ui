@@ -28,6 +28,8 @@ class ModelNestedProperties extends Component {
       onPropertyTypeChange,
       parentId,
       level,
+      nested,
+      index,
     } = this.props;
     const filteredProperties = properties.filter(property => property.parentId === parentId);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
@@ -37,7 +39,7 @@ class ModelNestedProperties extends Component {
         transitionEnterTimeout={800}
         transitionLeaveTimeout={800}
       >
-        {filteredProperties.map((property, index) => {
+        {filteredProperties.map((property, idx) => {
           const isNested = ['array', 'object'].includes(property.type);
           return (
             <ModelPropertyCollapsed
@@ -56,17 +58,21 @@ class ModelNestedProperties extends Component {
                   onPropertyTypeChange={onPropertyTypeChange}
                   parentId={property.id}
                   level={level + 1}
+                  nested={nested}
+                  index={index}
                 /> : null
               }
             >
               <ModelProperty
-                index={index}
+                idx={idx}
                 addAction={this.onAddProperty}
                 propertiesCount={filteredProperties.length}
                 onRemove={onRemoveProperty}
                 property={property}
                 onPropertyTypeChange={onPropertyTypeChange}
                 parentId={parentId}
+                nested={nested}
+                index={index}
               />
             </ModelPropertyCollapsed>
           )

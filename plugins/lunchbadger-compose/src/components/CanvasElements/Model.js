@@ -13,6 +13,15 @@ const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 
 class Model extends Component {
+  static propTypes = {
+    entity: PropTypes.object.isRequired,
+    nested: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    nested: false,
+  };
+
   constructor(props) {
     super(props);
     const stateFromStores = (newProps) => {
@@ -98,7 +107,7 @@ class Model extends Component {
     }
   }
 
-  updateName(event) {
+  updateName = event => {
     if (!this.state.contextPathDirty) {
       this.setState({contextPath: slug(event.target.value, {lower: true})});
     }
@@ -165,6 +174,7 @@ class Model extends Component {
   }
 
   renderProperties = () => {
+    const {nested, index} = this.props;
     return (
       <ModelNestedProperties
         title="Properties"
@@ -173,16 +183,19 @@ class Model extends Component {
         onAddProperty={this.onAddProperty}
         onRemoveProperty={this.onRemoveProperty}
         onPropertyTypeChange={this.onPropertyTypeChange}
+        nested={nested}
+        index={index}
       />
     );
   }
 
   renderMainProperties = () => {
-    const {validations: {data}, entity, entityDevelopment, onResetField} = this.props;
+    const {validations: {data}, entity, entityDevelopment, onResetField, nested, index} = this.props;
     const {contextPath} = this.state;
+    const name = nested ? `models[${index}][http][path]` : 'http[path]';
     const mainProperties = [
       {
-        name: 'http[path]',
+        name,
         modelName: 'contextPath',
         title: 'context path',
         value: contextPath,
@@ -197,10 +210,10 @@ class Model extends Component {
   }
 
   render() {
-    const {multiEnvIndex} = this.props;
+    const {multiEnvIndex, nested} = this.props;
     return (
-      <div className={cs('Model', {'multi': multiEnvIndex > 0})}>
-        {this.renderPorts()}
+      <div className={cs('Model', {nested, 'multi': multiEnvIndex > 0})}>
+        {!nested && this.renderPorts()}
         {this.renderMainProperties()}
         <EntitySubElements
           title="Properties"
@@ -216,13 +229,4 @@ class Model extends Component {
   }
 }
 
-Model.propTypes = {
-  entity: PropTypes.object.isRequired,
-  paper: PropTypes.object,
-};
-
-// const mapDispatchToProps = dispatch => ({
-// });
-
-// export default connect(null, mapDispatchToProps)(CanvasElement(Model));
 export default CanvasElement(Model);

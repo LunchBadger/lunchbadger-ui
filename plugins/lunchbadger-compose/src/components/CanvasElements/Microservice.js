@@ -6,6 +6,7 @@ import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
 import {bundle, unbundle, rebundle} from '../../reduxActions/models';
+import './Microservice.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -18,16 +19,13 @@ class Microservice extends Component {
     parent: PropTypes.object
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
       isShowingModal: false,
       bundledItem: null,
     }
+    this.modelsRefs = [];
   }
 
   renderModels() {
@@ -39,14 +37,15 @@ class Microservice extends Component {
         entity={model}
         left={0}
         top={0}
-        handleEndDrag={(item) => this.handleEndDrag(item)}
+        handleEndDrag={this.handleEndDrag}
         hideSourceOnDrag={true}
         index={idx}
+        ref={r => this.modelsRefs[idx] = r}
       />
     ));
   }
 
-  handleEndDrag(item) {
+  handleEndDrag = item => {
     if (item) {
       this.setState({
         isShowingModal: true,
@@ -58,16 +57,30 @@ class Microservice extends Component {
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
-    this.context.store.dispatch(unbundle(item.parent, entity));
+    this.props.dispatch(unbundle(item.parent, entity));
   }
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
-  bundleModel = (microservice, model) =>
-    this.context.store.dispatch(bundle(microservice, model));
+  bundleModel = (microservice, model) => this.props.dispatch(bundle(microservice, model));
 
-  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) =>
-    this.context.store.dispatch(rebundle(fromMicroservice, toMicroservice, model));
+  moveBetweenMicroservice = (from, to, model) => this.props.dispatch(rebundle(from, to, model));
+
+  processModel = model => {
+    if (!model.models) model.models = [];
+    model.models.forEach((item, idx) => {
+      model.models[idx] = this.modelsRefs[idx]
+        .getWrappedInstance()
+        .getDecoratedComponentInstance()
+        .refs
+        .model
+        .getWrappedInstance()
+        .getDecoratedComponentInstance()
+        .getDecoratedComponentInstance()
+        .element.processModel(item);
+    });
+    return model;
+  }
 
   render() {
     return (

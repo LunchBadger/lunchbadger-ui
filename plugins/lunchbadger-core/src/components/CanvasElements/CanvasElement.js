@@ -79,12 +79,10 @@ const boxTarget = {
 export default (ComposedComponent) => {
   class CanvasElement extends PureComponent {
     static propTypes = {
-      icon: PropTypes.string.isRequired,
       entity: PropTypes.object.isRequired,
       connectDragSource: PropTypes.func.isRequired,
       isDragging: PropTypes.bool.isRequired,
-      itemOrder: PropTypes.number.isRequired,
-      hideSourceOnDrag: PropTypes.bool.isRequired,
+      itemOrder: PropTypes.number,
       isOver: PropTypes.bool,
       canDrop: PropTypes.bool
     };
@@ -438,7 +436,31 @@ export default (ComposedComponent) => {
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
     render() {
-      const {entity, connectDragSource, connectDropTarget, isDragging, editable, highlighted, multiEnvIndex, multiEnvDelta, multiEnvEntity} = this.props;
+      const {
+        entity,
+        connectDragSource,
+        connectDropTarget,
+        isDragging,
+        editable,
+        highlighted,
+        multiEnvIndex,
+        multiEnvDelta,
+        multiEnvEntity,
+        nested,
+      } = this.props;
+      if (nested) return (
+        <ComposedComponent
+          ref={(ref) => this.element = ref}
+          parent={this}
+          {...this.props}
+          {...this.state}
+          entity={multiEnvEntity}
+          entityDevelopment={entity}
+          onFieldUpdate={this.handleFieldUpdate}
+          onResetField={this.handleResetMultiEnvEntityField}
+          multiEnvIndex={multiEnvIndex}
+        />
+      );
       const {ready} = entity;
       const processing = !ready;
       const {validations} = this.state;
@@ -553,5 +575,5 @@ export default (ComposedComponent) => {
     },
   );
 
-  return connect(connector)(CanvasElement);
+  return connect(connector, null, null, {withRef: true})(CanvasElement);
 }

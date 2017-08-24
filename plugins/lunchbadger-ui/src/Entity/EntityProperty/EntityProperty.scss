@@ -146,4 +146,22 @@
       text-align: center;
     }
   }
+  &__selected {
+    text-indent: 10px;
+    .EntityProperty__field {
+      color: #FFF;
+    }
+    &:before {
+      display: block;
+      content: '';
+      background-color: #00abff;
+      position: absolute;
+      top: 5px;
+      left: 10px;
+      right: 0;
+      bottom: 5px;
+      z-index: -1;
+      border-radius: 5px;
+    }
+  }
 }

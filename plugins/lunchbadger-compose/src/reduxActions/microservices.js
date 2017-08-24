@@ -1,6 +1,6 @@
 import {actions} from './actions';
 import Microservice from '../models/Microservice';
-import {remove as removeModel} from './models';
+import {update as updateModel, remove as removeModel} from './models';
 
 const {actions: coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
@@ -14,7 +14,7 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
@@ -23,8 +23,18 @@ export const update = (entity, model) => (dispatch, getState) => {
     dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
-  updatedEntity = Microservice.create({...entity.toJSON(), ...model});
-  dispatch(actions.updateMicroservice(updatedEntity));
+  if (model.models.length === 0) {
+    updatedEntity = Microservice.create({...entity.toJSON(), ...model});
+    dispatch(actions.updateMicroservice(updatedEntity));
+  } else {
+    updatedEntity = Microservice.create({...entity.toJSON(), ...model, models: entity.models, ready: false});
+    dispatch(actions.updateMicroservice(updatedEntity));
+    await Promise.all(entity.models.map((id, idx) =>
+      dispatch(updateModel(state.entities.modelsBundled[id], model.models[idx]))));
+    updatedEntity = updatedEntity.recreate();
+    updatedEntity.ready = true;
+    dispatch(actions.updateMicroservice(updatedEntity));
+  }
   return updatedEntity;
 };
 

@@ -6,6 +6,8 @@ import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
 import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
+import {EntityProperty, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import Model from '../Model';
 import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
@@ -33,7 +35,7 @@ const boxSource = {
   isDragging: monitor.isDragging()
 }))
 
-class Model extends PureComponent {
+class SubModel extends PureComponent {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -44,10 +46,6 @@ class Model extends PureComponent {
     top: PropTypes.number.isRequired,
     hideSourceOnDrag: PropTypes.bool.isRequired,
     handleEndDrag: PropTypes.func,
-  };
-
-  static contextTypes = {
-    store: PropTypes.object,
   };
 
   renderPorts() {
@@ -65,27 +63,37 @@ class Model extends PureComponent {
   }
 
   handleClick = () => {
-    const {store: {dispatch}} = this.context;
-    const {parent, entity} = this.props;
+    const {parent, entity, dispatch} = this.props;
     dispatch(toggleSubelement(parent, entity));
   }
 
+  handleNameChange = event => this.refs.model
+    .getWrappedInstance()
+    .getDecoratedComponentInstance()
+    .getDecoratedComponentInstance()
+    .element
+    .updateName(event);
+
   render() {
-    const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames('model', {
-      'model--selected': _.find(currentlySelectedSubelements, {id: this.props.id}),
-    });
+    const {connectDragSource, currentlySelectedSubelements, entity, index, id} = this.props;
     return connectDragSource(
-      <div className={elementClass} onClick={this.handleClick}>
+      <div className="SubModel">
         {this.renderPorts()}
-        <div className="model__info">
-          <div className="model__icon">
-            <i className="fa fa-plug"/>
-          </div>
-          <div className="model__name">
-            {this.props.entity.name}
-          </div>
-        </div>
+        <CollapsibleProperties
+          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
+          bar={
+            <EntityProperty
+              name={`models[${index}][name]`}
+              value={entity.name}
+              onViewModeClick={this.toggleCollapsibleProperties}
+              onClick={this.handleClick}
+              selected={!!_.find(currentlySelectedSubelements, {id})}
+              onChange={this.handleNameChange}
+            />
+          }
+          collapsible={<Model ref="model" entity={entity} nested index={index} />}
+          defaultOpened
+        />
       </div>
     );
   }
@@ -106,4 +114,4 @@ const selector = createSelector(
   }),
 );
 
-export default connect(selector)(Model);
+export default connect(selector, null, null, {withRef: true})(SubModel);

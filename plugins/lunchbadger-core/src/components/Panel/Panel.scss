@@ -2,6 +2,48 @@
 
 .panel {
   width: 100%;
+  .CollapsibleProperties {
+    &:first-child .CollapsibleProperties__bar:before {
+      display: none;
+    }
+    &__collapsible {
+      margin: 0 0 20px 10px;
+    }
+    &__bar {
+      &:before {
+        height: 2px;
+        left: 0;
+      }
+      &__right {
+        padding: 20px 0;
+        .EntityPropertyLabel {
+          color: #4190CE;
+        }
+      }
+    }
+  }
+  &__details {
+    .EntityProperty,
+    &__checkbox {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+    .EntityProperty {
+      width: 320px;
+      margin-right: 60px;
+      &Label {
+        color: #999;
+        font-size: 12px;
+        font-weight: 300;
+        margin: 0;
+        text-transform: none;
+      }
+    }
+    &__checkbox {
+      width: 188px;
+      padding-bottom: 22px;
+    }
+  }
 }
 
 .panel__container {

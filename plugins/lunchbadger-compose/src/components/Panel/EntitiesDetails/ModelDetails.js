@@ -12,19 +12,37 @@ import ModelNestedProperties from './ModelNestedProperties';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
+import {
+  EntityProperty,
+  EntityPropertyLabel,
+  CollapsibleProperties,
+  Input,
+  Checkbox,
+  Select,
+  Table,
+  IconButton,
+} from '../../../../../lunchbadger-ui/src';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const InputField = LunchBadgerCore.components.InputField;
-const Select = LunchBadgerCore.components.Select;
-const SelectField = LunchBadgerCore.components.SelectField;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
-const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 const {Connections} = LunchBadgerCore.stores;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
+
+const userFieldsTypeOptions = [
+  {label: 'String', value: 'string'},
+  {label: 'Number', value: 'number'},
+  {label: 'Object', value: 'object'},
+];
+
+const userFieldsTypeEmptyValues = {
+  string: '',
+  number: 0,
+  object: '{}',
+};
 
 @inject('connectionsStore') @observer
 class ModelDetails extends PureComponent {
@@ -220,15 +238,116 @@ class ModelDetails extends PureComponent {
 
   onRemoveRelation = relation => this.onRemoveItem('relations', relation);
 
-  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: '', value: ''});
+  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: 'string', value: ''});
 
-  onRemoveUserField = field => this.onRemoveItem('userFields', field);
+  onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
   onPropertyTypeChange = (id, type) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
     this.setState({properties});
   }
+
+  handleChangeUserDefinedFieldType = idx => (type) => {
+    const userFields = [...this.state.userFields];
+    userFields[idx] = {...userFields[idx]};
+    userFields[idx].type = type;
+    userFields[idx].value = userFieldsTypeEmptyValues[type];
+    this.setState({userFields});
+  }
+
+  renderDetailsSection = () => {
+    const {entity, dataSources, connectionsStore} = this.props;
+    const dataSourceOptions = Object.keys(dataSources)
+      .map(key => dataSources[key])
+      .map(({name: label, id: value}) => ({label, value}));
+    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    const fields = [
+      {
+        title: 'Context Path',
+        name: 'contextPath',
+        value: entity.contextPath,
+      },
+      {
+        title: 'Plural',
+        name: 'plural',
+        value: entity.plural,
+      },
+      {
+        title: 'Base Model',
+        name: 'base',
+        value: entity.base,
+        options: baseModelTypes,
+      },
+      {
+        title: 'Data Source',
+        name: 'dataSource',
+        value: currentDsId,
+        options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+      },
+    ];
+    const checkboxes = [
+      {
+        name: 'readonly',
+        label: 'Read Only',
+        value: entity.readonly,
+      },
+      {
+        name: 'strict',
+        label: 'Strict Schema',
+        value: entity.strict,
+      },
+      {
+        name: 'public',
+        label: 'Exposed as REST',
+        value: entity.public,
+      },
+    ];
+    return (
+      <div className="panel__details">
+        {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
+        {checkboxes.map(item => (
+          <div key={item.name} className="panel__details__checkbox">
+            <Checkbox {...item} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  renderPropertiesSection = () => (
+    <ModelNestedProperties
+      title="Properties"
+      path=""
+      properties={this.state.properties}
+      onAddProperty={this.onAddProperty}
+      onRemoveProperty={this.onRemoveProperty}
+      onPropertyTypeChange={this.onPropertyTypeChange}
+    />
+  );
+
+  renderRelationsSection = () => (
+    <table className="details-panel__table">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Model</th>
+        <th>Type</th>
+        <th>
+          Foreign Key
+          <a onClick={this.onAddRelation} className="details-panel__add">
+            <i className="fa fa-plus"/>
+            Add relation
+          </a>
+        </th>
+        <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+      </tr>
+      </thead>
+      <tbody>
+        {this.renderRelations()}
+      </tbody>
+    </table>
+  );
 
   renderRelations() {
     return this.state.relations.map((relation, index) => {
@@ -242,6 +361,77 @@ class ModelDetails extends PureComponent {
       );
     });
   }
+
+  renderUserDefinedFieldsSection = () => {
+    const columns = [
+      'Name',
+      'Type',
+      'Value',
+      <IconButton icon="iconPlus" onClick={this.onAddUserField} />,
+    ];
+    const widths = [300, 200, undefined, 70];
+    const data = this.state.userFields.map((field, idx) => [
+      <Input
+        name={`userFields[${idx}][name]`}
+        value={field.name}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Select
+        name={`userFields[${idx}][type]`}
+        value={field.type}
+        underlineStyle={{bottom: 0}}
+        options={userFieldsTypeOptions}
+        fullWidth
+        hideUnderline
+        handleChange={this.handleChangeUserDefinedFieldType(idx)}
+      />,
+      field.type === 'object'
+      ? <Input
+          name={`userFields[${idx}][value]`}
+          value={field.value}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          textarea
+        />
+      : <Input
+          name={`userFields[${idx}][value]`}
+          value={field.value}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          type={field.type === 'number' ? 'number' : 'text'}
+        />,
+      <IconButton icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
+    ]);
+    return <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+    />;
+  }
+  //   <table className="details-panel__table" ref="user-fields">
+  //     <thead>
+  //     <tr>
+  //       <th>Name</th>
+  //       <th>Data type</th>
+  //       <th>
+  //         Value
+  //         <a onClick={this.onAddUserField} className="details-panel__add">
+  //           <i className="fa fa-plus"/>
+  //           Add field
+  //         </a>
+  //       </th>
+  //       <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+  //     </tr>
+  //     </thead>
+  //     <tbody>
+  //       {this.renderUserFields()}
+  //     </tbody>
+  //   </table>
+  // );
 
   renderUserFields() {
     return this.state.userFields.map((field, index) => {
@@ -259,94 +449,30 @@ class ModelDetails extends PureComponent {
   }
 
   render() {
-    const {entity, dataSources, connectionsStore} = this.props;
-    const dataSourceOptions = Object.keys(dataSources)
-      .map(key => dataSources[key])
-      .map(({name: label, id: value}) => ({label, value}));
-    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     return (
       <div>
-        <CollapsableDetails title="Details">
-          <div className="details-panel__container details-panel__columns">
-            <InputField label="Context path" propertyName="contextPath" entity={entity}/>
-            <InputField label="Plural" propertyName="plural" entity={entity}/>
-            <SelectField
-              label="Base model"
-              propertyName="base"
-              entity={entity}
-              options={baseModelTypes}
-            />
-            <div className="details-panel__fieldset">
-              <label
-                className="details-panel__label"
-                htmlFor="dataSource"
-              >
-                Data source
-              </label>
-              <Select
-                className="details-panel__input"
-                name="dataSource"
-                value={currentDsId}
-                options={[{label: '[None]', value: 'none'}, ...dataSourceOptions]}
-              />
-            </div>
-            <CheckboxField label="Read only" propertyName="readonly" entity={entity} />
-            <CheckboxField label="Strict schema" propertyName="strict" entity={entity} />
-            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity} />
-          </div>
-        </CollapsableDetails>
-        <CollapsableDetails title="Relations">
-          <table className="details-panel__table">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Model</th>
-              <th>Type</th>
-              <th>
-                Foreign Key
-                <a onClick={this.onAddRelation} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add relation
-                </a>
-              </th>
-              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-            </tr>
-            </thead>
-            <tbody>
-              {this.renderRelations()}
-            </tbody>
-          </table>
-        </CollapsableDetails>
-        <ModelNestedProperties
-          title="Properties"
-          path=""
-          properties={this.state.properties}
-          onAddProperty={this.onAddProperty}
-          onRemoveProperty={this.onRemoveProperty}
-          onPropertyTypeChange={this.onPropertyTypeChange}
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Details</EntityPropertyLabel>}
+          collapsible={this.renderDetailsSection()}
+          barToggable
+          defaultOpened
         />
-        <div className="panel__title panel__title--custom">Custom Fields</div>
-        <CollapsableDetails title="User Defined Fields">
-          <table className="details-panel__table" ref="user-fields">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Data type</th>
-              <th>
-                Value
-                <a onClick={this.onAddUserField} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add field
-                </a>
-              </th>
-              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-            </tr>
-            </thead>
-            <tbody>
-              {this.renderUserFields()}
-            </tbody>
-          </table>
-        </CollapsableDetails>
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Relations</EntityPropertyLabel>}
+          collapsible={this.renderRelationsSection()}
+          barToggable
+        />
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
+          collapsible={this.renderPropertiesSection()}
+          barToggable
+        />
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>User-defined fields</EntityPropertyLabel>}
+          collapsible={this.renderUserDefinedFieldsSection()}
+          barToggable
+          defaultOpened
+        />
       </div>
     )
   }

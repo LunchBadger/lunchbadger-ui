@@ -5,6 +5,19 @@ import uncheckedIcon from './uncheckedIcon';
 import HOC from '../utils/Formsy/HOC';
 
 class Checkbox extends Component {
+  static propTypes = {
+    getValue: PropTypes.func,
+    setValue: PropTypes.func,
+    handleChange: PropTypes.func,
+    className: PropTypes.string,
+    label: PropTypes.string,
+    hidden: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    hidden: false,
+  };
+
   _handleChange = (event) => {
     this.props.setValue(event.currentTarget.checked);
 
@@ -37,18 +50,5 @@ class Checkbox extends Component {
     );
   }
 }
-
-Checkbox.propTypes = {
-  getValue: PropTypes.func,
-  setValue: PropTypes.func,
-  handleChange: PropTypes.func,
-  className: PropTypes.string,
-  label: PropTypes.string,
-  hidden: PropTypes.bool,
-};
-
-Checkbox.defaultProps = {
-  hidden: false,
-};
 
 export default HOC(Checkbox);

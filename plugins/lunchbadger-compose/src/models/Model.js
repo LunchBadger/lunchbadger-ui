@@ -2,6 +2,7 @@ import _ from 'lodash';
 import uuid from 'uuid';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
+import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -72,6 +73,17 @@ export default class Model extends BaseModel {
         portType: 'out'
       })
     ];
+  }
+
+  static create(data) {
+    const properties = data.properties || [];
+    const relations = data.relations || [];
+    delete data.properties;
+    delete data.relations;
+    const model = super.create(data);
+    properties.forEach(property => model.addProperty(ModelProperty.create(property)));
+    relations.forEach(relation => model.addRelation(ModelRelation.create(relation)));
+    return model;
   }
 
   recreate() {

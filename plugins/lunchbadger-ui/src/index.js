@@ -2,6 +2,7 @@ import Aside from './Aside/Aside';
 import Tool from './Aside/Tool/Tool';
 import Button from './Button/Button';
 import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties';
+import IconButton from './IconButton/IconButton';
 import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
 import ContextualInformationMessage from './ContextualInformationMessage/ContextualInformationMessage';
@@ -22,6 +23,9 @@ import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValida
 
 import Input from './Form/Input';
 import Checkbox from './Form/Checkbox';
+import Select from './Form/Select';
+
+import Table from './Table/Table';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import {Form} from './utils/Formsy/main';
@@ -80,13 +84,16 @@ export {
   EntitySubElements,
   EntityValidationErrors,
   Form,
+  IconButton,
   IconSVG,
   Input,
   PanelBar,
+  Select,
   SmoothCollapse,
   SystemDefcon1,
   SystemInformationMessages,
   SystemNotifications,
+  Table,
   Tool,
   Toolbox,
   TooltipWrapper,

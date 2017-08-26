@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Form} from '../../../../../lunchbadger-ui/src';
-import InputField from './InputField';
+import {Form, EntityProperty} from '../../../../../lunchbadger-ui/src';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
 import {changePanelStatus, setCurrentEditElement, setCurrentElement} from '../../../reduxActions';
@@ -104,12 +103,15 @@ export default (ComposedComponent) => {
               onSave={this.update}
               onCancel={this.discardChanges}
             />
-            <InputField
-              label="Name"
-              propertyName="name"
-              handleKeyPress={this._preventSubmit}
-              entity={this.props.entity}
-            />
+            <div className="panel__details">
+              <EntityProperty
+                title="Name"
+                name="name"
+                value={this.props.entity.name}
+                placeholder=" "
+                onChange={this._preventSubmit}
+              />
+            </div>
             <ComposedComponent
               parent={this}
               ref={(ref) => this.element = ref}

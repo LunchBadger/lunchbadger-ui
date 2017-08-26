@@ -19,7 +19,13 @@ class Input extends Component {
     underlineStyle: PropTypes.object,
     underlineFocusStyle: PropTypes.object,
     isInvalid: PropTypes.bool,
+    hideUnderline: PropTypes.bool,
+    textarea: PropTypes.bool,
   };
+
+  static defaultProps = {
+    textarea: false,
+  }
 
   _handleKeyPress = (event) => {
     if (typeof this.props.handleKeyPress === 'function') {
@@ -68,6 +74,8 @@ class Input extends Component {
       fullWidth,
       underlineStyle,
       isInvalid,
+      hideUnderline,
+      textarea,
     } = this.props;
     const rootStyle = {
       fontWeight: 'inherit',
@@ -83,6 +91,10 @@ class Input extends Component {
     };
     if (isInvalid) {
       underlineStyles.borderColor = '#f44336';
+    }
+    const underlineFocusStyle = {...underlineStyles};
+    if (hideUnderline) {
+      underlineStyles.borderColor = 'rgba(0, 0, 0, 0)';
     }
     return (
       <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
@@ -101,7 +113,10 @@ class Input extends Component {
           style={rootStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
-          underlineFocusStyle={underlineStyles}
+          underlineFocusStyle={underlineFocusStyle}
+          multiLine={textarea}
+          rows={textarea ? 2 : 1}
+          rowsMax={textarea ? 4 : 1}
         />
       </div>
     );

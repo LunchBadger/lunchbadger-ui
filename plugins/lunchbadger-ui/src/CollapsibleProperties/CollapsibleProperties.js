@@ -7,6 +7,22 @@ import iconArrow from '../../../../src/icons/icon-arrow.svg';
 import './CollapsibleProperties.scss';
 
 class CollapsibleProperties extends Component {
+  static propTypes = {
+    bar: PropTypes.node.isRequired,
+    collapsible: PropTypes.node.isRequired,
+    onToggleCollapse: PropTypes.func,
+    defaultOpened: PropTypes.bool,
+    plain: PropTypes.bool,
+    barToggable: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    onToggleCollapse: () => {},
+    defaultOpened: false,
+    plain: false,
+    barToggable: false,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,12 +36,13 @@ class CollapsibleProperties extends Component {
   }
 
   render() {
-    const {bar, collapsible, plain} = this.props;
+    const {bar, collapsible, plain, barToggable} = this.props;
     const {expanded} = this.state;
     const classNames = cs('CollapsibleProperties', {
       expanded,
       plain,
       nonEditable: typeof bar === 'string',
+      barToggable,
     });
     return (
       <div className={classNames}>
@@ -38,7 +55,10 @@ class CollapsibleProperties extends Component {
               <IconSVG svg={iconArrow} />
             </div>
           </div>
-          <div className="CollapsibleProperties__bar__right">
+          <div
+            className="CollapsibleProperties__bar__right"
+            onClick={barToggable ? this.handleToggleCollapse : undefined}
+          >
             {bar}
           </div>
         </div>
@@ -50,20 +70,6 @@ class CollapsibleProperties extends Component {
       </div>
     );
   }
-};
-
-CollapsibleProperties.propTypes = {
-  bar: PropTypes.node.isRequired,
-  collapsible: PropTypes.node.isRequired,
-  onToggleCollapse: PropTypes.func,
-  defaultOpened: PropTypes.bool,
-  plain: PropTypes.bool,
-}
-
-CollapsibleProperties.defaultProps = {
-  onToggleCollapse: () => {},
-  defaultOpened: false,
-  plain: false,
 }
 
 export default CollapsibleProperties;

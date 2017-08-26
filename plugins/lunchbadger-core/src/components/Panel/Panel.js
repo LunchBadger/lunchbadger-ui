@@ -128,7 +128,7 @@ export default (ComposedComponent) => {
         'panel__container--dragging': this.state.dragging,
       });
       return (
-        <div className="panel">
+        <div className="panel highlighted editable">
           <div className={containerClass} style={{height: panelHeight}}>
             <ComposedComponent parent={this} ref={(ref) => this.panel = ref} {...this.props} {...this.state} />
           </div>

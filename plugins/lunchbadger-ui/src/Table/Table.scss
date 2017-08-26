@@ -1,0 +1,18 @@
+.Table {
+  font-weight: 400;
+  &HeaderColumn:not(:last-child) {
+    padding: 0 32px !important;
+  }
+  &RowColumn {
+    vertical-align: bottom;
+    &:last-child {
+      vertical-align: middle;
+    }
+  }
+  &Footer {
+    tr,
+    td {
+      height: 1px !important;
+    }
+  }
+}

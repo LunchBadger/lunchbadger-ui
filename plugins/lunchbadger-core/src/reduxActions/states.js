@@ -8,6 +8,7 @@ export const createModelsFromJSON = response => (dispatch, getState) => {
   if (currentElement) {
     json = currentElement.value;
     const {type} = json;
+    delete json.type;
     const entity = models[type].create(json);
     dispatch(actions.setState({key: 'currentElement', value: entity}));
   }

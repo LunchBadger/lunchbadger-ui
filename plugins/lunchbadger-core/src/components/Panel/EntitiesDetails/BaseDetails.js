@@ -25,12 +25,12 @@ export default (ComposedComponent) => {
     }
 
     discardChanges = () => {
-      const element = this.element;
+      const element = this.element.wrappedInstance || this.element;
       if (typeof element.discardChanges === 'function') {
         element.discardChanges();
       }
       this.refs.form.reset(this.props.entity.toJSON());
-      this.forceUpdate();
+      this.setState({isPristine: true});
     }
 
     update = async (props = this.refs.form.getModel()) => {
@@ -54,10 +54,9 @@ export default (ComposedComponent) => {
       if (typeof changed === 'undefined') {
         changed = this.refs.form.isChanged();
       }
-      if (!this.element) {
-        return;
-      }
-      if (this.element.state && this.element.state.changed) {
+      if (!this.element) return;
+      const element = this.element.wrappedInstance || this.element;
+      if (element.state && element.state.changed) {
         this.setState({isPristine: false});
       } else {
         this.setState({isPristine: !changed});

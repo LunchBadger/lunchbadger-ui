@@ -1,0 +1,35 @@
+.ModelDetails {
+  &__arrow,
+  &__field {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &__arrow {
+    width: 10px;
+    height: 10px;
+    position: relative;
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      fill: rgb(65, 144, 206);
+      width: 10px;
+      height: auto;
+      stroke: none;
+    }
+    &:hover {
+      svg {
+        stroke: none;
+      }
+    }
+    &.expanded {
+      svg {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+    }
+  }
+  &__field {
+    width: calc(100% - 20px);
+  }
+}

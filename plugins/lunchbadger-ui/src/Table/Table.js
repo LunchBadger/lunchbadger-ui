@@ -16,16 +16,25 @@ export default class TableComponent extends PureComponent {
     columns: PropTypes.array,
     data: PropTypes.array,
     widths: PropTypes.array,
+    paddings: PropTypes.array,
+    centers: PropTypes.array,
   };
 
   static defaultProps = {
     widths: [],
+    paddings: [],
+    centers: [],
   };
 
-  getColumnStyles = idx => ({
-    width: this.props.widths[idx],
-    paddingRight: idx === this.props.columns.length - 1 ? 0 : undefined,
-  });
+  getColumnStyles = (idx, isHeader = false) => {
+    const {widths, paddings, centers} = this.props;
+    return {
+      width: widths[idx],
+      padding: !paddings[idx] ? 0 : (isHeader ? '0 8px' : undefined),
+      verticalAlign: (!paddings[idx] || isHeader) ? 'middle' : 'bottom',
+      textAlign: centers[idx] ? 'center' : 'left',
+    };
+  };
 
   render() {
     const {columns, data} = this.props;
@@ -43,7 +52,7 @@ export default class TableComponent extends PureComponent {
               <TableHeaderColumn
                 key={idx}
                 className="TableHeaderColumn"
-                style={this.getColumnStyles(idx)}
+                style={this.getColumnStyles(idx, true)}
               >
                 {item}
               </TableHeaderColumn>

@@ -8,6 +8,7 @@ class Input extends Component {
     getValue: PropTypes.func,
     setValue: PropTypes.func,
     handleBlur: PropTypes.func,
+    handleFocus: PropTypes.func,
     handleKeyPress: PropTypes.func,
     handleKeyUp: PropTypes.func,
     handleKeyDown: PropTypes.func,

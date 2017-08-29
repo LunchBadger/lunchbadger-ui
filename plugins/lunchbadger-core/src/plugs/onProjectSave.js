@@ -14,7 +14,7 @@ const setStatesToSave = (state) => {
     const value = state.states[key];
     if (typeof value === 'undefined' || value === null) return;
     if (value && value.toJSON && typeof value.toJSON === 'function') {
-      states.push({key, value: {...value.toJSON(), type: value.constructor.type}});
+      states.push({key, value: {id: value.id, type: value.constructor.entities}});
     } else {
       states.push({key, value});
     }

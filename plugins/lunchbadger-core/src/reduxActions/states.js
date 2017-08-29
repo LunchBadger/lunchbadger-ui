@@ -2,14 +2,14 @@ import _ from 'lodash';
 import {actions} from './actions';
 
 export const createModelsFromJSON = response => (dispatch, getState) => {
-  const {models} = getState().plugins;
+  const {entities, plugins: {models}} = getState();
   const currentElement = response.body.states.find(({key}) => key === 'currentElement');
   let json;
   if (currentElement) {
     json = currentElement.value;
-    const {type} = json;
+    const {id, type} = json;
     delete json.type;
-    const entity = models[type].create(json);
+    const entity = entities[type][id];
     dispatch(actions.setState({key: 'currentElement', value: entity}));
   }
   if (document.location.search === '?multi') {

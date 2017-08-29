@@ -6,7 +6,7 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
-
+  static entities = 'dataSources';
   /**
    * Collection of ports
    * @type {Port[]}

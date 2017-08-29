@@ -6,6 +6,8 @@ const Port = LunchBadgerCore.models.Port;
 
 export default class PrivateEndpoint extends BaseModel {
   static type = 'PrivateEndpoint';
+  static entities = 'privateEndpoints';
+
   _ports = [];
   url = 'https://private/endpoint';
 

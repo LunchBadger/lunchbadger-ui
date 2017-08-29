@@ -7,6 +7,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class API extends BaseModel {
   static type = 'API';
+  static entities = 'apis';
 
   /**
    * @type {Endpoint[]}

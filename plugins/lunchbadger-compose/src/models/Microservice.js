@@ -6,7 +6,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Microservice extends BaseModel {
   static type = 'Microservice';
-
+  static entities = 'microservices';
   /**
    * @type {Model.lunchbadgerId[]}
    * @private

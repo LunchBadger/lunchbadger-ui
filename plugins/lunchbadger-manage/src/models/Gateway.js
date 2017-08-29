@@ -6,6 +6,8 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
+  static entities = 'gateways';
+
   dnsPrefix = 'gateway';
 
   /**

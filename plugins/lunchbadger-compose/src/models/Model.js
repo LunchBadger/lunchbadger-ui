@@ -12,6 +12,7 @@ const {defaultEntityNames} = LunchBadgerCore.utils;
 
 export default class Model extends BaseModel {
   static type = 'Model';
+  static entities = 'models';
   static forbiddenFields = [
     '_id',
     '_ready',

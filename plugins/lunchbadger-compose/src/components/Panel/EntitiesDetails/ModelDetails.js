@@ -44,7 +44,7 @@ const userFieldsTypeOptions = [
 const userFieldsTypeEmptyValues = {
   string: '',
   number: '0',
-  object: '{}',
+  object: {},
 };
 
 const subTypes = ['object', 'array'];
@@ -250,11 +250,23 @@ class ModelDetails extends PureComponent {
 
   onRemoveProperty = property => () => this.onRemoveItem('properties', property);
 
-  onAddRelation = () => this.onAddItem('relations', ModelRelation.create({}));
+  onAddRelation = () => {
+    this.onAddItem('relations', ModelRelation.create({}));
+    setTimeout(() => {
+      const input = document.getElementById(`relations[${this.state.relations.length - 1}][name]`);
+      input && input.focus();
+    });
+  }
 
   onRemoveRelation = relation => () => this.onRemoveItem('relations', relation);
 
-  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: 'string', value: ''});
+  onAddUserField = () => {
+    this.onAddItem('userFields', {id: uuid.v4(), name: '', type: 'string', value: ''});
+    setTimeout(() => {
+      const input = document.getElementById(`userFields[${this.state.userFields.length - 1}][name]`);
+      input && input.focus();
+    });
+  }
 
   onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
@@ -375,7 +387,7 @@ class ModelDetails extends PureComponent {
 
   renderPropertiesSection = () => {
     const columns = [
-      'Name',
+      <div style={{marginLeft: 10}}>Name</div>,
       'Type',
       'Default Value',
       'Notes',
@@ -579,15 +591,16 @@ class ModelDetails extends PureComponent {
       field.type === 'object'
       ? <Input
           name={`userFields[${idx}][value]`}
-          value={field.value.toString()}
+          value={JSON.stringify(field.value)}
           underlineStyle={{bottom: 0}}
           fullWidth
           hideUnderline
           textarea
+          handleKeyDown={this.handleTab('userFields', idx)}
         />
       : <Input
           name={`userFields[${idx}][value]`}
-          value={field.value}
+          value={field.value.toString()}
           underlineStyle={{bottom: 0}}
           fullWidth
           hideUnderline
@@ -640,32 +653,23 @@ class ModelDetails extends PureComponent {
   // }
 
   render() {
+    const sections = [
+      {title: 'Details'},
+      {title: 'User-defined fields', render: 'UserDefinedFields'},
+      {title: 'Relations'},
+      {title: 'Properties'},
+    ];
     return (
       <div>
-        <CollapsibleProperties
-          bar={<EntityPropertyLabel>Details</EntityPropertyLabel>}
-          collapsible={this.renderDetailsSection()}
-          barToggable
-          defaultOpened
-        />
-        <CollapsibleProperties
-          bar={<EntityPropertyLabel>Relations</EntityPropertyLabel>}
-          collapsible={this.renderRelationsSection()}
-          barToggable
-          defaultOpened
-        />
-        <CollapsibleProperties
-          bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
-          collapsible={this.renderPropertiesSection()}
-          barToggable
-          defaultOpened
-        />
-        <CollapsibleProperties
-          bar={<EntityPropertyLabel>User-defined fields</EntityPropertyLabel>}
-          collapsible={this.renderUserDefinedFieldsSection()}
-          barToggable
-          defaultOpened
-        />
+        {sections.map(({title, render}) => (
+          <CollapsibleProperties
+            key={title}
+            bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
+            collapsible={this[`render${render || title}Section`]()}
+            barToggable
+            defaultOpened
+          />
+        ))}
       </div>
     )
   }

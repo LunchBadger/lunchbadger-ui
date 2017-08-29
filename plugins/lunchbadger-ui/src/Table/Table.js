@@ -37,51 +37,51 @@ export default class TableComponent extends PureComponent {
   };
 
   render() {
-    const {columns, data} = this.props;
+    const {columns, data, widths} = this.props;
+    const minWidth = widths.reduce((size, item) => size += item || 100, 0);
     return (
-      <Table
-        className="Table"
-        selectable={false}
-      >
-        <TableHeader
-          adjustForCheckbox={false}
-          displaySelectAll={false}
-        >
-          <TableRow>
-            {columns.map((item, idx) => (
-              <TableHeaderColumn
-                key={idx}
-                className="TableHeaderColumn"
-                style={this.getColumnStyles(idx, true)}
-              >
-                {item}
-              </TableHeaderColumn>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-        >
-          {data.map((row, idxRow) => (
-            <TableRow key={idxRow} displayBorder>
-              {row.map((column, idxColumn) => (
-                <TableRowColumn
-                  key={idxColumn}
-                  className="TableRowColumn"
-                  style={this.getColumnStyles(idxColumn)}
-                >
-                  {column}
-                </TableRowColumn>
+      <div style={{overflowX: 'auto'}}>
+        <div style={{minWidth}}>
+          <Table
+            className="Table"
+            selectable={false}
+          >
+            <TableHeader
+              adjustForCheckbox={false}
+              displaySelectAll={false}
+            >
+              <TableRow>
+                {columns.map((item, idx) => (
+                  <TableHeaderColumn
+                    key={idx}
+                    className="TableHeaderColumn"
+                    style={this.getColumnStyles(idx, true)}
+                  >
+                    {item}
+                  </TableHeaderColumn>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody
+              displayRowCheckbox={false}
+            >
+              {data.map((row, idxRow) => (
+                <TableRow key={idxRow} displayBorder>
+                  {row.map((column, idxColumn) => (
+                    <TableRowColumn
+                      key={idxColumn}
+                      className="TableRowColumn"
+                      style={this.getColumnStyles(idxColumn)}
+                    >
+                      {column}
+                    </TableRowColumn>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter adjustForCheckbox={false} className="TableFooter">
-          <TableRow>
-            <TableRowColumn colSpan={columns.length} />
-          </TableRow>
-        </TableFooter>
-      </Table>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     );
   }
 }

@@ -57,12 +57,11 @@ export const remove = entity => async (dispatch, getState) => {
     const state = getState();
     dispatch(actions.removeDataSource(entity));
     if (entity.loaded) {
-      await DataSourceService.delete(entity.workspaceId);
       Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))
         .filter(item => item instanceof Model)
-        .forEach(async model => {
-          await ModelService.upsertModelConfig({
+        .forEach(model => {
+          ModelService.upsertModelConfig({
             name: model.name,
             id: model.workspaceId,
             facetName: 'server',
@@ -70,6 +69,7 @@ export const remove = entity => async (dispatch, getState) => {
             public: model.public,
           });
         });
+      await DataSourceService.delete(entity.workspaceId);
     }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));

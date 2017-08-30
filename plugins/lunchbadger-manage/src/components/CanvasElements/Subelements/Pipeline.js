@@ -153,26 +153,28 @@ export default class Pipeline extends Component {
     });
     const {index, onRemove} = this.props;
     return (
-      <CollapsibleProperties
-        ref={(r) => {this.collapsiblePropertiesDOM = r;}}
-        bar={
-          <EntityProperty
-            name={`pipelines[${index}][name]`}
-            value={this.props.entity.name}
-            hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
-            onDelete={onRemove}
-            onViewModeClick={this.toggleCollapsibleProperties}
-          />
-        }
-        collapsible={
-          <div>
-            <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
-            {this.renderPolicies()}
-            {this.renderPorts()}
-          </div>
-        }
-        onToggleCollapse={this.toggleOpenState}
-      />
+      <div className="Pipeline">
+        <CollapsibleProperties
+          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
+          bar={
+            <EntityProperty
+              name={`pipelines[${index}][name]`}
+              value={this.props.entity.name}
+              hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
+              onDelete={onRemove}
+              onViewModeClick={this.toggleCollapsibleProperties}
+            />
+          }
+          collapsible={
+            <div>
+              <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
+              {this.renderPolicies()}
+              {this.renderPorts()}
+            </div>
+          }
+          onToggleCollapse={this.toggleOpenState}
+        />
+      </div>
     );
   }
 }

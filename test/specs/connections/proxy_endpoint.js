@@ -8,14 +8,10 @@ module.exports = {
     page.open();
     page.addElementFromTooltip('endpoint', 'privateendpoint');
     browser.waitForElementVisible(privateEndpointSelector + '.editable:not(.wip)', 30000);
-    browser.clearValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input');
-    browser.setValue(privateEndpointSelector + ' .EntityHeader .EntityProperty__field--input input', 'FooBar');
     browser.submitForm(privateEndpointSelector + '.editable form');
     browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     page.addElement('gateway');
-    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip)', 5 * 60 * 1000);
-    browser.clearValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input');
-    browser.setValue(gatewaySelector + ' .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'blip-bloop');
+    browser.waitForElementVisible(gatewaySelector + '.editable:not(.wip)', 120000);
     browser.submitForm(gatewaySelector + '.editable form');
     browser.waitForElementNotPresent('.canvas__container.canvas__container--editing', 30000);
     browser
@@ -28,9 +24,9 @@ module.exports = {
       .mouseButtonUp(0)
       .pause(1500);
     browser.waitForElementVisible(publicEndpointSelector + '.editable', 60000);
-    page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('FooBarPublicEndpoint');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('foobar');
-    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://blip-bloop.customer.lunchbadger.com/foobar');
+    page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('PrivateEndpointPublicEndpoint');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('privateendpoint');
+    page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gateway.customer.lunchbadger.com/privateendpoint');
     page.close();
   }
 };

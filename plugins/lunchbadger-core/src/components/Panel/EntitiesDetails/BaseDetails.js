@@ -102,7 +102,7 @@ export default (ComposedComponent) => {
               onSave={this.update}
               onCancel={this.discardChanges}
             />
-            <div className="panel__details">
+            <div className="panel__details panel__details--name">
               <EntityProperty
                 title="Name"
                 name="name"

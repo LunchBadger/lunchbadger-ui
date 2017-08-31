@@ -1,4 +1,5 @@
 .SystemDefcon1 {
+  cursor: default;
   position: fixed;
   top: 0;
   left: 0;
@@ -64,6 +65,8 @@
       padding: 26px 30px;
       color: #444;
       position: relative;
+      font-size: 18px;
+      font-weight: 300;
       &:before,
       &:after {
         display: block;
@@ -124,14 +127,34 @@
         }
       }
       button {
-        padding: 8px 30px;
+        padding: 0 30px;
         color: #FFF;
         background-color: #538cca;
         border: none;
         border-radius: 3px;
         font-size: 14px;
+        line-height: 32px;
         outline: none;
         cursor: pointer;
+      }
+    }
+    &.buttons {
+      width: 540px;
+      .SystemDefcon1__box__title:before {
+        display: none;
+      }
+      .SystemDefcon1__box__content {
+        text-align: center;
+        &:last-child {
+          padding: 16px;
+          button {
+            text-transform: uppercase;
+            margin: 0 10px;
+            &:nth-child(2) {
+              background-color: #7a8399;
+            }
+          }
+        }
       }
     }
   }

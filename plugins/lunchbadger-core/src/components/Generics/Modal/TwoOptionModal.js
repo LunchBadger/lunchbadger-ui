@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Modal from './Modal';
+import {SystemDefcon1} from '../../../../../lunchbadger-ui/src';
 
 class TwoOptionModal extends Component {
   static propTypes = {
@@ -15,42 +15,45 @@ class TwoOptionModal extends Component {
     discardText: 'Discard changes'
   };
 
-  _handleConfirm = () => {
-    if (typeof this.props.onSave === 'function') {
-      this.props.onSave();
+  handleConfirm = () => {
+    const {onSave, onClose} = this.props;
+    if (typeof onSave === 'function') {
+      onSave();
     }
-
-    this.props.onClose();
+    onClose();
   }
 
-  _handleCancel = () => {
-    if (typeof this.props.onCancel === 'function') {
-      this.props.onCancel();
+  handleCancel = () => {
+    const {onCancel, onClose} = this.props;
+    if (typeof onCancel === 'function') {
+      onCancel();
     }
+    onClose();
+  }
 
+  handleDoubleClick = event => event.stopPropagation();
+
+  handleClick = (event) => {
     this.props.onClose();
+    event.stopPropagation();
   }
 
   render() {
+    const {title, children, confirmText, discardText} = this.props;
+    const buttons = [
+      {label: confirmText, onClick: this.handleConfirm},
+      {label: discardText, onClick: this.handleCancel},
+    ];
     return (
-      <div className="modal__body">
-        <h1 className="modal__title">{this.props.title}</h1>
-        <p className="modal__message">{this.props.children}</p>
-
-        <div className="modal__actions">
-          <button className="modal__actions__button modal__actions__button--confirm"
-                  onClick={this._handleConfirm}>
-            {this.props.confirmText}
-          </button>
-
-          <button className="modal__actions__button modal__actions__button--discard"
-                  onClick={this._handleCancel}>
-            {this.props.discardText}
-          </button>
-        </div>
+      <div onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+        <SystemDefcon1
+          title={title}
+          content={children}
+          buttons={buttons}
+        />
       </div>
     );
   }
 }
 
-export default Modal(TwoOptionModal);
+export default TwoOptionModal;

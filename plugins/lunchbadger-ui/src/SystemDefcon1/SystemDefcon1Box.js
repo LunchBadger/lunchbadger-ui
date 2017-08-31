@@ -15,6 +15,17 @@ class SystemDefcon1Box extends Component {
     }
   }
 
+  componentWillMount() {
+    this.toggleCanvasEntities3D('none');
+  }
+
+  componentWillUnmount() {
+    this.toggleCanvasEntities3D('translateZ(0)');
+  }
+
+  toggleCanvasEntities3D = transform =>
+    document.querySelectorAll('.Entity').forEach(item => item.style.transform = transform);
+
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
   handleClose = () => {
@@ -28,20 +39,25 @@ class SystemDefcon1Box extends Component {
 
   handleRemove = item => () => this.props.dispatch(removeSystemDefcon1(item));
 
+  handleBoxClick = event => event.stopPropagation();
+
   render() {
-    const {server, errors} = this.props;
+    const {title, server, errors, content, buttons} = this.props;
     const {visibleError} = this.state;
-    const title = server ? 'Server Failure' : 'The workspace crashed';
-    const content = server
+    const titleTxt = title || (server ? 'Server Failure' : 'The workspace crashed');
+    const contentTxt = content || (server
       ? 'The system can\'t connect to the server. Please check that the server is running and reload the page.'
-      : 'You\'ll need to fix the workspace crash cause';
+      : 'You\'ll need to fix the workspace crash cause');
     return (
-      <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
+      <div
+        onClick={this.handleBoxClick}
+        className={cs('SystemDefcon1__box', {visibleError, buttons})}
+      >
         <div className="SystemDefcon1__box__title">
-          {title}
+          {titleTxt}
         </div>
         <div className="SystemDefcon1__box__content">
-          {content}
+          {contentTxt}
           {errors.length > 0 && (
             <div className="SystemDefcon1__box__content__details">
               <div>
@@ -70,9 +86,16 @@ class SystemDefcon1Box extends Component {
           )}
         </div>
         <div className="SystemDefcon1__box__content">
-          <button onClick={this.handleClose}>
-            {server ? 'RELOAD' : 'OK'}
-          </button>
+          {buttons && buttons.map(({label, onClick}) => (
+            <button key={label} onClick={onClick}>
+              {label}
+            </button>
+          ))}
+          {!buttons && (
+            <button onClick={this.handleClose}>
+              {server ? 'RELOAD' : 'OK'}
+            </button>
+          )}
         </div>
       </div>
     );

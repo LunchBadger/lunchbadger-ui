@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {AND, OR, NOT} from '../../../models/MetricPair';
-import changeType from '../../../actions/Metrics/changeType';
+import {changeType} from '../../../reduxActions/metrics';
 import './MetricTypeTooltip.scss';
 
 export default class MetricTypeTooltip extends Component {
@@ -11,15 +11,16 @@ export default class MetricTypeTooltip extends Component {
     onChange: PropTypes.func
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
   _handleChange(selection) {
-    changeType(this.props.metric, this.props.pairId, selection);
-
-    if (typeof this.props.onChange === 'function') {
-      this.props.onChange(selection);
+    const {metric, pairId, onChange} = this.props;
+    const {store: {dispatch}} = this.context;
+    dispatch(changeType(metric, pairId, selection));
+    if (typeof onChange === 'function') {
+      onChange(selection);
     }
   }
 

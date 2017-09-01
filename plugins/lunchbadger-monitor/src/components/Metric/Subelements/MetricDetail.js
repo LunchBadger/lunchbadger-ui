@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './MetricDetail.scss';
 import {APPS, PORTALS, USERS, REQUESTS} from '../../../models/MetricDetail';
 import numeral from 'numeral';
 import moment from 'moment';
+import './MetricDetail.scss';
 
 export default class MetricDetail extends Component {
   static propTypes = {
@@ -11,8 +11,12 @@ export default class MetricDetail extends Component {
     detail: PropTypes.string.isRequired
   };
 
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    this.interval = setInterval(() => this.forceUpdate(), 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   getDetailTitle(key) {
@@ -34,7 +38,6 @@ export default class MetricDetail extends Component {
     const {metric, detail} = this.props;
     const detailTitle = this.getDetailTitle(detail);
     const summary = metric.getDetailsSummary();
-
     return (
       <div className="metric-detail">
         <div className="metric-detail__cell">

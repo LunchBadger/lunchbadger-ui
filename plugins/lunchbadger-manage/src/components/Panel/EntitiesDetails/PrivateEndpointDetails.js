@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import updatePrivateEndpoint from '../../../actions/CanvasElements/PrivateEndpoint/update';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
@@ -11,25 +10,18 @@ class PrivateEndpointDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
-
-  update(model) {
-    updatePrivateEndpoint(this.props.entity.id, model);
-  }
-
   render() {
     const {entity} = this.props;
-
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
           <div className="details-panel__fieldset">
             <span className="details-panel__label">URL</span>
-            <Input className="details-panel__input"
-                   value={entity.url}
-                   name="url"/>
+            <Input
+              className="details-panel__input"
+              value={entity.url}
+              name="url"
+            />
           </div>
         </div>
       </CollapsableDetails>
@@ -38,4 +30,3 @@ class PrivateEndpointDetails extends Component {
 }
 
 export default BaseDetails(PrivateEndpointDetails);
-

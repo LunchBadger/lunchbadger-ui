@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DropTarget} from 'react-dnd';
 import classNames from 'classnames';
-import Metric from '../../stores/Metric';
-import create from '../../actions/Metrics/create';
-import createBundle from '../../actions/Metrics/createBundle';
-import update from '../../actions/Metrics/update';
+import {create, createBundle, update, simulateWebTraffic} from '../../reduxActions/metrics';
+import findMetricByEntityId from '../../utils/findMetricByEntityId';
 import MetricComponent from '../Metric/Metric';
 import './MetricsPanel.scss';
 
@@ -15,18 +14,19 @@ const Panel = LunchBadgerCore.components.Panel;
 
 const boxTarget = {
   drop(props, monitor) {
+    const {dispatch, metrics} = props;
     const item = monitor.getItem();
     const delta = monitor.getSourceClientOffset();
     if (!delta) {
       return;
     }
     if (monitor.getItemType() === 'elementsGroup') {
-      return createBundle(props.currentlySelectedSubelements, delta.x - 60, delta.y - 60);
+      return dispatch(createBundle(props.currentlySelectedSubelements, delta.x - 60, delta.y - 60));
     }
-    if (item.metric && Metric.findEntity(item.metric.id)) {
-      update(item.metric, delta.x - 60, delta.y - 60);
-    } else if (item.entity && !Metric.findByEntityId(item.entity.id)) {
-      create(item.entity, delta.x - 60, delta.y - 60);
+    if (item.metric && metrics[item.metric.id]) {
+      dispatch(update(item.metric, delta.x - 60, delta.y - 60));
+    } else if (item.entity && !findMetricByEntityId(metrics, item.entity.id)) {
+      dispatch(create(item.entity, delta.x - 60, delta.y - 60));
     }
   },
 
@@ -42,61 +42,60 @@ const boxTarget = {
 };
 
 class MetricsPanel extends Component {
+  static type = 'MetricsPanel';
+
   constructor(props) {
     super(props);
     props.parent.storageKey = METRICS_PANEL;
-    this.state = {
-      entities: []
-    };
-    this.onStoreUpdate = () => {
-      setTimeout(() => this.setState({entities: Metric.getData()}));
-    }
   }
 
-  componentWillMount() {
-    Metric.addChangeListener(this.onStoreUpdate);
+  componentDidMount() {
+    this.webTrafficInterval = setInterval(this.handleWebTrafficInterval, 2000);
   }
 
   componentWillUnmount() {
-    Metric.removeChangeListener(this.onStoreUpdate)
+    clearInterval(this.webTrafficInterval);
   }
 
-  renderEntities() {
-    return this.state.entities.map((entity) => {
-      return <MetricComponent key={entity.id} metric={entity}/>;
-    });
+  handleWebTrafficInterval = () => {
+    const {dispatch, metrics} = this.props;
+    if (Object.keys(metrics).length > 0) {
+      dispatch(simulateWebTraffic());
+    }
   }
 
   render() {
-    const {connectDropTarget, isOver, canDrop} = this.props;
+    const {connectDropTarget, isOver, canDrop, metrics} = this.props;
     const panelClass = classNames({
       'panel__metrics-drop': true,
       'panel__metrics-drop--over': isOver && canDrop
     });
-
+    const entities = Object.keys(metrics).map(key => metrics[key]);
     return connectDropTarget(
-      <div className="panel__body">
-        {
-          this.state.entities.length === 0 && (
-            <div className={panelClass}>
-              <div className="panel__metrics-drop__inside">
-                Drag objects here to measure them
-              </div>
+      <div className="panel__body metrics">
+        {entities.length === 0 && (
+          <div className={panelClass}>
+            <div className="panel__metrics-drop__inside">
+              Drag objects here to measure them
             </div>
-          )
-        }
-
-        {this.state.entities.length > 0 && this.renderEntities()}
+          </div>
+        )}
+        {entities.length > 0 && entities.map(item => (
+          <MetricComponent key={item.id} metric={item} />
+        ))}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedSubelements,
+  state => state.entities.metrics,
+  (currentlySelectedSubelements, metrics) =>
+    ({currentlySelectedSubelements, metrics}),
+);
 
-export default connect(mapStateToProps)(Panel(
+export default connect(selector)(Panel(
   DropTarget(
     ['canvasElement', 'metric', 'elementsGroup'],
     boxTarget,

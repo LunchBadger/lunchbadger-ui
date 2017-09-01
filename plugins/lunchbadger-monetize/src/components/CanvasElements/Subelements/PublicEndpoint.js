@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
-import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './PublicEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
+const {coreActions} = LunchBadgerCore.utils;
 
 const boxSource = {
   beginDrag(props) {
@@ -39,49 +40,43 @@ class PublicEndpoint extends Component {
     connectDragSource: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
-    paper: PropTypes.object,
     left: PropTypes.number.isRequired,
     top: PropTypes.number.isRequired,
     hideSourceOnDrag: PropTypes.bool.isRequired,
     handleEndDrag: PropTypes.func,
-    index: PropTypes.number,
-    expanded: PropTypes.bool,
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
   renderPorts() {
     return this.props.entity.ports.map((port) => {
-      const key = `port-${port.portType}-${port.id}`;
       return (
-        <Port key={key}
-              paper={this.props.paper}
-              way={port.portType}
-              middle={true}
-              elementId={`${this.props.entity.id}`}
-              ref={`port-${port.portType}`}
-              scope={this.props.expanded ? port.portGroup : key}
-              offsetTop={96 + this.props.index * 32}
+        <Port
+          key={`port-${port.portType}-${port.id}`}
+          way={port.portType}
+          middle={true}
+          elementId={port.id}
+          scope={port.portGroup}
         />
       );
     });
   }
 
   handleClick = () => {
-    const {parent, entity, toggleSubelement} = this.props;
-    toggleSubelement(parent, entity);
+    const {parent, entity} = this.props;
+    this.context.store.dispatch(coreActions.toggleSubelement(parent, entity));
   }
 
   render() {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames({
-      'public-endpoint': true,
+    const elementClass = classNames('public-endpoint', {
       'public-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
     });
     return connectDragSource(
       <div className={elementClass} onClick={this.handleClick}>
+        {this.renderPorts()}
         <div className="public-endpoint__info">
           <div className="public-endpoint__icon">
             <i className="fa fa-globe"/>
@@ -89,22 +84,19 @@ class PublicEndpoint extends Component {
           <div className="public-endpoint__name">
             {this.props.entity.name}
           </div>
-
-          {this.renderPorts()}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-  isCurrentEditElement: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
+  (currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement) => ({
+    currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement
+  }),
+);
 
-const mapDispatchToProps = dispatch => ({
-  toggleSubelement: (parent, subelement) => dispatch(toggleSubelement(parent, subelement)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PublicEndpoint);
+export default connect(selector)(PublicEndpoint);

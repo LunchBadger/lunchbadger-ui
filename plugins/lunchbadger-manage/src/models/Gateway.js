@@ -1,4 +1,6 @@
+import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
+import Policy from './Policy';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -16,9 +18,21 @@ export default class Gateway extends BaseModel {
 
   constructor(id, name) {
     super(id);
-
     this.name = name;
-    this.ready = false;
+  }
+
+  static create(data) {
+    return super.create({
+      ...data,
+      pipelines: (data.pipelines || []).map(pipeline => Pipeline.create({
+        ...pipeline,
+        policies: pipeline.policies.map(policy => Policy.create(policy)),
+      })),
+    });
+  }
+
+  recreate() {
+    return Gateway.create(this);
   }
 
   toJSON() {
@@ -59,6 +73,35 @@ export default class Gateway extends BaseModel {
     _.remove(this._pipelines, function (_pipeline) {
       return _pipeline.id === pipeline.id
     });
+  }
+
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.gateways;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Gateway');
+        }
+      }
+      const fields = ['name', 'dnsPrefix'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
+    }
+  }
+
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
+
+  remove() {
+    return async dispatch => await dispatch(remove(this));
   }
 
 }

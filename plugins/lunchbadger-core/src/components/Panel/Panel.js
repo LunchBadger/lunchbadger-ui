@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
@@ -27,7 +28,7 @@ export default (ComposedComponent) => {
       window.addEventListener('resize', this.handleWindowResize);
       setTimeout(() => {
         this.header = this.props.header().refs.headerContainer;
-        this.canvas = this.props.canvas();
+        this.canvas = this.props.canvas().getWrappedInstance();
         this.container = this.props.container();
         let panelDefaultHeight = '50vh';
 
@@ -58,17 +59,11 @@ export default (ComposedComponent) => {
       if (this.state.opened === prevState.opened && this.state.height === prevState.height) {
         return;
       }
-
       clearTimeout(this.openTimeout);
-
       if (this.state.opened && !prevState.opened) {
-        this.openTimeout = setTimeout(() => {
-          this.updateCanvasHeight();
-        }, 1500);
-
+        this.openTimeout = setTimeout(this.updateCanvasHeight);
         return;
       }
-
       if (this.state.opened) {
         this.updateCanvasHeight();
       } else {
@@ -76,7 +71,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    updateCanvasHeight() {
+    updateCanvasHeight = () => {
       const containerHeight = this.getContainerHeight();
       const heightToCalculation = this.state.height === '50vh' ? containerHeight / 2 : this.state.height;
       this.canvas.setState({canvasHeight: containerHeight - parseInt(heightToCalculation, 10)});
@@ -122,16 +117,16 @@ export default (ComposedComponent) => {
 
     render() {
       let panelHeight = '0px';
-
       if (this.state.opened) {
         panelHeight = this.state.height;
       }
-
-      const containerClass = classNames({
-        'panel__container': true,
-        'panel__container--dragging': this.state.dragging
+      let type = '';
+      if (this.panel) {
+        type = (this.panel.wrappedInstance || this.panel.decoratedComponentInstance || this.panel).constructor.type;
+      }
+      const containerClass = classNames(type, 'panel__container', {
+        'panel__container--dragging': this.state.dragging,
       });
-
       return (
         <div className="panel">
           <div className={containerClass} style={{height: panelHeight}}>
@@ -145,9 +140,10 @@ export default (ComposedComponent) => {
     }
   }
 
-  const mapStateToProps = state => ({
-    currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
-  });
+  const selector = createSelector(
+    state => state.states.currentlyOpenedPanel,
+    currentlyOpenedPanel => ({currentlyOpenedPanel}),
+  );
 
-  return connect(mapStateToProps)(Panel);
+  return connect(selector)(Panel);
 }

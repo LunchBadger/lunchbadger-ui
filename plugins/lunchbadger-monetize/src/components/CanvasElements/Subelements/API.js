@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import classNames from 'classnames';
+import {createSelector} from 'reselect';
+// import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
 import PublicEndpoint from './SubPublicEndpoint';
@@ -49,76 +50,86 @@ class API extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      opened: true
+      opened: true,
+      marginTopPorts: {},
     };
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api, index) => {
+    return this.props.entity.publicEndpoints.map((api) => {
       return (
         <PublicEndpoint
           key={api.id}
-          parent={this.props.entity}
-          {...this.props}
-          key={api.id}
-          id={api.id}
           entity={api}
-          paper={this.props.paper}
-          APIsOpened={this.props.APIsOpened}
-          APIId={this.props.entity.id}
-          index={index}
-          indexAPI={this.props.index}
-          APIsPublicEndpoints={this.props.APIsPublicEndpoints}
-          expanded={this.state.opened}
         />
       );
     });
   }
 
   toggleOpenState = () => {
-    this.setState({opened: !this.state.opened});
-    this.props.onToggleOpen(!this.state.opened);
+    const opened = !this.state.opened;
+    const apiOffsetTop = this.refs.api.offsetTop;
+    this.refs.data.querySelectorAll('.port__middle').forEach((portRef) => {
+      if (!opened) {
+        const marginTop = +window.getComputedStyle(portRef).marginTop.replace('px', '');
+        this.state.marginTopPorts[portRef.id] = marginTop;
+        portRef.style.marginTop = `${-portRef.offsetTop + apiOffsetTop + marginTop + 9}px`;
+      } else {
+        portRef.style.marginTop = `${this.state.marginTopPorts[portRef.id]}px`;
+      }
+    });
+    this.state.opened = opened;
   }
 
   render() {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames({
-      subapi: true,
-      'subapi--opened': this.state.opened,
-      'subapi--closed': !this.state.opened
-    });
-    const apiInfoClass = classNames({
-      'subapi__info': true,
-      'subapi__info--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
-    });
+    // const elementClass = classNames({
+    //   subapi: true,
+    //   'subapi--opened': this.state.opened,
+    //   'subapi--closed': !this.state.opened
+    // });
+    // const apiInfoClass = classNames({
+    //   'subapi__info': true,
+    //   'subapi__info--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
+    // });
     return connectDragSource(
-      <div>
-        <CollapsibleProperties
-          bar={(
-            <span className="Portal__APIs__title">
-              {this.props.entity.name}
-            </span>
-          )}
-          collapsible={
-            <div>
-              <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>
-              {this.renderEndpoints()}
-            </div>
-          }
-          onToggleCollapse={this.toggleOpenState}
-          defaultOpened
-        />
+      <div className="Portal__APIs">
+        <div ref="api">
+          <CollapsibleProperties
+            bar={(
+              <span className="Portal__APIs__title">
+                {this.props.entity.name}
+              </span>
+            )}
+            collapsible={
+              <div ref="data">
+                <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>
+                {this.renderEndpoints()}
+              </div>
+            }
+            onToggleCollapse={this.toggleOpenState}
+            defaultOpened
+          />
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-  isCurrentEditElement: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
+  (
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  ) => ({
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  }),
+);
 
-export default connect(mapStateToProps)(API);
+export default connect(selector)(API);

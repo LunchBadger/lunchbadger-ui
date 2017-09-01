@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {findDOMNode} from 'react-dom';
-import updatePlan from '../../../actions/APIForecast/updatePlan';
+import {updatePlan} from '../../../reduxActions/forecasts';
 
 export default class ForecastPlanInput extends Component {
   static propTypes = {
@@ -10,11 +10,14 @@ export default class ForecastPlanInput extends Component {
     forecast: PropTypes.object
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
-      value: props.value
+      value: props.value,
     };
   }
 
@@ -28,7 +31,6 @@ export default class ForecastPlanInput extends Component {
       nameInput.select();
       nameInput.removeEventListener('focus', selectAllOnce);
     };
-
     nameInput.addEventListener('focus', selectAllOnce);
     nameInput.focus();
   }
@@ -44,18 +46,21 @@ export default class ForecastPlanInput extends Component {
   }
 
   _update = () => {
-    updatePlan(this.props.forecast, this.props.plan, this.state.value);
+    const {forecast, plan} = this.props;
+    this.context.store.dispatch(updatePlan(forecast, plan, this.state.value));
   }
 
   render() {
     return (
-      <input value={this.state.value}
-             onBlur={this._update}
-             ref="input"
-             className={this.props.className || ''}
-             onKeyDown={this._handleKeyPress}
-             onChange={this._handleChange}
-             type="text"/>
+      <input
+        value={this.state.value}
+        onBlur={this._update}
+        ref="input"
+        className={this.props.className || ''}
+        onKeyDown={this._handleKeyPress}
+        onChange={this._handleChange}
+        type="text"
+      />
     );
   }
 }

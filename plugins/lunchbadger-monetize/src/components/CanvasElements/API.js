@@ -1,19 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import _ from 'lodash';
 import PublicEndpoint from './Subelements/PublicEndpoint';
 import Plan from './Subelements/Plan';
-import updateAPI from '../../actions/CanvasElements/API/update';
-import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
-import bundleAPI from '../../actions/CanvasElements/API/bundle';
-import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
-import removeAPI from '../../actions/CanvasElements/remove';
-import {EntityPropertyLabel, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
+import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
@@ -21,42 +15,26 @@ const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 class API extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.previousConnection = null;
     this.state = {
-      hasConnection: null,
       isShowingModal: false,
       bundledItem: null
     }
   }
 
   componentDidMount() {
-    this.props.paper.bind('connectionDetached', (info) => {
-      this.previousConnection = info;
-    });
-  }
-
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasConnection: true});
-      } else {
-        this.setState({hasConnection: false});
-      }
-    }
-  }
-
-  update(model) {
-    updateAPI(this.props.entity.id, model);
+    // this.props.paper.bind('connectionDetached', (info) => {
+    //   this.previousConnection = info;
+    // });
   }
 
   renderPlans = () => {
@@ -64,20 +42,16 @@ class API extends Component {
   }
 
   renderEndpoints = () => {
-    return this.props.entity.publicEndpoints.map((api, index) => (
+    return this.props.entity.publicEndpoints.map((api) => (
       <PublicEndpoint
         key={api.id}
-        {...this.props}
         parent={this.props.entity}
-        key={api.id}
         id={api.id}
         entity={api}
-        paper={this.props.paper}
-        left={api.left}
-        top={api.top}
+        left={api.left || 0}
+        top={api.top || 0}
         handleEndDrag={(item) => this._handleEndDrag(item)}
         hideSourceOnDrag={true}
-        index={index}
       />
     ));
   }
@@ -91,23 +65,29 @@ class API extends Component {
     }
   }
 
-  _handleModalConfirm = () => {
-    const item = this.state.bundledItem;
-    unbundleAPI(item.parent, item.entity);
-  }
-
   _handleClose = () => {
     this.setState({isShowingModal: false});
   }
 
-  removeEntity = () => removeAPI(this.props.entity);
+  bundle = (api, endpoint) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(bundle(api, endpoint));
+  }
+
+  rebundle = (fromApi, toApi, endpoint) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundle(fromApi, toApi, endpoint));
+  }
+
+  unbundle = () => {
+    const item = this.state.bundledItem;
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, item.entity));
+  }
 
   render() {
-    const elementClass = classNames({
-      'has-connection': this.state.hasConnection
-    });
     return (
-      <div className={elementClass}>
+      <div>
         {this.props.entity.plans.length > 0 && (
           <EntitySubElements
             title="Plans"
@@ -135,8 +115,8 @@ class API extends Component {
                 && !_.includes(this.props.entity.publicEndpoints, item.entity)
               }
               onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
-              onAdd={bundleAPI}
-              onMove={moveBetweenAPIs}
+              onAdd={this.bundle}
+              onMove={this.rebundle}
               parent={this.props.parent}
               entity={this.props.entity}
             />
@@ -148,7 +128,7 @@ class API extends Component {
             confirmText="Yes"
             discardText="No"
             onClose={this._handleClose}
-            onSave={this._handleModalConfirm}
+            onSave={this.unbundle}
           >
             <span>
               Are you sure you want to unbundle

@@ -1,63 +1,72 @@
-/*eslint no-console:0 */
-/*global LUNCHBADGER_CONFIG */
-/*global ID_TOKEN */
-// Let's register plugins inside the Core, yay!
-import ForecastsPanel from './plugs/ForecastsPanel';
+// /*eslint no-console:0 */
+// // Let's register plugins inside the Core, yay!
+// import ForecastsPanel from './plugs/ForecastsPanel';
+//
+// // stores
+// import Forecast from './stores/Forecast';
+//
+// // services
+// import ForecastService from './services/ForecastService';
+//
+// // actions
+// import initialize from './actions/APIForecast/initialize';
+// import setForecast from './actions/AppState/setForecast';
+//
+// // models
+// import APIForecast from './models/APIForecast';
+//
+// LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
 
-// stores
-import Forecast from './stores/Forecast';
+import {removeAPIForecast} from './reduxActions/forecasts';
 
-// services
-import ForecastService from './services/ForecastService';
+// import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+import plugs from './plugs';
 
-// actions
-import initialize from './actions/APIForecast/initialize';
-import setForecast from './actions/AppState/setForecast';
+const {registerPlugin} = LunchBadgerCore.utils;
+registerPlugin(reducers, plugs);
 
-// models
-import APIForecast from './models/APIForecast';
-
-LunchBadgerCore.actions.registerPlugin(ForecastsPanel);
-
-// try to load all forecasts
-const AppState = LunchBadgerCore.stores.AppState;
-const waitForStores = LunchBadgerCore.utils.waitForStores;
-
-waitForStores([AppState]).then(() => {
-  setTimeout(() => {
-
-    const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
-    const forecastService = new ForecastService(LUNCHBADGER_CONFIG.forecastApiUrl, ID_TOKEN);
-
-    if (apiForecastInformation) {
-      forecastService.getByForecast(apiForecastInformation.id).then((data) => {
-        if (data.body) {
-          const forecast = APIForecast.create(Object.assign({}, data.body, {
-              left: apiForecastInformation.left || 0,
-              top: apiForecastInformation.top || 0
-            }
-          ));
-
-          initialize(forecast);
-          setForecast(forecast, apiForecastInformation.selectedDate, apiForecastInformation.expanded);
-        }
-      }).catch((error) => {
-        return console.warn(error);
-      });
-    }
-  });
-});
-
-// export
+// // try to load all forecasts
+// const AppState = LunchBadgerCore.stores.AppState;
+// const waitForStores = LunchBadgerCore.utils.waitForStores;
+//
+// waitForStores([AppState]).then(() => {
+//   setTimeout(() => {
+//
+//     const apiForecastInformation = AppState.getStateKey('currentForecastInformation');
+//
+//     if (apiForecastInformation) {
+//       ForecastService.getByForecast(apiForecastInformation.id).then((data) => {
+//         if (data.body) {
+//           const forecast = APIForecast.create(Object.assign({}, data.body, {
+//               left: apiForecastInformation.left || 0,
+//               top: apiForecastInformation.top || 0
+//             }
+//           ));
+//
+//           initialize(forecast);
+//           setForecast(forecast, apiForecastInformation.selectedDate, apiForecastInformation.expanded);
+//         }
+//       }).catch((error) => {
+//         return console.warn(error);
+//       });
+//     }
+//   }, 5000); // FIXME
+// });
+//
+// // export
 let LunchBadgerOptimize = {
-  stores: {
-    Forecast: Forecast
+  actions: {
+    removeAPIForecast,
   },
-  services: {
-    ForecastService: ForecastService
-  }
+//   stores: {
+//     Forecast: Forecast
+//   },
+//   services: {
+//     ForecastService: ForecastService
+//   }
 };
-
+//
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
   global.LunchBadgerOptimize = LunchBadgerOptimize;
 }

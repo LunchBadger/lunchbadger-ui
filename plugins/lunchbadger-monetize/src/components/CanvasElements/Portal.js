@@ -1,25 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import cs from 'classnames';
+import {createSelector} from 'reselect';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import updatePortal from '../../actions/CanvasElements/Portal/update';
-import unbundlePortal from '../../actions/CanvasElements/Portal/unbundle';
-import moveBetweenPortals from '../../actions/CanvasElements/Portal/rebundle';
 import classNames from 'classnames';
-import bundlePortal from '../../actions/CanvasElements/Portal/bundle';
-import removePortal from '../../actions/CanvasElements/remove';
+import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
 
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const Input = LunchBadgerCore.components.Input;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 
 class Portal extends Component {
@@ -29,92 +22,40 @@ class Portal extends Component {
     parent: PropTypes.object
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
-    this.previousConnection = null;
-
     this.state = {
       hasConnection: null,
       isShowingModal: false,
       isShowingModalMultiple: false,
       bundledItem: null,
       bundledItems: [],
-      APIsOpened: {},
     }
   }
 
-  componentDidMount() {
-    const {paper, ready, toggleEdit, entity} = this.props;
-    paper.bind('connectionDetached', (info) => {
-      this.previousConnection = info;
-    });
-    if (!ready) {
-      toggleEdit(entity);
-    }
-    const APIsOpened = {...this.state.APIsOpened};
-    entity.apis.forEach((item) => {
-      APIsOpened[item.id] = true;
-    });
-    this.setState({APIsOpened});
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.ready && !this.props.ready) {
+  //     this._onDeploy();
+  //   }
+  //   // if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
+  //   //   const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
+  //   //     return Connection.getConnectionsForTarget(publicEndpoint.id).length;
+  //   //   });
+  //   //   if (hasConnection) {
+  //   //     this.setState({hasConnection: true});
+  //   //   } else {
+  //   //     this.setState({hasConnection: false});
+  //   //   }
+  //   // }
+  // }
 
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextProps.ready && !this.props.ready) {
-      this._onDeploy();
-    }
-    if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-      const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-        return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-      });
-      if (hasConnection) {
-        this.setState({hasConnection: true});
-      } else {
-        this.setState({hasConnection: false});
-      }
-    }
-    const APIsOpened = {...this.state.APIsOpened};
-    let isChange = false;
-    nextProps.entity.apis.forEach((item) => {
-      if (typeof APIsOpened[item.id] === 'undefined') {
-        APIsOpened[item.id] = true;
-        isChange = true;
-      }
-    });
-    if (isChange) {
-      this.setState({APIsOpened});
-    }
-  }
-
-  _onDeploy() {
-    const dispatchRedux = LunchBadgerCore.dispatchRedux;
-    dispatchRedux(addSystemInformationMessage({
-      message: 'Portal successfully deployed',
-      type: 'success'
-    }));
-    this.props.parent.triggerElementAutofocus();
-  }
-
-  update(model) {
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updatePortal(this.props.entity.id, model);
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.rootUrl === '') validations.data.rootUrl = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
+  // _onDeploy() {
+  //   this.props.parent.triggerElementAutofocus(); // FIXME
+  // }
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
@@ -122,46 +63,24 @@ class Portal extends Component {
     }
   }
 
-  handleToggleAPIOpen = APIId => opened => {
-    this.setState({APIsOpened: {...this.state.APIsOpened, [APIId]: opened}});
-  }
-
-  removeEntity = () => removePortal(this.props.entity);
-
   renderAPIs() {
-    const APIsPublicEndpoints = {};
-    this.props.entity.apis.forEach((endpoint) => {
-      APIsPublicEndpoints[endpoint.id] = endpoint.publicEndpoints.length;
-    });
-    return this.props.entity.apis.map((endpoint, index) => {
+    return this.props.entity.apis.map((endpoint) => {
       return (
         <API
           key={endpoint.id}
-          {...this.props}
           parent={this.props.entity}
-          key={endpoint.id}
           id={endpoint.id}
           entity={endpoint}
-          paper={this.props.paper}
-          left={endpoint.left}
-          top={endpoint.top}
+          left={endpoint.left || 0}
+          top={endpoint.top || 0}
           handleEndDrag={(item) => this._handleEndDrag(item)}
           hideSourceOnDrag={true}
-          onToggleOpen={this.handleToggleAPIOpen(endpoint.id)}
-          APIsOpened={this.state.APIsOpened}
-          index={index}
-          APIsPublicEndpoints={APIsPublicEndpoints}
         />
       );
     });
   }
 
-  _handleModalConfirm = () => {
-    const item = this.state.bundledItem;
-    unbundlePortal(item.parent, item.entity);
-  }
-
-  _handleClose = () => {
+  handleCloseModal = () => {
     this.setState({
       isShowingModal: false,
       isShowingModalMultiple: false
@@ -184,13 +103,30 @@ class Portal extends Component {
     });
   }
 
-  _handleModalConfirmMultiple = () => {
-    this.state.bundledItems.forEach(item => unbundlePortal(this.props.entity, item));
+  bundle = (portal, api) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(bundle(portal, api));
+  }
+
+  rebundle = (fromPortal, toPortal, api) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundle(fromPortal, toPortal, api));
+  }
+
+  unbundle = () => {
+    const item = this.state.bundledItem;
+    const {store: {dispatch}} = this.context;
+    dispatch(unbundle(item.parent, item.entity));
+  }
+
+  unbundleMultiple = () => {
+    const {store: {dispatch}} = this.context;
+    this.state.bundledItems.forEach(item => dispatch(unbundle(this.props.entity, item)));
   }
 
   render() {
     const elementClass = classNames({
-      'has-connection': this.state.hasConnection
+      'has-connection': this.state.hasConnection,
     });
     const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
@@ -226,8 +162,8 @@ class Portal extends Component {
               && !_.includes(this.props.entity.apis, item.entity)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
-            onAdd={bundlePortal}
-            onMove={moveBetweenPortals}
+            onAdd={this.bundle}
+            onMove={this.rebundle}
             dropText={'Drag APIs here'}
             parent={this.props.parent}
             entity={this.props.entity}
@@ -238,8 +174,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose}
-            onSave={this._handleModalConfirm}
+            onClose={this.handleCloseModal}
+            onSave={this.unbundle}
           >
             <span>
               Are you sure you want to unbundle
@@ -254,8 +190,8 @@ class Portal extends Component {
             title="Unbundle Portal"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose}
-            onSave={this._handleModalConfirmMultiple}
+            onClose={this.handleCloseModal}
+            onSave={this.unbundleMultiple}
           >
             <span>
               Are you sure you want to unbundle
@@ -270,12 +206,9 @@ class Portal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedSubelements, // FIXME
+  currentlySelectedSubelements => ({currentlySelectedSubelements}),
+);
 
-const mapDispatchToProps = dispatch => ({
-  toggleEdit: element => dispatch(toggleEdit(element)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CanvasElement(Portal));
+export default connect(selector)(CanvasElement(Portal));

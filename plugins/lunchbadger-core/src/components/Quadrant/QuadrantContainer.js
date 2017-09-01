@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import classNames from 'classnames';
+import QuadrantNew from './QuadrantNew';
 
-class QuadrantContainer extends Component {
+class QuadrantContainer extends PureComponent {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    paper: PropTypes.object,
     canvasHeight: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   };
 
@@ -80,51 +81,72 @@ class QuadrantContainer extends Component {
       }
     }
     this.setState({quadrantWidths});
-    this.props.paper.repaintEverything();
+    // this.props.paper.repaintEverything();
   }
 
-  renderQuadrants() {
-    const {plugins, appState, paper, scrollLeft} = this.props;
-    const pluggedQuadrants = plugins.getQuadrants();
-    const {quadrantWidths} = this.state;
-    return pluggedQuadrants.map((plugin, index) => {
-      const QuadrantComponent = plugin.component;
-      return (
-        <QuadrantComponent
-          key={`plugged-quadrant-${index}-${plugin.title}`}
-          appState={appState}
-          paper={paper}
-          data={plugin.dataStore}
-          resizable={index < pluggedQuadrants.length - 1}
-          index={index}
-          width={quadrantWidths[index]}
-          title={plugin.title}
-          scrollLeft={scrollLeft}
-          recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
-        />
-      );
-    });
-  }
+  // renderQuadrants() {
+  //   const {plugins, appState, paper, scrollLeft} = this.props;
+  //   const pluggedQuadrants = plugins.getQuadrants();
+  //   const {quadrantWidths} = this.state;
+  //   return pluggedQuadrants.map((plugin, index) => {
+  //     const QuadrantComponent = plugin.component;
+  //     return (
+  //       <QuadrantComponent
+  //         key={`plugged-quadrant-${index}-${plugin.title}`}
+  //         appState={appState}
+  //         paper={paper}
+  //         data={plugin.dataStore}
+  //         resizable={index < pluggedQuadrants.length - 1}
+  //         index={index}
+  //         width={quadrantWidths[index]}
+  //         title={plugin.title}
+  //         scrollLeft={scrollLeft}
+  //         recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
+  //       />
+  //     );
+  //   });
+  // }
 
   render() {
-    const {editing, canvasHeight, className, id} = this.props;
+    const {editing, canvasHeight, className, id, scrollLeft, quadrants} = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
+    const {quadrantWidths} = this.state;
+    // console.log('RENDER QuadrantContainer');
     return (
       <div
         style={{minHeight: canvasHeight}}
         className={`${className} ${containerClass}`}
         id={id}
       >
-        {this.renderQuadrants()}
+        {quadrants.map(({name, entities}, idx) => (
+          <QuadrantNew
+            key={idx}
+            title={name}
+            resizable={idx < quadrants.length - 1}
+            index={idx}
+            width={quadrantWidths[idx]}
+            scrollLeft={scrollLeft}
+            types={entities}
+            recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
+          />
+        ))}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  editing: !!state.core.appState.currentEditElement,
-});
+const selector = createSelector(
+  state => !!state.states.currentEditElement,
+  state => state.plugins.quadrants,
+  (
+    editing,
+    quadrants,
+  ) => ({
+    editing,
+    quadrants: Object.keys(quadrants).map(key => quadrants[key]),
+  }),
+);
 
-export default connect(mapStateToProps)(QuadrantContainer);
+export default connect(selector)(QuadrantContainer);

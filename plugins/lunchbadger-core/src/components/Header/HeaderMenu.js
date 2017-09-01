@@ -1,47 +1,29 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import cs from 'classnames';
 import HeaderMenuLink from './HeaderMenuLink';
-import HeaderMenuSaveButton from './HeaderMenuSaveButton';
-import HeaderMenuClearButton from './HeaderMenuClearButton';
-import panelKeys from '../../constants/panelKeys';
-import classNames from 'classnames';
-import iconDetails from '../../../../../src/icons/icon-details.svg';
 
-export default class HeaderMenu extends Component {
-  renderButtons() {
-    return this.props.plugins.getPanelButtons().map((button) => {
-      button = button.panelButton;
-      return (
-        <li key={`${button.panelKey}-button-plugin`} className="header__menu__element">
-          <HeaderMenuLink panel={button.panelKey} icon={button.icon}/>
-        </li>
-      );
-    });
-  }
-
+class HeaderMenu extends PureComponent {
   render() {
-    const {disabled, clearServer, saveToServer} = this.props;
-    const headerClass = classNames({
-      header__menu: true,
-      'header__menu--disabled': disabled,
-    });
+    const {disabled, panelMenu} = this.props;
     return (
-      <nav className={headerClass}>
+      <nav className={cs('header__menu', {'header__menu--disabled': disabled})}>
         <ul className="header__menu__list">
-          <li className="header__menu__element">
-            <HeaderMenuClearButton clearServer={clearServer} />
-          </li>
-          <li className="header__menu__element">
-            <HeaderMenuSaveButton saveToServer={saveToServer} />
-          </li>
-          <li className="header__menu__element">
-            <HeaderMenuLink panel={panelKeys.DETAILS_PANEL} kind="details" svg={iconDetails} />
-          </li>
-          {this.renderButtons()}
-          <li className="header__menu__element">
-            <HeaderMenuLink panel={panelKeys.SETTINGS_PANEL} icon="icon-icon-settings"/>
-          </li>
+          {panelMenu.map((item, idx) => <HeaderMenuLink key={idx} {...item} />)}
         </ul>
       </nav>
     );
   }
 }
+
+const selector = createSelector(
+  state => state.plugins.panelMenu,
+  state => !!state.states.currentEditElement,
+  (panelMenu, disabled) => ({
+    panelMenu: Object.keys(panelMenu).map(key => panelMenu[key]),
+    disabled,
+  }),
+);
+
+export default connect(selector)(HeaderMenu);

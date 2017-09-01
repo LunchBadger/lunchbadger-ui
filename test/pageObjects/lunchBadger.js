@@ -64,16 +64,16 @@ module.exports = {
   },
   elements: {
     forecaster: {
-      selector: '.header__menu__element .icon-icon-forecaster'
+      selector: '.header__menu__element .header__menu__link.FORECASTS_PANEL'
     },
     forecasterPanel: {
-      selector: '.panel:nth-child(3) .panel__container'
+      selector: '.panel__container.ForecastsPanel'
     },
     details: {
-      selector: '.header__menu__element .header__menu__link.details'
+      selector: '.header__menu__element .header__menu__link.DETAILS_PANEL'
     },
     detailsPanel: {
-      selector: '.panel:first-child .panel__container'
+      selector: '.panel__container.DetailsPanel'
     }
   }
 };

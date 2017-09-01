@@ -1,130 +1,56 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-// import {connect} from 'react-redux';
-import classNames from 'classnames';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import Model from './Subelements/Model';
-import updateMicroservice from '../../actions/CanvasElements/Microservice/update';
-import {bundleStart, bundleFinish} from '../../actions/CanvasElements/Microservice/bundle';
-import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Microservice/unbundle';
-import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
-import removeModel from '../../actions/CanvasElements/Model/remove';
-import updateModel from '../../actions/CanvasElements/Model/update';
-import removeEntity from '../../actions/CanvasElements/remove';
+import {bundle, unbundle, rebundle} from '../../reduxActions/models';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
 const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const Private = LunchBadgerManage.stores.Private;
-const Connection = LunchBadgerCore.stores.Connection;
 
 class Microservice extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object
   };
 
   static contextTypes = {
-    projectService: PropTypes.object
+    store: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-
-    this.previousConnection = null;
-
     this.state = {
-      hasTargetConnection: false,
-      hasSourceConnection: false,
       isShowingModal: false,
-      bundledItem: null
+      bundledItem: null,
     }
-  }
-
-  componentDidMount() {
-    this.props.paper.bind('connectionDetached', this.onConnectionDetached);
-  }
-
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextState === null || this.state.hasTargetConnection !== nextState.hasTargetConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
-        return Connection.getConnectionsForTarget(modelId).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasTargetConnection: true});
-      } else {
-        this.setState({hasTargetConnection: false});
-      }
-    }
-
-    if (nextState === null || this.state.hasSourceConnection !== nextState.hasSourceConnection) {
-      const hasConnection = nextProps.entity.models.some((modelId) => {
-        return Connection.getConnectionsForSource(modelId).length;
-      });
-
-      if (hasConnection) {
-        this.setState({hasSourceConnection: true});
-      } else {
-        this.setState({hasSourceConnection: false});
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.paper.unbind('connectionDetached', this.onConnectionDetached);
-  }
-
-  onConnectionDetached = (info) => {
-    this.previousConnection = info;
-  };
-
-  update = model => updateMicroservice(this.props.entity.id, model);
-
-  removeEntity = () => {
-    const {entity} = this.props;
-    entity.models.forEach((modelId) => {
-      const model = Private.findEntity(modelId);
-      model && removeModel(this.context.projectService, model);
-    });
-    removeEntity(entity);
   }
 
   renderModels() {
-    let index = -1;
-    return this.props.entity.models.map((modelId) => {
-      const entity = Private.findEntity(modelId);
-      if (!entity) {
-        return null;
-      }
-      index += 1;
-      return (
-        <Model
-          key={entity.id}
-          {...this.props}
-          parent={this.props.entity}
-          key={entity.id}
-          id={entity.id}
-          entity={entity}
-          paper={this.props.paper}
-          left={entity.left}
-          top={entity.top}
-          handleEndDrag={(item) => this.handleEndDrag(item)}
-          hideSourceOnDrag={true}
-          index={index}
-        />
-      );
-    });
+    return this.props.models.map((model, idx) => (
+      <Model
+        key={idx}
+        parent={this.props.entity}
+        id={model.id}
+        entity={model}
+        left={0}
+        top={0}
+        handleEndDrag={(item) => this.handleEndDrag(item)}
+        hideSourceOnDrag={true}
+        index={idx}
+      />
+    ));
   }
 
   handleEndDrag(item) {
     if (item) {
       this.setState({
         isShowingModal: true,
-        bundledItem: item
+        bundledItem: item,
       });
     }
   }
@@ -132,39 +58,20 @@ class Microservice extends Component {
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
-    const modelData = {
-      name: entity.name,
-      contextPath: entity.contextPath,
-      wasBundled: false
-    };
-    unbundleStart(item.parent);
-    updateModel(this.context.projectService, entity.lunchbadgerId || entity.id, modelData)
-      .then(() => unbundleFinish(item.parent, entity));
+    this.context.store.dispatch(unbundle(item.parent, entity));
   }
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
-  bundleMicroservice = (microservice, bundledItem) => {
-    const modelData = {
-      name: bundledItem.name,
-      contextPath: bundledItem.contextPath,
-      wasBundled: true
-    };
+  bundleModel = (microservice, model) =>
+    this.context.store.dispatch(bundle(microservice, model));
 
-    bundleStart(microservice);
-
-    updateModel(this.context.projectService, bundledItem.id, modelData)
-      .then(() => bundleFinish(microservice, bundledItem));
-  }
+  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) =>
+    this.context.store.dispatch(rebundle(fromMicroservice, toMicroservice, model));
 
   render() {
-    const elementClass = classNames({
-      'has-connection-in': this.state.hasTargetConnection,
-      'has-connection-out': this.state.hasSourceConnection
-    });
-
     return (
-      <div className={elementClass}>
+      <div>
         <EntitySubElements
           title="Models"
           main
@@ -184,8 +91,8 @@ class Microservice extends Component {
               && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
-            onAdd={this.bundleMicroservice}
-            onMove={moveBetweenMicroservice}
+            onAdd={this.bundleModel}
+            onMove={this.moveBetweenMicroservice}
             dropText="Drag Models Here"
             modalTitle="Bundle Microservice"
             parent={this.props.parent}
@@ -213,8 +120,12 @@ class Microservice extends Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-// });
+const connector = createSelector(
+  (_, props) => props.entity.models,
+  state => state.entities.modelsBundled,
+  (ids, models) => ({
+    models: ids.map(id => models[id]).filter(item => !!item),
+  }),
+);
 
-// export default connect(null, mapDispatchToProps)(CanvasElement(Microservice));
-export default CanvasElement(Microservice);
+export default connect(connector)(CanvasElement(Microservice));

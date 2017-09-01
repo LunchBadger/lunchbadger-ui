@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import './DraggableGroup.scss';
 
@@ -24,7 +25,7 @@ const boxSource = {
   isDragging: monitor.isDragging()
 }))
 
-class DraggableGroup extends Component {
+class DraggableGroup extends PureComponent {
   static propTypes = {
     connectDragSource: PropTypes.func,
     connectDragPreview: PropTypes.func,
@@ -32,9 +33,9 @@ class DraggableGroup extends Component {
     iconClass: PropTypes.string.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static defaultProps = {
+    currentlySelectedSubelements: [],
+  };
 
   render() {
     const {connectDragSource, connectDragPreview, currentlySelectedSubelements} = this.props;
@@ -58,9 +59,12 @@ class DraggableGroup extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentlySelectedParent: state.core.appState.currentlySelectedParent,
-  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
-});
+const selector = createSelector(
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  (currentlySelectedParent, currentlySelectedSubelements) => ({
+    currentlySelectedParent, currentlySelectedSubelements
+  }),
+);
 
-export default connect(mapStateToProps)(DraggableGroup);
+export default connect(selector)(DraggableGroup);

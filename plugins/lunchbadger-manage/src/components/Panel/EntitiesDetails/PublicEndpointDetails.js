@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import getPublicEndpointUrl from '../../../utils/getPublicEndpointUrl';
-import updatePublicEndpoint from '../../../actions/CanvasElements/PublicEndpoint/update';
-import PublicStore from '../../../stores/Public';
+import {connect} from 'react-redux';
+import selector from '../../../utils/selectorPublicEndpoint';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
@@ -15,26 +14,15 @@ class PublicEndpointDetails extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       path: props.entity.path
     };
   }
 
-  update(model) {
-    updatePublicEndpoint(this.props.entity.id, model);
-  }
-
-  onStoreUpdate = () => {
-    this.setState({path: this.props.entity.path});
-  }
-
-  componentDidMount() {
-    PublicStore.addChangeListener(this.onStoreUpdate);
-  }
-
-  componentWillUnmount() {
-    PublicStore.removeChangeListener(this.onStoreUpdate);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity !== nextProps.entity) {
+      this.setState({path: nextProps.entity.path});
+    }
   }
 
   onPathChange = (event) => {
@@ -42,18 +30,19 @@ class PublicEndpointDetails extends Component {
   }
 
   render() {
-    const {entity} = this.props;
-    const url = getPublicEndpointUrl(entity.id, this.state.path);
-
+    const {entity, gatewayPath} = this.props;
+    const url = `${gatewayPath}${this.state.path}`;
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
           <div className="details-panel__fieldset">
             <span className="details-panel__label">Path</span>
-            <Input className="details-panel__input"
-                   value={entity.path}
-                   name="path"
-                   handleChange={this.onPathChange}/>
+            <Input
+              className="details-panel__input"
+              value={entity.path}
+              name="path"
+              handleChange={this.onPathChange}
+            />
           </div>
           <div className="details-panel__fieldset">
             <span className="details-panel__label">URL</span>
@@ -67,4 +56,4 @@ class PublicEndpointDetails extends Component {
   }
 }
 
-export default BaseDetails(PublicEndpointDetails);
+export default connect(selector)(BaseDetails(PublicEndpointDetails));

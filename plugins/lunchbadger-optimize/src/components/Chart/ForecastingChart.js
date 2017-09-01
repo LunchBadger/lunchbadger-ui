@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {findDOMNode} from 'react-dom';
-import setForecast from '../../actions/AppState/setForecast';
-import './ForecastingChart.scss';
-import ForecastDataParser from '../../services/ForecastDataParser';
 import _ from 'lodash';
 import moment from 'moment';
-import Forecast from '../../stores/Forecast';
+import {findDOMNode} from 'react-dom';
+import {setForecast} from '../../reduxActions/forecasts';
+import ForecastDataParser from '../../services/ForecastDataParser';
+import './ForecastingChart.scss';
 
 export default class ForecastingChart extends Component {
   static propTypes = {
@@ -17,26 +16,17 @@ export default class ForecastingChart extends Component {
     selectedDate: PropTypes.string
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
-    this.state = {
-      lastUpdate: new Date()
-    };
-
-    this.forecastChanged = () => {
-      setTimeout(() => this.setState({lastUpdate: new Date()}));
-    };
-
-    this.onWindowResize = () => {
-      this._renderChart();
-    }
+    this.onWindowResize = () => this._renderChart();
   }
 
   componentDidMount() {
     this._renderChart();
-
-    Forecast.addChangeListener(this.forecastChanged);
     window.addEventListener('resize', this.onWindowResize);
   }
 
@@ -48,44 +38,23 @@ export default class ForecastingChart extends Component {
     this._renderChart();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const newData = nextProps.data;
     const oldData = this.props.data;
-
     if (nextProps.dateRange && this.props.dateRange && !_.isEqual(nextProps.dateRange, this.props.dateRange)) {
       return true;
     }
-
-    if (nextProps.selectedDate !== this.props.selectedDate) {
-      return true;
-    }
-
-    if (nextProps.expanded !== this.props.expanded) {
-      return true;
-    }
-
-    if (nextProps.panelHeight !== this.props.panelHeight) {
-      return true;
-    }
-
-    if (this.state.lastUpdate.toTimeString() !== nextState.lastUpdate.toTimeString()) {
-      return true;
-    }
-
-    return !_.isEqual(Object.keys(newData), Object.keys(oldData));
-  }
-
-  componentWillUnmount() {
-    Forecast.removeChangeListener(this.forecastChanged);
+    if (nextProps.selectedDate !== this.props.selectedDate) return true;
+    if (nextProps.expanded !== this.props.expanded) return true;
+    if (nextProps.panelHeight !== this.props.panelHeight) return true;
+    if (nextProps.forecast !== this.props.forecast) return true;
+    return !_.isEqual(Object.keys(newData[0]), Object.keys(oldData[0]));
   }
 
   _renderChart() {
     const data = this._formatData();
-
     let y0Factor = 0;
-
     const panelHeight = parseInt(this.props.panelHeight, 10);
-
     if (!this.props.expanded) {
       y0Factor = -0.15;
     } else if (panelHeight >= 850) {
@@ -107,7 +76,6 @@ export default class ForecastingChart extends Component {
       const ticktext = data[0].x.map((date) => {
         return this._formatDate(date);
       });
-
       const layout = {
         margin: {
           l: 30,
@@ -164,29 +132,22 @@ export default class ForecastingChart extends Component {
       };
 
       this.chart = findDOMNode(this.refs.chart);
-
       Plotly.newPlot(this.chart, data, layout, {displayModeBar: false}).then((chart) => {
         this._markCurrentMonth();
         this._markForecastedMonths();
-
         const xTicks = d3.selectAll('.xtick').selectAll('text');
-
         xTicks.forEach((tick, index) => {
           tick[0].setAttribute('data', this.tickvals[index]);
         });
-
         chart.on('plotly_click', (data) => {
           const {points} = data;
-
           if (points.length) {
             const {x} = points[0];
-
-            setForecast(this.props.forecast, x);
+            this.context.store.dispatch(setForecast(this.props.forecast, x));
             this._markCurrentMonth();
             this._markForecastedMonths();
           }
         });
-
         chart.on('plotly_relayout', () => {
           this._markForecastedMonths();
         });
@@ -197,14 +158,11 @@ export default class ForecastingChart extends Component {
   _markCurrentMonth() {
     this.tickvals.forEach((tick) => {
       const currentTick = moment(tick, 'M/YYYY');
-
       if (currentTick.isSame(moment(this.props.selectedDate, 'M/YYYY'), 'month')) {
         let currentMonthNumber = parseInt(currentTick.format('M'), 10) + ((parseInt(currentTick.format('Y'), 10) - parseInt(moment().format('Y'), 10)) * 12);
-
         if (this.props.dateRange) {
           currentMonthNumber -= parseInt(this.props.dateRange.startDate.format('M'), 10) - 1;
         }
-
         Plotly.relayout(this.chart, {
           'shapes[0].x0': currentMonthNumber - 1.5,
           'shapes[0].x1': currentMonthNumber - 0.5,
@@ -217,21 +175,17 @@ export default class ForecastingChart extends Component {
   _markForecastedMonths() {
     const barPaths = d3.selectAll('.bars').selectAll('path');
     const xTicks = d3.selectAll('.xtick').selectAll('text');
-
     this.tickvals.forEach((tick, index) => {
       let tickForecasted = false;
       const currentTick = moment(tick, 'M/YYYY');
-
       if (currentTick.isAfter(moment(), 'month')) {
         tickForecasted = true;
       }
-
       xTicks.forEach((xTick) => {
         if (xTick[0].getAttribute('data') === tick && tickForecasted) {
           xTick[0].classList.add('chart__tick-forecasted');
         }
       });
-
       barPaths.forEach((paths) => {
         if (paths[index] && tickForecasted) {
           paths[index].classList.add('chart__bar-forecasted');
@@ -243,7 +197,6 @@ export default class ForecastingChart extends Component {
   _formatData() {
     let data = [];
     let filteredData = this.props.data;
-
     const newTrace = {
       x: [],
       y: [],
@@ -289,21 +242,17 @@ export default class ForecastingChart extends Component {
         color: '#f29332'
       }
     };
-
     if (this.props.dateRange) {
       filteredData = ForecastDataParser.filterData(this.props.dateRange, this.props.data, this.props.forecast.api);
     }
-
     const newUsers = {};
     const upgradedUsers = {};
     const existingUsers = {};
     const downgradedUsers = {};
     const churnUsers = {};
-
     filteredData.forEach((plan) => {
       Object.keys(plan).forEach((planDetails) => {
         const {subscribers} = plan[planDetails];
-
         if (!newUsers.hasOwnProperty(planDetails)) {
           newUsers[planDetails] = subscribers.new;
           upgradedUsers[planDetails] = subscribers.upgrades;
@@ -319,22 +268,18 @@ export default class ForecastingChart extends Component {
         }
       });
     });
-
     Object.keys(newUsers).forEach((date) => {
       newTrace.x.push(date);
       newTrace.y.push(newUsers[date]);
     });
-
     Object.keys(upgradedUsers).forEach((date) => {
       upgradesTrace.x.push(date);
       upgradesTrace.y.push(upgradedUsers[date]);
     });
-
     Object.keys(existingUsers).forEach((date) => {
       existingTrace.x.push(date);
       existingTrace.y.push(existingUsers[date]);
     });
-
     Object.keys(downgradedUsers).forEach((date) => {
       downgradesTrace.x.push(date);
       downgradesTrace.y.push(downgradedUsers[date]);
@@ -344,15 +289,12 @@ export default class ForecastingChart extends Component {
       churnTrace.x.push(date);
       churnTrace.y.push(churnUsers[date]);
     });
-
     data = [churnTrace, downgradesTrace, existingTrace, upgradesTrace, newTrace];
-
     return data;
   }
 
   _formatDate(date) {
     const momentDate = moment(date, 'M/YYYY');
-
     return momentDate.format('MMMM')[0];
   }
 

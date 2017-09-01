@@ -1,101 +1,26 @@
 import ApiClient from '../utils/ApiClient';
-import {bindParams} from '../utils/URLParamsBind';
+import Config from '../../../../src/config';
+import {getUser} from '../utils/auth';
 
-export default class ProjectService {
-  constructor(projectUrl, workspaceUrl, idToken) {
-    this._projectClient = new ApiClient(projectUrl, idToken);
-    this._workspaceClient = new ApiClient(workspaceUrl, idToken);
-  }
+class ProjectService {
+  initialize = () => this.api = new ApiClient(Config.get('projectApiUrl'), getUser().idToken);
 
-  get(userName, envId) {
-    let projectId = `${userName}-${envId}`;
+  getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
 
-    return Promise.all([
-      this._projectClient
-        .get(bindParams('Projects/:id', {id: projectId}))
-        .catch(err => {
-          if (err.statusCode === 404) {
-            return {body: null};
-          }
-          throw err;
-        }),
-      this._workspaceClient.get('Facets/server/models?filter[include]=properties&filter[include]=relations'),
-      this._workspaceClient.get('Facets/server/datasources'),
-      this._workspaceClient.get('Facets/server/modelConfigs')
-    ]);
-  }
+  load = () => this.api.get(`Projects/${this.getProjectId()}`);
 
-  upsertDataSource(data) {
-    return this._workspaceClient.post('DataSourceDefinitions', { body: data });
-  }
+  save = data => this.api.patch('Projects', {body: {id: this.getProjectId(), ...data}});
 
-  deleteDataSource(id) {
-    return this._workspaceClient.delete(
-      bindParams('DataSourceDefinitions/:id', {id}));
-  }
+  clearProject = () => this.api.post(`Projects/${this.getProjectId()}/clear`);
 
-  upsertModel(data) {
-    return this._workspaceClient.post('ModelDefinitions', { body: data });
-  }
+  monitorStatus = () => this.api.eventSource('/WorkspaceStatus/change-stream');
 
-  deleteModel(id) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id', {id}));
-  }
+  ping = () => this.api.get('/WorkspaceStatus/ping');
 
-  upsertModelConfig(data) {
-    return this._workspaceClient.post('ModelConfigs', { body: data });
-  }
+  restartWorkspace = () => this.api.post('/WorkspaceStatus/restart');
 
-  deleteModelConfig(id) {
-    return this._workspaceClient.delete(bindParams('ModelConfigs/:id', {id}));
-  }
+  reinstallDeps = () => this.api.post('/WorkspaceStatus/reinstall');
 
-  upsertModelProperties(data) {
-    return this._workspaceClient.post('ModelProperties', { body: data });
-  }
-
-  deleteModelProperties(modelId) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id/properties', {id: modelId}));
-  }
-
-  upsertModelRelations(data) {
-    return this._workspaceClient.post('ModelRelations', { body: data });
-  }
-
-  deleteModelRelations(modelId) {
-    return this._workspaceClient.delete(
-      bindParams('ModelDefinitions/:id/relations', {id: modelId}));
-  }
-
-  save(userName, envId, data) {
-    let projectId = `${userName}-${envId}`;
-    return this._projectClient.patch('Projects', { body: {
-      id: projectId,
-      ...data
-    }});
-  }
-
-  clearProject(userName, envId) {
-    let projectId = `${userName}-${envId}`;
-    return this._projectClient.post(
-      bindParams('Projects/:id/clear', { id: projectId }));
-  }
-
-  monitorStatus() {
-    return this._projectClient.eventSource('/WorkspaceStatus/change-stream');
-  }
-
-  ping() {
-    return this._projectClient.get('/WorkspaceStatus/ping');
-  }
-
-  restartWorkspace() {
-    return this._projectClient.post('/WorkspaceStatus/restart');
-  }
-
-  reinstallDeps() {
-    return this._projectClient.post('/WorkspaceStatus/reinstall');
-  }
 }
+
+export default new ProjectService();

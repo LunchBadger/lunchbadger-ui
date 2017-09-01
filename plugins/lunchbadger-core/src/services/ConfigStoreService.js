@@ -1,23 +1,16 @@
 import ApiClient from '../utils/ApiClient';
-import {bindParams} from '../utils/URLParamsBind';
+import Config from '../../../../src/config';
+import {getUser} from '../utils/auth';
 
-export default class ConfigStoreService {
-  constructor(url, idToken) {
-    this._client = new ApiClient(url, idToken);
-  }
+class ConfigStoreService {
+  initialize = () => this.api = new ApiClient(Config.get('configStoreApiUrl'), getUser().idToken);
 
-  upsertProject(userId) {
-    let project = { id: userId };
-    return this._client.post('producers', { body: project });
-  }
+  upsertProject = () => this.api.post('producers', {body: {id: getUser().profile.sub}});
 
-  getAccessKey(userId) {
-    return this._client.get(bindParams('producers/:userId/accesskey',
-      {userId: userId}));
-  }
+  getAccessKey = () => this.api.get(`producers/${getUser().profile.sub}/accesskey`);
 
-  regenerateAccessKey(userId) {
-    return this._client.post(bindParams('producers/:userId/accesskey',
-      {userId: userId}));
-  }
+  regenerateAccessKey = () => this.api.post(`producers/${getUser().profile.sub}/accesskey`);
+
 }
+
+export default new ConfigStoreService();

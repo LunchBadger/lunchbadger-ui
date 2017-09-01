@@ -7,12 +7,11 @@ import './MetricDetails.scss';
 
 export default class MetricDetails extends Component {
   static propTypes = {
-    metric: PropTypes.object.isRequired
+    metric: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
-
     this.state = {
       showTooltip: false,
       visibleDetails: [USERS, REQUESTS]
@@ -28,16 +27,14 @@ export default class MetricDetails extends Component {
   _toggleDetailVisibility(key) {
     let visibleDetails = this.state.visibleDetails.slice();
     const keyIndex = visibleDetails.findIndex(detail => detail === key);
-
     if (keyIndex > -1) {
       visibleDetails.splice(keyIndex, 1);
     } else {
       visibleDetails.push(key);
     }
-
     this.setState({
       visibleDetails: visibleDetails,
-      showTooltip: false
+      showTooltip: false,
     });
   }
 
@@ -46,7 +43,6 @@ export default class MetricDetails extends Component {
       'metric-details__tooltip': true,
       'metric-details__tooltip--visible': this.state.showTooltip
     });
-
     return (
       <div className="metric-details">
         <div className="metric-details__header">
@@ -55,7 +51,6 @@ export default class MetricDetails extends Component {
             <i className="fa fa-plus metric-details__header__action__button"
                onClick={() => this.setState({showTooltip: !this.state.showTooltip})}>
             </i>
-
             <ul className={tooltipClass} onMouseLeave={() => this.setState({showTooltip: false})}>
               <li className="metric-details__tooltip__option"
                   onClick={() => {

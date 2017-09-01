@@ -1,1 +1,16 @@
-
+.editable .Gateway.multi {
+  .EntitySubElements__title__add,
+  .EntityProperty__delete {
+    display: none;
+  }
+  .Gateway__pipelines {
+    .EntityProperty__field {
+      &--text {
+        display: block;
+      }
+      &--input {
+        display: none;
+      }
+    }
+  }
+}

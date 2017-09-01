@@ -1,48 +1,37 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import classNames from 'classnames';
-import AppState from '../../stores/AppState';
-import {togglePanel} from '../../reduxActions';
+import {createSelector} from 'reselect';
+import cs from 'classnames';
 import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
 
-class HeaderMenuLink extends Component {
-  static propTypes = {
-    icon: PropTypes.string,
-    kind: PropTypes.string,
-    panel: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
+class HeaderMenuLink extends PureComponent {
+  handleClick = () => {
+    const {dispatch, action} = this.props;
+    dispatch(action);
   };
 
-  togglePanel = () => {
-    const {togglePanel, panel} = this.props;
-    togglePanel(panel);
-  }
-
   render() {
-    const {kind, icon, svg, panel, currentlyOpenedPanel} = this.props;
-    const pressed = currentlyOpenedPanel && currentlyOpenedPanel === panel;
-    const linkClass = classNames(kind, {
-      'header__menu__link': true,
+    const {hidden, icon, svg, pressed, panel} = this.props;
+    const linkClass = cs('header__menu__link', panel, {
+      'header__menu__link--hidden': hidden,
       'header__menu__link--pressed': pressed,
     });
     return (
-      <span className={linkClass} onClick={this.togglePanel}>
-        {icon && <i className={`fa ${icon}`} />}
-        {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
-      </span>
+      <li className="header__menu__element">
+        <span className={linkClass} onClick={this.handleClick}>
+          {icon && <i className={cs('fa', icon)} />}
+          {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
+        </span>
+      </li>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
-});
+const selector = createSelector(
+  (_, props) => props.panel || '',
+  state => state.states.currentlyOpenedPanel,
+  (panel, currentlyOpenedPanel) => ({pressed: panel === currentlyOpenedPanel}),
+);
 
-const mapDispatchToProps = dispatch => ({
-  togglePanel: panel => dispatch(togglePanel(panel)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenuLink);
+export default connect(selector)(HeaderMenuLink);

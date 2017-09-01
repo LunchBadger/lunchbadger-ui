@@ -1,10 +1,14 @@
 @import '/../../../../../lunchbadger-core/src/config';
 
 .public-endpoint {
-  position: static;
-  font-size: 16px;
-  padding: 4px 0;
+  // position: static;
+  // font-size: 16px;
+  // padding: 4px 0;
+  .port {
+    margin-top: 3px;
+  }
 }
+
 
 .public-endpoint--bundled {
   padding-left: 30px;

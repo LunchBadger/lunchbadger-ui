@@ -1,145 +1,106 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import cs from 'classnames';
-import Pipeline from './Subelements/Pipeline';
-import redeployGateway from '../../actions/CanvasElements/Gateway/redeploy';
-import addPipeline from '../../actions/CanvasElements/Gateway/addPipeline';
-import removeEntity from '../../actions/CanvasElements/remove';
-import removePipeline from '../../actions/CanvasElements/Gateway/removePipeline';
-import classNames from 'classnames';
-import Policy from '../../models/Policy';
-import PipelineFactory from '../../models/Pipeline';
-import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import _ from 'lodash';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleEdit} from '../../../../lunchbadger-core/src/reduxActions';
+import update from 'react-addons-update';
+import Pipeline from '../../models/Pipeline';
+import PipelineComponent from './Subelements/Pipeline';
+// import {removePipeline} from '../../reduxActions/gateways';
+import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import './Gateway.scss';
 
-const Connection = LunchBadgerCore.stores.Connection;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
 
 class Gateway extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object,
     parent: PropTypes.object.isRequired
   };
 
+  // static contextTypes = {
+  //   store: PropTypes.object,
+  // };
+
   constructor(props) {
     super(props);
-    this.state = {
-      hasInConnection: null,
-      hasOutConnection: null,
-      dnsPrefix: props.entity.dnsPrefix,
-      pipelinesOpened: {},
-      showRemovingModal: false,
-      pipelineToRemove: null,
+    // this.state = {
+    //   // hasInConnection: null,
+    //   // hasOutConnection: null,
+    //   dnsPrefix: props.entity.dnsPrefix,
+    //   pipelinesOpened: {},
+    //   showRemovingModal: false,
+    //   pipelineToRemove: null,
+    // };
+    // props.entity.pipelines.forEach((item) => {
+    //   this.state.pipelinesOpened[item.id] = false;
+    // });
+    this.state = {...this.stateFromStores(props)};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity !== nextProps.entity) {
+      this.onStoreUpdate(nextProps);
+    }
+    // if (nextProps.entity !== this.props.entity) {
+    //   this.setState({
+    //     dnsPrefix: nextProps.entity.dnsPrefix,
+    //     pipelinesOpened: {},
+    //     showRemovingModal: false,
+    //     pipelineToRemove: null,
+    //   });
+    // }
+    // // if (nextProps.ready && !this.props.ready) {
+    // //   this._onDeploy();
+    // // }
+    // // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
+    // //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
+    // //     return Connection.getConnectionsForTarget(pipeline.id).length;
+    // //   });
+    // //   if (hasInConnection) {
+    // //     this.setState({hasInConnection: true});
+    // //   } else {
+    // //     this.setState({hasInConnection: false});
+    // //   }
+    // // }
+    // // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
+    // //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
+    // //     return Connection.getConnectionsForSource(pipeline.id).length;
+    // //   });
+    // //   if (hasOutConnection) {
+    // //     this.setState({hasOutConnection: true});
+    // //   } else {
+    // //     this.setState({hasOutConnection: false});
+    // //   }
+    // // }
+    // // if (!this.props.parent.state.editable) { //FIXME
+    // //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
+    // // }
+    // const pipelinesOpened = {...this.state.pipelinesOpened};
+    // let pipelinesAdded = false;
+    // nextProps.entity.pipelines.forEach(({id}) => {
+    //   if (typeof pipelinesOpened[id] === 'undefined') {
+    //     pipelinesOpened[id] = false;
+    //     pipelinesAdded = true;
+    //   }
+    // });
+    // if (pipelinesAdded) this.setState({pipelinesOpened});
+  }
+
+  stateFromStores = props => {
+    const {dnsPrefix, pipelines} = props.entity;
+    const newState = {
+      dnsPrefix,
+      pipelines: pipelines.slice(),
     };
-    props.entity.pipelines.forEach((item) => {
-      this.state.pipelinesOpened[item.id] = false;
-    });
-  }
+    return newState;
+  };
 
-  componentDidMount() {
-    const {ready, toggleEdit, entity} = this.props;
-    if (!ready) {
-      toggleEdit(entity);
-    }
-  }
+  onStoreUpdate = (props = this.props, callback) =>
+    this.setState({...this.stateFromStores(props)}, () => callback && callback());
 
-  componentWillReceiveProps(nextProps, nextState) {
-    if (nextProps.ready && !this.props.ready) {
-      this._onDeploy();
-    }
-    if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-      const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
-        return Connection.getConnectionsForTarget(pipeline.id).length;
-      });
-      if (hasInConnection) {
-        this.setState({hasInConnection: true});
-      } else {
-        this.setState({hasInConnection: false});
-      }
-    }
-    if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-      const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
-        return Connection.getConnectionsForSource(pipeline.id).length;
-      });
-      if (hasOutConnection) {
-        this.setState({hasOutConnection: true});
-      } else {
-        this.setState({hasOutConnection: false});
-      }
-    }
-    if (!this.props.parent.state.editable) {
-      this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
-    }
-    const pipelinesOpened = {...this.state.pipelinesOpened};
-    let pipelinesAdded = false;
-    nextProps.entity.pipelines.forEach(({id}) => {
-      if (typeof pipelinesOpened[id] === 'undefined') {
-        pipelinesOpened[id] = false;
-        pipelinesAdded = true;
-      }
-    });
-    if (pipelinesAdded) this.setState({pipelinesOpened});
-  }
-
-  handleTogglePipelineOpen = pipelineId => opened => {
-    const pipelinesOpened = {...this.state.pipelinesOpened};
-    pipelinesOpened[pipelineId] = opened;
-    this.setState({pipelinesOpened});
-  }
-
-  renderPipelines = () => {
-    return this.props.entity.pipelines.map((pipeline, index) => (
-      <Pipeline
-        key={pipeline.id}
-        {...this.props}
-        index={index}
-        parent={this.props.entity}
-        paper={this.props.paper}
-        entity={pipeline}
-        onToggleOpen={this.handleTogglePipelineOpen(pipeline.id)}
-        pipelinesOpened={this.state.pipelinesOpened}
-        onRemove={this.onRemovePipeline(pipeline)}
-      />
-    ));
-  }
-
-  update(model) {
-    let data = {
-      pipelines: (model.pipelines || []).map(pipeline => {
-        let policies = pipeline.policies || [];
-        delete pipeline.policies;
-
-        return PipelineFactory.create({
-          ...pipeline,
-          policies: policies.map(policy => Policy.create(policy))
-        });
-      })
-    };
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      redeployGateway(this.props.entity, _.merge(model, data));
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.dnsPrefix === '') validations.data.dnsPrefix = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
+  discardChanges = (callback) => {
+    this.onStoreUpdate(this.props, callback);
   }
 
   handleFieldChange = field => (evt) => {
@@ -148,36 +109,59 @@ class Gateway extends Component {
     }
   }
 
-  onAddPipeline = name => () => addPipeline(this.props.entity, name);
+  // onAddPipeline = () => {
+  //   const {store: {dispatch}} = this.context;
+  //   const {entity} = this.props;
+  //   dispatch(addPipeline(entity.id));
+  // }
 
-  onRemovePipeline = pipelineToRemove => () => {
-    this.setState({
-      showRemovingModal: true,
-      pipelineToRemove,
-    });
+  _setPipelineState = (pipelines) => this.setState({pipelines});
+
+  onAddPipeline = () => {
+    this._setPipelineState([...this.state.pipelines, Pipeline.create({
+      name: 'Pipeline'
+    })]);
   }
 
-  removePipeline = () => removePipeline(this.props.entity, this.state.pipelineToRemove);
+  // onRemovePipeline = pipelineToRemove => () => {
+  //   this.setState({
+  //     showRemovingModal: true,
+  //     pipelineToRemove,
+  //   });
+  // }
 
-  _onDeploy() {
-    const dispatchRedux = LunchBadgerCore.dispatchRedux;
-    dispatchRedux(addSystemInformationMessage({
-      message: 'Gateway successfully deployed',
-      type: 'success'
+  onRemovePipeline = (plIdx) => () => {
+    this._setPipelineState(update(this.state.pipelines, {
+      $splice: [[plIdx, 1]]
     }));
-    this.props.parent.triggerElementAutofocus();
   }
 
-  removeEntity = () => removeEntity(this.props.entity);
+  // removePipeline = () => {
+  //   const {store: {dispatch}} = this.context;
+  //   const {entity} = this.props;
+  //   dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
+  // }
 
   onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
+  renderPipelines = () => {
+    return this.state.pipelines.map((pipeline, idx) => (
+      <PipelineComponent
+        key={pipeline.id}
+        entity={pipeline}
+        onRemove={this.onRemovePipeline(idx)}
+        index={idx}
+      />
+    ));
+  }
+
   render() {
-    const elementClass = classNames({
-      'has-connection-in': this.state.hasInConnection,
-      'has-connection-out': this.state.hasOutConnection
+    const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+    const elementClass = cs('Gateway', {
+      'multi': multiEnvIndex > 0,
+      // 'has-connection-in': this.state.hasInConnection,
+      // 'has-connection-out': this.state.hasOutConnection
     });
-    const {validations: {data}, entityDevelopment, onResetField} = this.props;
     const mainProperties = [
       {
         name: 'rootURL',
@@ -202,17 +186,19 @@ class Gateway extends Component {
         <EntityProperties properties={mainProperties} />
         <EntitySubElements
           title="Pipelines"
-          onAdd={this.onAddPipeline('Pipeline')}
+          onAdd={this.onAddPipeline}
           main
         >
-          <DraggableGroup
-            iconClass="icon-icon-gateway"
-            entity={this.props.entity}
-          >
-            {this.renderPipelines()}
-          </DraggableGroup>
+          <div className="Gateway__pipelines">
+            <DraggableGroup
+              iconClass="icon-icon-gateway"
+              entity={this.props.entity}
+            >
+              {this.renderPipelines()}
+            </DraggableGroup>
+          </div>
         </EntitySubElements>
-        {this.state.showRemovingModal && (
+        {/*this.state.showRemovingModal && (
           <TwoOptionModal
             onClose={() => this.setState({showRemovingModal: false})}
             onSave={this.removePipeline}
@@ -225,14 +211,10 @@ class Gateway extends Component {
               Do you really want to remove that pipeline?
             </span>
           </TwoOptionModal>
-        )}
+        )*/}
       </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  toggleEdit: element => dispatch(toggleEdit(element)),
-})
-
-export default connect(null, mapDispatchToProps)(CanvasElement(Gateway));
+export default CanvasElement(Gateway);

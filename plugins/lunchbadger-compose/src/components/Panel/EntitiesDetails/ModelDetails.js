@@ -1,78 +1,117 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import updateModel from '../../../actions/CanvasElements/Model/update';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {inject, observer} from 'mobx-react';
+import slug from 'slug';
+import _ from 'lodash';
+import uuid from 'uuid';
 import ModelRelationDetails from './ModelRelationDetails';
 import ModelUserFieldsDetails from './ModelUserFieldsDetails';
 import ModelNestedProperties from './ModelNestedProperties';
-import BackendStore from '../../../stores/Backend';
-import _ from 'lodash';
-import addPropertiesToData from '../../addPropertiesToData';
 import addNestedProperties from '../../addNestedProperties';
+import ModelProperty from '../../../models/ModelProperty';
+import ModelRelation from '../../../models/ModelRelation';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const InputField = LunchBadgerCore.components.InputField;
 const Select = LunchBadgerCore.components.Select;
 const SelectField = LunchBadgerCore.components.SelectField;
 const CheckboxField = LunchBadgerCore.components.CheckboxField;
-const ModelProperty = LunchBadgerManage.models.ModelProperty;
-const ModelRelation = LunchBadgerManage.models.ModelRelation;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
-const PrivateStore = LunchBadgerManage.stores.Private;
-const ConnectionStore = LunchBadgerCore.stores.Connection;
+const {Connections} = LunchBadgerCore.stores;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
 
-class ModelDetails extends Component {
+@inject('connectionsStore') @observer
+class ModelDetails extends PureComponent {
+  static propTypes = {
+    entity: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     const stateFromStores = (newProps) => {
       const data = {
-        properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
-        relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
+        properties: [],
+        relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
-        changed: false
       };
-      if (!newProps.entity.privateModelProperties) {
-         addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
-      }
+      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
-    this.state = Object.assign({}, stateFromStores(props));
+    this.state = {
+      ...this.initState(props),
+      ...stateFromStores(props),
+    };
     this.onStoreUpdate = (props = this.props) => {
-      this.setState(stateFromStores(props));
-    }
-  }
-
-  _getBackendConnection() {
-    const entity = this.props.entity;
-    const connections = ConnectionStore.getConnectionsForTarget(entity.id);
-    return connections.length ? connections[0] : null;
-  }
-
-  _getCurrentBackend() {
-    const connection = this._getBackendConnection();
-    if (connection) {
-      return BackendStore.findEntity(connection.fromId).id;
-    } else {
-      return 'none';
-    }
-  }
-
-  componentDidMount() {
-    PrivateStore.addChangeListener(this.onStoreUpdate);
+      this.setState({
+        ...this.initState(props),
+        ...stateFromStores(props),
+      });
+    };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.entity.id !== this.props.entity.id) {
+    const {id, properties} = this.props.entity;
+    if (nextProps.entity.id !== id || nextProps.entity.properties !== properties) {
       this.onStoreUpdate(nextProps);
     }
   }
 
-  componentWillUnmount() {
-    PrivateStore.removeChangeListener(this.onStoreUpdate);
+  initState = (props = this.props) => {
+    const {contextPath, name} = props.entity;
+    return {
+      changed: false,
+      contextPath,
+      contextPathDirty: slug(name, {lower: true}) !== contextPath,
+    };
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   diff(this.props, nextProps, this.state, nextState);
+  //   return true;
+  // }
+
+  processModel = model => {
+    const {entity} = this.props;
+    if (model.hasOwnProperty('dataSource')) {
+      const dsId = model.dataSource === 'none' ? null : model.dataSource;
+      const {paper: paperRef} = this.context;
+      const paper = paperRef.getInstance();
+      const currDsConn = Connections.find({toId: entity.id});
+      const currDsId = currDsConn ? currDsConn.fromId : null;
+      if (dsId !== currDsId) {
+        if (!dsId) {
+          paper.detach(currDsConn.info.connection);
+        } else if (currDsId) {
+          paper.setSource(
+            currDsConn.info.connection,
+            document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+          );
+        } else {
+          paper.connect({
+            source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+            target: document.getElementById(`port_in_${entity.id}`).querySelector('.port__anchor'),
+            parameters: {
+              forceDropped: true,
+            }
+          }, {
+            fireEvent: true,
+          });
+        }
+      }
+      delete model.dataSource;
+    }
+    return entity.processModel(model, this.state.properties);
   }
 
   discardChanges() {
@@ -80,66 +119,66 @@ class ModelDetails extends Component {
     this.onStoreUpdate();
   }
 
-  update(model) {
-    const data = {
-      properties: [],
-      relations: [],
-    };
-    addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-    model.relations && model.relations.forEach((relation) => {
-      let rel = ModelRelation.create(relation);
-      rel.attach(this.props.entity);
-      data.relations.push(rel);
-    });
-    model.userFields && model.userFields.forEach(field => {
-      const value = field.value;
-      let output = value;
-      if (field.type === 'object') {
-        output = JSON.parse(value);
-      } else if (field.type === 'number') {
-        output = Number(value);
-      }
-      data[field.name] = output;
-    });
-    const currDsConn = this._getBackendConnection();
-    const currDsId = currDsConn ? currDsConn.fromId : null;
-    const dsId = model.dataSource === 'none' ? null : model.dataSource;
-    if (dsId !== currDsId) {
-      if (!dsId) {
-        LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
-      } else if (currDsConn) {
-        LunchBadgerCore.utils.paper.setSource(
-          currDsConn.info.connection,
-          document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-        );
-      }
-    }
-    const updateData = Object.assign({}, model, data);
-    if (!updateData.userFields) {
-      updateData.userFields = [];
-    }
-    const propsToRemove = _.difference(
-      Object.keys(this.props.entity.userFields),
-      updateData.userFields.map(field => field.name)
-    );
-    delete updateData.dataSource;
-    delete updateData.userFields;
-    updateModel(this.context.projectService, this.props.entity.id, updateData, propsToRemove);
-  }
+  // update = async (model) => {
+  //   const {entity} = this.props;
+  //   const {store: {dispatch}} = this.context;
+  //   const updatedEntity = await dispatch(entity.update(model));
+  //   dispatch(coreActions.setCurrentElement(updatedEntity));
+  //   // const data = {
+  //   //   properties: [],
+  //   //   relations: [],
+  //   // };
+  //   // addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
+  //   // model.relations && model.relations.forEach((relation) => {
+  //   //   let rel = ModelRelation.create(relation);
+  //   //   rel.attach(this.props.entity);
+  //   //   data.relations.push(rel);
+  //   // });
+  //   // model.userFields && model.userFields.forEach(field => {
+  //   //   const value = field.value;
+  //   //   let output = value;
+  //   //   if (field.type === 'object') {
+  //   //     output = JSON.parse(value);
+  //   //   } else if (field.type === 'number') {
+  //   //     output = Number(value);
+  //   //   }
+  //   //   data[field.name] = output;
+  //   // });
+  //   // const currDsConn = this._getBackendConnection();
+  //   // const currDsId = currDsConn ? currDsConn.fromId : null;
+  //   // const dsId = model.dataSource === 'none' ? null : model.dataSource;
+  //   // if (dsId !== currDsId) {
+  //   //   if (!dsId) {
+  //   //     LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
+  //   //   } else if (currDsConn) {
+  //   //     LunchBadgerCore.utils.paper.setSource(
+  //   //       currDsConn.info.connection,
+  //   //       document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
+  //   //     );
+  //   //   }
+  //   // }
+  //   // const updateData = Object.assign({}, model, data);
+  //   // if (!updateData.userFields) {
+  //   //   updateData.userFields = [];
+  //   // }
+  //   // const propsToRemove = _.difference(
+  //   //   Object.keys(this.props.entity.userFields),
+  //   //   updateData.userFields.map(field => field.name)
+  //   // );
+  //   // delete updateData.dataSource;
+  //   // delete updateData.userFields;
+  //   // updateModel(this.props.entity.id, updateData, propsToRemove);
+  // }
 
-  onAddItem(collection, item) {
-    const items = this.state[collection];
-    items.push(item);
+  onAddItem = (collection, item) => {
     this.setState({
-      [collection]: items
+      [collection]: [...this.state[collection], item],
     });
-    this.setState({changed: true}, () => {
-      this.props.parent.checkPristine();
-    });
+    this.setState({changed: true}, () => this.props.parent.checkPristine());
   }
 
-  onRemoveItem(collection, item) {
-    const items = this.state[collection];
+  onRemoveItem = (collection, item) => {
+    const items = [...this.state[collection]];
     _.remove(items, function (i) {
       if (item.id) {
         return i.id === item.id;
@@ -147,7 +186,7 @@ class ModelDetails extends Component {
       return i.name === item.name;
     });
     this.setState({
-      [collection]: items
+      [collection]: items,
     });
     if (!_.isEqual(items, this.props.entity[collection])) {
       this.setState({changed: true});
@@ -175,25 +214,15 @@ class ModelDetails extends Component {
     });
   }
 
-  onRemoveProperty = (property) => {
-    this.onRemoveItem('properties', property);
-  }
+  onRemoveProperty = (property) => this.onRemoveItem('properties', property);
 
-  onAddRelation() {
-    this.onAddItem('relations', ModelRelation.create({}));
-  }
+  onAddRelation = () => this.onAddItem('relations', ModelRelation.create({}));
 
-  onRemoveRelation = (relation) => {
-    this.onRemoveItem('relations', relation);
-  }
+  onRemoveRelation = relation => this.onRemoveItem('relations', relation);
 
-  onAddUserField() {
-    this.onAddItem('userFields', {name: '', type: '', value: ''});
-  }
+  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: '', value: ''});
 
-  onRemoveUserField(field) {
-    this.onRemoveItem('userFields', field);
-  }
+  onRemoveUserField = field => this.onRemoveItem('userFields', field);
 
   onPropertyTypeChange = (id, type) => {
     const properties = [...this.state.properties];
@@ -219,10 +248,10 @@ class ModelDetails extends Component {
       return (
         <ModelUserFieldsDetails
           index={index}
-          addAction={() => this.onAddUserField()}
+          addAction={this.onAddUserField}
           fieldsCount={this.state.userFields.length}
-          key={`user-field-${index}`}
-          onRemove={(userField) => this.onRemoveUserField(userField)}
+          key={field.id}
+          onRemove={this.onRemoveUserField}
           field={field}
         />
       );
@@ -230,8 +259,11 @@ class ModelDetails extends Component {
   }
 
   render() {
-    const {entity} = this.props;
-    const dataSources = BackendStore.getData().map((item, idx) => ({label: item.name, value: item.id}));
+    const {entity, dataSources, connectionsStore} = this.props;
+    const dataSourceOptions = Object.keys(dataSources)
+      .map(key => dataSources[key])
+      .map(({name: label, id: value}) => ({label, value}));
+    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     return (
       <div>
         <CollapsableDetails title="Details">
@@ -254,11 +286,11 @@ class ModelDetails extends Component {
               <Select
                 className="details-panel__input"
                 name="dataSource"
-                value={this._getCurrentBackend()}
-                options={[{label: '[None]', value: 'none'}, ...dataSources]}
+                value={currentDsId}
+                options={[{label: '[None]', value: 'none'}, ...dataSourceOptions]}
               />
             </div>
-            <CheckboxField label="Read only" propertyName="readOnly" entity={entity} />
+            <CheckboxField label="Read only" propertyName="readonly" entity={entity} />
             <CheckboxField label="Strict schema" propertyName="strict" entity={entity} />
             <CheckboxField label="Exposed as REST" propertyName="public" entity={entity} />
           </div>
@@ -272,7 +304,7 @@ class ModelDetails extends Component {
               <th>Type</th>
               <th>
                 Foreign Key
-                <a onClick={() => this.onAddRelation()} className="details-panel__add">
+                <a onClick={this.onAddRelation} className="details-panel__add">
                   <i className="fa fa-plus"/>
                   Add relation
                 </a>
@@ -302,7 +334,7 @@ class ModelDetails extends Component {
               <th>Data type</th>
               <th>
                 Value
-                <a onClick={() => this.onAddUserField()} className="details-panel__add">
+                <a onClick={this.onAddUserField} className="details-panel__add">
                   <i className="fa fa-plus"/>
                   Add field
                 </a>
@@ -320,12 +352,9 @@ class ModelDetails extends Component {
   }
 }
 
-ModelDetails.propTypes = {
-  entity: PropTypes.object.isRequired,
-};
+const selector = createSelector(
+  state => state.entities.dataSources,
+  (dataSources) => ({dataSources}),
+);
 
-ModelDetails.contextTypes = {
-  projectService: PropTypes.object,
-};
-
-export default BaseDetails(ModelDetails);
+export default connect(selector)(BaseDetails(ModelDetails));

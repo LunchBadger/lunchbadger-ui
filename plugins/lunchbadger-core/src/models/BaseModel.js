@@ -12,6 +12,7 @@ export default class BaseModel {
   left = 0;
   top = 0;
   itemOrder = 0;
+  loaded = true;
 
   static deserializers = {};
 

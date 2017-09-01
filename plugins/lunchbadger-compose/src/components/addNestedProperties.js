@@ -1,4 +1,4 @@
-const ModelProperty = LunchBadgerManage.models.ModelProperty;
+import ModelProperty from '../models/ModelProperty';
 
 const addNestedProperties = (entity, props, properties, parentId) => {
   properties.forEach((property) => {

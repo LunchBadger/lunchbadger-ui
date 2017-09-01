@@ -1,54 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // import {connect} from 'react-redux';
-import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
-import updateDataSource from '../../actions/CanvasElements/DataSource/update';
-import removeDataSource from '../../actions/CanvasElements/DataSource/remove';
-import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const Port = LunchBadgerCore.components.Port;
 
 class DataSource extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
   };
-
-  static contextTypes = {
-    projectService: PropTypes.object
-  };
-
-  constructor(props) {
-    super(props);
-  }
-
-  update(model) {
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updateDataSource(this.context.projectService, this.props.entity.id, model);
-    }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.name === '') validations.data.name = messages.empty;
-    if (model.url === '') validations.data.url = messages.empty;
-    if (model.database === '') validations.data.database = messages.empty;
-    if (model.username === '') validations.data.username = messages.empty;
-    if (model.password === '') validations.data.password = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
-  }
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
@@ -56,63 +17,53 @@ class DataSource extends Component {
     }
   }
 
-  removeEntity = () => {
-    const {entity} = this.props;
-    removeDataSource(this.context.projectService, entity);
-    removeEntity(entity);
-  }
-
   renderPorts() {
     return this.props.entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
-          paper={this.props.paper}
           way={port.portType}
-          elementId={this.props.entity.id}
+          elementId={port.id}
           scope={port.portGroup}
         />
       );
     });
   }
 
-  renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
-    if (entity.connector === 'memory') {
-      return null;
+  getMainProperty = (name) => {
+    const {entity, validations: {data}} = this.props;
+    const prop = {
+      name,
+      title: name,
+      value: entity[name].toString(),
+      invalid: data[name],
+      onBlur: this.handleFieldChange(name),
+    };
+    if (name === 'password') {
+      prop.password = true;
+      prop.contextual = 'Password should be at least 6 chars long';
     }
-    const mainProperties = [
-      {
-        name: 'url',
-        title: 'URL',
-        value: entity.url,
-        invalid: data.url,
-        onBlur: this.handleFieldChange('url')
-      },
-      {
-        name: 'database',
-        title: 'database',
-        value: entity.database,
-        invalid: data.database,
-        onBlur: this.handleFieldChange('database')
-      },
-      {
-        name: 'username',
-        title: 'username',
-        value: entity.username,
-        invalid: data.username,
-        onBlur: this.handleFieldChange('username'),
-      },
-      {
-        name: 'password',
-        title: 'password',
-        value: entity.password,
-        invalid: data.password,
-        onBlur: this.handleFieldChange('password'),
-        password: true,
-        contextual: 'Password should be at least 6 chars long',
-      },
-    ];
+    return prop;
+  }
+
+  renderMainProperties = () => {
+    const {
+      entity: {connector},
+      entityDevelopment,
+      onResetField,
+    } = this.props;
+    if (connector === 'memory') return null;
+    const isMySql = connector === 'mysql';
+    const mainProperties = [];
+    if (isMySql) {
+      mainProperties.push(this.getMainProperty('host'));
+      mainProperties.push(this.getMainProperty('port'));
+    } else {
+      mainProperties.push(this.getMainProperty('url'));
+    }
+    mainProperties.push(this.getMainProperty('database'));
+    mainProperties.push(this.getMainProperty(isMySql ? 'user' : 'username'));
+    mainProperties.push(this.getMainProperty('password'));
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
       mainProperties[idx].onResetField = onResetField;

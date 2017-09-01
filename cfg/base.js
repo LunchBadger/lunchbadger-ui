@@ -15,6 +15,7 @@ module.exports = {
   devtool: 'eval',
   entry: {
     vendor: [
+      'babel-polyfill',
       'moment',
       'lodash'
     ],

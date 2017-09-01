@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import update from 'react-addons-update';
-import redeployGateway from '../../../actions/CanvasElements/Gateway/redeploy';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
-import GatewayStore from '../../../stores/Gateway';
 import GatewayPolicyDetails from './GatewayPolicyDetails';
 import _ from 'lodash';
 
@@ -19,46 +17,64 @@ class GatewayDetails extends Component {
     entity: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
+    // this.state = {
+    //   dnsPrefix: props.entity.dnsPrefix,
+    //   pipelines: props.entity.pipelines.slice(),
+    //   changed: false,
+    // };
+    this.state = {...this.stateFromStores(props)};
 
-    this.state = {
-      dnsPrefix: props.entity.dnsPrefix,
-      pipelines: props.entity.pipelines.slice(),
-      changed: false
-    };
-
-    this.onStoreUpdate = () => {
-      this.setState({
-        dnsPrefix: this.props.entity.dnsPrefix,
-        pipelines: this.props.entity.pipelines.slice(),
-        changed: false
-      });
-    };
   }
 
-  componentDidMount() {
-    GatewayStore.addChangeListener(this.onStoreUpdate);
-  }
-
-  componentWillUnmount() {
-    GatewayStore.removeChangeListener(this.onStoreUpdate);
-  }
-
-  update(model) {
-    let data = {
-      pipelines: (model.pipelines || []).map(pipeline => {
-        let policies = pipeline.policies || [];
-        delete pipeline.policies;
-
-        return Pipeline.create({
-          ...pipeline,
-          policies: policies.map(policy => Policy.create(policy))
-        });
-      })
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity !== nextProps.entity) {
+      this.onStoreUpdate(nextProps);
     }
-    redeployGateway(this.props.entity, _.merge(model, data));
   }
+
+  stateFromStores = props => ({
+    changed: false,
+    dnsPrefix: props.entity.dnsPrefix,
+    pipelines: props.entity.pipelines.slice(),
+  });
+
+  onStoreUpdate = (props = this.props) => this.setState({...this.stateFromStores(props)});
+
+  discardChanges() {
+    this.onStoreUpdate();
+  }
+
+  // update(model) {
+  //   let data = {
+  //     pipelines: (model.pipelines || []).map(pipeline => {
+  //       let policies = pipeline.policies || [];
+  //       delete pipeline.policies;
+  //
+  //       return Pipeline.create({
+  //         ...pipeline,
+  //         policies: policies.map(policy => Policy.create(policy))
+  //       });
+  //     })
+  //   }
+  //   redeployGateway(this.props.entity, _.merge(model, data));
+  // }
+
+  // update = async (model) => {
+  //   const entity = _.merge({}, this.props.entity);
+  //   const {store: {dispatch, getState}} = this.context;
+  //   const plugins = getState().plugins;
+  //   const onUpdate = plugins.onUpdate.Gateway;
+  //   entity.pipelines = [];
+  //   const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
+  //   const {coreActions} = LunchBadgerCore.utils;
+  //   dispatch(coreActions.setCurrentElement(updatedEntity));
+  // }
 
   _setPipelineState(pipelines) {
     this.setState({
@@ -102,11 +118,7 @@ class GatewayDetails extends Component {
     }));
   }
 
-  onPrefixChange = (event) => {
-    this.setState({
-      dnsPrefix: event.target.value
-    });
-  }
+  onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
   renderPipelines() {
     return this.state.pipelines.map((pipeline, plIdx) => {
@@ -158,7 +170,6 @@ class GatewayDetails extends Component {
   render() {
     const entity = this.props.entity;
     const url = `http://${this.state.dnsPrefix}.customer.lunchbadger.com`;
-
     return (
       <div>
         <CollapsableDetails title="Details" class="details-panel__columns">

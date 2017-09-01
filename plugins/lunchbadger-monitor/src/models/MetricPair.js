@@ -15,26 +15,27 @@ export default class MetricPair extends BaseModel {
 
   constructor(id, metricOne, metricTwo, type = OR) {
     super(id);
-
     this.metricOne = metricOne;
     this.metricTwo = metricTwo;
     this.type = type;
+  }
+
+  recreate() {
+    return MetricPair.create(this);
   }
 
   toJSON() {
     return {
       id: this.id,
       metricOne: this.metricOne,
-      metricTwo: this.metricTwo
+      metricTwo: this.metricTwo,
     }
   }
 
   get metrics() {
     const metrics = [];
-
     this.metricOne && metrics.push(this.metricOne);
     this.metricTwo && metrics.push(this.metricTwo);
-
     return metrics;
   }
 
@@ -69,7 +70,6 @@ export default class MetricPair extends BaseModel {
       [REQUESTS]: 0,
       [PORTALS]: 0
     };
-
     Object.keys(summary).forEach((key) => {
       this.metrics.forEach(metric => {
         const metricDetailsValue = metric.getDetail(key).value;
@@ -85,7 +85,6 @@ export default class MetricPair extends BaseModel {
         summary[key] += metricDetailsValue;
       });
     });
-
     return summary;
   }
 }

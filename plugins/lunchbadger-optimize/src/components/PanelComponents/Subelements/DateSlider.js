@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import './DateSlider.scss';
 import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
 import DateSliderMark from './DateSliderMark';
-import setForecast from '../../../actions/AppState/setForecast';
+import {setForecast} from '../../../reduxActions/forecasts';
+import 'rc-slider/assets/index.css';
+import './DateSlider.scss';
 
 export default class DateSlider extends Component {
   static propTypes = {
@@ -15,9 +15,12 @@ export default class DateSlider extends Component {
     onRangeUpdate: PropTypes.func
   };
 
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
       marks: this.getMarks(),
       range: this.getRange(props),
@@ -35,14 +38,15 @@ export default class DateSlider extends Component {
       range: this.getRange(this.props)
     }, () => {
       this._rescale(this.state.range[1], () => {
-        setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().add(1, 'months').toDate());
-
+        this.setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().add(1, 'months').toDate());
         setTimeout(() => {
-          setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().subtract(1, 'months').toDate());
+          this.setForecast(this.props.parent, moment(this.props.selectedDate, 'M/YYYY').clone().subtract(1, 'months').toDate());
         });
       });
     });
   }
+
+  setForecast = (forecast, date, expanded) => this.context.store.dispatch(setForecast(forecast, date, expanded));
 
   getRange(props) {
     if (props.range) {
@@ -50,7 +54,6 @@ export default class DateSlider extends Component {
       const endYear = +props.range.endDate.format('YYYY');
       const startDate = startYear > +moment().format('YYYY') ? +props.range.startDate.format('M') + 12 : +props.range.startDate.format('M');
       const endDate = endYear > +moment().format('YYYY') ? +props.range.endDate.format('M') + 12 : +props.range.endDate.format('M');
-
       return [startDate, endDate];
     } else {
       return [+props.selectedDate[0], +props.selectedDate[0] + 1];
@@ -59,11 +62,9 @@ export default class DateSlider extends Component {
 
   getMarks(count = 12) {
     let marks = {};
-
     for (var i = 1; i < count + 1; i++) {
       marks[i] = moment.months(i - 1)[0];
     }
-
     return marks;
   }
 
@@ -102,7 +103,6 @@ export default class DateSlider extends Component {
         }));
       }
     });
-
     this._rescale(e[1]);
   }
 

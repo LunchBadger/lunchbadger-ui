@@ -5,7 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import SubmenuItem from './SubmenuItem';
 import {IconSVG, ContextualInformationMessage} from '../../';
-import {iconArrow} from '../../../../../src/icons';
+import * as icons from '../../../../../src/icons';
 import './Tool.scss';
 
 class Tool extends Component {
@@ -22,9 +22,9 @@ class Tool extends Component {
   toggleOpen = opened => this.setState({opened});
 
   onClick = () => {
-    const {onClick, submenu} = this.props;
+    const {onClick, submenu, action} = this.props;
     if (submenu.length === 0) {
-      onClick();
+      onClick(action);
     } else {
       this.toggleOpen(true);
     }
@@ -44,7 +44,7 @@ class Tool extends Component {
     const isSubmenu = submenu.length > 0;
     const Button = (
       <IconButton style={style}>
-        <IconSVG className="Tool__icon" svg={icon} />
+        <IconSVG className="Tool__icon" svg={icons[icon]} />
       </IconButton>
     );
     return (
@@ -71,6 +71,7 @@ class Tool extends Component {
                   {...props}
                   onMenuItemClick={this.onMenuItemClick}
                   plain={plain}
+                  onClick={onClick}
                 />
               ))}
             </IconMenu>
@@ -82,7 +83,7 @@ class Tool extends Component {
             {tooltip}
           </ContextualInformationMessage>
         </div>
-        {isSubmenu && <IconSVG className="Tool__arrow" svg={iconArrow} />}
+        {isSubmenu && <IconSVG className="Tool__arrow" svg={icons.iconArrow} />}
       </div>
     );
   }

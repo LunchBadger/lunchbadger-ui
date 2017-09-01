@@ -17,7 +17,7 @@
     border: 2px solid #DDD;
     transition: width 500ms ease 1ms;
     &.visibleError {
-      width: 800px;
+      width: 900px;
     }
     &__delete {
       position: absolute;
@@ -101,6 +101,15 @@
           font-size: 12px;
           max-height: 300px;
           overflow: auto;
+          h3 {
+            small {
+              display: inline-block;
+              padding: 0 0 5px 10px;
+              text-decoration: underline;
+              cursor: pointer;
+              font-weight: normal;
+            }
+          }
           pre {
             margin-bottom: 10px;
           }

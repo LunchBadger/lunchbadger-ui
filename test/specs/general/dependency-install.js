@@ -6,10 +6,10 @@ const workspaceStatusSelector = '.workspace-status .ContextualInformationMessage
 function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDependenciesCheck) {
   browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
   if (!skipUpdatingDependenciesCheck) {
-    page.moveToElement('.logotype', 5, 5);
-    browser.click('.logotype');
+    // page.moveToElement('.logotype', 5, 5);
+    // browser.click('.logotype');
     page.moveToElement('.workspace-status', 5, 5, function () {
-      browser.waitForElementVisible(workspaceStatusSelector, 5000);
+      // browser.waitForElementVisible(workspaceStatusSelector, 5000);
       page.expect.element(workspaceStatusSelector).text.to.contain('Updating dependencies');
     });
   }
@@ -29,30 +29,6 @@ function expectInstall(browser, page, finalStatus, finalMsg, skipUpdatingDepende
   }
 }
 
-function scrollToField(browser, fieldSelector) {
-  browser.execute(function () {
-    document.querySelector(fieldSelector).scrollIntoView();
-  }, []);
-}
-
-function setFields(browser, page, type) {
-  let fieldSelector;
-  let value;
-  for (let nth = 1; nth <= 4; nth += 1) {
-    fieldSelector = elementSelector + '.' + type + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
-    value = 'x' + (Math.random() * 10e16);
-    if (type === 'mongodb' && nth === 1) {
-      value = 'mongodb://' + value;
-    }
-    scrollToField(browser, fieldSelector);
-    page.setValueSlow(fieldSelector, value);
-  }
-  const formSelector = elementSelector + '.' + type + '.editable form'
-  scrollToField(browser, formSelector);
-  browser.submitForm(formSelector);
-  browser.waitForElementNotPresent(formSelector, 60000);
-}
-
 module.exports = {
   '@disabled': true,
   'Connector installation: data source add': function(browser) {
@@ -60,40 +36,57 @@ module.exports = {
     page.open();
     browser.click('.workspace-status span');
     page.addElementFromTooltip('dataSource', 'rest');
-    browser.waitForElementVisible(elementSelector + '.rest.editable .EntityHeader .EntityProperty__field--input input', 5000);
-    setFields(browser, page, 'rest');
+    browser.waitForElementPresent(elementSelector + '.rest.editable .submit', 5000);
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.rest.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.moveToElement(elementSelector + '.rest.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.rest.editable .submit');
+    });
     expectInstall(browser, page, 'success', 'Workspace OK');
   },
 
   'Connector installation: add more data source': function(browser) {
     page.addElementFromTooltip('dataSource', 'soap');
-    browser.waitForElementVisible(elementSelector + '.soap.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    setFields(browser, page, 'soap');
-    browser.waitForElementVisible('.SystemDefcon1', 5 * 60 * 1000);
+    browser.waitForElementVisible(elementSelector + '.soap.editable .submit', 5000);
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dumpUrl');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.soap.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.moveToElement(elementSelector + '.soap.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.soap.editable .submit');
+    });
+    browser.waitForElementPresent('.SystemDefcon1', 5 * 60 * 1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     page.addElementFromTooltip('dataSource', 'mongodb');
-    browser.waitForElementVisible(elementSelector + '.mongodb.editable .EntityHeader .EntityProperty__field--input input', 5 * 60 * 1000);
-    setFields(browser, page, 'mongodb');
+    browser.waitForElementVisible(elementSelector + '.mongodb.editable .submit', 5000);
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'mongodb://dumpUrl');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input', 'dumpDatabase');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:nth-child(3) .EntityProperty__field--input input', 'dumpUsername');
+    browser.setValue(elementSelector + '.mongodb.editable .EntityProperties .EntityProperty:last-child .EntityProperty__field--input input', 'dumpPassword');
+    browser.moveToElement(elementSelector + '.mongodb.editable .submit', 5, 5, function() {
+      browser.click(elementSelector + '.mongodb.editable .submit');
+    });
     expectInstall(browser, page, 'failure', '?wsdl')
   },
 
   'Connector uninstallation: remove datasource': function(browser) {
-    browser.click('.SystemDefcon1__box__content__details--link');
-    browser.pause(1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click(elementSelector + '.mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb .Toolbox__button--delete', 50000);
     browser.click(elementSelector + '.mongodb .Toolbox__button--delete');
-    browser.pause(1500);
+    browser.waitForElementPresent('.modal__actions__button.modal__actions__button--confirm', 5000);
     browser.click('.modal__actions__button.modal__actions__button--confirm');
+    browser.waitForElementPresent('.SystemDefcon1', 5000);
+    browser.click('.SystemDefcon1 button');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     expectInstall(browser, page, 'failure', '?wsdl');
   },
 
   'Connector uninstallation: trash workspace': function(browser) {
-    browser.click('.SystemDefcon1__box__content__details--link');
-    browser.pause(1000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click('.header__menu__element .fa-trash-o');

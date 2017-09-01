@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ForecastDetailsTop from './ForecastDetailsTop';
 import ForecastDetailsBottom from './ForecastDetailsBottom';
 import ForecastingChart from '../../Chart/ForecastingChart';
-import createForecast from '../../../actions/APIForecast/createForecast';
+import {createForecast} from '../../../reduxActions/forecasts';
 import './ForecastDetails.scss';
 
 export default class ForecastDetails extends Component {
@@ -16,9 +16,9 @@ export default class ForecastDetails extends Component {
     incomeSummary: PropTypes.array
   };
 
-  constructor(props) {
-    super(props);
-  }
+  static contextTypes = {
+    store: PropTypes.object,
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.dateRange && this.props.dateRange
@@ -30,10 +30,9 @@ export default class ForecastDetails extends Component {
           .endOf('month')
           .diff(this.props.dateRange.endDate.clone().endOf('month'), 'months', true)
       );
-
       if (monthsDifference > 0) {
         for (let i = 1; i <= monthsDifference; i++) {
-          createForecast(nextProps.entity, this.props.dateRange.endDate.clone().add(i, 'months'));
+          this.context.store.dispatch(createForecast(nextProps.entity, this.props.dateRange.endDate.clone().add(i, 'months')));
         }
       }
     }
@@ -42,24 +41,28 @@ export default class ForecastDetails extends Component {
   render() {
     return (
       <div className={this.props.className || ''}>
-        <ForecastDetailsTop incomeSummary={this.props.incomeSummary}
-                            selectedDate={this.props.selectedDate}
-                            dateRange={this.props.dateRange}
-                            forecast={this.props.entity}
-                            data={this.props.data}/>
-        <ForecastingChart forecast={this.props.entity}
-                          panelHeight={this.props.panelHeight}
-                          dateRange={this.props.dateRange}
-                          selectedDate={this.props.selectedDate}
-                          expanded={this.props.expanded}
-                          data={this.props.data}/>
-        {
-          this.props.incomeSummary.length > 0 && (
-            <ForecastDetailsBottom selectedDate={this.props.selectedDate}
-                                   incomeSummary={this.props.incomeSummary}
-                                   data={this.props.data}/>
-          )
-        }
+        <ForecastDetailsTop
+          incomeSummary={this.props.incomeSummary}
+          selectedDate={this.props.selectedDate}
+          dateRange={this.props.dateRange}
+          forecast={this.props.entity}
+          data={this.props.data}
+        />
+        <ForecastingChart
+          forecast={this.props.entity}
+          panelHeight={this.props.panelHeight}
+          dateRange={this.props.dateRange}
+          selectedDate={this.props.selectedDate}
+          expanded={this.props.expanded}
+          data={this.props.data}
+        />
+        {this.props.incomeSummary.length > 0 && (
+          <ForecastDetailsBottom
+            selectedDate={this.props.selectedDate}
+            incomeSummary={this.props.incomeSummary}
+            data={this.props.data}
+          />
+        )}
       </div>
     );
   }

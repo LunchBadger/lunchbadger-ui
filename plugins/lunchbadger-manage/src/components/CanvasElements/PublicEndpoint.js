@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import cs from 'classnames';
+import {connect} from 'react-redux';
+import selector from '../../utils/selectorPublicEndpoint';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
-import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
-import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
-import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Input = LunchBadgerCore.components.Input;
 const Port = LunchBadgerCore.components.Port;
 
 class PublicEndpoint extends Component {
@@ -23,25 +20,10 @@ class PublicEndpoint extends Component {
     };
   }
 
-  update(model) {
-    const validations = this.validate(model);
-    if (validations.isValid) {
-      updatePublicEndpoint(this.props.entity.id, model);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity.path !== nextProps.entity.path) {
+      this.setState({path: nextProps.entity.path});
     }
-    return validations;
-  }
-
-  validate = (model) => {
-    const validations = {
-      isValid: true,
-      data: {},
-    }
-    const messages = {
-      empty: 'This field cannot be empty',
-    }
-    if (model.path === '') validations.data.path = messages.empty;
-    if (Object.keys(validations.data).length > 0) validations.isValid = false;
-    return validations;
   }
 
   handleFieldChange = field => (evt) => {
@@ -50,23 +32,14 @@ class PublicEndpoint extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.parent.state.editable) {
-      this.setState({path: nextProps.entity.path});
-    }
-  }
-
-  removeEntity = () => removeEntity(this.props.entity);
-
   onPathChange = event => this.setState({path: event.target.value});
 
   renderPorts() {
-    return this.props.entity.ports.map(port => (
+    return this.props.entity.ports.map((port, idx) => (
       <Port
-        key={`port-${port.portType}-${port.id}`}
-        paper={this.props.paper}
+        key={idx}
         way={port.portType}
-        elementId={this.props.entity.id}
+        elementId={port.id}
         className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
         scope={port.portGroup}
       />
@@ -74,12 +47,12 @@ class PublicEndpoint extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {entity, validations: {data}, entityDevelopment, onResetField, gatewayPath} = this.props;
     const mainProperties = [
       {
         name: 'url',
         title: 'URL',
-        value: getPublicEndpointUrl(entity.id, this.state.path),
+        value: `${gatewayPath}${this.state.path}`,
         fake: true,
       },
       {
@@ -107,4 +80,4 @@ class PublicEndpoint extends Component {
   }
 }
 
-export default CanvasElement(PublicEndpoint);
+export default connect(selector)(CanvasElement(PublicEndpoint));

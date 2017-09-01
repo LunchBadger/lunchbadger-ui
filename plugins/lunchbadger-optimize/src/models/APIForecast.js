@@ -13,12 +13,14 @@ export default class APIForecast extends BaseModel {
 
   constructor(id, api, left, top) {
     super(id);
-
     this.api = api;
     this.left = left;
     this.top = top;
-
     this.upgrades = [];
+  }
+
+  recreate() {
+    return APIForecast.create(this);
   }
 
   toJSON() {
@@ -34,13 +36,11 @@ export default class APIForecast extends BaseModel {
   set api(api) {
     if (!api) {
       this._api = ForecastAPI.create({});
-
       return;
     }
 
     if (api.constructor.type === ForecastAPI.type) {
       this._api = api;
-
       return;
     }
     /*

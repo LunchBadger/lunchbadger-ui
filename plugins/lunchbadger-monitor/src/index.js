@@ -1,4 +1,6 @@
-// Let's register plugins inside the Core, yay!
-import MetricsPanel from './plugs/MetricsPanel';
+// import {registerPlugin} from '../../../src/reducers';
+import reducers from './reducers';
+import plugs from './plugs';
 
-LunchBadgerCore.actions.registerPlugin(MetricsPanel);
+const {registerPlugin} = LunchBadgerCore.utils;
+registerPlugin(reducers, plugs);

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {update, remove} from '../reduxActions/apis';
 import APIPlan from './APIPlan';
 
 const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
@@ -23,15 +24,17 @@ export default class API extends BaseModel {
 
   constructor(id, name) {
     super(id);
-
     const defaultPlans = [
       APIPlan.create({name: 'Free', icon: 'fa-paper-plane'}),
       APIPlan.create({name: 'Developer', icon: 'fa-plane'}),
       APIPlan.create({name: 'Professional', icon: 'fa-fighter-jet'})
     ];
-
     this.name = name;
     this.plans = defaultPlans.slice();
+  }
+
+  recreate() {
+    return API.create(this);
   }
 
   toJSON() {
@@ -106,5 +109,34 @@ export default class API extends BaseModel {
 
   get accept() {
     return this._accept;
+  }
+
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.apis;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('API');
+        }
+      }
+      const fields = ['name'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
+    }
+  }
+
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
+
+  remove() {
+    return async dispatch => await dispatch(remove(this));
   }
 }

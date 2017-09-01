@@ -1,80 +1,81 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
-import {addSystemNotification} from '../../../../lunchbadger-ui/src/actions';
+import {addSystemDefcon1} from '../../reduxActions/systemDefcon1';
+import ConfigStoreService from '../../services/ConfigStoreService';
+import ProjectService from '../../services/ProjectService';
+import Config from '../../../../../src/config';
+import {getUser} from '../../utils/auth';
 
 class SettingsPanel extends Component {
+  static type = 'SettingsPanel';
+
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
-
     props.parent.storageKey = panelKeys.SETTINGS_PANEL;
     this.state = {
       accessKey: null
     };
   }
 
-  static contextTypes = {
-    loginManager: PropTypes.object,
-    lunchbadgerConfig: PropTypes.object,
-    configStoreService: PropTypes.object,
-    projectService: PropTypes.object,
-    workspaceUrl: PropTypes.string
-  };
-
   componentWillMount() {
-    const userName = this.context.loginManager.user.profile.sub;
-    this.context.configStoreService.getAccessKey(userName).then(data => {
-      this.setState({
-        accessKey: data.body.key
-      });
-    }).catch(err => {
-      this.props.displaySystemNotification({output: 'Error fetching Git access key'});
-    });
+    this.getAccessKey();
   }
 
-  onRegenerate = () => {
-    const userName = this.context.loginManager.user.profile.sub;
-    this.setState({
-      accessKey: null
-    });
-
-    this.context.configStoreService.regenerateAccessKey(userName).then(data => {
+  getAccessKey = async () => {
+    try {
+      const data = await ConfigStoreService.getAccessKey();
       this.setState({
-        accessKey: data.body.key
+        accessKey: data.body.key,
       });
-    }).catch(err => {
-      this.props.displaySystemNotification({output: 'Error regenerating Git access key'});
+    } catch (err) {
+      this.context.store.dispatch(addSystemDefcon1(err));
+    }
+  }
+
+  onRegenerate = async () => {
+    this.setState({
+      accessKey: null,
     });
+    try {
+      const data = await ConfigStoreService.regenerateAccessKey();
+      this.setState({
+        accessKey: data.body.key,
+      });
+    } catch (err) {
+      this.context.store.dispatch(addSystemDefcon1(err));
+    };
   }
 
   onRestartWorkspace = () => {
-    this.context.projectService.restartWorkspace();
+    ProjectService.restartWorkspace();
   }
 
   onReinstall = () => {
-    this.context.projectService.reinstallDeps();
+    ProjectService.reinstallDeps();
   }
 
   render() {
-    const userName = this.context.loginManager.user.profile.sub;
-
     let cloneCommand;
     if (this.state.accessKey) {
       const anchor = document.createElement('a');
-      anchor.href = this.context.lunchbadgerConfig.gitBaseUrl;
-      anchor.pathname += `/${userName}.git`;
+      anchor.href = Config.get('gitBaseUrl');
+      anchor.pathname += `/${getUser().profile.sub}.git`;
       anchor.username = 'git';
       anchor.password = this.state.accessKey;
       cloneCommand = `git clone ${anchor.href}`;
     } else {
       cloneCommand = '...';
     }
-
+    const workspaceUrl = Config.get('workspaceUrl');
     return (
-      <div className="panel__body">
+      <div className="panel__body settings">
         <div className="panel__title">
           Settings
         </div>
@@ -84,12 +85,12 @@ class SettingsPanel extends Component {
               Your application URLs
             </label>
             <div className="details-panel__static-field">
-              <a href={this.context.workspaceUrl} target="_blank">
-                {this.context.workspaceUrl}
+              <a href={workspaceUrl} target="_blank">
+                {workspaceUrl}
               </a> (root)
               <br />
-              <a href={this.context.workspaceUrl + '/explorer'} target="_blank">
-                {this.context.workspaceUrl + '/explorer'}
+              <a href={workspaceUrl + '/explorer'} target="_blank">
+                {workspaceUrl + '/explorer'}
               </a> (API explorer)
             </div>
           </div>
@@ -132,8 +133,4 @@ class SettingsPanel extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  displaySystemNotification: notification => dispatch(addSystemNotification(notification)),
-});
-
-export default connect(null, mapDispatchToProps)(Panel(SettingsPanel));
+export default Panel(SettingsPanel);

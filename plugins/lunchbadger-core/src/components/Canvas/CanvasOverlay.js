@@ -1,10 +1,19 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import './CanvasOverlay.scss';
 
-class CanvasOverlay extends Component {
+class CanvasOverlay extends PureComponent {
+  static propTypes = {
+    panelEditingStatus: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    panelEditingStatus: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,11 +27,10 @@ class CanvasOverlay extends Component {
 
   handleClick = () => {
     this.setState({isShowingModal: true});
-    this.props.handleClick();
   }
 
   render() {
-    const {panelEditingStatus, handleSave, handleCancel} = this.props;
+    const {panelEditingStatus, panelEditingStatusSave, panelEditingStatusDiscard} = this.props;
     if (!panelEditingStatus) return null;
     const {isShowingModal} = this.state;
     return (
@@ -30,8 +38,8 @@ class CanvasOverlay extends Component {
         {isShowingModal && (
           <TwoOptionModal
             onClose={this.handleClose}
-            onSave={handleSave}
-            onCancel={handleCancel}
+            onSave={panelEditingStatusSave}
+            onCancel={panelEditingStatusDiscard}
           >
             You have unsaved changes!
           </TwoOptionModal>
@@ -41,23 +49,13 @@ class CanvasOverlay extends Component {
   }
 }
 
-CanvasOverlay.propTypes = {
-  panelEditingStatus: PropTypes.bool.isRequired,
-  handleClick: PropTypes.func,
-  handleSave: PropTypes.func,
-  handleCancel: PropTypes.func,
-};
+const selector = createSelector(
+  state => state.states.panelEditingStatus,
+  state => state.states.panelEditingStatusSave,
+  state => state.states.panelEditingStatusDiscard,
+  (panelEditingStatus, panelEditingStatusSave, panelEditingStatusDiscard) => ({
+    panelEditingStatus, panelEditingStatusSave, panelEditingStatusDiscard
+  }),
+);
 
-CanvasOverlay.defaultProps = {
-  handleClick: () => {},
-  handleSave: () => {},
-  handleCancel: () => {},
-};
-
-const mapStateToProps = state => ({
-  panelEditingStatus: state.core.appState.panelEditingStatus,
-  handleSave: state.core.appState.panelEditingStatusSave,
-  handleCancel: state.core.appState.panelEditingStatusDiscard,
-});
-
-export default connect(mapStateToProps)(CanvasOverlay);
+export default connect(selector)(CanvasOverlay);

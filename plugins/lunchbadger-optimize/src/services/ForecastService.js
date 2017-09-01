@@ -1,33 +1,27 @@
-const ApiClient = LunchBadgerCore.utils.ApiClient;
-const {bindParams} = LunchBadgerCore.utils.URLParams;
+import Config from '../../../../src/config';
 
-export default class ForecastService {
-  constructor(apiUrl, idToken) {
-    this._APIHandle = new ApiClient(apiUrl, idToken);
-  }
+const {ApiClient, getUser} = LunchBadgerCore.utils;
 
-  get(apiId) {
-    return this._APIHandle.get('Forecasts', {
-      qs: {
-        filter: JSON.stringify({
-          where: {
-            // 'api.id': apiId
-            api: {
-              id: apiId
-            }
+class ForecastService {
+
+  initialize = () => this.api = new ApiClient(Config.get('forecastApiUrl'), getUser().idToken);
+
+  get = id => this.api.get('Forecasts', {
+    qs: {
+      filter: JSON.stringify({
+        where: {
+          api: {
+            id,
           }
-        })
-      }
-    });
-  }
+        }
+      })
+    }
+  });
 
-  getByForecast(forecastId) {
-    return this._APIHandle.get(bindParams('Forecasts/:id', {id: forecastId}));
-  }
+  getByForecast = id => this.api.get(`Forecasts/${id}`);
 
-  save(data) {
-    return this._APIHandle.put('Forecasts', {
-      body: data
-    });
-  }
+  save = body => this.api.put('Forecasts', {body});
+
 }
+
+export default new ForecastService();

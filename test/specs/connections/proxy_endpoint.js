@@ -1,5 +1,5 @@
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Connection: proxy endpoint': function (browser) {
     var page = browser.page.lunchBadger();
     var privateEndpointSelector = '.quadrant:nth-child(2) .Entity.PrivateEndpoint:last-child';

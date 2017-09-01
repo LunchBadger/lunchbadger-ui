@@ -1,4 +1,4 @@
-const ModelProperty = LunchBadgerManage.models.ModelProperty;
+import ModelProperty from '../models/ModelProperty';
 
 export default (model, entity, properties, stateProperties) => {
   const rootProperties = [];
@@ -10,7 +10,7 @@ export default (model, entity, properties, stateProperties) => {
     const prop = ModelProperty.create(property);
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
-    const [parentId, idx] = key.split('/');
+    const [parentId] = key.split('/');
     if (['array', 'object'].includes(prop.type)) {
       prop.isNull = true;
       prop.type = prop.type === 'object' ? {} : [];
@@ -32,7 +32,7 @@ export default (model, entity, properties, stateProperties) => {
   });
   const fallbackProperties = {};
   stateProperties.forEach((property) => {
-    const prop = ModelProperty.create(property);;
+    const prop = ModelProperty.create(property);
     fallbackProperties[prop.id] = prop;
     if (prop.type === 'object') {
       prop.type = {};

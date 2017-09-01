@@ -32,6 +32,7 @@ class EntityProperty extends Component {
   render() {
     const {
       name,
+      modelName,
       value,
       title,
       placeholder,
@@ -72,7 +73,7 @@ class EntityProperty extends Component {
       toolboxConfig.push({
         action: 'delete',
         svg: iconRevert,
-        onClick: onResetField(name),
+        onClick: onResetField(modelName || name),
       });
     }
     return (

@@ -1,36 +1,40 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse, IconSVG} from '../';
 import {iconDelete} from '../../../../src/icons';
+import {toggleSystemDefcon1, removeSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleError: false,
+      visibleError: true,
     }
   }
 
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
   handleClose = () => {
-    const {onClose, server} = this.props;
+    const {dispatch, server} = this.props;
     if (server) {
       document.location.reload();
     } else {
-      onClose();
+      dispatch(toggleSystemDefcon1());
     }
   }
+
+  handleRemove = item => () => this.props.dispatch(removeSystemDefcon1(item));
 
   render() {
     const {server, errors} = this.props;
     const {visibleError} = this.state;
     const title = server ? 'Server Failure' : 'The workspace crashed';
     const content = server
-      ? "The system can't connect to the server. Please check that the server is running and reload the page."
-      : "You'll need to fix the workspace crash cause";
+      ? 'The system can\'t connect to the server. Please check that the server is running and reload the page.'
+      : 'You\'ll need to fix the workspace crash cause';
     return (
       <div className={cs('SystemDefcon1__box', {['visibleError']: visibleError})}>
         <div className="SystemDefcon1__box__title">
@@ -38,12 +42,7 @@ class SystemDefcon1Box extends Component {
         </div>
         <div className="SystemDefcon1__box__content">
           {content}
-          {server && (
-            <div className="SystemDefcon1__box__content--error">
-              ERROR: {errors.join('')}
-            </div>
-          )}
-          {!server && (
+          {errors.length > 0 && (
             <div className="SystemDefcon1__box__content__details">
               <div>
                 <span
@@ -57,7 +56,11 @@ class SystemDefcon1Box extends Component {
                 <div className="SystemDefcon1__box__content__details--box">
                   {errors.map((item, idx) => (
                     <div key={idx}>
-                      {errors.length > 1 && <h3>Error {idx + 1}</h3>}
+                      <h3>
+                        Error {idx + 1}
+                        {' '}
+                        <small className="removeError" onClick={this.handleRemove(item)}>remove</small>
+                      </h3>
                       <pre>{item}</pre>
                     </div>
                   ))}
@@ -79,13 +82,11 @@ class SystemDefcon1Box extends Component {
 SystemDefcon1Box.propTypes = {
   server: PropTypes.bool,
   errors: PropTypes.array,
-  onClose: PropTypes.func,
 };
 
 SystemDefcon1Box.defaultProps = {
   server: false,
   errors: [],
-  onClose: () => {},
 };
 
-export default SystemDefcon1Box;
+export default connect(null)(SystemDefcon1Box);

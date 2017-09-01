@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import Model from './Model';
+import {update, remove} from '../reduxActions/microservices';
 
-const Model = LunchBadgerManage.models.Model;
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Microservice extends BaseModel {
@@ -11,14 +12,15 @@ export default class Microservice extends BaseModel {
    * @private
    */
   _models = [];
-
   _accept = [Model.type];
 
   constructor(id, name) {
     super(id);
-
     this.name = name;
-    this.ready = false;
+  }
+
+  recreate() {
+    return Microservice.create(this);
   }
 
   toJSON() {
@@ -60,5 +62,34 @@ export default class Microservice extends BaseModel {
 
   get accept() {
     return this._accept;
+  }
+
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.microservices;
+      const {messages, checkFields} = LunchBadgerCore.utils;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Microservice');
+        }
+      }
+      const fields = ['name'];
+      checkFields(fields, model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
+    }
+  }
+
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
+
+  remove() {
+    return async dispatch => await dispatch(remove(this));
   }
 }

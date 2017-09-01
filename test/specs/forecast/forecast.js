@@ -1,6 +1,6 @@
 var page;
 var apiSelector = '.quadrant:nth-child(4) .Entity.API';
-var forecasterSelector = '.panel:nth-child(3) .panel__container .panel__body';
+var forecasterSelector = '.panel-container .panel__body.forecasts';
 var apiForecastSelector = forecasterSelector + ' .api-forecast';
 
 var moment = require('moment');

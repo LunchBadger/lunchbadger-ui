@@ -3,173 +3,70 @@ import React, {Component} from 'react';
 import cs from 'classnames';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Aside from '../Aside/Aside';
+import {createSelector} from 'reselect';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import {Provider} from 'mobx-react';
 import Canvas from '../Canvas/Canvas';
 import Header from '../Header/Header';
 import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
-import './App.scss';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import PanelContainer from '../Panel/PanelContainer';
-import Pluggable from '../../stores/Pluggable';
-import AppState from '../../stores/AppState';
-import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
-import handleFatals from '../../utils/handleFatals';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
-import {toggleHighlight} from '../../reduxActions';
-import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
+import {loadFromServer} from '../../reduxActions';
+import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
+import {getUser} from '../../utils/auth';
+import Config from '../../../../../src/config';
+import Connections from '../../stores/Connections';
+import './App.scss';
 
 @DragDropContext(HTML5Backend)
 class App extends Component {
   static childContextTypes = {
-    lunchbadgerConfig: PropTypes.object,
-    loginManager: PropTypes.object,
-    projectService: PropTypes.object,
-    configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
+    paper: PropTypes.object,
   }
 
   static propTypes = {
-    config: PropTypes.object,
-    loginManager: PropTypes.object,
-    projectService: PropTypes.object,
-    configStoreService: PropTypes.object,
-    workspaceUrl: PropTypes.string,
     multiEnvIndex: PropTypes.number,
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      pluginsStore: Pluggable,
-      appState: AppState,
-      loaded: false
-    };
-
-    this.reloadPlugins = () => {
-      this.setState({pluginsStore: Pluggable});
-    };
-
-    this.appStateChange = () => {
-      this.setState({appState: AppState});
-    };
+    paper: PropTypes.object,
   }
 
   getChildContext() {
+    const {multiEnvIndex, multiEnvDelta, multiEnvAmount, paper} = this.props;
     return {
-      lunchbadgerConfig: this.props.config,
-      loginManager: this.props.loginManager,
-      projectService: this.props.projectService,
-      configStoreService: this.props.configStoreService,
-      workspaceUrl: this.props.workspaceUrl,
-      multiEnvIndex: this.props.multiEnvIndex,
-      multiEnvDelta: this.props.multiEnvDelta,
-      multiEnvAmount: this.props.multiEnvAmount,
+      multiEnvIndex,
+      multiEnvDelta,
+      multiEnvAmount,
+      paper,
     };
   }
 
   componentWillMount() {
-    let {config, loginManager, projectService, dispatch} = this.props;
-
-    LunchBadgerCore.dispatchRedux = dispatch;
-
-    Pluggable.addChangeListener(this.reloadPlugins);
-    AppState.addChangeListener(this.appStateChange);
-
-    let prm = loadFromServer(config, loginManager, projectService).then(() => {
-      this.setState({loaded: true});
-    })
-
-    handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
-    });
-  }
-
-  componentWillUnmount() {
-    Pluggable.removeChangeListener(this.reloadPlugins);
-    AppState.removeChangeListener(this.appStateChange);
-  }
-
-  saveToServer = () => {
-    let {
-      config,
-      loginManager,
-      projectService,
-      currentlyOpenedPanel,
-      currentElement,
-    } = this.props;
-    const coreStates = {
-      currentlyOpenedPanel,
-      currentElement,
-    };
-    this.setState({loaded: false});
-    let prm = saveToServer(config, loginManager, projectService, coreStates).then(() => {
-      this.props.displaySystemInformationMessage({
-        message: 'All data has been synced with API',
-        type: 'success'
-      });
-      this.setState({loaded: true});
-    });
-
-    handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
-    });
-  }
-
-  clearServer = () => {
-    let {config, loginManager, projectService} = this.props;
-
-    this.setState({loaded: false});
-
-    let prm = clearServer(config, loginManager, projectService).then(() => {
-      this.props.displaySystemInformationMessage({
-        message: 'All data removed from server',
-        type: 'success'
-      });
-      this.setState({loaded: true});
-    });
-
-    handleFatals(prm).catch(() => {
-      this.setState({loaded: true});
-    });
-  }
-
-  handleCanvasClick = () => {
-    const {canvasClickEnabled, toggleHighlight} = this.props;
-    if (canvasClickEnabled) {
-      toggleHighlight(null);
-    }
+    this.props.dispatch(loadFromServer());
   }
 
   renderHeader = () => {
-    const {currentEditElement} = this.props;
+    const {isEntityEditable} = this.props;
+    const username = getUser().profile.preferred_username;
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
           ref="header"
-          appState={this.state.appState}
-          plugins={this.state.pluginsStore}
-          saveToServer={this.saveToServer}
-          clearServer={this.clearServer}
-          disabledMultiEnvMenu={!!currentEditElement || !!this.props.currentlyOpenedPanel}
-          headerMenuDisabled={!!currentEditElement}
+          username={username}
+          disabledMultiEnvMenu={isEntityEditable || !!this.props.currentlyOpenedPanel}
+          headerMenuDisabled={isEntityEditable}
         />
       );
     }
     return (
       <Header
         ref="header"
-        plugins={this.state.pluginsStore}
-        saveToServer={this.saveToServer}
-        clearServer={this.clearServer}
-        headerMenuDisabled={!!currentEditElement}
+        username={username}
+        envId={Config.get('envId')}
       />
     );
   }
@@ -180,10 +77,8 @@ class App extends Component {
       systemDefcon1Errors,
       multiEnvDelta,
       multiEnvIndex,
-      panelEditingStatus,
       currentlyOpenedPanel,
-      toggleHighlight,
-      currentEditElement,
+      isEntityEditable,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -191,72 +86,73 @@ class App extends Component {
     }
     const multiEnvNotDev = multiEnvIndex > 0;
     return (
-      <div>
-        <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
-        <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
-          <Spinner loading={!this.state.loaded} />
-          {this.renderHeader()}
-          <Aside
-            plugins={this.state.pluginsStore}
-            disabled={multiEnvNotDev || !!currentlyOpenedPanel || !!currentEditElement}
-            currentEditElement={currentEditElement}
-          />
-          <div ref="container" className="app__container">
-            <div className="app__panel-wrapper">
-              <SystemNotifications />
+      <Provider connectionsStore={Connections}>
+        <div>
+          <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
+          <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
+            <Spinner />
+            {this.renderHeader()}
+            <Aside
+              disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
+            />
+            <div ref="container" className="app__container">
+              <div className="app__panel-wrapper">
+                <SystemNotifications />
+                <div style={multiEnvDeltaStyle}>
+                  <PanelContainer
+                    canvas={() => this.refs.canvas}
+                    header={() => this.refs.header}
+                    container={() => this.refs.container}
+                  />
+                </div>
+              </div>
               <div style={multiEnvDeltaStyle}>
-                <PanelContainer
-                  plugins={this.state.pluginsStore}
-                  appState={this.state.appState}
-                  canvas={() => this.refs.canvas}
-                  header={() => this.refs.header}
-                  container={() => this.refs.container}
+                <Canvas
+                  ref="canvas"
+                  multiEnvDelta={multiEnvDelta}
                 />
               </div>
             </div>
-            <div style={multiEnvDeltaStyle}>
-              <Canvas
-                appState={this.state.appState}
-                plugins={this.state.pluginsStore}
-                ref="canvas"
-                multiEnvDelta={multiEnvDelta}
-                currentlyOpenedPanel={currentlyOpenedPanel}
-                onClick={this.handleCanvasClick}
-              />
-            </div>
+            <SystemInformationMessages />
+            {systemDefcon1Visible && (
+              <SystemDefcon1 errors={systemDefcon1Errors} />
+            )}
+            <TooltipWrapper />
           </div>
-          <SystemInformationMessages />
-          {systemDefcon1Visible && (
-            <SystemDefcon1 errors={systemDefcon1Errors} />
-          )}
-          <TooltipWrapper />
         </div>
-      </div>
+      </Provider>
     );
   }
 }
 
-App.propTypes = {
-  panelEditingStatus: PropTypes.bool,
-  canvasClickEnabled: PropTypes.bool,
-}
+const selector = createSelector(
+  state => state.systemDefcon1.visible,
+  state => state.systemDefcon1.errors,
+  state => state.multiEnvironments.selected,
+  state => state.multiEnvironments.environments[state.multiEnvironments.selected].delta,
+  state => state.multiEnvironments.environments.length,
+  state => state.states.currentlyOpenedPanel,
+  state => state.states.currentElement,
+  state => !!state.states.currentEditElement,
+  (
+    systemDefcon1Visible,
+    systemDefcon1Errors,
+    multiEnvIndex,
+    multiEnvDelta,
+    multiEnvAmount,
+    currentlyOpenedPanel,
+    currentElement,
+    isEntityEditable,
+  ) => ({
+    systemDefcon1Visible,
+    systemDefcon1Errors,
+    multiEnvIndex,
+    multiEnvDelta,
+    multiEnvAmount,
+    currentlyOpenedPanel,
+    currentElement,
+    isEntityEditable,
+  }),
+);
 
-const mapStateToProps = state => ({
-  systemDefcon1Visible: state.ui.systemDefcon1.visible,
-  systemDefcon1Errors: state.ui.systemDefcon1.errors,
-  multiEnvIndex: state.ui.multiEnvironments.selected,
-  multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
-  multiEnvAmount: state.ui.multiEnvironments.environments.length,
-  canvasClickEnabled: !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
-  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
-  currentElement: state.core.appState.currentElement,
-  currentEditElement: state.core.appState.currentEditElement,
-});
-
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-  displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
-  toggleHighlight: element => dispatch(toggleHighlight(element)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(selector)(App);

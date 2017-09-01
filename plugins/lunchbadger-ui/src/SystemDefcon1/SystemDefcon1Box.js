@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import cs from 'classnames';
-import {SmoothCollapse, IconSVG} from '../';
-import {iconDelete} from '../../../../src/icons';
+import {SmoothCollapse} from '../';
 import {toggleSystemDefcon1, removeSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
 import './SystemDefcon1.scss';
 
@@ -51,7 +50,7 @@ class SystemDefcon1Box extends Component {
     return (
       <div
         onClick={this.handleBoxClick}
-        className={cs('SystemDefcon1__box', {visibleError, buttons})}
+        className={cs('SystemDefcon1__box', {visibleError, ConfirmModal: buttons})}
       >
         <div className="SystemDefcon1__box__title">
           {titleTxt}
@@ -86,8 +85,12 @@ class SystemDefcon1Box extends Component {
           )}
         </div>
         <div className="SystemDefcon1__box__content">
-          {buttons && buttons.map(({label, onClick}) => (
-            <button key={label} onClick={onClick}>
+          {buttons && buttons.map(({label, onClick}, idx) => (
+            <button
+              key={label}
+              onClick={onClick}
+              className={cs({confirm: idx === 0, discard: idx === 1})}
+            >
               {label}
             </button>
           ))}

@@ -20,8 +20,8 @@ module.exports = {
       publicEndpointSelector + ':last-child',
       apiSelector + ':nth-last-child(2) .canvas-element__drop-placeholder'
     );
-    browser.waitForElementPresent('.modal__actions__button--confirm', 10000);
-    browser.click('.modal__actions__button--discard', function () {
+    browser.waitForElementPresent('.ConfirmModal .discard', 10000);
+    browser.click('.ConfirmModal .discard', function () {
       browser.waitForElementPresent(publicEndpointSelector + ':last-child', 30000);
       browser.waitForElementNotPresent(apiSelector + ':last-child .EntitySubElements__main .public-endpoint', 30000);
     });

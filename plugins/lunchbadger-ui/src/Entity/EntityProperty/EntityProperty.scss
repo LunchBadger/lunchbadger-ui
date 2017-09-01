@@ -147,6 +147,15 @@
     }
   }
   &__selected {
+    .editable & {
+      text-indent: inherit;
+      .EntityProperty__field {
+        color: #4b4b4b;
+      }
+      &:before {
+        display: none;
+      }
+    }
     text-indent: 10px;
     .EntityProperty__field {
       color: #FFF;

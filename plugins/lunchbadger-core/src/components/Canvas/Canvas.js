@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
-import './Canvas.scss';
 import addConnection from '../../actions/Connection/add';
 import removeConnection from '../../actions/Connection/remove';
 import moveConnection from '../../actions/Connection/move';
 import Connection from '../../stores/Connection';
-import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
+import './Canvas.scss';
 
 export default class Canvas extends Component {
   static contextTypes = {
@@ -262,19 +262,18 @@ export default class Canvas extends Component {
   }
 
   render() {
-    const {appState, plugins} = this.props;
+    const {appState, plugins, currentlyOpenedPanel, onClick} = this.props;
     const {connections, scrollLeft} = this.state;
     let {canvasHeight} = this.state;
-    if (!appState.getStateKey('currentlyOpenedPanel')) {
+    if (!currentlyOpenedPanel) {
       canvasHeight = null;
     }
-    const panelEditingStatus = appState.getStateKey('panelEditingStatus');
     return (
       <section
         className="canvas"
-        onClick={() => !panelEditingStatus && appState.getStateKey('currentElement') && toggleHighlight(null)}
+        onClick={onClick}
       >
-        {panelEditingStatus && <CanvasOverlay appState={appState}/> }
+        <CanvasOverlay />
         <div
           style={{height: canvasHeight}}
           className="canvas__wrapper"

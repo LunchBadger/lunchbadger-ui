@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './Panel.scss';
+import {connect} from 'react-redux';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
+import './Panel.scss';
 
 export default (ComposedComponent) => {
-  return class Panel extends Component {
+  class Panel extends Component {
     static propTypes = {
       canvas: PropTypes.func.isRequired,
       container: PropTypes.func.isRequired,
@@ -15,23 +16,11 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
-
       this.state = {
         height: '50vh',
         opened: false
       };
-
       this.storageKey = null;
-
-      this.appStateUpdate = () => {
-        const currentPanel = this.props.appState.getStateKey('currentlyOpenedPanel');
-
-        if (this.storageKey === currentPanel && !this.state.opened) {
-          this.setState({opened: true});
-        } else if (this.storageKey !== currentPanel) {
-          this.setState({opened: false});
-        }
-      }
     }
 
     componentDidMount() {
@@ -55,8 +44,13 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(nextProps) {
-      if (nextProps.appState.getStateKey('currentlyOpenedPanel') !== this.props.appState.getStateKey) {
-        this.appStateUpdate();
+      const {currentlyOpenedPanel} = nextProps;
+      if (currentlyOpenedPanel !== this.props.currentlyOpenedPanel) {
+        if (this.storageKey === currentlyOpenedPanel && !this.state.opened) {
+          this.setState({opened: true});
+        } else if (this.storageKey !== currentlyOpenedPanel) {
+          this.setState({opened: false});
+        }
       }
     }
 
@@ -150,4 +144,10 @@ export default (ComposedComponent) => {
       );
     }
   }
+
+  const mapStateToProps = state => ({
+    currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
+  });
+
+  return connect(mapStateToProps)(Panel);
 }

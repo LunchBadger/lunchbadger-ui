@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 
-export default class QuadrantContainer extends Component {
+class QuadrantContainer extends Component {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
@@ -106,18 +107,24 @@ export default class QuadrantContainer extends Component {
   }
 
   render() {
+    const {editing, canvasHeight, className, id} = this.props;
     const containerClass = classNames({
-      'canvas__container--editing': this.props.appState.getStateKey('currentEditElement')
+      'canvas__container--editing': editing,
     });
-
     return (
       <div
-        style={{minHeight: this.props.canvasHeight}}
-        className={`${this.props.className} ${containerClass}`}
-        id={this.props.id}
+        style={{minHeight: canvasHeight}}
+        className={`${className} ${containerClass}`}
+        id={id}
       >
         {this.renderQuadrants()}
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  editing: !!state.core.appState.currentEditElement,
+});
+
+export default connect(mapStateToProps)(QuadrantContainer);

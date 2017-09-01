@@ -3,6 +3,7 @@ import AppState from '../stores/AppState';
 import ConnectionStore from '../stores/Connection';
 import {waitForStores} from '../utils/waitForStores';
 import clearData from '../actions/Stores/clearData';
+import {initialize} from '../reduxActions';
 
 const EMPTY_PROJECT = {
   connections: [],
@@ -53,8 +54,11 @@ export function loadFromServer(config, loginManager, projectService) {
     const dataSources = res[2].body;
     const modelConfigs = res[3].body;
 
-    //const rev = res.response.headers['etag'];
-    //setProjectRevision(rev);
+    const revisions = {
+      models: res[1].response.headers.etag,
+      dataSources: res[2].response.headers.etag,
+      modelConfigs: res[3].response.headers.etag,
+    };
 
     let result = waitForStores(storesList).then(() => {
       // attach connections ;-)
@@ -82,7 +86,7 @@ export function loadFromServer(config, loginManager, projectService) {
           }));
         }
       });
-
+      LunchBadgerCore.dispatchRedux(initialize(project.states, revisions));
       setTimeout(() => {
         LunchBadgerCore.actions.Stores.AppState.initialize(project.states);
       });
@@ -125,7 +129,7 @@ function initializeStores({project, models, dataSources}) {
   }
 }
 
-export function saveToServer(config, loginManager, projectService) {
+export function saveToServer(config, loginManager, projectService, coreStates) {
   let storesList = [
     ConnectionStore
   ];
@@ -189,7 +193,7 @@ export function saveToServer(config, loginManager, projectService) {
     });
   });
 
-  const states = AppState.getData();
+  const states = {...AppState.getData(), ...coreStates};
 
   // prepare appState
   if (states['currentlyOpenedPanel']) {

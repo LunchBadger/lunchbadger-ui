@@ -4,6 +4,7 @@ import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import getPublicEndpointUrl from '../../utils/getPublicEndpointUrl';
 import updatePublicEndpoint from '../../actions/CanvasElements/PublicEndpoint/update';
+import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -54,6 +55,8 @@ class PublicEndpoint extends Component {
       this.setState({path: nextProps.entity.path});
     }
   }
+
+  removeEntity = () => removeEntity(this.props.entity);
 
   onPathChange = event => this.setState({path: event.target.value});
 

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+// import {connect} from 'react-redux';
 import cs from 'classnames';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import updateDataSource from '../../actions/CanvasElements/DataSource/update';
 import removeDataSource from '../../actions/CanvasElements/DataSource/remove';
+import removeEntity from '../../actions/CanvasElements/remove';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Input = LunchBadgerCore.components.Input;
@@ -54,8 +56,10 @@ class DataSource extends Component {
     }
   }
 
-  removeEntity() {
-    removeDataSource(this.context.projectService, this.props.entity);
+  removeEntity = () => {
+    const {entity} = this.props;
+    removeDataSource(this.context.projectService, entity);
+    removeEntity(entity);
   }
 
   renderPorts() {
@@ -126,4 +130,8 @@ class DataSource extends Component {
   }
 }
 
+// const mapDispatchToProps = dispatch => ({
+// });
+
+// export default connect(null, mapDispatchToProps)(CanvasElement(DataSource));
 export default CanvasElement(DataSource);

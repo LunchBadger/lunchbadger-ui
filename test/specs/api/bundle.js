@@ -3,7 +3,7 @@ var publicEndpointSelector = '.quadrant:nth-child(4) .Entity.PublicEndpoint';
 var apiSelector = '.quadrant:nth-child(4) .Entity.API';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   before: function (browser) {
     page = browser.page.lunchBadger();
 

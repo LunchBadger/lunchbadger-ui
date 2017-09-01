@@ -32,7 +32,7 @@ class ModelDetails extends Component {
       const data = {
         properties: newProps.entity.privateModelProperties ? newProps.entity.privateModelProperties.slice() : [],
         relations: newProps.entity.privateModelRelations ? newProps.entity.privateModelRelations.slice() : newProps.entity.relations.slice(),
-        userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : newProps.entity.extendedUserFields.slice(),
+        userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
         changed: false
       };
       if (!newProps.entity.privateModelProperties) {

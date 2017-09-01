@@ -2,7 +2,7 @@ var page;
 var elementSelector = '.quadrant:nth-child(2) .Entity.Model:last-child';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Model: delete': function (browser) {
     page = browser.page.lunchBadger();
 

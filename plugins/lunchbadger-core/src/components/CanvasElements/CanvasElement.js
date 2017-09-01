@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import './CanvasElement.scss';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
-import toggleHighlight from '../../actions/CanvasElements/toggleHighlight';
-import toggleEdit from '../../actions/CanvasElements/toggleEdit';
+import {toggleHighlight, toggleEdit, removeEntity} from '../../reduxActions';
 import _ from 'lodash';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
-import removeEntity from '../../actions/CanvasElements/removeEntity';
 import {IconSVG, Entity, EntityActionButtons, EntityValidationErrors} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 
@@ -19,7 +18,7 @@ const boxSource = {
   },
 
   canDrag(props) {
-    return !props.appState.getStateKey('currentEditElement');
+    return !props.currentEditElement;
   }
 };
 
@@ -27,41 +26,32 @@ const boxTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().itemOrder;
     const hoverIndex = props.itemOrder;
-
     if (dragIndex === hoverIndex) {
       return;
     }
-
-    if (props.appState.getStateKey('isPanelOpened')) {
+    if (props.isPanelOpened) {
       return;
     }
-
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
     // const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
     const clientOffset = monitor.getClientOffset();
     // const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-
     if (dragIndex < hoverIndex && clientOffset.y < hoverBoundingRect.bottom - 15) {
       return;
     }
-
     if (dragIndex > hoverIndex && clientOffset.y > hoverBoundingRect.top + 15) {
       return;
     }
-
     const item = monitor.getItem();
-
     if (item.subelement) {
       return;
     }
-
     props.moveEntity(item.entity, dragIndex || 0, hoverIndex || 0);
     monitor.getItem().itemOrder = hoverIndex;
   },
 
   canDrop(props, monitor) {
     const item = monitor.getItem();
-
     return _.includes(props.entity.accept, item.entity.constructor.type);
   },
 
@@ -69,7 +59,7 @@ const boxTarget = {
     const item = monitor.getItem();
     const element = component.element.decoratedComponentInstance || component.element;
 
-    if (props.appState.getStateKey('isPanelOpened')) {
+    if (props.isPanelOpened) {
       return;
     }
 
@@ -89,7 +79,7 @@ const boxTarget = {
   canDrop: monitor.canDrop()
 }))
 export default (ComposedComponent) => {
-  return class CanvasElement extends Component {
+  class CanvasElement extends Component {
     static propTypes = {
       icon: PropTypes.string.isRequired,
       entity: PropTypes.object.isRequired,
@@ -109,7 +99,6 @@ export default (ComposedComponent) => {
 
     constructor(props) {
       super(props);
-      this.currentOpenedPanel = null;
       this.state = {
         editable: true,
         expanded: true,
@@ -124,8 +113,7 @@ export default (ComposedComponent) => {
       };
       this.multiEnvIndex = 0;
       this.checkHighlightAndEditableState = (props) => {
-        const currentElement = props.appState.getStateKey('currentElement');
-        this.currentOpenedPanel = props.appState.getStateKey('currentlyOpenedPanel');
+        const currentElement = props.currentElement;
         if (currentElement && currentElement.id === this.props.entity.id) {
           if (!this.state.highlighted) {
             this.setState({highlighted: true});
@@ -143,6 +131,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      this.handleChangeListeners('addChangeListener');
       if (this.props.entity.wasBundled) {
         this.setState({
           editable: false,
@@ -161,7 +150,7 @@ export default (ComposedComponent) => {
         });
       } else if (this.props.entity.ready) {
         this.triggerElementAutofocus();
-        toggleEdit(this.props.entity);
+        this.props.toggleEdit(this.props.entity);
       }
       this.checkHighlightAndEditableState(this.props);
       this.props.entity.elementDOM = this.elementDOM;
@@ -194,6 +183,25 @@ export default (ComposedComponent) => {
       }
     }
 
+    componentWillUnmount() {
+      this.handleChangeListeners('removeEventListener');
+    }
+
+    handleChangeListeners = (action) => {
+      // FIXME - replace with plugins redux
+      LunchBadgerCompose.stores.Backend[action](this.refresh);
+      LunchBadgerCore.stores.Pluggable[action](this.refresh);
+      LunchBadgerCore.stores.Connection[action](this.refresh);
+      LunchBadgerManage.stores.Public[action](this.refresh);
+      LunchBadgerManage.stores.Gateway[action](this.refresh);
+      LunchBadgerManage.stores.Private[action](this.refresh);
+      LunchBadgerOptimize.stores.Forecast[action](this.refresh);
+    }
+
+    refresh = () => {
+      this.forceUpdate();
+    }
+
     update = (model) => {
       const {multiEnvIndex, multiEnvAmount} = this.context;
       if (multiEnvIndex === 0 && this.state.modelEnv_0) {
@@ -218,6 +226,10 @@ export default (ComposedComponent) => {
       let updated;
       if (typeof element.update === 'function') {
         updated = element.update(model);
+        this.setState({
+          modelBeforeEdit: model,
+          [`modelEnv_${multiEnvIndex}`]: model,
+        });
       }
       if (typeof updated === 'undefined' || updated) {
         if (updated) {
@@ -227,16 +239,8 @@ export default (ComposedComponent) => {
           }
         }
         this.setState({editable: false, validations: {isValid: true, data:{}}});
-        toggleEdit(null);
+        this.props.toggleEdit(null);
       }
-      let modelBeforeEdit = this.entityRef.getFormRef().getModel();
-      if (typeof element.getModelAfterUpdate === 'function') {
-        modelBeforeEdit = element.getModelAfterUpdate(modelBeforeEdit);
-      }
-      this.setState({
-        modelBeforeEdit,
-        [`modelEnv_${multiEnvIndex}`]: modelBeforeEdit,
-      });
     }
 
     updateName = (evt) => {
@@ -261,7 +265,7 @@ export default (ComposedComponent) => {
       evt.persist();
       this.setState({expanded: !this.state.expanded}, () => {
         if (this.state.editable && !this.state.expanded) {
-          toggleEdit(null);
+          this.props.toggleEdit(null);
           this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
             this.toggleHighlighted();
           });
@@ -274,7 +278,7 @@ export default (ComposedComponent) => {
       if (this.state.editable) {
         return;
       }
-      toggleEdit(this.props.entity);
+      this.props.toggleEdit(this.props.entity);
       this.setState({editable: true}, () => {
         this.toggleHighlighted();
         this._focusClosestInput(target);
@@ -283,11 +287,11 @@ export default (ComposedComponent) => {
 
     toggleHighlighted() {
       if (!this.state.highlighted) {
-        toggleHighlight(this.props.entity);
+        this.props.toggleHighlight(this.props.entity);
       } else {
         setTimeout(() => {
           if (!this.state.editable && !this.state.expanded) {
-            toggleHighlight(null);
+            this.props.toggleHighlight(null);
           }
         });
       }
@@ -324,12 +328,11 @@ export default (ComposedComponent) => {
     }
 
     _handleRemove = () => {
+      const {removeEntity, entity} = this.props;
       if (this.element.removeEntity) {
         this.element.removeEntity();
-      } else {
-        removeEntity(this.props.entity);
       }
-      toggleEdit(null);
+      removeEntity(entity.id);
     }
 
     _handleEdit = (evt) => {
@@ -343,25 +346,6 @@ export default (ComposedComponent) => {
       evt.stopPropagation();
     }
 
-    getFlatModel = () => {
-      const model = {};
-      this.feedFlatModel(this.state.modelBeforeEdit, model);
-      return model;
-    }
-
-    feedFlatModel = (json, data, prefix = '') => {
-      Object.keys(json).forEach((key) => {
-        const pfx = prefix ? `[${key}]` : key;
-        if (Array.isArray(json[key])) {
-          json[key].forEach((item, idx) => {
-            this.feedFlatModel(item, data, `${prefix}${pfx}[${idx}]`);
-          });
-        } else {
-          data[`${prefix}${pfx}`] = json[key];
-        }
-      });
-    }
-
     _handleCancel = (evt) => {
       evt.persist();
       if (this.state.modelBeforeEdit === null) {
@@ -370,17 +354,20 @@ export default (ComposedComponent) => {
         evt.stopPropagation();
         return;
       }
+      if (this.entityRef.getFormRef()) {
+        this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
+      }
       const element = this.element.decoratedComponentInstance || this.element;
       if (typeof element.discardChanges === 'function') {
         element.discardChanges();
       }
-      if (this.entityRef.getFormRef()) {
-        this.entityRef.getFormRef().reset(this.getFlatModel());
-      }
-      toggleEdit(null);
+      this.props.toggleEdit(null);
       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
         this.toggleHighlighted();
       });
+      if (this.element && this.element.discardChanges) {
+        this.element.discardChanges();
+      }
       evt.preventDefault();
       evt.stopPropagation();
     }
@@ -419,7 +406,7 @@ export default (ComposedComponent) => {
 
     render() {
       const {multiEnvIndex, multiEnvDelta} = this.context;
-      const {ready} = this.props.entity;
+      const {ready} = this.props;
       const {connectDragSource, connectDropTarget, isDragging, icon} = this.props;
       const {validations} = this.state;
       const elementClass = classNames({
@@ -525,4 +512,18 @@ export default (ComposedComponent) => {
       );
     }
   }
+
+  const mapStateToProps = state => ({
+    currentElement: state.core.appState.currentElement,
+    currentEditElement: state.core.appState.currentEditElement,
+    isPanelOpened: !!state.core.appState.currentlyOpenedPanel,
+  });
+
+  const mapDispatchToProps = dispatch => ({
+    toggleHighlight: element => dispatch(toggleHighlight(element)),
+    toggleEdit: element => dispatch(toggleEdit(element)),
+    removeEntity: id => dispatch(removeEntity(id)),
+  });
+
+  return connect(mapStateToProps, mapDispatchToProps)(CanvasElement);
 }

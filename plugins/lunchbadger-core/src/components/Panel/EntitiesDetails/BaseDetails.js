@@ -1,48 +1,40 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './BaseDetails.scss';
+import {connect} from 'react-redux';
 import {Form} from '../../../../../lunchbadger-ui/src';
 import InputField from './InputField';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
-import changePanelStatus from '../../../actions/AppState/changePanelStatus';
+import {changePanelStatus} from '../../../reduxActions';
+import './BaseDetails.scss';
 
 export default (ComposedComponent) => {
-  return class BaseDetails extends Component {
-    static propTypes = {
-      entity: PropTypes.object.isRequired
-    };
-
+  class BaseDetails extends Component {
     constructor(props) {
       super(props);
       this.state = {
         isPristine: true,
-        formValid: false
+        formValid: false,
       }
     }
 
     discardChanges = () => {
       const element = this.element;
-
       if (typeof element.discardChanges === 'function') {
         element.discardChanges();
       }
-
       this.refs.form.reset();
       this.forceUpdate();
     }
 
     update = (model) => {
       const element = this.element;
-
       if (!model) {
         model = this.refs.form.getModel();
       }
-
       if (typeof element.update === 'function') {
         element.update(model);
       }
-
       this.setState({isPristine: true});
     }
 
@@ -50,11 +42,9 @@ export default (ComposedComponent) => {
       if (typeof changed === 'undefined') {
         changed = this.refs.form.isChanged();
       }
-
       if (!this.element) {
         return;
       }
-
       if (this.element.state && this.element.state.changed) {
         this.setState({isPristine: false});
       } else {
@@ -72,7 +62,7 @@ export default (ComposedComponent) => {
 
     componentWillUpdate(_nextProps, nextState) {
       if (this.state.isPristine !== nextState.isPristine) {
-        changePanelStatus(!nextState.isPristine, this.update, this.discardChanges);
+        this.props.changePanelStatus(!nextState.isPristine, this.update, this.discardChanges);
       }
     }
 
@@ -87,28 +77,46 @@ export default (ComposedComponent) => {
     render() {
       return (
         <div className="details-panel__element">
-          <Form name="panelForm"
-                ref="form"
-                onValid={this._handleValid}
-                onInvalid={this._handleInvalid}
-                onChange={this.checkPristine}
-                onValidSubmit={this.update}>
-            <CloseButton showConfirmation={!this.state.isPristine}
-                         onSave={this.update}
-                         onCancel={this.discardChanges}/>
-
-            <InputField label="Name"
-                        propertyName="name"
-                        handleKeyPress={this._preventSubmit}
-                        entity={this.props.entity} />
-
-            <ComposedComponent parent={this} ref={(ref) => this.element = ref} {...this.props} {...this.state}/>
-
-            <SaveButton enabled={!this.state.isPristine && this.state.formValid}
-                        onSave={this.update}/>
+          <Form
+            name="panelForm"
+            ref="form"
+            onValid={this._handleValid}
+            onInvalid={this._handleInvalid}
+            onChange={this.checkPristine}
+            onValidSubmit={this.update}
+          >
+            <CloseButton
+              showConfirmation={!this.state.isPristine}
+              onSave={this.update}
+              onCancel={this.discardChanges}
+            />
+            <InputField
+              label="Name"
+              propertyName="name"
+              handleKeyPress={this._preventSubmit}
+              entity={this.props.entity}
+            />
+            <ComposedComponent
+              parent={this}
+              ref={(ref) => this.element = ref}
+              {...this.props}
+              {...this.state}
+            />
+            <SaveButton
+              enabled={!this.state.isPristine && this.state.formValid}
+              onSave={this.update}
+            />
           </Form>
         </div>
       )
     }
   }
+  BaseDetails.propTypes = {
+    entity: PropTypes.object.isRequired,
+    changePanelStatus: PropTypes.func,
+  };
+  const mapDispatchToProps = dispatch => ({
+    changePanelStatus: (status, saveAction, discardAction) => dispatch(changePanelStatus(status, saveAction, discardAction)),
+  });
+  return connect(null, mapDispatchToProps)(BaseDetails);
 }

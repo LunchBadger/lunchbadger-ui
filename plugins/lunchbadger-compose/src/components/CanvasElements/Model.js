@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+// import {connect} from 'react-redux';
 import cs from 'classnames';
 import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import updateModel from '../../actions/CanvasElements/Model/update';
 import addProperty from '../../actions/CanvasElements/Model/addProperty';
-import removeEntity from '../../actions/CanvasElements/Model/remove';
+import removeModel from '../../actions/CanvasElements/Model/remove';
+import removeEntity from '../../actions/CanvasElements/remove';
 import slug from 'slug';
 import addPropertiesToData from '../addPropertiesToData';
 import addNestedProperties from '../addNestedProperties';
@@ -176,8 +178,10 @@ class Model extends Component {
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
-  removeEntity() {
-    removeEntity(this.context.projectService, this.props.entity);
+  removeEntity = () => {
+    const {entity} = this.props;
+    removeModel(this.context.projectService, entity);
+    removeEntity(entity);
   }
 
   renderPorts = () => {
@@ -254,4 +258,8 @@ Model.contextTypes = {
   projectService: PropTypes.object,
 };
 
+// const mapDispatchToProps = dispatch => ({
+// });
+
+// export default connect(null, mapDispatchToProps)(CanvasElement(Model));
 export default CanvasElement(Model);

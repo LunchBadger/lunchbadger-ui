@@ -31,7 +31,9 @@ class BackendQuadrant extends Component {
                          itemOrder={entity.itemOrder}
                          moveEntity={this.moveEntity}
                          saveOrder={this.saveOrder}
-                         entity={entity}/>;
+                         entity={entity}
+                         ready={entity.ready}
+                         />;
     })
   }
 

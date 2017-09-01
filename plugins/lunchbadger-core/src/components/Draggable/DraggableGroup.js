@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {DragSource} from 'react-dnd';
 import './DraggableGroup.scss';
 
@@ -9,14 +10,11 @@ const boxSource = {
   },
 
   canDrag(props) {
-    const selectedElements = props.appState.getStateKey('currentlySelectedSubelements');
-    const selectedParent = props.appState.getStateKey('currentlySelectedParent');
-
-    if (!selectedElements || !selectedParent) {
+    const {currentlySelectedSubelements, currentlySelectedParent} = props;
+    if (!currentlySelectedSubelements || !currentlySelectedParent) {
       return false;
     }
-
-    return selectedElements.length > 0 && selectedParent.id === props.entity.id;
+    return currentlySelectedSubelements.length > 0 && currentlySelectedParent.id === props.entity.id;
   }
 };
 
@@ -25,11 +23,11 @@ const boxSource = {
   connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
-export default class DraggableGroup extends Component {
+
+class DraggableGroup extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func,
     connectDragPreview: PropTypes.func,
-    appState: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     iconClass: PropTypes.string.isRequired
   };
@@ -39,9 +37,7 @@ export default class DraggableGroup extends Component {
   }
 
   render() {
-    const {connectDragSource, connectDragPreview} = this.props;
-    const selectedElements = this.props.appState.getStateKey('currentlySelectedSubelements') || [];
-
+    const {connectDragSource, connectDragPreview, currentlySelectedSubelements} = this.props;
     return connectDragSource(
       <div className="draggable-group">
         {this.props.children}
@@ -51,7 +47,7 @@ export default class DraggableGroup extends Component {
               <i className={this.props.iconClass}/>
             </div>
             <div className="draggable-group__preview__items">
-              {selectedElements.map(element => {
+              {currentlySelectedSubelements.map(element => {
                 return <div className="draggable-group__preview__title" key={element.id}>{element.name}</div>
               })}
             </div>
@@ -61,3 +57,10 @@ export default class DraggableGroup extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  currentlySelectedParent: state.core.appState.currentlySelectedParent,
+  currentlySelectedSubelements: state.core.appState.currentlySelectedSubelements,
+});
+
+export default connect(mapStateToProps)(DraggableGroup);

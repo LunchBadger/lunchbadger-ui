@@ -52,14 +52,8 @@ import Strategy from './models/Plugin/Strategy';
 
 // actions
 import registerPlugin from './actions/registerPlugin';
-import togglePanel from './actions/togglePanel';
-import toggleHighlight from './actions/CanvasElements/toggleHighlight';
-import toggleEdit from './actions/CanvasElements/toggleEdit';
 import removeConnection from './actions/Connection/remove';
-import setProjectRevision from './actions/Stores/AppState/setProjectRevision';
 import initializeAppState from './actions/Stores/AppState/initialize';
-import toggleSubelement from './actions/CanvasElements/toggleSubelement';
-import removeEntity from './actions/CanvasElements/removeEntity';
 
 // constants
 import panelKeys from './constants/panelKeys';
@@ -84,18 +78,12 @@ let LunchBadgerCore = {
   },
   actions: {
     registerPlugin: registerPlugin,
-    togglePanel: togglePanel,
-    toggleHighlight: toggleHighlight,
-    toggleEdit: toggleEdit,
-    toggleSubelement: toggleSubelement,
-    removeEntity: removeEntity,
     Connection: {
       removeConnection: removeConnection
     },
     Stores: {
       AppState: {
-        initialize: initializeAppState,
-        setProjectRevision: setProjectRevision
+        initialize: initializeAppState
       }
     }
   },

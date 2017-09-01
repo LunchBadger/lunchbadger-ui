@@ -1,56 +1,48 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 import AppState from '../../stores/AppState';
-import togglePanel from '../../actions/togglePanel';
+import {togglePanel} from '../../reduxActions';
 import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
 
-export default class HeaderMenuLink extends Component {
+class HeaderMenuLink extends Component {
   static propTypes = {
     icon: PropTypes.string,
     kind: PropTypes.string,
-    togglePanel: PropTypes.oneOfType([
+    panel: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.object
-    ])
+      PropTypes.object,
+    ]),
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      pressed: false
-    };
-
-    this.appStateUpdate = () => {
-      const currentPanel = AppState.getStateKey('currentlyOpenedPanel');
-
-      if (currentPanel && currentPanel === props.togglePanel) {
-        this.setState({pressed: true});
-      } else {
-        this.setState({pressed: false});
-      }
-    };
-  }
-
-  componentWillMount() {
-    AppState.addChangeListener(this.appStateUpdate);
-  }
-
-  componentWillUnmount() {
-    AppState.removeChangeListener(this.appStateUpdate);
+  togglePanel = () => {
+    const {togglePanel, panel} = this.props;
+    togglePanel(panel);
   }
 
   render() {
-    const linkClass = classNames(this.props.kind, {
+    const {kind, icon, svg, panel, currentlyOpenedPanel} = this.props;
+    const pressed = currentlyOpenedPanel && currentlyOpenedPanel === panel;
+    const linkClass = classNames(kind, {
       'header__menu__link': true,
-      'header__menu__link--pressed': this.state.pressed,
+      'header__menu__link--pressed': pressed,
     });
     return (
-      <span className={linkClass} onClick={() => togglePanel(this.props.togglePanel)}>
-        {this.props.icon && <i className={`fa ${this.props.icon}`} />}
-        {this.props.svg && <IconSVG className="header__menu__link__svg" svg={this.props.svg} />}
+      <span className={linkClass} onClick={this.togglePanel}>
+        {icon && <i className={`fa ${icon}`} />}
+        {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
       </span>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
+});
+
+const mapDispatchToProps = dispatch => ({
+  togglePanel: panel => dispatch(togglePanel(panel)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenuLink);

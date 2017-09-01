@@ -8,6 +8,7 @@ import updateAPI from '../../actions/CanvasElements/API/update';
 import unbundleAPI from '../../actions/CanvasElements/API/unbundle';
 import bundleAPI from '../../actions/CanvasElements/API/bundle';
 import moveBetweenAPIs from '../../actions/CanvasElements/API/rebundle';
+import removeAPI from '../../actions/CanvasElements/remove';
 import {EntityPropertyLabel, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import './API.scss';
 
@@ -99,6 +100,8 @@ class API extends Component {
     this.setState({isShowingModal: false});
   }
 
+  removeEntity = () => removeAPI(this.props.entity);
+
   render() {
     const elementClass = classNames({
       'has-connection': this.state.hasConnection
@@ -120,7 +123,6 @@ class API extends Component {
             <DraggableGroup
               iconClass="icon-icon-product"
               entity={this.props.entity}
-              appState={this.props.appState}
             >
               {this.renderEndpoints()}
             </DraggableGroup>

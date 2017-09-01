@@ -1,11 +1,5 @@
 @import '../../../../../lunchbadger-core/src/config';
 
-.Pipeline {
-  &.markedRemove {
-    opacity: 0.1;
-    pointer-events: none;
-  }
-  &__policies {
-    margin-bottom: 4px;
-  }
+.Pipeline__policies {
+  margin-bottom: 4px;
 }

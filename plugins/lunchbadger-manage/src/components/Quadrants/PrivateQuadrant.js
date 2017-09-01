@@ -28,7 +28,9 @@ class PrivateQuadrant extends Component {
           hideSourceOnDrag={true}
           itemOrder={entity.itemOrder}
           moveEntity={this.moveEntity}
-          entity={entity}/>
+          entity={entity}
+          ready={entity.ready}
+          />
       );
     });
   }

@@ -7,43 +7,38 @@ import classNames from 'classnames';
 import iconDetails from '../../../../../src/icons/icon-details.svg';
 
 export default class HeaderMenu extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderButtons() {
     return this.props.plugins.getPanelButtons().map((button) => {
       button = button.panelButton;
-
       return (
         <li key={`${button.panelKey}-button-plugin`} className="header__menu__element">
-          <HeaderMenuLink togglePanel={button.panelKey} icon={button.icon}/>
+          <HeaderMenuLink panel={button.panelKey} icon={button.icon}/>
         </li>
       );
     });
   }
 
   render() {
+    const {disabled, clearServer, saveToServer} = this.props;
     const headerClass = classNames({
       header__menu: true,
-      'header__menu--disabled': this.props.appState.getStateKey('currentEditElement')
+      'header__menu--disabled': disabled,
     });
-
     return (
       <nav className={headerClass}>
         <ul className="header__menu__list">
           <li className="header__menu__element">
-            <HeaderMenuClearButton clearServer={this.props.clearServer} />
+            <HeaderMenuClearButton clearServer={clearServer} />
           </li>
           <li className="header__menu__element">
-            <HeaderMenuSaveButton saveToServer={this.props.saveToServer} />
+            <HeaderMenuSaveButton saveToServer={saveToServer} />
           </li>
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={panelKeys.DETAILS_PANEL} kind="details" svg={iconDetails} />
+            <HeaderMenuLink panel={panelKeys.DETAILS_PANEL} kind="details" svg={iconDetails} />
           </li>
           {this.renderButtons()}
           <li className="header__menu__element">
-            <HeaderMenuLink togglePanel={panelKeys.SETTINGS_PANEL} icon="icon-icon-settings"/>
+            <HeaderMenuLink panel={panelKeys.SETTINGS_PANEL} icon="icon-icon-settings"/>
           </li>
         </ul>
       </nav>

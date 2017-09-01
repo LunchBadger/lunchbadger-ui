@@ -1,5 +1,5 @@
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Connection: proxy model': function (browser) {
     var page = browser.page.lunchBadger();
     var modelSelector = '.quadrant:nth-child(2) .Entity.Model:last-child';

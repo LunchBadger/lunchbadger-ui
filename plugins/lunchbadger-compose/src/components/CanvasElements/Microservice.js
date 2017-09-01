@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+// import {connect} from 'react-redux';
 import classNames from 'classnames';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
@@ -10,8 +11,8 @@ import {unbundleStart, unbundleFinish} from '../../actions/CanvasElements/Micros
 import moveBetweenMicroservice from '../../actions/CanvasElements/Microservice/rebundle';
 import removeModel from '../../actions/CanvasElements/Model/remove';
 import updateModel from '../../actions/CanvasElements/Model/update';
+import removeEntity from '../../actions/CanvasElements/remove';
 
-const removeEntity = LunchBadgerCore.actions.removeEntity;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
@@ -81,18 +82,15 @@ class Microservice extends Component {
     this.previousConnection = info;
   };
 
-  update(model) {
-    updateMicroservice(this.props.entity.id, model);
-  }
+  update = model => updateMicroservice(this.props.entity.id, model);
 
-  removeEntity() {
-    this.props.entity.models.forEach((modelId) => {
-      const entity = Private.findEntity(modelId);
-
-      entity && removeModel(this.context.projectService, entity);
+  removeEntity = () => {
+    const {entity} = this.props;
+    entity.models.forEach((modelId) => {
+      const model = Private.findEntity(modelId);
+      model && removeModel(this.context.projectService, model);
     });
-
-    removeEntity(this.props.entity);
+    removeEntity(entity);
   }
 
   renderModels() {
@@ -174,7 +172,6 @@ class Microservice extends Component {
           <DraggableGroup
             iconClass="icon-icon-microservice"
             entity={this.props.entity}
-            appState={this.props.appState}
           >
             {this.renderModels()}
           </DraggableGroup>
@@ -216,4 +213,8 @@ class Microservice extends Component {
   }
 }
 
+// const mapDispatchToProps = dispatch => ({
+// });
+
+// export default connect(null, mapDispatchToProps)(CanvasElement(Microservice));
 export default CanvasElement(Microservice);

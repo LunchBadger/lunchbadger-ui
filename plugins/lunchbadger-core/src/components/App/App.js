@@ -17,6 +17,7 @@ import AppState from '../../stores/AppState';
 import {loadFromServer, saveToServer, clearServer} from '../../utils/serverIo';
 import handleFatals from '../../utils/handleFatals';
 import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
+import {toggleHighlight} from '../../reduxActions';
 import {SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
 
 @DragDropContext(HTML5Backend)
@@ -97,10 +98,19 @@ class App extends Component {
   }
 
   saveToServer = () => {
-    let {config, loginManager, projectService} = this.props;
-
+    let {
+      config,
+      loginManager,
+      projectService,
+      currentlyOpenedPanel,
+      currentElement,
+    } = this.props;
+    const coreStates = {
+      currentlyOpenedPanel,
+      currentElement,
+    };
     this.setState({loaded: false});
-    let prm = saveToServer(config, loginManager, projectService).then(() => {
+    let prm = saveToServer(config, loginManager, projectService, coreStates).then(() => {
       this.props.displaySystemInformationMessage({
         message: 'All data has been synced with API',
         type: 'success'
@@ -131,27 +141,50 @@ class App extends Component {
     });
   }
 
+  handleCanvasClick = () => {
+    const {canvasClickEnabled, toggleHighlight} = this.props;
+    if (canvasClickEnabled) {
+      toggleHighlight(null);
+    }
+  }
+
   renderHeader = () => {
+    const {currentEditElement} = this.props;
     if (LunchBadgerCore.isMultiEnv) {
       return (
-        <HeaderMultiEnv ref="header"
-                appState={this.state.appState}
-                plugins={this.state.pluginsStore}
-                saveToServer={this.saveToServer}
-                clearServer={this.clearServer} />
+        <HeaderMultiEnv
+          ref="header"
+          appState={this.state.appState}
+          plugins={this.state.pluginsStore}
+          saveToServer={this.saveToServer}
+          clearServer={this.clearServer}
+          disabledMultiEnvMenu={!!currentEditElement || !!this.props.currentlyOpenedPanel}
+          headerMenuDisabled={!!currentEditElement}
+        />
       );
     }
     return (
-      <Header ref="header"
-              appState={this.state.appState}
-              plugins={this.state.pluginsStore}
-              saveToServer={this.saveToServer}
-              clearServer={this.clearServer} />
+      <Header
+        ref="header"
+        plugins={this.state.pluginsStore}
+        saveToServer={this.saveToServer}
+        clearServer={this.clearServer}
+        headerMenuDisabled={!!currentEditElement}
+      />
     );
   }
 
   render() {
-    const {systemDefcon1Visible, systemDefcon1Errors, multiEnvDelta, multiEnvIndex} = this.props;
+    const {
+      systemDefcon1Visible,
+      systemDefcon1Errors,
+      multiEnvDelta,
+      multiEnvIndex,
+      panelEditingStatus,
+      currentlyOpenedPanel,
+      toggleHighlight,
+      currentEditElement,
+    } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
@@ -164,19 +197,21 @@ class App extends Component {
           <Spinner loading={!this.state.loaded} />
           {this.renderHeader()}
           <Aside
-            appState={this.state.appState}
             plugins={this.state.pluginsStore}
-            disabled={multiEnvNotDev}
+            disabled={multiEnvNotDev || !!currentlyOpenedPanel || !!currentEditElement}
+            currentEditElement={currentEditElement}
           />
           <div ref="container" className="app__container">
             <div className="app__panel-wrapper">
               <SystemNotifications />
               <div style={multiEnvDeltaStyle}>
-                <PanelContainer plugins={this.state.pluginsStore}
-                                appState={this.state.appState}
-                                canvas={() => this.refs.canvas}
-                                header={() => this.refs.header}
-                                container={() => this.refs.container}/>
+                <PanelContainer
+                  plugins={this.state.pluginsStore}
+                  appState={this.state.appState}
+                  canvas={() => this.refs.canvas}
+                  header={() => this.refs.header}
+                  container={() => this.refs.container}
+                />
               </div>
             </div>
             <div style={multiEnvDeltaStyle}>
@@ -185,6 +220,8 @@ class App extends Component {
                 plugins={this.state.pluginsStore}
                 ref="canvas"
                 multiEnvDelta={multiEnvDelta}
+                currentlyOpenedPanel={currentlyOpenedPanel}
+                onClick={this.handleCanvasClick}
               />
             </div>
           </div>
@@ -199,17 +236,27 @@ class App extends Component {
   }
 }
 
+App.propTypes = {
+  panelEditingStatus: PropTypes.bool,
+  canvasClickEnabled: PropTypes.bool,
+}
+
 const mapStateToProps = state => ({
   systemDefcon1Visible: state.ui.systemDefcon1.visible,
   systemDefcon1Errors: state.ui.systemDefcon1.errors,
   multiEnvIndex: state.ui.multiEnvironments.selected,
   multiEnvDelta: state.ui.multiEnvironments.environments[state.ui.multiEnvironments.selected].delta,
   multiEnvAmount: state.ui.multiEnvironments.environments.length,
+  canvasClickEnabled: !state.core.appState.panelEditingStatus && !!state.core.appState.currentElement,
+  currentlyOpenedPanel: state.core.appState.currentlyOpenedPanel,
+  currentElement: state.core.appState.currentElement,
+  currentEditElement: state.core.appState.currentEditElement,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   displaySystemInformationMessage: message => dispatch(addSystemInformationMessage(message)),
+  toggleHighlight: element => dispatch(toggleHighlight(element)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

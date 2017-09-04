@@ -6,6 +6,8 @@ import MenuItem from 'material-ui/MenuItem';
 import HOC from '../utils/Formsy/HOC';
 import './Select.scss';
 
+const getClassName = str => str.replace('[', '').replace(']', '');
+
 class Select extends Component {
   static propTypes = {
     getValue: PropTypes.func,
@@ -40,7 +42,7 @@ class Select extends Component {
   }
 
   render() {
-    const {className, getValue, multiple, options, hideUnderline} = this.props;
+    const {className, getValue, multiple, options, hideUnderline, name} = this.props;
     const style = {
       fontWeight: 'inherit',
       fontSize: 'inherit',
@@ -69,7 +71,11 @@ class Select extends Component {
           underlineStyle={underlineStyle}
         >
         {options.map(({value, label}, idx) => (
-          <MenuItem key={idx} value={value} primaryText={label} />
+          <MenuItem
+            key={idx}
+            value={value}
+            primaryText={<div className={getClassName(`${name}__${label}`)}>{label}</div>}
+          />
         ))}
         </SelectField>
       </div>

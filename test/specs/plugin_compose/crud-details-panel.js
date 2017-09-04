@@ -90,6 +90,9 @@ module.exports = {
     browser.moveToElement('.DetailsPanel .confirm-button__button', 5, 5, function() {
       browser.click('.DetailsPanel .confirm-button__button');
     });
+    browser.pause(2000);
+    page.click('@details');
+    browser.pause(2000);
 
     // check, if Memory-car connection is present
     browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
@@ -152,6 +155,8 @@ module.exports = {
       });
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
       browser.pause(3000);
+      page.click('@details');
+      browser.pause(2000);
 
       // check, if Memory1-Car1 connection is present
       browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:first-child .port-out > .port__anchor--connected').to.be.present;
@@ -185,6 +190,9 @@ module.exports = {
         browser.moveToElement('.DetailsPanel .confirm-button__button', 5, 5, function() {
           browser.click('.DetailsPanel .confirm-button__button');
         });
+        browser.pause(2000);
+        page.click('@details');
+        browser.pause(2000);
 
         // check, if REST-Car1 connection is present
         browser.waitForElementNotPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
@@ -231,6 +239,8 @@ module.exports = {
           browser.moveToElement('.DetailsPanel .confirm-button__button', 5, 5, function() {
             browser.click('.DetailsPanel .confirm-button__button');
           });
+          browser.pause(2000);
+          page.click('@details');
           browser.pause(2000);
 
           // check, if REST-Driver connection is present

@@ -110,8 +110,8 @@ module.exports = {
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car');
       browser.waitForElementPresent(getModelSelector(2), 5000);
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-      browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:first-child .port-out > .port__anchor--connected').to.be.present;
-      browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.be.present;
+      browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
       // rename Memory into Memory1
       browser.click(getDataSourceSelector(1));
@@ -150,8 +150,8 @@ module.exports = {
       browser.pause(3000);
 
       // check, if Memory1-Car1 connection is present
-      browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:first-child .port-out > .port__anchor--connected').to.be.present;
-      browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.be.present;
+      browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
       // reload page and check if Memory1, REST, Car1, Driver and Memory1-Car1 connection are present
       browser.refresh(function () {
@@ -165,8 +165,8 @@ module.exports = {
         browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
         browser.waitForElementPresent(getModelSelector(2), 5000);
         browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-        browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:first-child .port-out > .port__anchor--connected').to.be.present;
-        browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.be.present;
+        browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
+        browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
         // reattach connection from Memory1 to REST
         browser
@@ -196,8 +196,8 @@ module.exports = {
           browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
           browser.waitForElementPresent(getModelSelector(2), 5000);
           browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-          browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:nth-child(2) .port-out > .port__anchor--connected').to.be.present;
-          browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.be.present;
+          browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
+          browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
           // reattach connection from Car1 to Driver
           browser
@@ -227,10 +227,10 @@ module.exports = {
             browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
             browser.waitForElementPresent(getModelSelector(2), 5000);
             browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-            browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:first-child .port-out > .port__anchor--connected').to.not.be.present;
-            browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.not.be.present;
-            browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:nth-child(2) .port-out > .port__anchor--connected').to.be.present;
-            browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .port-in > .port__anchor--connected').to.be.present;
+            browser.waitForElementNotPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
+            browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+            browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
+            browser.waitForElementPresent(getModelSelector(2) + ' .port-in > .port__anchor--connected', 5000);
 
             // remove Driver
             browser.click(getModelSelector(2));
@@ -242,7 +242,7 @@ module.exports = {
             browser.pause(3000);
 
             // check, if REST-Driver connection is also not present
-            browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:nth-child(2) .port-out > .port__anchor--connected').to.not.be.present;
+            browser.waitForElementNotPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
             // reload page and check if Memory1, REST, Car1 are present, and REST connection out is not present
             browser.refresh(function () {
@@ -255,7 +255,7 @@ module.exports = {
               browser.waitForElementPresent(getModelSelector(1), 5000);
               browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
               browser.waitForElementNotPresent(getModelSelector(2), 5000);
-              browser.expect.element('.quadrant:nth-child(1) .Entity.DataSource:nth-child(2) .port-out > .port__anchor--connected').to.not.be.present;
+              browser.waitForElementNotPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
               // connect REST with Car1
               browser
@@ -282,7 +282,7 @@ module.exports = {
               browser.pause(3000);
 
               // check, is Car1 connection in is also not present
-              browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(1) .port-in > .port__anchor--connected').to.not.be.present;
+              browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
               // reload page and check, if Memory1 and Car1 are present, and Car1 connection in is not present
               browser.refresh(function () {
@@ -294,7 +294,7 @@ module.exports = {
                 browser.waitForElementPresent(getModelSelector(1), 5000);
                 browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
                 browser.waitForElementNotPresent(getModelSelector(2), 5000);
-                browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .port-in > .port__anchor--connected').to.not.be.present;
+                browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
               });
             });
           });

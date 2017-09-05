@@ -13,6 +13,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: REST datasource selected': function (browser) {
@@ -20,6 +21,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: SOAP datasource selected': function (browser) {
@@ -27,6 +29,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: MongoDB datasource selected': function (browser) {
@@ -34,6 +37,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: Redis datasource selected': function (browser) {
@@ -41,6 +45,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: MySQL datasource selected': function (browser) {
@@ -48,6 +53,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: Ethereum datasource selected': function (browser) {
@@ -55,6 +61,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: Salesforce datasource selected': function (browser) {
@@ -62,6 +69,7 @@ module.exports = {
     browser.waitForElementPresent('.dataSource.Tool.selected', 8000);
     browser.click(backendSelector + '.DataSource.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: model selected': function (browser) {
@@ -69,6 +77,7 @@ module.exports = {
     browser.waitForElementPresent('.model.Tool.selected', 8000);
     browser.click(privateSelector + '.Model.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: microservice selected': function (browser) {
@@ -76,6 +85,7 @@ module.exports = {
     browser.waitForElementPresent('.microservice.Tool.selected', 8000);
     browser.click(privateSelector + '.Microservice.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: private endpoint selected': function (browser) {
@@ -83,6 +93,7 @@ module.exports = {
     browser.waitForElementPresent('.endpoint.Tool.selected', 8000);
     browser.click(privateSelector + '.PrivateEndpoint.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: public endpoint selected': function (browser) {
@@ -90,6 +101,7 @@ module.exports = {
     browser.waitForElementPresent('.endpoint.Tool.selected', 8000);
     browser.click(publicSelector + '.PublicEndpoint.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: gateway selected': function (browser) {
@@ -97,6 +109,7 @@ module.exports = {
     browser.waitForElementPresent('.gateway.Tool.selected', 8000);
     browser.click(gatewaySelector + '.Gateway.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: api selected': function (browser) {
@@ -104,6 +117,7 @@ module.exports = {
     browser.waitForElementPresent('.api.Tool.selected', 8000);
     browser.click(publicSelector + '.API.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   'Tools menu: portal selected': function (browser) {
@@ -111,6 +125,7 @@ module.exports = {
     browser.waitForElementPresent('.portal.Tool.selected', 8000);
     browser.click(publicSelector + '.Portal.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
+    browser.pause(1000);
   },
 
   after: function () {

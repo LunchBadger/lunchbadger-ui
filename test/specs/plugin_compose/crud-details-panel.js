@@ -22,6 +22,7 @@ module.exports = {
     // create Memory datasource
     page.addElementFromTooltip('dataSource', 'memory');
     browser.waitForElementPresent(getDataSourceSelector(1) + '.editable .submit', 5000);
+    browser.pause(1000);
     browser.moveToElement(getDataSourceSelector(1) + '.editable .submit', 5, 5, function() {
       browser.click(getDataSourceSelector(1) + '.editable .submit');
     });
@@ -35,6 +36,7 @@ module.exports = {
     page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
     page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
     page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
+    browser.pause(1000);
     browser.moveToElement(getDataSourceSelector(2) + '.editable .submit', 5, 5, function() {
       browser.click(getDataSourceSelector(2) + '.editable .submit');
     });
@@ -53,6 +55,7 @@ module.exports = {
     page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', 'Car');
+    browser.pause(1000);
     browser.moveToElement(getModelSelector(1) + '.editable .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + '.editable .submit');
     });
@@ -71,6 +74,7 @@ module.exports = {
     page.setValueSlow(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input', 'Driver');
+    browser.pause(1000);
     browser.moveToElement(getModelSelector(2) + '.editable .submit', 5, 5, function() {
       browser.click(getModelSelector(2) + '.editable .submit');
     });

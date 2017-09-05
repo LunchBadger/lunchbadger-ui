@@ -32,11 +32,13 @@ module.exports = {
     // create REST datasource
     page.addElementFromTooltip('dataSource', 'rest');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
+    browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(1), 'dumpUrl');
     page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
     page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
     page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
+    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.moveToElement(getDataSourceSelector(2) + ' .submit', 5, 5, function() {
       browser.click(getDataSourceSelector(2) + ' .submit');
     });

@@ -9,7 +9,7 @@ function getModelSelector (nth) {
 }
 
 function getDataSourceFieldSelector (nth) {
-  return getDataSourceSelector(2) + '.editable .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
+  return getDataSourceSelector(2) + ' .EntityProperties .EntityProperty:nth-child(' + nth + ') .EntityProperty__field--input input';
 }
 
 module.exports = {
@@ -46,15 +46,15 @@ module.exports = {
     // create Car model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-    page.clearValue(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input');
+    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input');
+    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', 'Car');
+    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car');
     browser.pause(1000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + ' .submit');
@@ -65,15 +65,15 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    page.clearValue(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input');
+    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input');
+    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + '.editable .EntityHeader .EntityProperty__field--input input', 'Driver');
+    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', 'Driver');
     browser.pause(1000);
     browser.moveToElement(getModelSelector(2) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(2) + ' .submit');
@@ -115,15 +115,15 @@ module.exports = {
       browser.click(getDataSourceSelector(1));
       browser.waitForElementPresent(getDataSourceSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
       browser.click(getDataSourceSelector(1) + '.highlighted .Toolbox__button--edit');
-      browser.waitForElementPresent(getDataSourceSelector(1) + '.editable .submit', 5000);
+      browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 5000);
       browser.pause(1000);
-      page.clearValue(getDataSourceSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input');
+      page.clearValue(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
       browser.pause(1000);
-      page.setValueSlow(getDataSourceSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+      page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
-      page.setValueSlow(getDataSourceSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', 'Memory1');
-      browser.moveToElement(getDataSourceSelector(1) + '.editable .submit', 5, 5, function() {
-        browser.click(getDataSourceSelector(1) + '.editable .submit');
+      page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1');
+      browser.moveToElement(getDataSourceSelector(1) + ' .submit', 5, 5, function() {
+        browser.click(getDataSourceSelector(1) + ' .submit');
       });
       browser.waitForElementNotPresent('.Aside.disabled', 5000);
       browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
@@ -133,15 +133,15 @@ module.exports = {
       browser.click(getModelSelector(1));
       browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
       browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
-      browser.waitForElementPresent(getModelSelector(1) + '.editable .submit', 5000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
       browser.pause(1000);
-      page.clearValue(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input');
+      page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
       browser.pause(1000);
-      page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', '');
+      page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
-      page.setValueSlow(getModelSelector(1) + '.editable .EntityHeader .EntityProperty__field--input input', 'Car1');
-      browser.moveToElement(getModelSelector(1) + '.editable .submit', 5, 5, function() {
-        browser.click(getModelSelector(1) + '.editable .submit');
+      page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car1');
+      browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
+        browser.click(getModelSelector(1) + ' .submit');
       });
       browser.waitForElementNotPresent('.Aside.disabled', 5000);
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');

@@ -31,6 +31,7 @@ var pageCommands = {
   addElementFromTooltip: function (entity, option) {
     option = option || 'rest';
     this.click('.Tool.' + entity);
+    this.api.pause(1500);
     this.waitForElementPresent('.Tool__submenuItem.' + option, 5000);
     this.click('.Tool__submenuItem.' + option);
   },

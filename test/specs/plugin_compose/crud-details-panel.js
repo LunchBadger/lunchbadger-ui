@@ -34,8 +34,14 @@ module.exports = {
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(1), 'dumpUrl');
+    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
+    browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
+    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
+    browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
+    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
+    browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);

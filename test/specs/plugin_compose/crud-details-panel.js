@@ -16,10 +16,8 @@ module.exports = {
   'Compose plugin: CRUD on details panel': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
-    // browser.saveScreenshot('panel-0.png');
     page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
-    // browser.saveScreenshot('panel-1.png');
 
     // create Memory datasource
     page.addElementFromTooltip('dataSource', 'memory');
@@ -30,7 +28,6 @@ module.exports = {
     });
     browser.waitForElementNotPresent('.Aside.disabled', 5000);
     browser.pause(3000);
-    // browser.saveScreenshot('panel-2.png');
 
     // create REST datasource
     page.addElementFromTooltip('dataSource', 'rest');

@@ -16,8 +16,10 @@ module.exports = {
   'Compose plugin: CRUD on canvas': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
+    browser.screenshot();
     page.expect.element('.Aside.disabled').to.not.be.present;
     page.expect.element('.canvas__container--editing').to.not.be.present;
+    browser.screenshot();
 
     // create Memory datasource
     page.addElementFromTooltip('dataSource', 'memory');
@@ -28,6 +30,7 @@ module.exports = {
     });
     browser.waitForElementNotPresent('.Aside.disabled', 5000);
     browser.pause(3000);
+    browser.screenshot();
 
     // create REST datasource
     page.addElementFromTooltip('dataSource', 'rest');
@@ -37,10 +40,12 @@ module.exports = {
     page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
     page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
+    browser.screenshot();
     browser.moveToElement(getDataSourceSelector(2) + '.editable .submit', 5, 5, function() {
       browser.click(getDataSourceSelector(2) + '.editable .submit');
     });
     browser.waitForElementNotPresent('.Aside.disabled', 5000);
+    browser.screenshot();
     browser.pause(3000);
 
     // create Car model

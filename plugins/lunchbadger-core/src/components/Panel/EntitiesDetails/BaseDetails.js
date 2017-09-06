@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Form, EntityProperty} from '../../../../../lunchbadger-ui/src';
+import {Form, EntityProperty, EntityValidationErrors} from '../../../../../lunchbadger-ui/src';
 import CloseButton from '../CloseButton';
 import SaveButton from '../SaveButton';
 import {changePanelStatus, setCurrentEditElement, setCurrentElement} from '../../../reduxActions';
+import getFlatModel from '../../../utils/getFlatModel';
 import './BaseDetails.scss';
 
 export default (ComposedComponent) => {
@@ -21,19 +22,41 @@ export default (ComposedComponent) => {
       this.state = {
         isPristine: true,
         formValid: false,
+        validations: {
+          isValid: true,
+          data: {}
+        },
       }
     }
+
+    componentDidMount() {
+      this.state.model = getFlatModel(this.refs.form.getModel());
+    }
+
+    componentWillUpdate(_nextProps, nextState) {
+      if (this.state.isPristine !== nextState.isPristine) {
+        const {store: {dispatch}} = this.context;
+        dispatch(changePanelStatus(!nextState.isPristine, this.update, this.discardChanges));
+      }
+    }
+
+    resetFormModel = () => this.refs.form.reset(this.state.model);
 
     discardChanges = () => {
       const element = this.element.wrappedInstance || this.element;
       if (typeof element.discardChanges === 'function') {
-        element.discardChanges();
+        element.discardChanges(() => setTimeout(this.resetFormModel));
+      } else {
+        this.resetFormModel();
       }
-      this.refs.form.reset(this.props.entity.toJSON());
-      this.setState({isPristine: true});
+      this.setState({
+        isPristine: true,
+        validations: {isValid: true, data: {}},
+      });
     }
 
     update = async (props = this.refs.form.getModel()) => {
+      const flatModel = getFlatModel(props);
       const {store: {dispatch}} = this.context;
       const {entity} = this.props;
       const element = this.element.wrappedInstance || this.element;
@@ -41,9 +64,14 @@ export default (ComposedComponent) => {
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);
       }
-      // const validations = dispatch(entity.validate(model)); //TODO
-      // this.setState({validations});
-      // if (!validations.isValid) return;
+      const validations = dispatch(entity.validate(model));
+      this.setState({validations}, () => {
+        if (!validations.isValid) {
+          document.querySelector('.DetailsPanel').scrollTop = 0;
+        }
+      });
+      if (!validations.isValid) return;
+      this.state.model = flatModel;
       this.setState({isPristine: true});
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
@@ -71,13 +99,6 @@ export default (ComposedComponent) => {
       }
     }
 
-    componentWillUpdate(_nextProps, nextState) {
-      if (this.state.isPristine !== nextState.isPristine) {
-        const {store: {dispatch}} = this.context;
-        dispatch(changePanelStatus(!nextState.isPristine, this.update, this.discardChanges));
-      }
-    }
-
     _handleValid = () => {
       this.setState({ formValid: true });
     }
@@ -87,8 +108,15 @@ export default (ComposedComponent) => {
     }
 
     render() {
+      const {validations} = this.state;
       return (
         <div className="details-panel__element">
+          {!validations.isValid && (
+            <EntityValidationErrors
+              validations={validations}
+              basic
+            />
+          )}
           <Form
             name="panelForm"
             ref="form"

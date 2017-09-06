@@ -99,9 +99,7 @@ class Gateway extends Component {
   onStoreUpdate = (props = this.props, callback) =>
     this.setState({...this.stateFromStores(props)}, () => callback && callback());
 
-  discardChanges = (callback) => {
-    this.onStoreUpdate(this.props, callback);
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {

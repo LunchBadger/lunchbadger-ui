@@ -7,9 +7,9 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import ModelRelationDetails from './ModelRelationDetails';
-import ModelUserFieldsDetails from './ModelUserFieldsDetails';
-import ModelNestedProperties from './ModelNestedProperties';
+// import ModelRelationDetails from './ModelRelationDetails';
+// import ModelUserFieldsDetails from './ModelUserFieldsDetails';
+// import ModelNestedProperties from './ModelNestedProperties';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
@@ -74,18 +74,18 @@ class ModelDetails extends PureComponent {
         relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
       };
-      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
     this.state = {
       ...this.initState(props),
       ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props) => {
+    this.onStoreUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         ...stateFromStores(props),
-      });
+      }, callback);
     };
   }
 
@@ -143,10 +143,7 @@ class ModelDetails extends PureComponent {
     return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges() {
-    // revert properties
-    this.onStoreUpdate();
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   // update = async (model) => {
   //   const {entity} = this.props;
@@ -320,7 +317,7 @@ class ModelDetails extends PureComponent {
     const fields = [
       {
         title: 'Context Path',
-        name: 'contextPath',
+        name: 'http[path]',
         value: entity.contextPath,
       },
       {

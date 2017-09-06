@@ -44,11 +44,9 @@ class GatewayDetails extends Component {
     pipelines: props.entity.pipelines.slice(),
   });
 
-  onStoreUpdate = (props = this.props) => this.setState({...this.stateFromStores(props)});
+  onStoreUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
 
-  discardChanges() {
-    this.onStoreUpdate();
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   // update(model) {
   //   let data = {

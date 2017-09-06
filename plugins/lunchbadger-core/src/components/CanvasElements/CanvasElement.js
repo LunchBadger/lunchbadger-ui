@@ -12,10 +12,10 @@ import {
   setCurrentEditElement,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
-import getFlatModel from '../../utils/getFlatModel';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
+import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {
   beginDrag: (props) => {
@@ -98,7 +98,7 @@ export default (ComposedComponent) => {
         // modelBeforeEdit: null,
         // modelEnv_0: null,
       };
-      this.multiEnvIndex = 0;
+      // this.multiEnvIndex = 0;
       // this.checkHighlightAndEditableState = (props) => {
       //   const currentElement = props.currentElement;
       //   if (currentElement && currentElement.data.id === this.props.entity.data.id) {
@@ -118,6 +118,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
       // this.handleChangeListeners('addChangeListener');
       // if (this.props.entity.metadata.wasBundled) {
       //   this.setState({
@@ -175,6 +176,7 @@ export default (ComposedComponent) => {
     }
 
     update = async (props) => {
+      const flatModel = getFlatModel(props);
       const {entity, dispatch} = this.props;
       let model = props;
       const element = this.element.decoratedComponentInstance || this.element;
@@ -184,6 +186,7 @@ export default (ComposedComponent) => {
       const validations = dispatch(entity.validate(model));
       this.setState({validations});
       if (!validations.isValid) return;
+      this.state.model = flatModel;
       dispatch(setCurrentEditElement(null));
       // const onUpdate = entity.update;
       // const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
@@ -310,6 +313,12 @@ export default (ComposedComponent) => {
       event.stopPropagation();
     }
 
+    resetFormModel = () => {
+      if (this.entityRef.getFormRef()) {
+        this.entityRef.getFormRef().reset(this.state.model);
+      }
+    }
+
     handleCancel = (event) => {
       event.persist();
       const {entity, dispatch} = this.props;
@@ -323,15 +332,9 @@ export default (ComposedComponent) => {
         }
         const element = this.element.decoratedComponentInstance || this.element;
         if (typeof element.discardChanges === 'function') {
-          element.discardChanges(() => {
-            if (this.entityRef.getFormRef()) {
-              this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
-            }
-          });
+          element.discardChanges(() => setTimeout(this.resetFormModel));
         } else {
-          if (this.entityRef.getFormRef()) {
-            this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
-          }
+          this.resetFormModel();
         }
       }
       dispatch(setCurrentEditElement(null));

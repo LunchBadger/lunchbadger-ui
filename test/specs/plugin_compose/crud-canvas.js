@@ -16,87 +16,32 @@ module.exports = {
   'Compose plugin: CRUD on canvas': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
-    page.expect.element('.Aside.disabled').to.not.be.present;
-    page.expect.element('.canvas__container--editing').to.not.be.present;
+    page.checkEntities();
 
     // create Memory datasource
     page.addElementFromTooltip('dataSource', 'memory');
-    browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 5000);
-    browser.pause(1000);
-    browser.moveToElement(getDataSourceSelector(1) + ' .submit', 5, 5, function() {
-      browser.click(getDataSourceSelector(1) + ' .submit');
-    });
-    browser.waitForElementNotPresent('.Aside.disabled', 5000);
-    browser.pause(3000);
+    page.submitCanvasEntity(getDataSourceSelector(1));
 
     // create REST datasource
     page.addElementFromTooltip('dataSource', 'rest');
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
-    browser.pause(1000);
-    browser.setValue(getDataSourceFieldSelector(1), 'dumpUrl');
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
-    browser.pause(1000);
-    browser.setValue(getDataSourceFieldSelector(2), 'dumpDatabase');
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
-    browser.pause(1000);
-    browser.setValue(getDataSourceFieldSelector(3), 'dumpUsername');
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
-    browser.pause(1000);
-    browser.setValue(getDataSourceFieldSelector(4), 'dumpPassword');
-    browser.pause(1000);
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 50000);
-    browser.moveToElement(getDataSourceSelector(2) + ' .submit', 5, 5, function() {
-      browser.click(getDataSourceSelector(2) + ' .submit');
-    });
-    browser.waitForElementNotPresent('.Aside.disabled', 5000);
-    browser.pause(3000);
+    page.setValueSlow(getDataSourceFieldSelector(1), 'dumpUrl');
+    page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
+    page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
+    page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
+    page.submitCanvasEntity(getDataSourceSelector(2));
 
     // create Car model
     page.addElement('model');
-    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car');
-    browser.pause(1000);
-    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
-    browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
-      browser.click(getModelSelector(1) + ' .submit');
-    });
-    browser.waitForElementNotPresent('.Aside.disabled', 5000);
-    browser.pause(3000);
+    page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car');
+    page.submitCanvasEntity(getModelSelector(1));
 
     // create Driver model
     page.addElement('model');
-    browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
-    browser.pause(1000);
-    page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', 'Driver');
-    browser.pause(1000);
-    browser.waitForElementPresent(getModelSelector(2) + ' .submit', 50000);
-    browser.moveToElement(getModelSelector(2) + ' .submit', 5, 5, function() {
-      browser.click(getModelSelector(2) + ' .submit');
-    });
-    browser.waitForElementNotPresent('.Aside.disabled', 5000);
-    browser.pause(3000);
+    page.setValueSlow(getModelSelector(2) + ' .input__name input', 'Driver');
+    page.submitCanvasEntity(getModelSelector(2));
 
     // connect Memory with Car
-    browser
-      .pause(500)
-      .useCss()
-      .moveToElement(getDataSourceSelector(1) + ' .port-out > .port__anchor > .port__inside', null, null)
-      .mouseButtonDown(0)
-      .moveToElement(getModelSelector(1) + ' .port-in > .port__anchor > .port__inside', null, null)
-      .pause(500)
-      .mouseButtonUp(0)
-      .pause(500);
+    page.connectPorts(getDataSourceSelector(1), 'out', getModelSelector(1), 'in');
 
     // check, if Memory-car connection is present
     browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
@@ -104,60 +49,21 @@ module.exports = {
 
     // reload page and check if Memory, REST, Car, Driver and Memory-Car connection are present
     browser.refresh(function () {
-      page.expect.element('.Aside.disabled').to.not.be.present;
-      page.expect.element('.canvas__container--editing').to.not.be.present;
-      browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-      browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory');
-      browser.waitForElementPresent(getDataSourceSelector(2), 5000);
-      browser.expect.element('.quadrant:first-child .Entity.DataSource:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('REST');
-      browser.waitForElementPresent(getModelSelector(1), 5000);
-      browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car');
-      browser.waitForElementPresent(getModelSelector(2), 5000);
-      browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-      browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-      browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+      page.checkEntities('Memory,REST', 'Car,Driver');
+      browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
       // rename Memory into Memory1
-      browser.click(getDataSourceSelector(1));
-      browser.waitForElementPresent(getDataSourceSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
-      browser.click(getDataSourceSelector(1) + '.highlighted .Toolbox__button--edit');
-      browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 5000);
-      browser.pause(1000);
-      browser.clearValue(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
-      browser.pause(1000);
-      page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-      browser.pause(1000);
-      page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-      browser.pause(1000);
+      page.editEntity(getDataSourceSelector(1));
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1');
-      browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 50000);
-      browser.moveToElement(getDataSourceSelector(1) + ' .submit', 5, 5, function() {
-        browser.click(getDataSourceSelector(1) + ' .submit');
-      });
-      browser.waitForElementNotPresent('.Aside.disabled', 5000);
-      browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-      browser.pause(3000);
+      page.submitCanvasEntity(getDataSourceSelector(1));
+      browser.expect.element(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
 
       // rename Car into Car1
-      browser.click(getModelSelector(1));
-      browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
-      browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
-      browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-      browser.pause(1000);
-      browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
-      browser.pause(1000);
-      page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-      browser.pause(1000);
-      page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
-      browser.pause(1000);
+      page.editEntity(getModelSelector(1));
       page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car1');
-      browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
-      browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
-        browser.click(getModelSelector(1) + ' .submit');
-      });
-      browser.waitForElementNotPresent('.Aside.disabled', 5000);
-      browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-      browser.pause(3000);
+      page.submitCanvasEntity(getModelSelector(1));
+      browser.expect.element(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
 
       // check, if Memory1-Car1 connection is present
       browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
@@ -165,29 +71,12 @@ module.exports = {
 
       // reload page and check if Memory1, REST, Car1, Driver and Memory1-Car1 connection are present
       browser.refresh(function () {
-        page.expect.element('.Aside.disabled').to.not.be.present;
-        page.expect.element('.canvas__container--editing').to.not.be.present;
-        browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-        browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-        browser.waitForElementPresent(getDataSourceSelector(2), 5000);
-        browser.expect.element('.quadrant:first-child .Entity.DataSource:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('REST');
-        browser.waitForElementPresent(getModelSelector(1), 5000);
-        browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-        browser.waitForElementPresent(getModelSelector(2), 5000);
-        browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-        browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-        browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+        page.checkEntities('Memory1,REST', 'Car1,Driver');
+        browser.waitForElementPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+        browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
         // reattach connection from Memory1 to REST
-        browser
-          .pause(500)
-          .useCss()
-          .moveToElement(getDataSourceSelector(1) + ' .port-out > .port__anchor', 7, 9)
-          .mouseButtonDown(0)
-          .moveToElement(getDataSourceSelector(2) + ' .port-out > .port__anchor > .port__inside', null, null)
-          .pause(500)
-          .mouseButtonUp(0)
-          .pause(500);
+        page.connectPorts(getDataSourceSelector(1), 'out', getDataSourceSelector(2), 'out');
 
         // check, if REST-Car1 connection is present
         browser.waitForElementNotPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
@@ -196,29 +85,12 @@ module.exports = {
 
         // reload page and check if Memory1, REST, Car1, Driver and REST-Car1 connection are present
         browser.refresh(function () {
-          page.expect.element('.Aside.disabled').to.not.be.present;
-          page.expect.element('.canvas__container--editing').to.not.be.present;
-          browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-          browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-          browser.waitForElementPresent(getDataSourceSelector(2), 5000);
-          browser.expect.element('.quadrant:first-child .Entity.DataSource:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('REST');
-          browser.waitForElementPresent(getModelSelector(1), 5000);
-          browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-          browser.waitForElementPresent(getModelSelector(2), 5000);
-          browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
-          browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
-          browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+          page.checkEntities('Memory1,REST', 'Car1,Driver');
+          browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
+          browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
           // reattach connection from Car1 to Driver
-          browser
-            .pause(500)
-            .useCss()
-            .moveToElement(getModelSelector(1) + ' .port-in > .port__anchor > .port__inside', null, null)
-            .mouseButtonDown(0)
-            .moveToElement(getModelSelector(2) + ' .port-in > .port__anchor > .port__inside', null, null)
-            .pause(500)
-            .mouseButtonUp(0)
-            .pause(500);
+          page.connectPorts(getModelSelector(1), 'in', getModelSelector(2), 'in');
 
           // check, if REST-Driver connection is present
           browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
@@ -227,83 +99,39 @@ module.exports = {
 
           // reload page and check if Memory1, REST, Car1, Driver and REST-Driver connection are present
           browser.refresh(function () {
-            page.expect.element('.Aside.disabled').to.not.be.present;
-            page.expect.element('.canvas__container--editing').to.not.be.present;
-            browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-            browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-            browser.waitForElementPresent(getDataSourceSelector(2), 5000);
-            browser.expect.element('.quadrant:first-child .Entity.DataSource:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('REST');
-            browser.waitForElementPresent(getModelSelector(1), 5000);
-            browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-            browser.waitForElementPresent(getModelSelector(2), 5000);
-            browser.expect.element('.quadrant:nth-child(2) .Entity.Model:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('Driver');
+            page.checkEntities('Memory1,REST', 'Car1,Driver');
             browser.waitForElementNotPresent(getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
             browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
-            browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
-            browser.waitForElementPresent(getModelSelector(2) + ' .port-in > .port__anchor--connected', 5000);
+            browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
+            browser.waitForElementPresent(getModelSelector(2) + ' .port-in > .port__anchor--connected', 50000);
 
             // remove Driver
-            browser.click(getModelSelector(2));
-            browser.waitForElementPresent(getModelSelector(2) + ' .Toolbox__button--delete', 5000);
-            browser.click(getModelSelector(2) + ' .Toolbox__button--delete');
-            browser.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
-            browser.click('.SystemDefcon1 .confirm');
-            browser.waitForElementNotPresent(getModelSelector(2), 5000);
-            browser.pause(3000);
+            page.removeEntity(getModelSelector(2));
 
             // check, if REST-Driver connection is also not present
             browser.waitForElementNotPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
             // reload page and check if Memory1, REST, Car1 are present, and REST connection out is not present
             browser.refresh(function () {
-              page.expect.element('.Aside.disabled').to.not.be.present;
-              page.expect.element('.canvas__container--editing').to.not.be.present;
-              browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-              browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-              browser.waitForElementPresent(getDataSourceSelector(2), 5000);
-              browser.expect.element('.quadrant:first-child .Entity.DataSource:nth-child(2) .EntityHeader .EntityProperty__field--text').text.to.equal('REST');
-              browser.waitForElementPresent(getModelSelector(1), 5000);
-              browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-              browser.waitForElementNotPresent(getModelSelector(2), 5000);
+              page.checkEntities('Memory1,REST', 'Car1');
               browser.waitForElementNotPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
               // connect REST with Car1
-              browser
-                .pause(500)
-                .useCss()
-                .moveToElement(getDataSourceSelector(2) + ' .port-out > .port__anchor > .port__inside', null, null)
-                .mouseButtonDown(0)
-                .moveToElement(getModelSelector(1) + ' .port-in > .port__anchor > .port__inside', null, null)
-                .pause(500)
-                .mouseButtonUp(0)
-                .pause(500);
+              page.connectPorts(getDataSourceSelector(2), 'out', getModelSelector(1), 'in');
 
               // check, if REST-Car1 connection is present
               browser.waitForElementPresent(getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
               browser.waitForElementPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
               // remove REST
-              browser.click(getDataSourceSelector(2));
-              browser.waitForElementPresent(getDataSourceSelector(2) + ' .Toolbox__button--delete', 5000);
-              browser.click(getDataSourceSelector(2) + ' .Toolbox__button--delete');
-              browser.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
-              browser.click('.SystemDefcon1 .confirm');
-              browser.waitForElementNotPresent(getDataSourceSelector(2), 5000);
-              browser.pause(3000);
+              page.removeEntity(getDataSourceSelector(2));
 
               // check, is Car1 connection in is also not present
               browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
               // reload page and check, if Memory1 and Car1 are present, and Car1 connection in is not present
               browser.refresh(function () {
-                page.expect.element('.Aside.disabled').to.not.be.present;
-                page.expect.element('.canvas__container--editing').to.not.be.present;
-                browser.waitForElementPresent(getDataSourceSelector(1), 5000);
-                browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
-                browser.waitForElementNotPresent(getDataSourceSelector(2), 5000);
-                browser.waitForElementPresent(getModelSelector(1), 5000);
-                browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
-                browser.waitForElementNotPresent(getModelSelector(2), 5000);
+                page.checkEntities('Memory1', 'Car1');
                 browser.waitForElementNotPresent(getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
               });
             });

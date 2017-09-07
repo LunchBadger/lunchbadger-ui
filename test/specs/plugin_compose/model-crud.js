@@ -5,7 +5,7 @@ function getModelSelector (nth) {
 }
 
 module.exports = {
-  'Compose plugin: CRUD on canvas': function (browser) {
+  'Compose plugin: Model CRUD': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
     page.expect.element('.Aside.disabled').to.not.be.present;
@@ -25,6 +25,7 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car');
     browser.pause(1000);
+    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + ' .submit');
     });
@@ -46,6 +47,7 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .input__name input', 'Driver');
     browser.pause(1000);
+    browser.waitForElementPresent(getModelSelector(2) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(2) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(2) + ' .submit');
     });
@@ -62,13 +64,14 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
     browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-    browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
-    browser.pause(1000);
+    browser.waitForElementPresent(getModelSelector(1) + '.editable .input__name input', 5000);
+    browser.pause(5000);
     page.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car1');
+    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + ' .submit');
     });
@@ -89,6 +92,7 @@ module.exports = {
     page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__httppath input', 'car12');
+    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + ' .submit');
     });
@@ -149,6 +153,7 @@ module.exports = {
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', 'engine');
       browser.pause(1000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
       browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
         browser.click(getModelSelector(1) + ' .submit');
       });
@@ -196,6 +201,7 @@ module.exports = {
         browser.pause(500);
         browser.click('.properties1type__Number');
         browser.pause(1000);
+        browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
         browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
           browser.click(getModelSelector(1) + ' .submit');
         });

@@ -64,6 +64,7 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car');
     browser.pause(1000);
+    browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(1) + ' .submit');
     });
@@ -83,6 +84,7 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', 'Driver');
     browser.pause(1000);
+    browser.waitForElementPresent(getModelSelector(2) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(2) + ' .submit', 5, 5, function() {
       browser.click(getModelSelector(2) + ' .submit');
     });
@@ -130,6 +132,7 @@ module.exports = {
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1');
+      browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 50000);
       browser.moveToElement(getDataSourceSelector(1) + ' .submit', 5, 5, function() {
         browser.click(getDataSourceSelector(1) + ' .submit');
       });
@@ -148,6 +151,7 @@ module.exports = {
       page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Car1');
+      browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
       browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
         browser.click(getModelSelector(1) + ' .submit');
       });

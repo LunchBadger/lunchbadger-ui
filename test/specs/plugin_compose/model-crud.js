@@ -15,9 +15,9 @@ module.exports = {
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
     browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
-    page.clearValue(getModelSelector(1) + ' .input__name input');
+    browser.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(1) + ' .input__name input');
+    browser.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
     browser.pause(1000);
@@ -30,16 +30,16 @@ module.exports = {
       browser.click(getModelSelector(1) + ' .submit');
     });
     browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
     browser.pause(3000);
 
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
     browser.waitForElementPresent(getModelSelector(2) + ' .input__name input', 5000);
-    page.clearValue(getModelSelector(2) + ' .input__name input');
+    browser.clearValue(getModelSelector(2) + ' .input__name input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(2) + ' .input__name input');
+    browser.clearValue(getModelSelector(2) + ' .input__name input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .input__name input', '');
     browser.pause(1000);
@@ -52,7 +52,7 @@ module.exports = {
       browser.click(getModelSelector(2) + ' .submit');
     });
     browser.waitForElementPresent(getModelSelector(2) + '.wip', 5000);
-    browser.waitForElementNotPresent(getModelSelector(2) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(2) + '.wip', 60000);
     browser.pause(3000);
 
     // Check, if context path is car
@@ -66,7 +66,7 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
     browser.waitForElementPresent(getModelSelector(1) + '.editable .input__name input', 5000);
     browser.pause(5000);
-    page.clearValue(getModelSelector(1) + ' .input__name input');
+    browser.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
     browser.pause(1000);
@@ -76,7 +76,7 @@ module.exports = {
       browser.click(getModelSelector(1) + ' .submit');
     });
     browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
     browser.pause(2000);
     browser.expect.element(getModelSelector(1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal('car1');
 
@@ -87,7 +87,7 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
     browser.waitForElementPresent(getModelSelector(1) + ' .input__httppath input', 5000);
     browser.pause(1000);
-    page.clearValue(getModelSelector(1) + ' .input__httppath input');
+    browser.clearValue(getModelSelector(1) + ' .input__httppath input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
     browser.pause(1000);
@@ -97,7 +97,7 @@ module.exports = {
       browser.click(getModelSelector(1) + ' .submit');
     });
     browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
     browser.expect.element(getModelSelector(1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal('car12');
 
     // Reload page and check, if model is consistent after reload
@@ -117,13 +117,13 @@ module.exports = {
       browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
       browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
       browser.pause(1000);
-      page.clearValue(getModelSelector(1) + ' .input__name input');
+      browser.clearValue(getModelSelector(1) + ' .input__name input');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Bus');
       browser.pause(1000);
-      page.clearValue(getModelSelector(1) + ' .input__httppath input');
+      browser.clearValue(getModelSelector(1) + ' .input__httppath input');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
       browser.pause(1000);
@@ -158,7 +158,7 @@ module.exports = {
         browser.click(getModelSelector(1) + ' .submit');
       });
       browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-      browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+      browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
 
       // Reload page and check model data
       browser.refresh(function () {
@@ -179,26 +179,26 @@ module.exports = {
         browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
         browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
         browser.pause(1000);
-        page.clearValue(getModelSelector(1) + ' .input__properties0name input');
+        browser.clearValue(getModelSelector(1) + ' .input__properties0name input');
         browser.pause(1000);
-        page.clearValue(getModelSelector(1) + ' .input__properties0name input');
+        browser.clearValue(getModelSelector(1) + ' .input__properties0name input');
         browser.pause(1000);
         page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', 'manual');
         browser.pause(1000);
         browser.click(getModelSelector(1) + ' .select__properties0type');
         browser.waitForElementPresent('.properties0type__Boolean', 5000);
-        browser.pause(500);
+        browser.pause(1000);
         browser.click('.properties0type__Boolean');
         browser.pause(1000);
-        page.clearValue(getModelSelector(1) + ' .input__properties1name input');
+        browser.clearValue(getModelSelector(1) + ' .input__properties1name input');
         browser.pause(1000);
-        page.clearValue(getModelSelector(1) + ' .input__properties1name input');
+        browser.clearValue(getModelSelector(1) + ' .input__properties1name input');
         browser.pause(1000);
         page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', 'windows');
         browser.pause(1000);
         browser.click(getModelSelector(1) + ' .select__properties1type');
         browser.waitForElementPresent('.properties1type__Number', 5000);
-        browser.pause(500);
+        browser.pause(1000);
         browser.click('.properties1type__Number');
         browser.pause(1000);
         browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
@@ -206,7 +206,7 @@ module.exports = {
           browser.click(getModelSelector(1) + ' .submit');
         });
         browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-        browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+        browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
 
         // Reload page and check model data
         browser.refresh(function () {
@@ -233,9 +233,9 @@ module.exports = {
           page.click('@details');
           browser.pause(2000);
           browser.waitForElementPresent('.DetailsPanel .input__name input', 5000);
-          page.clearValue('.DetailsPanel .input__name input');
+          browser.clearValue('.DetailsPanel .input__name input');
           browser.pause(1000);
-          page.clearValue('.DetailsPanel .input__name input');
+          browser.clearValue('.DetailsPanel .input__name input');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__name input', '');
           browser.pause(1000);
@@ -243,9 +243,9 @@ module.exports = {
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__name input', 'Car');
           browser.pause(1000);
-          page.clearValue('.DetailsPanel .input__httppath input');
+          browser.clearValue('.DetailsPanel .input__httppath input');
           browser.pause(1000);
-          page.clearValue('.DetailsPanel .input__httppath input');
+          browser.clearValue('.DetailsPanel .input__httppath input');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__httppath input', '');
           browser.pause(1000);
@@ -253,9 +253,9 @@ module.exports = {
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__httppath input', 'car');
           browser.pause(1000);
-          page.clearValue('.DetailsPanel .input__plural input');
+          browser.clearValue('.DetailsPanel .input__plural input');
           browser.pause(1000);
-          page.clearValue('.DetailsPanel .input__plural input');
+          browser.clearValue('.DetailsPanel .input__plural input');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__plural input', '');
           browser.pause(1000);
@@ -265,7 +265,7 @@ module.exports = {
           browser.pause(1000);
           browser.click('.select__base');
           browser.waitForElementPresent('div[role=menu] .base__Model', 5000);
-          browser.pause(500);
+          browser.pause(1000);
           browser.click('div[role=menu] .base__Model');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__properties0default_ input', 'true');
@@ -288,7 +288,7 @@ module.exports = {
             browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
           });
           browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-          browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+          browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
           browser.expect.element(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Car');
           browser.expect.element(getModelSelector(1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal('car');
           browser.waitForElementPresent(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--text', 5000);
@@ -334,9 +334,9 @@ module.exports = {
 
             // Edit model in details panel, rename model into Bus, rename context path into bus
             // remove windows property, add new property temp (string)
-            page.clearValue('.DetailsPanel .input__name input');
+            browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__name input');
+            browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
@@ -344,9 +344,9 @@ module.exports = {
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', 'Bus');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__httppath input');
+            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__httppath input');
+            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__httppath input', '');
             browser.pause(1000);
@@ -405,9 +405,9 @@ module.exports = {
 
             // Rename model into Bus, rename context path into bus
             // Remove windows property, add new property temp (string)
-            page.clearValue('.DetailsPanel .input__name input');
+            browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__name input');
+            browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
@@ -415,9 +415,9 @@ module.exports = {
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', 'Bus');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__httppath input');
+            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
-            page.clearValue('.DetailsPanel .input__httppath input');
+            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__httppath input', '');
             browser.pause(1000);
@@ -450,7 +450,7 @@ module.exports = {
             browser.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
             browser.click('.SystemDefcon1 .confirm');
             browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-            browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+            browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
             browser.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
 
             // Reload page and check, if model in canvas and details panel has correct data
@@ -504,12 +504,12 @@ module.exports = {
               browser.pause(1000);
               browser.click('.select__userFields1type');
               browser.waitForElementPresent('div[role=menu] .userFields1type__Number', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .userFields1type__Number');
               browser.pause(1000);
-              page.clearValue('.DetailsPanel .input__userFields1value input');
+              browser.clearValue('.DetailsPanel .input__userFields1value input');
               browser.pause(1000);
-              page.clearValue('.DetailsPanel .input__userFields1value input');
+              browser.clearValue('.DetailsPanel .input__userFields1value input');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__userFields1value input', '123');
               browser.pause(1000);
@@ -517,12 +517,12 @@ module.exports = {
               browser.pause(1000);
               browser.click('.select__userFields2type');
               browser.waitForElementPresent('div[role=menu] .userFields2type__Number', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .userFields2type__Object');
               browser.pause(1000);
-              page.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
+              browser.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
               browser.pause(1000);
-              page.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
+              browser.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__userFields2value textarea:nth-child(2)', '{"abc": 234}');
               browser.pause(1000);
@@ -534,12 +534,12 @@ module.exports = {
               browser.pause(1000);
               browser.click('.select__relations0type');
               browser.waitForElementPresent('div[role=menu] .relations0type__hasMany', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations0type__hasMany');
               browser.pause(1000);
               browser.click('.select__relations0model');
               browser.waitForElementPresent('div[role=menu] .relations0model__Driver', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations0model__Driver');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__relations0foreignKey input', 'driver1');
@@ -548,12 +548,12 @@ module.exports = {
               browser.pause(1000);
               browser.click('.select__relations1type');
               browser.waitForElementPresent('div[role=menu] .relations1type__belongsTo', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations1type__belongsTo');
               browser.pause(1000);
               browser.click('.select__relations1model');
               browser.waitForElementPresent('div[role=menu] .relations1model__Bus', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations1model__Bus');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__relations1foreignKey input', 'bus1');
@@ -562,12 +562,12 @@ module.exports = {
               browser.pause(1000);
               browser.click('.select__relations2type');
               browser.waitForElementPresent('div[role=menu] .relations2type__hasAndBelongsToMany', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations2type__hasAndBelongsToMany');
               browser.pause(1000);
               browser.click('.select__relations2model');
               browser.waitForElementPresent('div[role=menu] .relations2model__Bus', 5000);
-              browser.pause(500);
+              browser.pause(1000);
               browser.click('div[role=menu] .relations2model__Bus');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__relations2foreignKey input', 'bus2');
@@ -577,7 +577,7 @@ module.exports = {
                 browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
               });
               browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-              browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+              browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
               browser.waitForElementNotPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
 
               // Reload page and check, if model in details panel has correct data
@@ -741,7 +741,7 @@ module.exports = {
                 browser.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
                 browser.click('.SystemDefcon1 .confirm');
                 browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-                browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+                browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
                 browser.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
                 browser.pause(3000);
                 page.click('@details');

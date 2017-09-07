@@ -33,16 +33,16 @@ module.exports = {
     page.addElementFromTooltip('dataSource', 'rest');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(1), 'dumpUrl');
+    browser.setValue(getDataSourceFieldSelector(1), 'dumpUrl');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
+    browser.setValue(getDataSourceFieldSelector(2), 'dumpDatabase');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
+    browser.setValue(getDataSourceFieldSelector(3), 'dumpUsername');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
+    browser.setValue(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 50000);
     browser.moveToElement(getDataSourceSelector(2) + ' .submit', 5, 5, function() {
@@ -54,9 +54,9 @@ module.exports = {
     // create Car model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
@@ -74,9 +74,9 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
@@ -107,7 +107,7 @@ module.exports = {
       browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
     });
     browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
     browser.pause(2000);
     page.click('@details');
     browser.pause(2000);
@@ -137,9 +137,9 @@ module.exports = {
       page.click('@details');
       browser.pause(2000);
       browser.waitForElementPresent('.DetailsPanel .panel__details--name input', 5000);
-      page.clearValue('.DetailsPanel .panel__details--name input');
+      browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
-      page.clearValue('.DetailsPanel .panel__details--name input');
+      browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
       page.setValueSlow('.DetailsPanel .panel__details--name input', '');
       browser.pause(1000);
@@ -152,7 +152,7 @@ module.exports = {
         browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
       });
       browser.waitForElementPresent(getDataSourceSelector(1) + '.wip', 5000);
-      browser.waitForElementNotPresent(getDataSourceSelector(1) + '.wip', 5000);
+      browser.waitForElementNotPresent(getDataSourceSelector(1) + '.wip', 60000);
       browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
       browser.pause(3000);
 
@@ -161,9 +161,9 @@ module.exports = {
       browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
       browser.pause(2000);
       browser.waitForElementPresent('.DetailsPanel .panel__details--name input', 5000);
-      page.clearValue('.DetailsPanel .panel__details--name input');
+      browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
-      page.clearValue('.DetailsPanel .panel__details--name input');
+      browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
       page.setValueSlow('.DetailsPanel .panel__details--name input', '');
       browser.pause(1000);
@@ -176,7 +176,7 @@ module.exports = {
         browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
       });
       browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-      browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+      browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
       browser.pause(3000);
       page.click('@details');
@@ -217,7 +217,7 @@ module.exports = {
           browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
         });
         browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-        browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+        browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
         browser.pause(2000);
         page.click('@details');
         browser.pause(2000);
@@ -258,7 +258,7 @@ module.exports = {
             browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
           });
           browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-          browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+          browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
           browser.pause(2000);
           browser.click(getModelSelector(2));
           browser.waitForElementPresent(getModelSelector(2) + '.highlighted', 5000);
@@ -274,7 +274,7 @@ module.exports = {
             browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
           });
           browser.waitForElementPresent(getModelSelector(2) + '.wip', 5000);
-          browser.waitForElementNotPresent(getModelSelector(2) + '.wip', 5000);
+          browser.waitForElementNotPresent(getModelSelector(2) + '.wip', 60000);
           browser.pause(2000);
           page.click('@details');
           browser.pause(2000);
@@ -342,7 +342,7 @@ module.exports = {
                 browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
               });
               browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
-              browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+              browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 60000);
               page.click('@details');
               browser.pause(2000);
 

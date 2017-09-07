@@ -33,16 +33,16 @@ module.exports = {
     page.addElementFromTooltip('dataSource', 'rest');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(1), 'dumpUrl');
+    browser.setValue(getDataSourceFieldSelector(1), 'dumpUrl');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(2), 'dumpDatabase');
+    browser.setValue(getDataSourceFieldSelector(2), 'dumpDatabase');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(3), 'dumpUsername');
+    browser.setValue(getDataSourceFieldSelector(3), 'dumpUsername');
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
     browser.pause(1000);
-    page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
+    browser.setValue(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
     browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 50000);
     browser.moveToElement(getDataSourceSelector(2) + ' .submit', 5, 5, function() {
@@ -54,9 +54,9 @@ module.exports = {
     // create Car model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
-    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
@@ -74,9 +74,9 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    page.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
+    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
@@ -127,7 +127,7 @@ module.exports = {
       browser.click(getDataSourceSelector(1) + '.highlighted .Toolbox__button--edit');
       browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 5000);
       browser.pause(1000);
-      page.clearValue(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+      browser.clearValue(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
       browser.pause(1000);
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
@@ -146,7 +146,7 @@ module.exports = {
       browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
       browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
       browser.pause(1000);
-      page.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+      browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);

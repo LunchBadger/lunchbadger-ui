@@ -74,6 +74,7 @@ module.exports = {
     });
     browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
     browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
+    browser.pause(2000);
     browser.expect.element(getModelSelector(1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal('car1');
 
     // Update context path into car12 and check, if context path is car12

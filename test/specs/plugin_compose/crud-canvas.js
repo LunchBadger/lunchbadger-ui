@@ -44,7 +44,7 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getDataSourceFieldSelector(4), 'dumpPassword');
     browser.pause(1000);
-    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 5000);
+    browser.waitForElementPresent(getDataSourceSelector(2) + ' .submit', 50000);
     browser.moveToElement(getDataSourceSelector(2) + ' .submit', 5, 5, function() {
       browser.click(getDataSourceSelector(2) + ' .submit');
     });

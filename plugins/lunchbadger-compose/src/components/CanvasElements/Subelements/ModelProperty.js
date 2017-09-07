@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-const {Input, Select, Textarea} = LunchBadgerCore.components;
+// const {Input, Select, Textarea} = LunchBadgerCore.components;
 const {propertyTypes} = LunchBadgerCore.utils;
-import {Checkbox, IconSVG} from '../../../../../lunchbadger-ui/src';
+import {Input, Select, Checkbox, IconSVG} from '../../../../../lunchbadger-ui/src';
 import {iconDelete, iconPlus} from '../../../../../../src/icons';
 import './ModelProperty.scss';
 

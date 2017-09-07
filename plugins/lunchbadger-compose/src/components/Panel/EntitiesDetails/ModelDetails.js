@@ -390,7 +390,7 @@ class ModelDetails extends PureComponent {
       'Notes',
       'Required',
       'Is Index',
-      <IconButton icon="iconPlus" onClick={this.onAddProperty('')} />,
+      <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
     ];
     const widths = [300, 120, 200, undefined, 100, 100, 70];
     const paddings = [true, true, true, true, false, false, false];
@@ -455,7 +455,7 @@ class ModelDetails extends PureComponent {
         handleKeyDown={this.handleTabProperties(property)}
       />,
       <div>
-        <IconButton icon="iconDelete" onClick={this.onRemoveProperty(property)} />
+        <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />
         {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
       </div>,
     ]);
@@ -483,7 +483,7 @@ class ModelDetails extends PureComponent {
       'Type',
       'Model',
       'Foreign Key',
-      <IconButton icon="iconPlus" onClick={this.onAddRelation} />,
+      <IconButton name="add__relation" icon="iconPlus" onClick={this.onAddRelation} />,
     ];
     const widths = [300, 220, 300, undefined, 70];
     const paddings = [true, true, true, true, false];
@@ -517,7 +517,7 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleKeyDown={this.handleTab('relations', idx)}
       />,
-      <IconButton icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
+      <IconButton name={`remove__relation${idx}`} icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
     ]);
     return <Table
       columns={columns}
@@ -565,7 +565,7 @@ class ModelDetails extends PureComponent {
       'Name',
       'Type',
       'Value',
-      <IconButton icon="iconPlus" onClick={this.onAddUserField} />,
+      <IconButton name="add__udf" icon="iconPlus" onClick={this.onAddUserField} />,
     ];
     const widths = [300, 120, undefined, 70];
     const paddings = [true, true, true, false];
@@ -604,7 +604,7 @@ class ModelDetails extends PureComponent {
           type={field.type === 'number' ? 'number' : 'text'}
           handleKeyDown={this.handleTab('userFields', idx)}
         />,
-      <IconButton icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
+      <IconButton name={`remove__udf${idx}`} icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
     ]);
     return <Table
       columns={columns}

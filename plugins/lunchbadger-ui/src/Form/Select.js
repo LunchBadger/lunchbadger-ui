@@ -4,9 +4,8 @@ import cs from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import HOC from '../utils/Formsy/HOC';
+import getPlainText from '../utils/getPlainText';
 import './Select.scss';
-
-const getClassName = str => str.replace('[', '').replace(']', '');
 
 class Select extends Component {
   static propTypes = {
@@ -57,7 +56,7 @@ class Select extends Component {
       underlineStyle.display = 'none';
     }
     return (
-      <div className={cs('Select', className)}>
+      <div className={cs('Select', className, getPlainText(`select__${name}`))}>
         <SelectField
           value={getValue()}
           multiple={multiple}
@@ -74,7 +73,7 @@ class Select extends Component {
           <MenuItem
             key={idx}
             value={value}
-            primaryText={<div className={getClassName(`${name}__${label}`)}>{label}</div>}
+            primaryText={<div className={getPlainText(`${name}__${label}`)}>{label}</div>}
           />
         ))}
         </SelectField>

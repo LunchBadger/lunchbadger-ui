@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {Input, Select, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
-import {iconDelete, iconTrash, iconRevert} from '../../../../../src/icons';
+import getPlainText from '../../utils/getPlainText';
+import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
@@ -155,7 +156,7 @@ class EntityProperty extends Component {
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
-        <div className="EntityProperty__field">
+        <div className={cs('EntityProperty__field', getPlainText(name))}>
           <div className='EntityProperty__field--text' onClick={onClick}>
             <span className={textValueClassNames} onClick={onViewModeClick}>
               {textValue}

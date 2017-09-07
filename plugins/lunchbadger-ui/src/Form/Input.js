@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import TextField from 'material-ui/TextField';
 import HOC from '../utils/Formsy/HOC';
+import getPlainText from '../utils/getPlainText';
 
 class Input extends Component {
   static propTypes = {
@@ -98,7 +100,7 @@ class Input extends Component {
       underlineStyles.borderColor = 'rgba(0, 0, 0, 0)';
     }
     return (
-      <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
+      <div className={cs(className, getPlainText(`input__${name}`))} style={{display: type === 'hidden' ? 'none' : undefined}}>
         <TextField
           value={getValue()}
           type={type || 'text'}

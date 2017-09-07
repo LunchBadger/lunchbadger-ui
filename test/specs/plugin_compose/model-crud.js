@@ -17,8 +17,6 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
     browser.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
-    browser.clearValue(getModelSelector(1) + ' .input__name input');
-    browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
@@ -37,8 +35,6 @@ module.exports = {
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
     browser.waitForElementPresent(getModelSelector(2) + ' .input__name input', 5000);
-    browser.clearValue(getModelSelector(2) + ' .input__name input');
-    browser.pause(1000);
     browser.clearValue(getModelSelector(2) + ' .input__name input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .input__name input', '');
@@ -70,6 +66,8 @@ module.exports = {
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
     browser.pause(1000);
+    page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
+    browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car1');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 50000);
     browser.moveToElement(getModelSelector(1) + ' .submit', 5, 5, function() {
@@ -88,6 +86,8 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .input__httppath input', 5000);
     browser.pause(1000);
     browser.clearValue(getModelSelector(1) + ' .input__httppath input');
+    browser.pause(1000);
+    page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
     browser.pause(1000);
@@ -121,9 +121,13 @@ module.exports = {
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
       browser.pause(1000);
+      page.setValueSlow(getModelSelector(1) + ' .input__name input', '');
+      browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Bus');
       browser.pause(1000);
       browser.clearValue(getModelSelector(1) + ' .input__httppath input');
+      browser.pause(1000);
+      page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .input__httppath input', '');
       browser.pause(1000);
@@ -181,7 +185,9 @@ module.exports = {
         browser.pause(1000);
         browser.clearValue(getModelSelector(1) + ' .input__properties0name input');
         browser.pause(1000);
-        browser.clearValue(getModelSelector(1) + ' .input__properties0name input');
+        page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', '');
+        browser.pause(1000);
+        page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', '');
         browser.pause(1000);
         page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', 'manual');
         browser.pause(1000);
@@ -192,7 +198,9 @@ module.exports = {
         browser.pause(1000);
         browser.clearValue(getModelSelector(1) + ' .input__properties1name input');
         browser.pause(1000);
-        browser.clearValue(getModelSelector(1) + ' .input__properties1name input');
+        page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', '');
+        browser.pause(1000);
+        page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', '');
         browser.pause(1000);
         page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', 'windows');
         browser.pause(1000);
@@ -235,8 +243,6 @@ module.exports = {
           browser.waitForElementPresent('.DetailsPanel .input__name input', 5000);
           browser.clearValue('.DetailsPanel .input__name input');
           browser.pause(1000);
-          browser.clearValue('.DetailsPanel .input__name input');
-          browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__name input', '');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__name input', '');
@@ -245,15 +251,11 @@ module.exports = {
           browser.pause(1000);
           browser.clearValue('.DetailsPanel .input__httppath input');
           browser.pause(1000);
-          browser.clearValue('.DetailsPanel .input__httppath input');
-          browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__httppath input', '');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__httppath input', '');
           browser.pause(1000);
           page.setValueSlow('.DetailsPanel .input__httppath input', 'car');
-          browser.pause(1000);
-          browser.clearValue('.DetailsPanel .input__plural input');
           browser.pause(1000);
           browser.clearValue('.DetailsPanel .input__plural input');
           browser.pause(1000);
@@ -336,15 +338,11 @@ module.exports = {
             // remove windows property, add new property temp (string)
             browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
-            browser.clearValue('.DetailsPanel .input__name input');
-            browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', 'Bus');
-            browser.pause(1000);
-            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
             browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
@@ -407,15 +405,11 @@ module.exports = {
             // Remove windows property, add new property temp (string)
             browser.clearValue('.DetailsPanel .input__name input');
             browser.pause(1000);
-            browser.clearValue('.DetailsPanel .input__name input');
-            browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', '');
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__name input', 'Bus');
-            browser.pause(1000);
-            browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
             browser.clearValue('.DetailsPanel .input__httppath input');
             browser.pause(1000);
@@ -509,7 +503,9 @@ module.exports = {
               browser.pause(1000);
               browser.clearValue('.DetailsPanel .input__userFields1value input');
               browser.pause(1000);
-              browser.clearValue('.DetailsPanel .input__userFields1value input');
+              page.setValueSlow('.DetailsPanel .input__userFields1value input', '');
+              browser.pause(1000);
+              page.setValueSlow('.DetailsPanel .input__userFields1value input', '');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__userFields1value input', '123');
               browser.pause(1000);
@@ -522,7 +518,9 @@ module.exports = {
               browser.pause(1000);
               browser.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
               browser.pause(1000);
-              browser.clearValue('.DetailsPanel .input__userFields2value textarea:nth-child(2)');
+              page.setValueSlow('.DetailsPanel .input__userFields2value textarea:nth-child(2)', '');
+              browser.pause(1000);
+              page.setValueSlow('.DetailsPanel .input__userFields2value textarea:nth-child(2)', '');
               browser.pause(1000);
               page.setValueSlow('.DetailsPanel .input__userFields2value textarea:nth-child(2)', '{"abc": 234}');
               browser.pause(1000);

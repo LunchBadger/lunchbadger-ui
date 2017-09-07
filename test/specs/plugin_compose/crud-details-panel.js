@@ -56,8 +56,6 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
     browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
@@ -74,8 +72,6 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
     browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
@@ -139,8 +135,6 @@ module.exports = {
       browser.waitForElementPresent('.DetailsPanel .panel__details--name input', 5000);
       browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
-      browser.clearValue('.DetailsPanel .panel__details--name input');
-      browser.pause(1000);
       page.setValueSlow('.DetailsPanel .panel__details--name input', '');
       browser.pause(1000);
       page.setValueSlow('.DetailsPanel .panel__details--name input', '');
@@ -161,8 +155,6 @@ module.exports = {
       browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
       browser.pause(2000);
       browser.waitForElementPresent('.DetailsPanel .panel__details--name input', 5000);
-      browser.clearValue('.DetailsPanel .panel__details--name input');
-      browser.pause(1000);
       browser.clearValue('.DetailsPanel .panel__details--name input');
       browser.pause(1000);
       page.setValueSlow('.DetailsPanel .panel__details--name input', '');

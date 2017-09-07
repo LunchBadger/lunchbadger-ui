@@ -56,8 +56,6 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
     browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
-    browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
@@ -74,8 +72,6 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
-    browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
-    browser.pause(1000);
     browser.clearValue(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input');
     browser.pause(1000);
     page.setValueSlow(getModelSelector(2) + ' .EntityHeader .EntityProperty__field--input input', '');
@@ -131,6 +127,8 @@ module.exports = {
       browser.pause(1000);
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
+      page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
+      browser.pause(1000);
       page.setValueSlow(getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1');
       browser.waitForElementPresent(getDataSourceSelector(1) + ' .submit', 50000);
       browser.moveToElement(getDataSourceSelector(1) + ' .submit', 5, 5, function() {
@@ -147,6 +145,8 @@ module.exports = {
       browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
       browser.pause(1000);
       browser.clearValue(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input');
+      browser.pause(1000);
+      page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);
       page.setValueSlow(getModelSelector(1) + ' .EntityHeader .EntityProperty__field--input input', '');
       browser.pause(1000);

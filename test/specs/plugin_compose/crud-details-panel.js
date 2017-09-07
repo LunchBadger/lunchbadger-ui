@@ -94,15 +94,18 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
     page.click('@details');
     browser.pause(2000);
-    browser.waitForElementPresent('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select', 5000);
-    browser.click('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select');
-    browser.waitForElementPresent('.dataSource__Memory', 5000);
-    browser.click('.dataSource__Memory');
+    browser.waitForElementPresent('.DetailsPanel .select__dataSource', 5000);
+    browser.click('.DetailsPanel .select__dataSource');
+    browser.waitForElementPresent('div[role=menu] .dataSource__Memory', 5000);
+    browser.pause(500);
+    browser.click('div[role=menu] .dataSource__Memory');
     browser.pause(1000);
     browser.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
     browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
       browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
     });
+    browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
+    browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
     browser.pause(2000);
     page.click('@details');
     browser.pause(2000);
@@ -146,6 +149,8 @@ module.exports = {
       browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
         browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
       });
+      browser.waitForElementPresent(getDataSourceSelector(1) + '.wip', 5000);
+      browser.waitForElementNotPresent(getDataSourceSelector(1) + '.wip', 5000);
       browser.expect.element('.quadrant:first-child .Entity.DataSource:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
       browser.pause(3000);
 
@@ -168,6 +173,8 @@ module.exports = {
       browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
         browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
       });
+      browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
+      browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
       browser.expect.element('.quadrant:nth-child(2) .Entity.Model:first-child .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
       browser.pause(3000);
       page.click('@details');
@@ -197,15 +204,18 @@ module.exports = {
         browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
         page.click('@details');
         browser.pause(2000);
-        browser.waitForElementPresent('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select', 5000);
-        browser.click('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select');
-        browser.waitForElementPresent('.dataSource__REST', 5000);
-        browser.click('.dataSource__REST');
+        browser.waitForElementPresent('.DetailsPanel .select__dataSource', 5000);
+        browser.click('.DetailsPanel .panel__details .select__dataSource');
+        browser.waitForElementPresent('div[role=menu] .dataSource__REST', 5000);
+        browser.pause(500);
+        browser.click('div[role=menu] .dataSource__REST');
         browser.pause(1000);
         browser.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
         browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
           browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
         });
+        browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
+        browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
         browser.pause(2000);
         page.click('@details');
         browser.pause(2000);
@@ -235,28 +245,34 @@ module.exports = {
           browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
           page.click('@details');
           browser.pause(2000);
-          browser.waitForElementPresent('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select', 5000);
-          browser.click('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select');
-          browser.waitForElementPresent('.dataSource__None', 5000);
-          browser.click('.dataSource__None');
+          browser.waitForElementPresent('.DetailsPanel .select__dataSource', 5000);
+          browser.click('.DetailsPanel .select__dataSource');
+          browser.waitForElementPresent('div[role=menu] .dataSource__None', 5000);
+          browser.pause(500);
+          browser.click('div[role=menu] .dataSource__None');
           browser.pause(1000);
           browser.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
           browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
             browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
           });
+          browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
+          browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
           browser.pause(2000);
           browser.click(getModelSelector(2));
           browser.waitForElementPresent(getModelSelector(2) + '.highlighted', 5000);
           browser.pause(2000);
-          browser.waitForElementPresent('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select', 5000);
-          browser.click('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select');
-          browser.waitForElementPresent('.dataSource__REST', 5000);
-          browser.click('.dataSource__REST');
+          browser.waitForElementPresent('.DetailsPanel .select__dataSource', 5000);
+          browser.click('.DetailsPanel .select__dataSource');
+          browser.waitForElementPresent('div[role=menu] .dataSource__REST', 5000);
+          browser.pause(500);
+          browser.click('div[role=menu] .dataSource__REST');
           browser.pause(1000);
           browser.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
           browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
             browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
           });
+          browser.waitForElementPresent(getModelSelector(2) + '.wip', 5000);
+          browser.waitForElementNotPresent(getModelSelector(2) + '.wip', 5000);
           browser.pause(2000);
           page.click('@details');
           browser.pause(2000);
@@ -313,17 +329,18 @@ module.exports = {
               browser.waitForElementPresent(getModelSelector(1) + '.highlighted', 5000);
               page.click('@details');
               browser.pause(2000);
-              browser.waitForElementPresent('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select', 5000);
-              browser.click('.DetailsPanel .panel__details .EntityProperty:nth-child(4) .Select');
-              browser.waitForElementPresent('.dataSource__REST', 5000);
-              browser.moveToElement('.dataSource__REST', 5, 5, function() {
-                browser.click('.dataSource__REST');
-              });
+              browser.waitForElementPresent('.DetailsPanel .select__dataSource', 5000);
+              browser.click('.DetailsPanel .select__dataSource');
+              browser.waitForElementPresent('div[role=menu] .dataSource__REST', 5000);
+              browser.pause(500);
+              browser.click('div[role=menu] .dataSource__REST');
               browser.pause(1000);
               browser.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
               browser.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
                 browser.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
               });
+              browser.waitForElementPresent(getModelSelector(1) + '.wip', 5000);
+              browser.waitForElementNotPresent(getModelSelector(1) + '.wip', 5000);
               page.click('@details');
               browser.pause(2000);
 

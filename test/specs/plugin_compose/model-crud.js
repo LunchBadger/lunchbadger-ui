@@ -14,6 +14,7 @@ module.exports = {
     // create Car model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
+    browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
     page.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
     page.clearValue(getModelSelector(1) + ' .input__name input');
@@ -34,6 +35,7 @@ module.exports = {
     // create Driver model
     page.addElement('model');
     browser.waitForElementPresent(getModelSelector(2) + ' .submit', 5000);
+    browser.waitForElementPresent(getModelSelector(2) + ' .input__name input', 5000);
     page.clearValue(getModelSelector(2) + ' .input__name input');
     browser.pause(1000);
     page.clearValue(getModelSelector(2) + ' .input__name input');
@@ -60,6 +62,7 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
     browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
+    browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
     browser.pause(1000);
     page.clearValue(getModelSelector(1) + ' .input__name input');
     browser.pause(1000);
@@ -78,6 +81,7 @@ module.exports = {
     browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
     browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
     browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
+    browser.waitForElementPresent(getModelSelector(1) + ' .input__httppath input', 5000);
     browser.pause(1000);
     page.clearValue(getModelSelector(1) + ' .input__httppath input');
     browser.pause(1000);
@@ -106,6 +110,7 @@ module.exports = {
       browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
       browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
       browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
+      browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
       browser.pause(1000);
       page.clearValue(getModelSelector(1) + ' .input__name input');
       browser.pause(1000);
@@ -166,6 +171,7 @@ module.exports = {
         browser.waitForElementPresent(getModelSelector(1) + '.highlighted .Toolbox__button--edit', 5000);
         browser.click(getModelSelector(1) + '.highlighted .Toolbox__button--edit');
         browser.waitForElementPresent(getModelSelector(1) + ' .submit', 5000);
+        browser.waitForElementPresent(getModelSelector(1) + ' .input__name input', 5000);
         browser.pause(1000);
         page.clearValue(getModelSelector(1) + ' .input__properties0name input');
         browser.pause(1000);

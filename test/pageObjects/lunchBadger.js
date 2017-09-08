@@ -128,8 +128,8 @@ var pageCommands = {
 
   removeEntity: function (selector) {
     this.click(selector);
-    this.waitForElementPresent(selector + ' .Toolbox__button--delete', 5000);
-    this.click(selector + ' .Toolbox__button--delete');
+    this.waitForElementPresent(selector + ' > .Toolbox .Toolbox__button--delete', 5000);
+    this.click(selector + ' > .Toolbox .Toolbox__button--delete');
     this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
     this.click('.SystemDefcon1 .confirm');
     this.waitForElementNotPresent(selector, 5000);
@@ -220,8 +220,44 @@ var pageCommands = {
       });
       this.waitForElementNotPresent(`.DetailsPanel .input__properties${names.split(',').length}name`, 5000);
     }
-  }
+  },
 
+  getDataSourceSelector: function (nth) {
+    return '.quadrant:first-child .Entity.DataSource:nth-child(' + nth + ')';
+  },
+
+  getDataSourceFieldSelector: function (nthEntity, nthProperty) {
+    return this.getDataSourceSelector(nthEntity) + ' .EntityProperties .EntityProperty:nth-child(' + nthProperty + ') .EntityProperty__field--input input';
+  },
+
+  getModelSelector: function (nth) {
+    return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
+  },
+
+  testDatasource: function (type, config = []) {
+    this.addElementFromTooltip('dataSource', type);
+    if (config.length === 0) {
+      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+    } else {
+      config.forEach((option, idx) => {
+        this.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
+        this.setValueSlow(this.getDataSourceFieldSelector(1, idx + 1), option[1]);
+      });
+      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+    }
+    this.submitCanvasEntity(this.getDataSourceSelector(1));
+    if (config.length === 0) {
+      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+    } else {
+      config.forEach((option, idx) => {
+        this.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
+        this.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityProperty__field--text`).text.to.equal(option[0] === 'PASSWORD' ? '••••••••••••' : option[1]);
+        this.expect.element(this.getDataSourceFieldSelector(1, idx + 1)).value.to.equal(option[1]);
+      });
+      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+    }
+    this.removeEntity(this.getDataSourceSelector(1));
+  }
 };
 
 module.exports = {

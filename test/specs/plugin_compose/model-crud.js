@@ -1,21 +1,17 @@
 var page;
 
-function getModelSelector (nth) {
-  return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
-}
-
 function checkProperties (browser, names = '', types = '') {
   if (names === '') {
-    browser.waitForElementNotPresent(getModelSelector(1) + ' .Model__properties .ModelPropertyCollapsed:nth-child(1)', 5000);
+    browser.waitForElementNotPresent(page.getModelSelector(1) + ' .Model__properties .ModelPropertyCollapsed:nth-child(1)', 5000);
   } else {
     names.split(',').forEach((name, idx) => {
-      browser.expect.element(getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.name .EntityProperty__field--text`).text.to.equal(name);
+      browser.expect.element(page.getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.name .EntityProperty__field--text`).text.to.equal(name);
     });
-    browser.waitForElementNotPresent(getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${names.split(',').length + 1})`, 5000);
+    browser.waitForElementNotPresent(page.getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${names.split(',').length + 1})`, 5000);
   }
   if (types !== '') {
     types.split(',').forEach((name, idx) => {
-      browser.expect.element(getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.type .EntityProperty__field--text`).text.to.equal(name);
+      browser.expect.element(page.getModelSelector(1) + ` .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.type .EntityProperty__field--text`).text.to.equal(name);
     });
   }
 }
@@ -59,26 +55,26 @@ module.exports = {
 
     // create Car model and check, if context path is car
     page.addElement('model');
-    page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car');
-    page.submitCanvasEntity(getModelSelector(1));
+    page.setValueSlow(page.getModelSelector(1) + ' .input__name input', 'Car');
+    page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car');
 
     // create Driver model
     page.addElement('model');
-    page.setValueSlow(getModelSelector(2) + ' .input__name input', 'Driver');
-    page.submitCanvasEntity(getModelSelector(2));
+    page.setValueSlow(page.getModelSelector(2) + ' .input__name input', 'Driver');
+    page.submitCanvasEntity(page.getModelSelector(2));
     page.checkEntities('', 'Car,Driver');
 
     // Update Car name into Car1 and check, if context path is car1
-    page.editEntity(getModelSelector(1));
-    page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Car1');
-    page.submitCanvasEntity(getModelSelector(1));
+    page.editEntity(page.getModelSelector(1));
+    page.setValueSlow(page.getModelSelector(1) + ' .input__name input', 'Car1');
+    page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car1,Driver');
 
     // Update context path into car12 and check, if context path is car12
-    page.editEntity(getModelSelector(1));
-    page.setValueSlow(getModelSelector(1) + ' .input__httppath input', 'car12');
-    page.submitCanvasEntity(getModelSelector(1));
+    page.editEntity(page.getModelSelector(1));
+    page.setValueSlow(page.getModelSelector(1) + ' .input__httppath input', 'car12');
+    page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car1,Driver', 'car12,driver');
 
     // Reload page and check, if model is consistent after reload
@@ -86,25 +82,25 @@ module.exports = {
       page.checkEntities('', 'Car1,Driver', 'car12,driver');
 
       // Edit Car1 model, rename Car1 into Bus, rename context path into bus
-      page.editEntity(getModelSelector(1));
-      page.setValueSlow(getModelSelector(1) + ' .input__name input', 'Bus');
-      page.setValueSlow(getModelSelector(1) + ' .input__httppath input', 'bus');
+      page.editEntity(page.getModelSelector(1));
+      page.setValueSlow(page.getModelSelector(1) + ' .input__name input', 'Bus');
+      page.setValueSlow(page.getModelSelector(1) + ' .input__httppath input', 'bus');
 
       // Cancel editing and check, if model is consistent with data before editing
-      page.discardCanvasEntityChanges(getModelSelector(1));
+      page.discardCanvasEntityChanges(page.getModelSelector(1));
       page.checkEntities('', 'Car1,Driver', 'car12,driver');
 
       // Edit model and check, if input fields are consistent with data before editing
-      page.editEntity(getModelSelector(1));
-      browser.expect.element(getModelSelector(1) + ' .input__name input').value.to.equal('Car1');
-      browser.expect.element(getModelSelector(1) + ' .input__httppath input').value.to.equal('car12');
+      page.editEntity(page.getModelSelector(1));
+      browser.expect.element(page.getModelSelector(1) + ' .input__name input').value.to.equal('Car1');
+      browser.expect.element(page.getModelSelector(1) + ' .input__httppath input').value.to.equal('car12');
 
       // Add string properties: color, engine
-      browser.click(getModelSelector(1) + ' .EntitySubElements__title__add');
-      browser.click(getModelSelector(1) + ' .EntitySubElements__title__add');
-      page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', 'color');
-      page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', 'engine');
-      page.submitCanvasEntity(getModelSelector(1));
+      browser.click(page.getModelSelector(1) + ' .EntitySubElements__title__add');
+      browser.click(page.getModelSelector(1) + ' .EntitySubElements__title__add');
+      page.setValueSlow(page.getModelSelector(1) + ' .input__properties0name input', 'color');
+      page.setValueSlow(page.getModelSelector(1) + ' .input__properties1name input', 'engine');
+      page.submitCanvasEntity(page.getModelSelector(1));
 
       // Reload page and check model data
       browser.refresh(function () {
@@ -112,12 +108,12 @@ module.exports = {
         checkProperties(browser, 'color,engine', 'String,String');
 
         // Change properties: engine into windows number, color into manual boolean, add object property produced having year (number) and country (string)
-        page.editEntity(getModelSelector(1));
-        page.setValueSlow(getModelSelector(1) + ' .input__properties0name input', 'manual');
-        page.selectValueSlow(getModelSelector(1), 'properties0type', 'Boolean');
-        page.setValueSlow(getModelSelector(1) + ' .input__properties1name input', 'windows');
-        page.selectValueSlow(getModelSelector(1), 'properties1type', 'Number');
-        page.submitCanvasEntity(getModelSelector(1));
+        page.editEntity(page.getModelSelector(1));
+        page.setValueSlow(page.getModelSelector(1) + ' .input__properties0name input', 'manual');
+        page.selectValueSlow(page.getModelSelector(1), 'properties0type', 'Boolean');
+        page.setValueSlow(page.getModelSelector(1) + ' .input__properties1name input', 'windows');
+        page.selectValueSlow(page.getModelSelector(1), 'properties1type', 'Number');
+        page.submitCanvasEntity(page.getModelSelector(1));
 
         // Reload page and check model data
         browser.refresh(function () {
@@ -130,7 +126,7 @@ module.exports = {
           // manual renamed as manualNew: true/note manual,
           // year: 2015/note year, country: USA/note country,
           // set all properties as required and is index
-          page.openEntityInDetailsPanel(getModelSelector(1));
+          page.openEntityInDetailsPanel(page.getModelSelector(1));
           page.setValueSlow('.DetailsPanel .input__name input', 'Car');
           page.setValueSlow('.DetailsPanel .input__httppath input', 'car');
           page.setValueSlow('.DetailsPanel .input__plural input', 'cars');
@@ -145,7 +141,7 @@ module.exports = {
           browser.click('.DetailsPanel .checkbox__properties1index');
 
           // Save model and check, if model in canvas has correct data
-          page.submitDetailsPanel(getModelSelector(1));
+          page.submitDetailsPanel(page.getModelSelector(1));
           page.closeDetailsPanel();
           page.checkEntities('', 'Car,Driver');
           checkProperties(browser, 'manual,windows', 'Boolean,Number');
@@ -154,7 +150,7 @@ module.exports = {
           browser.refresh(function () {
             page.checkEntities('', 'Car,Driver');
             checkProperties(browser, 'manual,windows', 'Boolean,Number');
-            page.openEntityInDetailsPanel(getModelSelector(1));
+            page.openEntityInDetailsPanel(page.getModelSelector(1));
             page.checkModelDetails('Car', 'car', 'cars', 'Model');
             checkDetailsProperties('manual,windows', 'Boolean,Number', 'true,6', 'notes manual,notes windows', 'checked,checked', 'checked,checked');
             checkDetailsRelations();
@@ -190,13 +186,13 @@ module.exports = {
             checkDetailsProperties('windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
 
             // Click on canvas and save changes
-            page.confirmDetailsPanelChanges(getModelSelector(1));
+            page.confirmDetailsPanelChanges(page.getModelSelector(1));
 
             // Reload page and check, if model in canvas and details panel has correct data
             browser.refresh(function () {
               page.checkEntities('', 'Bus,Driver');
               checkProperties(browser, 'temp,windows', 'String,Number');
-              page.openEntityInDetailsPanel(getModelSelector(1));
+              page.openEntityInDetailsPanel(page.getModelSelector(1));
               page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
               checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
               checkDetailsRelations();
@@ -234,13 +230,13 @@ module.exports = {
               page.selectValueSlow('.DetailsPanel', 'relations2type', 'hasAndBelongsToMany');
               page.selectValueSlow('.DetailsPanel', 'relations2model', 'Bus');
               page.setValueSlow('.DetailsPanel .input__relations2foreignKey input', 'bus2');
-              page.submitDetailsPanel(getModelSelector(1));
+              page.submitDetailsPanel(page.getModelSelector(1));
 
               // Reload page and check, if model in details panel has correct data
               browser.refresh(function () {
                 page.checkEntities('', 'Bus,Driver');
                 checkProperties(browser, 'temp,windows', 'String,Number');
-                page.openEntityInDetailsPanel(getModelSelector(1));
+                page.openEntityInDetailsPanel(page.getModelSelector(1));
                 page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
                 checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
                 checkDetailsUDF(browser, 'field1,field2,field3', 'String,Number,Object', 'value1,123,');
@@ -270,7 +266,7 @@ module.exports = {
                 browser.pause(1000);
                 checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
                 checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
-                page.confirmDetailsPanelChanges(getModelSelector(1));
+                page.confirmDetailsPanelChanges(page.getModelSelector(1));
                 checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
                 checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
 
@@ -278,7 +274,7 @@ module.exports = {
                 browser.refresh(function () {
                   page.checkEntities('', 'Bus,Driver');
                   checkProperties(browser, 'temp,windows', 'String,Number');
-                  page.openEntityInDetailsPanel(getModelSelector(1));
+                  page.openEntityInDetailsPanel(page.getModelSelector(1));
                   page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
                   checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
                   checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');

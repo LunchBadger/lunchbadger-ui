@@ -79,6 +79,7 @@ var pageCommands = {
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
     this.click(selector + '.highlighted .Toolbox__button--edit');
     this.waitForElementPresent(selector + '.editable', 50000);
+    this.waitForElementPresent(selector + '.editable .submit', 50000);
     this.api.pause(3000);
   },
 
@@ -98,6 +99,7 @@ var pageCommands = {
     // this.waitForElementPresent(selector + '.wip', 5000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
     this.waitForElementNotPresent('.Aside.disabled', 5000);
+    this.waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
   submitDetailsPanel: function (selector) {

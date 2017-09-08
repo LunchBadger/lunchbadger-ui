@@ -6,13 +6,14 @@ module.exports = {
     page.open();
     page.checkEntities();
 
-    // create Memory datasource
+    // create Memory1 datasource
     page.addElementFromTooltip('dataSource', 'memory');
+    page.setValueSlow(page.getDataSourceSelector(1) + ' .input__name input', 'Memory1');
     page.submitCanvasEntity(page.getDataSourceSelector(1));
 
-    // create REST datasource
-    page.addElementFromTooltip('dataSource', 'rest');
-    page.setValueSlow(page.getDataSourceFieldSelector(2, 1), 'dumpUrl');
+    // create Memory2 datasource
+    page.addElementFromTooltip('dataSource', 'memory');
+    page.setValueSlow(page.getDataSourceSelector(2) + ' .input__name input', 'Memory2');
     page.submitCanvasEntity(page.getDataSourceSelector(2));
 
     // create Car model
@@ -25,24 +26,24 @@ module.exports = {
     page.setValueSlow(page.getModelSelector(2) + ' .input__name input', 'Driver');
     page.submitCanvasEntity(page.getModelSelector(2));
 
-    // connect Memory with Car
+    // connect Memory1 with Car
     page.connectPorts(page.getDataSourceSelector(1), 'out', page.getModelSelector(1), 'in');
 
-    // check, if Memory-car connection is present
+    // check, if Memory1-car connection is present
     browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
     browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
-    // reload page and check if Memory, REST, Car, Driver and Memory-Car connection are present
+    // reload page and check if Memory1, Memory2, Car, Driver and Memory1-Car connection are present
     browser.refresh(function () {
-      page.checkEntities('Memory,REST', 'Car,Driver');
+      page.checkEntities('Memory1,Memory2', 'Car,Driver');
       browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
       browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
-      // rename Memory into Memory1
+      // rename Memory1 into Memory1New
       page.editEntity(page.getDataSourceSelector(1));
-      page.setValueSlow(page.getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1');
+      page.setValueSlow(page.getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--input input', 'Memory1New');
       page.submitCanvasEntity(page.getDataSourceSelector(1));
-      browser.expect.element(page.getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1');
+      browser.expect.element(page.getDataSourceSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Memory1New');
 
       // rename Car into Car1
       page.editEntity(page.getModelSelector(1));
@@ -50,41 +51,41 @@ module.exports = {
       page.submitCanvasEntity(page.getModelSelector(1));
       browser.expect.element(page.getModelSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
 
-      // check, if Memory1-Car1 connection is present
+      // check, if Memory1New-Car1 connection is present
       browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
       browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
-      // reload page and check if Memory1, REST, Car1, Driver and Memory1-Car1 connection are present
+      // reload page and check if Memory1New, Memory2, Car1, Driver and Memory1New-Car1 connection are present
       browser.refresh(function () {
-        page.checkEntities('Memory1,REST', 'Car1,Driver');
+        page.checkEntities('Memory1New,Memory2', 'Car1,Driver');
         browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
         browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
-        // reattach connection from Memory1 to REST
+        // reattach connection from Memory1New to Memory2
         page.connectPorts(page.getDataSourceSelector(1), 'out', page.getDataSourceSelector(2), 'out');
 
-        // check, if REST-Car1 connection is present
+        // check, if Memory2-Car1 connection is present
         browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
         browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
         browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
-        // reload page and check if Memory1, REST, Car1, Driver and REST-Car1 connection are present
+        // reload page and check if Memory1New, Memory2, Car1, Driver and Memory2-Car1 connection are present
         browser.refresh(function () {
-          page.checkEntities('Memory1,REST', 'Car1,Driver');
+          page.checkEntities('Memory1New,Memory2', 'Car1,Driver');
           browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
           browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
           // reattach connection from Car1 to Driver
           page.connectPorts(page.getModelSelector(1), 'in', page.getModelSelector(2), 'in');
 
-          // check, if REST-Driver connection is present
+          // check, if Memory2-Driver connection is present
           browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
           browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
           browser.waitForElementPresent(page.getModelSelector(2) + ' .port-in > .port__anchor--connected', 5000);
 
-          // reload page and check if Memory1, REST, Car1, Driver and REST-Driver connection are present
+          // reload page and check if Memory1New, Memory2, Car1, Driver and Memory2-Driver connection are present
           browser.refresh(function () {
-            page.checkEntities('Memory1,REST', 'Car1,Driver');
+            page.checkEntities('Memory1New,Memory2', 'Car1,Driver');
             browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
             browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
             browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
@@ -93,30 +94,30 @@ module.exports = {
             // remove Driver
             page.removeEntity(page.getModelSelector(2));
 
-            // check, if REST-Driver connection is also not present
+            // check, if Memory2-Driver connection is also not present
             browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
-            // reload page and check if Memory1, REST, Car1 are present, and REST connection out is not present
+            // reload page and check if Memory1New, Memory2, Car1 are present, and Memory2 connection out is not present
             browser.refresh(function () {
-              page.checkEntities('Memory1,REST', 'Car1');
+              page.checkEntities('Memory1New,Memory2', 'Car1');
               browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
 
-              // connect REST with Car1
+              // connect Memory2 with Car1
               page.connectPorts(page.getDataSourceSelector(2), 'out', page.getModelSelector(1), 'in');
 
-              // check, if REST-Car1 connection is present
+              // check, if Memory2-Car1 connection is present
               browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
               browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
-              // remove REST
+              // remove Memory2
               page.removeEntity(page.getDataSourceSelector(2));
 
               // check, is Car1 connection in is also not present
               browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
-              // reload page and check, if Memory1 and Car1 are present, and Car1 connection in is not present
+              // reload page and check, if Memory1New and Car1 are present, and Car1 connection in is not present
               browser.refresh(function () {
-                page.checkEntities('Memory1', 'Car1');
+                page.checkEntities('Memory1New', 'Car1');
                 browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
               });
             });

@@ -54,7 +54,7 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
-    this.waitForElementPresent(selector, 5000);
+    this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
       for (let c in result.value) {
         this.setValue(selector, this.Keys.BACK_SPACE);
@@ -64,9 +64,9 @@ var pageCommands = {
   },
 
   selectValueSlow: function (selector, select, value) {
-    this.waitForElementPresent(selector, 5000);
+    this.waitForElementPresent(selector, 500-0);
     this.click(selector + ` .select__${select}`);
-    this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 5000);
+    this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
     this.api.pause(2000);
     this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
       this.click(`div[role=menu] .${select}__${value}`);
@@ -76,8 +76,10 @@ var pageCommands = {
 
   editEntity: function (selector) {
     this.click(selector);
-    this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 5000);
+    this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
     this.click(selector + '.highlighted .Toolbox__button--edit');
+    this.waitForElementPresent(selector + '.editable', 50000);
+    this.api.pause(3000);
   },
 
   discardCanvasEntityChanges: function (selector) {
@@ -88,10 +90,10 @@ var pageCommands = {
   },
 
   submitCanvasEntity: function (selector) {
-    this.waitForElementPresent(selector + ' .submit', 50000);
-    this.moveToElement(selector + ' .submit', 5, 5, function() {
-      this.click(selector + ' .submit');
-    });
+    this.submitForm(selector + ' form');
+    // this.moveToElement(selector + ' .submit', 5, 5, function() {
+    //   this.click(selector + ' .submit');
+    // });
     this.api.pause(500);
     // this.waitForElementPresent(selector + '.wip', 5000);
     this.waitForElementNotPresent(selector + '.wip', 60000);

@@ -26,7 +26,7 @@ import {
 import './ModelDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const CheckboxField = LunchBadgerCore.components.CheckboxField;
+// const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const {Connections} = LunchBadgerCore.stores;
 const {propertyTypes} = LunchBadgerCore.utils;
 

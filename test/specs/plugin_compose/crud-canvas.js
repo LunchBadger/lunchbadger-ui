@@ -109,7 +109,7 @@ module.exports = {
               browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
 
               // remove REST
-              page.removeEntity(getDataSourceSelector(2));
+              page.removeEntity(page.getDataSourceSelector(2));
 
               // check, is Car1 connection in is also not present
               browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);

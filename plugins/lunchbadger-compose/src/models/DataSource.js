@@ -95,6 +95,13 @@ export default class DataSource extends BaseModel {
       json.host = this.host;
       json.port = this.port;
     }
+    if (this.isRest) {
+      delete json.url;
+      delete json.database;
+      delete json.username;
+      delete json.password;
+      json.operations = this.operations;
+    }
     return json;
   }
 
@@ -167,8 +174,11 @@ export default class DataSource extends BaseModel {
   }
 
   get isWithPort() {
-    console.log(23, ['mysql', 'mongodb', 'redis'].includes(this._connector), this._connector);
     return ['mysql', 'mongodb', 'redis'].includes(this._connector);
+  }
+
+  get isRest() {
+    return this._connector === 'rest';
   }
 
   validate(model) {
@@ -185,10 +195,16 @@ export default class DataSource extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Data Source');
         }
       }
+      console.log(9, {model});
       const withPort = model.hasOwnProperty('port');
-      const fields = withPort
-        ? ['name', 'host', 'port', 'database', 'username', 'password']
-        : ['name', 'url', 'database', 'username', 'password'];
+      const isRest = model.hasOwnProperty('operations');
+      let fields = ['name', 'url', 'database', 'username', 'password'];
+      if (withPort) {
+        fields = ['name', 'host', 'port', 'database', 'username', 'password'];
+      }
+      if (isRest) {
+        fields = ['name'];
+      }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {
         if (isNaN(+model.port)) {
@@ -200,6 +216,9 @@ export default class DataSource extends BaseModel {
           }
           model.port = model.port.toString();
         }
+      }
+      if (isRest && model.operations[0].template.url === '') {
+        validations.data['baseUrl'] = messages.fieldCannotBeEmpty;
       }
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;

@@ -21,19 +21,39 @@ class DataSourceDetails extends Component {
     </div>
   );
 
+  renderFields = () => {
+    const {isWithPort, isRest} = this.props.entity;
+    if (isRest) {
+      return (
+        <div className="details-panel__fieldset">
+          <span className="details-panel__label">BASE URL</span>
+          <Input
+            className="details-panel__input"
+            value={this.props.entity.operations[0].template.url.toString()}
+            name='operations[0].template.url'
+          />
+        </div>
+      );
+    }
+    return (
+      <div>
+        {isWithPort && this.renderField('host')}
+        {isWithPort && this.renderField('port')}
+        {!isWithPort && this.renderField('url')}
+        {this.renderField('database')}
+        {this.renderField('username')}
+        {this.renderField('password')}
+      </div>
+    );
+  }
+
   render() {
-    const {entity} = this.props;
-    const {connector, isWithPort} = entity;
+    const {connector} = this.props.entity;
     if (connector === 'memory') return null;
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
-          {isWithPort && this.renderField('host')}
-          {isWithPort && this.renderField('port')}
-          {!isWithPort && this.renderField('url')}
-          {this.renderField('database')}
-          {this.renderField('username')}
-          {this.renderField('password')}
+          {this.renderFields()}
         </div>
       </CollapsableDetails>
     )

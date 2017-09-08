@@ -46,9 +46,22 @@ class DataSource extends Component {
     return prop;
   }
 
+  getRedisUrlProperty = () => {
+    const {entity, validations: {data}} = this.props;
+    const prop = {
+      name: 'operations[0][template][url]',
+      modelName: 'baseUrl',
+      title: 'base url',
+      value: entity.operations[0].template.url.toString(),
+      invalid: data.baseUrl,
+      onBlur: this.handleFieldChange('baseUrl'),
+    };
+    return prop;
+  }
+
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, connector},
+      entity: {isWithPort, isRest, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
@@ -58,11 +71,17 @@ class DataSource extends Component {
       mainProperties.push(this.getMainProperty('host'));
       mainProperties.push(this.getMainProperty('port'));
     } else {
-      mainProperties.push(this.getMainProperty('url'));
+      if (isRest) {
+        mainProperties.push(this.getRedisUrlProperty());
+      } else {
+        mainProperties.push(this.getMainProperty('url'));
+      }
     }
-    mainProperties.push(this.getMainProperty('database'));
-    mainProperties.push(this.getMainProperty('username'));
-    mainProperties.push(this.getMainProperty('password'));
+    if (!isRest) {
+      mainProperties.push(this.getMainProperty('database'));
+      mainProperties.push(this.getMainProperty('username'));
+      mainProperties.push(this.getMainProperty('password'));
+    }
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
       mainProperties[idx].onResetField = onResetField;

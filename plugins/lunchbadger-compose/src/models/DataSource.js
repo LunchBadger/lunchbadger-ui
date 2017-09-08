@@ -102,6 +102,11 @@ export default class DataSource extends BaseModel {
       delete json.password;
       json.operations = this.operations;
     }
+    if (this.isSoap) {
+      delete json.database;
+      delete json.username;
+      delete json.password;
+    }
     return json;
   }
 
@@ -181,6 +186,10 @@ export default class DataSource extends BaseModel {
     return this._connector === 'rest';
   }
 
+  get isSoap() {
+    return this._connector === 'soap';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
@@ -195,7 +204,6 @@ export default class DataSource extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Data Source');
         }
       }
-      console.log(9, {model});
       const withPort = model.hasOwnProperty('port');
       const isRest = model.hasOwnProperty('operations');
       let fields = ['name', 'url', 'database', 'username', 'password'];

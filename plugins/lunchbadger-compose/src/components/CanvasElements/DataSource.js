@@ -32,9 +32,13 @@ class DataSource extends Component {
 
   getMainProperty = (name) => {
     const {entity, validations: {data}} = this.props;
+    let title = name;
+    if (title === 'url' && entity.isSoap) {
+      title = 'base url';
+    }
     const prop = {
       name,
-      title: name,
+      title,
       value: entity[name].toString(),
       invalid: data[name],
       onBlur: this.handleFieldChange(name),
@@ -61,7 +65,7 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, isRest, connector},
+      entity: {isWithPort, isRest, isSoap, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
@@ -77,7 +81,7 @@ class DataSource extends Component {
         mainProperties.push(this.getMainProperty('url'));
       }
     }
-    if (!isRest) {
+    if (!isRest && !isSoap) {
       mainProperties.push(this.getMainProperty('database'));
       mainProperties.push(this.getMainProperty('username'));
       mainProperties.push(this.getMainProperty('password'));

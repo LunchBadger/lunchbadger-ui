@@ -22,7 +22,7 @@ class DataSourceDetails extends Component {
   );
 
   renderFields = () => {
-    const {isWithPort, isRest} = this.props.entity;
+    const {isWithPort, isRest, isSoap} = this.props.entity;
     if (isRest) {
       return (
         <div className="details-panel__fieldset">
@@ -31,6 +31,18 @@ class DataSourceDetails extends Component {
             className="details-panel__input"
             value={this.props.entity.operations[0].template.url.toString()}
             name='operations[0].template.url'
+          />
+        </div>
+      );
+    }
+    if (isSoap) {
+      return (
+        <div className="details-panel__fieldset">
+          <span className="details-panel__label">BASE URL</span>
+          <Input
+            className="details-panel__input"
+            value={this.props.entity.url.toString()}
+            name='url'
           />
         </div>
       );

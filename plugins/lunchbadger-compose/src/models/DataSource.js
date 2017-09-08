@@ -102,7 +102,7 @@ export default class DataSource extends BaseModel {
       delete json.password;
       json.operations = this.operations;
     }
-    if (this.isSoap) {
+    if (this.isSoap || this.isEthereum) {
       delete json.database;
       delete json.username;
       delete json.password;
@@ -190,6 +190,10 @@ export default class DataSource extends BaseModel {
     return this._connector === 'soap';
   }
 
+  get isEthereum() {
+    return this._connector === 'web3';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
@@ -209,9 +213,6 @@ export default class DataSource extends BaseModel {
       let fields = ['name', 'url', 'database', 'username', 'password'];
       if (withPort) {
         fields = ['name', 'host', 'port', 'database', 'username', 'password'];
-      }
-      if (isRest) {
-        fields = ['name'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

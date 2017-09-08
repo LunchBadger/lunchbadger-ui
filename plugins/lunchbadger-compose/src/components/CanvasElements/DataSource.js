@@ -65,7 +65,7 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, isRest, isSoap, connector},
+      entity: {isWithPort, isRest, isSoap, isEthereum, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
@@ -81,7 +81,7 @@ class DataSource extends Component {
         mainProperties.push(this.getMainProperty('url'));
       }
     }
-    if (!isRest && !isSoap) {
+    if (!isRest && !isSoap && !isEthereum) {
       mainProperties.push(this.getMainProperty('database'));
       mainProperties.push(this.getMainProperty('username'));
       mainProperties.push(this.getMainProperty('password'));

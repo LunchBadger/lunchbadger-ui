@@ -22,7 +22,7 @@ class DataSourceDetails extends Component {
   );
 
   renderFields = () => {
-    const {isWithPort, isRest, isSoap} = this.props.entity;
+    const {isWithPort, isRest, isSoap, isEthereum} = this.props.entity;
     if (isRest) {
       return (
         <div className="details-panel__fieldset">
@@ -35,10 +35,10 @@ class DataSourceDetails extends Component {
         </div>
       );
     }
-    if (isSoap) {
+    if (isSoap || isEthereum) {
       return (
         <div className="details-panel__fieldset">
-          <span className="details-panel__label">BASE URL</span>
+          <span className="details-panel__label">{`${isSoap ? 'BASE ' : ''}URL`}</span>
           <Input
             className="details-panel__input"
             value={this.props.entity.url.toString()}

@@ -4,23 +4,6 @@ function getModelSelector (nth) {
   return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
 }
 
-function checkDetailsFields (browser, names, prefix, postfix, kind = 'string') {
-  if (names === '') {
-    browser.waitForElementNotPresent(`.DetailsPanel .input__${prefix}0${postfix}`, 5000);
-  } else {
-    names.split(',').forEach((name, idx) => {
-      if (kind === 'select') {
-        browser.expect.element(`.DetailsPanel .select__${prefix}${idx}${postfix}`).text.to.equal(name);
-      } else if (kind === 'checkbox') {
-        browser.expect.element(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`).to.be.present;
-      } else {
-        browser.expect.element(`.DetailsPanel .input__${prefix}${idx}${postfix} input`).value.to.equal(name);
-      }
-    });
-    browser.waitForElementNotPresent(`.DetailsPanel .input__properties${names.split(',').length}name`, 5000);
-  }
-}
-
 function checkProperties (browser, names = '', types = '') {
   if (names === '') {
     browser.waitForElementNotPresent(getModelSelector(1) + ' .Model__properties .ModelPropertyCollapsed:nth-child(1)', 5000);
@@ -37,18 +20,18 @@ function checkProperties (browser, names = '', types = '') {
   }
 }
 
-function checkDetailsProperties (browser, names = '', types = '', defaults = '', descriptions = '', requireds = '', indexes = '') {
-  checkDetailsFields(browser, names, 'properties', 'name');
-  checkDetailsFields(browser, types, 'properties', 'type', 'select');
-  checkDetailsFields(browser, defaults, 'properties', 'default_');
-  checkDetailsFields(browser, descriptions, 'properties', 'description');
-  checkDetailsFields(browser, requireds, 'properties', 'required', 'checkbox');
-  checkDetailsFields(browser, indexes, 'properties', 'index', 'checkbox');
+function checkDetailsProperties (names = '', types = '', defaults = '', descriptions = '', requireds = '', indexes = '') {
+  page.checkDetailsFields(names, 'properties', 'name');
+  page.checkDetailsFields(types, 'properties', 'type', 'select');
+  page.checkDetailsFields(defaults, 'properties', 'default_');
+  page.checkDetailsFields(descriptions, 'properties', 'description');
+  page.checkDetailsFields(requireds, 'properties', 'required', 'checkbox');
+  page.checkDetailsFields(indexes, 'properties', 'index', 'checkbox');
 }
 
 function checkDetailsUDF (browser, names = '', types = '', values = '') {
-  checkDetailsFields(browser, names, 'userFields', 'name');
-  checkDetailsFields(browser, types, 'userFields', 'type', 'select');
+  page.checkDetailsFields(names, 'userFields', 'name');
+  page.checkDetailsFields(types, 'userFields', 'type', 'select');
   if (values !== '') {
     values.split(',').forEach((name, idx) => {
       if (types.split(',')[idx] === 'Object') {
@@ -61,11 +44,11 @@ function checkDetailsUDF (browser, names = '', types = '', values = '') {
   }
 }
 
-function checkDetailsRelations (browser, names = '', types = '', models = '', foreignKeys = '') {
-  checkDetailsFields(browser, names, 'relations', 'name');
-  checkDetailsFields(browser, types, 'relations', 'type', 'select');
-  checkDetailsFields(browser, models, 'relations', 'model', 'select');
-  checkDetailsFields(browser, foreignKeys, 'relations', 'foreignKey');
+function checkDetailsRelations (names = '', types = '', models = '', foreignKeys = '') {
+  page.checkDetailsFields(names, 'relations', 'name');
+  page.checkDetailsFields(types, 'relations', 'type', 'select');
+  page.checkDetailsFields(models, 'relations', 'model', 'select');
+  page.checkDetailsFields(foreignKeys, 'relations', 'foreignKey');
 }
 
 module.exports = {
@@ -173,8 +156,8 @@ module.exports = {
             checkProperties(browser, 'manual,windows', 'Boolean,Number');
             page.openEntityInDetailsPanel(getModelSelector(1));
             page.checkModelDetails('Car', 'car', 'cars', 'Model');
-            checkDetailsProperties(browser, 'manual,windows', 'Boolean,Number', 'true,6', 'notes manual,notes windows', 'checked,checked', 'checked,checked');
-            checkDetailsRelations(browser);
+            checkDetailsProperties('manual,windows', 'Boolean,Number', 'true,6', 'notes manual,notes windows', 'checked,checked', 'checked,checked');
+            checkDetailsRelations();
             checkDetailsUDF(browser);
 
             // Edit model in details panel, rename model into Bus, rename context path into bus
@@ -186,14 +169,14 @@ module.exports = {
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__properties1name input', 'temp');
             page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-            checkDetailsProperties(browser, 'windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
+            checkDetailsProperties('windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
 
             // Click on canvas and discard changes
             page.discardDetailsPanelChanges();
 
             // Check, if model in details panel has correct data
             page.checkModelDetails('Car', 'car', 'cars', 'Model');
-            checkDetailsProperties(browser, 'manual,windows', 'Boolean,Number', 'true,6', 'notes manual,notes windows', 'checked,checked', 'checked,checked');
+            checkDetailsProperties('manual,windows', 'Boolean,Number', 'true,6', 'notes manual,notes windows', 'checked,checked', 'checked,checked');
 
             // Rename model into Bus, rename context path into bus
             // Remove windows property, add new property temp (string)
@@ -204,7 +187,7 @@ module.exports = {
             browser.pause(1000);
             page.setValueSlow('.DetailsPanel .input__properties1name input', 'temp');
             page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-            checkDetailsProperties(browser, 'windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
+            checkDetailsProperties('windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
 
             // Click on canvas and save changes
             page.confirmDetailsPanelChanges(getModelSelector(1));
@@ -215,8 +198,8 @@ module.exports = {
               checkProperties(browser, 'temp,windows', 'String,Number');
               page.openEntityInDetailsPanel(getModelSelector(1));
               page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-              checkDetailsProperties(browser, 'temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
-              checkDetailsRelations(browser);
+              checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
+              checkDetailsRelations();
               checkDetailsUDF(browser);
 
               // Edit model in details panel and add 3 user defined fields:
@@ -259,9 +242,9 @@ module.exports = {
                 checkProperties(browser, 'temp,windows', 'String,Number');
                 page.openEntityInDetailsPanel(getModelSelector(1));
                 page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-                checkDetailsProperties(browser, 'temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
+                checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
                 checkDetailsUDF(browser, 'field1,field2,field3', 'String,Number,Object', 'value1,123,');
-                checkDetailsRelations(browser, 'relation1,relation2,relation3', 'hasMany,belongsTo,hasAndBelongsToMany', 'Driver,Bus,Bus', 'driver1,bus1,bus2');
+                checkDetailsRelations('relation1,relation2,relation3', 'hasMany,belongsTo,hasAndBelongsToMany', 'Driver,Bus,Bus', 'driver1,bus1,bus2');
 
                 // Remove 1st user-defined field and relation, discard changes
                 // and check if model in details panel has correct data
@@ -271,12 +254,12 @@ module.exports = {
                 browser.waitForElementNotPresent('.DetailsPanel .input__relations2name', 5000);
                 browser.pause(1000);
                 checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
-                checkDetailsRelations(browser, 'relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
+                checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
                 page.discardDetailsPanelChanges();
                 page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-                checkDetailsProperties(browser, 'temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
+                checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
                 checkDetailsUDF(browser, 'field1,field2,field3', 'String,Number,Object', 'value1,123,');
-                checkDetailsRelations(browser, 'relation1,relation2,relation3', 'hasMany,belongsTo,hasAndBelongsToMany', 'Driver,Bus,Bus', 'driver1,bus1,bus2');
+                checkDetailsRelations('relation1,relation2,relation3', 'hasMany,belongsTo,hasAndBelongsToMany', 'Driver,Bus,Bus', 'driver1,bus1,bus2');
 
                 // Remove 1st user-defined field and relation, save changes
                 // and check if model in details panel has correct data
@@ -286,10 +269,10 @@ module.exports = {
                 browser.waitForElementNotPresent('.DetailsPanel .input__relations2name', 5000);
                 browser.pause(1000);
                 checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
-                checkDetailsRelations(browser, 'relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
+                checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
                 page.confirmDetailsPanelChanges(getModelSelector(1));
                 checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
-                checkDetailsRelations(browser, 'relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
+                checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
 
                 // reload page and check if model in details panel has correct data
                 browser.refresh(function () {
@@ -297,9 +280,9 @@ module.exports = {
                   checkProperties(browser, 'temp,windows', 'String,Number');
                   page.openEntityInDetailsPanel(getModelSelector(1));
                   page.checkModelDetails('Bus', 'bus', 'cars', 'Model');
-                  checkDetailsProperties(browser, 'temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
+                  checkDetailsProperties('temp,windows', 'String,Number', ',6', ',notes windows', 'unchecked,checked', 'unchecked,checked');
                   checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '123,');
-                  checkDetailsRelations(browser, 'relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
+                  checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Bus,Bus', 'bus1,bus2');
                 });
               });
             });

@@ -199,7 +199,25 @@ var pageCommands = {
     this.expect.element('.DetailsPanel .input__httppath input').value.to.equal(contextPath);
     this.expect.element('.DetailsPanel .input__plural input').value.to.equal(plural);
     this.expect.element('.DetailsPanel .select__base').text.to.equal(base);
+  },
+
+  checkDetailsFields: function (names, prefix, postfix, kind = 'string') {
+    if (names === '') {
+      this.waitForElementNotPresent(`.DetailsPanel .input__${prefix}0${postfix}`, 5000);
+    } else {
+      names.split(',').forEach((name, idx) => {
+        if (kind === 'select') {
+          this.expect.element(`.DetailsPanel .select__${prefix}${idx}${postfix}`).text.to.equal(name);
+        } else if (kind === 'checkbox') {
+          this.expect.element(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`).to.be.present;
+        } else {
+          this.expect.element(`.DetailsPanel .input__${prefix}${idx}${postfix} input`).value.to.equal(name);
+        }
+      });
+      this.waitForElementNotPresent(`.DetailsPanel .input__properties${names.split(',').length}name`, 5000);
+    }
   }
+
 };
 
 module.exports = {

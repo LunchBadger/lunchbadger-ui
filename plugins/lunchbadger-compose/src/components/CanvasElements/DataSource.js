@@ -48,21 +48,20 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {connector},
+      entity: {isWithPort, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
     if (connector === 'memory') return null;
-    const isMySql = connector === 'mysql';
     const mainProperties = [];
-    if (isMySql) {
+    if (isWithPort) {
       mainProperties.push(this.getMainProperty('host'));
       mainProperties.push(this.getMainProperty('port'));
     } else {
       mainProperties.push(this.getMainProperty('url'));
     }
     mainProperties.push(this.getMainProperty('database'));
-    mainProperties.push(this.getMainProperty(isMySql ? 'user' : 'username'));
+    mainProperties.push(this.getMainProperty('username'));
     mainProperties.push(this.getMainProperty('password'));
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];

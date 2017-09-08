@@ -23,17 +23,16 @@ class DataSourceDetails extends Component {
 
   render() {
     const {entity} = this.props;
-    const {connector} = entity;
+    const {connector, isWithPort} = entity;
     if (connector === 'memory') return null;
-    const isMySql = connector === 'mysql';
     return (
       <CollapsableDetails title="Properties">
         <div className="details-panel__container details-panel__columns">
-          {isMySql && this.renderField('host')}
-          {isMySql && this.renderField('port')}
-          {!isMySql && this.renderField('url')}
+          {isWithPort && this.renderField('host')}
+          {isWithPort && this.renderField('port')}
+          {!isWithPort && this.renderField('url')}
           {this.renderField('database')}
-          {this.renderField(isMySql ? 'user' : 'username')}
+          {this.renderField('username')}
           {this.renderField('password')}
         </div>
       </CollapsableDetails>

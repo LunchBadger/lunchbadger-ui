@@ -42,12 +42,6 @@ export default class DataSource extends BaseModel {
    * @type {String}
    * @private
    */
-  _user = ''; // in MySQL
-
-  /**
-   * @type {String}
-   * @private
-   */
   _username = '';
 
   /**
@@ -91,13 +85,12 @@ export default class DataSource extends BaseModel {
       connector: this.connector,
       url: this.url,
       database: this.database,
-      user: this.user,
       username: this.username,
       password: this.password,
       itemOrder: this.itemOrder,
       lunchbadgerId: this.id,
     };
-    if (this.connector === 'mysql') {
+    if (this.isWithPort) {
       delete json.url;
       json.host = this.host;
       json.port = this.port;
@@ -149,14 +142,6 @@ export default class DataSource extends BaseModel {
     this._database = database;
   }
 
-  get user() {
-    return this._user;
-  }
-
-  set user(user) {
-    this._user = user;
-  }
-
   get username() {
     return this._username;
   }
@@ -181,6 +166,11 @@ export default class DataSource extends BaseModel {
     this._connector = connector;
   }
 
+  get isWithPort() {
+    console.log(23, ['mysql', 'mongodb', 'redis'].includes(this._connector), this._connector);
+    return ['mysql', 'mongodb', 'redis'].includes(this._connector);
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
@@ -195,12 +185,12 @@ export default class DataSource extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Data Source');
         }
       }
-      const isMySql = model.hasOwnProperty('port');
-      const fields = isMySql
-        ? ['name', 'host', 'port', 'database', 'user', 'password']
+      const withPort = model.hasOwnProperty('port');
+      const fields = withPort
+        ? ['name', 'host', 'port', 'database', 'username', 'password']
         : ['name', 'url', 'database', 'username', 'password'];
       checkFields(fields, model, validations.data);
-      if (isMySql && model.port !== '') {
+      if (withPort && model.port !== '') {
         if (isNaN(+model.port)) {
           validations.data.port = 'Port format is invalid';
         } else {

@@ -7,9 +7,7 @@ import {
   Input,
 } from '../../../../../lunchbadger-ui/src';
 
-// const Input = LunchBadgerCore.components.Input;
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-// const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
 class DataSourceDetails extends Component {
   static propTypes = {
@@ -28,39 +26,6 @@ class DataSourceDetails extends Component {
   );
 
   renderFields = () => {
-    // const {isWithPort, isRest, isSoap, isEthereum, isSalesforce} = this.props.entity;
-    // if (isRest) {
-    //   return (
-    //     <div className="details-panel__fieldset">
-    //       <span className="details-panel__label">BASE URL</span>
-    //       <Input
-    //         className="details-panel__input"
-    //         value={this.props.entity.operations[0].template.url.toString()}
-    //         name='operations[0].template.url'
-    //       />
-    //     </div>
-    //   );
-    // }
-    // if (isSoap || isEthereum) {
-    //   return (
-    //     <div className="details-panel__fieldset">
-    //       <span className="details-panel__label">{`${isSoap ? 'BASE ' : ''}URL`}</span>
-    //       <Input
-    //         className="details-panel__input"
-    //         value={this.props.entity.url.toString()}
-    //         name='url'
-    //       />
-    //     </div>
-    //   );
-    // }
-    // if (isSalesforce) {
-    //   return (
-    //     <div>
-    //       {this.renderField('username')}
-    //       {this.renderField('password')}
-    //     </div>
-    //   );
-    // }
     const {
       url,
       host,
@@ -124,16 +89,6 @@ class DataSourceDetails extends Component {
         {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
       </div>
     );
-    // return (
-    //   <div>
-    //     {isWithPort && this.renderField('host')}
-    //     {isWithPort && this.renderField('port')}
-    //     {!isWithPort && this.renderField('url')}
-    //     {this.renderField('database')}
-    //     {this.renderField('username')}
-    //     {this.renderField('password')}
-    //   </div>
-    // );
   }
 
   render() {

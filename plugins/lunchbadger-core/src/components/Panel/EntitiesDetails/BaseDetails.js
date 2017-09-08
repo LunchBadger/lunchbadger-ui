@@ -30,7 +30,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
-      this.state.model = getFlatModel(this.refs.form.getModel());
+      this.setFlatModel();
     }
 
     componentWillUpdate(_nextProps, nextState) {
@@ -39,6 +39,15 @@ export default (ComposedComponent) => {
         dispatch(changePanelStatus(!nextState.isPristine, this.update, this.discardChanges));
       }
     }
+
+    componentDidUpdate(prevProps) {
+      const {id} = this.props.entity;
+      if (prevProps.entity.id !== id) {
+        setTimeout(this.setFlatModel);
+      }
+    }
+
+    setFlatModel = () => this.state.model = getFlatModel(this.refs.form.getModel());
 
     resetFormModel = () => this.refs.form.reset(this.state.model);
 

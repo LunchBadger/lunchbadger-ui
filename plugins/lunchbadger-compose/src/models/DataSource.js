@@ -107,6 +107,10 @@ export default class DataSource extends BaseModel {
       delete json.username;
       delete json.password;
     }
+    if (this.isSalesforce) {
+      delete json.url;
+      delete json.database;
+    }
     return json;
   }
 
@@ -192,6 +196,10 @@ export default class DataSource extends BaseModel {
 
   get isEthereum() {
     return this._connector === 'web3';
+  }
+
+  get isSalesforce() {
+    return this._connector === 'salesforce';
   }
 
   validate(model) {

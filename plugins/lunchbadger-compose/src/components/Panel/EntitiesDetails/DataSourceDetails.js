@@ -22,7 +22,7 @@ class DataSourceDetails extends Component {
   );
 
   renderFields = () => {
-    const {isWithPort, isRest, isSoap, isEthereum} = this.props.entity;
+    const {isWithPort, isRest, isSoap, isEthereum, isSalesforce} = this.props.entity;
     if (isRest) {
       return (
         <div className="details-panel__fieldset">
@@ -44,6 +44,14 @@ class DataSourceDetails extends Component {
             value={this.props.entity.url.toString()}
             name='url'
           />
+        </div>
+      );
+    }
+    if (isSalesforce) {
+      return (
+        <div>
+          {this.renderField('username')}
+          {this.renderField('password')}
         </div>
       );
     }

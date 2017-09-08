@@ -65,7 +65,7 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, isRest, isSoap, isEthereum, connector},
+      entity: {isWithPort, isRest, isSoap, isEthereum, isSalesforce, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
@@ -77,12 +77,14 @@ class DataSource extends Component {
     } else {
       if (isRest) {
         mainProperties.push(this.getRedisUrlProperty());
-      } else {
+      } else if (!isSalesforce) {
         mainProperties.push(this.getMainProperty('url'));
       }
     }
     if (!isRest && !isSoap && !isEthereum) {
-      mainProperties.push(this.getMainProperty('database'));
+      if (!isSalesforce) {
+        mainProperties.push(this.getMainProperty('database'));
+      }
       mainProperties.push(this.getMainProperty('username'));
       mainProperties.push(this.getMainProperty('password'));
     }

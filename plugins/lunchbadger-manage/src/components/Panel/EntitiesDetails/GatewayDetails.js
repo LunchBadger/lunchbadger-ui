@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
+import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
 import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
@@ -53,7 +54,7 @@ class GatewayDetails extends PureComponent {
   processModel = model => {
     const {entity} = this.props;
     return entity.processModel(model);
-  }
+  };
 
   changeState = obj => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();
@@ -61,20 +62,20 @@ class GatewayDetails extends PureComponent {
 
   addPipeline = () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines.push(Pipeline.create({name: 'Pipeline'}));
+    pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
     this.changeState({pipelines});
     setTimeout(() => {
       const idx = pipelines.length - 1;
       const input = document.getElementById(`pipelines[${idx}][name]`);
       input && input.focus();
     });
-  }
+  };
 
   removePipeline = idx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines.splice(idx, 1);
     this.changeState({pipelines});
-  }
+  };
 
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
@@ -85,13 +86,13 @@ class GatewayDetails extends PureComponent {
       const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
       input && input.focus();
     });
-  }
+  };
 
   removePipelinePolicy = (pipelineIdx, idx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies.splice(idx, 1);
     this.changeState({pipelines});
-  }
+  };
 
   addCAPair = (pipelineIdx, policyIdx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
@@ -106,13 +107,13 @@ class GatewayDetails extends PureComponent {
       const input = document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action][0][name]`);
       input && input.focus();
     });
-  }
+  };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies[policyIdx].conditionAction.splice(idx, 1);
     this.changeState({pipelines});
-  }
+  };
 
   addParameter = (kind, pipelineIdx, policyIdx, pairIdx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
@@ -142,7 +143,7 @@ class GatewayDetails extends PureComponent {
       .parameters
       .splice(idx, 1)
     this.changeState({pipelines});
-  }
+  };
 
   handleParametersTab = (kind, pipelineIdx, policyIdx, pairIdx, idx) => (event) => {
     if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
@@ -154,7 +155,7 @@ class GatewayDetails extends PureComponent {
     if (size - 1 === idx) {
       this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)();
     }
-  }
+  };
 
   renderParameters = (pipelineIdx, policyIdx, pairIdx, pair, kind) => {
     const columns = [
@@ -197,7 +198,7 @@ class GatewayDetails extends PureComponent {
         space={`${kind === 'action' ? 2 : 1}0px 0 0`}
       />
     );
-  }
+  };
 
   renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx) => {
     return (
@@ -211,13 +212,13 @@ class GatewayDetails extends PureComponent {
         {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action')}
       </div>
     );
-  }
+  };
 
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
     const collapsible = policy.conditionAction.map((pair, idx) => (
       <CollapsibleProperties
         key={pair.id}
-        bar={<EntityPropertyLabel>C/A Pair {idx + 1}</EntityPropertyLabel>}
+        bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
         collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx)}
         button={<IconButton icon="iconDelete" onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)} />}
         barToggable
@@ -235,7 +236,7 @@ class GatewayDetails extends PureComponent {
         space="15px 0 10px"
       />
     );
-  }
+  };
 
   getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
 
@@ -272,7 +273,7 @@ class GatewayDetails extends PureComponent {
         space="15px 0 5px"
       />
     );
-  }
+  };
 
   renderPipelineInput = (idx, pipeline) => (
     <EntityProperty
@@ -287,13 +288,13 @@ class GatewayDetails extends PureComponent {
     const http = _.cloneDeep(this.state.http);
     http.enabled = event.currentTarget.checked;
     this.changeState({http});
-  }
+  };
 
   onHttpsToggle = (event) => {
     const https = _.cloneDeep(this.state.https);
     https.enabled = event.currentTarget.checked;
     this.changeState({https});
-  }
+  };
 
   addHttpsTlsDomain = () => {
     const https = _.cloneDeep(this.state.https);
@@ -304,13 +305,13 @@ class GatewayDetails extends PureComponent {
       const input = document.getElementById(`https[tls][${idx}][domain]`);
       input && input.focus();
     });
-  }
+  };
 
   removeHttpsTlsDomain = idx => () => {
     const https = _.cloneDeep(this.state.https);
     https.tls.splice(idx, 1);
     this.changeState({https});
-  }
+  };
 
   handleHttpsTlsTab = idx => (event) => {
     if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
@@ -318,14 +319,14 @@ class GatewayDetails extends PureComponent {
     if (size - 1 === idx) {
       this.addHttpsTlsDomain();
     }
-  }
+  };
 
   renderProtocolSection = () => {
     const {http, https} = this.state;
     const columns = [
       'Host Domain',
       'TLS Key',
-      'TLS Certicicate',
+      'TLS Certificate',
       <IconButton icon="iconPlus" onClick={this.addHttpsTlsDomain} />,
     ];
     const widths = [250, 300, undefined, 70];
@@ -412,16 +413,16 @@ class GatewayDetails extends PureComponent {
         bar={<EntityPropertyLabel>Protocol</EntityPropertyLabel>}
         collapsible={collapsible}
         barToggable
-        defaultOpened
+        defaultOpened={false}
       />
     );
-  }
+  };
 
   onAdminToggle = (event) => {
     const admin = _.cloneDeep(this.state.admin);
     admin.enabled = event.currentTarget.checked;
     this.changeState({admin});
-  }
+  };
 
   renderAdminSection = () => {
     const {admin} = this.state;
@@ -465,10 +466,10 @@ class GatewayDetails extends PureComponent {
         bar={<EntityPropertyLabel>Admin</EntityPropertyLabel>}
         collapsible={collapsible}
         barToggable
-        defaultOpened
+        defaultOpened={false}
       />
     );
-  }
+  };
 
   renderPipelinesSection = () => {
     const {pipelines} = this.state;
@@ -482,7 +483,7 @@ class GatewayDetails extends PureComponent {
         space="0"
         noDividers
       />
-    ))
+    ));
     return (
       <CollapsibleProperties
         key="pipelines"

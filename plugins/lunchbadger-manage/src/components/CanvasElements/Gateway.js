@@ -2,15 +2,25 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
-import update from 'react-addons-update';
+// import update from 'react-addons-update';
 import Pipeline from '../../models/Pipeline';
-import PipelineComponent from './Subelements/Pipeline';
+import Policy from '../../models/Policy';
+import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
+// import PipelineComponent from './Subelements/Pipeline';
 // import {removePipeline} from '../../reduxActions/gateways';
-import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import {
+  EntityProperty,
+  EntityPropertyLabel,
+  EntitySubElements,
+  CollapsibleProperties,
+  IconButton,
+  Input,
+} from '../../../../lunchbadger-ui/src';
 import './Gateway.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
+const Port = LunchBadgerCore.components.Port;
+// const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
 class Gateway extends Component {
   static propTypes = {
@@ -18,23 +28,8 @@ class Gateway extends Component {
     parent: PropTypes.object.isRequired
   };
 
-  // static contextTypes = {
-  //   store: PropTypes.object,
-  // };
-
   constructor(props) {
     super(props);
-    // this.state = {
-    //   // hasInConnection: null,
-    //   // hasOutConnection: null,
-    //   dnsPrefix: props.entity.dnsPrefix,
-    //   pipelinesOpened: {},
-    //   showRemovingModal: false,
-    //   pipelineToRemove: null,
-    // };
-    // props.entity.pipelines.forEach((item) => {
-    //   this.state.pipelinesOpened[item.id] = false;
-    // });
     this.state = {...this.stateFromStores(props)};
   }
 
@@ -101,123 +96,224 @@ class Gateway extends Component {
 
   discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
+  processModel = model => {
+    const {entity} = this.props;
+    return entity.processModel(model);
+  };
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
     }
   }
 
-  // onAddPipeline = () => {
-  //   const {store: {dispatch}} = this.context;
-  //   const {entity} = this.props;
-  //   dispatch(addPipeline(entity.id));
-  // }
+  // onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
-  _setPipelineState = (pipelines) => this.setState({pipelines});
+  changeState = obj => this.setState(obj);
 
-  onAddPipeline = () => {
-    this._setPipelineState([...this.state.pipelines, Pipeline.create({
-      name: 'Pipeline'
-    })]);
+  addPipeline = () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
+    this.changeState({pipelines});
+    setTimeout(() => {
+      const idx = pipelines.length - 1;
+      const input = document.getElementById(`pipelines[${idx}][name]`);
+      input && input.focus();
+    });
+  };
+
+  removePipeline = idx => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines.splice(idx, 1);
+    this.changeState({pipelines});
+  };
+
+  addPipelinePolicy = pipelineIdx => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].addPolicy(Policy.create({'': []}));
+    this.changeState({pipelines});
+    setTimeout(() => {
+      const policyIdx = pipelines[pipelineIdx].policies.length - 1;
+      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
+      input && input.focus();
+    });
+  };
+
+  deletePipelinePolicy = (pipelineIdx, policyIdx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies.splice(policyIdx, 1);
+    this.changeState({pipelines});
   }
 
-  // onRemovePipeline = pipelineToRemove => () => {
-  //   this.setState({
-  //     showRemovingModal: true,
-  //     pipelineToRemove,
-  //   });
-  // }
+  removePipelinePolicy = (pipelineIdx, idx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies.splice(idx, 1);
+    this.changeState({pipelines});
+  };
 
-  onRemovePipeline = (plIdx) => () => {
-    this._setPipelineState(update(this.state.pipelines, {
-      $splice: [[plIdx, 1]]
-    }));
+  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
+
+  getPolicyHiddenInputs = (pipelineIdx, policyIdx, policy) => {
+    const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}]`;
+    const hiddenInputs = [{name: `${prefix}[id]`, value: policy.id}];
+    policy.conditionAction.forEach((pair, pairIdx) => {
+      hiddenInputs.push({
+        name: `${prefix}[pairs][${pairIdx}][id]`,
+        value: pair.id,
+      });
+      pair.condition.parameters.forEach((parameter, idx) => {
+        hiddenInputs.push({
+          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][name]`,
+          value: parameter.name,
+        });
+        hiddenInputs.push({
+          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][value]`,
+          value: parameter.value,
+        });
+      });
+      pair.action.parameters.forEach((parameter, idx) => {
+        hiddenInputs.push({
+          name: `${prefix}[pairs][${pairIdx}][action][${idx}][name]`,
+          value: parameter.name,
+        });
+        hiddenInputs.push({
+          name: `${prefix}[pairs][${pairIdx}][action][${idx}][value]`,
+          value: parameter.value,
+        });
+      });
+    });
+    return hiddenInputs;
   }
 
-  // removePipeline = () => {
-  //   const {store: {dispatch}} = this.context;
-  //   const {entity} = this.props;
-  //   dispatch(removePipeline(entity.id, this.state.pipelineToRemove));
-  // }
+  renderPipeline = (pipeline, pipelineIdx) => {
+    const options = this.getPolicyInputOptions();
+    const collapsible = (
+      <div>
+        {pipeline.policies.map((policy, idx) => (
+          <EntityProperty
+            key={idx}
+            name={`pipelines[${pipelineIdx}][policies][${idx}][name]`}
+            value={policy.name || options[0].value}
+            options={options}
+            hiddenInputs={this.getPolicyHiddenInputs(pipelineIdx, idx, policy)}
+            onDelete={this.deletePipelinePolicy(pipelineIdx, idx)}
+          />
+        ))}
+      </div>
+    );
+    return (
+      <CollapsibleProperties
+        bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
+        collapsible={collapsible}
+        button={<IconButton icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
+        defaultOpened
+        untoggable
+        space="15px 0 5px"
+      />
+    );
+  };
 
-  onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
+  renderPipelineInput = (idx, pipeline) => (
+    <EntityProperty
+      name={`pipelines[${idx}][name]`}
+      value={pipeline.name}
+      placeholder="Enter pipeline name here"
+      hiddenInputs={[{name: `pipelines[${idx}][id]`, value: pipeline.id}]}
+    />
+  );
+
+  renderPipelinePorts = ports => ports.map(port => (
+    <Port
+      key={`port-${port.portType}-${port.id}`}
+      way={port.portType}
+      elementId={port.id}
+      middle={true}
+      scope={port.portGroup}
+    />
+  ));
 
   renderPipelines = () => {
-    return this.state.pipelines.map((pipeline, idx) => (
-      <PipelineComponent
-        key={pipeline.id}
-        entity={pipeline}
-        onRemove={this.onRemovePipeline(idx)}
-        index={idx}
-      />
-    ));
+    const {pipelines} = this.state;
+    return (
+      <div className="Gateway__pipelines">
+        {pipelines.map((pipeline, idx) => (
+          <div key={pipeline.id}>
+            {this.renderPipelinePorts(pipeline.ports)}
+            <CollapsibleProperties
+              bar={this.renderPipelineInput(idx, pipeline)}
+              collapsible={this.renderPipeline(pipeline, idx)}
+              button={<IconButton icon="iconDelete" onClick={this.removePipeline(idx)} />}
+              defaultOpened
+              space="0"
+              noDividers
+            />
+          </div>
+        ))}
+      </div>
+    );
   }
+
+  renderHiddenFields = () => {
+    const {http, https, admin} = this.props.entity;
+    const hiddenInputs = [];
+    hiddenInputs.push({name: 'http[enabled]', value: http.enabled});
+    hiddenInputs.push({name: 'http[port]', value: http.port});
+    hiddenInputs.push({name: 'https[enabled]', value: https.enabled});
+    hiddenInputs.push({name: 'https[port]', value: https.port});
+    https.tls.forEach(({domain, key, cert}, idx) => {
+      hiddenInputs.push({name: `https[tls][${idx}][domain]`, value: domain});
+      hiddenInputs.push({name: `https[tls][${idx}][key]`, value: key});
+      hiddenInputs.push({name: `https[tls][${idx}][cert]`, value: cert});
+    });
+    hiddenInputs.push({name: 'admin[enabled]', value: admin.enabled});
+    hiddenInputs.push({name: 'admin[hostname]', value: admin.hostname});
+    hiddenInputs.push({name: 'admin[port]', value: admin.port});
+    return (
+      <div>
+        {hiddenInputs.map(({name, value}) => <Input key={name} type="hidden" value={value} name={name} />)}
+      </div>
+    );
+  };
 
   render() {
-    // console.log('gateway', this.props.entity, this.props.entity.toJSON());
-    return null;
+    const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+    const elementClass = cs('Gateway', {
+      'multi': multiEnvIndex > 0,
+      // 'has-connection-in': this.state.hasInConnection,
+      // 'has-connection-out': this.state.hasOutConnection
+    });
+    // const mainProperties = [
+    //   {
+    //     name: 'rootURL',
+    //     title: 'root URL',
+    //     value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
+    //     fake: true,
+    //   },
+    //   {
+    //     name: 'dnsPrefix',
+    //     title: 'DNS prefix',
+    //     value: this.props.entity.dnsPrefix,
+    //     editableOnly: true,
+    //     invalid: data.dnsPrefix,
+    //     onChange: this.onPrefixChange,
+    //     onBlur: this.handleFieldChange('dnsPrefix'),
+    //   },
+    // ];
+    // mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
+    // mainProperties[0].onResetField = () => onResetField('dnsPrefix');
+    return (
+      <div className={elementClass}>
+        {this.renderHiddenFields()}
+        <EntitySubElements
+          title="Pipelines"
+          onAdd={this.addPipeline}
+          main
+        >
+          {this.renderPipelines()}
+        </EntitySubElements>
+      </div>
+    );
   }
-
-  // render() {
-  //   const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
-  //   const elementClass = cs('Gateway', {
-  //     'multi': multiEnvIndex > 0,
-  //     // 'has-connection-in': this.state.hasInConnection,
-  //     // 'has-connection-out': this.state.hasOutConnection
-  //   });
-  //   const mainProperties = [
-  //     {
-  //       name: 'rootURL',
-  //       title: 'root URL',
-  //       value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
-  //       fake: true,
-  //     },
-  //     {
-  //       name: 'dnsPrefix',
-  //       title: 'DNS prefix',
-  //       value: this.props.entity.dnsPrefix,
-  //       editableOnly: true,
-  //       invalid: data.dnsPrefix,
-  //       onChange: this.onPrefixChange,
-  //       onBlur: this.handleFieldChange('dnsPrefix'),
-  //     },
-  //   ];
-  //   mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
-  //   mainProperties[0].onResetField = () => onResetField('dnsPrefix');
-  //   return (
-  //     <div className={elementClass}>
-  //       <EntityProperties properties={mainProperties} />
-  //       <EntitySubElements
-  //         title="Pipelines"
-  //         onAdd={this.onAddPipeline}
-  //         main
-  //       >
-  //         <div className="Gateway__pipelines">
-  //           <DraggableGroup
-  //             iconClass="icon-icon-gateway"
-  //             entity={this.props.entity}
-  //           >
-  //             {this.renderPipelines()}
-  //           </DraggableGroup>
-  //         </div>
-  //       </EntitySubElements>
-  //       {/*this.state.showRemovingModal && (
-  //         <TwoOptionModal
-  //           onClose={() => this.setState({showRemovingModal: false})}
-  //           onSave={this.removePipeline}
-  //           onCancel={() => this.setState({showRemovingModal: false})}
-  //           title="Remove pipeline"
-  //           confirmText="Remove"
-  //           discardText="Cancel"
-  //         >
-  //           <span>
-  //             Do you really want to remove that pipeline?
-  //           </span>
-  //         </TwoOptionModal>
-  //       )*/}
-  //     </div>
-  //   );
-  // }
 }
 
 export default CanvasElement(Gateway);

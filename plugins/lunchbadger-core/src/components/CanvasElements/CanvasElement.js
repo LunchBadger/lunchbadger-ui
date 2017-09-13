@@ -176,7 +176,6 @@ export default (ComposedComponent) => {
     }
 
     update = async (props) => {
-      const flatModel = getFlatModel(props);
       const {entity, dispatch} = this.props;
       let model = props;
       const element = this.element.decoratedComponentInstance || this.element;
@@ -186,12 +185,16 @@ export default (ComposedComponent) => {
       const validations = dispatch(entity.validate(model));
       this.setState({validations});
       if (!validations.isValid) return;
-      this.state.model = flatModel;
       dispatch(setCurrentEditElement(null));
       // const onUpdate = entity.update;
       // const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
+      setTimeout(() => {
+        if (this.entityRef && this.entityRef.getFormRef()) {
+          this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+        }
+      });
       // update currentElement
 
       // const {multiEnvIndex, multiEnvAmount} = this.context;

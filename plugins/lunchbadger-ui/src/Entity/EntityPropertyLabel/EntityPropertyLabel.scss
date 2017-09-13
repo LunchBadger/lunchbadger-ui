@@ -6,4 +6,10 @@
   .multiEnvDelta & {
     filter: grayscale(100%);
   }
+  &.plain {
+    color: #4b4b4b !important;
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: none;
+  }
 }

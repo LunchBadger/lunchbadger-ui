@@ -14,7 +14,6 @@ var pageCommands = {
     var page = this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
     this.waitForElementVisible('.app', 5000);
-
     return page;
   },
 
@@ -80,7 +79,7 @@ var pageCommands = {
     this.click(selector + '.highlighted .Toolbox__button--edit');
     this.waitForElementPresent(selector + '.editable', 50000);
     this.waitForElementVisible(selector + ' .input__name input', 50000);
-    this.api.pause(3000);
+    // this.api.pause(3000);
   },
 
   discardCanvasEntityChanges: function (selector) {

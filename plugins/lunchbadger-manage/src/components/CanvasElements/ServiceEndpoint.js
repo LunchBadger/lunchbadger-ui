@@ -5,7 +5,7 @@ import {EntityProperties} from '../../../../lunchbadger-ui/src';
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 
-class PrivateEndpoint extends Component {
+class ServiceEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object
@@ -57,4 +57,4 @@ class PrivateEndpoint extends Component {
   }
 }
 
-export default CanvasElement(PrivateEndpoint);
+export default CanvasElement(ServiceEndpoint);

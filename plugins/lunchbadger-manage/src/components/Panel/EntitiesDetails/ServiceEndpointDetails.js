@@ -5,7 +5,7 @@ const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
-class PrivateEndpointDetails extends Component {
+class ServiceEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
@@ -29,4 +29,4 @@ class PrivateEndpointDetails extends Component {
   }
 }
 
-export default BaseDetails(PrivateEndpointDetails);
+export default BaseDetails(ServiceEndpointDetails);

@@ -1,15 +1,15 @@
-import {update, remove} from '../reduxActions/privateEndpoints';
+import {update, remove} from '../reduxActions/serviceEndpoints';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
 
-export default class PrivateEndpoint extends BaseModel {
-  static type = 'PrivateEndpoint';
-  static entities = 'privateEndpoints';
+export default class ServiceEndpoint extends BaseModel {
+  static type = 'ServiceEndpoint';
+  static entities = 'serviceEndpoints';
 
   _ports = [];
-  url = 'https://private/endpoint';
+  url = 'https://service/endpoint';
 
   constructor(id, name) {
     super(id);
@@ -24,7 +24,7 @@ export default class PrivateEndpoint extends BaseModel {
   }
 
   recreate() {
-    return PrivateEndpoint.create(this);
+    return ServiceEndpoint.create(this);
   }
 
   toJSON() {
@@ -45,7 +45,7 @@ export default class PrivateEndpoint extends BaseModel {
     this._ports = ports;
   }
 
-  // The default/initial REST path to be used when auto-creating a public
+  // The default/initial REST path to be used when auto-creating an api
   // endpoint associated with this.
   get contextPath() {
     return this.name.toLowerCase().replace(/ /g, '-');
@@ -56,7 +56,7 @@ export default class PrivateEndpoint extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.privateEndpoints;
+      const entities = getState().entities.serviceEndpoints;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateName = Object.keys(entities)
@@ -64,7 +64,7 @@ export default class PrivateEndpoint extends BaseModel {
           .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
-          validations.data.name = messages.duplicatedEntityName('Private Endpoint');
+          validations.data.name = messages.duplicatedEntityName('Service Endpoint');
         }
       }
       const fields = ['name', 'url'];

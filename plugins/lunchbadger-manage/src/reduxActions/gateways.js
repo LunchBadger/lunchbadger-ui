@@ -11,7 +11,51 @@ export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[2].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false, pipelines: [Pipeline.create({name: 'Pipeline'})]});
+  const pipelines = {
+    'Pipeline': {
+      policies: [
+        {
+          'oauth2': [
+            {
+              condition: {
+                aaa: 'bbb',
+                ccc: 'ddd',
+              },
+              action: {
+                eee: 'fff',
+                ggg: 'hhh',
+              },
+            },
+            {
+              condition: {
+                aaa2: 'bbb2',
+                ccc2: 'ddd2',
+              },
+              action: {
+                eee2: 'fff2',
+                ggg2: 'hhh2',
+              },
+            },
+          ],
+        },
+        {
+          'simple-logger': [
+            {
+              condition: {
+                aaas: 'bbbs',
+                cccs: 'ddds',
+              },
+              action: {
+                eees: 'fffs',
+                gggs: 'hhhs',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  };
+  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false, pipelines});
   dispatch(actions.updateGateway(entity));
   return entity;
 }

@@ -668,7 +668,7 @@ class ModelDetails extends PureComponent {
           />
         ))}
       </div>
-    )
+    );
   }
 }
 

@@ -79,8 +79,8 @@ var pageCommands = {
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
     this.click(selector + '.highlighted .Toolbox__button--edit');
     this.waitForElementPresent(selector + '.editable', 50000);
-    this.waitForElementPresent(selector + '.editable .submit', 50000);
-    this.api.pause(3000);
+    this.waitForElementVisible(selector + ' .input__name input', 50000);
+    // this.api.pause(3000);
   },
 
   discardCanvasEntityChanges: function (selector) {

@@ -65,7 +65,6 @@ export default (ComposedComponent) => {
     }
 
     update = async (props = this.refs.form.getModel()) => {
-      const flatModel = getFlatModel(props);
       const {store: {dispatch}} = this.context;
       const {entity} = this.props;
       const element = this.element.wrappedInstance || this.element;
@@ -80,11 +79,15 @@ export default (ComposedComponent) => {
         }
       });
       if (!validations.isValid) return;
-      this.state.model = flatModel;
       this.setState({isPristine: true});
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
+      setTimeout(() => {
+        if (this.refs && this.refs.form) {
+          this.state.model = getFlatModel(this.refs.form.getModel());
+        }
+      });
     }
 
     checkPristine = (_model, changed) => {
@@ -93,10 +96,14 @@ export default (ComposedComponent) => {
       }
       if (!this.element) return;
       const element = this.element.wrappedInstance || this.element;
+      let isPristine;
       if (element.state && element.state.changed) {
-        this.setState({isPristine: false});
+        isPristine = false;
       } else {
-        this.setState({isPristine: !changed});
+        isPristine = !changed;
+      }
+      if (this.state.isPristine !== isPristine) {
+        this.setState({isPristine});
       }
     }
 
@@ -109,11 +116,15 @@ export default (ComposedComponent) => {
     }
 
     _handleValid = () => {
-      this.setState({ formValid: true });
+      if (!this.state.formValid) {
+        this.setState({formValid: true});
+      }
     }
 
     _handleInvalid = () => {
-      this.setState({ formValid: false });
+      if (this.state.formValid) {
+        this.setState({formValid: false});
+      }
     }
 
     render() {

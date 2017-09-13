@@ -163,7 +163,7 @@ class EntityProperty extends Component {
             </span>
           </div>
           {!fake && this.renderField()}
-          {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
+          {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
           <Toolbox config={toolboxConfig} />
         </div>
         {onDelete && (

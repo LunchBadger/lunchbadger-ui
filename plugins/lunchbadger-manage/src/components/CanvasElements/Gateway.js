@@ -154,65 +154,70 @@ class Gateway extends Component {
   }
 
   render() {
-    const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
-    const elementClass = cs('Gateway', {
-      'multi': multiEnvIndex > 0,
-      // 'has-connection-in': this.state.hasInConnection,
-      // 'has-connection-out': this.state.hasOutConnection
-    });
-    const mainProperties = [
-      {
-        name: 'rootURL',
-        title: 'root URL',
-        value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
-        fake: true,
-      },
-      {
-        name: 'dnsPrefix',
-        title: 'DNS prefix',
-        value: this.props.entity.dnsPrefix,
-        editableOnly: true,
-        invalid: data.dnsPrefix,
-        onChange: this.onPrefixChange,
-        onBlur: this.handleFieldChange('dnsPrefix'),
-      },
-    ];
-    mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
-    mainProperties[0].onResetField = () => onResetField('dnsPrefix');
-    return (
-      <div className={elementClass}>
-        <EntityProperties properties={mainProperties} />
-        <EntitySubElements
-          title="Pipelines"
-          onAdd={this.onAddPipeline}
-          main
-        >
-          <div className="Gateway__pipelines">
-            <DraggableGroup
-              iconClass="icon-icon-gateway"
-              entity={this.props.entity}
-            >
-              {this.renderPipelines()}
-            </DraggableGroup>
-          </div>
-        </EntitySubElements>
-        {/*this.state.showRemovingModal && (
-          <TwoOptionModal
-            onClose={() => this.setState({showRemovingModal: false})}
-            onSave={this.removePipeline}
-            onCancel={() => this.setState({showRemovingModal: false})}
-            title="Remove pipeline"
-            confirmText="Remove"
-            discardText="Cancel"
-          >
-            <span>
-              Do you really want to remove that pipeline?
-            </span>
-          </TwoOptionModal>
-        )*/}
-      </div>
-    );
+    // console.log('gateway', this.props.entity, this.props.entity.toJSON());
+    return null;
   }
+
+  // render() {
+  //   const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+  //   const elementClass = cs('Gateway', {
+  //     'multi': multiEnvIndex > 0,
+  //     // 'has-connection-in': this.state.hasInConnection,
+  //     // 'has-connection-out': this.state.hasOutConnection
+  //   });
+  //   const mainProperties = [
+  //     {
+  //       name: 'rootURL',
+  //       title: 'root URL',
+  //       value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
+  //       fake: true,
+  //     },
+  //     {
+  //       name: 'dnsPrefix',
+  //       title: 'DNS prefix',
+  //       value: this.props.entity.dnsPrefix,
+  //       editableOnly: true,
+  //       invalid: data.dnsPrefix,
+  //       onChange: this.onPrefixChange,
+  //       onBlur: this.handleFieldChange('dnsPrefix'),
+  //     },
+  //   ];
+  //   mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
+  //   mainProperties[0].onResetField = () => onResetField('dnsPrefix');
+  //   return (
+  //     <div className={elementClass}>
+  //       <EntityProperties properties={mainProperties} />
+  //       <EntitySubElements
+  //         title="Pipelines"
+  //         onAdd={this.onAddPipeline}
+  //         main
+  //       >
+  //         <div className="Gateway__pipelines">
+  //           <DraggableGroup
+  //             iconClass="icon-icon-gateway"
+  //             entity={this.props.entity}
+  //           >
+  //             {this.renderPipelines()}
+  //           </DraggableGroup>
+  //         </div>
+  //       </EntitySubElements>
+  //       {/*this.state.showRemovingModal && (
+  //         <TwoOptionModal
+  //           onClose={() => this.setState({showRemovingModal: false})}
+  //           onSave={this.removePipeline}
+  //           onCancel={() => this.setState({showRemovingModal: false})}
+  //           title="Remove pipeline"
+  //           confirmText="Remove"
+  //           discardText="Cancel"
+  //         >
+  //           <span>
+  //             Do you really want to remove that pipeline?
+  //           </span>
+  //         </TwoOptionModal>
+  //       )*/}
+  //     </div>
+  //   );
+  // }
 }
 
 export default CanvasElement(Gateway);

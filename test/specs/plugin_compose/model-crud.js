@@ -56,24 +56,31 @@ module.exports = {
     // create Car model and check, if context path is car
     page.addElement('model');
     page.setValueSlow(page.getModelSelector(1) + ' .input__name input', 'Car');
+    browser.expect.element(page.getModelSelector(1) + ' .input__name input').value.to.equal('Car');
+    browser.expect.element(page.getModelSelector(1) + ' .input__httppath input').value.to.equal('car');
     page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car');
 
     // create Driver model
     page.addElement('model');
     page.setValueSlow(page.getModelSelector(2) + ' .input__name input', 'Driver');
+    browser.expect.element(page.getModelSelector(2) + ' .input__name input').value.to.equal('Driver');
+    browser.expect.element(page.getModelSelector(2) + ' .input__httppath input').value.to.equal('driver');
     page.submitCanvasEntity(page.getModelSelector(2));
     page.checkEntities('', 'Car,Driver');
 
     // Update Car name into Car1 and check, if context path is car1
     page.editEntity(page.getModelSelector(1));
     page.setValueSlow(page.getModelSelector(1) + ' .input__name input', 'Car1');
+    browser.expect.element(page.getModelSelector(1) + ' .input__name input').value.to.equal('Car1');
+    browser.expect.element(page.getModelSelector(1) + ' .input__httppath input').value.to.equal('car1');
     page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car1,Driver');
 
     // Update context path into car12 and check, if context path is car12
     page.editEntity(page.getModelSelector(1));
     page.setValueSlow(page.getModelSelector(1) + ' .input__httppath input', 'car12');
+    browser.expect.element(page.getModelSelector(1) + ' .input__httppath input').value.to.equal('car12');
     page.submitCanvasEntity(page.getModelSelector(1));
     page.checkEntities('', 'Car1,Driver', 'car12,driver');
 

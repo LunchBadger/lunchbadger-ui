@@ -1,6 +1,6 @@
 export default {
   1: {
-    name: 'Service',
+    name: 'Private',
     entities: ['serviceEndpoints'],
     connectionEntities: ['serviceEndpoints'],
   },

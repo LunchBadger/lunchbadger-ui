@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {update, remove} from '../reduxActions/serviceEndpoints';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -9,7 +10,7 @@ export default class ServiceEndpoint extends BaseModel {
   static entities = 'serviceEndpoints';
 
   _ports = [];
-  url = 'https://service/endpoint';
+  urls = [];
 
   constructor(id, name) {
     super(id);
@@ -23,18 +24,31 @@ export default class ServiceEndpoint extends BaseModel {
     ];
   }
 
+  static create(data) {
+    return super.create({
+      ...data,
+      urls: data.urls ? data.urls : [data.url],
+    });
+  }
+
   recreate() {
-    return ServiceEndpoint.create(this);
+    return ServiceEndpoint.create(this.toJSON());
   }
 
   toJSON() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
       url: this.url,
       contextPath: this.contextPath,
       itemOrder: this.itemOrder
     }
+    if (this.urls.length === 1) {
+      json.url = this.urls[0];
+    } else {
+      json.urls = this.urls;
+    }
+    return json;
   }
 
   get ports() {
@@ -67,7 +81,7 @@ export default class ServiceEndpoint extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Service Endpoint');
         }
       }
-      const fields = ['name', 'url'];
+      const fields = ['name'];
       checkFields(fields, model, validations.data);
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
@@ -80,5 +94,15 @@ export default class ServiceEndpoint extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model) {
+    const data = _.cloneDeep(model);
+    data.urls = [];
+    model.urls.forEach((url) => {
+      if (url.trim() === '') return;
+      data.urls.push(url.trim());
+    })
+    return data;
   }
 }

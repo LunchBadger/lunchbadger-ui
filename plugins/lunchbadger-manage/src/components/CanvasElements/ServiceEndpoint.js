@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {EntityProperties} from '../../../../lunchbadger-ui/src';
+import {
+  EntityProperty,
+  EntitySubElements,
+} from '../../../../lunchbadger-ui/src';
+import './ServiceEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -11,10 +15,66 @@ class ServiceEndpoint extends Component {
     paper: PropTypes.object
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {...this.stateFromStores(props)};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.entity !== nextProps.entity) {
+      this.onStoreUpdate(nextProps);
+    }
+  }
+
+  stateFromStores = props => {
+    const {urls} = props.entity;
+    const newState = {
+      urls: urls.slice(),
+    };
+    return newState;
+  };
+
+  onStoreUpdate = (props = this.props, callback) =>
+    this.setState({...this.stateFromStores(props)}, () => callback && callback());
+
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+
+  processModel = model => {
+    const {entity} = this.props;
+    return entity.processModel(model);
+  };
+
+  changeState = obj => this.setState(obj);
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
     }
+  }
+
+  handleUrlTab = idx => () => {
+    const size = this.state.urls.length;
+    if (size - 1 === idx) {
+      this.addUrl();
+    }
+  };
+
+  addUrl = () => {
+    const urls = _.cloneDeep(this.state.urls);
+    urls.push('');
+    this.changeState({urls});
+    setTimeout(() => {
+      const idx = urls.length - 1;
+      const input = document.getElementById(`urls[${idx}]`);
+      input && input.focus();
+    });
+  }
+
+  deleteUrl = idx => () => {
+    if (this.state.urls.length === 1) return;
+    const urls = _.cloneDeep(this.state.urls);
+    urls.splice(idx, 1);
+    this.changeState({urls});
   }
 
   renderPorts() {
@@ -29,29 +89,48 @@ class ServiceEndpoint extends Component {
     ));
   }
 
-  renderMainProperties = () => {
-    const {entity: {url}, validations: {data}, entityDevelopment, onResetField} = this.props;
-    const mainProperties = [
-      {
-        name: 'url',
-        title: 'URL',
-        value: url,
-        invalid: data.url,
-        onBlur: this.handleFieldChange('url'),
-      },
-    ];
-    mainProperties.forEach((item, idx) => {
-      mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
-      mainProperties[idx].onResetField = onResetField;
-    });
-    return <EntityProperties properties={mainProperties} />;
+  renderUrls = () => {
+    const {urls} = this.state;
+    return (
+      <EntitySubElements
+        title={`URL${urls.length === 1 ? '' : 'S'}`}
+        onAdd={this.addUrl}
+        main
+      >
+        {urls.map((url, idx) => (
+          <EntityProperty
+            key={idx}
+            placeholder="Enter url here"
+            name={`urls[${idx}]`}
+            value={url}
+            onDelete={this.deleteUrl(idx)}
+            onTab={this.handleUrlTab(idx)}
+          />
+        ))}
+      </EntitySubElements>
+    );
+    // const {entity: {url}, validations: {data}, entityDevelopment, onResetField} = this.props;
+    // const mainProperties = [
+    //   {
+    //     name: 'url',
+    //     title: 'URL',
+    //     value: url,
+    //     invalid: data.url,
+    //     onBlur: this.handleFieldChange('url'),
+    //   },
+    // ];
+    // mainProperties.forEach((item, idx) => {
+    //   mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
+    //   mainProperties[idx].onResetField = onResetField;
+    // });
+    // return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
     return (
-      <div>
+      <div className="ServiceEndpoint">
         {this.renderPorts()}
-        {this.renderMainProperties()}
+        {this.renderUrls()}
       </div>
     );
   }

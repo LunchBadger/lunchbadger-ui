@@ -11,7 +11,7 @@ module.exports = {
     page.addElement('gateway');
     page.submitCanvasEntity(gatewaySelector);
     page.connectPorts(privateEndpointSelector, 'out', gatewaySelector, 'in');
-    browser.waitForElementVisible(publicEndpointSelector, 60000);
+    browser.waitForElementVisible(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input', 60000);
     page.expect.element(publicEndpointSelector + ' .EntityHeader .EntityProperty__field--input input').to.have.value.that.equals('PrivateEndpointPublicEndpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:nth-child(2) .EntityProperty__field--input input').to.have.value.that.equals('privateendpoint');
     page.expect.element(publicEndpointSelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--text').to.have.text.that.equals('http://gateway.customer.lunchbadger.com/privateendpoint');

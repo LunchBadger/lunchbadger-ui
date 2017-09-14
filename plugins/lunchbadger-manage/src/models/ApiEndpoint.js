@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {update, remove} from '../reduxActions/apiEndpoints';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -10,7 +11,8 @@ export default class ApiEndpoint extends BaseModel {
 
   _ports = [];
   wasBundled = false;
-  path = '/endpoint';
+  host = '';
+  paths = [];
 
   constructor(id, name) {
     super(id);
@@ -24,17 +26,36 @@ export default class ApiEndpoint extends BaseModel {
     ];
   }
 
+  static create(data) {
+    return super.create({
+      ...data,
+      paths: this.deserializePaths(data.paths),
+    });
+  }
+
   recreate() {
-    return ApiEndpoint.create(this);
+    return ApiEndpoint.create(this.toJSON());
   }
 
   toJSON() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
-      path: this.path,
+      host: this.host,
       itemOrder: this.itemOrder
     }
+    if (this.paths.length === 1) {
+      json.paths = this.paths[0];
+    } else if (this.paths.length > 1) {
+      json.paths = this.paths;
+    }
+    return json;
+  }
+
+  static deserializePaths(paths) {
+    if (typeof paths === 'undefined') return [];
+    if (typeof paths === 'string') return [paths];
+    return paths;
   }
 
   get ports() {
@@ -59,7 +80,7 @@ export default class ApiEndpoint extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('API Endpoint');
         }
       }
-      const fields = ['name', 'path'];
+      const fields = ['name', 'host'];
       checkFields(fields, model, validations.data);
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
@@ -72,6 +93,16 @@ export default class ApiEndpoint extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model) {
+    const data = _.cloneDeep(model);
+    data.paths = [];
+    (model.paths || []).forEach((path) => {
+      if (path.trim() === '') return;
+      data.paths.push(path.trim());
+    })
+    return data;
   }
 
 }

@@ -12,7 +12,6 @@ const CanvasElement = LunchBadgerCore.components.CanvasElement;
 class ServiceEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
-    paper: PropTypes.object
   };
 
   constructor(props) {
@@ -26,13 +25,9 @@ class ServiceEndpoint extends Component {
     }
   }
 
-  stateFromStores = props => {
-    const {urls} = props.entity;
-    const newState = {
-      urls: urls.slice(),
-    };
-    return newState;
-  };
+  stateFromStores = props => ({
+    urls: props.entity.urls.slice(),
+  });
 
   onStoreUpdate = (props = this.props, callback) =>
     this.setState({...this.stateFromStores(props)}, () => callback && callback());
@@ -46,11 +41,11 @@ class ServiceEndpoint extends Component {
 
   changeState = obj => this.setState(obj);
 
-  handleFieldChange = field => (evt) => {
-    if (typeof this.props.onFieldUpdate === 'function') {
-      this.props.onFieldUpdate(field, evt.target.value);
-    }
-  }
+  // handleFieldChange = field => (evt) => {
+  //   if (typeof this.props.onFieldUpdate === 'function') {
+  //     this.props.onFieldUpdate(field, evt.target.value);
+  //   }
+  // }
 
   handleUrlTab = idx => () => {
     const size = this.state.urls.length;

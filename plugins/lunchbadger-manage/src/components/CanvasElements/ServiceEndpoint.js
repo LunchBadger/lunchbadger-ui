@@ -70,7 +70,7 @@ class ServiceEndpoint extends Component {
     });
   }
 
-  deleteUrl = idx => () => {
+  removeUrl = idx => () => {
     if (this.state.urls.length === 1) return;
     const urls = _.cloneDeep(this.state.urls);
     urls.splice(idx, 1);
@@ -103,7 +103,7 @@ class ServiceEndpoint extends Component {
             placeholder="Enter url here"
             name={`urls[${idx}]`}
             value={url}
-            onDelete={this.deleteUrl(idx)}
+            onDelete={this.removeUrl(idx)}
             onTab={this.handleUrlTab(idx)}
           />
         ))}

@@ -11,7 +11,7 @@ export default class ApiEndpoint extends BaseModel {
 
   _ports = [];
   wasBundled = false;
-  host = '';
+  host = '*';
   paths = [];
 
   constructor(id, name) {

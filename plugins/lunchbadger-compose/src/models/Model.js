@@ -227,14 +227,18 @@ export default class Model extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.models;
+      const {models, modelsBundled} = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
-        const isDuplicateName = Object.keys(entities)
+        const isDuplicateModelName = Object.keys(models)
           .filter(id => id !== this.id)
-          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .filter(id => models[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
-        if (isDuplicateName) {
+        const isDuplicateModelBundledName = Object.keys(modelsBundled)
+          .filter(id => id !== this.id)
+          .filter(id => modelsBundled[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateModelName || isDuplicateModelBundledName) {
           validations.data.name = messages.duplicatedEntityName('Model');
         }
       }

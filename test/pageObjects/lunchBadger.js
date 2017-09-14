@@ -214,7 +214,7 @@ var pageCommands = {
   },
 
   getDataSourceSelector: function (nth) {
-    return '.quadrant:first-child .Entity.DataSource:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:first-child .quadrant__body .Entity.DataSource:nth-child(' + nth + ')';
   },
 
   getDataSourceFieldSelector: function (nthEntity, nthProperty) {
@@ -222,7 +222,7 @@ var pageCommands = {
   },
 
   getModelSelector: function (nth) {
-    return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.Model:nth-child(' + nth + ')';
   },
 
   testDatasource: function (type, config = []) {

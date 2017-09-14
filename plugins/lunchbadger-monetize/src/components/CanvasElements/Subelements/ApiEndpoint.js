@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import classNames from 'classnames';
-import './PublicEndpoint.scss';
+import './ApiEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const {coreActions} = LunchBadgerCore.utils;
@@ -33,7 +33,7 @@ const boxSource = {
   isDragging: monitor.isDragging()
 }))
 
-class PublicEndpoint extends Component {
+class ApiEndpoint extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -71,17 +71,17 @@ class PublicEndpoint extends Component {
 
   render() {
     const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames('public-endpoint', {
-      'public-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
+    const elementClass = classNames('api-endpoint', {
+      'api-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
     });
     return connectDragSource(
       <div className={elementClass} onClick={this.handleClick}>
         {this.renderPorts()}
-        <div className="public-endpoint__info">
-          <div className="public-endpoint__icon">
+        <div className="api-endpoint__info">
+          <div className="api-endpoint__icon">
             <i className="fa fa-globe"/>
           </div>
-          <div className="public-endpoint__name">
+          <div className="api-endpoint__name">
             {this.props.entity.name}
           </div>
         </div>
@@ -99,4 +99,4 @@ const selector = createSelector(
   }),
 );
 
-export default connect(selector)(PublicEndpoint);
+export default connect(selector)(ApiEndpoint);

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import selector from '../../utils/selectorPublicEndpoint';
+import selector from '../../utils/selectorApiEndpoint';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
 
-class PublicEndpoint extends Component {
+class ApiEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     paper: PropTypes.object
@@ -80,4 +80,4 @@ class PublicEndpoint extends Component {
   }
 }
 
-export default connect(selector)(CanvasElement(PublicEndpoint));
+export default connect(selector)(CanvasElement(ApiEndpoint));

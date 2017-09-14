@@ -33,7 +33,7 @@ export const update = (entity, model) => (dispatch, getState) => {
 
 export const remove = entity => (dispatch) => {
   entity.apis.forEach((api) => {
-    api.publicEndpoints.forEach(({id: toId}) => {
+    api.apiEndpoints.forEach(({id: toId}) => {
       Connections.removeConnection(null, toId);
     });
     if (LunchBadgerOptimize) {

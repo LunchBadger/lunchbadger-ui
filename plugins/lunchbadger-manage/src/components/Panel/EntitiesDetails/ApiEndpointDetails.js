@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import selector from '../../../utils/selectorPublicEndpoint';
+import selector from '../../../utils/selectorApiEndpoint';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const Input = LunchBadgerCore.components.Input;
 const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
 
-class PublicEndpointDetails extends Component {
+class ApiEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
@@ -56,4 +56,4 @@ class PublicEndpointDetails extends Component {
   }
 }
 
-export default connect(selector)(BaseDetails(PublicEndpointDetails));
+export default connect(selector)(BaseDetails(ApiEndpointDetails));

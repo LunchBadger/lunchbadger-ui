@@ -1,12 +1,12 @@
-import {update, remove} from '../reduxActions/publicEndpoints';
+import {update, remove} from '../reduxActions/apiEndpoints';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
 
-export default class PublicEndpoint extends BaseModel {
-  static type = 'PublicEndpoint';
-  static entities = 'publicEndpoints';
+export default class ApiEndpoint extends BaseModel {
+  static type = 'ApiEndpoint';
+  static entities = 'apiEndpoints';
 
   _ports = [];
   wasBundled = false;
@@ -25,7 +25,7 @@ export default class PublicEndpoint extends BaseModel {
   }
 
   recreate() {
-    return PublicEndpoint.create(this);
+    return ApiEndpoint.create(this);
   }
 
   toJSON() {
@@ -48,7 +48,7 @@ export default class PublicEndpoint extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.publicEndpoints;
+      const entities = getState().entities.apiEndpoints;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateName = Object.keys(entities)
@@ -56,7 +56,7 @@ export default class PublicEndpoint extends BaseModel {
           .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
-          validations.data.name = messages.duplicatedEntityName('Public Endpoint');
+          validations.data.name = messages.duplicatedEntityName('API Endpoint');
         }
       }
       const fields = ['name', 'path'];

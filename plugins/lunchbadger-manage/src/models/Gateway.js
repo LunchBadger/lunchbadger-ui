@@ -195,7 +195,7 @@ export default class Gateway extends BaseModel {
     const data = _.cloneDeep(model);
     data.https.tls = {};
     if (model.https.enabled) {
-      model.https.tls.forEach(({domain, key, cert}) => {
+      (model.https.tls || []).forEach(({domain, key, cert}) => {
         if (domain.trim() === '') return;
         data.https.tls[domain.trim()] = {key, cert};
       });

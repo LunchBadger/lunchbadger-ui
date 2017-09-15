@@ -36,19 +36,12 @@ export default class ServiceEndpoint extends BaseModel {
   }
 
   toJSON() {
-    const json = {
+    return {
       id: this.id,
       name: this.name,
-      url: this.url,
-      contextPath: this.contextPath,
+      urls: this.urls,
       itemOrder: this.itemOrder
-    }
-    if (this.urls.length === 1) {
-      json.url = this.urls[0];
-    } else {
-      json.urls = this.urls;
-    }
-    return json;
+    };
   }
 
   get ports() {
@@ -58,14 +51,6 @@ export default class ServiceEndpoint extends BaseModel {
   set ports(ports) {
     this._ports = ports;
   }
-
-  // The default/initial REST path to be used when auto-creating an api
-  // endpoint associated with this.
-  get contextPath() {
-    return this.name.toLowerCase().replace(/ /g, '-');
-  }
-
-  set contextPath(_) {}
 
   validate(model) {
     return (_, getState) => {

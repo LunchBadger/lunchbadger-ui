@@ -154,7 +154,8 @@ var pageCommands = {
     this.click('.header .canvas-overlay');
     this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
     this.click('.SystemDefcon1 .confirm');
-    this.waitForElementPresent(selector + '.wip', 5000);
+    this.api.pause(500);
+    // this.waitForElementPresent(selector + '.wip', 5000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
     this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
   },

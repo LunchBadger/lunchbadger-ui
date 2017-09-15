@@ -44,9 +44,7 @@ export default class ApiEndpoint extends BaseModel {
       host: this.host,
       itemOrder: this.itemOrder
     }
-    if (this.paths.length === 1) {
-      json.paths = this.paths[0];
-    } else if (this.paths.length > 1) {
+    if (this.paths.length > 0) {
       json.paths = this.paths;
     }
     return json;

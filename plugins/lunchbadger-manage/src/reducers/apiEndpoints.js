@@ -7,7 +7,7 @@ export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
     case coreActionTypes.onLoadProject:
-      return (action.payload.body.apiEndpoints || []).reduce((map, item) => {
+      return action.payload.body.apiEndpoints.reduce((map, item) => {
         map[item.id] = ApiEndpoint.create(item);
         return map;
       }, {});

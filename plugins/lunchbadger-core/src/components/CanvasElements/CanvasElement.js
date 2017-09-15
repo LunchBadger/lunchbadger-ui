@@ -508,6 +508,7 @@ export default (ComposedComponent) => {
               toolboxConfig={toolboxConfig}
               name={this.props.entity.name}
               onNameChange={this.updateName}
+              onNameBlur={this.handleFieldUpdate}
               onCancel={this.handleCancel}
               validations={validations}
               onFieldClick={this.handleValidationFieldClick}

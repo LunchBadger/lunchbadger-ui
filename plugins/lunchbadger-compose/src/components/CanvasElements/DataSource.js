@@ -45,7 +45,9 @@ class DataSource extends Component {
     };
     if (name === 'password') {
       prop.password = true;
-      prop.contextual = 'Password should be at least 6 chars long';
+      if (entity.isSalesforce) {
+        prop.contextual = 'Password should be a concatenation of the Salesforce password and API token';
+      }
     }
     return prop;
   }

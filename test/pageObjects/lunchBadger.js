@@ -68,10 +68,11 @@ var pageCommands = {
   editEntity: function (selector) {
     this.click(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
-    this.click(selector + '.highlighted .Toolbox__button--edit');
-    this.waitForElementPresent(selector + '.editable', 50000);
-    this.waitForElementVisible(selector + ' .input__name input', 50000);
-    // this.api.pause(3000);
+    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -15, function() {
+      this.click(selector + '.highlighted .Toolbox__button--edit');
+      this.waitForElementPresent(selector + '.editable', 50000);
+      this.waitForElementVisible(selector + ' .input__name input', 50000);
+    });
   },
 
   discardCanvasEntityChanges: function (selector) {
@@ -224,6 +225,10 @@ var pageCommands = {
 
   getModelSelector: function (nth) {
     return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.Model:nth-child(' + nth + ')';
+  },
+
+  getGatewaySelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .Entity.Gateway:nth-child(' + nth + ')';
   },
 
   testDatasource: function (type, config = []) {

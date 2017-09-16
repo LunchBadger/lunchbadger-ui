@@ -153,10 +153,11 @@ class EntityProperty extends Component {
         onClick: onResetField(modelName || name),
       });
     }
+    const plainName = getPlainText(name);
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
-        <div className={cs('EntityProperty__field', getPlainText(name))}>
+        <div className={cs('EntityProperty__field', plainName)}>
           <div className='EntityProperty__field--text' onClick={onClick}>
             <span className={textValueClassNames} onClick={onViewModeClick}>
               {textValue}
@@ -167,7 +168,7 @@ class EntityProperty extends Component {
           <Toolbox config={toolboxConfig} />
         </div>
         {onDelete && (
-          <div className="EntityProperty__delete" onClick={onDelete}>
+          <div className={cs('EntityProperty__delete', `button__remove__${plainName}`)} onClick={onDelete}>
             <IconSVG svg={iconDelete} />
           </div>
         )}

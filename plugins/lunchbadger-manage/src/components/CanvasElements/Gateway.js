@@ -205,7 +205,7 @@ class Gateway extends Component {
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
         collapsible={collapsible}
-        button={<IconButton icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
+        button={<IconButton name={`add__pipelines${pipelineIdx}policy`} icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
         defaultOpened
         untoggable
         space="15px 0 5px"
@@ -237,12 +237,12 @@ class Gateway extends Component {
     return (
       <div className="Gateway__pipelines">
         {pipelines.map((pipeline, idx) => (
-          <div key={pipeline.id}>
+          <div key={pipeline.id} className={`Gateway__pipeline${idx}`}>
             {this.renderPipelinePorts(pipeline.ports)}
             <CollapsibleProperties
               bar={this.renderPipelineInput(idx, pipeline)}
               collapsible={this.renderPipeline(pipeline, idx)}
-              button={<IconButton icon="iconDelete" onClick={this.removePipeline(idx)} />}
+              button={<IconButton name={`remove__pipelines${idx}`} icon="iconDelete" onClick={this.removePipeline(idx)} />}
               defaultOpened
               space="0"
               noDividers

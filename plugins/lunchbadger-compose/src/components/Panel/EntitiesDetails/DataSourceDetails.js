@@ -4,7 +4,6 @@ import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
-  Input,
 } from '../../../../../lunchbadger-ui/src';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -13,17 +12,6 @@ class DataSourceDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
   };
-
-  renderField = name => (
-    <div className="details-panel__fieldset">
-      <span className="details-panel__label">{name.toUpperCase()}</span>
-      <Input
-        className="details-panel__input"
-        value={this.props.entity[name].toString()}
-        name={name}
-      />
-    </div>
-  );
 
   renderFields = () => {
     const {
@@ -82,6 +70,7 @@ class DataSourceDetails extends Component {
         title: 'Password',
         name: 'password',
         value: password,
+        password: true,
       });
     }
     return (

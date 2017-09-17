@@ -1,6 +1,5 @@
 .EntityHeader {
   background-color: #01667D;
-  height: 48px;
   color: #FFF;
   padding: 0 35px 0 60px;
   position: relative;
@@ -64,6 +63,9 @@
           }
         }
       }
+    }
+    .EntityProperty__error {
+      margin-top: 0;
     }
   }
 }

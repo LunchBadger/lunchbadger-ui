@@ -1,1 +1,1 @@
-export default str => str.replace(/[\/\[\]]/g, '').toLowerCase();
+export default str => str.replace(/[\/\[\]]/g, '');

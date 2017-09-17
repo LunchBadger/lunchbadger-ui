@@ -24,9 +24,9 @@ module.exports = {
       page.expect.element(page.getGatewaySelector(1) + ' .pipelines0policies2name .EntityProperty__field--text').text.to.equal('simple-logger');
       page.editEntity(page.getGatewaySelector(1));
       browser.pause(2000);
-      browser.waitForElementVisible(page.getGatewaySelector(1) + ' .button__add__pipelines', 5000);
-      page.click(page.getGatewaySelector(1) + ' .button__add__pipelines');
-      page.click(page.getGatewaySelector(1) + ' .button__add__pipelines');
+      browser.waitForElementVisible(page.getGatewaySelector(1) + ' .button__add__Pipelines', 5000);
+      page.click(page.getGatewaySelector(1) + ' .button__add__Pipelines');
+      page.click(page.getGatewaySelector(1) + ' .button__add__Pipelines');
       browser.waitForElementVisible(page.getGatewaySelector(1) + ' .input__pipelines1name input', 5000);
       page.setValueSlow(page.getGatewaySelector(1) + ' .input__pipelines1name input', 'Pipeline2');
       page.setValueSlow(page.getGatewaySelector(1) + ' .input__pipelines2name input', 'Pipeline3');

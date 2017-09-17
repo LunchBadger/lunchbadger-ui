@@ -89,17 +89,17 @@ module.exports = {
   },
 
   'Tools menu: private endpoint selected': function (browser) {
-    page.addElementFromTooltip('endpoint', 'privateendpoint');
+    page.addElementFromTooltip('endpoint', 'serviceendpoint');
     browser.waitForElementPresent('.endpoint.Tool.selected', 8000);
-    browser.click(privateSelector + '.PrivateEndpoint.editable .Button.cancel');
+    browser.click(privateSelector + '.ServiceEndpoint.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
     browser.pause(1000);
   },
 
   'Tools menu: public endpoint selected': function (browser) {
-    page.addElementFromTooltip('endpoint', 'publicendpoint');
+    page.addElementFromTooltip('endpoint', 'apiendpoint');
     browser.waitForElementPresent('.endpoint.Tool.selected', 8000);
-    browser.click(publicSelector + '.PublicEndpoint.editable .Button.cancel');
+    browser.click(publicSelector + '.ApiEndpoint.editable .Button.cancel');
     browser.waitForElementNotPresent('.Aside.disabled', 8000);
     browser.pause(1000);
   },

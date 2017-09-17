@@ -1,9 +1,9 @@
 var page;
 
-function expectInstall(browser, finalStatus) {
+function expectStatus(browser, status) {
   browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
-  browser.waitForElementPresent(`.workspace-status .workspace-status__${finalStatus}`, 120000);
-  if (finalStatus === 'failure') {
+  browser.waitForElementPresent(`.workspace-status .workspace-status__${status}`, 5 * 60 * 1000);
+  if (status === 'failure') {
     browser.click('.workspace-status span');
     browser.waitForElementPresent('.SystemDefcon1 .SystemDefcon1__box__content__details--box', 5000);
     page.expect.element('.SystemDefcon1 .SystemDefcon1__box__content__details--box').text.to.contain('ENOTFOUND');
@@ -19,7 +19,7 @@ module.exports = {
     page.addElementFromTooltip('dataSource', 'rest');
     page.setValueSlow(page.getDataSourceSelector(1) + ' .input__operations0templateurl input', 'http://dumpUrl');
     page.submitCanvasEntity(page.getDataSourceSelector(1));
-    expectInstall(browser, 'success');
+    expectStatus(browser, 'success');
   },
 
   'Connector installation: add more data source': function(browser) {
@@ -36,7 +36,7 @@ module.exports = {
     page.setValueSlow(page.getDataSourceSelector(3) + ' .input__username input', 'dumpUsername');
     page.setValueSlow(page.getDataSourceSelector(3) + ' .input__password input', 'dumpPassword');
     page.submitCanvasEntity(page.getDataSourceSelector(3));
-    expectInstall(browser, 'failure');
+    expectStatus(browser, 'failure');
   },
 
   'Connector uninstallation: remove datasource': function(browser) {
@@ -47,7 +47,7 @@ module.exports = {
     browser.click(page.getDataSourceSelector(3) + ' .Toolbox__button--delete');
     browser.waitForElementPresent('.ConfirmModal .confirm', 5000);
     browser.click('.ConfirmModal .confirm');
-    expectInstall(browser, 'failure');
+    expectStatus(browser, 'failure');
   },
 
   'Connector uninstallation: trash workspace': function(browser) {
@@ -55,7 +55,7 @@ module.exports = {
     browser.click('.SystemDefcon1 .removeError');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click('.header__menu__element .fa-trash-o');
-    expectInstall(browser, 'success');
+    expectStatus(browser, 'success');
   },
 
   after: function() {

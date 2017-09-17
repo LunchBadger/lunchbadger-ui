@@ -1,20 +1,11 @@
 const fs = require('fs');
 let notifiedCoverage = false;
 
-function getDataSourceSelector (nth) {
-  return '.quadrant:first-child .Entity.DataSource:nth-child(' + nth + ')';
-}
-
-function getModelSelector (nth) {
-  return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
-}
-
 var pageCommands = {
   open: function () {
     var page = this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
     this.waitForElementVisible('.app', 5000);
-
     return page;
   },
 
@@ -77,10 +68,11 @@ var pageCommands = {
   editEntity: function (selector) {
     this.click(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
-    this.click(selector + '.highlighted .Toolbox__button--edit');
-    this.waitForElementPresent(selector + '.editable', 50000);
-    this.waitForElementVisible(selector + ' .input__name input', 50000);
-    // this.api.pause(3000);
+    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -15, function() {
+      this.click(selector + '.highlighted .Toolbox__button--edit');
+      this.waitForElementPresent(selector + '.editable', 50000);
+      this.waitForElementVisible(selector + ' .input__name input', 50000);
+    });
   },
 
   discardCanvasEntityChanges: function (selector) {
@@ -163,7 +155,8 @@ var pageCommands = {
     this.click('.header .canvas-overlay');
     this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
     this.click('.SystemDefcon1 .confirm');
-    this.waitForElementPresent(selector + '.wip', 5000);
+    this.api.pause(500);
+    // this.waitForElementPresent(selector + '.wip', 5000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
     this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
   },
@@ -173,27 +166,27 @@ var pageCommands = {
     this.expect.element('.Aside.disabled').to.not.be.present;
     this.expect.element('.canvas__container--editing').to.not.be.present;
     if (dataSources === '') {
-      this.waitForElementNotPresent(getDataSourceSelector(1), 5000);
+      this.waitForElementNotPresent(this.getDataSourceSelector(1), 5000);
     } else {
       dataSources.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
-        this.expect.element(getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
+        this.waitForElementPresent(this.getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
+        this.expect.element(this.getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
       });
-      this.waitForElementNotPresent(getDataSourceSelector(dataSources.split(',').length + 1), 5000);
+      this.waitForElementNotPresent(this.getDataSourceSelector(dataSources.split(',').length + 1), 5000);
     }
     if (models === '') {
-      this.waitForElementNotPresent(getModelSelector(1), 5000);
+      this.waitForElementNotPresent(this.getModelSelector(1), 5000);
     } else {
       models.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
-        this.expect.element(getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
+        this.waitForElementPresent(this.getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
+        this.expect.element(this.getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
       });
-      this.waitForElementNotPresent(getModelSelector(models.split(',').length + 1), 5000);
+      this.waitForElementNotPresent(this.getModelSelector(models.split(',').length + 1), 5000);
     }
     if (contextPaths !== '') {
       contextPaths.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text', 5000);
-        this.expect.element(getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal(name);
+        this.waitForElementPresent(this.getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text', 5000);
+        this.expect.element(this.getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal(name);
       });
     }
   },
@@ -223,7 +216,7 @@ var pageCommands = {
   },
 
   getDataSourceSelector: function (nth) {
-    return '.quadrant:first-child .Entity.DataSource:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:first-child .quadrant__body .Entity.DataSource:nth-child(' + nth + ')';
   },
 
   getDataSourceFieldSelector: function (nthEntity, nthProperty) {
@@ -231,7 +224,11 @@ var pageCommands = {
   },
 
   getModelSelector: function (nth) {
-    return '.quadrant:nth-child(2) .Entity.Model:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.Model:nth-child(' + nth + ')';
+  },
+
+  getGatewaySelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .Entity.Gateway:nth-child(' + nth + ')';
   },
 
   testDatasource: function (type, config = []) {

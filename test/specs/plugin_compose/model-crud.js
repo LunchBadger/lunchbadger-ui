@@ -63,6 +63,7 @@ module.exports = {
 
     // Reload page and check, if Car is present
     browser.refresh(function () {
+      page.waitUntilWorkspaceLoaded();
       page.checkEntities('', 'Car');
 
       // create Driver model
@@ -75,6 +76,7 @@ module.exports = {
 
       // Reload page and check, if models are consistent after reload
       browser.refresh(function () {
+        page.waitUntilWorkspaceLoaded();
         page.checkEntities('', 'Car,Driver');
 
         // Update Car name into Car1 and check, if context path is car1
@@ -87,6 +89,7 @@ module.exports = {
 
         // Reload page and check, if models are consistent after reload
         browser.refresh(function () {
+          page.waitUntilWorkspaceLoaded();
           page.checkEntities('', 'Car1,Driver');
 
           // Update context path into car12 and check, if context path is car12
@@ -98,6 +101,7 @@ module.exports = {
 
           // Reload page and check, if model is consistent after reload
           browser.refresh(function () {
+            page.waitUntilWorkspaceLoaded();
             page.checkEntities('', 'Car1,Driver', 'car12,driver');
 
             // Edit Car1 model, rename Car1 into Bus, rename context path into bus
@@ -123,6 +127,7 @@ module.exports = {
 
             // Reload page and check model data
             browser.refresh(function () {
+              page.waitUntilWorkspaceLoaded();
               page.checkEntities('', 'Car1,Driver', 'car12,driver');
               checkProperties(browser, 'color,engine', 'String,String');
 
@@ -136,6 +141,7 @@ module.exports = {
 
               // Reload page and check model data
               browser.refresh(function () {
+                page.waitUntilWorkspaceLoaded();
                 page.checkEntities('', 'Car1,Driver', 'car12,driver');
                 checkProperties(browser, 'manual,windows', 'Boolean,Number');
 
@@ -167,6 +173,7 @@ module.exports = {
 
                 // Reload page and check model data in canvas and details panel
                 browser.refresh(function () {
+                  page.waitUntilWorkspaceLoaded();
                   page.checkEntities('', 'Car,Driver');
                   checkProperties(browser, 'manual,windows', 'Boolean,Number');
                   page.openEntityInDetailsPanel(page.getModelSelector(1));
@@ -209,6 +216,7 @@ module.exports = {
 
                   // Reload page and check, if model in canvas and details panel has correct data
                   browser.refresh(function () {
+                    page.waitUntilWorkspaceLoaded();
                     page.checkEntities('', 'Bus,Driver');
                     checkProperties(browser, 'temp,windows', 'String,Number');
                     page.openEntityInDetailsPanel(page.getModelSelector(1));
@@ -253,6 +261,7 @@ module.exports = {
 
                     // Reload page and check, if model in details panel has correct data
                     browser.refresh(function () {
+                      page.waitUntilWorkspaceLoaded();
                       page.checkEntities('', 'Bus,Driver');
                       checkProperties(browser, 'temp,windows', 'String,Number');
                       page.openEntityInDetailsPanel(page.getModelSelector(1));
@@ -291,6 +300,7 @@ module.exports = {
 
                       // reload page and check if model in details panel has correct data
                       browser.refresh(function () {
+                        page.waitUntilWorkspaceLoaded();
                         page.checkEntities('', 'Bus,Driver');
                         checkProperties(browser, 'temp,windows', 'String,Number');
                         page.openEntityInDetailsPanel(page.getModelSelector(1));

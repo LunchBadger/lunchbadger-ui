@@ -161,6 +161,11 @@ var pageCommands = {
     this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
   },
 
+  waitUntilWorkspaceLoaded: function() {
+    this.waitForElementPresent('.spinner__overlay', 5000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
+  },
+
   checkEntities: function (dataSources = '', models = '', contextPaths) {
     contextPaths = contextPaths || models.toLowerCase();
     this.expect.element('.Aside.disabled').to.not.be.present;

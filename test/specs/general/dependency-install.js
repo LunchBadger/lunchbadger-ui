@@ -50,12 +50,12 @@ module.exports = {
     expectStatus(browser, 'failure');
   },
 
-  'Connector uninstallation: trash workspace': function(browser) {
-    browser.click('.SystemDefcon1 .removeError');
-    browser.click('.SystemDefcon1 .removeError');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
+  'Connector uninstallation: trash workspace and reload page': function(browser) {
+    browser.click('.SystemDefcon1 button');
     browser.click('.header__menu__element .fa-trash-o');
-    expectStatus(browser, 'success');
+    browser.refresh(function () {
+      expectStatus(browser, 'success');
+    });
   },
 
   after: function() {

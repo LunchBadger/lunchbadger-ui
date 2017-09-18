@@ -50,14 +50,19 @@ module.exports = {
   },
 
   'Connector uninstallation: trash workspace and reload page': function(browser) {
-    browser.click('.SystemDefcon1 button');
+    browser.click('.SystemDefcon1 .removeError');
+    browser.click('.SystemDefcon1 .removeError');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click('.header__menu__element .fa-trash-o');
     browser.waitForElementPresent('.spinner__overlay', 5000);
     browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
     browser.waitForElementNotPresent('.spinner__overlay', 60000);
-    browser.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
+    browser.waitForElementPresent('.SystemDefcon1', 5000);
+    browser.click('.SystemDefcon1 .removeError');
+    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
+    browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
     browser.refresh(function () {
-      browser.waitForElementVisible('.workspace-status .workspace-status__success', 120000);
+      browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
     });
   },
 

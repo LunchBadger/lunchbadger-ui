@@ -64,7 +64,7 @@ class SubModel extends PureComponent {
 
   handleClick = () => {
     const {parent, entity, dispatch} = this.props;
-    dispatch(toggleSubelement(parent, entity));
+    setTimeout(() => dispatch(toggleSubelement(parent, entity)));
   }
 
   handleNameChange = event => this.refs.model

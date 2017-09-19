@@ -1,7 +1,9 @@
 import Model from '../models/Model.js';
+import ModelProperty from '../models/ModelProperty';
+import ModelRelation from '../models/ModelRelation';
 import {actionTypes} from '../reduxActions/actions';
 
-const {actionTypes: coreActions} = LunchBadgerCore.utils;
+const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
 export default (state = {}, action) => {
   const newState = {...state};
@@ -9,7 +11,14 @@ export default (state = {}, action) => {
     case actionTypes.onLoadCompose:
       return action.payload[1].body.reduce((map, item) => {
         if (!item.wasBundled) return map;
-        map[item.lunchbadgerId] = Model.create(item);
+        const properties = item.properties || [];
+        const relations = item.relations || [];
+        delete item.properties;
+        delete item.relations;
+        const model = Model.create(item);
+        properties.forEach(property => model.addProperty(ModelProperty.create(property)));
+        relations.forEach(relation => model.addRelation(ModelRelation.create(relation)));
+        map[item.lunchbadgerId] = model;
         return map;
       }, {});
     case actionTypes.updateModelBundled:
@@ -18,7 +27,7 @@ export default (state = {}, action) => {
     case actionTypes.removeModelBundled:
       delete newState[action.payload.id];
       return newState;
-    case coreActions.clearProject:
+    case coreActionTypes.clearProject:
       return {};
     default:
       return state;

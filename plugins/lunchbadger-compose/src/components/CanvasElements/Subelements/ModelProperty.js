@@ -14,7 +14,7 @@ class ModelPropertyDetails extends Component {
   }
 
   checkTabButton = (event) => {
-    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.index + 1) {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.idx + 1) {
       const {parentId, addAction} = this.props;
       addAction(parentId)();
     }
@@ -26,37 +26,44 @@ class ModelPropertyDetails extends Component {
   }
 
   render() {
-    const {property, parentId, addAction} = this.props;
-    const index = `${parentId}/${this.props.index}`;
+    const {property, parentId, addAction, nested, index} = this.props;
+    const idx = `${parentId}/${this.props.idx}`;
     const type = property.type || 'string';
     const isNested = ['array', 'object'].includes(property.type);
+    const nameId = nested ? `models[${index}][properties][${idx}][id]` : `properties[${idx}][id]`;
+    const nameRequired = nested ? `models[${index}][properties][${idx}][required]` : `properties[${idx}][required]`;
+    const nameIndex = nested ? `models[${index}][properties][${idx}][index]` : `properties[${idx}][index]`;
+    const nameDescription = nested ? `models[${index}][properties][${idx}][description]` : `properties[${idx}][description]`;
+    const nameDefault = nested ? `models[${index}][properties][${idx}][default_]` : `properties[${idx}][default_]`;
+    const nameName = nested ? `models[${index}][properties][${idx}][name]` : `properties[${idx}][name]`;
+    const nameType = nested ? `models[${index}][properties][${idx}][type]` : `properties[${idx}][type]`;
     return (
       <div className="ModelProperty">
         <Input
           value={property.id}
           type="hidden"
-          name={`properties[${index}][id]`}
+          name={nameId}
         />
         <Checkbox
           value={property.required}
           hidden
-          name={`properties[${index}][required]`}
+          name={nameRequired}
         />
         <Checkbox
           value={property.index}
           hidden
-          name={`properties[${index}][index]`}
+          name={nameIndex}
         />
         <Input
           type="hidden"
           value={property.description}
-          name={`properties[${index}][description]`}
+          name={nameDescription}
         />
         {!isNested && (
           <Input
             type="hidden"
             value={property.default_}
-            name={`properties[${index}][default_]`}
+            name={nameDefault}
           />
         )}
         <div className={cs('ModelProperty__col', 'name')}>
@@ -68,7 +75,7 @@ class ModelPropertyDetails extends Component {
             </div>
             <Input
               value={property.name}
-              name={`properties[${index}][name]`}
+              name={nameName}
               fullWidth
               className="EntityProperty__field--input"
             />
@@ -85,7 +92,7 @@ class ModelPropertyDetails extends Component {
               value={type || 'string'}
               handleChange={this.onPropertyTypeChange}
               handleKeyDown={this.checkTabButton}
-              name={`properties[${index}][type]`}
+              name={nameType}
               options={propertyTypes}
               className="EntityProperty__field--input"
             />
@@ -112,7 +119,7 @@ ModelPropertyDetails.propTypes = {
   addAction: PropTypes.func.isRequired,
   onPropertyTypeChange: PropTypes.func.isRequired,
   propertiesCount: PropTypes.number.isRequired,
-  index: PropTypes.number.isRequired,
+  idx: PropTypes.number.isRequired,
   parentId: PropTypes.string.isRequired,
 };
 

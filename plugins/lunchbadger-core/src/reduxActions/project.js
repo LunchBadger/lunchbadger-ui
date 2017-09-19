@@ -10,6 +10,7 @@ export const loadFromServer = () => async (dispatch, getState) => {
     onAppLoad.map((item, idx) => {
       dispatch(item.callback(responses[idx]));
       item.action && dispatch(item.action(responses[idx]));
+      item.actions && item.actions.map(action => dispatch(action(responses[idx])));
     });
   } catch (err) {
     if (err.statusCode === 401) {

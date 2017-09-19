@@ -31,7 +31,7 @@ var pageCommands = {
   addElementFromTooltip: function (entity, option) {
     option = option || 'rest';
     this.click('.Tool.' + entity);
-    this.api.waitForElementVisible('.Tool__submenuItem.' + option, 60 * 1000);
+    this.api.pause(500);
     this.click('.Tool__submenuItem.' + option);
   },
 
@@ -43,17 +43,6 @@ var pageCommands = {
     this.api.drag(dragTarget, dropTarget);
 
     return this;
-  },
-
-  setValueSlow: function (selector, value, using) {
-    var self = this.api;
-    self.elements(using || 'css selector', selector, function (elems) {
-      elems.value.forEach(function (element) {
-        for (var c of value.split('')) {
-          self.elementIdValue(element.ELEMENT, c);
-        }
-      });
-    });
   }
 };
 

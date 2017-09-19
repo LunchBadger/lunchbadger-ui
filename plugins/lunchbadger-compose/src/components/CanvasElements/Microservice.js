@@ -4,8 +4,10 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
-import Model from './Subelements/Model';
+import ModelComponent from './Subelements/Model';
+import Model from '../../models/Model';
 import {bundle, unbundle, rebundle} from '../../reduxActions/models';
+import './Microservice.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
@@ -18,35 +20,24 @@ class Microservice extends Component {
     parent: PropTypes.object
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
       isShowingModal: false,
       bundledItem: null,
+      models: props.models,
+    }
+    this.onStoreUpdate = (props = this.props, callback) => this.setState({models: props.models}, callback);
+    this.modelsRefs = {};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.entity !== this.props.entity || nextProps.models !== this.props.models) {
+      this.onStoreUpdate(nextProps);
     }
   }
 
-  renderModels() {
-    return this.props.models.map((model, idx) => (
-      <Model
-        key={idx}
-        parent={this.props.entity}
-        id={model.id}
-        entity={model}
-        left={0}
-        top={0}
-        handleEndDrag={(item) => this.handleEndDrag(item)}
-        hideSourceOnDrag={true}
-        index={idx}
-      />
-    ));
-  }
-
-  handleEndDrag(item) {
+  handleEndDrag = item => {
     if (item) {
       this.setState({
         isShowingModal: true,
@@ -58,16 +49,62 @@ class Microservice extends Component {
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
-    this.context.store.dispatch(unbundle(item.parent, entity));
+    this.props.dispatch(unbundle(item.parent, entity));
   }
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
-  bundleModel = (microservice, model) =>
-    this.context.store.dispatch(bundle(microservice, model));
+  bundleModel = (microservice, model) => this.props.dispatch(bundle(microservice, model));
 
-  moveBetweenMicroservice = (fromMicroservice, toMicroservice, model) =>
-    this.context.store.dispatch(rebundle(fromMicroservice, toMicroservice, model));
+  moveBetweenMicroservice = (from, to, model) => this.props.dispatch(rebundle(from, to, model));
+
+  getSubModel = id => this.modelsRefs[id]
+    .getWrappedInstance()
+    .getDecoratedComponentInstance()
+    .refs
+    .model
+    .getWrappedInstance()
+    .getDecoratedComponentInstance()
+    .getDecoratedComponentInstance()
+    .element;
+
+  processModel = model => {
+    if (!model.models) model.models = [];
+    model.models.forEach(({lunchbadgerId}, idx) => {
+      model.models[idx] = this.getSubModel(lunchbadgerId).processModel(model.models[idx]);
+    });
+    return model;
+  }
+
+  handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
+
+  discardChanges = () => {
+    this.onStoreUpdate(this.props, () => {
+      this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
+    });
+  }
+
+  renderModels = () => {
+    const {entity, validations: {data: {models: data = {}}}} = this.props;
+    const {models} = this.state;
+    return models.map((model, idx) => {
+      const validations = data[model.id] ? {data: data[model.id], isValid: false} : {data: {}, isValid: true};
+      return <ModelComponent
+        key={idx}
+        parent={entity}
+        id={model.id}
+        entity={model}
+        left={0}
+        top={0}
+        handleEndDrag={this.handleEndDrag}
+        hideSourceOnDrag={true}
+        index={idx}
+        ref={r => this.modelsRefs[model.id] = r}
+        validations={validations}
+        handleDeleteModel={this.handleDeleteModel}
+      />;
+    });
+  }
 
   render() {
     return (

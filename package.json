@@ -119,6 +119,7 @@
     "react-redux": "^4.4.7",
     "react-tap-event-plugin": "^2.0.1",
     "react-tooltip": "^2.0.3",
+    "react-transition-group": "^1.2.0",
     "redux": "https://registry.npmjs.org/redux/-/redux-3.6.0.tgz",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",

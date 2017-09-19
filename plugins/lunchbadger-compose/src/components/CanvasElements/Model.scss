@@ -1,3 +1,20 @@
+.Model {
+  .EntitySubElements {
+    margin-left: -10px;
+    margin-top: -10px;
+    &__elements {
+      margin-left: 5px;
+    }
+  }
+  &.nested {
+    margin-top: -15px;
+    .EntitySubElements {
+      border-top: none;
+      margin-top: -20px;
+    }
+  }
+}
+
 .editable .Model.multi {
   .EntitySubElements__title__add,
   .ModelProperty__action {
@@ -13,4 +30,26 @@
       }
     }
   }
+}
+
+.propertyTransition-enter {
+  opacity: 0;
+  height: 0;
+}
+
+.propertyTransition-enter.propertyTransition-enter-active {
+  opacity: 1;
+  height: 48px;
+  transition: opacity 400ms ease 400ms, height 400ms ease;
+}
+
+.propertyTransition-leave {
+  opacity: 1;
+  height: 48px;
+}
+
+.propertyTransition-leave.propertyTransition-leave-active {
+  opacity: 0;
+  height: 0;
+  transition: opacity 400ms ease, height 400ms ease 400ms;
 }

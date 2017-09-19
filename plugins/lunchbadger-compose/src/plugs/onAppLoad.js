@@ -1,8 +1,7 @@
-import {DataSourceService} from '../services';
-import {ModelService} from '../services';
-import {ModelConfigsService} from '../services';
+import {DataSourceService, ModelService, ModelConfigsService} from '../services';
 import {actions} from '../reduxActions/actions';
 import {addModelConfigsToConnections} from '../reduxActions/connections';
+import {removeNonExistentSubModels} from '../reduxActions/microservices';
 
 export default [
   {
@@ -12,6 +11,9 @@ export default [
       ModelConfigsService.load(),
     ]),
     callback: actions.onLoadCompose,
-    action: addModelConfigsToConnections,
+    actions: [
+      addModelConfigsToConnections,
+      removeNonExistentSubModels,
+    ],
   }
 ];

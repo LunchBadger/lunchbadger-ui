@@ -134,10 +134,7 @@ class Quadrant extends PureComponent {
             return (
               <Component
                 id={id}
-                icon=""
                 key={entity.id}
-                appState={null}
-                paper={null}
                 entity={entity}
                 hideSourceOnDrag={true}
                 itemOrder={idx}

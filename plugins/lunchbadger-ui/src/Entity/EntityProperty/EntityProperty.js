@@ -6,6 +6,39 @@ import {iconDelete, iconTrash, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    placeholder: PropTypes.string,
+    invalid: PropTypes.string,
+    fake: PropTypes.bool,
+    editableOnly: PropTypes.bool,
+    password: PropTypes.bool,
+    hiddenInputs: PropTypes.array,
+    onChange: PropTypes.func,
+    onDelete: PropTypes.func,
+    onBlur: PropTypes.func,
+    underlineStyle: PropTypes.object,
+    onViewModeClick: PropTypes.func,
+    onClick: PropTypes.func,
+    selected: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    title: '',
+    placeholder: '',
+    invalid: '',
+    contextual: '',
+    fake: false,
+    editableOnly: false,
+    password: false,
+    hiddenInputs: [],
+    onChange: () => {},
+    onBlur: () => {},
+    onResetField: () => {},
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -49,6 +82,8 @@ class EntityProperty extends Component {
       onViewModeClick,
       isDelta,
       onResetField,
+      onClick,
+      selected,
     } = this.props;
     const {contextualVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -59,6 +94,7 @@ class EntityProperty extends Component {
       ['EntityProperty__contextual']: contextualVisible,
       ['EntityProperty__invalid']: isInvalid,
       ['EntityProperty__delta']: isDelta,
+      ['EntityProperty__selected']: selected,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;
@@ -80,7 +116,7 @@ class EntityProperty extends Component {
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
         <div className="EntityProperty__field">
-          <div className='EntityProperty__field--text'>
+          <div className='EntityProperty__field--text' onClick={onClick}>
             <span className={textValueClassNames} onClick={onViewModeClick}>
               {textValue}
             </span>
@@ -120,37 +156,6 @@ class EntityProperty extends Component {
       </div>
     );
   }
-}
-
-EntityProperty.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  title: PropTypes.string,
-  placeholder: PropTypes.string,
-  invalid: PropTypes.string,
-  fake: PropTypes.bool,
-  editableOnly: PropTypes.bool,
-  password: PropTypes.bool,
-  hiddenInputs: PropTypes.array,
-  onChange: PropTypes.func,
-  onDelete: PropTypes.func,
-  onBlur: PropTypes.func,
-  underlineStyle: PropTypes.object,
-  onViewModeClick: PropTypes.func,
-}
-
-EntityProperty.defaultProps = {
-  title: '',
-  placeholder: '',
-  invalid: '',
-  contextual: '',
-  fake: false,
-  editableOnly: false,
-  password: false,
-  hiddenInputs: [],
-  onChange: () => {},
-  onBlur: () => {},
-  onResetField: () => {},
 }
 
 export default EntityProperty;

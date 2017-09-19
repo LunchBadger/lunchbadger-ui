@@ -1,0 +1,17 @@
+.Microservice {
+  .CollapsibleProperties {
+    padding: 0;
+    &__bar {
+      padding: 0 24px;
+      &:before {
+        display: none;
+      }
+    }
+  }
+  .SubModel {
+    border-top: 1px solid #f8f8f8;
+    &:first-child {
+      border-top: none;
+    }
+  }
+}

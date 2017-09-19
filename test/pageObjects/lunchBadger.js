@@ -162,7 +162,9 @@ var pageCommands = {
   },
 
   waitUntilWorkspaceLoaded: function() {
-    this.waitForElementPresent('.spinner__overlay', 5000);
+    this.waitForElementPresent('.header', 60000);
+    this.api.pause(500);
+    // this.waitForElementPresent('.spinner__overlay', 60000);
     this.waitForElementNotPresent('.spinner__overlay', 60000);
   },
 

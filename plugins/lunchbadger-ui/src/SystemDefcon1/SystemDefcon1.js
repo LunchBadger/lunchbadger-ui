@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import SystemDefcon1Box from './SystemDefcon1Box';
 import './SystemDefcon1.scss';
 

@@ -55,8 +55,8 @@ const entityIcons = {
   Microservice: iconMicroservice,
   Model: iconModel,
   Portal: iconPortal,
-  PrivateEndpoint: iconEndpoint,
-  PublicEndpoint: iconEndpoint,
+  ServiceEndpoint: iconEndpoint,
+  ApiEndpoint: iconEndpoint,
 };
 
 const dataSourceIcons = {

@@ -1,5 +1,5 @@
-import {add as addPrivateEndpoint} from '../reduxActions/privateEndpoints';
-import {add as addPublicEndpoint} from '../reduxActions/publicEndpoints';
+import {add as addServiceEndpoint} from '../reduxActions/serviceEndpoints';
+import {add as addApiEndpoint} from '../reduxActions/apiEndpoints';
 import {add as addGateway} from '../reduxActions/gateways';
 
 export default {
@@ -11,16 +11,16 @@ export default {
       plain: true,
       submenu: [
         {
-          label: 'Private',
-          name: 'privateendpoint',
+          label: 'Service',
+          name: 'serviceendpoint',
           icon: 'iconEndpoint',
-          action: addPrivateEndpoint,
+          action: addServiceEndpoint,
         },
         {
-          label: 'Public',
-          name: 'publicendpoint',
+          label: 'API',
+          name: 'apiendpoint',
           icon: 'iconEndpoint',
-          action: addPublicEndpoint,
+          action: addApiEndpoint,
         },
       ],
     },

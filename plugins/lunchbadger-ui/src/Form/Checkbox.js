@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import MaterialUICheckbox from 'material-ui/Checkbox';
 import uncheckedIcon from './uncheckedIcon';
 import HOC from '../utils/Formsy/HOC';
+import getPlainText from '../utils/getPlainText';
 import './Checkbox.scss';
 
 class Checkbox extends Component {
@@ -68,7 +70,7 @@ class Checkbox extends Component {
     }
     return (
       <MaterialUICheckbox
-        className={className || ''}
+        className={cs(className, getPlainText(`checkbox__${name}`), getPlainText(`checkbox__${name}__${getValue() ? 'checked' : 'unchecked'}`))}
         type="checkbox"
         checked={getValue()}
         id={name}

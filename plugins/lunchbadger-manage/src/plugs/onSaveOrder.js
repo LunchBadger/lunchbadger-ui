@@ -1,9 +1,9 @@
 import {saveOrder as saveOrderGateway} from '../reduxActions/gateways';
-import {saveOrder as saveOrderPrivateEndpoint} from '../reduxActions/privateEndpoints';
-import {saveOrder as saveOrderPublicEndpoint} from '../reduxActions/publicEndpoints';
+import {saveOrder as saveOrderServiceEndpoint} from '../reduxActions/serviceEndpoints';
+import {saveOrder as saveOrderApiEndpoint} from '../reduxActions/apiEndpoints';
 
 export default [
   saveOrderGateway,
-  saveOrderPrivateEndpoint,
-  saveOrderPublicEndpoint,
+  saveOrderServiceEndpoint,
+  saveOrderApiEndpoint,
 ];

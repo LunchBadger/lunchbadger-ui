@@ -61,6 +61,7 @@ class Entity extends PureComponent {
       onDoubleClick,
       connectDragSource,
       connectDropTarget,
+      onNameBlur,
     } = this.props;
     const opacity = dragging ? 0.2 : 1;
     const {expanded} = this.state;
@@ -80,6 +81,8 @@ class Entity extends PureComponent {
             onToggleExpand={this.handleToggleExpand}
             name={name}
             onNameChange={onNameChange}
+            onNameBlur={onNameBlur}
+            invalid={validations.data.name}
           />
           <div className="Entity__data">
             <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
@@ -111,6 +114,7 @@ Entity.propTypes = {
   toolboxConfig: PropTypes.array.isRequired,
   name: PropTypes.string.isRequired,
   onNameChange: PropTypes.func.isRequired,
+  onNameBlur: PropTypes.func.isRequired,
   validations: PropTypes.object.isRequired,
   onFieldClick: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

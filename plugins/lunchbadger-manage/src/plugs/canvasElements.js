@@ -1,9 +1,9 @@
 import Gateway from '../components/CanvasElements/Gateway';
-import PrivateEndpoint from '../components/CanvasElements/PrivateEndpoint';
-import PublicEndpoint from '../components/CanvasElements/PublicEndpoint';
+import ServiceEndpoint from '../components/CanvasElements/ServiceEndpoint';
+import ApiEndpoint from '../components/CanvasElements/ApiEndpoint';
 
 export default {
   Gateway,
-  PrivateEndpoint,
-  PublicEndpoint,
+  ServiceEndpoint,
+  ApiEndpoint,
 };

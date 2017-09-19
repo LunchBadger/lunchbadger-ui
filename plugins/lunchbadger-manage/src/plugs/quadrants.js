@@ -1,8 +1,8 @@
 export default {
   1: {
     name: 'Private',
-    entities: ['privateEndpoints'],
-    connectionEntities: ['privateEndpoints'],
+    entities: ['serviceEndpoints'],
+    connectionEntities: ['serviceEndpoints'],
   },
   2: {
     name: 'Gateway',
@@ -11,7 +11,7 @@ export default {
   },
   3: {
     name: 'Public',
-    entities: ['publicEndpoints'],
-    connectionEntities: ['publicEndpoints'],
+    entities: ['apiEndpoints'],
+    connectionEntities: ['apiEndpoints'],
   },
 };

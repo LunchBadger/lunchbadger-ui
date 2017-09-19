@@ -107,16 +107,15 @@ class WorkspaceStatus extends Component {
             </ContextualInformationMessage>
           )}
         </span>
-        {
-          this.state.isShowingModal &&
-          <OneOptionModal confirmText="Reload"
-                          onClose={this.onModalClose}>
-            <p>
-              The workspace has changed since the Canvas was loaded. Please
-              reload the page to refresh the Canvas contents.
-            </p>
+        {this.state.isShowingModal && (
+          <OneOptionModal
+            confirmText="Reload"
+            onClose={this.onModalClose}
+          >
+            The workspace has changed since the Canvas was loaded. Please
+            reload the page to refresh the Canvas contents.
           </OneOptionModal>
-        }
+        )}
       </span>
     );
   }

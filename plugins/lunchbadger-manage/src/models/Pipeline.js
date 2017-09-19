@@ -16,23 +16,7 @@ export default class Pipeline extends BaseModel {
 
   constructor(id, name) {
     super(id);
-
     this.name = name;
-    this.policies = [
-      Policy.create({
-        name: 'Auth 01',
-        type: 'OAuth2'
-      }),
-      Policy.create({
-        name: 'Rate limiter',
-        type: 'Rate limit'
-      }),
-      Policy.create({
-        name: 'Logger',
-        type: 'Logging'
-      })
-    ];
-
     this.ports = [
       Port.create({
         id: this.id,
@@ -47,11 +31,18 @@ export default class Pipeline extends BaseModel {
     ];
   }
 
+  static create(data) {
+    return super.create({
+      ...data,
+      policies: (data.policies || []).map(policy => Policy.create(policy)),
+    });
+  }
+
   toJSON() {
     return {
       id: this.id,
       name: this.name,
-      policies: this.policies.map(policy => policy.toJSON())
+      policies: this.policies.map(policy => policy.toJSON()),
     }
   }
 

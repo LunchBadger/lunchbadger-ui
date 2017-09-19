@@ -1,0 +1,42 @@
+@import '/../../../../../lunchbadger-core/src/config';
+
+.api-endpoint {
+  // position: static;
+  // font-size: 16px;
+  // padding: 4px 0;
+  .canvas-element__port {
+    margin-top: 3px;
+  }
+}
+
+
+.api-endpoint--bundled {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.api-endpoint--selected {
+  background: #00abff;
+  color: #fff;
+}
+
+.api-endpoint__info {
+  cursor: pointer;
+  padding-left: 18px;
+}
+
+.api-endpoint__name {
+  display: inline-block;
+  width: calc(100% - 43px);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.api-endpoint__icon {
+  display: inline-block;
+  margin-right: 7px;
+  vertical-align: middle;
+}

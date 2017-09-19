@@ -65,23 +65,47 @@
       display: inline-block;
       vertical-align: middle;
       width: calc(100% - 20px);
+      & > span {
+        display: inline-block;
+      }
       .CollapsibleProperties.nonEditable & {
         width: calc(100% - 35px);
         margin-left: 15px;
+      }
+      &--button {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
       }
     }
   }
   &__collapsible {
     margin: 4px 0 0 16px;
   }
-  &.expanded {
+  &.expanded > &__bar {
     .CollapsibleProperties__bar__left--arrow svg {
       transform: translate(-50%, -50%) rotate(0deg);
     }
   }
-  &.barToggable {
-    .CollapsibleProperties__bar__right {
-      cursor: pointer;
+  &.barToggable > .CollapsibleProperties__bar > .CollapsibleProperties__bar__right > span {
+    cursor: pointer;
+  }
+  &.untoggable {
+    padding-left: 0;
+  }
+  &.untoggable > .CollapsibleProperties__bar {
+    margin-left: -8px;
+  }
+  &.untoggable > .CollapsibleProperties__bar > .CollapsibleProperties__bar__right {
+    width: 100%;
+  }
+  &.untoggable > div > div > .CollapsibleProperties__collapsible {
+    margin: 0;
+  }
+  &.noDividers {
+    .CollapsibleProperties__bar:before {
+      display: none;
     }
   }
 }

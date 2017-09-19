@@ -4,10 +4,17 @@ import {entityIcons, IconSVG, EntityProperty} from '../../';
 import './EntityHeader.scss';
 
 class EntityHeader extends Component {
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+    onToggleExpand: PropTypes.func.isRequired,
+  }
+
   getInputNameRef = () => this.inputNameRef.getInputRef();
 
+  handleNameBlur = event => this.props.onNameBlur('name', event.target.value, event);
+
   render() {
-    const {type, name, onNameChange, onToggleExpand} = this.props;
+    const {type, name, onNameChange, onToggleExpand, invalid} = this.props;
     const underlineStyle = {
       borderColor: '#8dbde2',
     }
@@ -22,17 +29,14 @@ class EntityHeader extends Component {
             name="name"
             value={name}
             onChange={onNameChange}
+            onBlur={this.handleNameBlur}
             underlineStyle={underlineStyle}
+            invalid={invalid}
           />
         </div>
       </div>
     );
   }
 }
-
-EntityHeader.propTypes = {
-  type: PropTypes.string.isRequired,
-  onToggleExpand: PropTypes.func.isRequired,
-};
 
 export default EntityHeader;

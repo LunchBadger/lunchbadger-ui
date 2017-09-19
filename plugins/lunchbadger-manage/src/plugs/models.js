@@ -1,9 +1,9 @@
 import Gateway from '../models/Gateway';
-import PrivateEndpoint from '../models/PrivateEndpoint';
-import PublicEndpoint from '../models/PublicEndpoint';
+import ServiceEndpoint from '../models/ServiceEndpoint';
+import ApiEndpoint from '../models/ApiEndpoint';
 
 export default {
   Gateway,
-  PrivateEndpoint,
-  PublicEndpoint,
+  ServiceEndpoint,
+  ApiEndpoint,
 };

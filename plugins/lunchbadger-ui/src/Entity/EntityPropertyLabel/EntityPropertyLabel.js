@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import './EntityPropertyLabel.scss';
 
-const EntityPropertyLabel = ({children, className}) => (
-  <div className={cs('EntityPropertyLabel', className)}>
+const EntityPropertyLabel = ({children, className, plain}) => (
+  <div className={cs('EntityPropertyLabel', className, {plain})}>
     {children}
   </div>
 );

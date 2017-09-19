@@ -75,8 +75,8 @@ export default class Portal extends BaseModel {
     return this._accept;
   }
 
-  get publicEndpoints() {
-    return this._apis.reduce((endpoints, api) => endpoints.concat(api.publicEndpoints), []);
+  get apiEndpoints() {
+    return this._apis.reduce((endpoints, api) => endpoints.concat(api.apiEndpoints), []);
   }
 
   get rootUrl() {

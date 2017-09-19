@@ -14,6 +14,10 @@ class CollapsibleProperties extends Component {
     defaultOpened: PropTypes.bool,
     plain: PropTypes.bool,
     barToggable: PropTypes.bool,
+    button: PropTypes.node,
+    untoggable: PropTypes.bool,
+    space: PropTypes.string,
+    noDividers: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -21,6 +25,8 @@ class CollapsibleProperties extends Component {
     defaultOpened: false,
     plain: false,
     barToggable: false,
+    untoggable: false,
+    noDividers: false,
   }
 
   constructor(props) {
@@ -30,36 +36,49 @@ class CollapsibleProperties extends Component {
     };
   }
 
-  handleToggleCollapse = () => {
-    this.setState({expanded: !this.state.expanded});
+  handleToggleCollapse = (expanded) => {
+    this.setState({expanded: typeof expanded === 'boolean' ? expanded : !this.state.expanded});
     this.props.onToggleCollapse();
   }
 
   render() {
-    const {bar, collapsible, plain, barToggable} = this.props;
+    const {bar, collapsible, plain, barToggable, button, untoggable, space, noDividers} = this.props;
     const {expanded} = this.state;
     const classNames = cs('CollapsibleProperties', {
       expanded,
       plain,
       nonEditable: typeof bar === 'string',
       barToggable,
+      withButton: !!button,
+      untoggable,
+      noDividers,
     });
+    const barRightStyle = {};
+    if (space) {
+      barRightStyle.margin = space;
+    }
     return (
       <div className={classNames}>
         <div className="CollapsibleProperties__bar">
-          <div
-            className="CollapsibleProperties__bar__left"
-             onClick={this.handleToggleCollapse}
-          >
-            <div className="CollapsibleProperties__bar__left--arrow">
-              <IconSVG svg={iconArrow} />
+          {!untoggable && (
+            <div
+              className="CollapsibleProperties__bar__left"
+              onClick={this.handleToggleCollapse}
+            >
+              <div className="CollapsibleProperties__bar__left--arrow">
+                <IconSVG svg={iconArrow} />
+              </div>
             </div>
-          </div>
-          <div
-            className="CollapsibleProperties__bar__right"
-            onClick={barToggable ? this.handleToggleCollapse : undefined}
-          >
-            {bar}
+          )}
+          <div className="CollapsibleProperties__bar__right" style={barRightStyle}>
+            <span onClick={barToggable ? this.handleToggleCollapse : undefined}>
+              {bar}
+            </span>
+            {!!button && (
+              <div className="CollapsibleProperties__bar__right--button">
+                {button}
+              </div>
+            )}
           </div>
         </div>
         <SmoothCollapse expanded={expanded} heightTransition="800ms ease">

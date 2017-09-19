@@ -7,9 +7,9 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import ModelRelationDetails from './ModelRelationDetails';
-import ModelUserFieldsDetails from './ModelUserFieldsDetails';
-import ModelNestedProperties from './ModelNestedProperties';
+// import ModelRelationDetails from './ModelRelationDetails';
+// import ModelUserFieldsDetails from './ModelUserFieldsDetails';
+// import ModelNestedProperties from './ModelNestedProperties';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
@@ -26,7 +26,7 @@ import {
 import './ModelDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const CheckboxField = LunchBadgerCore.components.CheckboxField;
+// const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const {Connections} = LunchBadgerCore.stores;
 const {propertyTypes} = LunchBadgerCore.utils;
 
@@ -74,18 +74,18 @@ class ModelDetails extends PureComponent {
         relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
       };
-      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
     this.state = {
       ...this.initState(props),
       ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props) => {
+    this.onStoreUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         ...stateFromStores(props),
-      });
+      }, callback);
     };
   }
 
@@ -143,10 +143,7 @@ class ModelDetails extends PureComponent {
     return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges() {
-    // revert properties
-    this.onStoreUpdate();
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   // update = async (model) => {
   //   const {entity} = this.props;
@@ -320,7 +317,7 @@ class ModelDetails extends PureComponent {
     const fields = [
       {
         title: 'Context Path',
-        name: 'contextPath',
+        name: 'http[path]',
         value: entity.contextPath,
       },
       {
@@ -393,7 +390,7 @@ class ModelDetails extends PureComponent {
       'Notes',
       'Required',
       'Is Index',
-      <IconButton icon="iconPlus" onClick={this.onAddProperty('')} />,
+      <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
     ];
     const widths = [300, 120, 200, undefined, 100, 100, 70];
     const paddings = [true, true, true, true, false, false, false];
@@ -458,7 +455,7 @@ class ModelDetails extends PureComponent {
         handleKeyDown={this.handleTabProperties(property)}
       />,
       <div>
-        <IconButton icon="iconDelete" onClick={this.onRemoveProperty(property)} />
+        <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />
         {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
       </div>,
     ]);
@@ -486,7 +483,7 @@ class ModelDetails extends PureComponent {
       'Type',
       'Model',
       'Foreign Key',
-      <IconButton icon="iconPlus" onClick={this.onAddRelation} />,
+      <IconButton name="add__relation" icon="iconPlus" onClick={this.onAddRelation} />,
     ];
     const widths = [300, 220, 300, undefined, 70];
     const paddings = [true, true, true, true, false];
@@ -520,7 +517,7 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleKeyDown={this.handleTab('relations', idx)}
       />,
-      <IconButton icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
+      <IconButton name={`remove__relation${idx}`} icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
     ]);
     return <Table
       columns={columns}
@@ -568,7 +565,7 @@ class ModelDetails extends PureComponent {
       'Name',
       'Type',
       'Value',
-      <IconButton icon="iconPlus" onClick={this.onAddUserField} />,
+      <IconButton name="add__udf" icon="iconPlus" onClick={this.onAddUserField} />,
     ];
     const widths = [300, 120, undefined, 70];
     const paddings = [true, true, true, false];
@@ -607,7 +604,7 @@ class ModelDetails extends PureComponent {
           type={field.type === 'number' ? 'number' : 'text'}
           handleKeyDown={this.handleTab('userFields', idx)}
         />,
-      <IconButton icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
+      <IconButton name={`remove__udf${idx}`} icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
     ]);
     return <Table
       columns={columns}
@@ -671,7 +668,7 @@ class ModelDetails extends PureComponent {
           />
         ))}
       </div>
-    )
+    );
   }
 }
 

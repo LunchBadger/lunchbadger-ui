@@ -3,13 +3,13 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
 
   ],
   [
-    'updatePrivateEndpoint',
-    'updatePrivateEndpoints',
-    'removePrivateEndpoint',
+    'updateServiceEndpoint',
+    'updateServiceEndpoints',
+    'removeServiceEndpoint',
 
-    'updatePublicEndpoint',
-    'updatePublicEndpoints',
-    'removePublicEndpoint',
+    'updateApiEndpoint',
+    'updateApiEndpoints',
+    'removeApiEndpoint',
 
     'updateGateway',
     'updateGateways',

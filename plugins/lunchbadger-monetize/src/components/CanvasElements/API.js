@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import PublicEndpoint from './Subelements/PublicEndpoint';
+import ApiEndpoint from './Subelements/ApiEndpoint';
 import Plan from './Subelements/Plan';
 import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
@@ -42,8 +42,8 @@ class API extends Component {
   }
 
   renderEndpoints = () => {
-    return this.props.entity.publicEndpoints.map((api) => (
-      <PublicEndpoint
+    return this.props.entity.apiEndpoints.map((api) => (
+      <ApiEndpoint
         key={api.id}
         parent={this.props.entity}
         id={api.id}
@@ -112,9 +112,9 @@ class API extends Component {
               {...this.props}
               canDropCheck={
                 (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                && !_.includes(this.props.entity.publicEndpoints, item.entity)
+                && !_.includes(this.props.entity.apiEndpoints, item.entity)
               }
-              onAddCheck={(item) => !_.includes(this.props.entity.publicEndpoints, item.entity)}
+              onAddCheck={(item) => !_.includes(this.props.entity.apiEndpoints, item.entity)}
               onAdd={this.bundle}
               onMove={this.rebundle}
               parent={this.props.parent}

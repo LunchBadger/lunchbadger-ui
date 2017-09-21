@@ -1,7 +1,7 @@
 var page;
 
 function expectStatus(browser, status, error) {
-  browser.waitForElementVisible('.workspace-status .workspace-status__progress', 120000);
+  browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
   browser.waitForElementPresent(`.workspace-status .workspace-status__${status}`, 5 * 60 * 1000);
   if (status === 'failure') {
     browser.click('.workspace-status span');
@@ -50,17 +50,12 @@ module.exports = {
   },
 
   'Connector uninstallation: trash workspace and reload page': function(browser) {
-    browser.click('.SystemDefcon1 .removeError');
-    browser.click('.SystemDefcon1 .removeError');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.click('.header__menu__element .fa-trash-o');
-    browser.waitForElementPresent('.spinner__overlay', 5000);
+    browser.click('.SystemDefcon1 button');
+    page.clearProject();
     browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
     browser.waitForElementNotPresent('.spinner__overlay', 60000);
-    browser.waitForElementPresent('.SystemDefcon1', 5000);
-    browser.click('.SystemDefcon1 .removeError');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
+    browser.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
+    browser.pause(10000);
     browser.refresh(function () {
       browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
     });

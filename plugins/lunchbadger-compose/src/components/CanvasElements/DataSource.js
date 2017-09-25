@@ -49,6 +49,14 @@ class DataSource extends Component {
         prop.contextual = 'Password should be a concatenation of the Salesforce password and API token';
       }
     }
+    if (name === 'database') {
+      if (entity.isMongoDB) {
+        prop.title = 'Collection';
+      }
+      if (entity.isRedis) {
+        prop.title = 'Namespace';
+      }
+    }
     return prop;
   }
 

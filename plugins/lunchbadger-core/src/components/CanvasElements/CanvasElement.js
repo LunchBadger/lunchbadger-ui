@@ -114,11 +114,14 @@ export default (ComposedComponent) => {
 
     componentWillReceiveProps(props) {
       this._handleDrop(props);
+      if (props.entity !== this.props.entity) {
+        setTimeout(this.setFlatModel);
+      }
       // this.checkHighlightAndEditableState(props);
     }
 
     componentDidMount() {
-      this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+      this.setFlatModel();
       // this.handleChangeListeners('addChangeListener');
       // if (this.props.entity.metadata.wasBundled) {
       //   this.setState({
@@ -170,6 +173,7 @@ export default (ComposedComponent) => {
       // }
     }
 
+    setFlatModel = () => this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
 
     refresh = () => {
       this.forceUpdate();
@@ -192,7 +196,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentElement(updatedEntity));
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
-          this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+          this.setFlatModel();
         }
       });
       // update currentElement

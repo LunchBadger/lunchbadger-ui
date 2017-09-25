@@ -161,6 +161,13 @@ var pageCommands = {
     this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
   },
 
+  waitUntilWorkspaceLoaded: function() {
+    this.waitForElementPresent('.header', 60000);
+    this.api.pause(500);
+    // this.waitForElementPresent('.spinner__overlay', 60000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
+  },
+
   checkEntities: function (dataSources = '', models = '', contextPaths) {
     contextPaths = contextPaths || models.toLowerCase();
     this.expect.element('.Aside.disabled').to.not.be.present;
@@ -247,6 +254,11 @@ var pageCommands = {
     this.click('.header__menu .fa-floppy-o');
     this.waitForElementPresent('.spinner__overlay', 5000);
     this.waitForElementNotPresent('.spinner__overlay', 60000);
+  },
+
+  clearProject: function () {
+    this.click('.header__menu__element .fa-trash-o');
+    this.waitForElementPresent('.spinner__overlay', 5000);
   },
 
   testDatasource: function (type, config = []) {

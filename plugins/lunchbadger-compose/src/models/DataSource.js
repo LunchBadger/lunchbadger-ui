@@ -202,6 +202,14 @@ export default class DataSource extends BaseModel {
     return this._connector === 'salesforce';
   }
 
+  get isMongoDB() {
+    return this._connector === 'mongodb';
+  }
+
+  get isRedis() {
+    return this._connector === 'redis';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

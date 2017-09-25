@@ -27,6 +27,8 @@ class DataSourceDetails extends Component {
       isSoap,
       isEthereum,
       isSalesforce,
+      isMongoDB,
+      isRedis,
     } = this.props.entity;
     const fields = [];
     if (isRest) {
@@ -54,8 +56,15 @@ class DataSourceDetails extends Component {
         name: 'port',
         value: port,
       });
+      let title = 'Database';
+      if (isMongoDB) {
+        title = 'Collection';
+      }
+      if (isRedis) {
+        title = 'Namespace';
+      }
       fields.push({
-        title: 'Database',
+        title,
         name: 'database',
         value: database,
       });

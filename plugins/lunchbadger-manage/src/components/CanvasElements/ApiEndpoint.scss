@@ -1,4 +1,4 @@
-.ServiceEndpoint {
+.ApiEndpoint {
   .EntitySubElements {
     margin: 0 -10px;
     .EntityProperty {
@@ -18,16 +18,11 @@
   }
 }
 
-.editable .ServiceEndpoint {
+.editable .ApiEndpoint {
   .EntityProperty {
     &__delete {
       opacity: 1;
       pointer-events: all;
-    }
-    &:first-child {
-      .EntityProperty__delete {
-        display: none;
-      }
     }
   }
 }

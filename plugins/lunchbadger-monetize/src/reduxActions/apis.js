@@ -29,7 +29,7 @@ export const update = (entity, model) => (dispatch, getState) => {
 };
 
 export const remove = entity => (dispatch) => {
-  entity.publicEndpoints.forEach(({id}) => {
+  entity.apiEndpoints.forEach(({id}) => {
     Connections.removeConnection(null, id);
   });
   if (LunchBadgerOptimize) {
@@ -57,7 +57,7 @@ export const bundle = (api, endpoint) => (dispatch) => {
   const updatedApi = api.recreate();
   updatedApi.addEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
-  dispatch(manageActions.removePublicEndpoint(endpoint));
+  dispatch(manageActions.removeApiEndpoint(endpoint));
 };
 
 export const unbundle = (api, endpoint) => (dispatch) => {
@@ -65,7 +65,7 @@ export const unbundle = (api, endpoint) => (dispatch) => {
   updatedApi.removeEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
   endpoint.wasBundled = false;
-  dispatch(manageActions.updatePublicEndpoint(endpoint));
+  dispatch(manageActions.updateApiEndpoint(endpoint));
 };
 
 export const rebundle = (fromApi, toApi, endpoint) => (dispatch) => {

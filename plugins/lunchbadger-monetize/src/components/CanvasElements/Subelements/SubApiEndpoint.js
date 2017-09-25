@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './PublicEndpoint.scss';
+import './ApiEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
 
-export default class PublicEndpoint extends Component {
+export default class ApiEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
   };
@@ -25,12 +25,12 @@ export default class PublicEndpoint extends Component {
 
   render() {
     return (
-      <div className="public-endpoint__info">
+      <div className="api-endpoint__info">
         {this.renderPorts()}
-        <div className="public-endpoint__icon">
+        <div className="api-endpoint__icon">
           <i className="fa fa-globe"/>
         </div>
-        <div className="public-endpoint__name">
+        <div className="api-endpoint__name">
           {this.props.entity.name}
         </div>
       </div>

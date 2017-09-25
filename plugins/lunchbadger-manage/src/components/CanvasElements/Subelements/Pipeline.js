@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 // import {findDOMNode} from 'react-dom';
 import Policy from './Policy';
-import {addAndConnect as addPublicEndpointAndConnect} from '../../../reduxActions/publicEndpoints';
+import {addAndConnect as addApiEndpointAndConnect} from '../../../reduxActions/apiEndpoints';
 import {EntityProperty, EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
 import './Pipeline.scss';
 
@@ -75,7 +75,7 @@ export default class Pipeline extends Component {
   //   console.log(22, connection);
   //   if (connection && connection.toId === id && !proxiedBy.includes(connection.fromId)) {
   //     if (connection.info.connection.getParameter('existing')) return;
-  //     this.context.store.dispatch(addPublicEndpointAndConnect(
+  //     this.context.store.dispatch(addApiEndpointAndConnect(
   //       connection.fromId,
   //       id,
   //       findDOMNode(this.refs['port-out']),

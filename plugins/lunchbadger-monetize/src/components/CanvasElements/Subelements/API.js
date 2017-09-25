@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 // import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
-import PublicEndpoint from './SubPublicEndpoint';
+import ApiEndpoint from './SubApiEndpoint';
 import {EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
 import './API.scss';
 
@@ -57,9 +57,9 @@ class API extends Component {
   }
 
   renderEndpoints() {
-    return this.props.entity.publicEndpoints.map((api) => {
+    return this.props.entity.apiEndpoints.map((api) => {
       return (
-        <PublicEndpoint
+        <ApiEndpoint
           key={api.id}
           entity={api}
         />

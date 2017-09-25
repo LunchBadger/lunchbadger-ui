@@ -9,9 +9,7 @@ module.exports = {
     page.expect.element(page.getGatewaySelector(1) + ' .pipelines0policies0name .EntityProperty__field--text').text.to.equal('oauth2');
     page.expect.element(page.getGatewaySelector(1) + ' .pipelines0policies1name .EntityProperty__field--text').text.to.equal('rate-limiter');
     page.expect.element(page.getGatewaySelector(1) + ' .pipelines0policies2name .EntityProperty__field--text').text.to.equal('simple-logger');
-    page.click('.header__menu .fa-floppy-o');
-    page.waitForElementPresent('.spinner__overlay', 5000);
-    page.waitForElementNotPresent('.spinner__overlay', 60000);
+    page.saveProject();
 
     // Reload page and check, if gateway data are consisten
     browser.refresh(function () {
@@ -43,9 +41,7 @@ module.exports = {
       page.expect.element(page.getGatewaySelector(1) + ' .pipelines2policies0name .EntityProperty__field--text').text.to.equal('oauth2');
       page.expect.element(page.getGatewaySelector(1) + ' .pipelines2policies1name .EntityProperty__field--text').text.to.equal('rate-limiter');
       page.expect.element(page.getGatewaySelector(1) + ' .pipelines2policies2name .EntityProperty__field--text').text.to.equal('simple-logger');
-      page.click('.header__menu .fa-floppy-o');
-      page.waitForElementPresent('.spinner__overlay', 5000);
-      page.waitForElementNotPresent('.spinner__overlay', 60000);
+      page.saveProject();
 
       // Reload page and check, if gateway data are consisten
       browser.refresh(function () {
@@ -95,9 +91,7 @@ module.exports = {
         page.expect.element(page.getGatewaySelector(1) + ' .pipelines1policies0name .EntityProperty__field--text').text.to.equal('oauth2');
         browser.waitForElementNotPresent(page.getGatewaySelector(1) + ' .pipelines1policies1name', 5000);
         browser.waitForElementNotPresent(page.getGatewaySelector(1) + ' .pipelines2name', 5000);
-        page.click('.header__menu .fa-floppy-o');
-        page.waitForElementPresent('.spinner__overlay', 5000);
-        page.waitForElementNotPresent('.spinner__overlay', 60000);
+        page.saveProject();
 
         // Reload page and check, if gateway data are consisten
         browser.refresh(function () {

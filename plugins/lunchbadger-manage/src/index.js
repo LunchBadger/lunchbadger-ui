@@ -1,5 +1,5 @@
 import {actions} from './reduxActions/actions';
-import PublicEndpoint from './models/PublicEndpoint';
+import ApiEndpoint from './models/ApiEndpoint';
 
 // import {registerPlugin} from '../../../src/reducers';
 import reducers from './reducers';
@@ -10,7 +10,7 @@ registerPlugin(reducers, plugs);
 
 const LunchBadgerManage = {
   models: {
-    PublicEndpoint,
+    ApiEndpoint,
   },
   utils: {
     actions,

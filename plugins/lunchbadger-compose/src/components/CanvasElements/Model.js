@@ -35,11 +35,11 @@ class Model extends Component {
       ...this.initState(props),
       ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props) => {
+    this.onStoreUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         ...stateFromStores(props),
-      });
+      }, callback);
     };
   }
 
@@ -68,7 +68,7 @@ class Model extends Component {
     };
   }
 
-  discardChanges = () => this.onStoreUpdate();
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   // update(model) {
   //   const data = {

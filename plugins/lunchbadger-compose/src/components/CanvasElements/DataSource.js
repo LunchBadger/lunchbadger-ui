@@ -32,38 +32,64 @@ class DataSource extends Component {
 
   getMainProperty = (name) => {
     const {entity, validations: {data}} = this.props;
+    let title = name;
+    if (title === 'url' && entity.isSoap) {
+      title = 'base url';
+    }
     const prop = {
       name,
-      title: name,
+      title,
       value: entity[name].toString(),
       invalid: data[name],
       onBlur: this.handleFieldChange(name),
     };
     if (name === 'password') {
       prop.password = true;
-      prop.contextual = 'Password should be at least 6 chars long';
+      if (entity.isSalesforce) {
+        prop.contextual = 'Password should be a concatenation of the Salesforce password and API token';
+      }
     }
+    return prop;
+  }
+
+  getRedisUrlProperty = () => {
+    const {entity, validations: {data}} = this.props;
+    const prop = {
+      name: 'operations[0][template][url]',
+      modelName: 'baseUrl',
+      title: 'base url',
+      value: entity.operations[0].template.url.toString(),
+      invalid: data.baseUrl,
+      onBlur: this.handleFieldChange('baseUrl'),
+    };
     return prop;
   }
 
   renderMainProperties = () => {
     const {
-      entity: {connector},
+      entity: {isWithPort, isRest, isSoap, isEthereum, isSalesforce, connector},
       entityDevelopment,
       onResetField,
     } = this.props;
     if (connector === 'memory') return null;
-    const isMySql = connector === 'mysql';
     const mainProperties = [];
-    if (isMySql) {
+    if (isWithPort) {
       mainProperties.push(this.getMainProperty('host'));
       mainProperties.push(this.getMainProperty('port'));
     } else {
-      mainProperties.push(this.getMainProperty('url'));
+      if (isRest) {
+        mainProperties.push(this.getRedisUrlProperty());
+      } else if (!isSalesforce) {
+        mainProperties.push(this.getMainProperty('url'));
+      }
     }
-    mainProperties.push(this.getMainProperty('database'));
-    mainProperties.push(this.getMainProperty(isMySql ? 'user' : 'username'));
-    mainProperties.push(this.getMainProperty('password'));
+    if (!isRest && !isSoap && !isEthereum) {
+      if (!isSalesforce) {
+        mainProperties.push(this.getMainProperty('database'));
+      }
+      mainProperties.push(this.getMainProperty('username'));
+      mainProperties.push(this.getMainProperty('password'));
+    }
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
       mainProperties[idx].onResetField = onResetField;

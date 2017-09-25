@@ -21,6 +21,16 @@
     line-height: 16px;
     text-align: center;
   }
+  &.basic {
+    margin: 16px 0;
+    .EntityValidationErrors__fields__field {
+      text-decoration: none;
+      cursor: default;
+      span {
+        text-transform: none;
+      }
+    }
+  }
   &__fields {
     margin-top: 8px;
     &__field {

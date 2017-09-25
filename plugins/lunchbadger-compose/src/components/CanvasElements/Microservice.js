@@ -78,11 +78,10 @@ class Microservice extends Component {
 
   handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
 
-  discardChanges = () => {
-    this.onStoreUpdate(this.props, () => {
-      this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
-    });
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, () => {
+    this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
+    callback && callback();
+  });
 
   renderModels = () => {
     const {entity, validations: {data: {models: data = {}}}} = this.props;

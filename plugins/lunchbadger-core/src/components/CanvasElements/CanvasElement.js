@@ -12,10 +12,10 @@ import {
   setCurrentEditElement,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
-import getFlatModel from '../../utils/getFlatModel';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
+import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {
   beginDrag: (props) => {
@@ -98,7 +98,7 @@ export default (ComposedComponent) => {
         // modelBeforeEdit: null,
         // modelEnv_0: null,
       };
-      this.multiEnvIndex = 0;
+      // this.multiEnvIndex = 0;
       // this.checkHighlightAndEditableState = (props) => {
       //   const currentElement = props.currentElement;
       //   if (currentElement && currentElement.data.id === this.props.entity.data.id) {
@@ -114,10 +114,14 @@ export default (ComposedComponent) => {
 
     componentWillReceiveProps(props) {
       this._handleDrop(props);
+      if (props.entity !== this.props.entity) {
+        setTimeout(this.setFlatModel);
+      }
       // this.checkHighlightAndEditableState(props);
     }
 
     componentDidMount() {
+      this.setFlatModel();
       // this.handleChangeListeners('addChangeListener');
       // if (this.props.entity.metadata.wasBundled) {
       //   this.setState({
@@ -169,6 +173,7 @@ export default (ComposedComponent) => {
       // }
     }
 
+    setFlatModel = () => this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
 
     refresh = () => {
       this.forceUpdate();
@@ -189,6 +194,11 @@ export default (ComposedComponent) => {
       // const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
+      setTimeout(() => {
+        if (this.entityRef && this.entityRef.getFormRef()) {
+          this.setFlatModel();
+        }
+      });
       // update currentElement
 
       // const {multiEnvIndex, multiEnvAmount} = this.context;
@@ -310,6 +320,12 @@ export default (ComposedComponent) => {
       event.stopPropagation();
     }
 
+    resetFormModel = () => {
+      if (this.entityRef.getFormRef()) {
+        this.entityRef.getFormRef().reset(this.state.model);
+      }
+    }
+
     handleCancel = (event) => {
       event.persist();
       const {entity, dispatch} = this.props;
@@ -323,15 +339,9 @@ export default (ComposedComponent) => {
         }
         const element = this.element.decoratedComponentInstance || this.element;
         if (typeof element.discardChanges === 'function') {
-          element.discardChanges(() => {
-            if (this.entityRef.getFormRef()) {
-              this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
-            }
-          });
+          element.discardChanges(() => setTimeout(this.resetFormModel));
         } else {
-          if (this.entityRef.getFormRef()) {
-            this.entityRef.getFormRef().reset(getFlatModel(entity.toJSON()));
-          }
+          this.resetFormModel();
         }
       }
       dispatch(setCurrentEditElement(null));
@@ -502,6 +512,7 @@ export default (ComposedComponent) => {
               toolboxConfig={toolboxConfig}
               name={this.props.entity.name}
               onNameChange={this.updateName}
+              onNameBlur={this.handleFieldUpdate}
               onCancel={this.handleCancel}
               validations={validations}
               onFieldClick={this.handleValidationFieldClick}

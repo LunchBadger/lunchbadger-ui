@@ -1,18 +1,25 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import update from 'react-addons-update';
+import _ from 'lodash';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
-import GatewayPolicyDetails from './GatewayPolicyDetails';
-import _ from 'lodash';
+import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
+import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
+import ConditionAction from '../../../models/ConditionAction';
+import Parameter from '../../../models/Parameter';
+import {
+  EntityProperty,
+  EntityPropertyLabel,
+  CollapsibleProperties,
+  Input,
+  Checkbox,
+  Table,
+  IconButton,
+} from '../../../../../lunchbadger-ui/src';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
-const Input = LunchBadgerCore.components.Input;
 
-const InputField = LunchBadgerCore.components.InputField;
-
-class GatewayDetails extends Component {
+class GatewayDetails extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
@@ -23,13 +30,7 @@ class GatewayDetails extends Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //   dnsPrefix: props.entity.dnsPrefix,
-    //   pipelines: props.entity.pipelines.slice(),
-    //   changed: false,
-    // };
     this.state = {...this.stateFromStores(props)};
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,162 +41,474 @@ class GatewayDetails extends Component {
 
   stateFromStores = props => ({
     changed: false,
-    dnsPrefix: props.entity.dnsPrefix,
     pipelines: props.entity.pipelines.slice(),
+    http: _.cloneDeep(props.entity.http),
+    https: _.cloneDeep(props.entity.https),
+    admin: _.cloneDeep(props.entity.admin),
   });
 
-  onStoreUpdate = (props = this.props) => this.setState({...this.stateFromStores(props)});
+  onStoreUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
 
-  discardChanges() {
-    this.onStoreUpdate();
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
-  // update(model) {
-  //   let data = {
-  //     pipelines: (model.pipelines || []).map(pipeline => {
-  //       let policies = pipeline.policies || [];
-  //       delete pipeline.policies;
-  //
-  //       return Pipeline.create({
-  //         ...pipeline,
-  //         policies: policies.map(policy => Policy.create(policy))
-  //       });
-  //     })
-  //   }
-  //   redeployGateway(this.props.entity, _.merge(model, data));
-  // }
+  processModel = model => {
+    const {entity} = this.props;
+    return entity.processModel(model);
+  };
 
-  // update = async (model) => {
-  //   const entity = _.merge({}, this.props.entity);
-  //   const {store: {dispatch, getState}} = this.context;
-  //   const plugins = getState().plugins;
-  //   const onUpdate = plugins.onUpdate.Gateway;
-  //   entity.pipelines = [];
-  //   const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
-  //   const {coreActions} = LunchBadgerCore.utils;
-  //   dispatch(coreActions.setCurrentElement(updatedEntity));
-  // }
+  changeState = obj => this.setState({...obj, changed: true}, () => {
+    this.props.parent.checkPristine();
+  });
 
-  _setPipelineState(pipelines) {
-    this.setState({
-      pipelines: pipelines,
-      changed: !_.isEqual(pipelines, this.props.entity.pipelines)
-    }, () => {
-      this.props.parent.checkPristine();
+  addPipeline = () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
+    this.changeState({pipelines});
+    setTimeout(() => {
+      const idx = pipelines.length - 1;
+      const input = document.getElementById(`pipelines[${idx}][name]`);
+      input && input.focus();
     });
-  }
+  };
 
-  onAddPipeline() {
-    this._setPipelineState([...this.state.pipelines, Pipeline.create({
-      name: 'Pipeline'
-    })]);
-  }
+  removePipeline = idx => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines.splice(idx, 1);
+    this.changeState({pipelines});
+  };
 
-  onRemovePipeline(plIdx) {
-    this._setPipelineState(update(this.state.pipelines, {
-      $splice: [[plIdx, 1]]
-    }));
-  }
-
-  onAddPolicy(plIdx) {
-    this._setPipelineState(update(this.state.pipelines, {
-      [plIdx]: {
-        policies: {
-          $push: [Policy.create({
-            name: 'New policy',
-            type: 'Rate limit'
-          })]
-        }
-      }
-    }));
-  }
-
-  onRemovePolicy(plIdx, policyIdx) {
-    this._setPipelineState(update(this.state.pipelines, {
-      [plIdx]: {
-        policies: {$splice: [[policyIdx, 1]]}
-      }
-    }));
-  }
-
-  onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
-
-  renderPipelines() {
-    return this.state.pipelines.map((pipeline, plIdx) => {
-      const policies = pipeline.policies.map((policy, index) => {
-        return <GatewayPolicyDetails key={`pipeline-${pipeline.id}-policy-${policy.id}`}
-                                     pipelineIndex={plIdx}
-                                     policy={policy}
-                                     index={index}
-                                     onRemove={this.onRemovePolicy.bind(this, plIdx)} />;
-      });
-
-      return (
-        <div key={`pipeline-${pipeline.id}`}>
-          <div className="details-panel__section-name">
-            <Input value={pipeline.id}
-                   type="hidden"
-                   name={`pipelines[${plIdx}][id]`}/>
-            <Input className="details-panel__input"
-                   value={pipeline.name}
-                   name={`pipelines[${plIdx}][name]`}/>
-            <i className="fa fa-remove details-panel__action"
-               onClick={() => this.onRemovePipeline(plIdx)}/>
-          </div>
-          <table className="details-panel__table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>
-                  Details
-                  <a onClick={() => this.onAddPolicy(plIdx)} className="details-panel__add">
-                    <i className="fa fa-plus"/>
-                    Add policy
-                  </a>
-                </th>
-                <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-              </tr>
-            </thead>
-            <tbody>
-              {policies}
-            </tbody>
-          </table>
-
-        </div>
-      );
+  addPipelinePolicy = pipelineIdx => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].addPolicy(Policy.create({'': []}));
+    this.changeState({pipelines});
+    setTimeout(() => {
+      const policyIdx = pipelines[pipelineIdx].policies.length - 1;
+      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
+      input && input.focus();
     });
-  }
+  };
 
-  render() {
-    const entity = this.props.entity;
-    const url = `http://${this.state.dnsPrefix}.customer.lunchbadger.com`;
+  removePipelinePolicy = (pipelineIdx, idx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies.splice(idx, 1);
+    this.changeState({pipelines});
+  };
+
+  addCAPair = (pipelineIdx, policyIdx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({}));
+    const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
+    pipelines[pipelineIdx]
+      .policies[policyIdx]
+      .conditionAction[pairIdx]
+      .action.addParameter(Parameter.create({name: '', value: ''}));
+    this.changeState({pipelines})
+    setTimeout(() => {
+      const input = document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action][0][name]`);
+      input && input.focus();
+    });
+  };
+
+  removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction.splice(idx, 1);
+    this.changeState({pipelines});
+  };
+
+  addParameter = (kind, pipelineIdx, policyIdx, pairIdx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx]
+      .policies[policyIdx]
+      .conditionAction[pairIdx]
+      [kind]
+      .addParameter(Parameter.create({name: '', value: ''}));
+    this.changeState({pipelines});
+    setTimeout(() => {
+      const idx = pipelines[pipelineIdx]
+        .policies[policyIdx]
+        .conditionAction[pairIdx]
+        [kind]
+        .parameters.length - 1;
+      const input = document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][${kind}][${idx}][name]`);
+      input && input.focus();
+    });
+  };
+
+  removeParameter = (kind, pipelineIdx, policyIdx, pairIdx, idx) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx]
+      .policies[policyIdx]
+      .conditionAction[pairIdx]
+      [kind]
+      .parameters
+      .splice(idx, 1)
+    this.changeState({pipelines});
+  };
+
+  handleParametersTab = (kind, pipelineIdx, policyIdx, pairIdx, idx) => (event) => {
+    if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
+    const size = this.state.pipelines[pipelineIdx]
+      .policies[policyIdx]
+      .conditionAction[pairIdx]
+      [kind]
+      .parameters.length;
+    if (size - 1 === idx) {
+      this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)();
+    }
+  };
+
+  renderParameters = (pipelineIdx, policyIdx, pairIdx, pair, kind) => {
+    const columns = [
+      'Parameter Name',
+      'Parameter Value',
+      <IconButton icon="iconPlus" onClick={this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)} />,
+    ];
+    const widths = [350, undefined, 70];
+    const paddings = [true, true, false];
+    const data = pair[kind].parameters.map((item, idx) => [
+      <Input
+        name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][${kind}][${idx}][name]`}
+        value={item.name}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Input
+        name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][${kind}][${idx}][value]`}
+        value={item.value}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleKeyDown={this.handleParametersTab(kind, pipelineIdx, policyIdx, pairIdx, idx)}
+      />,
+      <IconButton icon="iconDelete" onClick={this.removeParameter(kind, pipelineIdx, policyIdx, pairIdx, idx)} />,
+    ]);
+    const table = <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+    />;
+    return (
+      <CollapsibleProperties
+        bar={<EntityPropertyLabel>{kind}</EntityPropertyLabel>}
+        collapsible={table}
+        defaultOpened
+        untoggable
+        space={`${kind === 'action' ? 2 : 1}0px 0 0`}
+      />
+    );
+  };
+
+  renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx) => {
     return (
       <div>
-        <CollapsableDetails title="Details" class="details-panel__columns">
-          <InputField label="DNS prefix"
-                      propertyName="dnsPrefix"
-                      entity={entity}
-                      handleChange={this.onPrefixChange}/>
-          <div className="details-panel__fieldset">
-            <label className="details-panel__label">
-              Root URL
-            </label>
-            <div className="details-panel__static-field">
-              <a href="{url}" target="_blank">{url}</a>
-            </div>
-          </div>
-        </CollapsableDetails>
-        <CollapsableDetails title="Pipelines">
-          {this.renderPipelines()}
-          <a onClick={() => this.onAddPipeline()} className="details-panel__add-section">
-            <i className="fa fa-plus"/>
-            Add pipeline
-          </a>
-        </CollapsableDetails>
+        <Input
+          type="hidden"
+          name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][id]`}
+          value={pair.id}
+        />
+        {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'condition')}
+        {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action')}
       </div>
-    )
+    );
+  };
+
+  renderPolicy = (policy, pipelineIdx, policyIdx) => {
+    const collapsible = policy.conditionAction.map((pair, idx) => (
+      <CollapsibleProperties
+        key={pair.id}
+        bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
+        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx)}
+        button={<IconButton icon="iconDelete" onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)} />}
+        barToggable
+        defaultOpened
+        space="10px 0"
+      />
+    ));
+    return (
+      <CollapsibleProperties
+        bar={<EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>}
+        collapsible={collapsible}
+        button={<IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx)} />}
+        defaultOpened
+        untoggable
+        space="15px 0 10px"
+      />
+    );
+  };
+
+  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
+
+  renderPolicyInput = (pipelineIdx, policyIdx, policy) => {
+    const options = this.getPolicyInputOptions();
+    return (
+      <EntityProperty
+        name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
+        value={policy.name || options[0].value}
+        options={options}
+        hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
+      />
+    );
+  };
+
+  renderPipeline = (pipeline, pipelineIdx) => {
+    const collapsible = pipeline.policies.map((policy, idx) => (
+      <CollapsibleProperties
+        key={policy.id}
+        bar={this.renderPolicyInput(pipelineIdx, idx, policy)}
+        collapsible={this.renderPolicy(policy, pipelineIdx, idx)}
+        button={<IconButton icon="iconDelete" onClick={this.removePipelinePolicy(pipelineIdx, idx)} />}
+        defaultOpened
+        space="0"
+      />
+    ));
+    return (
+      <CollapsibleProperties
+        bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
+        collapsible={collapsible}
+        button={<IconButton icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
+        defaultOpened
+        untoggable
+        space="15px 0 5px"
+      />
+    );
+  };
+
+  renderPipelineInput = (idx, pipeline) => (
+    <EntityProperty
+      name={`pipelines[${idx}][name]`}
+      value={pipeline.name}
+      placeholder="Enter pipeline name here"
+      hiddenInputs={[{name: `pipelines[${idx}][id]`, value: pipeline.id}]}
+    />
+  );
+
+  onHttpToggle = (event) => {
+    const http = _.cloneDeep(this.state.http);
+    http.enabled = event.currentTarget.checked;
+    this.changeState({http});
+  };
+
+  onHttpsToggle = (event) => {
+    const https = _.cloneDeep(this.state.https);
+    https.enabled = event.currentTarget.checked;
+    this.changeState({https});
+  };
+
+  addHttpsTlsDomain = () => {
+    const https = _.cloneDeep(this.state.https);
+    https.tls.push(HttpsTlsDomain.create({domain: '', key: '', cert: ''}));
+    this.changeState({https});
+    setTimeout(() => {
+      const idx = https.tls.length - 1;
+      const input = document.getElementById(`https[tls][${idx}][domain]`);
+      input && input.focus();
+    });
+  };
+
+  removeHttpsTlsDomain = idx => () => {
+    const https = _.cloneDeep(this.state.https);
+    https.tls.splice(idx, 1);
+    this.changeState({https});
+  };
+
+  handleHttpsTlsTab = idx => (event) => {
+    if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
+    const size = this.state.https.tls.length;
+    if (size - 1 === idx) {
+      this.addHttpsTlsDomain();
+    }
+  };
+
+  renderProtocolSection = () => {
+    const {http, https} = this.state;
+    const columns = [
+      'Host Domain',
+      'TLS Key',
+      'TLS Certificate',
+      <IconButton icon="iconPlus" onClick={this.addHttpsTlsDomain} />,
+    ];
+    const widths = [250, 300, undefined, 70];
+    const paddings = [true, true, true, false];
+    const data = https.tls.map((item, idx) => [
+      <Input
+        name={`https[tls][${idx}][domain]`}
+        value={item.domain}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Input
+        name={`https[tls][${idx}][key]`}
+        value={item.key}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Input
+        name={`https[tls][${idx}][cert]`}
+        value={item.cert}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleKeyDown={this.handleHttpsTlsTab(idx)}
+      />,
+      <IconButton icon="iconDelete" onClick={this.removeHttpsTlsDomain(idx)} />,
+    ]);
+    const table = <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+    />;
+    const collapsible = (
+      <div className="panel__details__enableable">
+        <div>
+          <div className="panel__details__checkbox">
+            <Checkbox
+              name="http[enabled]"
+              label="HTTP"
+              value={http.enabled}
+              handleChange={this.onHttpToggle}
+            />
+          </div>
+          <div className="panel__details__checkbox narrow">
+            {http.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="http[port]"
+                value={http.port}
+              />
+            )}
+          </div>
+        </div>
+        <div>
+          <div className="panel__details__checkbox">
+            <Checkbox
+              name="https[enabled]"
+              label="HTTPS"
+              value={https.enabled}
+              handleChange={this.onHttpsToggle}
+            />
+          </div>
+          <div className="panel__details__checkbox narrow">
+            {https.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="https[port]"
+                value={https.port}
+              />
+            )}
+          </div>
+          {https.enabled && table}
+        </div>
+      </div>
+    );
+    return (
+      <CollapsibleProperties
+        key="protocol"
+        bar={<EntityPropertyLabel>Protocol</EntityPropertyLabel>}
+        collapsible={collapsible}
+        barToggable
+        defaultOpened={false}
+      />
+    );
+  };
+
+  onAdminToggle = (event) => {
+    const admin = _.cloneDeep(this.state.admin);
+    admin.enabled = event.currentTarget.checked;
+    this.changeState({admin});
+  };
+
+  renderAdminSection = () => {
+    const {admin} = this.state;
+    const collapsible = (
+      <div className="panel__details__enableable">
+        <div>
+          <div className="panel__details__checkbox">
+            <Checkbox
+              name="admin[enabled]"
+              label="Enabled"
+              value={admin.enabled}
+              handleChange={this.onAdminToggle}
+            />
+          </div>
+          <div className="panel__details__checkbox">
+            {admin.enabled && (
+              <EntityProperty
+                title="Hostname"
+                placeholder=" "
+                name="admin[hostname]"
+                value={admin.hostname}
+              />
+            )}
+          </div>
+          <div className="panel__details__checkbox narrow">
+            {admin.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="admin[port]"
+                value={admin.port}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    );
+    return (
+      <CollapsibleProperties
+        key="admin"
+        bar={<EntityPropertyLabel>Admin</EntityPropertyLabel>}
+        collapsible={collapsible}
+        barToggable
+        defaultOpened={false}
+      />
+    );
+  };
+
+  renderPipelinesSection = () => {
+    const {pipelines} = this.state;
+    const collapsible = pipelines.map((pipeline, idx) => (
+      <CollapsibleProperties
+        key={pipeline.id}
+        bar={this.renderPipelineInput(idx, pipeline)}
+        collapsible={this.renderPipeline(pipeline, idx)}
+        button={<IconButton icon="iconDelete" onClick={this.removePipeline(idx)} />}
+        defaultOpened
+        space="0"
+        noDividers
+      />
+    ));
+    return (
+      <CollapsibleProperties
+        key="pipelines"
+        bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
+        collapsible={collapsible}
+        button={<IconButton icon="iconPlus" onClick={this.addPipeline} />}
+        barToggable
+        defaultOpened
+      />
+    );
+  };
+
+  render() {
+    const sections = [
+      {title: 'Protocol'},
+      {title: 'Admin'},
+      {title: 'Pipelines'},
+    ];
+    return (
+      <div className="panel__details">
+        {sections.map(({title, render}) => this[`render${render || title}Section`]())}
+      </div>
+    );
   }
+
 }
 
 export default BaseDetails(GatewayDetails);

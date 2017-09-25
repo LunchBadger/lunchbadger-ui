@@ -11,7 +11,7 @@ export default {
   },
   3: {
     name: 'Public',
-    entities: ['publicEndpoints'],
-    connectionEntities: ['publicEndpoints'],
+    entities: ['apiEndpoints'],
+    connectionEntities: ['apiEndpoints'],
   },
 };

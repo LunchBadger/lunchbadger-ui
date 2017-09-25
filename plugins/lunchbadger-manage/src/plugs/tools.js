@@ -1,5 +1,5 @@
 import {add as addServiceEndpoint} from '../reduxActions/serviceEndpoints';
-import {add as addPublicEndpoint} from '../reduxActions/publicEndpoints';
+import {add as addApiEndpoint} from '../reduxActions/apiEndpoints';
 import {add as addGateway} from '../reduxActions/gateways';
 
 export default {
@@ -17,10 +17,10 @@ export default {
           action: addServiceEndpoint,
         },
         {
-          label: 'Public',
-          name: 'publicendpoint',
+          label: 'API',
+          name: 'apiendpoint',
           icon: 'iconEndpoint',
-          action: addPublicEndpoint,
+          action: addApiEndpoint,
         },
       ],
     },

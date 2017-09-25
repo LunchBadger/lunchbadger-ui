@@ -1,4 +1,4 @@
-import {addAndConnect} from './publicEndpoints';
+import {addAndConnect} from './apiEndpoints';
 
 const {storeUtils} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;

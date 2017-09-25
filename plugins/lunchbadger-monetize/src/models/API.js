@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {update, remove} from '../reduxActions/apis';
 import APIPlan from './APIPlan';
 
-const PublicEndpoint = LunchBadgerManage.models.PublicEndpoint;
+const ApiEndpoint = LunchBadgerManage.models.ApiEndpoint;
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class API extends BaseModel {
@@ -13,7 +13,7 @@ export default class API extends BaseModel {
    * @type {Endpoint[]}
    * @private
    */
-  _publicEndpoints = [];
+  _apiEndpoints = [];
 
   /**
    * @type {APIPlan[]}
@@ -21,7 +21,7 @@ export default class API extends BaseModel {
    */
   _plans = [];
 
-  _accept = [PublicEndpoint.type];
+  _accept = [ApiEndpoint.type];
 
   constructor(id, name) {
     super(id);
@@ -42,7 +42,7 @@ export default class API extends BaseModel {
     return {
       id: this.id,
       name: this.name,
-      publicEndpoints: this.publicEndpoints.map(endpoint => endpoint.toJSON()),
+      apiEndpoints: this.apiEndpoints.map(endpoint => endpoint.toJSON()),
       plans: this.plans.map(plan => plan.toJSON()),
       itemOrder: this.itemOrder,
       portalId: this.portalId
@@ -52,18 +52,18 @@ export default class API extends BaseModel {
   /**
    * @param endpoints {Endpoint[]}
    */
-  set publicEndpoints(endpoints) {
-    this._publicEndpoints = endpoints.map((endpoint) => {
+  set apiEndpoints(endpoints) {
+    this._apiEndpoints = endpoints.map((endpoint) => {
       endpoint.wasBundled = true;
-      return PublicEndpoint.create(endpoint);
+      return ApiEndpoint.create(endpoint);
     });
   }
 
   /**
    * @returns {Endpoint[]}
    */
-  get publicEndpoints() {
-    return this._publicEndpoints;
+  get apiEndpoints() {
+    return this._apiEndpoints;
   }
 
   /**
@@ -87,11 +87,11 @@ export default class API extends BaseModel {
    */
   addEndpoint(endpoint) {
     endpoint.wasBundled = true;
-    this._publicEndpoints.push(endpoint);
+    this._apiEndpoints.push(endpoint);
   }
 
   removeEndpoint(endpoint) {
-    this._publicEndpoints.splice(_.findIndex(this.publicEndpoints, {id: endpoint.id}), 1);
+    this._apiEndpoints.splice(_.findIndex(this.apiEndpoints, {id: endpoint.id}), 1);
   }
 
   /**

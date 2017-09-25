@@ -1,16 +1,18 @@
-import {update, remove} from '../reduxActions/publicEndpoints';
+import _ from 'lodash';
+import {update, remove} from '../reduxActions/apiEndpoints';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
 
-export default class PublicEndpoint extends BaseModel {
-  static type = 'PublicEndpoint';
-  static entities = 'publicEndpoints';
+export default class ApiEndpoint extends BaseModel {
+  static type = 'ApiEndpoint';
+  static entities = 'apiEndpoints';
 
   _ports = [];
   wasBundled = false;
-  path = '/endpoint';
+  host = '*';
+  paths = [];
 
   constructor(id, name) {
     super(id);
@@ -24,17 +26,34 @@ export default class PublicEndpoint extends BaseModel {
     ];
   }
 
+  static create(data) {
+    return super.create({
+      ...data,
+      paths: this.deserializePaths(data.paths),
+    });
+  }
+
   recreate() {
-    return PublicEndpoint.create(this);
+    return ApiEndpoint.create(this.toJSON());
   }
 
   toJSON() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
-      path: this.path,
+      host: this.host,
       itemOrder: this.itemOrder
     }
+    if (this.paths.length > 0) {
+      json.paths = this.paths;
+    }
+    return json;
+  }
+
+  static deserializePaths(paths) {
+    if (typeof paths === 'undefined') return [];
+    if (typeof paths === 'string') return [paths];
+    return paths;
   }
 
   get ports() {
@@ -48,7 +67,7 @@ export default class PublicEndpoint extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.publicEndpoints;
+      const entities = getState().entities.apiEndpoints;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateName = Object.keys(entities)
@@ -56,10 +75,10 @@ export default class PublicEndpoint extends BaseModel {
           .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
-          validations.data.name = messages.duplicatedEntityName('Public Endpoint');
+          validations.data.name = messages.duplicatedEntityName('API Endpoint');
         }
       }
-      const fields = ['name', 'path'];
+      const fields = ['name', 'host'];
       checkFields(fields, model, validations.data);
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
@@ -72,6 +91,16 @@ export default class PublicEndpoint extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model) {
+    const data = _.cloneDeep(model);
+    data.paths = [];
+    (model.paths || []).forEach((path) => {
+      if (path.trim() === '') return;
+      data.paths.push(path.trim());
+    })
+    return data;
   }
 
 }

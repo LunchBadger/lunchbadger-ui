@@ -231,6 +231,24 @@ var pageCommands = {
     return '.canvas__container .quadrant:nth-child(3) .quadrant__body .Entity.Gateway:nth-child(' + nth + ')';
   },
 
+  getApiSelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.API:nth-child(' + nth + ')';
+  },
+
+  getServiceEndpointSelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.ServiceEndpoint:nth-child(' + nth + ')';
+  },
+
+  getApiEndpointSelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.ApiEndpoint:nth-child(' + nth + ')';
+  },
+
+  saveProject: function () {
+    this.click('.header__menu .fa-floppy-o');
+    this.waitForElementPresent('.spinner__overlay', 5000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
+  },
+
   testDatasource: function (type, config = []) {
     this.addElementFromTooltip('dataSource', type);
     if (config.length === 0) {

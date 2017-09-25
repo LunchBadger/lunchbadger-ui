@@ -56,7 +56,7 @@ const entityIcons = {
   Model: iconModel,
   Portal: iconPortal,
   ServiceEndpoint: iconEndpoint,
-  PublicEndpoint: iconEndpoint,
+  ApiEndpoint: iconEndpoint,
 };
 
 const dataSourceIcons = {

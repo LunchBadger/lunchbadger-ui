@@ -1,9 +1,9 @@
 import gateways from './gateways';
 import serviceEndpoints from './serviceEndpoints';
-import publicEndpoints from './publicEndpoints';
+import apiEndpoints from './apiEndpoints';
 
 export default {
   gateways,
   serviceEndpoints,
-  publicEndpoints,
+  apiEndpoints,
 };

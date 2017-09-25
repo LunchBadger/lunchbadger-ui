@@ -1,9 +1,9 @@
 import Gateway from '../components/Panel/EntitiesDetails/GatewayDetails';
 import ServiceEndpoint from '../components/Panel/EntitiesDetails/ServiceEndpointDetails';
-import PublicEndpoint from '../components/Panel/EntitiesDetails/PublicEndpointDetails';
+import ApiEndpoint from '../components/Panel/EntitiesDetails/ApiEndpointDetails';
 
 export default {
   Gateway,
   ServiceEndpoint,
-  PublicEndpoint,
+  ApiEndpoint,
 };

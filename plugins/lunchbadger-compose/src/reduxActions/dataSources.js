@@ -10,7 +10,11 @@ export const add = (name, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[0].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = DataSource.create({name, connector, itemOrder, loaded: false});
+  const json = {name, connector, itemOrder, loaded: false};
+  if (connector === 'rest') {
+    json.operations = [{template: {url: ''}}];
+  }
+  const entity = DataSource.create(json);
   dispatch(actions.updateDataSource(entity));
   return entity;
 }
@@ -57,12 +61,11 @@ export const remove = entity => async (dispatch, getState) => {
     const state = getState();
     dispatch(actions.removeDataSource(entity));
     if (entity.loaded) {
-      await DataSourceService.delete(entity.workspaceId);
       Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))
         .filter(item => item instanceof Model)
-        .forEach(async model => {
-          await ModelService.upsertModelConfig({
+        .forEach(model => {
+          ModelService.upsertModelConfig({
             name: model.name,
             id: model.workspaceId,
             facetName: 'server',
@@ -70,6 +73,7 @@ export const remove = entity => async (dispatch, getState) => {
             public: model.public,
           });
         });
+      await DataSourceService.delete(entity.workspaceId);
     }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));

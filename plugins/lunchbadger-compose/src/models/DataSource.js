@@ -6,7 +6,7 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
-
+  static entities = 'dataSources';
   /**
    * Collection of ports
    * @type {Port[]}
@@ -37,12 +37,6 @@ export default class DataSource extends BaseModel {
    * @private
    */
   _database = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
-  _user = ''; // in MySQL
 
   /**
    * @type {String}
@@ -91,16 +85,31 @@ export default class DataSource extends BaseModel {
       connector: this.connector,
       url: this.url,
       database: this.database,
-      user: this.user,
       username: this.username,
       password: this.password,
       itemOrder: this.itemOrder,
       lunchbadgerId: this.id,
     };
-    if (this.connector === 'mysql') {
+    if (this.isWithPort) {
       delete json.url;
       json.host = this.host;
       json.port = this.port;
+    }
+    if (this.isRest) {
+      delete json.url;
+      delete json.database;
+      delete json.username;
+      delete json.password;
+      json.operations = this.operations;
+    }
+    if (this.isSoap || this.isEthereum) {
+      delete json.database;
+      delete json.username;
+      delete json.password;
+    }
+    if (this.isSalesforce) {
+      delete json.url;
+      delete json.database;
     }
     return json;
   }
@@ -149,14 +158,6 @@ export default class DataSource extends BaseModel {
     this._database = database;
   }
 
-  get user() {
-    return this._user;
-  }
-
-  set user(user) {
-    this._user = user;
-  }
-
   get username() {
     return this._username;
   }
@@ -181,6 +182,26 @@ export default class DataSource extends BaseModel {
     this._connector = connector;
   }
 
+  get isWithPort() {
+    return ['mysql', 'mongodb', 'redis'].includes(this._connector);
+  }
+
+  get isRest() {
+    return this._connector === 'rest';
+  }
+
+  get isSoap() {
+    return this._connector === 'soap';
+  }
+
+  get isEthereum() {
+    return this._connector === 'web3';
+  }
+
+  get isSalesforce() {
+    return this._connector === 'salesforce';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
@@ -195,12 +216,14 @@ export default class DataSource extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Data Source');
         }
       }
-      const isMySql = model.hasOwnProperty('port');
-      const fields = isMySql
-        ? ['name', 'host', 'port', 'database', 'user', 'password']
-        : ['name', 'url', 'database', 'username', 'password'];
+      const withPort = model.hasOwnProperty('port');
+      const isRest = model.hasOwnProperty('operations');
+      let fields = ['name', 'url', 'database', 'username', 'password'];
+      if (withPort) {
+        fields = ['name', 'host', 'port', 'database', 'username', 'password'];
+      }
       checkFields(fields, model, validations.data);
-      if (isMySql && model.port !== '') {
+      if (withPort && model.port !== '') {
         if (isNaN(+model.port)) {
           validations.data.port = 'Port format is invalid';
         } else {
@@ -210,6 +233,9 @@ export default class DataSource extends BaseModel {
           }
           model.port = model.port.toString();
         }
+      }
+      if (isRest && model.operations[0].template.url === '') {
+        validations.data['baseUrl'] = messages.fieldCannotBeEmpty;
       }
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;

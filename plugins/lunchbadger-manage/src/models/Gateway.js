@@ -1,19 +1,28 @@
 import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
-import Policy from './Policy';
+import HttpsTlsDomain from './HttpsTlsDomain';
+import _ from 'lodash';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
-  dnsPrefix = 'gateway';
+  static entities = 'gateways';
 
   /**
    * @type {Pipeline[]}
    * @private
    */
-  _pipelines = [
-    Pipeline.create({name: 'Pipeline'})
+  _pipelines = [];
+
+  _policies = [
+    'basic-auth',
+    'cors',
+    'key-auth',
+    'oauth2',
+    'proxy',
+    'rate-limiter',
+    'simple-logger',
   ];
 
   constructor(id, name) {
@@ -24,25 +33,95 @@ export default class Gateway extends BaseModel {
   static create(data) {
     return super.create({
       ...data,
-      pipelines: (data.pipelines || []).map(pipeline => Pipeline.create({
-        ...pipeline,
-        policies: pipeline.policies.map(policy => Policy.create(policy)),
-      })),
+      pipelines: Object.keys(data.pipelines || {}).map(name => Pipeline.create({name, ...data.pipelines[name]})),
+      http: this.deserializeHttp(data.http),
+      https: this.deserializeHttps(data.https),
+      admin: this.deserializeAdmin(data.admin),
     });
   }
 
   recreate() {
-    return Gateway.create(this);
+    return Gateway.create(this.toJSON());
   }
 
   toJSON() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
-      dnsPrefix: this.dnsPrefix,
-      pipelines: this.pipelines.map(pipeline => pipeline.toJSON()),
-      itemOrder: this.itemOrder
+      dnsPrefix: 'gateway',
+      policies: this.policies,
+      pipelines: this.pipelines.map(item => item.toJSON()),
+      itemOrder: this.itemOrder,
+    };
+    if (this.http.enabled) {
+      json.http = {
+        port: this.http.port,
+      };
     }
+    if (this.https.enabled) {
+      json.https = {
+        port: this.https.port,
+        tls: this.https.tls.reduce((r, i) => ({...r, ...i.toJSON()}), {}),
+      };
+    }
+    if (this.admin.enabled) {
+      json.admin = {
+        hostname: this.admin.hostname,
+        port: this.admin.port,
+      };
+    }
+    return json;
+  }
+
+  static deserializeHttp(http) {
+    let enabled = false;
+    if (http) {
+      if (typeof http.enabled === 'boolean') {
+        enabled = http.enabled;
+      } else {
+        enabled = true;
+      }
+    }
+    return {
+      enabled,
+      port: http ? http.port : '',
+    };
+  }
+
+  static deserializeHttps(https) {
+    let enabled = false;
+    if (https) {
+      if (typeof https.enabled === 'boolean') {
+        enabled = https.enabled;
+      } else {
+        enabled = true;
+      }
+    }
+    return {
+      enabled,
+      port: https ? https.port : '',
+      tls: https ? Object.keys(https.tls).map(domain => HttpsTlsDomain.create({
+        domain,
+        key: https.tls[domain].key,
+        cert: https.tls[domain].cert,
+      })): [],
+    };
+  }
+
+  static deserializeAdmin(admin) {
+    let enabled = false;
+    if (admin) {
+      if (typeof admin.enabled === 'boolean') {
+        enabled = admin.enabled;
+      } else {
+        enabled = true;
+      }
+    }
+    return {
+      enabled,
+      hostname: admin ? admin.hostname : '',
+      port: admin ? admin.port : '',
+    };
   }
 
   /**
@@ -57,6 +136,14 @@ export default class Gateway extends BaseModel {
    */
   get pipelines() {
     return this._pipelines;
+  }
+
+  set policies(policies) {
+    this._policies = policies;
+  }
+
+  get policies() {
+    return this._policies;
   }
 
   /**
@@ -89,7 +176,7 @@ export default class Gateway extends BaseModel {
           validations.data.name = messages.duplicatedEntityName('Gateway');
         }
       }
-      const fields = ['name', 'dnsPrefix'];
+      const fields = ['name'];
       checkFields(fields, model, validations.data);
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
@@ -102,6 +189,53 @@ export default class Gateway extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model) {
+    const data = _.cloneDeep(model);
+    data.https.tls = {};
+    if (model.https.enabled) {
+      (model.https.tls || []).forEach(({domain, key, cert}) => {
+        if (domain.trim() === '') return;
+        data.https.tls[domain.trim()] = {key, cert};
+      });
+    }
+    data.pipelines = [];
+    (model.pipelines || []).forEach(({id, name, policies}) => {
+      if (name.trim() === '') return;
+      const pipeline = {
+        id,
+        name: name.trim(),
+        policies: [],
+      };
+      (policies || []).forEach(({id, name, pairs}) => {
+        const policy = {
+          id,
+          [name]: [],
+        };
+        (pairs || []).forEach(({id, action, condition}) => {
+          const pair = {
+            id,
+            action: {},
+            condition: {},
+          };
+          (action || []).forEach((parameter) => {
+            if (parameter.name.trim() !== '') {
+              pair.action[parameter.name.trim()] = parameter.value;
+            }
+          });
+          (condition || []).forEach((parameter) => {
+            if (parameter.name.trim() !== '') {
+              pair.condition[parameter.name] = parameter.value;
+            }
+          });
+          policy[name].push(pair);
+        });
+        pipeline.policies.push(policy);
+      });
+      data.pipelines.push(pipeline);
+    });
+    return data;
   }
 
 }

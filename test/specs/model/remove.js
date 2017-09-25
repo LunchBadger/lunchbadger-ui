@@ -23,7 +23,7 @@ module.exports = {
 
     // Remove it
     page.click(elementSelector + ' .Toolbox__button--delete');
-    page.click('.modal__actions__button.modal__actions__button--confirm');
+    page.click('.ConfirmModal .confirm');
     browser.expect.element('.Entity.expanded.Model').to.not.be.present.before(2000);
   },
 

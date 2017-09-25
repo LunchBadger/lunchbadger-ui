@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {Input, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
-import {iconDelete, iconTrash, iconRevert} from '../../../../../src/icons';
+import {Input, Select, EntityPropertyLabel, IconSVG, SmoothCollapse, Toolbox} from '../../';
+import getPlainText from '../../utils/getPlainText';
+import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
 class EntityProperty extends Component {
@@ -23,6 +24,8 @@ class EntityProperty extends Component {
     onViewModeClick: PropTypes.func,
     onClick: PropTypes.func,
     selected: PropTypes.bool,
+    options: PropTypes.array,
+    onTab: PropTypes.func,
   }
 
   static defaultProps = {
@@ -62,6 +65,57 @@ class EntityProperty extends Component {
     onBlur(event);
   }
 
+  handleTab = (event) => {
+    if (typeof this.props.onTab === 'function') {
+      if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
+      this.props.onTab();
+    }
+  }
+
+  renderField = () => {
+    const {
+      name,
+      options,
+      onChange,
+      password,
+      invalid,
+      value,
+      placeholder,
+      title,
+      underlineStyle,
+    } = this.props;
+    const isInvalid = invalid !== '';
+    const filler = placeholder || `Enter ${title} here`;
+    if (options) {
+      return <Select
+        ref={(r) => {this.inputRef = r;}}
+        className="EntityProperty__field--input"
+        name={name}
+        value={value}
+        options={options}
+        handleChange={onChange}
+        handleKeyDown={this.handleTab}
+      />;
+    }
+    return (
+      <Input
+        ref={(r) => {this.inputRef = r;}}
+        className="EntityProperty__field--input"
+        name={name}
+        value={value}
+        placeholder={filler}
+        handleChange={onChange}
+        handleFocus={this.handleFocus}
+        handleBlur={this.handleBlur}
+        type={password ? 'password' : 'text'}
+        fullWidth
+        underlineStyle={underlineStyle}
+        isInvalid={isInvalid}
+        handleKeyDown={this.handleTab}
+      />
+    );
+  }
+
   render() {
     const {
       name,
@@ -75,10 +129,7 @@ class EntityProperty extends Component {
       editableOnly,
       password,
       hiddenInputs,
-      onChange,
       onDelete,
-      onBlur,
-      underlineStyle,
       onViewModeClick,
       isDelta,
       onResetField,
@@ -112,36 +163,22 @@ class EntityProperty extends Component {
         onClick: onResetField(modelName || name),
       });
     }
+    const plainName = getPlainText(name);
     return (
       <div className={classNames}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
-        <div className="EntityProperty__field">
+        <div className={cs('EntityProperty__field', plainName)}>
           <div className='EntityProperty__field--text' onClick={onClick}>
             <span className={textValueClassNames} onClick={onViewModeClick}>
               {textValue}
             </span>
           </div>
-          {!fake && (
-            <Input
-              ref={(r) => {this.inputRef = r;}}
-              className="EntityProperty__field--input"
-              name={name}
-              value={value}
-              placeholder={filler}
-              handleChange={onChange}
-              handleFocus={this.handleFocus}
-              handleBlur={this.handleBlur}
-              type={password ? 'password' : 'text'}
-              fullWidth
-              underlineStyle={underlineStyle}
-              isInvalid={isInvalid}
-            />
-          )}
-          {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name}/>)}
+          {!fake && this.renderField()}
+          {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
           <Toolbox config={toolboxConfig} />
         </div>
         {onDelete && (
-          <div className="EntityProperty__delete" onClick={onDelete}>
+          <div className={cs('EntityProperty__delete', `button__remove__${plainName}`)} onClick={onDelete}>
             <IconSVG svg={iconDelete} />
           </div>
         )}

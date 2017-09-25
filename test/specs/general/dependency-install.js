@@ -78,8 +78,8 @@ module.exports = {
     browser.click(elementSelector + '.mongodb');
     browser.waitForElementVisible(elementSelector + '.mongodb .Toolbox__button--delete', 50000);
     browser.click(elementSelector + '.mongodb .Toolbox__button--delete');
-    browser.waitForElementPresent('.modal__actions__button.modal__actions__button--confirm', 5000);
-    browser.click('.modal__actions__button.modal__actions__button--confirm');
+    browser.waitForElementPresent('.ConfirmModal .confirm', 5000);
+    browser.click('.ConfirmModal .confirm');
     browser.waitForElementPresent('.SystemDefcon1', 5000);
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);

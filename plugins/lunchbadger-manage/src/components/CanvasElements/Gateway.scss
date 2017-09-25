@@ -14,3 +14,42 @@
     }
   }
 }
+
+.Gateway {
+  .CollapsibleProperties__bar__right--button {
+    transform: none;
+    top: 14px;
+  }
+  .CollapsibleProperties__bar__right > span {
+    width: calc(100% - 22px);
+  }
+  .CollapsibleProperties__collapsible {
+    margin: -10px 0 0 20px;
+  }
+  .CollapsibleProperties.untoggable {
+    padding-right: 0;
+    .EntityProperty {
+      width: calc(100% - 22px);
+    }
+
+  }
+  .EntityProperty__delete,
+  .IconButton {
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 800ms ease;
+  }
+  .EntityProperty__delete {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.editable .Gateway {
+  .IconButton,
+  .EntityProperty__delete {
+    opacity: 1;
+    pointer-events: all;
+  }
+}

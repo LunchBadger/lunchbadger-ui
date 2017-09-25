@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Modal from './Modal';
+import {SystemDefcon1} from '../../../../../lunchbadger-ui/src';
 
 class OneOptionModal extends Component {
   static propTypes = {
@@ -14,25 +14,16 @@ class OneOptionModal extends Component {
     confirmText: 'Ok'
   };
 
-  _handleConfirm = () => {
-    this.props.onClose();
-  }
-
   render() {
+    const {title, children, confirmText: label, onClose: onClick} = this.props;
     return (
-      <div className="modal__body">
-        <h1 className="modal__title">{this.props.title}</h1>
-        <p className="modal__message">{this.props.children}</p>
-
-        <div className="modal__actions">
-          <button className="modal__actions__button modal__actions__button--confirm"
-                  onClick={this._handleConfirm}>
-            {this.props.confirmText}
-          </button>
-        </div>
-      </div>
+      <SystemDefcon1
+        title={title}
+        content={children}
+        buttons={[{label, onClick}]}
+      />
     );
   }
 }
 
-export default Modal(OneOptionModal);
+export default OneOptionModal;

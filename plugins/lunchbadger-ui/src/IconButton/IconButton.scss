@@ -1,0 +1,17 @@
+.IconButton {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  float: right;
+  cursor: pointer;
+  margin-left: 10px;
+  &:hover svg {
+    stroke: #3B85BF;
+  }
+  &:active svg {
+    stroke: #377CB3;
+  }
+  svg {
+    stroke: #3F8FCD;
+  }
+}

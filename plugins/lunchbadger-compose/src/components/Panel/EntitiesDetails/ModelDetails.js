@@ -1,29 +1,58 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import ModelRelationDetails from './ModelRelationDetails';
-import ModelUserFieldsDetails from './ModelUserFieldsDetails';
-import ModelNestedProperties from './ModelNestedProperties';
+// import ModelRelationDetails from './ModelRelationDetails';
+// import ModelUserFieldsDetails from './ModelUserFieldsDetails';
+// import ModelNestedProperties from './ModelNestedProperties';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
+import {
+  EntityProperty,
+  EntityPropertyLabel,
+  CollapsibleProperties,
+  Input,
+  Checkbox,
+  Select,
+  Table,
+  IconButton,
+} from '../../../../../lunchbadger-ui/src';
+import './ModelDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const InputField = LunchBadgerCore.components.InputField;
-const Select = LunchBadgerCore.components.Select;
-const SelectField = LunchBadgerCore.components.SelectField;
-const CheckboxField = LunchBadgerCore.components.CheckboxField;
-const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
+// const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const {Connections} = LunchBadgerCore.stores;
+const {propertyTypes} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
+];
+
+const userFieldsTypeOptions = [
+  {label: 'String', value: 'string'},
+  {label: 'Number', value: 'number'},
+  {label: 'Object', value: 'object'},
+];
+
+const userFieldsTypeEmptyValues = {
+  string: '',
+  number: '0',
+  object: {},
+};
+
+const subTypes = ['object', 'array'];
+
+const relationTypeOptions = [
+  {label: 'hasMany', value: 'hasMany'},
+  {label: 'belongsTo', value: 'belongsTo'},
+  {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
 ];
 
 @inject('connectionsStore') @observer
@@ -45,18 +74,18 @@ class ModelDetails extends PureComponent {
         relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
       };
-      addNestedProperties(props.entity, data.properties, newProps.entity.properties.slice(), '');
+      addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
     };
     this.state = {
       ...this.initState(props),
       ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props) => {
+    this.onStoreUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         ...stateFromStores(props),
-      });
+      }, callback);
     };
   }
 
@@ -114,10 +143,7 @@ class ModelDetails extends PureComponent {
     return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges() {
-    // revert properties
-    this.onStoreUpdate();
-  }
+  discardChanges = callback => this.onStoreUpdate(this.props, callback);
 
   // update = async (model) => {
   //   const {entity} = this.props;
@@ -170,35 +196,40 @@ class ModelDetails extends PureComponent {
   //   // updateModel(this.props.entity.id, updateData, propsToRemove);
   // }
 
+  handlePropertyToggleCollapse = id => () => {
+    const properties = [...this.state.properties];
+    const property = properties.find(item => item.id === id);
+    property.expanded = !property.expanded;
+    this.setState({properties});
+  }
+
   onAddItem = (collection, item) => {
+    const newCollection = [...this.state[collection], item];
+    if (collection === 'properties' && item.parentId !== '') {
+      const property = newCollection.find(prop => prop.id === item.parentId);
+      if (property) {
+        property.expanded = true;
+      }
+    }
     this.setState({
-      [collection]: [...this.state[collection], item],
-    });
-    this.setState({changed: true}, () => this.props.parent.checkPristine());
+      [collection]: newCollection,
+      changed: true,
+    }, () => this.props.parent.checkPristine());
   }
 
   onRemoveItem = (collection, item) => {
     const items = [...this.state[collection]];
-    _.remove(items, function (i) {
-      if (item.id) {
-        return i.id === item.id;
-      }
+    _.remove(items, (i) => {
+      if (item.id) return i.id === item.id;
       return i.name === item.name;
     });
+    this.setState({[collection]: items});
     this.setState({
-      [collection]: items,
-    });
-    if (!_.isEqual(items, this.props.entity[collection])) {
-      this.setState({changed: true});
-    } else {
-      this.setState({changed: false});
-    }
-    setTimeout(() => {
-      this.props.parent.checkPristine();
-    });
+      changed: !_.isEqual(items, this.props.entity[collection]),
+    }, () => this.props.parent.checkPristine());
   }
 
-  onAddProperty = (parentId) => () => {
+  onAddProperty = parentId => () => {
     const property = ModelProperty.create({
       parentId,
       default_: '',
@@ -209,152 +240,448 @@ class ModelDetails extends PureComponent {
     });
     this.onAddItem('properties', property);
     setTimeout(() => {
-      const input = Array.from(document.querySelectorAll(`.details-panel__input.details-key.property-${property.id} input`)).slice(-1)[0];
+      const input = document.getElementById(`properties[${property.idx}][name]`);
       input && input.focus();
     });
   }
 
-  onRemoveProperty = (property) => this.onRemoveItem('properties', property);
+  onRemoveProperty = property => () => this.onRemoveItem('properties', property);
 
-  onAddRelation = () => this.onAddItem('relations', ModelRelation.create({}));
+  onAddRelation = () => {
+    this.onAddItem('relations', ModelRelation.create({}));
+    setTimeout(() => {
+      const input = document.getElementById(`relations[${this.state.relations.length - 1}][name]`);
+      input && input.focus();
+    });
+  }
 
-  onRemoveRelation = relation => this.onRemoveItem('relations', relation);
+  onRemoveRelation = relation => () => this.onRemoveItem('relations', relation);
 
-  onAddUserField = () => this.onAddItem('userFields', {id: uuid.v4(), name: '', type: '', value: ''});
+  onAddUserField = () => {
+    this.onAddItem('userFields', {id: uuid.v4(), name: '', type: 'string', value: ''});
+    setTimeout(() => {
+      const input = document.getElementById(`userFields[${this.state.userFields.length - 1}][name]`);
+      input && input.focus();
+    });
+  }
 
-  onRemoveUserField = field => this.onRemoveItem('userFields', field);
+  onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
-  onPropertyTypeChange = (id, type) => {
+  // onPropertyTypeChange = (id, type) => {
+  //   const properties = [...this.state.properties];
+  //   properties.find(prop => prop.id === id).type = type;
+  //   this.setState({properties});
+  // }
+
+  handleChangePropertyType = id => (type) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
-    this.setState({properties});
+    this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   }
 
-  renderRelations() {
-    return this.state.relations.map((relation, index) => {
-      return (
-        <ModelRelationDetails
-          index={index}
-          key={`relation-${relation.id}`}
-          onRemove={this.onRemoveRelation}
-          relation={relation}
-        />
-      );
-    });
+  handleChangeUserDefinedFieldType = idx => (type) => {
+    const userFields = [...this.state.userFields];
+    userFields[idx] = {...userFields[idx]};
+    userFields[idx].type = type;
+    userFields[idx].value = userFieldsTypeEmptyValues[type];
+    this.setState({userFields});
   }
 
-  renderUserFields() {
-    return this.state.userFields.map((field, index) => {
-      return (
-        <ModelUserFieldsDetails
-          index={index}
-          addAction={this.onAddUserField}
-          fieldsCount={this.state.userFields.length}
-          key={field.id}
-          onRemove={this.onRemoveUserField}
-          field={field}
-        />
-      );
-    });
+  handleTab = (collection, idx) => (event) => {
+    if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
+    const collectionSize = this.state[collection].length;
+    const addFunc = {
+      userFields: 'onAddUserField',
+      relations: 'onAddRelation',
+    };
+    if (collectionSize - 1 === idx) {
+      this[addFunc[collection]]();
+    }
   }
 
-  render() {
+  handleTabProperties = property => (event) => {
+    if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
+    const idx = +property.idx.split('/')[1];
+    const size = this.state.properties.filter(item => item.parentId === property.parentId).length - 1;
+    if (size === idx) {
+      this.onAddProperty(property.parentId)();
+    }
+  }
+
+  renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
     const dataSourceOptions = Object.keys(dataSources)
       .map(key => dataSources[key])
       .map(({name: label, id: value}) => ({label, value}));
     const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    const fields = [
+      {
+        title: 'Context Path',
+        name: 'http[path]',
+        value: entity.contextPath,
+      },
+      {
+        title: 'Plural',
+        name: 'plural',
+        value: entity.plural,
+      },
+      {
+        title: 'Base Model',
+        name: 'base',
+        value: entity.base,
+        options: baseModelTypes,
+      },
+      {
+        title: 'Data Source',
+        name: 'dataSource',
+        value: currentDsId,
+        options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+      },
+    ];
+    const checkboxes = [
+      {
+        name: 'readonly',
+        label: 'Read Only',
+        value: entity.readonly,
+      },
+      {
+        name: 'strict',
+        label: 'Strict Schema',
+        value: entity.strict,
+      },
+      {
+        name: 'public',
+        label: 'Exposed as REST',
+        value: entity.public,
+      },
+    ];
+    return (
+      <div className="panel__details">
+        {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
+        {checkboxes.map(item => (
+          <div key={item.name} className="panel__details__checkbox">
+            <Checkbox {...item} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  getProperties = (properties, parentId, level = 0) => {
+    let idx = 0;
+    this.state.properties.forEach((property) => {
+      if (property.parentId === parentId) {
+        property.idx = `${parentId}/${idx}`;
+        property.level = level;
+        idx += 1;
+        properties.push(property);
+        if (property.expanded) {
+          this.getProperties(properties, property.id, level + 1);
+        }
+      };
+    });
+  };
+
+  renderPropertiesSection = () => {
+    const columns = [
+      <div style={{marginLeft: 10}}>Name</div>,
+      'Type',
+      'Default Value',
+      'Notes',
+      'Required',
+      'Is Index',
+      <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
+    ];
+    const widths = [300, 120, 200, undefined, 100, 100, 70];
+    const paddings = [true, true, true, true, false, false, false];
+    const centers = [false, false, false, false, true, true, false];
+    const properties = [];
+    this.getProperties(properties, '');
+    const data = properties.map((property) => [
+      <div style={{marginLeft: property.level * 10}}>
+        <div className={cs('ModelDetails__arrow', {expanded: property.expanded})}>
+          {subTypes.includes(property.type) && (
+            <IconButton
+              onClick={this.handlePropertyToggleCollapse(property.id)}
+              icon="iconArrow"
+            />
+          )}
+        </div>
+        <div className="ModelDetails__field">
+          <Input
+            name={`properties[${property.idx}][id]`}
+            value={property.id}
+            type="hidden"
+          />
+          <Input
+            name={`properties[${property.idx}][name]`}
+            value={property.name}
+            underlineStyle={{bottom: 0}}
+            fullWidth
+            hideUnderline
+          />
+        </div>
+      </div>,
+      <Select
+        name={`properties[${property.idx}][type]`}
+        value={property.type || 'string'}
+        options={propertyTypes}
+        fullWidth
+        hideUnderline
+        handleChange={this.handleChangePropertyType(property.id)}
+      />,
+      subTypes.includes(property.type) ? null :
+        <Input
+          name={`properties[${property.idx}][default_]`}
+          value={property.default_}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />,
+      <Input
+        name={`properties[${property.idx}][description]`}
+        value={property.description}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Checkbox
+        name={`properties[${property.idx}][required]`}
+        value={property.required}
+      />,
+      <Checkbox
+        name={`properties[${property.idx}][index]`}
+        value={property.index}
+        handleKeyDown={this.handleTabProperties(property)}
+      />,
+      <div>
+        <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />
+        {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
+      </div>,
+    ]);
+    return <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+      centers={centers}
+    />;
+    // <ModelNestedProperties
+    //   title="Properties"
+    //   path=""
+    //   properties={this.state.properties}
+    //   onAddProperty={this.onAddProperty}
+    //   onRemoveProperty={this.onRemoveProperty}
+    //   onPropertyTypeChange={this.onPropertyTypeChange}
+    // />
+  };
+
+  renderRelationsSection = () => {
+    const {modelOptions} = this.props;
+    const columns = [
+      'Name',
+      'Type',
+      'Model',
+      'Foreign Key',
+      <IconButton name="add__relation" icon="iconPlus" onClick={this.onAddRelation} />,
+    ];
+    const widths = [300, 220, 300, undefined, 70];
+    const paddings = [true, true, true, true, false];
+    const data = this.state.relations.map((relation, idx) => [
+      <Input
+        name={`relations[${idx}][name]`}
+        value={relation.name}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Select
+        name={`relations[${idx}][type]`}
+        value={relation.type || 'hasMany'}
+        options={relationTypeOptions}
+        fullWidth
+        hideUnderline
+      />,
+      <Select
+        name={`relations[${idx}][model]`}
+        value={relation.model || modelOptions[0].value}
+        options={modelOptions}
+        fullWidth
+        hideUnderline
+      />,
+      <Input
+        name={`relations[${idx}][foreignKey]`}
+        value={relation.foreignKey}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleKeyDown={this.handleTab('relations', idx)}
+      />,
+      <IconButton name={`remove__relation${idx}`} icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
+    ]);
+    return <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+    />;
+    // <table className="details-panel__table">
+    //   <thead>
+    //   <tr>
+    //     <th>Name</th>
+    //     <th>Model</th>
+    //     <th>Type</th>
+    //     <th>
+    //       Foreign Key
+    //       <a onClick={this.onAddRelation} className="details-panel__add">
+    //         <i className="fa fa-plus"/>
+    //         Add relation
+    //       </a>
+    //     </th>
+    //     <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+    //   </tr>
+    //   </thead>
+    //   <tbody>
+    //     {this.renderRelations()}
+    //   </tbody>
+    // </table>
+  };
+
+  // renderRelations() {
+  //   return this.state.relations.map((relation, index) => {
+  //     return (
+  //       <ModelRelationDetails
+  //         index={index}
+  //         key={`relation-${relation.id}`}
+  //         onRemove={this.onRemoveRelation}
+  //         relation={relation}
+  //       />
+  //     );
+  //   });
+  // }
+
+  renderUserDefinedFieldsSection = () => {
+    const columns = [
+      'Name',
+      'Type',
+      'Value',
+      <IconButton name="add__udf" icon="iconPlus" onClick={this.onAddUserField} />,
+    ];
+    const widths = [300, 120, undefined, 70];
+    const paddings = [true, true, true, false];
+    const data = this.state.userFields.map((field, idx) => [
+      <Input
+        name={`userFields[${idx}][name]`}
+        value={field.name}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+      />,
+      <Select
+        name={`userFields[${idx}][type]`}
+        value={field.type}
+        options={userFieldsTypeOptions}
+        fullWidth
+        hideUnderline
+        handleChange={this.handleChangeUserDefinedFieldType(idx)}
+      />,
+      field.type === 'object'
+      ? <Input
+          name={`userFields[${idx}][value]`}
+          value={JSON.stringify(field.value)}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          textarea
+          handleKeyDown={this.handleTab('userFields', idx)}
+        />
+      : <Input
+          name={`userFields[${idx}][value]`}
+          value={field.value.toString()}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          type={field.type === 'number' ? 'number' : 'text'}
+          handleKeyDown={this.handleTab('userFields', idx)}
+        />,
+      <IconButton name={`remove__udf${idx}`} icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
+    ]);
+    return <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+    />;
+  }
+  //   <table className="details-panel__table" ref="user-fields">
+  //     <thead>
+  //     <tr>
+  //       <th>Name</th>
+  //       <th>Data type</th>
+  //       <th>
+  //         Value
+  //         <a onClick={this.onAddUserField} className="details-panel__add">
+  //           <i className="fa fa-plus"/>
+  //           Add field
+  //         </a>
+  //       </th>
+  //       <th className="details-panel__table__cell details-panel__table__cell--empty"/>
+  //     </tr>
+  //     </thead>
+  //     <tbody>
+  //       {this.renderUserFields()}
+  //     </tbody>
+  //   </table>
+  // );
+
+  // renderUserFields() {
+  //   return this.state.userFields.map((field, index) => {
+  //     return (
+  //       <ModelUserFieldsDetails
+  //         index={index}
+  //         addAction={this.onAddUserField}
+  //         fieldsCount={this.state.userFields.length}
+  //         key={field.id}
+  //         onRemove={this.onRemoveUserField}
+  //         field={field}
+  //       />
+  //     );
+  //   });
+  // }
+
+  render() {
+    const sections = [
+      {title: 'Details'},
+      {title: 'User-defined fields', render: 'UserDefinedFields'},
+      {title: 'Relations'},
+      {title: 'Properties'},
+    ];
     return (
       <div>
-        <CollapsableDetails title="Details">
-          <div className="details-panel__container details-panel__columns">
-            <InputField label="Context path" propertyName="contextPath" entity={entity}/>
-            <InputField label="Plural" propertyName="plural" entity={entity}/>
-            <SelectField
-              label="Base model"
-              propertyName="base"
-              entity={entity}
-              options={baseModelTypes}
-            />
-            <div className="details-panel__fieldset">
-              <label
-                className="details-panel__label"
-                htmlFor="dataSource"
-              >
-                Data source
-              </label>
-              <Select
-                className="details-panel__input"
-                name="dataSource"
-                value={currentDsId}
-                options={[{label: '[None]', value: 'none'}, ...dataSourceOptions]}
-              />
-            </div>
-            <CheckboxField label="Read only" propertyName="readonly" entity={entity} />
-            <CheckboxField label="Strict schema" propertyName="strict" entity={entity} />
-            <CheckboxField label="Exposed as REST" propertyName="public" entity={entity} />
-          </div>
-        </CollapsableDetails>
-        <CollapsableDetails title="Relations">
-          <table className="details-panel__table">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Model</th>
-              <th>Type</th>
-              <th>
-                Foreign Key
-                <a onClick={this.onAddRelation} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add relation
-                </a>
-              </th>
-              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-            </tr>
-            </thead>
-            <tbody>
-              {this.renderRelations()}
-            </tbody>
-          </table>
-        </CollapsableDetails>
-        <ModelNestedProperties
-          title="Properties"
-          path=""
-          properties={this.state.properties}
-          onAddProperty={this.onAddProperty}
-          onRemoveProperty={this.onRemoveProperty}
-          onPropertyTypeChange={this.onPropertyTypeChange}
-        />
-        <div className="panel__title panel__title--custom">Custom Fields</div>
-        <CollapsableDetails title="User Defined Fields">
-          <table className="details-panel__table" ref="user-fields">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Data type</th>
-              <th>
-                Value
-                <a onClick={this.onAddUserField} className="details-panel__add">
-                  <i className="fa fa-plus"/>
-                  Add field
-                </a>
-              </th>
-              <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-            </tr>
-            </thead>
-            <tbody>
-              {this.renderUserFields()}
-            </tbody>
-          </table>
-        </CollapsableDetails>
+        {sections.map(({title, render}) => (
+          <CollapsibleProperties
+            key={title}
+            bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
+            collapsible={this[`render${render || title}Section`]()}
+            barToggable
+            defaultOpened
+          />
+        ))}
       </div>
-    )
+    );
   }
 }
 
 const selector = createSelector(
   state => state.entities.dataSources,
-  (dataSources) => ({dataSources}),
+  state => state.entities.models,
+  state => state.entities.modelsBundled,
+  (dataSources, models, modelsBundled) => ({
+    dataSources,
+    modelOptions: Object.keys(models).map(key => models[key].name)
+      .concat(Object.keys(modelsBundled).map(key => modelsBundled[key].name))
+      .map(label => ({label, value: label})),
+  }),
 );
 
 export default connect(selector)(BaseDetails(ModelDetails));

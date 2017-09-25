@@ -1,6 +1,6 @@
 @import '../../config';
 
-.port {
+.canvas-element__port {
   display: inline-block;
   border-radius: 50%;
   border: 2px solid $ui-light;
@@ -21,7 +21,7 @@
   // }
   .DataSource &,
   .Model &,
-  .PrivateEndpoint &,
+  .ServiceEndpoint &,
   .PublicEndpoint & {
     top: -2px !important;
   }
@@ -71,6 +71,6 @@
   font-size: 14px;
 }
 
-.multiEnvNotDev .port {
+.multiEnvNotDev .canvas-element__port {
   pointer-events: none;
 }

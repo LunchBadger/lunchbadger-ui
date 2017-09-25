@@ -7,8 +7,8 @@ export const loadFromServer = () => async (dispatch, getState) => {
   const {onAppLoad} = getState().plugins;
   try {
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
+    onAppLoad.map((item, idx) => dispatch(item.callback(responses[idx])));
     onAppLoad.map((item, idx) => {
-      dispatch(item.callback(responses[idx]));
       item.action && dispatch(item.action(responses[idx]));
       item.actions && item.actions.map(action => dispatch(action(responses[idx])));
     });

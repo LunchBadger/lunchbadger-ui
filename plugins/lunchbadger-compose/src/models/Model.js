@@ -2,6 +2,7 @@ import _ from 'lodash';
 import uuid from 'uuid';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
+import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -11,6 +12,7 @@ const {defaultEntityNames} = LunchBadgerCore.utils;
 
 export default class Model extends BaseModel {
   static type = 'Model';
+  static entities = 'models';
   static forbiddenFields = [
     '_id',
     '_ready',
@@ -72,6 +74,17 @@ export default class Model extends BaseModel {
         portType: 'out'
       })
     ];
+  }
+
+  static create(data) {
+    const properties = data.properties || [];
+    const relations = data.relations || [];
+    delete data.properties;
+    delete data.relations;
+    const model = super.create(data);
+    properties.forEach(property => model.addProperty(ModelProperty.create(property)));
+    relations.forEach(relation => model.addRelation(ModelRelation.create(relation)));
+    return model;
   }
 
   recreate() {
@@ -214,14 +227,18 @@ export default class Model extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.models;
+      const {models, modelsBundled} = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
-        const isDuplicateName = Object.keys(entities)
+        const isDuplicateModelName = Object.keys(models)
           .filter(id => id !== this.id)
-          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .filter(id => models[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
-        if (isDuplicateName) {
+        const isDuplicateModelBundledName = Object.keys(modelsBundled)
+          .filter(id => id !== this.id)
+          .filter(id => modelsBundled[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateModelName || isDuplicateModelBundledName) {
           validations.data.name = messages.duplicatedEntityName('Model');
         }
       }

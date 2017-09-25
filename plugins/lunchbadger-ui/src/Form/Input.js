@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import TextField from 'material-ui/TextField';
 import HOC from '../utils/Formsy/HOC';
+import getPlainText from '../utils/getPlainText';
 
 class Input extends Component {
   static propTypes = {
     getValue: PropTypes.func,
     setValue: PropTypes.func,
     handleBlur: PropTypes.func,
+    handleFocus: PropTypes.func,
     handleKeyPress: PropTypes.func,
     handleKeyUp: PropTypes.func,
     handleKeyDown: PropTypes.func,
@@ -19,7 +22,13 @@ class Input extends Component {
     underlineStyle: PropTypes.object,
     underlineFocusStyle: PropTypes.object,
     isInvalid: PropTypes.bool,
+    hideUnderline: PropTypes.bool,
+    textarea: PropTypes.bool,
   };
+
+  static defaultProps = {
+    textarea: false,
+  }
 
   _handleKeyPress = (event) => {
     if (typeof this.props.handleKeyPress === 'function') {
@@ -68,6 +77,8 @@ class Input extends Component {
       fullWidth,
       underlineStyle,
       isInvalid,
+      hideUnderline,
+      textarea,
     } = this.props;
     const rootStyle = {
       fontWeight: 'inherit',
@@ -84,8 +95,12 @@ class Input extends Component {
     if (isInvalid) {
       underlineStyles.borderColor = '#f44336';
     }
+    const underlineFocusStyle = {...underlineStyles};
+    if (hideUnderline) {
+      underlineStyles.borderColor = 'rgba(0, 0, 0, 0)';
+    }
     return (
-      <div className={className || ''} style={{display: type === 'hidden' ? 'none' : undefined}}>
+      <div className={cs(className, getPlainText(`input__${name}`))} style={{display: type === 'hidden' ? 'none' : undefined}}>
         <TextField
           value={getValue()}
           type={type || 'text'}
@@ -101,7 +116,10 @@ class Input extends Component {
           style={rootStyle}
           inputStyle={inputStyle}
           underlineStyle={underlineStyles}
-          underlineFocusStyle={underlineStyles}
+          underlineFocusStyle={underlineFocusStyle}
+          multiLine={textarea}
+          rows={textarea ? 2 : 1}
+          rowsMax={textarea ? 4 : 1}
         />
       </div>
     );

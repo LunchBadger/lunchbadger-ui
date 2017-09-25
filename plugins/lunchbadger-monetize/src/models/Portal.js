@@ -6,6 +6,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class Portal extends BaseModel {
   static type = 'Portal';
+  static entities = 'portals';
 
   /**
    * @type {API[]}

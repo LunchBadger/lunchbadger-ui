@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
+import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 // import PipelineComponent from './Subelements/Pipeline';
 // import {removePipeline} from '../../reduxActions/gateways';
 import {
@@ -20,12 +21,17 @@ import './Gateway.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
+const {Connections} = LunchBadgerCore.stores;
 // const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
 class Gateway extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     parent: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -98,6 +104,17 @@ class Gateway extends Component {
 
   processModel = model => {
     const {entity} = this.props;
+    // FIXME - finish removing paper connections for pipelines having no proxy policy
+    // const {paper: paperRef} = this.context;
+    // const paper = paperRef.getInstance();
+    // (model.pipelines || []).forEach(({name, id, policies}) => {
+    //   if (policies.filter(policy => !!policy.proxy).length === 0) {
+    //     console.log('Del conns', name, id, policies);
+    //     const connectionsTo = Connections.search({toId: id});
+    //     const connectionsFrom = Connections.search({fromId: id});
+    //     [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
+    //   }
+    // });
     return entity.processModel(model);
   };
 
@@ -222,15 +239,20 @@ class Gateway extends Component {
     />
   );
 
-  renderPipelinePorts = ports => ports.map(port => (
-    <Port
-      key={`port-${port.portType}-${port.id}`}
-      way={port.portType}
-      elementId={port.id}
-      middle={true}
-      scope={port.portGroup}
-    />
-  ));
+  renderPipelinePorts = pipeline => {
+    const {ports, policies} = pipeline;
+    const hasProxyPolicy = !!policies.find(item => item.name === GATEWAY_POLICIES.PROXY);
+    return ports.map(port => (
+      <Port
+        key={`port-${port.portType}-${port.id}`}
+        way={port.portType}
+        elementId={port.id}
+        middle={true}
+        scope={hasProxyPolicy ? port.portGroup : port.id}
+        disabled={!hasProxyPolicy}
+      />
+    ));
+  }
 
   renderPipelines = () => {
     const {pipelines} = this.state;
@@ -238,7 +260,7 @@ class Gateway extends Component {
       <div className="Gateway__pipelines">
         {pipelines.map((pipeline, idx) => (
           <div key={pipeline.id} className={`Gateway__pipeline${idx}`}>
-            {this.renderPipelinePorts(pipeline.ports)}
+            {this.renderPipelinePorts(pipeline)}
             <CollapsibleProperties
               bar={this.renderPipelineInput(idx, pipeline)}
               collapsible={this.renderPipeline(pipeline, idx)}

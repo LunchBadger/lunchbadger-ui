@@ -1,7 +1,7 @@
 import {actions} from './actions';
 import ApiEndpoint from '../models/ApiEndpoint';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
@@ -26,28 +26,30 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
   });
   Connections.addConnection(fromId, entity.id, {source: outPort});
   dispatch(actions.updateApiEndpoint(entity));
-  dispatch(coreActions.setStates([
+  dispatch(actionsCore.setStates([
     {key: 'currentElement', value: entity},
     {key: 'currentEditElement', value: entity},
   ]));
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateApiEndpoint(updatedEntity));
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
   dispatch(actions.removeApiEndpoint(entity));
+  await dispatch(coreActions.saveToServer());
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

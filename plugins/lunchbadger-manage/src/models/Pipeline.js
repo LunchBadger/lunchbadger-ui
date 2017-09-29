@@ -3,6 +3,7 @@ import Policy from './Policy';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Pipeline extends BaseModel {
   static type = 'Pipeline';
@@ -44,6 +45,17 @@ export default class Pipeline extends BaseModel {
       name: this.name,
       policies: this.policies.map(policy => policy.toJSON()),
     }
+  }
+
+  toApiJSON() {
+    const serviceEndpoint = Connections.search({toId: this.id}).map(conn => conn.fromId)[0];
+    const json = {
+      name: this.id,
+      friendlyName: this.name,
+      policies: this.policies.map(policy => policy.toApiJSON(serviceEndpoint)),
+      apiEndpoints: Connections.search({fromId: this.id}).map(conn => conn.toId),
+    };
+    return json;
   }
 
   /**

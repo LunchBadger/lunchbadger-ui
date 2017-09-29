@@ -25,7 +25,15 @@ export const loadFromServer = () => async (dispatch, getState) => {
 export const saveToServer = () => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(true));
   const state = getState();
-  const {onProjectSave} = state.plugins;
+  const {onProjectSave, onBeforeProjectSave} = state.plugins;
+  const onSaves = onBeforeProjectSave.reduce((map, item) => [...map, ...item(state)], []);
+  if (onSaves.length > 0) {
+    try {
+      await Promise.all(onSaves.map(item => item.onSave(state)));
+    } catch (err) {
+      dispatch(actions.addSystemDefcon1(err));
+    }
+  }
   const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
   try {
     await ProjectService.save(data);

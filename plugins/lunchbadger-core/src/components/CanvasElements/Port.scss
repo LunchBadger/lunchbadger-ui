@@ -55,6 +55,14 @@
   // margin-top: 0;
 }
 
+.port__disabled {
+  border-color: #c8c8c8;
+  background: #c8c8c8;
+  .port__anchor {
+    background: #c8c8c8;
+  }
+}
+
 .port__inside {
   color: $font-base;
   text-align: center;

@@ -1,5 +1,6 @@
 import {
   loadFromServer,
+  saveToServer,
   saveOrder,
 } from './project';
 import {
@@ -22,6 +23,7 @@ export {
   toggleSubelement,
 
   loadFromServer,
+  saveToServer,
   saveOrder,
 
   setCurrentElement,

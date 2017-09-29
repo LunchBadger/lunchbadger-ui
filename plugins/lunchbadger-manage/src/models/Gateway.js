@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
 import HttpsTlsDomain from './HttpsTlsDomain';
-import _ from 'lodash';
+import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
+import {gatewayPolicies} from '../utils/gatewayPolicies';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -15,19 +17,13 @@ export default class Gateway extends BaseModel {
    */
   _pipelines = [];
 
-  _policies = [
-    'basic-auth',
-    'cors',
-    'key-auth',
-    'oauth2',
-    'proxy',
-    'rate-limiter',
-    'simple-logger',
-  ];
+  _policies = gatewayPolicies;
 
   constructor(id, name) {
     super(id);
     this.name = name;
+    this.adminApi = new ExpressGatewayAdminService();
+    this.adminApi.initialize(id);
   }
 
   static create(data) {
@@ -71,6 +67,40 @@ export default class Gateway extends BaseModel {
       };
     }
     return json;
+  }
+
+  async onSave(state) {
+    if (this.loaded) {
+      const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([
+        this.adminApi.getServiceEndpoints(),
+        this.adminApi.getApiEndpoints(),
+        this.adminApi.getPipelines(),
+      ]);
+      for (let id in gatewayServiceEndpoints.body) {
+        if (id === 'admin') continue;
+        await this.adminApi.deleteServiceEndpoint(id);
+      }
+      for (let id in gatewayApiEndpoints.body) {
+        if (id === 'admin') continue;
+        await this.adminApi.deleteApiEndpoint(id);
+      }
+      const {entities: {serviceEndpoints, apiEndpoints}} = state;
+      for (let id in serviceEndpoints) {
+        await this.adminApi.putServiceEndpoint(id, serviceEndpoints[id].toApiJSON());
+      }
+      for (let id in apiEndpoints) {
+        await this.adminApi.putApiEndpoint(id, apiEndpoints[id].toApiJSON());
+      }
+      for (let i = 0; i < gatewayPipelines.body.length; i += 1) {
+        const pipeline = gatewayPipelines.body[i];
+        if (pipeline.name === 'admin') continue;
+        await this.adminApi.deletePipeline(pipeline.name);
+      }
+      for (let i = 0; i < this.pipelines.length; i += 1) {
+        const pipeline = this.pipelines[i];
+        await this.adminApi.putPipeline(pipeline.id, pipeline.toApiJSON());
+      }
+    }
   }
 
   static deserializeHttp(http) {

@@ -6,7 +6,7 @@ import initialPipelinePolicies from '../utils/initialPipelinePolicies';
 // import Policy from '../models/Policy';
 
 const {Connections} = LunchBadgerCore.stores;
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -24,7 +24,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   let updatedEntity;
   if (index > 0) {
     updatedEntity = Gateway.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   const removedPipelines = _.difference(
@@ -35,25 +35,34 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  updatedEntity = Gateway.create({...entity.toJSON(), ...model, ready: false});
+  // (model.pipelines || []).forEach(({name, id, policies}) => {
+  //   if (policies.filter(policy => !!policy.proxy).length === 0) {
+  //     console.log('Del conns', name, id, policies);
+  //     Connections.removeConnection(id);
+  //     Connections.removeConnection(null, id);
+  //   }
+  // });
+  updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: entity.loaded, ready: false});
   dispatch(actions.updateGateway(updatedEntity));
-  await new Promise(r => setTimeout(() => r(), 1500));
+  await dispatch(coreActions.saveToServer());
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
+  updatedEntity.loaded = true;
   dispatch(actions.updateGateway(updatedEntity));
-  dispatch(coreActions.addSystemInformationMessage({
+  dispatch(actionsCore.addSystemInformationMessage({
     type: 'success',
     message: 'Gateway successfully deployed',
   }));
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
   entity.pipelines.forEach(({id}) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
   dispatch(actions.removeGateway(entity));
+  await dispatch(coreActions.saveToServer());
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

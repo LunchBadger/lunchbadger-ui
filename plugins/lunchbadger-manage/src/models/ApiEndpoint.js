@@ -50,6 +50,17 @@ export default class ApiEndpoint extends BaseModel {
     return json;
   }
 
+  toApiJSON() {
+    const json = {
+      friendlyName: this.name,
+      host: this.host,
+    };
+    if (this.paths.length > 0) {
+      json.paths = this.paths;
+    }
+    return json;
+  }
+
   static deserializePaths(paths) {
     if (typeof paths === 'undefined') return [];
     if (typeof paths === 'string') return [paths];

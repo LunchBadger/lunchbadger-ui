@@ -1,9 +1,9 @@
 import {addAndConnect} from './apiEndpoints';
 
-const {storeUtils} = LunchBadgerCore.utils;
+const {coreActions, storeUtils} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
-export const attach = info => (dispatch, getState) => {
+export const attach = info => async (dispatch, getState) => {
   info.connection.setType('wip');
   const {sourceId, targetId} = info;
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
@@ -15,7 +15,14 @@ export const attach = info => (dispatch, getState) => {
     }
   }
   Connections.addConnectionByInfo(info);
+  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
+};
+
+export const detach = info => async (dispatch) => {
+  const {sourceId: fromId, targetId: toId} = info;
+  Connections.removeConnection(fromId, toId);
+  await dispatch(coreActions.saveToServer());
 };
 
 export const reattach = info => async (dispatch, getState) => {
@@ -30,5 +37,6 @@ export const reattach = info => async (dispatch, getState) => {
     }
   }
   Connections.moveConnection(info);
+  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
 }

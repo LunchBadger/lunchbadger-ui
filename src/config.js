@@ -2,6 +2,14 @@ import config from 'config';
 
 const mkUrl = (url, user, env) => url.replace('{USER}', user).replace('{ENV}', env);
 
+const serviceUrls = [
+  'workspaceUrl',
+  'projectApiUrl',
+  'workspaceApiUrl',
+  'forecastApiUrl',
+  'expressGatewayAdminApiUrl'
+];
+
 class Cfg {
   constructor(config) {
     this.data = {};
@@ -25,7 +33,7 @@ class Cfg {
   }
 
   apiUrlsReplacements(user) {
-    ['workspaceUrl', 'projectApiUrl', 'workspaceApiUrl', 'forecastApiUrl'].forEach((key) => {
+    serviceUrls.forEach((key) => {
       this.apiUrlReplacements(key, user);
     });
   }

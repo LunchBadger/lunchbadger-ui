@@ -1,3 +1,3 @@
 export default [
-  'http://service/endpoint',
+  'http://example.org',
 ];

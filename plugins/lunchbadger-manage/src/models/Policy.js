@@ -33,6 +33,20 @@ export default class Policy extends BaseModel {
     }
   }
 
+  toApiJSON(serviceEndpoint) {
+    const json = {
+      id: this.id,
+      [this.name]: this.conditionAction.map(conditionAction => conditionAction.toJSON()),
+    };
+    if (serviceEndpoint && !!json.proxy) {
+      if (json.proxy.length === 0) {
+        json.proxy.push({action: {}});
+      }
+      json.proxy[0].action.serviceEndpoint = serviceEndpoint;
+    }
+    return json;
+  }
+
   set conditionAction(conditionAction) {
     this._conditionAction = conditionAction;
   }

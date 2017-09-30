@@ -35,13 +35,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  // (model.pipelines || []).forEach(({name, id, policies}) => {
-  //   if (policies.filter(policy => !!policy.proxy).length === 0) {
-  //     console.log('Del conns', name, id, policies);
-  //     Connections.removeConnection(id);
-  //     Connections.removeConnection(null, id);
-  //   }
-  // });
   updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: entity.loaded, ready: false});
   dispatch(actions.updateGateway(updatedEntity));
   await dispatch(coreActions.saveToServer());
@@ -57,12 +50,15 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   entity.pipelines.forEach(({id}) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
   dispatch(actions.removeGateway(entity));
-  await dispatch(coreActions.saveToServer());
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

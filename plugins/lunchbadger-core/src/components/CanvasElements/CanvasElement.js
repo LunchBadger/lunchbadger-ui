@@ -173,7 +173,11 @@ export default (ComposedComponent) => {
       // }
     }
 
-    setFlatModel = () => this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+    setFlatModel = () => {
+      if (this.entityRef) {
+        this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+      }
+    }
 
     refresh = () => {
       this.forceUpdate();

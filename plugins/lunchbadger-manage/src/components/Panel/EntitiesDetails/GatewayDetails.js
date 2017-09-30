@@ -7,6 +7,7 @@ import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
 import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
+import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -18,6 +19,7 @@ import {
 } from '../../../../../lunchbadger-ui/src';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const {Connections} = LunchBadgerCore.stores;
 
 class GatewayDetails extends PureComponent {
   static propTypes = {
@@ -26,6 +28,7 @@ class GatewayDetails extends PureComponent {
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -53,6 +56,15 @@ class GatewayDetails extends PureComponent {
 
   processModel = model => {
     const {entity} = this.props;
+    const {paper: paperRef} = this.context;
+    const paper = paperRef.getInstance();
+    (model.pipelines || []).forEach(({id, policies}) => {
+      if (!policies.find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
+        const connectionsTo = Connections.search({toId: id});
+        const connectionsFrom = Connections.search({fromId: id});
+        [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
+      }
+    });
     return entity.processModel(model);
   };
 

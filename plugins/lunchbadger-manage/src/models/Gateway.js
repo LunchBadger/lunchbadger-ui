@@ -84,12 +84,15 @@ export default class Gateway extends BaseModel {
         if (id === 'admin') continue;
         await this.adminApi.deleteApiEndpoint(id);
       }
-      const {entities: {serviceEndpoints, apiEndpoints}} = state;
-      for (let id in serviceEndpoints) {
-        await this.adminApi.putServiceEndpoint(id, serviceEndpoints[id].toApiJSON());
+      const {entities: {serviceEndpoints, apiEndpoints, models, modelsBundled}} = state;
+      const serviceEndpointEntities = {...serviceEndpoints, ...models, ...modelsBundled};
+      for (let id in serviceEndpointEntities) {
+        await this.adminApi.putServiceEndpoint(id, serviceEndpointEntities[id].toApiJSON());
       }
       for (let id in apiEndpoints) {
-        await this.adminApi.putApiEndpoint(id, apiEndpoints[id].toApiJSON());
+        if (apiEndpoints[id].loaded) {
+          await this.adminApi.putApiEndpoint(id, apiEndpoints[id].toApiJSON());
+        }
       }
       for (let i = 0; i < gatewayPipelines.body.length; i += 1) {
         const pipeline = gatewayPipelines.body[i];

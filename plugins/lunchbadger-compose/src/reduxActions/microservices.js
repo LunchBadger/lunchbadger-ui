@@ -2,7 +2,7 @@ import {actions} from './actions';
 import Microservice from '../models/Microservice';
 import {update as updateModel, remove as removeModel} from './models';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
@@ -31,19 +31,20 @@ export const removeNonExistentSubModels = () => (dispatch, getState) => {
 };
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  const isAutoSave = entity.models.length > 0;
   const {multiEnvironments, entities: {modelsBundled}} = getState();
   const index = multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = Microservice.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   const models = model.models.map(({lunchbadgerId}) => lunchbadgerId);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
   dispatch(actions.updateMicroservice(updatedEntity));
   entity.models.forEach((id) => {
-    if (!models.includes(id)) dispatch(coreActions.removeEntity(modelsBundled[id]));
+    if (!models.includes(id)) dispatch(actionsCore.removeEntity(modelsBundled[id]));
   });
   await Promise.all(entity.models.map((id) =>
     models.includes(id)
@@ -53,18 +54,26 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
   dispatch(actions.updateMicroservice(updatedEntity));
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch, getState) => {
+export const remove = entity => async (dispatch, getState) => {
+  const isAutoSave = entity.loaded && entity.models.length > 0;
   const modelsBundled = getState().entities.modelsBundled;
-  entity.models.forEach(async (id) => {
+  for (let i = 0; i < entity.models.length; i += 1) {
+    const id = entity.models[i];
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
     await dispatch(removeModel(modelsBundled[id], 'removeModelBundled'));
-    dispatch(coreActions.removeEntity(modelsBundled[id]));
-  });
+    dispatch(actionsCore.removeEntity(modelsBundled[id]));
+  }
   dispatch(actions.removeMicroservice(entity));
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

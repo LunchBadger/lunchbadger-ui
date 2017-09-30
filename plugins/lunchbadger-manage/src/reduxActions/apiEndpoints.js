@@ -48,8 +48,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   dispatch(actions.removeApiEndpoint(entity));
-  await dispatch(coreActions.saveToServer());
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

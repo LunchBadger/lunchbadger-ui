@@ -8,6 +8,7 @@ export default {
   gitBaseUrl: 'http://api.lunchbadger.com/git',
   workspaceUrl: 'http://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'http://admin-gateway-{USER}-{ENV}-{ID}.lunchbadger.io',
+  customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

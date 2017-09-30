@@ -7,7 +7,8 @@ const serviceUrls = [
   'projectApiUrl',
   'workspaceApiUrl',
   'forecastApiUrl',
-  'expressGatewayAdminApiUrl'
+  'expressGatewayAdminApiUrl',
+  'customerUrl'
 ];
 
 class Cfg {

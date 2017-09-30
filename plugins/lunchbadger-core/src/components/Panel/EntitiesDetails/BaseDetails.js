@@ -47,7 +47,11 @@ export default (ComposedComponent) => {
       }
     }
 
-    setFlatModel = () => this.state.model = getFlatModel(this.refs.form.getModel());
+    setFlatModel = () => {
+      if (this.refs.form) {
+        this.state.model = getFlatModel(this.refs.form.getModel());
+      }
+    }
 
     resetFormModel = () => this.refs.form.reset(this.state.model);
 

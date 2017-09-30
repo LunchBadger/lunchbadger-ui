@@ -1,4 +1,5 @@
 import ConditionAction from './ConditionAction';
+import GATEWAY_POLICIES from '../utils/gatewayPolicies';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -33,16 +34,19 @@ export default class Policy extends BaseModel {
     }
   }
 
-  toApiJSON(serviceEndpoint) {
+  toApiJSON(serviceEndpoints) {
     const json = {
       id: this.id,
       [this.name]: this.conditionAction.map(conditionAction => conditionAction.toJSON()),
     };
-    if (serviceEndpoint && !!json.proxy) {
-      if (json.proxy.length === 0) {
-        json.proxy.push({action: {}});
-      }
-      json.proxy[0].action.serviceEndpoint = serviceEndpoint;
+    const proxy = GATEWAY_POLICIES.PROXY;
+    if (serviceEndpoints.length > 0 && !!json[proxy]) {
+      serviceEndpoints.forEach((serviceEndpoint, idx) => {
+        if (!json[proxy][idx]) {
+          json[proxy].push({action: {}});
+        }
+        json[proxy][idx].action.serviceEndpoint = serviceEndpoint;
+      });
     }
     return json;
   }

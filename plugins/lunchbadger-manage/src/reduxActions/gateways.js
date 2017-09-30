@@ -3,10 +3,11 @@ import _ from 'lodash';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import initialPipelinePolicies from '../utils/initialPipelinePolicies';
-// import Policy from '../models/Policy';
+import GATEWAY_POLICIES from '../utils/gatewayPolicies';
+import ConditionAction from '../models/ConditionAction';
 
 const {Connections} = LunchBadgerCore.stores;
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, storeUtils} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -80,7 +81,7 @@ export const addPipeline = gatewayId => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
   entity.addPipeline(Pipeline.create({name: 'Pipeline'}));
   dispatch(actions.updateGateway(entity));
-}
+};
 
 export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
@@ -89,4 +90,28 @@ export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   Connections.removeConnection(null, id);
   entity.removePipeline(pipeline);
   dispatch(actions.updateGateway(entity));
-}
+};
+
+export const addServiceEndpointIntoProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
+  const state = getState();
+  const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
+  const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  pipeline.policies
+    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .forEach((policy) => {
+      policy.addConditionAction(ConditionAction.create({action: {serviceEndpoint}}));
+    });
+  dispatch(actions.updateGateway(gateway));
+};
+
+export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
+  const state = getState();
+  const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
+  const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  pipeline.policies
+    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .forEach((policy) => {
+      policy.removeConditionActionByServiceEndpoint(serviceEndpoint);
+    });
+  dispatch(actions.updateGateway(gateway));
+};

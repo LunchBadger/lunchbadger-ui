@@ -107,7 +107,7 @@ class Gateway extends Component {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
-      if (!policies.find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
+      if (!(policies || []).find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
         [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));

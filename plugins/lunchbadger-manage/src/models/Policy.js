@@ -34,20 +34,20 @@ export default class Policy extends BaseModel {
     }
   }
 
-  toApiJSON(serviceEndpoints) {
+  toApiJSON() {
     const json = {
       id: this.id,
       [this.name]: this.conditionAction.map(conditionAction => conditionAction.toJSON()),
     };
-    const proxy = GATEWAY_POLICIES.PROXY;
-    if (serviceEndpoints.length > 0 && !!json[proxy]) {
-      serviceEndpoints.forEach((serviceEndpoint, idx) => {
-        if (!json[proxy][idx]) {
-          json[proxy].push({action: {}});
-        }
-        json[proxy][idx].action.serviceEndpoint = serviceEndpoint;
-      });
-    }
+    // const proxy = GATEWAY_POLICIES.PROXY;
+    // if (serviceEndpoints.length > 0 && !!json[proxy]) {
+    //   serviceEndpoints.forEach((serviceEndpoint, idx) => {
+    //     if (!json[proxy][idx]) {
+    //       json[proxy].push({action: {}});
+    //     }
+    //     json[proxy][idx].action.serviceEndpoint = serviceEndpoint;
+    //   });
+    // }
     return json;
   }
 
@@ -61,6 +61,14 @@ export default class Policy extends BaseModel {
 
   addConditionAction(conditionAction) {
     this._conditionAction.push(conditionAction);
+  }
+
+  removeConditionActionByServiceEndpoint(serviceEndpoint) {
+    console.log('removeConditionActionByServiceEndpoint', serviceEndpoint);
+    this._conditionAction = this._conditionAction.filter(pair =>
+      !pair.action.parameters
+        .find(({name, value}) => name === 'serviceEndpoint' && value === serviceEndpoint)
+    );
   }
 
 }

@@ -55,7 +55,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity.ready = true;
   dispatch(actions.updateMicroservice(updatedEntity));
   if (isAutoSave) {
-    await dispatch(coreActions.saveToServer());
+    // await dispatch(coreActions.saveToServer());
   }
   return updatedEntity;
 };
@@ -72,7 +72,7 @@ export const remove = entity => async (dispatch, getState) => {
   }
   dispatch(actions.removeMicroservice(entity));
   if (isAutoSave) {
-    await dispatch(coreActions.saveToServer());
+    // await dispatch(coreActions.saveToServer());
   }
 };
 

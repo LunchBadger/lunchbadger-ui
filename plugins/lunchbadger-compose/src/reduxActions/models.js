@@ -81,7 +81,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       }
     }
     dispatch(actions[updateAction](updatedEntity));
-    await dispatch(coreActions.saveToServer());
+    // await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (err) {
     dispatch(actionsCore.addSystemDefcon1(err));
@@ -104,7 +104,7 @@ export const remove = (entity, action = 'removeModel') => async (dispatch) => {
       await ModelService.deleteModelConfig(entity.workspaceId);
     }
     if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
+      // await dispatch(coreActions.saveToServer());
     }
   } catch (err) {
     dispatch(actionsCore.addSystemDefcon1(err));

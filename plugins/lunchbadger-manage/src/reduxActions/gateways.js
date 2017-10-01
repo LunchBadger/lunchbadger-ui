@@ -58,7 +58,7 @@ export const remove = entity => async (dispatch) => {
   });
   dispatch(actions.removeGateway(entity));
   if (isAutoSave) {
-    await dispatch(coreActions.saveToServer());
+    // await dispatch(coreActions.saveToServer());
   }
 };
 

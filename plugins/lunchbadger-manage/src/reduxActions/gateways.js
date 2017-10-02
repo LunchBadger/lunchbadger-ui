@@ -20,6 +20,7 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  const isAutoSave = !entity.loaded;
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
@@ -38,7 +39,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
   });
   updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: entity.loaded, ready: false});
   dispatch(actions.updateGateway(updatedEntity));
-  await dispatch(coreActions.saveToServer());
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
   updatedEntity.loaded = true;
@@ -99,7 +102,7 @@ export const addServiceEndpointIntoProxy = (serviceEndpoint, pipelineId) => (dis
   pipeline.policies
     .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
     .forEach((policy) => {
-      policy.addConditionAction(ConditionAction.create({action: {serviceEndpoint}}));
+      policy.addConditionAction(ConditionAction.create({action: {serviceEndpoint, changeOrigin: true}}));
     });
   dispatch(actions.updateGateway(gateway));
 };

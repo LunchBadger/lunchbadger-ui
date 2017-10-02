@@ -3,6 +3,7 @@ export default {
     name: 'Private',
     entities: ['serviceEndpoints'],
     connectionEntities: ['serviceEndpoints'],
+    serviceEndpointEntities: ['serviceEndpoints'],
   },
   2: {
     name: 'Gateway',

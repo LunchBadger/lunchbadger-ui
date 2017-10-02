@@ -8,6 +8,8 @@ import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
+import PolicyProxyActionPair from './PolicyProxyActionPair';
+
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -59,11 +61,33 @@ class GatewayDetails extends PureComponent {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
+      // remove connections for pipelines having no proxy policy
       if (!policies.find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
         [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
       }
+      policies.forEach((policy) => {
+        if (policy.name === GATEWAY_POLICIES.PROXY) {
+          // removing old serviceEndpoints connections
+          Connections.search({toId: id}).forEach((conn) => {
+            paper.detach(conn.info.connection);
+          });
+          // restoring current serviceEndpoints connections
+          (policy.pairs || []).forEach((pair) => {
+            const serviceEndpointId = pair.action.find(p => p.name === 'serviceEndpoint').value;
+            paper.connect({
+              source: document.getElementById(`port_out_${serviceEndpointId}`).querySelector('.port__anchor'),
+              target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
+              parameters: {
+                forceDropped: true,
+              }
+            }, {
+              fireEvent: true,
+            });
+          });
+        }
+      });
     });
     return entity.processModel(model);
   };
@@ -106,7 +130,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
-  addCAPair = (pipelineIdx, policyIdx) => () => {
+  addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({}));
     const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
@@ -116,7 +140,9 @@ class GatewayDetails extends PureComponent {
       .action.addParameter(Parameter.create({name: '', value: ''}));
     this.changeState({pipelines})
     setTimeout(() => {
-      const input = document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action][0][name]`);
+      const input = policyName === GATEWAY_POLICIES.PROXY
+        ? document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action0value button`)
+        : document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action][0][name]`);
       input && input.focus();
     });
   };
@@ -212,7 +238,13 @@ class GatewayDetails extends PureComponent {
     );
   };
 
-  renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx) => {
+  renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx, policyName) => {
+    const actionParameters = policyName === GATEWAY_POLICIES.PROXY
+      ? <PolicyProxyActionPair
+          pair={pair}
+          namePrefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`}
+        />
+      : this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action');
     return (
       <div>
         <Input
@@ -221,7 +253,7 @@ class GatewayDetails extends PureComponent {
           value={pair.id}
         />
         {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'condition')}
-        {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action')}
+        {actionParameters}
       </div>
     );
   };
@@ -231,7 +263,7 @@ class GatewayDetails extends PureComponent {
       <CollapsibleProperties
         key={pair.id}
         bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
-        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx)}
+        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
         button={<IconButton icon="iconDelete" onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)} />}
         barToggable
         defaultOpened
@@ -242,7 +274,7 @@ class GatewayDetails extends PureComponent {
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>}
         collapsible={collapsible}
-        button={<IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx)} />}
+        button={<IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />}
         defaultOpened
         untoggable
         space="15px 0 10px"

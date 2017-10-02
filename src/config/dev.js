@@ -7,7 +7,7 @@ export default {
   configStoreApiUrl: 'http://api.lunchbadger.com/api',
   gitBaseUrl: 'http://api.lunchbadger.com/git',
   workspaceUrl: 'http://{USER}-{ENV}.lunchbadger.io',
-  expressGatewayAdminApiUrl: 'http://admin-gateway-{USER}-{ENV}-{ID}.lunchbadger.io',
+  expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   user: {
     sub: 'demo',

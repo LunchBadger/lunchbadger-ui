@@ -3,7 +3,7 @@ import Config from '../../../../src/config';
 const {ApiClient, getUser} = LunchBadgerCore.utils;
 
 class ExpressGatewayAdminService {
-  initialize = id => this.api = new ApiClient(Config.get('expressGatewayAdminApiUrl').replace('{ID}', id), getUser().idToken);
+  initialize = name => this.api = new ApiClient(Config.get('expressGatewayAdminApiUrl').replace('{NAME}', name), getUser().idToken);
 
   // getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
 

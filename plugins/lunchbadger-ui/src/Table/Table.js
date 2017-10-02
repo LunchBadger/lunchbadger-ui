@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {
   Table,
   TableBody,
@@ -7,7 +8,6 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn,
-  TableFooter,
 } from 'material-ui/Table';
 import './Table.scss';
 
@@ -70,7 +70,7 @@ export default class TableComponent extends PureComponent {
                   {row.map((column, idxColumn) => (
                     <TableRowColumn
                       key={idxColumn}
-                      className="TableRowColumn"
+                      className={cs('TableRowColumn', typeof column)}
                       style={this.getColumnStyles(idxColumn)}
                     >
                       {column}

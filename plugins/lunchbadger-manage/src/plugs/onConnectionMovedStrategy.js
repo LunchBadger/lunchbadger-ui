@@ -2,7 +2,7 @@ import {reattach} from '../reduxActions/connections';
 
 const Strategy = LunchBadgerCore.models.Strategy;
 const {storeUtils} = LunchBadgerCore.utils;
-// const {Connections} = LunchBadgerCore.stores;
+const {Connections} = LunchBadgerCore.stores;
 
 const checkMovedConnection = info => (_, getState) => {
   const state = getState();
@@ -20,13 +20,13 @@ const checkMovedConnection = info => (_, getState) => {
     //   return true;
     // }
     // return false;
-    return true;
+    return !Connections.isFromTo(newSourceId, newTargetId);
   }
   const isGatewayOut = storeUtils.findGatewayByPipelineId(state, newSourceId);
   // FIXME - check for endpoints inside apis and endpoints inside apis inside portals
   const isPublic = storeUtils.isInQuadrant(state, 3, newTargetId);
   if (isGatewayOut && isPublic) {
-    return true;
+    return !Connections.isFromTo(newSourceId, newTargetId);
   }
   return null;
 };

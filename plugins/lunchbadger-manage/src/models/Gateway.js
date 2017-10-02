@@ -22,17 +22,19 @@ export default class Gateway extends BaseModel {
   constructor(id, name) {
     super(id);
     this.name = name;
-    this.adminApi = new ExpressGatewayAdminService();
-    this.adminApi.initialize(id);
   }
 
   static create(data) {
+    const adminApi = new ExpressGatewayAdminService(data.name);
+    adminApi.initialize(data.name);
+
     return super.create({
       ...data,
       pipelines: Object.keys(data.pipelines || {}).map(name => Pipeline.create({name, ...data.pipelines[name]})),
       http: this.deserializeHttp(data.http),
       https: this.deserializeHttps(data.https),
       admin: this.deserializeAdmin(data.admin),
+      adminApi: adminApi,
     });
   }
 

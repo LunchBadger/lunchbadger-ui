@@ -169,6 +169,14 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
+  reorderCAPair = (pipelineIdx, policyIdx, idx, step) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    const tmp = pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx + step];
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx + step] = pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx];
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx] = tmp;
+    this.changeState({pipelines});
+  };
+
   addParameter = (kind, pipelineIdx, policyIdx, pairIdx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx]
@@ -280,7 +288,24 @@ class GatewayDetails extends PureComponent {
         key={pair.id}
         bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
         collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
-        button={<IconButton icon="iconDelete" onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)} />}
+        button={(
+          <span>
+            <IconButton
+              icon="iconDelete"
+              onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+            />
+            <IconButton
+              icon="iconArrowDown"
+              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+              disabled={idx === policy.conditionAction.length - 1}
+            />
+            <IconButton
+              icon="iconArrowUp"
+              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+              disabled={idx === 0}
+            />
+          </span>
+        )}
         barToggable
         defaultOpened
         space="10px 0"

@@ -62,12 +62,12 @@ class GatewayDetails extends PureComponent {
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
       // remove connections for pipelines having no proxy policy
-      if (!policies.find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
+      if (!(policies || []).find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
         [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
       }
-      policies.forEach((policy) => {
+      (policies || []).forEach((policy) => {
         if (policy.name === GATEWAY_POLICIES.PROXY) {
           // removing old serviceEndpoints connections
           Connections.search({toId: id}).forEach((conn) => {
@@ -110,6 +110,14 @@ class GatewayDetails extends PureComponent {
   removePipeline = idx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines.splice(idx, 1);
+    this.changeState({pipelines});
+  };
+
+  reorderPipeline = (idx, step) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    const tmp = pipelines[idx + step];
+    pipelines[idx + step] = pipelines[idx];
+    pipelines[idx] = tmp;
     this.changeState({pipelines});
   };
 
@@ -547,7 +555,24 @@ class GatewayDetails extends PureComponent {
         key={pipeline.id}
         bar={this.renderPipelineInput(idx, pipeline)}
         collapsible={this.renderPipeline(pipeline, idx)}
-        button={<IconButton icon="iconDelete" onClick={this.removePipeline(idx)} />}
+        button={(
+          <span>
+            <IconButton
+              icon="iconDelete"
+              onClick={this.removePipeline(idx)}
+            />
+            <IconButton
+              icon="iconArrowDown"
+              onClick={this.reorderPipeline(idx, 1)}
+              disabled={idx === pipelines.length - 1}
+            />
+            <IconButton
+              icon="iconArrowUp"
+              onClick={this.reorderPipeline(idx, -1)}
+              disabled={idx === 0}
+            />
+          </span>
+        )}
         defaultOpened
         space="0"
         noDividers

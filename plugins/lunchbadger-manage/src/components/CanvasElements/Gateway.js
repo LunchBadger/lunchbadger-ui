@@ -7,7 +7,7 @@ import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
-// import PipelineComponent from './Subelements/Pipeline';
+import PipelineComponent from './Subelements/Pipeline';
 // import {removePipeline} from '../../reduxActions/gateways';
 import {
   EntityProperty,
@@ -19,8 +19,7 @@ import {
 } from '../../../../lunchbadger-ui/src';
 import './Gateway.scss';
 
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Port = LunchBadgerCore.components.Port;
+const {CanvasElement, DraggableGroup, Port} = LunchBadgerCore.components;
 const {Connections} = LunchBadgerCore.stores;
 // const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
 
@@ -253,21 +252,24 @@ class Gateway extends Component {
   }
 
   renderPipelines = () => {
+    const {entity} = this.props;
     const {pipelines} = this.state;
     return (
       <div className="Gateway__pipelines">
         {pipelines.map((pipeline, idx) => (
-          <div key={pipeline.id} className={`Gateway__pipeline${idx}`}>
-            {this.renderPipelinePorts(pipeline)}
-            <CollapsibleProperties
-              bar={this.renderPipelineInput(idx, pipeline)}
-              collapsible={this.renderPipeline(pipeline, idx)}
-              button={<IconButton name={`remove__pipelines${idx}`} icon="iconDelete" onClick={this.removePipeline(idx)} />}
-              defaultOpened
-              space="0"
-              noDividers
-            />
-          </div>
+          <PipelineComponent
+            key={pipeline.id}
+            entity={pipeline}
+            parent={entity}
+            idx={idx}
+            left={0}
+            top={0}
+            renderPipelinePorts={this.renderPipelinePorts}
+            renderPipelineInput={this.renderPipelineInput}
+            renderPipeline={this.renderPipeline}
+            removePipeline={this.removePipeline}
+            handleEndDrag={() => {}}
+          />
         ))}
       </div>
     );
@@ -296,7 +298,7 @@ class Gateway extends Component {
   };
 
   render() {
-    const {validations: {data}, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+    const {validations: {data}, entity, entityDevelopment, onResetField, multiEnvIndex} = this.props;
     const elementClass = cs('Gateway', {
       'multi': multiEnvIndex > 0,
       // 'has-connection-in': this.state.hasInConnection,
@@ -329,7 +331,12 @@ class Gateway extends Component {
           onAdd={this.addPipeline}
           main
         >
-          {this.renderPipelines()}
+          <DraggableGroup
+            iconClass="icon-icon-gateway"
+            entity={entity}
+          >
+            {this.renderPipelines()}
+          </DraggableGroup>
         </EntitySubElements>
       </div>
     );

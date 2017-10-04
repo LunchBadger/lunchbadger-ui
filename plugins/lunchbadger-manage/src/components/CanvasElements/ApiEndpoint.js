@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import cs from 'classnames';
 import _ from 'lodash';
 import {
   EntityProperties,
@@ -90,22 +91,26 @@ class ApiEndpoint extends Component {
 
   renderPaths = () => {
     const {paths} = this.state;
+    const {nested, index} = this.props;
     return (
       <EntitySubElements
         title="PATHS"
         onAdd={this.addPath}
         main
       >
-        {paths.map((path, idx) => (
-          <EntityProperty
-            key={idx}
-            placeholder="Enter path here"
-            name={`paths[${idx}]`}
-            value={path}
-            onDelete={this.removePath(idx)}
-            onTab={this.handlePathTab(idx)}
-          />
-        ))}
+        {paths.map((path, idx) => {
+          const name = nested ? `apiEndpoints[${index}][paths][${idx}]` : `paths[${idx}]`;
+          return (
+            <EntityProperty
+              key={idx}
+              placeholder="Enter path here"
+              name={name}
+              value={path}
+              onDelete={this.removePath(idx)}
+              onTab={this.handlePathTab(idx)}
+            />
+          );
+        })}
       </EntitySubElements>
     );
     // const {entity: {url}, validations: {data}, entityDevelopment, onResetField} = this.props;
@@ -126,10 +131,12 @@ class ApiEndpoint extends Component {
   }
 
   renderMainProperties = () => {
-    const {entity, validations: {data}, entityDevelopment, onResetField} = this.props;
+    const {entity, validations, validationsForced, entityDevelopment, onResetField, nested, index} = this.props;
+    const name = nested ? `apiEndpoints[${index}][host]` : 'host';
+    const {data} = validationsForced || validations;
     const mainProperties = [
       {
-        name: 'host',
+        name,
         title: 'host',
         value: entity.host,
         invalid: data.host,
@@ -142,9 +149,10 @@ class ApiEndpoint extends Component {
   }
 
   render() {
+    const {nested} = this.props;
     return (
-      <div className="ApiEndpoint">
-        {this.renderPorts()}
+      <div className={cs('ApiEndpoint', {nested})}>
+        {!nested && this.renderPorts()}
         {this.renderMainProperties()}
         {this.renderPaths()}
       </div>

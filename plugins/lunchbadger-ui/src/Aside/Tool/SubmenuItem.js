@@ -45,7 +45,7 @@ class SubmenuItem extends Component {
       >
         <div
           className={cs('Tool__submenuItem', name)}
-          style={{width: plain ? 130 : 224}}
+          style={{width: plain ? 130 : 230}}
         >
           <span
             ref={(r) => {this.labelDOM = r;}}

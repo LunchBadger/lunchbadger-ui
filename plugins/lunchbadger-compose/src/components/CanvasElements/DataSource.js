@@ -102,6 +102,7 @@ class DataSource extends Component {
       mainProperties.push(this.getMainProperty('user'));
       mainProperties.push(this.getMainProperty('subuser'));
       mainProperties.push(this.getMainProperty('keyId', 'key id'));
+      mainProperties.push(this.getMainProperty('publicKey', 'public key'));
     }
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];

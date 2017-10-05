@@ -284,7 +284,7 @@ export default class DataSource extends BaseModel {
       }
       const isTritonObjectStorage = model.hasOwnProperty('subuser');
       if (isTritonObjectStorage) {
-        fields = ['name', 'url', 'user', 'subuser', 'keyId'];
+        fields = ['name', 'url', 'user', 'keyId'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

@@ -7,65 +7,17 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
   static entities = 'dataSources';
-  /**
-   * Collection of ports
-   * @type {Port[]}
-   * @private
-   */
+
   _ports = [];
-
-  /**
-   * @type {String}
-   * @private
-   */
   _url = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _host = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _port = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _database = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _username = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _subuser = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _keyId = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
+  _publicKey = '';
   _password = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _type = '';
 
   constructor(id, name, connector) {
@@ -130,6 +82,7 @@ export default class DataSource extends BaseModel {
       json.user = this.username;
       json.subuser = this.subuser;
       json.keyId = this.keyId;
+      json.publicKey = this.publicKey;
     }
     return json;
   }
@@ -210,6 +163,14 @@ export default class DataSource extends BaseModel {
     this._keyId = keyId;
   }
 
+  get publicKey() {
+    return this._publicKey;
+  }
+
+  set publicKey(publicKey) {
+    this._publicKey = publicKey;
+  }
+
   get password() {
     return this._password;
   }
@@ -284,7 +245,7 @@ export default class DataSource extends BaseModel {
       }
       const isTritonObjectStorage = model.hasOwnProperty('subuser');
       if (isTritonObjectStorage) {
-        fields = ['name', 'url', 'user', 'keyId'];
+        fields = ['name', 'url', 'user', 'keyId', 'publicKey'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

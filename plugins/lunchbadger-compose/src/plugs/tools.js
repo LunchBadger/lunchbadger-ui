@@ -14,6 +14,7 @@ const dataSources = [
   'MySQL',
   'Ethereum',
   'Salesforce',
+  'TritonObjectStorage',
 ];
 
 const dataSourcesWizard = [
@@ -23,6 +24,8 @@ const dataSourcesWizard = [
 ];
 
 const getDataSourceConnector = label => label === 'Ethereum' ? 'web3' : label.toLowerCase();
+
+const getDataSourceLabel = label => label === 'TritonObjectStorage' ? 'Triton Object Storage' : label;
 
 const wizardFunc = label => () => {}; //TODO: implement datasource wizard
 
@@ -44,7 +47,7 @@ export default {
       icon: 'iconDataSource',
       tooltip: 'Data Source',
       submenu: dataSources.map(label => ({
-        label,
+        label: getDataSourceLabel(label),
         name: label.toLowerCase(),
         icon: `iconDataSource${label}`,
         action: dataSourceAction(label),

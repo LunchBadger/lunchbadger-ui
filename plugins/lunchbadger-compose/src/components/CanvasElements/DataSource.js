@@ -30,9 +30,9 @@ class DataSource extends Component {
     });
   }
 
-  getMainProperty = (name) => {
+  getMainProperty = (name, label) => {
     const {entity, validations: {data}} = this.props;
-    let title = name;
+    let title = label || name;
     if (title === 'url' && entity.isSoap) {
       title = 'base url';
     }
@@ -75,11 +75,11 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, isRest, isSoap, isEthereum, isSalesforce, connector},
+      entity: {isWithPort, isRest, isSoap, isEthereum, isSalesforce, isMemory, isTritonObjectStorage},
       entityDevelopment,
       onResetField,
     } = this.props;
-    if (connector === 'memory') return null;
+    if (isMemory) return null;
     const mainProperties = [];
     if (isWithPort) {
       mainProperties.push(this.getMainProperty('host'));
@@ -91,12 +91,17 @@ class DataSource extends Component {
         mainProperties.push(this.getMainProperty('url'));
       }
     }
-    if (!isRest && !isSoap && !isEthereum) {
+    if (!isRest && !isSoap && !isEthereum && !isTritonObjectStorage) {
       if (!isSalesforce) {
         mainProperties.push(this.getMainProperty('database'));
       }
       mainProperties.push(this.getMainProperty('username'));
       mainProperties.push(this.getMainProperty('password'));
+    }
+    if (isTritonObjectStorage) {
+      mainProperties.push(this.getMainProperty('user'));
+      mainProperties.push(this.getMainProperty('subuser'));
+      mainProperties.push(this.getMainProperty('keyId', 'key id'));
     }
     mainProperties.forEach((item, idx) => {
       mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];

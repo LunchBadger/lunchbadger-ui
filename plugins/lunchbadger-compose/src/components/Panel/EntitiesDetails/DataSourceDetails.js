@@ -20,6 +20,10 @@ class DataSourceDetails extends Component {
       port,
       database,
       username,
+      user,
+      subuser,
+      keyId,
+      publicKey,
       password,
       operations,
       isWithPort,
@@ -29,6 +33,7 @@ class DataSourceDetails extends Component {
       isSalesforce,
       isMongoDB,
       isRedis,
+      isTritonObjectStorage,
     } = this.props.entity;
     const fields = [];
     if (isRest) {
@@ -80,6 +85,33 @@ class DataSourceDetails extends Component {
         name: 'password',
         value: password,
         password: true,
+      });
+    }
+    if (isTritonObjectStorage) {
+      fields.push({
+        title: 'Url',
+        name: 'url',
+        value: url,
+      });
+      fields.push({
+        title: 'User',
+        name: 'user',
+        value: user,
+      });
+      fields.push({
+        title: 'SubUser',
+        name: 'subuser',
+        value: subuser,
+      });
+      fields.push({
+        title: 'Key Id',
+        name: 'keyId',
+        value: keyId,
+      });
+      fields.push({
+        title: 'Public Key',
+        name: 'publicKey',
+        value: publicKey,
       });
     }
     return (

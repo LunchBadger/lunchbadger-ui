@@ -18,6 +18,10 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
     'updateMicroservice',
     'updateMicroservices',
     'removeMicroservice',
+
+    'updateFunction',
+    'updateFunctions',
+    'removeFunction',
   ],
 );
 

@@ -173,6 +173,7 @@ let LunchBadgerCore = {
     ],
     defaultEntityNames: {
       Model: 'NewModel',
+      Function: 'Function',
     },
     messages,
     checkFields,

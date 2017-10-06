@@ -34,6 +34,7 @@ import {
   iconApi,
   iconDataSource,
   iconEndpoint,
+  iconFunction,
   iconGateway,
   iconMicroservice,
   iconModel,
@@ -51,13 +52,14 @@ import {
 
 const entityIcons = {
   API: iconApi,
+  ApiEndpoint: iconEndpoint,
   DataSource: iconDataSource,
+  Function: iconFunction,
   Gateway: iconGateway,
   Microservice: iconMicroservice,
   Model: iconModel,
   Portal: iconPortal,
   ServiceEndpoint: iconEndpoint,
-  ApiEndpoint: iconEndpoint,
 };
 
 const dataSourceIcons = {

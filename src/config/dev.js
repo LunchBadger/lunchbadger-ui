@@ -1,14 +1,14 @@
-// const serverHost = process.env.LBSERVER_HOST || 'localhost';
+const serverHost = process.env.LBSERVER_HOST || 'localhost';
 
 export default {
-  projectApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
-  workspaceApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/workspace-api/api',
-  forecastApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
-  configStoreApiUrl: 'http://api.lunchbadger.com/api',
-  gitBaseUrl: 'http://api.lunchbadger.com/git',
-  workspaceUrl: 'http://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
+  projectApiUrl: `http://${serverHost}:4230/api`,
+  workspaceApiUrl: `http://${serverHost}:4231/api`,
+  forecastApiUrl: `http://${serverHost}:4230/api`,
+  configStoreApiUrl: `http://${serverHost}:3002/api`,
+  gitBaseUrl: `http://${serverHost}:3002/git`,
+  workspaceUrl: 'http://localhost:3000',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

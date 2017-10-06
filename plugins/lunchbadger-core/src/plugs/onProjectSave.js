@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Connections from '../stores/Connections';
-import {isInQuadrant} from '../utils/storeUtils';
+import {isInQuadrant, findEntity} from '../utils/storeUtils';
 
 const statesToSave = [
   'currentElement',
@@ -58,7 +58,10 @@ const setStatesToSave = (state) => {
 export default [
   state => ({
     name: 'main',
-    connections: Connections.toJSON().filter(({fromId}) => !isInQuadrant(state, 0, fromId)),
+    connections: Connections.toJSON()
+      .filter(({fromId, toId}) =>
+        !isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function'
+      ),
     states: setStatesToSave(state),
   }),
 ];

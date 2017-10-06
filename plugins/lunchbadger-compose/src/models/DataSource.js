@@ -220,7 +220,7 @@ export default class DataSource extends BaseModel {
   }
 
   get isTritonObjectStorage() {
-    return this._connector === 'tritonobjectstorage';
+    return this._connector === 'manta';
   }
 
   validate(model) {

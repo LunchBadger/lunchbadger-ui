@@ -23,7 +23,11 @@ const dataSourcesWizard = [
   'MySQL',
 ];
 
-const getDataSourceConnector = label => label === 'Ethereum' ? 'web3' : label.toLowerCase();
+const getDataSourceConnector = label => {
+  if (label === 'Ethereum') return 'web3';
+  if (label === 'TritonObjectStorage') return 'manta';
+  return label.toLowerCase();
+}
 
 const getDataSourceLabel = label => label === 'TritonObjectStorage' ? 'Triton Object Storage' : label;
 

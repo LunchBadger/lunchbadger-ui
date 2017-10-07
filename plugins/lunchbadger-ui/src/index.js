@@ -46,6 +46,7 @@ import {
   iconDataSourceMySQL,
   iconDataSourceEthereum,
   iconDataSourceSalesforce,
+  iconDataSourceTritonObjectStorage,
 } from '../../../src/icons';
 
 const entityIcons = {
@@ -68,6 +69,7 @@ const dataSourceIcons = {
   MySQL: iconDataSourceMySQL,
   Ethereum: iconDataSourceEthereum,
   Salesforce: iconDataSourceSalesforce,
+  TritonObjectStorage: iconDataSourceTritonObjectStorage,
 };
 
 export {

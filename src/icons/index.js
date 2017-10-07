@@ -10,6 +10,7 @@ import iconDataSourceMySQL from './icon-datasource-mysql.svg';
 import iconDataSourceRedis from './icon-datasource-redis.svg';
 import iconDataSourceREST from './icon-datasource-rest.svg';
 import iconDataSourceSalesforce from './icon-datasource-salesforce.svg';
+import iconDataSourceTritonObjectStorage from './icon-datasource-tritonobjectstorage.svg';
 import iconDataSourceSOAP from './icon-datasource-soap.svg';
 import iconDelete from './icon-delete.svg';
 import iconDetails from './icon-details.svg';
@@ -42,6 +43,7 @@ export {
   iconDataSourceRedis,
   iconDataSourceREST,
   iconDataSourceSalesforce,
+  iconDataSourceTritonObjectStorage,
   iconDataSourceSOAP,
   iconDelete,
   iconDetails,

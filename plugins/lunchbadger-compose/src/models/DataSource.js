@@ -7,53 +7,16 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
   static entities = 'dataSources';
-  /**
-   * Collection of ports
-   * @type {Port[]}
-   * @private
-   */
+
   _ports = [];
-
-  /**
-   * @type {String}
-   * @private
-   */
   _url = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _host = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _port = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _database = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _username = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
+  _subuser = '';
+  _keyId = '';
   _password = '';
-
-  /**
-   * @type {String}
-   * @private
-   */
   _type = '';
 
   constructor(id, name, connector) {
@@ -111,6 +74,14 @@ export default class DataSource extends BaseModel {
       delete json.url;
       delete json.database;
     }
+    if (this.isTritonObjectStorage) {
+      delete json.database;
+      delete json.username;
+      delete json.password;
+      json.user = this.username;
+      json.subuser = this.subuser;
+      json.keyId = this.keyId;
+    }
     return json;
   }
 
@@ -166,6 +137,30 @@ export default class DataSource extends BaseModel {
     this._username = username;
   }
 
+  get user() {
+    return this._username;
+  }
+
+  set user(username) {
+    this._username = username;
+  }
+
+  get subuser() {
+    return this._subuser;
+  }
+
+  set subuser(subuser) {
+    this._subuser = subuser;
+  }
+
+  get keyId() {
+    return this._keyId;
+  }
+
+  set keyId(keyId) {
+    this._keyId = keyId;
+  }
+
   get password() {
     return this._password;
   }
@@ -184,6 +179,10 @@ export default class DataSource extends BaseModel {
 
   get isWithPort() {
     return ['mysql', 'mongodb', 'redis'].includes(this._connector);
+  }
+
+  get isMemory() {
+    return this._connector === 'memory';
   }
 
   get isRest() {
@@ -210,6 +209,10 @@ export default class DataSource extends BaseModel {
     return this._connector === 'redis';
   }
 
+  get isTritonObjectStorage() {
+    return this._connector === 'manta';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
@@ -229,6 +232,10 @@ export default class DataSource extends BaseModel {
       let fields = ['name', 'url', 'database', 'username'];
       if (withPort) {
         fields = ['name', 'host', 'port', 'database', 'username'];
+      }
+      const isTritonObjectStorage = model.hasOwnProperty('subuser');
+      if (isTritonObjectStorage) {
+        fields = ['name', 'url', 'user', 'keyId'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

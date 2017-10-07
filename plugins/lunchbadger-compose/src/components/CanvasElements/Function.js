@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
+import {inject, observer} from 'mobx-react';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 // import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 // import addNestedProperties from '../addNestedProperties';
@@ -12,11 +13,17 @@ import './Function.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const {utils: {storeUtils:{findGatewayByPipelineId}}} = LunchBadgerCore;
 
+@inject('connectionsStore') @observer
 class Function extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
     // nested: PropTypes.bool,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   // static defaultProps = {
@@ -213,12 +220,61 @@ class Function extends Component {
     return <EntityProperties properties={mainProperties} />;
   }
 
+  renderTriggers() {
+    const {entity, connectionsStore} = this.props;
+    const state = this.context.store.getState();
+    let connector = '';
+    const currDsConn = connectionsStore.find({toId: entity.id});
+    if (currDsConn) {
+      connector = state.entities.dataSources[currDsConn.fromId].connector;
+    }
+    let pipeline = '';
+    const currPipelineConn = connectionsStore.find({fromId: entity.id});
+    if (currPipelineConn) {
+      pipeline = findGatewayByPipelineId(state, currPipelineConn.toId)
+        .pipelines
+        .find(({id}) => id === currPipelineConn.toId)
+        .name;
+    }
+    return (
+      <div className="Function__triggers">
+        {connector !== '' && (
+          <div>
+            <span>
+              Connector
+            </span>
+            <span>
+              {connector}
+            </span>
+          </div>
+        )}
+        {pipeline !== '' && (
+          <div>
+            <span>
+              API Gateway
+            </span>
+            <span>
+              {pipeline}
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   render() {
     const {multiEnvIndex, nested} = this.props;
     return (
       <div className={cs('Function', {nested, 'multi': multiEnvIndex > 0})}>
         {!nested && this.renderPorts()}
         {this.renderMainProperties()}
+        <EntitySubElements
+          title="Triggers"
+          onAdd={this.onAddRootProperty}
+          main
+        >
+          {this.renderTriggers()}
+        </EntitySubElements>
         {/*<EntitySubElements
           title="Properties"
           onAdd={this.onAddRootProperty}

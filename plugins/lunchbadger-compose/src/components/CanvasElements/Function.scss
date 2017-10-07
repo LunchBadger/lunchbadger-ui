@@ -13,4 +13,20 @@
       margin-top: -20px;
     }
   }
+  &__triggers {
+    color: #000;
+    margin: 0 10px 0 30px;
+    & > div {
+      margin-bottom: 5px;
+      & > span {
+        display: inline-block;
+        &:first-child {
+          width: 120px;
+        }
+        &:last-child {
+          width: calc(100% - 120px);
+        }
+      }
+    }
+  }
 }

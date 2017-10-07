@@ -25,17 +25,6 @@ export default class ConditionAction extends BaseModel {
     };
   }
 
-  toApiJSON() {
-    const condition = this.condition.parameters.length > 0
-      ? this.condition.toJSON()
-      : undefined;
-
-    return {
-      condition: condition,
-      action: this.action.toJSON(),
-    };
-  }
-
   set condition(condition){
     this._condition = condition;
   }

@@ -44,13 +44,6 @@ export default class ServiceEndpoint extends BaseModel {
     };
   }
 
-  toApiJSON() {
-    return {
-      friendlyName: this.name,
-      urls: this.urls,
-    };
-  }
-
   get ports() {
     return this._ports;
   }

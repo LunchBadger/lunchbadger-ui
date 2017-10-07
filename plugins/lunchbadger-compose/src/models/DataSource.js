@@ -16,7 +16,6 @@ export default class DataSource extends BaseModel {
   _username = '';
   _subuser = '';
   _keyId = '';
-  _publicKey = '';
   _password = '';
   _type = '';
 
@@ -82,7 +81,6 @@ export default class DataSource extends BaseModel {
       json.user = this.username;
       json.subuser = this.subuser;
       json.keyId = this.keyId;
-      json.publicKey = this.publicKey;
     }
     return json;
   }
@@ -163,14 +161,6 @@ export default class DataSource extends BaseModel {
     this._keyId = keyId;
   }
 
-  get publicKey() {
-    return this._publicKey;
-  }
-
-  set publicKey(publicKey) {
-    this._publicKey = publicKey;
-  }
-
   get password() {
     return this._password;
   }
@@ -245,7 +235,7 @@ export default class DataSource extends BaseModel {
       }
       const isTritonObjectStorage = model.hasOwnProperty('subuser');
       if (isTritonObjectStorage) {
-        fields = ['name', 'url', 'user', 'keyId', 'publicKey'];
+        fields = ['name', 'url', 'user', 'keyId'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

@@ -23,7 +23,6 @@ class DataSourceDetails extends Component {
       user,
       subuser,
       keyId,
-      publicKey,
       password,
       operations,
       isWithPort,
@@ -107,11 +106,6 @@ class DataSourceDetails extends Component {
         title: 'Key Id',
         name: 'keyId',
         value: keyId,
-      });
-      fields.push({
-        title: 'Public Key',
-        name: 'publicKey',
-        value: publicKey,
       });
     }
     return (

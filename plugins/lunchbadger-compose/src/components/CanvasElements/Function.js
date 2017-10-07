@@ -7,6 +7,7 @@ import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/sr
 // import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 // import addNestedProperties from '../addNestedProperties';
 // import ModelProperty from '../../models/ModelProperty';
+import runtimeOptions from '../../utils/runtimeOptions';
 import './Function.scss';
 
 const Port = LunchBadgerCore.components.Port;
@@ -189,18 +190,23 @@ class Function extends Component {
   renderMainProperties = () => {
     const {validations, validationsForced, entity, entityDevelopment, onResetField, nested, index} = this.props;
     const {contextPath} = this.state;
-    const name = nested ? `functions[${index}][http][path]` : 'http[path]';
     const {data} = validationsForced || validations;
     const mainProperties = [
       {
-        name,
+        name: 'http[path]',
         modelName: 'contextPath',
         title: 'context path',
         value: contextPath,
         invalid: data.contextPath,
         onChange: this.updateContextPath,
         onBlur: this.handleFieldChange('contextPath'),
-      }
+      },
+      {
+        name: 'runtime',
+        title: 'Runtime',
+        value: entity.runtime,
+        options: runtimeOptions.map(label => ({label, value: label})),
+      },
     ];
     mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;

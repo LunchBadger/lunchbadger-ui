@@ -2,6 +2,7 @@ import _ from 'lodash';
 import uuid from 'uuid';
 import {update, remove} from '../reduxActions/functions';
 import Config from '../../../../src/config';
+import runtimeOptions from '../utils/runtimeOptions';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -48,6 +49,7 @@ export default class Function extends BaseModel {
   public = true;
   strict = false;
   wasBundled = false;
+  runtime = runtimeOptions[0];
 
   static deserializers = {
     http: (obj, val) => {
@@ -104,6 +106,7 @@ export default class Function extends BaseModel {
       strict: this.strict,
       lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
+      runtime: this.runtime,
     }
   }
 

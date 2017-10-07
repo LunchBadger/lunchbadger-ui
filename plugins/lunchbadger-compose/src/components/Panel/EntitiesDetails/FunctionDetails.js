@@ -7,6 +7,7 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
+import MonacoEditor from 'react-monaco-editor';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -561,6 +562,22 @@ class FunctionDetails extends PureComponent {
   //   />;
   // }
 
+  renderCodeEditorSection() {
+    const code = "function hello() {\n\talert('Hello world!');\n}";
+    const options = {
+      selectOnLineNumbers: true
+    };
+    return (
+      <MonacoEditor
+        height="350"
+        language="javascript"
+        theme="vs-dark"
+        value={code}
+        options={options}
+      />
+    );
+  }
+
   render() {
     const sections = [
       {title: 'Details'},
@@ -580,6 +597,7 @@ class FunctionDetails extends PureComponent {
             defaultOpened
           />
         ))}
+        {this.renderCodeEditorSection()}
       </div>
     );
   }

@@ -5,6 +5,7 @@ let path = require('path');
 let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
+let CopyWebpackPlugin = require('copy-webpack-plugin');
 
 let config = _.merge({}, baseConfig, {
   cache: false,
@@ -26,7 +27,13 @@ let config = _.merge({}, baseConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor'],
       minChunks: Infinity
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: 'node_modules/monaco-editor/min/vs',
+        to: 'vs'
+      }
+    ])
   ],
   resolve: {
     alias: {

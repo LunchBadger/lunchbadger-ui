@@ -1,157 +1,106 @@
 import React, {Component, PureComponent} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import _ from 'lodash';
-// import {findDOMNode} from 'react-dom';
-import Policy from './Policy';
-import {addAndConnect as addApiEndpointAndConnect} from '../../../reduxActions/apiEndpoints';
-import {EntityProperty, EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
-import './Pipeline.scss';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {DragSource} from 'react-dnd';
+import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
+import {
+  CollapsibleProperties,
+  IconButton,
+  EntityProperty,
+} from '../../../../../lunchbadger-ui/src';
+import '../Gateway.scss';
 
-const Port = LunchBadgerCore.components.Port;
+const boxSource = {
+  beginDrag(props) {
+    const {entity, left, top, parent, handleEndDrag} = props;
+    return {entity, left, top, parent, handleEndDrag, subelement: true};
+  },
+  endDrag(props) {
+    const {entity, left, top, parent, handleEndDrag} = props;
+    return {entity, left, top, parent, handleEndDrag, subelement: true};
+  },
+  canDrag(props) {
+    const {currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement} = props;
+    if (currentlySelectedParent && currentlySelectedParent.id === props.parent.id && currentlySelectedSubelements.length) {
+      return false;
+    }
+    return !isCurrentEditElement;
+  }
+};
 
-// FIXME - handle toggleSubelement
+@DragSource('canvasElement', boxSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))
 
-export default class Pipeline extends Component {
-  static propTypes = {
-    entity: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired,
-  };
+class Pipeline extends PureComponent {
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     opened: false,
-  //     proxiedBy: []
-  //   };
-  //   // this.initializeProxyConnections = () => {
-  //   //   const inConnections = Connection.getConnectionsForTarget(this.props.entity.id);
-  //   //   const {proxiedBy} = this.state;
-  //   //   inConnections.forEach(connection => {
-  //   //     if (this.state.proxiedBy.indexOf(connection.fromId) < 0) {
-  //   //       proxiedBy.push(connection.fromId);
-  //   //     }
-  //   //   });
-  //   //   this.setState({proxiedBy: proxiedBy});
-  //   // };
-  //   // this.newConnectionListener = () => {
-  //   //   const connection = Connection.getLastConnection();
-  //   //   if (connection && connection.toId === this.props.entity.id
-  //   //     && this.state.proxiedBy.indexOf(connection.fromId) < 0) {
-  //   //     const {proxiedBy} = this.state;
-  //   //     if (connection.info.connection.getParameter('existing')) {
-  //   //       return;
-  //   //     }
-  //   //     this._handleReverseProxyConnection(connection);
-  //   //     proxiedBy.push(connection.fromId);
-  //   //     this.setState({proxiedBy: proxiedBy});
-  //   //   }
-  //   // };
-  //   // this.removeNewConnectionListener = () => {
-  //   //   Connection.removeChangeListener(this.newConnectionListener);
-  //   //   this.removeNewConnectionListener = null;
-  //   // };
-  //   // this.appStateReady = () => {
-  //   //   this.initializeProxyConnections();
-  //   // }
-  // }
-
-  // componentDidMount() {
-  //   // Connection.addChangeListener(this.newConnectionListener);
-  // }
-  //
-  // componentWillMount() {
-  //   // AppState.addInitListener(this.appStateReady);
-  // }
-
-  // componentWillReact() {
-  //   const {connectionsStore} = this.props;
-  //   const {id} = this.props.entity;
-  //   const {proxiedBy} = this.state;
-  //   const connection = connectionsStore.getLastConnection();
-  //   console.log(22, connection);
-  //   if (connection && connection.toId === id && !proxiedBy.includes(connection.fromId)) {
-  //     if (connection.info.connection.getParameter('existing')) return;
-  //     this.context.store.dispatch(addApiEndpointAndConnect(
-  //       connection.fromId,
-  //       id,
-  //       findDOMNode(this.refs['port-out']),
-  //     ));
-  //     this.setState({proxiedBy: [...proxiedBy, connection.fromId]});
-  //   };
-  // }
-
-  // componentWillUnmount() {
-  //   // if (typeof this.removeNewConnectionListener === 'function') {
-  //   //   this.removeNewConnectionListener();
-  //   // }
-  // }
-
-  // _handleReverseProxyConnection = (fromId) => {
-  //   // const connectionEntity = Private.findEntity(connection.fromId);
-  //   // if (!connectionEntity) {
-  //   //   return;
-  //   // }
-  // }
-
-  renderPolicies() {
-    return this.props.entity.policies.map((policy, idx) => {
-      return (
-        <Policy
-          key={policy.id}
-          index={idx}
-          pipelineIndex={this.props.index}
-          policy={policy}
-        />
-      );
-    });
+  handleClick = () => {
+    const {parent, entity, dispatch} = this.props;
+    setTimeout(() => dispatch(toggleSubelement(parent, entity)));
   }
 
-  renderPorts() {
-    return this.props.entity.ports.map((port) => {
-      return (
-        <Port
-          key={`port-${port.portType}-${port.id}`}
-          way={port.portType}
-          elementId={port.id}
-          middle={true}
-          scope={port.portGroup}
-        />
-      );
-    });
-  }
-
-  toggleCollapsibleProperties = () => {
-    this.collapsiblePropertiesDOM.handleToggleCollapse();
+  renderPipelineInput = (idx, pipeline) => {
+    const {currentlySelectedSubelements} = this.props;
+    const {id, name} = pipeline;
+    return (
+      <EntityProperty
+        name={`pipelines[${idx}][name]`}
+        value={name}
+        placeholder="Enter pipeline name here"
+        hiddenInputs={[{name: `pipelines[${idx}][id]`, value: id}]}
+        onClick={this.handleClick}
+        selected={!!_.find(currentlySelectedSubelements, {id})}
+      />
+    );
   }
 
   render() {
-    const {index, onRemove} = this.props;
-    return (
-      <div className="Pipeline">
-        {this.renderPorts()}
+    const {
+      connectDragSource,
+      entity,
+      idx,
+      renderPipelinePorts,
+      renderPipeline,
+      removePipeline,
+    } = this.props;
+    return connectDragSource(
+      <div className={`Gateway__pipeline${idx}`}>
+        {renderPipelinePorts(entity)}
         <CollapsibleProperties
-          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
-          bar={
-            <EntityProperty
-              name={`pipelines[${index}][name]`}
-              value={this.props.entity.name}
-              hiddenInputs={[{name: `pipelines[${index}][id]`, value: this.props.entity.id}]}
-              onDelete={onRemove}
-              onViewModeClick={this.toggleCollapsibleProperties}
+          bar={this.renderPipelineInput(idx, entity)}
+          collapsible={renderPipeline(entity, idx)}
+          button={(
+            <IconButton
+              name={`remove__pipelines${idx}`}
+              icon="iconDelete"
+              onClick={removePipeline(idx)}
             />
-          }
-          collapsible={
-            <div>
-              <EntityPropertyLabel className="Pipeline__policies">Policies</EntityPropertyLabel>
-              {this.renderPolicies()}
-            </div>
-          }
+          )}
+          defaultOpened
+          space="0"
+          noDividers
         />
       </div>
     );
   }
 }
+
+const selector = createSelector(
+  state => state.states.currentlySelectedParent,
+  state => state.states.currentlySelectedSubelements,
+  state => !!state.states.currentEditElement,
+  (
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  ) => ({
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  }),
+);
+
+export default connect(selector, null, null, {withRef: true})(Pipeline);

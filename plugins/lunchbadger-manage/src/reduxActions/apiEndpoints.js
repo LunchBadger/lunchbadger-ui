@@ -1,7 +1,7 @@
 import {actions} from './actions';
 import ApiEndpoint from '../models/ApiEndpoint';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
@@ -15,39 +15,47 @@ export const add = () => (dispatch, getState) => {
 
 export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState) => {
   const state = getState();
-  const {entities, plugins: {quadrants}} = state;
-  const types = quadrants[3].entities;
-  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = ApiEndpoint.create({
-    name: endpoint.name + 'ApiEndpoint',
-    path: endpoint.contextPath,
-    itemOrder,
-    loaded: false,
-  });
-  Connections.addConnection(fromId, entity.id, {source: outPort});
-  dispatch(actions.updateApiEndpoint(entity));
-  dispatch(coreActions.setStates([
-    {key: 'currentElement', value: entity},
-    {key: 'currentEditElement', value: entity},
-  ]));
+  const {entities, plugins: {quadrants}, states} = state;
+  const isPanelClosed = !states.currentlyOpenedPanel;
+  if (isPanelClosed) {
+    const types = quadrants[3].entities;
+    const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+    const entity = ApiEndpoint.create({
+      name: endpoint.name + 'ApiEndpoint',
+      path: endpoint.contextPath,
+      itemOrder,
+      loaded: false,
+    });
+    Connections.addConnection(fromId, entity.id, {source: outPort});
+    dispatch(actions.updateApiEndpoint(entity));
+    dispatch(actionsCore.setStates([
+      {key: 'currentElement', value: entity},
+      {key: 'currentEditElement', value: entity},
+    ]));
+  }
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateApiEndpoint(updatedEntity));
+  // await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   dispatch(actions.removeApiEndpoint(entity));
+  if (isAutoSave) {
+    // await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

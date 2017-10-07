@@ -4,8 +4,10 @@ import canvasElements from './canvasElements';
 import models from './models';
 import panelDetailsElements from './panelDetailsElements';
 import onProjectSave from './onProjectSave';
+import onBeforeProjectSave from './onBeforeProjectSave';
 import onSaveOrder from './onSaveOrder';
 import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
+import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
 
 export default {
@@ -15,7 +17,9 @@ export default {
   models,
   panelDetailsElements,
   onProjectSave,
+  onBeforeProjectSave,
   onSaveOrder,
   onConnectionCreatedStrategy,
+  onConnectionDeletedStrategy,
   onConnectionMovedStrategy,
 };

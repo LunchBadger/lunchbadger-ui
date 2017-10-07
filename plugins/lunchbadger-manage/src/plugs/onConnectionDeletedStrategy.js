@@ -1,26 +1,25 @@
-import {attach} from '../reduxActions/connections';
+import {detach} from '../reduxActions/connections';
 
 const Strategy = LunchBadgerCore.models.Strategy;
 const {storeUtils} = LunchBadgerCore.utils;
-const {Connections} = LunchBadgerCore.stores;
 
-const checkConnection = (info) => (_, getState) => {
+const checkConnectionDelete = info => (_, getState) => {
   const {sourceId, targetId} = info;
   const state = getState();
   const isPrivate = storeUtils.isInQuadrant(state, 1, sourceId);
   const isGatewayIn = storeUtils.findGatewayByPipelineId(state, targetId);
   if (isPrivate && isGatewayIn) {
-    return !Connections.isFromTo(sourceId, targetId);
+    return true;
   }
   const isGatewayOut = storeUtils.findGatewayByPipelineId(state, sourceId);
   // FIXME - check for endpoints inside apis and endpoints inside apis inside portals
   const isPublic = storeUtils.isInQuadrant(state, 3, targetId);
   if (isGatewayOut && isPublic) {
-    return !Connections.isFromTo(sourceId, targetId);
+    return true;
   }
   return null;
 };
 
 export default [
-  new Strategy(checkConnection, attach),
+  new Strategy(checkConnectionDelete, detach),
 ];

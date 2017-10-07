@@ -3,10 +3,11 @@ import _ from 'lodash';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import initialPipelinePolicies from '../utils/initialPipelinePolicies';
-// import Policy from '../models/Policy';
+import GATEWAY_POLICIES from '../utils/gatewayPolicies';
+import ConditionAction from '../models/ConditionAction';
 
 const {Connections} = LunchBadgerCore.stores;
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, storeUtils} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -19,12 +20,13 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  const isAutoSave = !entity.loaded;
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = Gateway.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   const removedPipelines = _.difference(
@@ -35,25 +37,32 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  updatedEntity = Gateway.create({...entity.toJSON(), ...model, ready: false});
+  updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: entity.loaded, ready: false});
   dispatch(actions.updateGateway(updatedEntity));
-  await new Promise(r => setTimeout(() => r(), 1500));
+  if (isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
+  updatedEntity.loaded = true;
   dispatch(actions.updateGateway(updatedEntity));
-  dispatch(coreActions.addSystemInformationMessage({
+  dispatch(actionsCore.addSystemInformationMessage({
     type: 'success',
     message: 'Gateway successfully deployed',
   }));
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   entity.pipelines.forEach(({id}) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
   dispatch(actions.removeGateway(entity));
+  if (isAutoSave) {
+    // await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {
@@ -75,7 +84,7 @@ export const addPipeline = gatewayId => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
   entity.addPipeline(Pipeline.create({name: 'Pipeline'}));
   dispatch(actions.updateGateway(entity));
-}
+};
 
 export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   const entity = getState().entities.gateways[gatewayId].recreate();
@@ -84,4 +93,28 @@ export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   Connections.removeConnection(null, id);
   entity.removePipeline(pipeline);
   dispatch(actions.updateGateway(entity));
-}
+};
+
+export const addServiceEndpointIntoProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
+  const state = getState();
+  const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
+  const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  pipeline.policies
+    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .forEach((policy) => {
+      policy.addConditionAction(ConditionAction.create({action: {serviceEndpoint, changeOrigin: true}}));
+    });
+  dispatch(actions.updateGateway(gateway));
+};
+
+export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
+  const state = getState();
+  const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
+  const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  pipeline.policies
+    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .forEach((policy) => {
+      policy.removeConditionActionByServiceEndpoint(serviceEndpoint);
+    });
+  dispatch(actions.updateGateway(gateway));
+};

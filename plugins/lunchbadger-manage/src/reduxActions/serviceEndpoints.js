@@ -1,7 +1,7 @@
 import {actions} from './actions';
 import ServiceEndpoint from '../models/ServiceEndpoint';
 import initialServiceEndpointUrls from '../utils/initialServiceEndpointUrls';
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -12,22 +12,27 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = ServiceEndpoint.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   updatedEntity = ServiceEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateServiceEndpoint(updatedEntity));
+  // await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   dispatch(actions.removeServiceEndpoint(entity));
+  if (isAutoSave) {
+    // await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

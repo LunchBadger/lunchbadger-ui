@@ -53,6 +53,7 @@ module.exports = {
       })
     ];
   },
-  apiUrl: 'http://0.0.0.0:4230/api/',
+  // apiUrl: 'http://0.0.0.0:4230/api/',
+  apiUrl: 'http://demo-dev.lunchbadger.io/api/',
   gitBase: 'git@github.com:LunchBadger/'
 };

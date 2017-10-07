@@ -83,6 +83,10 @@ class Connections {
     });
   }
 
+  isFromTo(fromId, toId) {
+    return this.findEntityIndexBySourceAndTarget(fromId, toId) > -1;
+  }
+
   getConnectionsForTarget(target) {
     return this.search({toId: formatId(target)});
   }

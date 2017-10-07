@@ -4,6 +4,7 @@ import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
+import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -119,6 +120,13 @@ export default class Model extends BaseModel {
       wasBundled: this.wasBundled,
       ...this.userFields
     }
+  }
+
+  toApiJSON() {
+    return {
+      friendlyName: this.name,
+      url: Config.get('customerUrl'),
+    };
   }
 
   get workspaceId() {

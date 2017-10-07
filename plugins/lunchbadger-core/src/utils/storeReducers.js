@@ -9,6 +9,7 @@ const arraysToRegister = [
   'services',
   'onAppLoad',
   'onProjectSave',
+  'onBeforeProjectSave',
   'panels',
   'onSaveOrder',
   'onConnectionCreatedStrategy',
@@ -86,6 +87,13 @@ export const registerPlugin = (_entities, plugs, _reducers = {}) => {
           ...plugins.quadrants[key].connectionEntities,
           ...plugs.quadrants[key].connectionEntities
         ];
+        if (key === '1') {
+          if (!plugins.quadrants[key].serviceEndpointEntities) plugins.quadrants[key].serviceEndpointEntities = [];
+          plugins.quadrants[key].serviceEndpointEntities = [
+            ...plugins.quadrants[key].serviceEndpointEntities,
+            ...(plugs.quadrants[key].serviceEndpointEntities || [])
+          ];
+        }
       });
     }
     registerArrays(plugins, plugs);

@@ -22,7 +22,7 @@ import './FunctionDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const {Connections} = LunchBadgerCore.stores;
-const {propertyTypes} = LunchBadgerCore.utils;
+const {storeUtils: {findGatewayByPipelineId}} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
@@ -311,6 +311,42 @@ class FunctionDetails extends PureComponent {
     );
   }
 
+  renderTriggersSection() {
+    const {entity, connectionsStore} = this.props;
+    const state = this.context.store.getState();
+    const fields = [];
+    const currDsConn = connectionsStore.find({toId: entity.id});
+    if (currDsConn) {
+      fields.push({
+        title: 'Connector',
+        value: state.entities.dataSources[currDsConn.fromId].connector,
+      });
+    }
+    const currPipelineConn = connectionsStore.find({fromId: entity.id});
+    if (currPipelineConn) {
+      fields.push({
+        title: 'API Gateway',
+        value: findGatewayByPipelineId(state, currPipelineConn.toId)
+          .pipelines
+          .find(({id}) => id === currPipelineConn.toId)
+          .name,
+      });
+    }
+    return (
+      <div className="panel__details">
+        {fields.map(({title, value}) => (
+          <EntityProperty
+            key={title}
+            name={title}
+            title={title}
+            value={value}
+            fake
+          />
+        ))}
+      </div>
+    );
+  }
+
   // getProperties = (properties, parentId, level = 0) => {
   //   let idx = 0;
   //   this.state.properties.forEach((property) => {
@@ -528,6 +564,7 @@ class FunctionDetails extends PureComponent {
   render() {
     const sections = [
       {title: 'Details'},
+      {title: 'Triggers'},
       // {title: 'User-defined fields', render: 'UserDefinedFields'},
       // {title: 'Relations'},
       // {title: 'Properties'},

@@ -1,21 +1,7 @@
-// import GATEWAY_POLICIES from './gatewayPolicies';
-
-// const {PROXY} = GATEWAY_POLICIES;
-
-export default [
-  // {
-  //   [PROXY]: [],
-  // },
-  // {
-  //   [RATE_LIMIT]: [],
-  // },
-  // {
-  //   [LOG]: [
-  //     {
-  //       action: {
-  //         message: '${req.method} ${req.originalUrl}',
-  //       }
-  //     },
-  //   ],
-  // },
+const initialPolicies = [
+  'oauth2',
+  'rate-limiter',
+  'simple-logger',
 ];
+
+export default initialPolicies.map(key => ({[key]: []}));

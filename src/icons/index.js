@@ -1,7 +1,5 @@
 import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
-import iconArrowDown from './icon-arrow-down.svg';
-import iconArrowUp from './icon-arrow-up.svg';
 import iconDataSource from './icon-datasource.svg';
 import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
 import iconDataSourceMemory from './icon-datasource-memory.svg';
@@ -32,8 +30,6 @@ import iconWand from './icon-wand.svg';
 export {
   iconApi,
   iconArrow,
-  iconArrowDown,
-  iconArrowUp,
   iconDataSource,
   iconDataSourceEthereum,
   iconDataSourceMemory,

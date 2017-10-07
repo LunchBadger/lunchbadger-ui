@@ -15,13 +15,8 @@ export default class Port extends PureComponent {
     way: PropTypes.oneOf(['in', 'out']).isRequired,
     scope: PropTypes.string.isRequired,
     middle: PropTypes.bool,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
+    className: PropTypes.string
   };
-
-  static defaultProps = {
-    disabled: false,
-  }
 
   static contextTypes = {
     paper: PropTypes.object,
@@ -138,13 +133,12 @@ export default class Port extends PureComponent {
   }
 
   render() {
-    const {way, elementId, middle, className, connectionsStore, disabled} = this.props;
+    const {way, elementId, middle, className, connectionsStore} = this.props;
     const isConnected = connectionsStore.isPortConnected(way, elementId);
     const portClass = classNames('canvas-element__port', 'port', {
       'canvas-element__port--out': way === 'out',
       'canvas-element__port--in': way === 'in',
       'port__middle': middle,
-      'port__disabled': disabled,
     });
     const portAnchorClass = classNames('port__anchor', {
       'port__anchor--connected': isConnected,

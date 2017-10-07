@@ -8,15 +8,9 @@ const checkConnection = (info) => (_, getState) => {
   const {sourceId, targetId} = info;
   const state = getState();
   const isPrivate = storeUtils.isInQuadrant(state, 1, sourceId);
-  const isGatewayIn = storeUtils.findGatewayByPipelineId(state, targetId);
-  if (isPrivate && isGatewayIn) {
-    return !Connections.isFromTo(sourceId, targetId);
-  }
-  const isGatewayOut = storeUtils.findGatewayByPipelineId(state, sourceId);
-  // FIXME - check for endpoints inside apis and endpoints inside apis inside portals
-  const isPublic = storeUtils.isInQuadrant(state, 3, targetId);
-  if (isGatewayOut && isPublic) {
-    return !Connections.isFromTo(sourceId, targetId);
+  const isGateway = storeUtils.findGatewayByPipelineId(state, targetId);
+  if (isPrivate && isGateway) {
+    return !Connections.search({toId: storeUtils.formatId(targetId)}).length;
   }
   return null;
 };

@@ -226,9 +226,9 @@ export default class DataSource extends BaseModel {
       }
       const withPort = model.hasOwnProperty('port');
       const isRest = model.hasOwnProperty('operations');
-      let fields = ['name', 'url', 'database', 'username'];
+      let fields = ['name', 'url', 'database', 'username', 'password'];
       if (withPort) {
-        fields = ['name', 'host', 'port', 'database', 'username'];
+        fields = ['name', 'host', 'port', 'database', 'username', 'password'];
       }
       checkFields(fields, model, validations.data);
       if (withPort && model.port !== '') {

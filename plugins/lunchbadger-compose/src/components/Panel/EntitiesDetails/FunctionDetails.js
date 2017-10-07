@@ -17,6 +17,7 @@ import {
   Table,
   IconButton,
 } from '../../../../../lunchbadger-ui/src';
+import runtimeOptions from '../../../utils/runtimeOptions';
 import './FunctionDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -273,6 +274,12 @@ class FunctionDetails extends PureComponent {
         name: 'dataSource',
         value: currentDsId,
         options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+      },
+      {
+        title: 'Runtime',
+        name: 'runtime',
+        value: entity.runtime,
+        options: runtimeOptions.map(label => ({label, value: label})),
       },
     ];
     const checkboxes = [

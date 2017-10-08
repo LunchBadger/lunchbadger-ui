@@ -30,6 +30,15 @@ const baseModelTypes = [
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
 
+const monacoEditorLanguages = {
+  node: 'javascript',
+  python: 'python',
+  java: 'java',
+  'c#': 'c',
+};
+
+const detectMonacoEditorLanguage = str => monacoEditorLanguages[str.split(' ')[0].toLowerCase()];
+
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
 //   {label: 'Number', value: 'number'},
@@ -92,11 +101,13 @@ class FunctionDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name} = props.entity;
+    const {contextPath, name, runtime} = props.entity;
     return {
       changed: false,
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
+      monacoEditorLanguage: detectMonacoEditorLanguage(runtime),
+      functionCode: "function hello() {\n\talert('Hello world!');\n}",
     };
   }
 
@@ -247,6 +258,10 @@ class FunctionDetails extends PureComponent {
   //   }
   // }
 
+  handleRuntimeChange = value => {
+    this.setState({monacoEditorLanguage: detectMonacoEditorLanguage(value)})
+  };
+
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
     // const dataSourceOptions = Object.keys(dataSources)
@@ -281,6 +296,7 @@ class FunctionDetails extends PureComponent {
         name: 'runtime',
         value: entity.runtime,
         options: runtimeOptions.map(label => ({label, value: label})),
+        onChange: this.handleRuntimeChange,
       },
     ];
     // const checkboxes = [
@@ -562,8 +578,10 @@ class FunctionDetails extends PureComponent {
   //   />;
   // }
 
+  handleFunctionCodeChange = functionCode => this.setState({functionCode});
+
   renderFunctionCodeSection() {
-    const code = "function hello() {\n\talert('Hello world!');\n}";
+    const {monacoEditorLanguage, functionCode} = this.state;
     const options = {
       selectOnLineNumbers: true
     };
@@ -571,10 +589,11 @@ class FunctionDetails extends PureComponent {
       <MonacoEditor
         width="700"
         height="350"
-        language="javascript"
+        language={monacoEditorLanguage}
         theme="vs-dark"
-        value={code}
+        value={functionCode}
         options={options}
+        onChange={this.handleFunctionCodeChange}
       />
     );
   }

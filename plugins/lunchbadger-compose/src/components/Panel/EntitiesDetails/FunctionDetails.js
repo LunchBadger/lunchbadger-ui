@@ -249,33 +249,33 @@ class FunctionDetails extends PureComponent {
 
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
-    const dataSourceOptions = Object.keys(dataSources)
-      .map(key => dataSources[key])
-      .map(({name: label, id: value}) => ({label, value}));
-    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    // const dataSourceOptions = Object.keys(dataSources)
+    //   .map(key => dataSources[key])
+    //   .map(({name: label, id: value}) => ({label, value}));
+    // const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     const fields = [
       {
         title: 'Context Path',
         name: 'http[path]',
         value: entity.contextPath,
       },
-      {
-        title: 'Plural',
-        name: 'plural',
-        value: entity.plural,
-      },
-      {
-        title: 'Base Model',
-        name: 'base',
-        value: entity.base,
-        options: baseModelTypes,
-      },
-      {
-        title: 'Data Source',
-        name: 'dataSource',
-        value: currentDsId,
-        options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
-      },
+      // {
+      //   title: 'Plural',
+      //   name: 'plural',
+      //   value: entity.plural,
+      // },
+      // {
+      //   title: 'Base Model',
+      //   name: 'base',
+      //   value: entity.base,
+      //   options: baseModelTypes,
+      // },
+      // {
+      //   title: 'Data Source',
+      //   name: 'dataSource',
+      //   value: currentDsId,
+      //   options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+      // },
       {
         title: 'Runtime',
         name: 'runtime',
@@ -283,31 +283,31 @@ class FunctionDetails extends PureComponent {
         options: runtimeOptions.map(label => ({label, value: label})),
       },
     ];
-    const checkboxes = [
-      {
-        name: 'readonly',
-        label: 'Read Only',
-        value: entity.readonly,
-      },
-      {
-        name: 'strict',
-        label: 'Strict Schema',
-        value: entity.strict,
-      },
-      {
-        name: 'public',
-        label: 'Exposed as REST',
-        value: entity.public,
-      },
-    ];
+    // const checkboxes = [
+    //   {
+    //     name: 'readonly',
+    //     label: 'Read Only',
+    //     value: entity.readonly,
+    //   },
+    //   {
+    //     name: 'strict',
+    //     label: 'Strict Schema',
+    //     value: entity.strict,
+    //   },
+    //   {
+    //     name: 'public',
+    //     label: 'Exposed as REST',
+    //     value: entity.public,
+    //   },
+    // ];
     return (
       <div className="panel__details">
         {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
-        {checkboxes.map(item => (
+        {/*checkboxes.map(item => (
           <div key={item.name} className="panel__details__checkbox">
             <Checkbox {...item} />
           </div>
-        ))}
+        ))*/}
       </div>
     );
   }
@@ -562,13 +562,14 @@ class FunctionDetails extends PureComponent {
   //   />;
   // }
 
-  renderCodeEditorSection() {
+  renderFunctionCodeSection() {
     const code = "function hello() {\n\talert('Hello world!');\n}";
     const options = {
       selectOnLineNumbers: true
     };
     return (
       <MonacoEditor
+        width="700"
         height="350"
         language="javascript"
         theme="vs-dark"
@@ -582,6 +583,7 @@ class FunctionDetails extends PureComponent {
     const sections = [
       {title: 'Details'},
       {title: 'Triggers'},
+      {title: 'Function Code', render: 'FunctionCode'},
       // {title: 'User-defined fields', render: 'UserDefinedFields'},
       // {title: 'Relations'},
       // {title: 'Properties'},
@@ -597,7 +599,6 @@ class FunctionDetails extends PureComponent {
             defaultOpened
           />
         ))}
-        {this.renderCodeEditorSection()}
       </div>
     );
   }

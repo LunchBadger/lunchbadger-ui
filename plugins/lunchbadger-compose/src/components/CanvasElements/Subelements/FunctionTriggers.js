@@ -12,6 +12,12 @@ class FunctionTriggers extends PureComponent {
     store: PropTypes.object,
   };
 
+  renderDetails = details => details.map((entry, idx1) => (
+    <div key={idx1}>
+      {entry.map((item, idx2) => <span key={idx2}>{item}</span>)}
+    </div>
+  ));
+
   render() {
     const {id, connectionsStore, details} = this.props;
     const state = this.context.store.getState();
@@ -21,16 +27,40 @@ class FunctionTriggers extends PureComponent {
       triggers.push({
         type: 'Connector',
         source: state.entities.dataSources[conn.fromId].name,
+        details: [[<code>Object Create</code>, <code>Object Update</code>]],
       });
     });
     const connsFrom = connectionsStore.search({fromId: id});
+    const gateways = {};
     connsFrom.forEach((conn) => {
+      const gateway = findGatewayByPipelineId(state, conn.toId);
+      if (!gateways[gateway.id]) {
+        gateways[gateway.id] = {
+          name: gateway.name,
+          apiEndpoints: [],
+        }
+      }
+      const connsApiEndpoints = connectionsStore.search({fromId: conn.toId});
+      connsApiEndpoints.forEach((connAE) => {
+        gateways[gateway.id].apiEndpoints.push([
+          state.entities.apiEndpoints[connAE.toId].name,
+          <code>GET</code>,
+          <code>POST</code>,
+        ]);
+      });
+      // triggers.push({
+      //   type: 'API Gateway',
+      //   source: findGatewayByPipelineId(state, conn.toId)
+      //     .pipelines
+      //     .find(({id}) => id === conn.toId)
+      //     .name,
+      // });
+    });
+    Object.keys(gateways).forEach((key) => {
       triggers.push({
         type: 'API Gateway',
-        source: findGatewayByPipelineId(state, conn.toId)
-          .pipelines
-          .find(({id}) => id === conn.toId)
-          .name,
+        source: gateways[key].name,
+        details: gateways[key].apiEndpoints,
       });
     });
     if (!details) {
@@ -45,11 +75,11 @@ class FunctionTriggers extends PureComponent {
         </div>
       );
     }
-    const columns = ['Type','Source'];
-    const widths = [300, undefined];
-    const paddings = [true, true];
-    const centers = [false, false];
-    const data = triggers.map(({type, source}) => [type, source]);
+    const columns = ['Type', 'Source', 'Details'];
+    const widths = [300, 300, undefined];
+    const paddings = [true, true, true];
+    const centers = [false, true, false];
+    const data = triggers.map(({type, source, details}, idx) => [type, source, this.renderDetails(details, idx)]);
     return <Table
       columns={columns}
       data={data}

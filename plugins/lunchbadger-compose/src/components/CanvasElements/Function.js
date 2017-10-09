@@ -223,41 +223,32 @@ class Function extends Component {
   renderTriggers() {
     const {entity, connectionsStore} = this.props;
     const state = this.context.store.getState();
-    let connector = '';
-    const currDsConn = connectionsStore.find({toId: entity.id});
-    if (currDsConn) {
-      connector = state.entities.dataSources[currDsConn.fromId].connector;
-    }
-    let pipeline = '';
-    const currPipelineConn = connectionsStore.find({fromId: entity.id});
-    if (currPipelineConn) {
-      pipeline = findGatewayByPipelineId(state, currPipelineConn.toId)
-        .pipelines
-        .find(({id}) => id === currPipelineConn.toId)
-        .name;
-    }
+    const triggers = [];
+    const connsTo = connectionsStore.search({toId: entity.id});
+    connsTo.forEach((conn) => {
+      triggers.push({
+        label: 'Connector',
+        value: state.entities.dataSources[conn.fromId].connector,
+      });
+    });
+    const connsFrom = connectionsStore.search({fromId: entity.id});
+    connsFrom.forEach((conn) => {
+      triggers.push({
+        label: 'API Gateway',
+        value: findGatewayByPipelineId(state, conn.toId)
+          .pipelines
+          .find(({id}) => id === conn.toId)
+          .name,
+      });
+    });
     return (
       <div className="Function__triggers">
-        {connector !== '' && (
-          <div>
-            <span>
-              Connector
-            </span>
-            <span>
-              {connector}
-            </span>
+        {triggers.map(({label, value}, idx) => (
+          <div key={idx}>
+            <span>{label}</span>
+            <span>{value}</span>
           </div>
-        )}
-        {pipeline !== '' && (
-          <div>
-            <span>
-              API Gateway
-            </span>
-            <span>
-              {pipeline}
-            </span>
-          </div>
-        )}
+        ))}
       </div>
     );
   }

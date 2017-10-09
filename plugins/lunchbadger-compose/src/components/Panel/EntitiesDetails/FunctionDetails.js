@@ -337,28 +337,28 @@ class FunctionDetails extends PureComponent {
     const {entity, connectionsStore} = this.props;
     const state = this.context.store.getState();
     const fields = [];
-    const currDsConn = connectionsStore.find({toId: entity.id});
-    if (currDsConn) {
+    const connsTo = connectionsStore.search({toId: entity.id});
+    connsTo.forEach((conn) => {
       fields.push({
         title: 'Connector',
-        value: state.entities.dataSources[currDsConn.fromId].connector,
+        value: state.entities.dataSources[conn.fromId].connector,
       });
-    }
-    const currPipelineConn = connectionsStore.find({fromId: entity.id});
-    if (currPipelineConn) {
+    });
+    const connsFrom = connectionsStore.search({fromId: entity.id});
+    connsFrom.forEach((conn) => {
       fields.push({
         title: 'API Gateway',
-        value: findGatewayByPipelineId(state, currPipelineConn.toId)
+        value: findGatewayByPipelineId(state, conn.toId)
           .pipelines
-          .find(({id}) => id === currPipelineConn.toId)
+          .find(({id}) => id === conn.toId)
           .name,
       });
-    }
+    });
     return (
       <div className="panel__details">
-        {fields.map(({title, value}) => (
+        {fields.map(({title, value}, idx) => (
           <EntityProperty
-            key={title}
+            key={idx}
             name={title}
             title={title}
             value={value}

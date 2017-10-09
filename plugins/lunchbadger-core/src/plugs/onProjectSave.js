@@ -58,10 +58,7 @@ const setStatesToSave = (state) => {
 export default [
   state => ({
     name: 'main',
-    connections: Connections.toJSON()
-      .filter(({fromId, toId}) =>
-        !isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function'
-      ),
+    connections: Connections.toJSON().filter(({fromId}) => !isInQuadrant(state, 0, fromId)),
     states: setStatesToSave(state),
   }),
 ];

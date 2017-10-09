@@ -98,7 +98,7 @@ export const remove = entity => async (dispatch) => {
     dispatch(actions.removeFunction(entity));
     if (entity.loaded) {
       await ModelService.delete(entity.workspaceId);
-      // await ModelService.deleteModelConfig(entity.workspaceId);
+      await ModelService.deleteModelConfig(entity.workspaceId);
     }
     if (isAutoSave) {
       // await dispatch(coreActions.saveToServer());

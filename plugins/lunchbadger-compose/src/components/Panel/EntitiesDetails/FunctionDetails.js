@@ -7,7 +7,13 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import MonacoEditor from 'react-monaco-editor';
+import brace from 'brace';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/mode/java';
+import 'brace/mode/python';
+import 'brace/mode/csharp';
+import 'brace/theme/monokai';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -30,14 +36,14 @@ const baseModelTypes = [
   {label: 'PersistedModel', value: 'PersistedModel'},
 ];
 
-const monacoEditorLanguages = {
+const editorCodeLanguages = {
   node: 'javascript',
   python: 'python',
   java: 'java',
-  'c#': 'c',
+  'c#': 'csharp',
 };
 
-const detectMonacoEditorLanguage = str => monacoEditorLanguages[str.split(' ')[0].toLowerCase()];
+const detectEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
 
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
@@ -101,13 +107,13 @@ class FunctionDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name, runtime} = props.entity;
+    const {contextPath, name, runtime, code} = props.entity;
     return {
       changed: false,
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
-      monacoEditorLanguage: detectMonacoEditorLanguage(runtime),
-      functionCode: "function hello() {\n\talert('Hello world!');\n}",
+      editorCodeLanguage: detectEditorCodeLanguage(runtime),
+      code,
     };
   }
 
@@ -146,6 +152,7 @@ class FunctionDetails extends PureComponent {
       }
       delete model.dataSource;
     }
+    model.code = this.state.code;
     return model;
     // return entity.processModel(model, this.state.properties);
   }
@@ -258,9 +265,7 @@ class FunctionDetails extends PureComponent {
   //   }
   // }
 
-  handleRuntimeChange = value => {
-    this.setState({monacoEditorLanguage: detectMonacoEditorLanguage(value)})
-  };
+  handleRuntimeChange = value => this.setState({editorCodeLanguage: detectEditorCodeLanguage(value)});
 
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
@@ -578,22 +583,26 @@ class FunctionDetails extends PureComponent {
   //   />;
   // }
 
-  handleFunctionCodeChange = functionCode => this.setState({functionCode});
+  handleFunctionCodeChange = code => this.setState({code, changed: true}, () => this.props.parent.checkPristine());
 
   renderFunctionCodeSection() {
-    const {monacoEditorLanguage, functionCode} = this.state;
+    const {editorCodeLanguage, code} = this.state;
     const options = {
-      selectOnLineNumbers: true
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      enableSnippets: true,
+      showLineNumbers: true,
+      tabSize: 2,
     };
     return (
-      <MonacoEditor
-        width="700"
-        height="350"
-        language={monacoEditorLanguage}
-        theme="vs-dark"
-        value={functionCode}
-        options={options}
+      <AceEditor
+        width="700px"
+        height="350px"
+        theme="monokai"
+        mode={editorCodeLanguage}
+        value={code}
         onChange={this.handleFunctionCodeChange}
+        setOptions={options}
       />
     );
   }

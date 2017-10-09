@@ -50,6 +50,7 @@ export default class Function extends BaseModel {
   strict = false;
   wasBundled = false;
   runtime = runtimeOptions[0];
+  code = '';
 
   static deserializers = {
     http: (obj, val) => {
@@ -108,6 +109,7 @@ export default class Function extends BaseModel {
       wasBundled: this.wasBundled,
       runtime: this.runtime,
       kind: 'function',
+      code: this.code,
     }
   }
 

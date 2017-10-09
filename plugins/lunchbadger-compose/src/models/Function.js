@@ -107,6 +107,7 @@ export default class Function extends BaseModel {
       lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
       runtime: this.runtime,
+      kind: 'function',
     }
   }
 

@@ -6,8 +6,10 @@ const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
-    case coreActionTypes.onLoadProject:
-      return (action.payload.body.functions || []).reduce((map, item) => {
+    case actionTypes.onLoadCompose:
+      return action.payload[1].body.reduce((map, item) => {
+        if (item.kind !== 'function') return map;
+        if (item.wasBundled) return map;
         map[item.lunchbadgerId] = Function.create(item);
         return map;
       }, {});

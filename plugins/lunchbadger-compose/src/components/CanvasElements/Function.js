@@ -3,19 +3,17 @@ import PropTypes from 'prop-types';
 import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
-import {inject, observer} from 'mobx-react';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 // import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 // import addNestedProperties from '../addNestedProperties';
 // import ModelProperty from '../../models/ModelProperty';
 import runtimeOptions from '../../utils/runtimeOptions';
+import FunctionTriggers from './Subelements/FunctionTriggers';
 import './Function.scss';
 
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const {utils: {storeUtils:{findGatewayByPipelineId}}} = LunchBadgerCore;
 
-@inject('connectionsStore') @observer
 class Function extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
@@ -220,41 +218,8 @@ class Function extends Component {
     return <EntityProperties properties={mainProperties} />;
   }
 
-  renderTriggers() {
-    const {entity, connectionsStore} = this.props;
-    const state = this.context.store.getState();
-    const triggers = [];
-    const connsTo = connectionsStore.search({toId: entity.id});
-    connsTo.forEach((conn) => {
-      triggers.push({
-        label: 'Connector',
-        value: state.entities.dataSources[conn.fromId].connector,
-      });
-    });
-    const connsFrom = connectionsStore.search({fromId: entity.id});
-    connsFrom.forEach((conn) => {
-      triggers.push({
-        label: 'API Gateway',
-        value: findGatewayByPipelineId(state, conn.toId)
-          .pipelines
-          .find(({id}) => id === conn.toId)
-          .name,
-      });
-    });
-    return (
-      <div className="Function__triggers">
-        {triggers.map(({label, value}, idx) => (
-          <div key={idx}>
-            <span>{label}</span>
-            <span>{value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   render() {
-    const {multiEnvIndex, nested} = this.props;
+    const {multiEnvIndex, nested, entity: {id}} = this.props;
     return (
       <div className={cs('Function', {nested, 'multi': multiEnvIndex > 0})}>
         {!nested && this.renderPorts()}
@@ -264,7 +229,7 @@ class Function extends Component {
           onAdd={this.onAddRootProperty}
           main
         >
-          {this.renderTriggers()}
+          <FunctionTriggers id={id} />
         </EntitySubElements>
         {/*<EntitySubElements
           title="Properties"

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
@@ -25,11 +24,11 @@ import {
   IconButton,
 } from '../../../../../lunchbadger-ui/src';
 import runtimeOptions from '../../../utils/runtimeOptions';
+import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
 import './FunctionDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const {Connections} = LunchBadgerCore.stores;
-const {storeUtils: {findGatewayByPipelineId}} = LunchBadgerCore.utils;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
@@ -65,7 +64,6 @@ const detectEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].to
 //   {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
 // ];
 
-@inject('connectionsStore') @observer
 class FunctionDetails extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired
@@ -268,7 +266,7 @@ class FunctionDetails extends PureComponent {
   handleRuntimeChange = value => this.setState({editorCodeLanguage: detectEditorCodeLanguage(value)});
 
   renderDetailsSection = () => {
-    const {entity, dataSources, connectionsStore} = this.props;
+    const {entity, dataSources} = this.props;
     // const dataSourceOptions = Object.keys(dataSources)
     //   .map(key => dataSources[key])
     //   .map(({name: label, id: value}) => ({label, value}));
@@ -334,39 +332,7 @@ class FunctionDetails extends PureComponent {
   }
 
   renderTriggersSection() {
-    const {entity, connectionsStore} = this.props;
-    const state = this.context.store.getState();
-    const fields = [];
-    const connsTo = connectionsStore.search({toId: entity.id});
-    connsTo.forEach((conn) => {
-      fields.push({
-        title: 'Connector',
-        value: state.entities.dataSources[conn.fromId].connector,
-      });
-    });
-    const connsFrom = connectionsStore.search({fromId: entity.id});
-    connsFrom.forEach((conn) => {
-      fields.push({
-        title: 'API Gateway',
-        value: findGatewayByPipelineId(state, conn.toId)
-          .pipelines
-          .find(({id}) => id === conn.toId)
-          .name,
-      });
-    });
-    return (
-      <div className="panel__details">
-        {fields.map(({title, value}, idx) => (
-          <EntityProperty
-            key={idx}
-            name={title}
-            title={title}
-            value={value}
-            fake
-          />
-        ))}
-      </div>
-    );
+    return <FunctionTriggers id={this.props.entity.id} details />
   }
 
   // getProperties = (properties, parentId, level = 0) => {

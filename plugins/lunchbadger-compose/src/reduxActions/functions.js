@@ -34,17 +34,17 @@ export const update = (entity, model) => async (dispatch, getState) => {
   try {
     if (isDifferent) {
       await ModelService.delete(entity.workspaceId);
-      await ModelService.deleteModelConfig(entity.workspaceId);
-      const dataSource = Connections.search({toId: entity.id})
-        .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
-        .find(item => item instanceof DataSource);
-      await ModelService.upsertModelConfig({
-        name: updatedEntity.name,
-        id: updatedEntity.workspaceId,
-        facetName: 'server',
-        dataSource: dataSource ? dataSource.name : null,
-        public: updatedEntity.public,
-      });
+      // await ModelService.deleteModelConfig(entity.workspaceId);
+      // const dataSource = Connections.search({toId: entity.id})
+      //   .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
+      //   .find(item => item instanceof DataSource);
+      // await ModelService.upsertModelConfig({
+      //   name: updatedEntity.name,
+      //   id: updatedEntity.workspaceId,
+      //   facetName: 'server',
+      //   dataSource: dataSource ? dataSource.name : null,
+      //   public: updatedEntity.public,
+      // });
     }
     const {body} = await ModelService.upsert(updatedEntity.toJSON());
     updatedEntity = Function.create(body);
@@ -97,7 +97,7 @@ export const remove = entity => async (dispatch) => {
     dispatch(actions.removeFunction(entity));
     if (entity.loaded) {
       await ModelService.delete(entity.workspaceId);
-      await ModelService.deleteModelConfig(entity.workspaceId);
+      // await ModelService.deleteModelConfig(entity.workspaceId);
     }
     if (isAutoSave) {
       // await dispatch(coreActions.saveToServer());

@@ -1,10 +1,21 @@
 import Metric, {getRandomInt} from '../models/Metric';
 import MetricBundle from '../models/MetricBundle';
 import MetricPair, {OR} from '../models/MetricPair';
+import MetricFunction from '../models/MetricFunction';
 import {actions} from './actions';
 
-export const create = (entity, left, top) => dispatch =>
-  dispatch(actions.updateMetric(
+export const create = (entity, left, top) => (dispatch) => {
+  if (entity.constructor.type === 'Function') {
+    return dispatch(actions.updateMetric(
+      MetricFunction.create({
+        entityId: entity.id,
+        name: entity.name,
+        left: left || 0,
+        top: top || 0,
+      })
+    ));
+  }
+  return dispatch(actions.updateMetric(
     MetricBundle.create({
       pairs: [
         MetricPair.create({
@@ -16,6 +27,7 @@ export const create = (entity, left, top) => dispatch =>
       top: top || 0
     }),
   ));
+}
 
 export const createBundle = (items, left, top) => (dispatch) => {
   let pairs = [];
@@ -93,6 +105,7 @@ export const simulateWebTraffic = () => (dispatch, getState) => {
   const updates = [];
   Object.keys(metrics).forEach(key => {
     const updatedMetric = metrics[key].recreate();
+    if (!updatedMetric.pairs) return;
     updatedMetric.pairs.forEach((pair) => {
       if (pair.metricOne) {
         pair.metricOne.details.forEach((detail) => {

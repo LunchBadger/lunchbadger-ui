@@ -21,8 +21,14 @@ class ModelPropertyDetails extends Component {
   }
 
   onPropertyTypeChange = (type) => {
-    const {property, onPropertyTypeChange} = this.props;
+    const {property, onPropertyTypeChange, nested, index, parentId} = this.props;
     onPropertyTypeChange(property.id, type);
+    setTimeout(() => {
+      const idx = `${parentId}${this.props.idx}`;
+      const prefix = nested ? `models${index}` : '';
+      const input = document.querySelector(`.Entity .select__${prefix}properties${idx}type button`);
+      input && input.focus();
+    }, 500);
   }
 
   render() {

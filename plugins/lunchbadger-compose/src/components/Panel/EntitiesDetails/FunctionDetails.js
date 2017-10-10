@@ -583,7 +583,7 @@ class FunctionDetails extends PureComponent {
       // {title: 'Properties'},
     ];
     return (
-      <div>
+      <div className="FunctionDetails">
         {sections.map(({title, render}) => (
           <CollapsibleProperties
             key={title}

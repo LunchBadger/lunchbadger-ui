@@ -5,7 +5,6 @@ let path = require('path');
 let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
-let CopyWebpackPlugin = require('copy-webpack-plugin');
 
 let config = _.merge({}, baseConfig, {
   cache: true,
@@ -20,13 +19,7 @@ let config = _.merge({}, baseConfig, {
       'process.env': {
         'LBSERVER_HOST': JSON.stringify(process.env.LBSERVER_HOST || 'localhost')
       }
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: 'node_modules/monaco-editor/min/vs',
-        to: 'vs'
-      }
-    ])
+    })
   ],
   resolve: {
     alias: {

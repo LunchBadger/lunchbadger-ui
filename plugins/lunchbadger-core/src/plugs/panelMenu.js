@@ -6,6 +6,11 @@ export default {
   0: {
     icon: 'fa-trash-o',
     hidden: true,
+    confirm: {
+      title: 'Clear the workspace',
+      ok: 'Clear',
+      message: 'Are you sure, you want to clear the workspace?',
+    },
     action: clearServer(),
   },
   1: {

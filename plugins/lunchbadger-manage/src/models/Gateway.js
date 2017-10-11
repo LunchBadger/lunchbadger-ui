@@ -86,8 +86,8 @@ export default class Gateway extends BaseModel {
         if (id === 'admin') continue;
         await this.adminApi.deleteApiEndpoint(id);
       }
-      const {entities: {serviceEndpoints, apiEndpoints, models, modelsBundled, apis, portals}} = state;
-      const serviceEndpointEntities = {...serviceEndpoints, ...models, ...modelsBundled};
+      const {entities: {serviceEndpoints, apiEndpoints, functions, models, modelsBundled, apis, portals}} = state;
+      const serviceEndpointEntities = {...serviceEndpoints, ...models, ...functions, ...modelsBundled};
       for (let id in serviceEndpointEntities) {
         await this.adminApi.putServiceEndpoint(id, serviceEndpointEntities[id].toApiJSON());
       }

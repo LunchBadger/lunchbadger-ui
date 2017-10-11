@@ -1,7 +1,9 @@
 import ModelProperty from '../models/ModelProperty';
 
 const addNestedProperties = (entity, props, properties, parentId) => {
-  properties.forEach((property) => {
+  properties
+  .sort((a, b) => a.itemOrder > b.itemOrder)
+  .forEach((property) => {
     const prop = ModelProperty.create(property);
     prop.parentId = parentId;
     prop.attach(entity);

@@ -65,7 +65,7 @@ class FunctionTriggers extends PureComponent {
       });
     });
     Object.keys(gateways).forEach((key) => {
-      triggers.push({
+      triggers.unshift({
         type: 'API Gateway',
         source: gateways[key].name,
         details: gateways[key].apiEndpoints,

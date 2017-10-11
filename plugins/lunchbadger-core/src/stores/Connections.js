@@ -118,8 +118,64 @@ class Connections {
   }
 
   isPortConnected(way, id) {
-    if (way === 'out') return !!_.find(this.connections, {fromId: id});
-    if (way === 'in') return !!_.find(this.connections, {toId: id});
+    if (way === 'out') {
+      const conns = this.connections
+        .filter(({fromId, toId}) => fromId === id || toId === id)
+        .filter(({fromId, info: {source, target}}) => {
+          if (!source || !target) return false;
+          const sc = source.parentElement.classList;
+          const tc = target.parentElement.classList;
+          return (
+            (
+              fromId === id
+              &&
+              sc.contains('port-out')
+              &&
+              tc.contains('port-in')
+            )
+            ||
+            (
+              sc.contains('port-out')
+              &&
+              tc.contains('port-out')
+              &&
+              sc.contains('port-Function')
+              &&
+              tc.contains('port-Model')
+            )
+          );
+        });
+      return conns.length > 0;
+    }
+    if (way === 'in') {
+      const conns = this.connections
+        .filter(({fromId, toId}) => fromId === id || toId === id)
+        .filter(({toId, info: {source, target}}) => {
+          if (!source || !target) return false;
+          const sc = source.parentElement.classList;
+          const tc = target.parentElement.classList;
+          return (
+            (
+              toId === id
+              &&
+              sc.contains('port-out')
+              &&
+              tc.contains('port-in')
+            )
+            ||
+            (
+              sc.contains('port-in')
+              &&
+              tc.contains('port-in')
+              &&
+              sc.contains('port-Function')
+              &&
+              tc.contains('port-Model')
+            )
+          );
+        });
+      return conns.length > 0;
+    }
     return false;
   }
 

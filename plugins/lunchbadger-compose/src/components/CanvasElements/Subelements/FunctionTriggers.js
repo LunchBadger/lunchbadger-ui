@@ -4,7 +4,7 @@ import {inject, observer} from 'mobx-react';
 import {Table} from '../../../../../lunchbadger-ui/src';
 import '../Function.scss';
 
-const {utils: {storeUtils:{findGatewayByPipelineId}}} = LunchBadgerCore;
+const {utils: {storeUtils: {findGatewayByPipelineId, findEntity}}} = LunchBadgerCore;
 
 @inject('connectionsStore') @observer
 class FunctionTriggers extends PureComponent {
@@ -40,6 +40,14 @@ class FunctionTriggers extends PureComponent {
     const connsFrom = connectionsStore.search({fromId: id});
     const gateways = {};
     connsFrom.forEach((conn) => {
+      const model = findEntity(state, 1, conn.toId);
+      if (model) {
+        triggers.push({
+          type: 'Model',
+          source: model.name,
+          details: [['on.save', 'after.save'].map(item => <code>{item}</code>)],
+        });
+      }
       const gateway = findGatewayByPipelineId(state, conn.toId);
       const connsApiEndpoints = connectionsStore.search({fromId: conn.toId});
       connsApiEndpoints.forEach((connAE) => {

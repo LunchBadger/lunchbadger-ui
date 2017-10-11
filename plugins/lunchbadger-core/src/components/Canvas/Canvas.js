@@ -86,9 +86,14 @@ class Canvas extends Component {
 
   handleInitialConnections = () => {
     const {store: {getState}} = this.context;
-    getState().initialConnections.forEach((connection) => {
-      const portOut = document.getElementById(`port_out_${connection.fromId}`);
-      const portIn = document.getElementById(`port_in_${connection.toId}`);
+    const {initialConnections, entities: {functions, models}} = getState();
+    initialConnections.forEach(({fromId, toId}) => {
+      let portOut = document.getElementById(`port_out_${fromId}`);
+      let portIn = document.getElementById(`port_in_${toId}`);
+      if (functions[fromId] && models[toId]) {
+        portOut = document.getElementById(`port_out_${fromId}`);
+        portIn = document.getElementById(`port_out_${toId}`);
+      }
       if (portOut && portIn) {
         this.paper.connect({
           source: portOut.querySelector('.port__anchor'),
@@ -122,6 +127,10 @@ class Canvas extends Component {
     if (sourceId === targetId) return false;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
+      if ((source.parentElement.classList.contains('port-Function') && target.parentElement.classList.contains('port-Model')) ||
+        (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function'))) {
+        return true;
+      }
       return false;
     }
     // Only one connection between two entities is allowed.
@@ -155,8 +164,19 @@ class Canvas extends Component {
   _attachPaperEvents() {
     const {store: {getState}} = this.context;
     this.paper.bind('connection', (info) => {
-      const {source, connection} = info;
-      if (source.parentElement.classList.contains('port-in')) {
+      const {
+        source: {parentElement: {classList: source}},
+        target: {parentElement: {classList: target}},
+        connection,
+      } = info;
+      if (source.contains('port-in')) {
+        if (!(source.contains('port-Function') && target.contains('port-Model'))) {
+          this._flipConnection(info);
+          this._disconnect(connection);
+          return;
+        }
+      }
+      if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function')) {
         this._flipConnection(info);
         this._disconnect(connection);
         return;

@@ -24,10 +24,17 @@ class FunctionTriggers extends PureComponent {
     const triggers = [];
     const connsTo = connectionsStore.search({toId: id});
     connsTo.forEach((conn) => {
+      const {name: source, isTritonObjectStorage} = state.entities.dataSources[conn.fromId];
+      const details = ['Object Create', 'Object Update'];
+      if (isTritonObjectStorage) {
+        details.push('mfind');
+        details.push('mjob');
+        details.push('maggr');
+      }
       triggers.push({
         type: 'Datasource',
-        source: state.entities.dataSources[conn.fromId].name,
-        details: [[<code>Object Create</code>, <code>Object Update</code>]],
+        source,
+        details: [details.map(item => <code>{item}</code>)],
       });
     });
     const connsFrom = connectionsStore.search({fromId: id});

@@ -17,9 +17,13 @@
     color: #000;
     margin: 0 10px 0 30px;
     & > div {
-      margin-bottom: 5px;
+      margin-top: 10px;
       & > span {
         display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         &:first-child {
           width: 120px;
         }

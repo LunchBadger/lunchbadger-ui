@@ -26,7 +26,7 @@ class ModelPropertyDetails extends Component {
     setTimeout(() => {
       const idx = `${parentId}${this.props.idx}`;
       const prefix = nested ? `models${index}` : '';
-      const input = document.querySelector(`.Entity .select__${prefix}properties${idx}type button`);
+      const input = document.querySelector(`.Entity.highlighted .select__${prefix}properties${idx}type button`);
       input && input.focus();
     }, 500);
   }

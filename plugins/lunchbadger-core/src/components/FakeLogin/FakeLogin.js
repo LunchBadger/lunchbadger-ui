@@ -41,6 +41,7 @@ export default class FakeLogin extends PureComponent {
     }
     if (login !== '' && isStorageSupported) {
       localStorage.setItem('fakeLogin', login);
+      localStorage.setItem('preferred_username', password);
       document.location.reload();
     }
   }

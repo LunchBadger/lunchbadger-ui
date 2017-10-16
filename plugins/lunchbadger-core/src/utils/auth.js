@@ -88,6 +88,7 @@ export class DummyLoginManager {
       return Promise.resolve(false);
     }
     this.user.profile.sub = fakeLogin;
+    this.user.profile.preferred_username = localStorage.getItem('preferred_username');
     Config.apiUrlsReplacements(this.user.profile.sub);
     return Promise.resolve(this.user);
   }
@@ -99,6 +100,7 @@ export class DummyLoginManager {
   logout() {
     if (!isStorageSupported) return;
     localStorage.removeItem('fakeLogin');
+    localStorage.removeItem('preferred_username');
     document.location.reload();
   }
 }

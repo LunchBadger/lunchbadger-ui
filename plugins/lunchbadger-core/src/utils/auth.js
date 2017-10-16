@@ -1,6 +1,10 @@
 /*eslint no-console:0 */
+import React from 'react';
+import ReactDOM from 'react-dom';
 import {UserManager} from 'oidc-client';
+import FakeLogin from '../components/FakeLogin/FakeLogin';
 import Config from '../../../../src/config';
+import isStorageSupported from './isStorageSupported';
 
 export class LoginManager {
   constructor(config) {
@@ -61,6 +65,12 @@ export class LoginManager {
       window.localStorage.setItem('login_refresh_attempts', 0);
     }
   }
+
+  logout() {
+    this.um.removeUser().then(() => {
+      this.um.signinRedirect();
+    });
+  }
 }
 
 export class DummyLoginManager {
@@ -71,12 +81,25 @@ export class DummyLoginManager {
   }
 
   checkAuth() {
+    if (!isStorageSupported) return Promise.resolve(false);
+    const fakeLogin = localStorage.getItem('fakeLogin');
+    if (!fakeLogin) {
+      ReactDOM.render(<FakeLogin />, document.getElementById('app'));
+      return Promise.resolve(false);
+    }
+    this.user.profile.sub = fakeLogin;
     Config.apiUrlsReplacements(this.user.profile.sub);
     return Promise.resolve(this.user);
   }
 
   refreshLogin() {
     // Dummy login doesn't do this
+  }
+
+  logout() {
+    if (!isStorageSupported) return;
+    localStorage.removeItem('fakeLogin');
+    document.location.reload();
   }
 }
 

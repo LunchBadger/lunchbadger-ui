@@ -1,6 +1,6 @@
-import {clearServer, saveToServer} from '../reduxActions/project';
+import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
-import {iconDetails} from '../../../../src/icons';
+import {iconDetails, iconLogout} from '../../../../src/icons';
 
 export default {
   0: {
@@ -26,5 +26,14 @@ export default {
     icon: 'icon-icon-settings',
     panel:'SETTINGS_PANEL',
     action: togglePanel('SETTINGS_PANEL'),
+  },
+  11: {
+    svg: iconLogout,
+    action: logout(),
+    confirm: {
+      title: 'Logging out',
+      ok: 'Log out',
+      message: 'Are you sure, you want to log out from the workspace?',
+    },
   },
 };

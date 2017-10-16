@@ -20,6 +20,7 @@ import iconForklift from './icon-forklift.svg';
 import iconFunction from './icon-function.svg';
 import iconGateway from './icon-gateway.svg';
 import iconLeaf from './icon-leaf.svg';
+import iconLogout from './icon-logout.svg';
 import iconMicroservice from './icon-microservice.svg';
 import iconModel from './icon-model.svg';
 import iconMouse from './icon-mouse.svg';
@@ -54,6 +55,7 @@ export {
   iconFunction,
   iconGateway,
   iconLeaf,
+  iconLogout,
   iconMicroservice,
   iconModel,
   iconMouse,

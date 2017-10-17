@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // import {connect} from 'react-redux';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
+import predefinedRests from '../../utils/predefinedRests';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
@@ -76,12 +77,32 @@ class DataSource extends Component {
 
   renderMainProperties = () => {
     const {
-      entity: {isWithPort, isRest, isSoap, isEthereum, isSalesforce, isMemory, isTritonObjectStorage},
+      entity: {
+        isWithPort,
+        isRest,
+        isSoap,
+        isEthereum,
+        isSalesforce,
+        isMemory,
+        isTritonObjectStorage,
+        predefined,
+      },
       entityDevelopment,
       onResetField,
     } = this.props;
     if (isMemory) return null;
     const mainProperties = [];
+    if (isRest) {
+      mainProperties.push({
+        name: 'predefined',
+        title: 'Predefined settings',
+        value: predefined,
+        options: [
+          {label: 'Custom', value: 'custom'},
+          ...Object.keys(predefinedRests).map(value => ({label: predefinedRests[value].label, value})),
+        ],
+      });
+    };
     if (isWithPort) {
       mainProperties.push(this.getMainProperty('host'));
       mainProperties.push(this.getMainProperty('port'));

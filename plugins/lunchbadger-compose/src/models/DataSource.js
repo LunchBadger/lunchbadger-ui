@@ -1,4 +1,5 @@
 import {update, remove} from '../reduxActions/dataSources';
+import predefinedRests from '../utils/predefinedRests';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -18,6 +19,7 @@ export default class DataSource extends BaseModel {
   _keyId = '';
   _password = '';
   _type = '';
+  predefined = 'custom';
 
   constructor(id, name, connector) {
     super(id);
@@ -63,7 +65,12 @@ export default class DataSource extends BaseModel {
       delete json.database;
       delete json.username;
       delete json.password;
-      json.operations = this.operations;
+      json.predefined = this.predefined;
+      if (json.predefined === 'custom') {
+        json.operations = this.operations;
+      } else {
+        json.operations = predefinedRests[json.predefined].operations;
+      }
     }
     if (this.isSoap || this.isEthereum) {
       delete json.database;

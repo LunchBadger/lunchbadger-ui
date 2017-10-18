@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // import {connect} from 'react-redux';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
-import predefinedRests from '../../utils/predefinedRests';
+import Rest from './Subelements/Rest';
+import './Rest.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
@@ -12,11 +13,21 @@ class DataSource extends Component {
     entity: PropTypes.object.isRequired,
   };
 
+  processModel = model => this.props.entity.processModel(model);
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value, evt);
     }
-  }
+  };
+
+  discardChanges = callback => {
+    if (this.restRef) {
+      this.restRef.onStoreUpdate(callback);
+    } else {
+      callback();
+    }
+  };
 
   renderPorts() {
     return this.props.entity.ports.map((port) => {
@@ -60,20 +71,7 @@ class DataSource extends Component {
       }
     }
     return prop;
-  }
-
-  getRedisUrlProperty = () => {
-    const {entity, validations: {data}} = this.props;
-    const prop = {
-      name: 'operations[0][template][url]',
-      modelName: 'baseUrl',
-      title: 'base url',
-      value: entity.operations[0].template.url.toString(),
-      invalid: data.baseUrl,
-      onBlur: this.handleFieldChange('baseUrl'),
-    };
-    return prop;
-  }
+  };
 
   renderMainProperties = () => {
     const {
@@ -85,31 +83,17 @@ class DataSource extends Component {
         isSalesforce,
         isMemory,
         isTritonObjectStorage,
-        predefined,
       },
       entityDevelopment,
       onResetField,
     } = this.props;
     if (isMemory) return null;
     const mainProperties = [];
-    if (isRest) {
-      mainProperties.push({
-        name: 'predefined',
-        title: 'Predefined settings',
-        value: predefined,
-        options: [
-          {label: 'Custom', value: 'custom'},
-          ...Object.keys(predefinedRests).map(value => ({label: predefinedRests[value].label, value})),
-        ],
-      });
-    };
     if (isWithPort) {
       mainProperties.push(this.getMainProperty('host'));
       mainProperties.push(this.getMainProperty('port'));
     } else {
-      if (isRest) {
-        mainProperties.push(this.getRedisUrlProperty());
-      } else if (!isSalesforce) {
+      if (!isSalesforce) {
         mainProperties.push(this.getMainProperty('url'));
       }
     }
@@ -130,20 +114,25 @@ class DataSource extends Component {
       mainProperties[idx].onResetField = onResetField;
     });
     return <EntityProperties properties={mainProperties} />;
-  }
+  };
 
   render() {
+    const {entity} = this.props;
+    const {isRest} = entity;
     return (
       <div>
         {this.renderPorts()}
-        {this.renderMainProperties()}
+        {isRest && (
+          <Rest
+            ref={r => this.restRef = r}
+            entity={entity}
+            plain
+          />
+        )}
+        {!isRest && this.renderMainProperties()}
       </div>
     );
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-// });
-
-// export default connect(null, mapDispatchToProps)(CanvasElement(DataSource));
 export default CanvasElement(DataSource);

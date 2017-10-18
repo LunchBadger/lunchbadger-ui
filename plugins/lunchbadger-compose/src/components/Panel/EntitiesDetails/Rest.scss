@@ -1,0 +1,12 @@
+.Rest {
+  &__options {
+    & > span {
+      display: inline-block;
+      vertical-align: middle;
+      width: 170px;
+    }
+  }
+  &__method .EntityProperty{
+    width: 135px !important;
+  }
+}

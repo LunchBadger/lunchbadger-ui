@@ -45,6 +45,8 @@ const editorCodeLanguages = {
 
 const detectEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
 
+const initialEditorCodeWidth = Math.floor(window.innerWidth * 0.75);
+
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
 //   {label: 'Number', value: 'number'},
@@ -113,7 +115,7 @@ class FunctionDetails extends PureComponent {
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
       editorCodeLanguage: detectEditorCodeLanguage(runtime),
       code,
-      editorCodeWidth: 700,
+      editorCodeWidth: initialEditorCodeWidth,
       editorCodeHeight: 350,
     };
   }
@@ -569,7 +571,7 @@ class FunctionDetails extends PureComponent {
     const maxWidth = window.innerWidth - 170;
     return (
       <ResizableBox
-        width={700}
+        width={initialEditorCodeWidth}
         height={350}
         minConstraints={[200, 100]}
         maxConstraints={[maxWidth, 2000]}

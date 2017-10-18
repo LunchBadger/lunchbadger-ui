@@ -5402,6 +5402,11 @@
         }
       }
     },
+    "react-draggable": {
+      "version": "3.0.3",
+      "from": "react-draggable@>=2.2.6 <3.0.0||>=3.0.3 <4.0.0",
+      "resolved": "https://registry.npmjs.org/react-draggable/-/react-draggable-3.0.3.tgz"
+    },
     "react-event-listener": {
       "version": "0.4.5",
       "from": "react-event-listener@>=0.4.5 <0.5.0",
@@ -5509,6 +5514,11 @@
       "version": "4.4.7",
       "from": "react-redux@4.4.7",
       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-4.4.7.tgz"
+    },
+    "react-resizable": {
+      "version": "1.7.5",
+      "from": "react-resizable@latest",
+      "resolved": "https://registry.npmjs.org/react-resizable/-/react-resizable-1.7.5.tgz"
     },
     "react-simple-di": {
       "version": "1.2.0",

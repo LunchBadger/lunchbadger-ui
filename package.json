@@ -118,6 +118,7 @@
     "react-modal-dialog": "^3.0.2",
     "react-notify-toast": "^0.1.2",
     "react-redux": "^4.4.7",
+    "react-resizable": "^1.7.5",
     "react-tap-event-plugin": "^2.0.1",
     "react-tooltip": "^2.0.3",
     "react-transition-group": "^1.2.0",

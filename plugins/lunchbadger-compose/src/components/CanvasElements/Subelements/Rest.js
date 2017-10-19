@@ -38,8 +38,8 @@ const transformParameters = (template, kind) => {
         value: template[kind][key],
         id: uuid.v4(),
       };
-      if (kind === 'functions' && item.value[0] && typeof item.value[0] === 'string') {
-        item.value = item.value.map(value => ({id: uuid.v4(), value}));
+      if (kind === 'functions') {
+        item.value = item.value.join(',');
       }
       return item;
     });
@@ -128,15 +128,26 @@ export default class Rest extends PureComponent {
     this.changeState({operations});
   };
 
-  handleAddParameter = (kind, idx) => () => {
+  handleAddParameter = (kind, operationIdx) => () => {
     const operations = transformOperations(this.state.operations);
-    operations[idx].template[kind].push({
+    operations[operationIdx].template[kind].push({
       id: uuid.v4(),
       key: '',
       value: '',
     });
     this.changeState({operations});
-  }
+    setTimeout(() => {
+      const idx = operations[operationIdx].template[kind].length - 1;
+      const input = document.getElementById(`operations[${operationIdx}][template][${kind}][${idx}][key]`);
+      input && input.focus();
+    });
+  };
+
+  checkParameterTabButton = (kind, operationIdx) => (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddParameter(kind, operationIdx)();
+    }
+  };
 
   handleRemoveParameter = (kind, operationIdx, idx) => () => {
     const operations = transformOperations(this.state.operations);
@@ -155,29 +166,25 @@ export default class Rest extends PureComponent {
     operations[operationIdx].functions.push({
       id: uuid.v4(),
       key: '',
-      value: [],
+      value: '',
     });
     this.changeState({operations});
+    setTimeout(() => {
+      const idx = operations[operationIdx].functions.length - 1;
+      const input = document.getElementById(`operations[${operationIdx}][functions][${idx}][key]`);
+      input && input.focus();
+    });
   };
+
+  checkFunctionsTabButton = operationIdx => (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddFunction(operationIdx)();
+    }
+  }
 
   handleRemoveFunction = (operationIdx, functionIdx) => () => {
     const operations = transformOperations(this.state.operations);
     operations[operationIdx].functions.splice(functionIdx, 1);
-    this.changeState({operations});
-  };
-
-  handleAddFunctionParameter = (operationIdx, functionIdx) => () => {
-    const operations = transformOperations(this.state.operations);
-    operations[operationIdx].functions[functionIdx].value.push({
-      id: uuid.v4(),
-      value: '',
-    });
-    this.changeState({operations});
-  };
-
-  handleRemoveFunctionParameter = (operationIdx, functionIdx, parameterIdx) => () => {
-    const operations = transformOperations(this.state.operations);
-    operations[operationIdx].functions[functionIdx].value.splice(parameterIdx, 1);
     this.changeState({operations});
   };
 
@@ -189,7 +196,18 @@ export default class Rest extends PureComponent {
       value: '',
     });
     this.changeState({options});
+    setTimeout(() => {
+      const idx = options.headers.length - 1;
+      const input = document.getElementById(`options[headers][params][${idx}][key]`);
+      input && input.focus();
+    });
   };
+
+  checkOptionHeadersParameterTabButton = (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddOptionsHeadersParameter();
+    }
+  }
 
   handleUpdateOptionsHeadersParameter = (idx, param) => ({target: {value}}) => {
     const options = transformOptions(this.state.options);
@@ -239,9 +257,9 @@ export default class Rest extends PureComponent {
     this.changeState({options});
   };
 
-  handleUpdateFunctionParameter = (operationIdx, functionIdx, idx) => ({target: {value}}) => {
+  handleUpdateFunctionParameter = (operationIdx, functionIdx, param) => ({target: {value}}) => {
     const operations = transformOperations(this.state.operations);
-    operations[operationIdx].functions[functionIdx].value[idx].value = value;
+    operations[operationIdx].functions[functionIdx][param] = value;
     this.changeState({operations});
   }
 
@@ -268,6 +286,7 @@ export default class Rest extends PureComponent {
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
     const centers = [false, false, false];
+    const paramsSize = headers.length - 1;
     const data = headers.map(({key, value}, idx) => ([
       <Input
         name={`options[headers][params][${idx}][key]`}
@@ -284,6 +303,7 @@ export default class Rest extends PureComponent {
         fullWidth
         hideUnderline
         handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'value')}
+        handleKeyDown={idx === paramsSize ? this.checkOptionHeadersParameterTabButton : undefined}
       />,
       <IconButton icon="iconDelete" onClick={this.handleRemoveOptionsHeadersParameter(idx)} />,
     ]));
@@ -347,6 +367,7 @@ export default class Rest extends PureComponent {
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
     const centers = [false, false, false];
+    const paramsSize = params.length - 1;
     const data = params.map(({key, value}, idx) => ([
       <Input
         name={`operations[${operationIdx}][template][${kind}][${idx}][key]`}
@@ -363,6 +384,7 @@ export default class Rest extends PureComponent {
         fullWidth
         hideUnderline
         handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'value')}
+        handleKeyDown={idx === paramsSize ? this.checkParameterTabButton(kind, operationIdx) : undefined}
       />,
       <IconButton icon="iconDelete" onClick={this.handleRemoveParameter(kind, operationIdx, idx)} />,
     ]));
@@ -375,33 +397,35 @@ export default class Rest extends PureComponent {
     />;
   };
 
-  renderFunctionField = (key, operationIdx, idx) => (
-    <EntityProperty
-      name={`operations[${operationIdx}][functions][${idx}][key]`}
-      value={key}
-      placeholder=" "
-    />
-  );
-
-  renderFunctionParameters = (value, operationIdx, functionIdx) => {
+  renderFunctions = (functions, operationIdx) => {
     const columns = [
-      'Function parameters',
-      <IconButton name="add__xxx" icon="iconPlus" onClick={this.handleAddFunctionParameter(operationIdx, functionIdx)} />,
+      'Function name',
+      'Function parameters (comma separated)',
+      <IconButton icon="iconPlus" onClick={this.handleAddFunction(operationIdx)} />,
     ];
-    const widths = [undefined, 70];
-    const paddings = [true, false];
-    const centers = [false, false];
-    const data = value.map((item, idx) => ([
+    const widths = [300, undefined, 70];
+    const paddings = [true, true, false];
+    const centers = [false, false, false];
+    const paramsSize = functions.length - 1;
+    const data = functions.map(({key, value}, idx) => ([
       <Input
-        key={item.id}
-        name={`operations[${operationIdx}][functions][${functionIdx}][value][${idx}]`}
-        value={item.value}
+        name={`operations[${operationIdx}][functions][${idx}][key]`}
+        value={key}
         underlineStyle={{bottom: 0}}
         fullWidth
         hideUnderline
-        handleBlur={this.handleUpdateFunctionParameter(operationIdx, functionIdx, idx)}
+        handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'key')}
       />,
-      <IconButton name="remove__xxx" icon="iconDelete" onClick={this.handleRemoveFunctionParameter(operationIdx, functionIdx, idx)} />,
+      <Input
+        name={`operations[${operationIdx}][functions][${idx}][value]`}
+        value={value}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'value')}
+        handleKeyDown={idx === paramsSize ? this.checkFunctionsTabButton(operationIdx) : undefined}
+      />,
+      <IconButton icon="iconDelete" onClick={this.handleRemoveFunction(operationIdx, idx)} />,
     ]));
     return <Table
       columns={columns}
@@ -410,22 +434,6 @@ export default class Rest extends PureComponent {
       paddings={paddings}
       centers={centers}
     />;
-  };
-
-  renderFunctions = (functions, operationIdx) => {
-    return (
-      <div>
-        {functions.map((func, idx) => (
-          <CollapsibleProperties
-            key={func.id}
-            bar={this.renderFunctionField(func.key, operationIdx, idx)}
-            collapsible={this.renderFunctionParameters(func.value, operationIdx, idx)}
-            button={<IconButton icon="iconDelete" onClick={this.handleRemoveFunction(operationIdx, idx)} />}
-            defaultOpened
-          />
-        ))}
-      </div>
-    );
   };
 
   renderTemplateOptions = (options, operationIdx) => {
@@ -507,7 +515,6 @@ export default class Rest extends PureComponent {
           <CollapsibleProperties
             bar={<EntityPropertyLabel>Functions</EntityPropertyLabel>}
             collapsible={this.renderFunctions(operation.functions, idx)}
-            button={<IconButton icon="iconPlus" onClick={this.handleAddFunction(idx)} />}
             defaultOpened
             barToggable
           />

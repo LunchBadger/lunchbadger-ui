@@ -128,15 +128,26 @@ export default class Rest extends PureComponent {
     this.changeState({operations});
   };
 
-  handleAddParameter = (kind, idx) => () => {
+  handleAddParameter = (kind, operationIdx) => () => {
     const operations = transformOperations(this.state.operations);
-    operations[idx].template[kind].push({
+    operations[operationIdx].template[kind].push({
       id: uuid.v4(),
       key: '',
       value: '',
     });
     this.changeState({operations});
-  }
+    setTimeout(() => {
+      const idx = operations[operationIdx].template[kind].length - 1;
+      const input = document.getElementById(`operations[${operationIdx}][template][${kind}][${idx}][key]`);
+      input && input.focus();
+    });
+  };
+
+  checkParameterTabButton = (kind, operationIdx) => (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddParameter(kind, operationIdx)();
+    }
+  };
 
   handleRemoveParameter = (kind, operationIdx, idx) => () => {
     const operations = transformOperations(this.state.operations);
@@ -189,7 +200,18 @@ export default class Rest extends PureComponent {
       value: '',
     });
     this.changeState({options});
+    setTimeout(() => {
+      const idx = options.headers.length - 1;
+      const input = document.getElementById(`options[headers][params][${idx}][key]`);
+      input && input.focus();
+    });
   };
+
+  checkOptionHeadersParameterTabButton = (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddOptionsHeadersParameter();
+    }
+  }
 
   handleUpdateOptionsHeadersParameter = (idx, param) => ({target: {value}}) => {
     const options = transformOptions(this.state.options);
@@ -268,6 +290,7 @@ export default class Rest extends PureComponent {
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
     const centers = [false, false, false];
+    const paramsSize = headers.length - 1;
     const data = headers.map(({key, value}, idx) => ([
       <Input
         name={`options[headers][params][${idx}][key]`}
@@ -284,6 +307,7 @@ export default class Rest extends PureComponent {
         fullWidth
         hideUnderline
         handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'value')}
+        handleKeyDown={idx === paramsSize ? this.checkOptionHeadersParameterTabButton : undefined}
       />,
       <IconButton icon="iconDelete" onClick={this.handleRemoveOptionsHeadersParameter(idx)} />,
     ]));
@@ -347,6 +371,7 @@ export default class Rest extends PureComponent {
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
     const centers = [false, false, false];
+    const paramsSize = params.length - 1;
     const data = params.map(({key, value}, idx) => ([
       <Input
         name={`operations[${operationIdx}][template][${kind}][${idx}][key]`}
@@ -363,6 +388,7 @@ export default class Rest extends PureComponent {
         fullWidth
         hideUnderline
         handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'value')}
+        handleKeyDown={idx === paramsSize ? this.checkParameterTabButton(kind, operationIdx) : undefined}
       />,
       <IconButton icon="iconDelete" onClick={this.handleRemoveParameter(kind, operationIdx, idx)} />,
     ]));

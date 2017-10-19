@@ -12,7 +12,7 @@ import {
 class PolicyProxyActionPair extends PureComponent {
   render() {
     const {pair: {id, action: {parameters}}, namePrefix, serviceEndpointOptions} = this.props;
-    const serviceEndpoint = (parameters.find(p => p.name === 'serviceEndpoint') || serviceEndpointOptions[0]).value;
+    const serviceEndpoint = (parameters.find(p => p.name === 'serviceEndpoint') || serviceEndpointOptions[0] || {value: ''}).value;
     const changeOrigin = (parameters.find(p => p.name === 'changeOrigin') || {value: 'true'}).value.toString() === 'true';
     const changeOriginOptions = [false, true].map(value => ({label: value.toString(), value}));
     const columns = [

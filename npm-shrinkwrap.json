@@ -1779,6 +1779,11 @@
       "resolved": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.6.tgz",
       "dev": true
     },
+    "copy-to-clipboard": {
+      "version": "3.0.8",
+      "from": "copy-to-clipboard@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.0.8.tgz"
+    },
     "copyfiles": {
       "version": "0.2.2",
       "from": "copyfiles@>=0.2.1 <0.3.0",
@@ -5312,6 +5317,11 @@
       "resolved": "https://registry.npmjs.org/react-color/-/react-color-2.11.7.tgz",
       "dev": true
     },
+    "react-copy-to-clipboard": {
+      "version": "5.0.1",
+      "from": "react-copy-to-clipboard@latest",
+      "resolved": "https://registry.npmjs.org/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.1.tgz"
+    },
     "react-datepicker": {
       "version": "0.27.0",
       "from": "react-datepicker@>=0.27.0 <0.28.0",
@@ -6508,6 +6518,11 @@
       "from": "to-iso-string@0.0.2",
       "resolved": "https://registry.npmjs.org/to-iso-string/-/to-iso-string-0.0.2.tgz",
       "dev": true
+    },
+    "toggle-selection": {
+      "version": "1.0.6",
+      "from": "toggle-selection@>=1.0.3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/toggle-selection/-/toggle-selection-1.0.6.tgz"
     },
     "tough-cookie": {
       "version": "2.2.2",

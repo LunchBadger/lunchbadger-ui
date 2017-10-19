@@ -299,13 +299,11 @@ export default class DataSource extends BaseModel {
         data.operations = undefined;
       } else {
         data.operations.forEach((operation) => {
-          const functions = operation.functions || [];
-          operation.functions = {};
-          functions.forEach(({key, value}) => {
-            if (key.trim() !== '') {
-              operation.functions[key.trim()] = value.filter(item => item.trim() !== '');
-            }
-          });
+          if (!operation.template.options.enabled) {
+            operation.template.options = undefined;
+          } else {
+            delete operation.template.options.enabled;
+          }
           const headers = operation.template.headers || [];
           operation.template.headers = {};
           headers.forEach(({key, value}) => {
@@ -320,11 +318,13 @@ export default class DataSource extends BaseModel {
               operation.template.query[key.trim()] = value;
             }
           });
-          if (!operation.template.options.enabled) {
-            operation.template.options = undefined;
-          } else {
-            delete operation.template.options.enabled;
-          }
+          const functions = operation.functions || [];
+          operation.functions = {};
+          functions.forEach(({key, value}) => {
+            if (key.trim() !== '') {
+              operation.functions[key.trim()] = value.split(',').map(i => i.trim()).filter(i => i !== '');
+            }
+          });
         });
       }
     }

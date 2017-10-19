@@ -28,6 +28,7 @@ export default {
           'content-type': 'application/json',
         },
         query: {
+          key: '',
           address: '{street},{city},{zipcode}',
           sensor: '{sensor=false}',
         },
@@ -49,8 +50,8 @@ export default {
           'content-type': 'application/json',
         },
         query: {
-          latlng: '{lat},{long}',
           key: '',
+          latlng: '{lat},{long}',
         },
         responsePath: '$.results[0].formatted_address',
       },

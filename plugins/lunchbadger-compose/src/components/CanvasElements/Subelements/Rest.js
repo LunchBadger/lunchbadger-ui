@@ -385,7 +385,7 @@ export default class Rest extends PureComponent {
 
   renderFunctionParameters = (value, operationIdx, functionIdx) => {
     const columns = [
-      'Function parameter',
+      'Function parameters',
       <IconButton name="add__xxx" icon="iconPlus" onClick={this.handleAddFunctionParameter(operationIdx, functionIdx)} />,
     ];
     const widths = [undefined, 70];
@@ -536,7 +536,7 @@ export default class Rest extends PureComponent {
       </div>
     );
     return (
-      <div className={cs('Rest', {plain})}>
+      <div className={cs('Rest', {plain, notPlain: !plain})}>
         <div className="Rest__predefined">
           <EntityProperty
             name="predefined"

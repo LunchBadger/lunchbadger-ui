@@ -129,15 +129,17 @@ class Canvas extends Component {
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       if ((source.parentElement.classList.contains('port-Function') && target.parentElement.classList.contains('port-Model')) ||
         (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function'))) {
+        if (source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) {
+          return false;
+        }
         return true;
       }
       return false;
     }
     // Only one connection between two entities is allowed.
-    // if (Connection.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 || // FIXME
-    //     Connection.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0) {
-    //   return false;
-    // }
+    if (Connections.connectionExists(sourceId, targetId)) {
+      return false;
+    }
     return true;
   }
 

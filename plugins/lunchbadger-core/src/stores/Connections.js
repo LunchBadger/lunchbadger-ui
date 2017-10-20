@@ -83,6 +83,11 @@ class Connections {
     });
   }
 
+  connectionExists(sourceId, targetId) {
+    return this.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 ||
+      this.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0;
+  }
+
   isFromTo(fromId, toId) {
     return this.findEntityIndexBySourceAndTarget(fromId, toId) > -1;
   }

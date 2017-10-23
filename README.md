@@ -55,7 +55,7 @@ the following steps:
   * `npm install`.
   * `npm start`
 
-2. Check out [lunchbadger](../../../../LunchBadger/configstore). This server will serve the
+2. Check out [lunchbadger](../../../../LunchBadger/lunchbadger). This server will serve the
    forecast data.
 
   * `npm install`

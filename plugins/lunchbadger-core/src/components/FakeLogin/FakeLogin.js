@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import {Form, EntityProperty, Button} from '../../../../lunchbadger-ui/src/';
 import isStorageSupported from '../../utils/isStorageSupported';
 import messages from '../../utils/messages';
+import envs from '../../utils/fakeLoginEnvs';
 import './FakeLogin.scss';
 
 const muiTheme = getMuiTheme({
@@ -37,6 +38,10 @@ export default class FakeLogin extends PureComponent {
       if (login === '') state.login = messages.fieldCannotBeEmpty;
       if (password === '') state.password = messages.fieldCannotBeEmpty;
       this.setState(state);
+      return;
+    }
+    if (!envs.includes(login)) {
+      this.setState({login: 'Login or password is incorrect'});
       return;
     }
     if (login !== '' && isStorageSupported) {

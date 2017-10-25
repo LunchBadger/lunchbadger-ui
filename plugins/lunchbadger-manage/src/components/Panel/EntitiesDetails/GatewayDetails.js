@@ -9,6 +9,7 @@ import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import PolicyProxyActionPair from './PolicyProxyActionPair';
+import GatewayPolicyCAPair from './GatewayPolicyCAPair';
 
 import {
   EntityProperty,
@@ -282,35 +283,60 @@ class GatewayDetails extends PureComponent {
     );
   };
 
+  renderCAPairs = (policy, pipelineIdx, policyIdx) => {
+    const {conditionAction} = policy;
+    const {length} = conditionAction;
+    return (
+      <div>
+        {conditionAction.map((pair, idx) => (
+          <GatewayPolicyCAPair
+            key={pair.id}
+            pairIdx={idx}
+            onRemoveCAPair={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+            onReorderCAPairUp={idx === 0 ? undefined : this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+            onReorderCAPairDown={idx === length - 1 ? undefined : this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+            onAddParameter={this.addParameter}
+            onRemoveParameter={this.removeParameter}
+            onParameterTab={this.handleParametersTab}
+            pipelineIdx={pipelineIdx}
+            policyIdx={policyIdx}
+            pair={pair}
+          />
+        ))}
+      </div>
+    );
+  }
+
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
-    const collapsible = policy.conditionAction.map((pair, idx) => (
-      <CollapsibleProperties
-        key={pair.id}
-        bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
-        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
-        button={(
-          <span>
-            <IconButton
-              icon="iconDelete"
-              onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-            />
-            <IconButton
-              icon="iconArrowDown"
-              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-              disabled={idx === policy.conditionAction.length - 1}
-            />
-            <IconButton
-              icon="iconArrowUp"
-              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-              disabled={idx === 0}
-            />
-          </span>
-        )}
-        barToggable
-        defaultOpened
-        space="10px 0"
-      />
-    ));
+    const collapsible = this.renderCAPairs(policy, pipelineIdx, policyIdx);
+    // const collapsible = policy.conditionAction.map((pair, idx) => (
+    //   <CollapsibleProperties
+    //     key={pair.id}
+    //     bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
+    //     collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
+    //     button={(
+    //       <span>
+    //         <IconButton
+    //           icon="iconDelete"
+    //           onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+    //         />
+    //         <IconButton
+    //           icon="iconArrowDown"
+    //           onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+    //           disabled={idx === policy.conditionAction.length - 1}
+    //         />
+    //         <IconButton
+    //           icon="iconArrowUp"
+    //           onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+    //           disabled={idx === 0}
+    //         />
+    //       </span>
+    //     )}
+    //     barToggable
+    //     defaultOpened
+    //     space="10px 0"
+    //   />
+    // ));
     let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
     if (policy.name === GATEWAY_POLICIES.PROXY) {
       const state = this.context.store.getState();

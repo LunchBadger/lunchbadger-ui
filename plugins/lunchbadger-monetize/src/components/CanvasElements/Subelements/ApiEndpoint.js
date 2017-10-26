@@ -4,11 +4,12 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
-import classNames from 'classnames';
+import {EntityProperty, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './ApiEndpoint.scss';
 
 const Port = LunchBadgerCore.components.Port;
-const {coreActions} = LunchBadgerCore.utils;
+const {ApiEndpointComponent} = LunchBadgerManage.components;
 
 const boxSource = {
   beginDrag(props) {
@@ -33,7 +34,7 @@ const boxSource = {
   isDragging: monitor.isDragging()
 }))
 
-class ApiEndpoint extends Component {
+class SubApiEndpoint extends Component {
   static propTypes = {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
@@ -46,17 +47,13 @@ class ApiEndpoint extends Component {
     handleEndDrag: PropTypes.func,
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   renderPorts() {
     return this.props.entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
           way={port.portType}
-          middle={true}
+          middle
           elementId={port.id}
           scope={port.portGroup}
         />
@@ -65,26 +62,52 @@ class ApiEndpoint extends Component {
   }
 
   handleClick = () => {
-    const {parent, entity} = this.props;
-    this.context.store.dispatch(coreActions.toggleSubelement(parent, entity));
+    const {parent, entity, dispatch} = this.props;
+    setTimeout(() => dispatch(toggleSubelement(parent, entity)));
   }
 
   render() {
-    const {connectDragSource, currentlySelectedSubelements} = this.props;
-    const elementClass = classNames('api-endpoint', {
-      'api-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
-    });
+    const {
+      connectDragSource,
+      currentlySelectedSubelements,
+      entity,
+      index,
+      id,
+      validations,
+      handleDeleteApiEndpoint,
+    } = this.props;
     return connectDragSource(
-      <div className={elementClass} onClick={this.handleClick}>
+      <div className="SubApiEndpoint">
         {this.renderPorts()}
-        <div className="api-endpoint__info">
-          <div className="api-endpoint__icon">
-            <i className="fa fa-globe"/>
-          </div>
-          <div className="api-endpoint__name">
-            {this.props.entity.name}
-          </div>
-        </div>
+        <CollapsibleProperties
+          ref={(r) => {this.collapsiblePropertiesDOM = r;}}
+          bar={
+            <EntityProperty
+              name={`apiEndpoints[${index}][name]`}
+              value={entity.name}
+              hiddenInputs={[
+                {name: `apiEndpoints[${index}][id]`, value: entity.id},
+                {name: `apiEndpoints[${index}][itemOrder]`, value: entity.itemOrder}
+              ]}
+              onViewModeClick={this.toggleCollapsibleProperties}
+              onClick={this.handleClick}
+              selected={!!_.find(currentlySelectedSubelements, {id})}
+              onChange={this.handleNameChange}
+              invalid={validations.data.name || ''}
+              onDelete={handleDeleteApiEndpoint(entity.id)}
+            />
+          }
+          collapsible={
+            <ApiEndpointComponent
+              ref="apiEndpoint"
+              entity={entity}
+              nested
+              index={index}
+              validationsForced={validations}
+            />
+          }
+          defaultOpened
+        />
       </div>
     );
   }
@@ -94,9 +117,15 @@ const selector = createSelector(
   state => state.states.currentlySelectedParent,
   state => state.states.currentlySelectedSubelements,
   state => !!state.states.currentEditElement,
-  (currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement) => ({
-    currentlySelectedParent, currentlySelectedSubelements, isCurrentEditElement
+  (
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
+  ) => ({
+    currentlySelectedParent,
+    currentlySelectedSubelements,
+    isCurrentEditElement,
   }),
 );
 
-export default connect(selector)(ApiEndpoint);
+export default connect(selector, null, null, {withRef: true})(SubApiEndpoint);

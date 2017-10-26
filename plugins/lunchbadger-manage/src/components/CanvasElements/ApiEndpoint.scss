@@ -1,6 +1,13 @@
 .ApiEndpoint {
   .EntitySubElements {
-    margin: 0 -10px;
+    margin-left: -10px;
+    margin-top: -10px;
+    &__elements {
+      margin: 0 15px 0 25px;
+    }
+    &__title {
+      margin-right: 15px;
+    }
     .EntityProperty {
       width: calc(100% - 25px);
       margin-left: 3px;
@@ -13,8 +20,12 @@
       }
     }
   }
-  .EntitySubElements__elements {
-    padding: 0 24px;
+  &.nested {
+    margin-top: -15px;
+    .EntitySubElements {
+      border-top: none;
+      margin-top: -20px;
+    }
   }
 }
 

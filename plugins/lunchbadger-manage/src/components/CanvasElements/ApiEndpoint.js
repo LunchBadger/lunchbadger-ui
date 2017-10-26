@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import cs from 'classnames';
 import _ from 'lodash';
+import ApiEndpointPath from './Subelements/ApiEndpointPath';
 import {
   EntityProperties,
   EntityProperty,
@@ -53,7 +54,7 @@ class ApiEndpoint extends Component {
 
   // onPathChange = event => this.setState({path: event.target.value});
 
-  handlePathTab = idx => () => {
+  handlePathTab = idx => {
     const size = this.state.paths.length;
     if (size - 1 === idx) {
       this.addPath();
@@ -71,7 +72,7 @@ class ApiEndpoint extends Component {
     });
   }
 
-  removePath = idx => () => {
+  removePath = idx => {
     const paths = _.cloneDeep(this.state.paths);
     paths.splice(idx, 1);
     this.changeState({paths});
@@ -101,13 +102,13 @@ class ApiEndpoint extends Component {
         {paths.map((path, idx) => {
           const name = nested ? `apiEndpoints[${index}][paths][${idx}]` : `paths[${idx}]`;
           return (
-            <EntityProperty
+            <ApiEndpointPath
               key={idx}
-              placeholder="Enter path here"
+              idx={idx}
               name={name}
-              value={path}
-              onDelete={this.removePath(idx)}
-              onTab={this.handlePathTab(idx)}
+              path={path}
+              onRemovePath={this.removePath}
+              onPathTab={this.handlePathTab}
             />
           );
         })}

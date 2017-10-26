@@ -27,13 +27,13 @@ class API extends Component {
       bundledItem: null,
       apiEndpoints: props.entity.apiEndpoints,
     };
-    this.onStoreUpdate = (props = this.props, callback) => this.setState({apiEndpoints: props.entity.apiEndpoints}, callback);
+    this.onPropsUpdate = (props = this.props, callback) => this.setState({apiEndpoints: props.entity.apiEndpoints}, callback);
     this.apiEndpointsRefs = {};
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -49,16 +49,13 @@ class API extends Component {
 
   processModel = model => {
     if (!model.apiEndpoints) model.apiEndpoints = [];
-    model.apiEndpoints.forEach(({id}, idx) => {
-      model.apiEndpoints[idx] = this.getSubApiEndpoint(id).processModel(model.apiEndpoints[idx]);
-    });
-    console.log(model);
+    model.apiEndpoints = model.apiEndpoints.map(({id}, idx) => this.getSubApiEndpoint(id).processModel(model.apiEndpoints[idx]));
     return model;
   }
 
   handleDeleteApiEndpoint = id => () => this.setState({apiEndpoints: this.state.apiEndpoints.filter((item) => item.id !== id)});
 
-  discardChanges = callback => this.onStoreUpdate(this.props, () => {
+  discardChanges = callback => this.onPropsUpdate(this.props, () => {
     this.state.apiEndpoints.forEach(({id}) => this.getSubApiEndpoint(id).discardChanges());
     callback && callback();
   });

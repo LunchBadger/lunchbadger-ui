@@ -67,10 +67,6 @@ class SubApiEndpoint extends Component {
   }
 
   render() {
-    // const {connectDragSource, currentlySelectedSubelements} = this.props;
-    // const elementClass = cs('api-endpoint', {
-    //   'api-endpoint--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
-    // });
     const {
       connectDragSource,
       currentlySelectedSubelements,
@@ -114,19 +110,6 @@ class SubApiEndpoint extends Component {
         />
       </div>
     );
-    // return connectDragSource(
-    //   <div className={elementClass} onClick={this.handleClick}>
-    //     {this.renderPorts()}
-    //     <div className="api-endpoint__info">
-    //       <div className="api-endpoint__icon">
-    //         <i className="fa fa-globe"/>
-    //       </div>
-    //       <div className="api-endpoint__name">
-    //         {this.props.entity.name}
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
   }
 }
 

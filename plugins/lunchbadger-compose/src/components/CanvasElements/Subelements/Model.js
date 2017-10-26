@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
-import classNames from 'classnames';
 import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import {EntityProperty, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
 import Model from '../Model';
@@ -54,7 +53,7 @@ class SubModel extends PureComponent {
         <Port
           key={`port-${port.portType}-${port.id}`}
           way={port.portType}
-          middle={true}
+          middle
           elementId={port.id}
           scope={port.portGroup}
         />
@@ -75,7 +74,15 @@ class SubModel extends PureComponent {
     .updateName(event);
 
   render() {
-    const {connectDragSource, currentlySelectedSubelements, entity, index, id, validations, handleDeleteModel} = this.props;
+    const {
+      connectDragSource,
+      currentlySelectedSubelements,
+      entity,
+      index,
+      id,
+      validations,
+      handleDeleteModel,
+    } = this.props;
     return connectDragSource(
       <div className="SubModel">
         {this.renderPorts()}

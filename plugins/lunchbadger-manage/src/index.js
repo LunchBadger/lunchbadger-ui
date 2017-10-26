@@ -1,7 +1,6 @@
 import {actions} from './reduxActions/actions';
 import ApiEndpoint from './models/ApiEndpoint';
-
-// import {registerPlugin} from '../../../src/reducers';
+import ApiEndpointComponent from './components/CanvasElements/ApiEndpoint';
 import reducers from './reducers';
 import plugs from './plugs';
 
@@ -11,6 +10,9 @@ registerPlugin(reducers, plugs);
 const LunchBadgerManage = {
   models: {
     ApiEndpoint,
+  },
+  components: {
+    ApiEndpointComponent,
   },
   utils: {
     actions,

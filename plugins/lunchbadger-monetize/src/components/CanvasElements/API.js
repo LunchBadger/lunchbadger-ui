@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import ApiEndpoint from './Subelements/ApiEndpoint';
 import Plan from './Subelements/Plan';
-import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
+import ApiEndpointComponent from './Subelements/ApiEndpoint';
+import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
 import './API.scss';
 
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
+const {TwoOptionModal, CanvasElement, DraggableGroup, ElementsBundler} = LunchBadgerCore.components;
 
 class API extends Component {
   static propTypes = {
@@ -27,33 +24,68 @@ class API extends Component {
     this.previousConnection = null;
     this.state = {
       isShowingModal: false,
-      bundledItem: null
+      bundledItem: null,
+      apiEndpoints: props.entity.apiEndpoints,
+    };
+    this.onPropsUpdate = (props = this.props, callback) => this.setState({apiEndpoints: props.entity.apiEndpoints}, callback);
+    this.apiEndpointsRefs = {};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.entity !== this.props.entity) {
+      this.onPropsUpdate(nextProps);
     }
   }
 
-  componentDidMount() {
-    // this.props.paper.bind('connectionDetached', (info) => {
-    //   this.previousConnection = info;
-    // });
+  getSubApiEndpoint = id => this.apiEndpointsRefs[id]
+    .getWrappedInstance()
+    .getDecoratedComponentInstance()
+    .refs
+    .apiEndpoint
+    .getWrappedInstance()
+    .getDecoratedComponentInstance()
+    .getDecoratedComponentInstance()
+    .element;
+
+  processModel = model => {
+    if (!model.apiEndpoints) model.apiEndpoints = [];
+    model.apiEndpoints = model.apiEndpoints.map(({id}, idx) => this.getSubApiEndpoint(id).processModel(model.apiEndpoints[idx]));
+    return model;
   }
+
+  handleDeleteApiEndpoint = id => () => this.setState({apiEndpoints: this.state.apiEndpoints.filter((item) => item.id !== id)});
+
+  discardChanges = callback => this.onPropsUpdate(this.props, () => {
+    this.state.apiEndpoints.forEach(({id}) => this.getSubApiEndpoint(id).discardChanges());
+    callback && callback();
+  });
 
   renderPlans = () => {
     return this.props.entity.plans.map(plan => <Plan key={plan.id} entity={plan} />);
   }
 
   renderEndpoints = () => {
-    return this.props.entity.apiEndpoints.map((api) => (
-      <ApiEndpoint
-        key={api.id}
-        parent={this.props.entity}
-        id={api.id}
-        entity={api}
-        left={api.left || 0}
-        top={api.top || 0}
-        handleEndDrag={(item) => this._handleEndDrag(item)}
-        hideSourceOnDrag={true}
-      />
-    ));
+    const {entity, validations: {data: {apiEndpoints: data = {}}}} = this.props;
+    const {apiEndpoints} = this.state;
+    return apiEndpoints.map((apiEndpoint, idx) => {
+      const validations = data[apiEndpoint.id] ? {data: data[apiEndpoint.id], isValid: false} : {data: {}, isValid: true};
+      return (
+        <ApiEndpointComponent
+          key={apiEndpoint.id}
+          parent={entity}
+          id={apiEndpoint.id}
+          entity={apiEndpoint}
+          left={apiEndpoint.left || 0}
+          top={apiEndpoint.top || 0}
+          handleEndDrag={(item) => this._handleEndDrag(item)}
+          hideSourceOnDrag
+          ref={r => this.apiEndpointsRefs[apiEndpoint.id] = r}
+          index={idx}
+          validations={validations}
+          handleDeleteApiEndpoint={this.handleDeleteApiEndpoint}
+        />
+      );
+    });
   }
 
   _handleEndDrag(item) {
@@ -86,9 +118,10 @@ class API extends Component {
   }
 
   render() {
+    const {entity, parent} = this.props;
     return (
       <div>
-        {this.props.entity.plans.length > 0 && (
+        {entity.plans.length > 0 && (
           <EntitySubElements
             title="Plans"
           >
@@ -102,7 +135,7 @@ class API extends Component {
           <div className="canvas-element__endpoints" ref="endpoints">
             <DraggableGroup
               iconClass="icon-icon-product"
-              entity={this.props.entity}
+              entity={entity}
             >
               {this.renderEndpoints()}
             </DraggableGroup>
@@ -111,14 +144,14 @@ class API extends Component {
             <ElementsBundler
               {...this.props}
               canDropCheck={
-                (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-                && !_.includes(this.props.entity.apiEndpoints, item.entity)
+                (item) => _.includes(entity.accept, item.entity.constructor.type)
+                && !_.includes(entity.apiEndpoints, item.entity)
               }
-              onAddCheck={(item) => !_.includes(this.props.entity.apiEndpoints, item.entity)}
+              onAddCheck={(item) => !_.includes(entity.apiEndpoints, item.entity)}
               onAdd={this.bundle}
               onMove={this.rebundle}
-              parent={this.props.parent}
-              entity={this.props.entity}
+              parent={parent}
+              entity={entity}
             />
           </div>
         </EntitySubElements>

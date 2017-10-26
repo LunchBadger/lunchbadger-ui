@@ -5,14 +5,10 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelComponent from './Subelements/Model';
-import Model from '../../models/Model';
 import {bundle, unbundle, rebundle} from '../../reduxActions/models';
 import './Microservice.scss';
 
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
+const {CanvasElement, DraggableGroup, ElementsBundler, TwoOptionModal} = LunchBadgerCore.components;
 
 class Microservice extends Component {
   static propTypes = {
@@ -96,7 +92,7 @@ class Microservice extends Component {
         left={0}
         top={0}
         handleEndDrag={this.handleEndDrag}
-        hideSourceOnDrag={true}
+        hideSourceOnDrag
         index={idx}
         ref={r => this.modelsRefs[model.id] = r}
         validations={validations}

@@ -71,9 +71,9 @@ class CollapsibleProperties extends Component {
             </div>
           )}
           <div className="CollapsibleProperties__bar__right" style={barRightStyle}>
-            <span onClick={barToggable ? this.handleToggleCollapse : undefined}>
+            <div onClick={barToggable ? this.handleToggleCollapse : undefined}>
               {bar}
-            </span>
+            </div>
             {!!button && (
               <div className="CollapsibleProperties__bar__right--button">
                 {button}

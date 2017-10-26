@@ -1,0 +1,22 @@
+.API {
+  .CollapsibleProperties {
+    padding: 0;
+    &__bar {
+      padding: 0 37px 0 24px;
+      &:before {
+        display: none;
+      }
+    }
+  }
+  .EntitySubElements {
+    &__main {
+      margin-top: 15px;
+    }
+  }
+  .SubApiEndpoint {
+    border-top: 1px solid #f8f8f8;
+    &:first-child {
+      border-top: none;
+    }
+  }
+}

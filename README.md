@@ -55,12 +55,12 @@ the following steps:
   * `npm install`.
   * `npm start`
 
-2. Check out [lunchbadger](../../../../LunchBadger/configstore). This server will serve the
+2. Check out [lunchbadger](../../../../LunchBadger/lunchbadger). This server will serve the
    forecast data.
 
   * `npm install`
   * `npm start`
 
-###Important thing while building:
+### Important thing while building:
 
 You can set which plugins should be installed during bundling container to main app in `cfg/info.json`

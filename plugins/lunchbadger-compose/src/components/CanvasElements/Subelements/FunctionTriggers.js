@@ -5,6 +5,10 @@ import {Table} from '../../../../../lunchbadger-ui/src';
 import '../Function.scss';
 
 const {utils: {storeUtils:{findGatewayByPipelineId}}} = LunchBadgerCore;
+const columns = ['Type', 'Source', 'Details'];
+const widths = [300, 300, undefined];
+const paddings = [false, false, false];
+const centers = [false, false, false];
 
 @inject('connectionsStore') @observer
 class FunctionTriggers extends PureComponent {
@@ -75,10 +79,6 @@ class FunctionTriggers extends PureComponent {
         </div>
       );
     }
-    const columns = ['Type', 'Source', 'Details'];
-    const widths = [300, 300, undefined];
-    const paddings = [false, false, false];
-    const centers = [false, false, false];
     const data = triggers.map(({type, source, details}, idx) => [type, source, this.renderDetails(details, idx)]);
     return <Table
       columns={columns}

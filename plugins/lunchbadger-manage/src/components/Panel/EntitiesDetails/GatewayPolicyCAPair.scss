@@ -2,23 +2,24 @@
   border: 1px solid #e0e0e0;
   margin: 10px 6px 20px 0;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  &.hidden {
+    display: none;
+  }
   &__title {
     font-size: 18px;
     font-weight: normal;
     padding-left: 5px;
   }
   &__CA {
-    border-top: 1px solid #e0e0e0;
-    display: table;
-    width: 100%;
     &__C,
     &__A {
-      display: table-cell;
-      width: 50%;
+      border-top: 1px solid #e0e0e0;
       padding: 20px 23px 15px 23px;
     }
     &__C {
-      border-right: 1px solid #e0e0e0;
+      &__box {
+        margin: 15px 0 0 8px;
+      }
     }
   }
   & > .CollapsibleProperties {

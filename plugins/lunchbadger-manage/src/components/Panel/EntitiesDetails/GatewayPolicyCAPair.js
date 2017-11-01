@@ -1,11 +1,11 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
+import GatewayPolicyCondition from './GatewayPolicyCondition';
 import {
-  // EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
   Input,
-  // Checkbox,
   Table,
   IconButton,
 } from '../../../../../lunchbadger-ui/src';
@@ -20,10 +20,23 @@ export default class GatewayPolicyCAPair extends PureComponent {
     onAddParameter: PropTypes.func,
     onRemoveParameter: PropTypes.func,
     onParameterTab: PropTypes.func,
+    onChangeState: PropTypes.func,
     pipelineIdx: PropTypes.number,
     policyIdx: PropTypes.number,
     pair: PropTypes.object,
+    hidden: PropTypes.bool,
   };
+
+  static defaultProps = {
+    onAddParameter: () => () => {},
+    hidden: false,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
+  discardChanges = () => this.policyConditionRef.discardChanges();
 
   renderParameters = (pipelineIdx, policyIdx, pairIdx, pair, kind) => {
     const {onAddParameter, onRemoveParameter, onParameterTab} = this.props;
@@ -68,10 +81,14 @@ export default class GatewayPolicyCAPair extends PureComponent {
       onRemoveCAPair,
       onReorderCAPairUp,
       onReorderCAPairDown,
+      onChangeState,
       pipelineIdx,
       policyIdx,
       pair,
+      hidden
     } = this.props;
+    const conditionSchemas = this.context.store.getState().entities.gatewaySchemas.condition;
+    const conditionPrefix = `pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`;
     const collapsible = (
       <div className="GatewayPolicyCAPair__CA">
         <Input
@@ -81,7 +98,15 @@ export default class GatewayPolicyCAPair extends PureComponent {
         />
         <div className="GatewayPolicyCAPair__CA__C">
           <EntityPropertyLabel>Condition</EntityPropertyLabel>
-          {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'condition')}
+          <div className="GatewayPolicyCAPair__CA__C__box">
+            <GatewayPolicyCondition
+              ref={r => this.policyConditionRef = r}
+              condition={pair.condition}
+              schemas={conditionSchemas}
+              prefix={conditionPrefix}
+              onChangeState={onChangeState}
+            />
+          </div>
         </div>
         <div className="GatewayPolicyCAPair__CA__A">
           <EntityPropertyLabel>Action</EntityPropertyLabel>
@@ -108,7 +133,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
       </span>
     );
     return (
-      <div className="GatewayPolicyCAPair">
+      <div className={cs('GatewayPolicyCAPair', {hidden})}>
         <CollapsibleProperties
           bar={<span className="GatewayPolicyCAPair__title">Pair {pairIdx + 1}</span>}
           button={buttons}

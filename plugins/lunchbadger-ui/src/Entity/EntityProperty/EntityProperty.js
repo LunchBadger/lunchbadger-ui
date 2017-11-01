@@ -26,6 +26,7 @@ class EntityProperty extends Component {
     selected: PropTypes.bool,
     options: PropTypes.array,
     onTab: PropTypes.func,
+    width: PropTypes.number,
   }
 
   static defaultProps = {
@@ -40,6 +41,7 @@ class EntityProperty extends Component {
     onChange: () => {},
     onBlur: () => {},
     onResetField: () => {},
+    width: 0,
   }
 
   constructor(props) {
@@ -136,6 +138,7 @@ class EntityProperty extends Component {
       onResetField,
       onClick,
       selected,
+      width,
     } = this.props;
     const {contextualVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -168,8 +171,12 @@ class EntityProperty extends Component {
       });
     }
     const plainName = getPlainText(name);
+    const style = {};
+    if (width > 0) {
+      style.width = width;
+    }
     return (
-      <div className={classNames}>
+      <div className={classNames} style={style}>
         {title !== '' && <EntityPropertyLabel>{title}</EntityPropertyLabel>}
         <div className={cs('EntityProperty__field', plainName)}>
           <div className='EntityProperty__field--text' onClick={onClick}>

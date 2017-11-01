@@ -1,4 +1,4 @@
-import Condition from './Condition';
+import uuid from 'uuid';
 import Action from './Action';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -12,7 +12,10 @@ export default class ConditionAction extends BaseModel {
   static create(data) {
     return super.create({
       ...data,
-      condition: Condition.create(data.condition),
+      condition: {
+        ...data.condition,
+        id: (data.condition || {id: uuid.v4()}).id,
+      },
       action: Action.create(data.action),
     });
   }
@@ -20,18 +23,14 @@ export default class ConditionAction extends BaseModel {
   toJSON() {
     return {
       id: this.id,
-      condition: this.condition.toJSON(),
+      condition: this.condition,
       action: this.action.toJSON(),
     };
   }
 
   toApiJSON() {
-    const condition = this.condition.parameters.length > 0
-      ? this.condition.toJSON()
-      : undefined;
-
     return {
-      condition: condition,
+      condition: this.condition,
       action: this.action.toJSON(),
     };
   }

@@ -8,7 +8,7 @@ import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 import PipelineComponent from './Subelements/Pipeline';
-// import {removePipeline} from '../../reduxActions/gateways';
+import GatewayPolicyCAPair from '../Panel/EntitiesDetails/GatewayPolicyCAPair';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -35,56 +35,20 @@ class Gateway extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {...this.stateFromStores(props)};
+    this.state = this.stateFromStores(props);
+    this.policyCAPairRefs = {};
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps, () => {
+        Object.keys(this.policyCAPairRefs).forEach((key) => {
+          if (this.policyCAPairRefs[key]) {
+            this.policyCAPairRefs[key].discardChanges();
+          }
+        });
+      });
     }
-    // if (nextProps.entity !== this.props.entity) {
-    //   this.setState({
-    //     dnsPrefix: nextProps.entity.dnsPrefix,
-    //     pipelinesOpened: {},
-    //     showRemovingModal: false,
-    //     pipelineToRemove: null,
-    //   });
-    // }
-    // // if (nextProps.ready && !this.props.ready) {
-    // //   this._onDeploy();
-    // // }
-    // // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-    // //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
-    // //     return Connection.getConnectionsForTarget(pipeline.id).length;
-    // //   });
-    // //   if (hasInConnection) {
-    // //     this.setState({hasInConnection: true});
-    // //   } else {
-    // //     this.setState({hasInConnection: false});
-    // //   }
-    // // }
-    // // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-    // //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
-    // //     return Connection.getConnectionsForSource(pipeline.id).length;
-    // //   });
-    // //   if (hasOutConnection) {
-    // //     this.setState({hasOutConnection: true});
-    // //   } else {
-    // //     this.setState({hasOutConnection: false});
-    // //   }
-    // // }
-    // // if (!this.props.parent.state.editable) { //FIXME
-    // //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
-    // // }
-    // const pipelinesOpened = {...this.state.pipelinesOpened};
-    // let pipelinesAdded = false;
-    // nextProps.entity.pipelines.forEach(({id}) => {
-    //   if (typeof pipelinesOpened[id] === 'undefined') {
-    //     pipelinesOpened[id] = false;
-    //     pipelinesAdded = true;
-    //   }
-    // });
-    // if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
   stateFromStores = props => {
@@ -96,10 +60,16 @@ class Gateway extends Component {
     return newState;
   };
 
-  onStoreUpdate = (props = this.props, callback) =>
-    this.setState({...this.stateFromStores(props)}, () => callback && callback());
+  onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = (callback) => {
+    Object.keys(this.policyCAPairRefs).forEach((key) => {
+      if (this.policyCAPairRefs[key]) {
+        this.policyCAPairRefs[key].discardChanges();
+      }
+    });
+    this.onPropsUpdate(this.props, callback);
+  }
 
   processModel = model => {
     const {entity} = this.props;
@@ -167,51 +137,30 @@ class Gateway extends Component {
 
   getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
 
-  getPolicyHiddenInputs = (pipelineIdx, policyIdx, policy) => {
-    const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}]`;
-    const hiddenInputs = [{name: `${prefix}[id]`, value: policy.id}];
-    policy.conditionAction.forEach((pair, pairIdx) => {
-      hiddenInputs.push({
-        name: `${prefix}[pairs][${pairIdx}][id]`,
-        value: pair.id,
-      });
-      pair.condition.parameters.forEach((parameter, idx) => {
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][name]`,
-          value: parameter.name,
-        });
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][value]`,
-          value: parameter.value,
-        });
-      });
-      pair.action.parameters.forEach((parameter, idx) => {
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][action][${idx}][name]`,
-          value: parameter.name,
-        });
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][action][${idx}][value]`,
-          value: parameter.value,
-        });
-      });
-    });
-    return hiddenInputs;
-  }
-
   renderPipeline = (pipeline, pipelineIdx) => {
     const options = this.getPolicyInputOptions();
     const collapsible = (
       <div>
-        {pipeline.policies.map((policy, idx) => (
-          <EntityProperty
-            key={idx}
-            name={`pipelines[${pipelineIdx}][policies][${idx}][name]`}
-            value={policy.name || options[0].value}
-            options={options}
-            hiddenInputs={this.getPolicyHiddenInputs(pipelineIdx, idx, policy)}
-            onDelete={this.deletePipelinePolicy(pipelineIdx, idx)}
-          />
+        {pipeline.policies.map((policy, policyIdx) => (
+          <div key={policy.id}>
+            <EntityProperty
+              name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
+              value={policy.name || options[0].value}
+              options={options}
+              onDelete={this.deletePipelinePolicy(pipelineIdx, policyIdx)}
+            />
+            {policy.conditionAction.map((pair, idx) => (
+              <GatewayPolicyCAPair
+                key={pair.id}
+                ref={r => this.policyCAPairRefs[pair.id] = r}
+                pairIdx={idx}
+                pipelineIdx={pipelineIdx}
+                policyIdx={policyIdx}
+                pair={pair}
+                hidden
+              />
+            ))}
+          </div>
         ))}
       </div>
     );

@@ -266,16 +266,11 @@ export default class Gateway extends BaseModel {
           const pair = {
             id,
             action: {},
-            condition: {},
+            condition,
           };
           (action || []).forEach((parameter) => {
             if (parameter.name.trim() !== '') {
               pair.action[parameter.name.trim()] = parameter.value;
-            }
-          });
-          (condition || []).forEach((parameter) => {
-            if (parameter.name.trim() !== '') {
-              pair.condition[parameter.name] = parameter.value;
             }
           });
           policy[name].push(pair);

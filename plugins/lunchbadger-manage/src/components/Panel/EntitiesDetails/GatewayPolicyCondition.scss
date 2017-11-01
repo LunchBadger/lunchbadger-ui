@@ -1,0 +1,19 @@
+.GatewayPolicyCondition {
+  .EntityProperty {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    &Label {
+      text-transform: capitalize !important;
+    }
+  }
+  &__C {
+    margin-left: 15px;
+  }
+  &__button {
+    margin-top: 30px;
+    float: right;
+  }
+  &__array {
+    margin: -15px 0 15px 15px;
+  }
+}

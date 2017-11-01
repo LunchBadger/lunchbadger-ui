@@ -1,6 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import uuid from 'uuid';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -36,12 +37,13 @@ class GatewayDetails extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {...this.stateFromStores(props)};
+    this.state = this.stateFromStores(props);
+    this.policyCAPairRefs = {};
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -53,9 +55,16 @@ class GatewayDetails extends PureComponent {
     admin: _.cloneDeep(props.entity.admin),
   });
 
-  onStoreUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
+  onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = (callback) => {
+    Object.keys(this.policyCAPairRefs).forEach((key) => {
+      if (this.policyCAPairRefs[key]) {
+        this.policyCAPairRefs[key].discardChanges();
+      }
+    });
+    this.onPropsUpdate(this.props, callback);
+  };
 
   processModel = model => {
     const {entity} = this.props;
@@ -149,7 +158,8 @@ class GatewayDetails extends PureComponent {
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({}));
+    const condition = {id: uuid.v4(), name: 'always'};
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({condition}));
     const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
     pipelines[pipelineIdx]
       .policies[policyIdx]
@@ -291,6 +301,7 @@ class GatewayDetails extends PureComponent {
         {conditionAction.map((pair, idx) => (
           <GatewayPolicyCAPair
             key={pair.id}
+            ref={r => this.policyCAPairRefs[pair.id] = r}
             pairIdx={idx}
             onRemoveCAPair={this.removeCAPair(pipelineIdx, policyIdx, idx)}
             onReorderCAPairUp={idx === 0 ? undefined : this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
@@ -298,6 +309,7 @@ class GatewayDetails extends PureComponent {
             onAddParameter={this.addParameter}
             onRemoveParameter={this.removeParameter}
             onParameterTab={this.handleParametersTab}
+            onChangeState={this.changeState}
             pipelineIdx={pipelineIdx}
             policyIdx={policyIdx}
             pair={pair}

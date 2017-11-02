@@ -43,7 +43,7 @@ const editorCodeLanguages = {
   'c#': 'csharp',
 };
 
-const detectEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
+const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
 
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
@@ -111,7 +111,7 @@ class FunctionDetails extends PureComponent {
       changed: false,
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
-      editorCodeLanguage: detectEditorCodeLanguage(runtime),
+      editorCodeLanguage: getEditorCodeLanguage(runtime),
       code,
       editorCodeWidth: 700,
       editorCodeHeight: 350,
@@ -266,7 +266,7 @@ class FunctionDetails extends PureComponent {
   //   }
   // }
 
-  handleRuntimeChange = value => this.setState({editorCodeLanguage: detectEditorCodeLanguage(value)});
+  handleRuntimeChange = value => this.setState({editorCodeLanguage: getEditorCodeLanguage(value)});
 
   renderDetailsSection = () => {
     const {entity, dataSources} = this.props;

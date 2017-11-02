@@ -17,6 +17,7 @@ import iconDetails from './icon-details.svg';
 import iconEdit from './icon-edit.svg';
 import iconEndpoint from './icon-endpoint.svg';
 import iconForklift from './icon-forklift.svg';
+import iconFunction from './icon-function.svg';
 import iconGateway from './icon-gateway.svg';
 import iconLeaf from './icon-leaf.svg';
 import iconMicroservice from './icon-microservice.svg';
@@ -50,6 +51,7 @@ export {
   iconEdit,
   iconEndpoint,
   iconForklift,
+  iconFunction,
   iconGateway,
   iconLeaf,
   iconMicroservice,

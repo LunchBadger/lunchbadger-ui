@@ -6,8 +6,8 @@ export default {
   },
   1: {
     name: 'Private',
-    entities: ['models', 'microservices'],
-    connectionEntities: ['models', 'modelsBundled', 'microservices'],
-    serviceEndpointEntities: ['models', 'modelsBundled'],
+    entities: ['models', 'microservices', 'functions'],
+    connectionEntities: ['models', 'modelsBundled', 'microservices', 'functions'],
+    serviceEndpointEntities: ['models', 'modelsBundled', 'functions'],
   },
 };

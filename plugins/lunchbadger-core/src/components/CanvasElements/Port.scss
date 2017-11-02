@@ -22,7 +22,8 @@
   .DataSource &,
   .Model &,
   .ServiceEndpoint &,
-  .ApiEndpoint & {
+  .ApiEndpoint &,
+  .Function & {
     top: -2px !important;
   }
 }

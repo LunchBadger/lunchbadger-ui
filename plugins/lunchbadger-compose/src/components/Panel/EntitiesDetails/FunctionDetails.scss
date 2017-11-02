@@ -1,0 +1,15 @@
+.FunctionDetails {
+  .triggers__details {
+    margin: 15px 0;
+    span {
+      display: inline-block;
+      margin-right: 10px;
+      code {
+        color: #FFF;
+        background-color: #019abc;
+        border-radius: 3px;
+        padding: 2px 5px;
+      }
+    }
+  }
+}

@@ -73,6 +73,31 @@
   background: #fff;
   position: relative;
   padding: 15px 0;
+  &.function {
+    .metric-detail-daterange {
+      text-align: center;
+      margin-top: -3px;
+      .metric-detail__date {
+        font-size: 20px;
+      }
+    }
+    .metric-details__list {
+      font-size: 17px;
+      .metric-detail {
+        &:first-child {
+          color: #29869C;
+          font-weight: 400;
+          background-color: #FFF !important;
+        }
+        .metric-detail__cell {
+          text-align: right;
+          &:first-child {
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
 }
 
 .metric__details__tooltip {

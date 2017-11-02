@@ -1317,6 +1317,11 @@
       "from": "bowser@>=1.6.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/bowser/-/bowser-1.6.1.tgz"
     },
+    "brace": {
+      "version": "0.10.0",
+      "from": "brace@>=0.10.0 <0.11.0",
+      "resolved": "https://registry.npmjs.org/brace/-/brace-0.10.0.tgz"
+    },
     "brace-expansion": {
       "version": "1.1.6",
       "from": "brace-expansion@>=1.0.0 <2.0.0",
@@ -3820,6 +3825,11 @@
       "resolved": "https://registry.npmjs.org/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.0.tgz",
       "dev": true
     },
+    "lodash.get": {
+      "version": "4.4.2",
+      "from": "lodash.get@>=4.4.2 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz"
+    },
     "lodash.isarguments": {
       "version": "3.1.0",
       "from": "lodash.isarguments@>=3.0.0 <4.0.0",
@@ -3831,6 +3841,11 @@
       "from": "lodash.isarray@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/lodash.isarray/-/lodash.isarray-3.0.4.tgz",
       "dev": true
+    },
+    "lodash.isequal": {
+      "version": "4.5.0",
+      "from": "lodash.isequal@>=4.1.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
     },
     "lodash.keys": {
       "version": "3.1.2",
@@ -5206,6 +5221,11 @@
           "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.8.9.tgz"
         }
       }
+    },
+    "react-ace": {
+      "version": "5.3.0",
+      "from": "react-ace@latest",
+      "resolved": "https://registry.npmjs.org/react-ace/-/react-ace-5.3.0.tgz"
     },
     "react-addons-create-fragment": {
       "version": "15.5.4",
@@ -6710,6 +6730,11 @@
       "from": "vm-browserify@0.0.4",
       "resolved": "https://registry.npmjs.org/vm-browserify/-/vm-browserify-0.0.4.tgz",
       "dev": true
+    },
+    "w3c-blob": {
+      "version": "0.0.1",
+      "from": "w3c-blob@0.0.1",
+      "resolved": "https://registry.npmjs.org/w3c-blob/-/w3c-blob-0.0.1.tgz"
     },
     "warning": {
       "version": "3.0.0",

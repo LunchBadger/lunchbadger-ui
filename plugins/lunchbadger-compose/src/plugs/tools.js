@@ -1,9 +1,7 @@
 import {add as addDataSource} from '../reduxActions/dataSources';
 import {add as addModel} from '../reduxActions/models';
 import {add as addMicroservice} from '../reduxActions/microservices';
-// import AddDataSource from '../actions/CanvasElements/DataSource/add';
-// import AddModel from '../actions/CanvasElements/Model/add';
-// import AddMicroservice from '../actions/CanvasElements/Microservice/add';
+import {add as addFunction} from '../reduxActions/functions';
 
 const dataSources = [
   'Memory',
@@ -44,6 +42,8 @@ const modelAction = () => dispatch => dispatch(addModel());
 
 const microserviceAction = () => dispatch => dispatch(addMicroservice());
 
+const functionAction = () => dispatch => dispatch(addFunction());
+
 export default {
   0: [
     {
@@ -64,6 +64,12 @@ export default {
       icon: 'iconModel',
       tooltip: 'Model',
       action: modelAction,
+    },
+    {
+      name: 'function',
+      icon: 'iconFunction',
+      tooltip: 'Function',
+      action: functionAction,
     },
     {
       name: 'microservice',

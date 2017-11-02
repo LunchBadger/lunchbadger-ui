@@ -4,10 +4,10 @@ export default (model, entity, properties, stateProperties) => {
   const rootProperties = [];
   const props = {};
   const idMapping = {};
-  Object.keys(model.properties || {}).forEach((key) => {
+  Object.keys(model.properties || {}).forEach((key, itemOrder) => {
     const property = model.properties[key];
     if (property.name.trim().length === 0) return;
-    const prop = ModelProperty.create(property);
+    const prop = ModelProperty.create({...property, itemOrder});
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
     const [parentId] = key.split('/');

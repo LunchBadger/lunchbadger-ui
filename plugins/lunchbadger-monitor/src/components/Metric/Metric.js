@@ -8,6 +8,7 @@ import MetricRemoveButton from './Subelements/MetricRemoveButton';
 import MetricDetails from './Subelements/MetricDetails';
 import MetricTypeTooltip from './Subelements/MetricTypeTooltip';
 import {aggregate} from '../../reduxActions/metrics';
+import MetricFunctionDetails from './Subelements/MetricFunctionDetails';
 import './Metric.scss';
 
 const boxSource = {
@@ -22,8 +23,10 @@ const boxTarget = {
     const item = monitor.getItem();
     if (!item.metric) return false;
     if (item.metric.id === props.metric.id) return false;
+    if (!props.metric.pairs) return false;
     if (props.metric.pairs.length > 1) return false;
     if (props.metric.pairs[0].metricTwo && !item.metric.pairs[0].metricTwo) return false;
+    if (!item.metric.pairs) return false;
     if (item.metric.pairs.length > 1) return false;
     return true;
   },
@@ -73,6 +76,14 @@ class Metric extends Component {
   }
 
   renderHeader() {
+    if (this.props.metric.constructor.type === 'MetricFunction') {
+      const pair = {metricOne: {entity: {name: this.props.metric.name}}};
+      return (
+        <MetricHeader
+          pair={pair}
+        />
+      );
+    }
     return (
       <div>
         {
@@ -95,6 +106,7 @@ class Metric extends Component {
 
   render() {
     const {metric, connectDragSource, connectDragPreview, connectDropTarget} = this.props;
+    const isFunction = metric.constructor.type === 'MetricFunction';
     const {left, top} = metric;
     const metricStyle = {
       left,
@@ -121,16 +133,21 @@ class Metric extends Component {
             <MetricRemoveButton metric={this.props.metric}/>
           </div>
         )}
-        <div className="metric__details">
-          <div className={tooltipClass} onMouseLeave={() => this.setState({currentPairId: null})}>
-            <MetricTypeTooltip
-              pairId={this.state.currentPairId}
-              metric={metric}
-              onChange={this._handleMetricTypeChange}
-            />
+        {isFunction && (
+          <MetricFunctionDetails id={metric.entityId} />
+        )}
+        {!isFunction && (
+          <div className="metric__details">
+            <div className={tooltipClass} onMouseLeave={() => this.setState({currentPairId: null})}>
+              <MetricTypeTooltip
+                pairId={this.state.currentPairId}
+                metric={metric}
+                onChange={this._handleMetricTypeChange}
+              />
+            </div>
+            <MetricDetails metric={metric}/>
           </div>
-          <MetricDetails metric={metric}/>
-        </div>
+        )}
       </div>
     ));
   }

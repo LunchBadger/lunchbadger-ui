@@ -12,6 +12,7 @@ export default (state = initialState, action) => {
       const error = action.payload.stack || action.payload.message || action.payload;
       if (!newState.errors.includes(error)) {
         newState.errors = [error, ...newState.errors];
+        console.error(error);
       }
       newState.visible = true;
       return newState;

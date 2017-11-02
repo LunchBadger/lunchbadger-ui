@@ -1,0 +1,36 @@
+.Function {
+  .EntitySubElements {
+    margin-left: -10px;
+    margin-top: -10px;
+    &__elements {
+      margin-left: 5px;
+    }
+  }
+  &.nested {
+    margin-top: -15px;
+    .EntitySubElements {
+      border-top: none;
+      margin-top: -20px;
+    }
+  }
+  &__triggers {
+    color: #000;
+    margin: 0 10px 0 30px;
+    & > div {
+      margin-top: 10px;
+      & > span {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:first-child {
+          width: 120px;
+        }
+        &:last-child {
+          width: calc(100% - 120px);
+        }
+      }
+    }
+  }
+}

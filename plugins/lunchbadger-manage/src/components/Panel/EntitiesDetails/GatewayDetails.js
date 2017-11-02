@@ -321,34 +321,6 @@ class GatewayDetails extends PureComponent {
 
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
     const collapsible = this.renderCAPairs(policy, pipelineIdx, policyIdx);
-    // const collapsible = policy.conditionAction.map((pair, idx) => (
-    //   <CollapsibleProperties
-    //     key={pair.id}
-    //     bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
-    //     collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
-    //     button={(
-    //       <span>
-    //         <IconButton
-    //           icon="iconDelete"
-    //           onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-    //         />
-    //         <IconButton
-    //           icon="iconArrowDown"
-    //           onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-    //           disabled={idx === policy.conditionAction.length - 1}
-    //         />
-    //         <IconButton
-    //           icon="iconArrowUp"
-    //           onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-    //           disabled={idx === 0}
-    //         />
-    //       </span>
-    //     )}
-    //     barToggable
-    //     defaultOpened
-    //     space="10px 0"
-    //   />
-    // ));
     let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
     if (policy.name === GATEWAY_POLICIES.PROXY) {
       const state = this.context.store.getState();

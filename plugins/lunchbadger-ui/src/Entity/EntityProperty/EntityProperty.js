@@ -119,6 +119,7 @@ class EntityProperty extends Component {
   render() {
     const {
       name,
+      options,
       modelName,
       value,
       title,
@@ -151,6 +152,9 @@ class EntityProperty extends Component {
     let textValue = value || filler;
     if (password && value.length > 0) {
       textValue = '•'.repeat(value.length);
+    }
+    if (options) {
+      textValue = options.find(item => item.value === value).label;
     }
     const textValueClassNames = cs('EntityProperty__field--textValue', {
       ['EntityProperty__field--textValue--clickable']: !!onViewModeClick,

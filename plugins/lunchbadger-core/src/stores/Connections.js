@@ -159,25 +159,8 @@ class Connections {
           if (!sourceEndpoint || !targetEndpoint) return false;
           const sc = sourceEndpoint.parentElement.classList;
           const tc = targetEndpoint.parentElement.classList;
-          return (
-            (
-              fromId === id
-              &&
-              sc.contains('port-out')
-              &&
-              tc.contains('port-in')
-            )
-            ||
-            (
-              sc.contains('port-out')
-              &&
-              tc.contains('port-out')
-              &&
-              sc.contains('port-Function')
-              &&
-              tc.contains('port-Model')
-            )
-          );
+          return ((fromId === id && sc.contains('port-out') && tc.contains('port-in'))
+            || (sc.contains('port-out') && tc.contains('port-out') && sc.contains('port-Function') && tc.contains('port-Model')));
         });
       return conns.length > 0;
     }

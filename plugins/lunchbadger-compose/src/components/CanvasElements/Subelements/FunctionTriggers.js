@@ -55,17 +55,19 @@ class FunctionTriggers extends PureComponent {
       const gateway = findGatewayByPipelineId(state, conn.toId);
       const connsApiEndpoints = connectionsStore.search({fromId: conn.toId});
       connsApiEndpoints.forEach((connAE) => {
-        if (!gateways[gateway.id]) {
-          gateways[gateway.id] = {
-            name: gateway.name,
-            apiEndpoints: [],
+        if (state.entities.apiEndpoints[connAE.toId]) {
+          if (!gateways[gateway.id]) {
+            gateways[gateway.id] = {
+              name: gateway.name,
+              apiEndpoints: [],
+            }
           }
+          gateways[gateway.id].apiEndpoints.push([
+            state.entities.apiEndpoints[connAE.toId].name,
+            <code>GET</code>,
+            <code>POST</code>,
+          ]);
         }
-        gateways[gateway.id].apiEndpoints.push([
-          state.entities.apiEndpoints[connAE.toId].name,
-          <code>GET</code>,
-          <code>POST</code>,
-        ]);
       });
     });
     Object.keys(gateways).forEach((key) => {

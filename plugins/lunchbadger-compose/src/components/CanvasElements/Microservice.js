@@ -23,13 +23,13 @@ class Microservice extends Component {
       bundledItem: null,
       models: props.models,
     }
-    this.onStoreUpdate = (props = this.props, callback) => this.setState({models: props.models}, callback);
+    this.onPropsUpdate = (props = this.props, callback) => this.setState({models: props.models}, callback);
     this.modelsRefs = {};
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity || nextProps.models !== this.props.models) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -74,7 +74,7 @@ class Microservice extends Component {
 
   handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
 
-  discardChanges = callback => this.onStoreUpdate(this.props, () => {
+  discardChanges = callback => this.onPropsUpdate(this.props, () => {
     this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
     callback && callback();
   });

@@ -19,6 +19,8 @@ class ProjectService {
 
   restartWorkspace = () => this.api.post('/WorkspaceStatus/restart');
 
+  resetWorkspace = () => this.api.post('/WorkspaceStatus/hard-reset');
+
   reinstallDeps = () => this.api.post('/WorkspaceStatus/reinstall');
 
 }

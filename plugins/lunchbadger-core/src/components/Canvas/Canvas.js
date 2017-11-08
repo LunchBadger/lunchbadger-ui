@@ -88,10 +88,9 @@ class Canvas extends Component {
     const {store: {getState}} = this.context;
     const {initialConnections, entities: {functions, models}} = getState();
     initialConnections.forEach(({fromId, toId}) => {
-      let portOut = document.getElementById(`port_out_${fromId}`);
+      const portOut = document.getElementById(`port_out_${fromId}`);
       let portIn = document.getElementById(`port_in_${toId}`);
       if (functions[fromId] && models[toId]) {
-        portOut = document.getElementById(`port_out_${fromId}`);
         portIn = document.getElementById(`port_out_${toId}`);
       }
       if (portOut && portIn) {
@@ -263,10 +262,10 @@ class Canvas extends Component {
     });
 
     this.paper.bind('beforeDrop', () => {
-      // // Save the fact that the connection was dropped. This is used in the
-      // // 'connect' event handler. This is the only way for it to know that
-      // // the connection was created by the user, vs programmatically, e.g. when
-      // // loading from the server.
+      // Save the fact that the connection was dropped. This is used in the
+      // 'connect' event handler. This is the only way for it to know that
+      // the connection was created by the user, vs programmatically, e.g. when
+      // loading from the server.
       this.dropped = true;
       return true;
     });

@@ -11,7 +11,10 @@ const checkConnection = (info) => (_, getState) => {
   const isBackend = isInQuadrant(state, 0, sourceId);
   const isPrivate = isInQuadrant(state, 1, targetId);
   if (isBackend && isPrivate) {
-    return !Connections.search({toId: formatId(targetId)}).length;
+    const conns = Connections
+      .search({toId: formatId(targetId)})
+      .filter(({info: {source}}) => !source.parentElement.classList.contains('port-Function'));
+    return !conns.length;
   }
   return null;
 };

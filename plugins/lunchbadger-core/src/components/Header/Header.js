@@ -8,16 +8,16 @@ import './Header.scss';
 
 export default class Header extends PureComponent {
   render() {
-    const {username, envId} = this.props;
+    const {username, envId, blank} = this.props;
     return (
       <header className="header" ref="headerContainer">
-        <CanvasOverlay />
+        {!blank && <CanvasOverlay />}
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
         <p className="logotype" >LunchBadger</p>
         <span className="On">on</span>
         <img src={BrandingLogo} className="BrandingLogo" alt="Triton" />
-        <Breadcrumbs username={username} envId={envId}/>
-        <HeaderMenu />
+        {!blank && <Breadcrumbs username={username} envId={envId}/>}
+        {!blank && <HeaderMenu />}
       </header>
     );
   }

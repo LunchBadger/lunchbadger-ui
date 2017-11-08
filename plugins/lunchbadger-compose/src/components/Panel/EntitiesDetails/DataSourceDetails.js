@@ -28,7 +28,7 @@ class DataSourceDetails extends Component {
 
   discardChanges = callback => {
     if (this.restRef) {
-      this.restRef.onStoreUpdate(() => this.setState({changed: false}, callback));
+      this.restRef.onPropsUpdate(() => this.setState({changed: false}, callback));
     } else {
       callback();
     }

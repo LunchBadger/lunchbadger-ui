@@ -85,7 +85,7 @@ export default class Rest extends PureComponent {
     this.state = {
       ...this.initState(props),
     };
-    this.onStoreUpdate = (callback, props = this.props) => {
+    this.onPropsUpdate = (callback, props = this.props) => {
       this.setState({
         ...this.initState(props),
       }, callback);
@@ -94,7 +94,7 @@ export default class Rest extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
-      this.onStoreUpdate(undefined, nextProps);
+      this.onPropsUpdate(undefined, nextProps);
     }
   }
 

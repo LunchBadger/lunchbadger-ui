@@ -23,6 +23,22 @@ export default class DataSource extends BaseModel {
   predefined = 'custom';
   operations = _.merge([], predefinedRests.custom.operations);
   options = undefined;
+  wsdl = '';
+  wsdl_options = {
+    rejectUnauthorized: false,
+    strictSSL: false,
+    requestCert: false,
+  };
+  remotingEnabled: false;
+  security = {
+    scheme: 'WS',
+    username: '',
+    password: '',
+    passwordType: 'PasswordText',
+    keyPath: '',
+    certPath: '',
+  };
+  soapOperations = {};
 
   constructor(id, name, connector) {
     super(id);
@@ -88,6 +104,13 @@ export default class DataSource extends BaseModel {
       json.user = this.username;
       json.subuser = this.subuser;
       json.keyId = this.keyId;
+    }
+    if (this.isSoap) {
+      json.wsdl = this.wsdl;
+      json.wsdl_options = this.wsdl_options;
+      json.remotingEnabled = this.remotingEnabled;
+      json.security = this.security;
+      json.operations = this.soapOperations;
     }
     return json;
   }
@@ -327,6 +350,14 @@ export default class DataSource extends BaseModel {
           });
         });
       }
+    }
+    if (data.hasOwnProperty('wsdl')) {
+      data.soapOperations = {};
+      (model.soapOperations || []).forEach(({key, service, port, operation}) => {
+        if (key.trim() !== '') {
+          data.soapOperations[key] = {service, port, operation};
+        }
+      });
     }
     return data;
   }

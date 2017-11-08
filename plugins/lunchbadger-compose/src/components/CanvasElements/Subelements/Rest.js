@@ -82,19 +82,13 @@ export default class Rest extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      ...this.initState(props),
-    };
-    this.onStoreUpdate = (callback, props = this.props) => {
-      this.setState({
-        ...this.initState(props),
-      }, callback);
-    };
+    this.state = this.initState(props);
+    this.onPropsUpdate = (callback, props = this.props) => this.setState(this.initState(props), callback);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
-      this.onStoreUpdate(undefined, nextProps);
+      this.onPropsUpdate(undefined, nextProps);
     }
   }
 
@@ -341,7 +335,7 @@ export default class Rest extends PureComponent {
           <span>
             <Checkbox
               label="Use Querystring"
-              name="options][useQuerystring]"
+              name="options[useQuerystring]"
               value={options.useQuerystring || false}
             />
           </span>

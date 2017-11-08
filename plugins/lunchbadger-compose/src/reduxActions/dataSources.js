@@ -11,9 +11,6 @@ export const add = (name, connector) => (dispatch, getState) => {
   const types = quadrants[0].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
   const json = {name, connector, itemOrder, loaded: false};
-  if (connector === 'rest') {
-    json.operations = [{template: {url: ''}}];
-  }
   const entity = DataSource.create(json);
   dispatch(actions.updateDataSource(entity));
   return entity;

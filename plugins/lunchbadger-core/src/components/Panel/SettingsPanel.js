@@ -53,13 +53,11 @@ class SettingsPanel extends Component {
     };
   }
 
-  onRestartWorkspace = () => {
-    ProjectService.restartWorkspace();
-  }
+  onRestartWorkspace = () => ProjectService.restartWorkspace();
 
-  onReinstall = () => {
-    ProjectService.reinstallDeps();
-  }
+  onResetWorkspace = () => ProjectService.resetWorkspace();
+
+  onReinstall = () => ProjectService.reinstallDeps();
 
   render() {
     let cloneCommand;
@@ -115,6 +113,16 @@ class SettingsPanel extends Component {
             </label>
             <div className="details-panel__static-field">
               <button onClick={this.onRestartWorkspace}>Restart</button>
+            </div>
+          </div>
+        </div>
+        <div className="details-panel__element">
+          <div className="details-panel__fieldset">
+            <label className="details-panel__label">
+              Reset application
+            </label>
+            <div className="details-panel__static-field">
+              <button onClick={this.onResetWorkspace}>Reset</button>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import _ from 'lodash';
 import uuid from 'uuid';
 import brace from 'brace';
 import AceEditor from 'react-ace';
+import {ResizableBox} from 'react-resizable';
 import 'brace/mode/javascript';
 import 'brace/mode/java';
 import 'brace/mode/python';
@@ -43,6 +44,8 @@ const editorCodeLanguages = {
 };
 
 const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
+
+const initialEditorCodeWidth = Math.floor(window.innerWidth * 0.75);
 
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
@@ -89,7 +92,7 @@ class FunctionDetails extends PureComponent {
       ...this.initState(props),
       // ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props, callback) => {
+    this.onPropsUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         // ...stateFromStores(props),
@@ -100,7 +103,7 @@ class FunctionDetails extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const {id} = this.props.entity;
     if (nextProps.entity.id !== id) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -112,6 +115,8 @@ class FunctionDetails extends PureComponent {
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
       editorCodeLanguage: getEditorCodeLanguage(runtime),
       code,
+      editorCodeWidth: initialEditorCodeWidth,
+      editorCodeHeight: 350,
     };
   }
 
@@ -155,7 +160,7 @@ class FunctionDetails extends PureComponent {
     // return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   // handlePropertyToggleCollapse = id => () => {
   //   const properties = [...this.state.properties];
@@ -551,8 +556,11 @@ class FunctionDetails extends PureComponent {
 
   handleFunctionCodeChange = code => this.setState({code, changed: true}, () => this.props.parent.checkPristine());
 
+  handleFunctionCodeResize = (_, {size: {width: editorCodeWidth, height: editorCodeHeight}}) =>
+    this.setState({editorCodeWidth, editorCodeHeight});
+
   renderFunctionCodeSection() {
-    const {editorCodeLanguage, code} = this.state;
+    const {editorCodeLanguage, code, editorCodeWidth, editorCodeHeight} = this.state;
     const options = {
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
@@ -560,16 +568,25 @@ class FunctionDetails extends PureComponent {
       showLineNumbers: true,
       tabSize: 2,
     };
+    const maxWidth = window.innerWidth - 170;
     return (
-      <AceEditor
-        width="700px"
-        height="350px"
-        theme="monokai"
-        mode={editorCodeLanguage}
-        value={code}
-        onChange={this.handleFunctionCodeChange}
-        setOptions={options}
-      />
+      <ResizableBox
+        width={initialEditorCodeWidth}
+        height={350}
+        minConstraints={[200, 100]}
+        maxConstraints={[maxWidth, 2000]}
+        onResize={this.handleFunctionCodeResize}
+      >
+        <AceEditor
+          width={`${editorCodeWidth}px`}
+          height={`${editorCodeHeight}px`}
+          theme="monokai"
+          mode={editorCodeLanguage}
+          value={code}
+          onChange={this.handleFunctionCodeChange}
+          setOptions={options}
+        />
+      </ResizableBox>
     );
   }
 

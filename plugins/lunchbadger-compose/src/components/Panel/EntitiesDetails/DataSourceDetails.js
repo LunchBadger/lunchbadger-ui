@@ -1,16 +1,37 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import Rest from '../../CanvasElements/Subelements/Rest';
 import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
 } from '../../../../../lunchbadger-ui/src';
+import './Rest.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
 class DataSourceDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      changed: false,
+    };
+  }
+
+  handleStateChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
+
+  processModel = model => this.props.entity.processModel(model);
+
+  discardChanges = callback => {
+    if (this.restRef) {
+      this.restRef.onPropsUpdate(() => this.setState({changed: false}, callback));
+    } else {
+      callback();
+    }
   };
 
   renderFields = () => {
@@ -24,9 +45,7 @@ class DataSourceDetails extends Component {
       subuser,
       keyId,
       password,
-      operations,
       isWithPort,
-      isRest,
       isSoap,
       isEthereum,
       isSalesforce,
@@ -35,13 +54,6 @@ class DataSourceDetails extends Component {
       isTritonObjectStorage,
     } = this.props.entity;
     const fields = [];
-    if (isRest) {
-      fields.push({
-        title: 'Base Url',
-        name: 'operations[0].template.url',
-        value: operations[0].template.url,
-      });
-    }
     if (isSoap || isEthereum) {
       fields.push({
         title: `${isSoap ? 'Base ' : ''}Url`,
@@ -109,15 +121,13 @@ class DataSourceDetails extends Component {
       });
     }
     return (
-      <div className="panel__details">
+      <div>
         {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
       </div>
     );
-  }
+  };
 
-  render() {
-    const {connector} = this.props.entity;
-    if (connector === 'memory') return null;
+  renderMainProperties = () => {
     return (
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
@@ -125,6 +135,24 @@ class DataSourceDetails extends Component {
         barToggable
         defaultOpened
       />
+    );
+  };
+
+  render() {
+    const {entity} = this.props;
+    const {isMemory, isRest} = entity;
+    if (isMemory) return null;
+    return (
+      <div className="panel__details">
+        {isRest && (
+          <Rest
+            ref={r => this.restRef = r}
+            entity={entity}
+            onStateChange={this.handleStateChange}
+          />
+        )}
+        {!isRest && this.renderMainProperties()}
+      </div>
     );
   }
 }

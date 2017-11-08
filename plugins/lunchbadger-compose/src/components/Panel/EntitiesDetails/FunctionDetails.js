@@ -45,6 +45,8 @@ const editorCodeLanguages = {
 
 const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
 
+const initialEditorCodeWidth = Math.floor(window.innerWidth * 0.75);
+
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
 //   {label: 'Number', value: 'number'},
@@ -90,7 +92,7 @@ class FunctionDetails extends PureComponent {
       ...this.initState(props),
       // ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props, callback) => {
+    this.onPropsUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         // ...stateFromStores(props),
@@ -101,7 +103,7 @@ class FunctionDetails extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const {id} = this.props.entity;
     if (nextProps.entity.id !== id) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -113,7 +115,7 @@ class FunctionDetails extends PureComponent {
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
       editorCodeLanguage: getEditorCodeLanguage(runtime),
       code,
-      editorCodeWidth: 700,
+      editorCodeWidth: initialEditorCodeWidth,
       editorCodeHeight: 350,
     };
   }
@@ -158,7 +160,7 @@ class FunctionDetails extends PureComponent {
     // return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   // handlePropertyToggleCollapse = id => () => {
   //   const properties = [...this.state.properties];
@@ -569,7 +571,7 @@ class FunctionDetails extends PureComponent {
     const maxWidth = window.innerWidth - 170;
     return (
       <ResizableBox
-        width={700}
+        width={initialEditorCodeWidth}
         height={350}
         minConstraints={[200, 100]}
         maxConstraints={[maxWidth, 2000]}

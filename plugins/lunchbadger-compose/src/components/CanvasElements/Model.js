@@ -35,7 +35,7 @@ class Model extends Component {
       ...this.initState(props),
       ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props, callback) => {
+    this.onPropsUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         ...stateFromStores(props),
@@ -44,12 +44,12 @@ class Model extends Component {
   }
 
   // componentDidMount() {
-  //   PrivateStore.addChangeListener(this.onStoreUpdate);
+  //   PrivateStore.addChangeListener(this.onPropsUpdate);
   // }
   //
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
     // if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
     //   this.setState(this.initState());
@@ -57,7 +57,7 @@ class Model extends Component {
   }
   //
   // componentWillUnmount() {
-  //   PrivateStore.removeChangeListener(this.onStoreUpdate);
+  //   PrivateStore.removeChangeListener(this.onPropsUpdate);
   // }
 
   initState = (props = this.props) => {
@@ -68,7 +68,7 @@ class Model extends Component {
     };
   }
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   // update(model) {
   //   const data = {

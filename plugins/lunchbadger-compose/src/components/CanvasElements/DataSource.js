@@ -23,7 +23,7 @@ class DataSource extends Component {
 
   discardChanges = callback => {
     if (this.restRef) {
-      this.restRef.onStoreUpdate(callback);
+      this.restRef.onPropsUpdate(callback);
     } else {
       callback();
     }

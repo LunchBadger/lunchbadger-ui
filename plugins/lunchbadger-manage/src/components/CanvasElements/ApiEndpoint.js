@@ -26,7 +26,7 @@ class ApiEndpoint extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -34,10 +34,10 @@ class ApiEndpoint extends Component {
     paths: props.entity.paths.slice(),
   });
 
-  onStoreUpdate = (props = this.props, callback) =>
+  onPropsUpdate = (props = this.props, callback) =>
     this.setState({...this.stateFromStores(props)}, () => callback && callback());
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   processModel = model => {
     const {entity} = this.props;

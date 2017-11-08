@@ -92,7 +92,7 @@ class FunctionDetails extends PureComponent {
       ...this.initState(props),
       // ...stateFromStores(props),
     };
-    this.onStoreUpdate = (props = this.props, callback) => {
+    this.onPropsUpdate = (props = this.props, callback) => {
       this.setState({
         ...this.initState(props),
         // ...stateFromStores(props),
@@ -103,7 +103,7 @@ class FunctionDetails extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const {id} = this.props.entity;
     if (nextProps.entity.id !== id) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
   }
 
@@ -160,7 +160,7 @@ class FunctionDetails extends PureComponent {
     // return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   // handlePropertyToggleCollapse = id => () => {
   //   const properties = [...this.state.properties];

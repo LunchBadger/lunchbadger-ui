@@ -40,7 +40,7 @@ class Gateway extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
-      this.onStoreUpdate(nextProps);
+      this.onPropsUpdate(nextProps);
     }
     // if (nextProps.entity !== this.props.entity) {
     //   this.setState({
@@ -96,10 +96,10 @@ class Gateway extends Component {
     return newState;
   };
 
-  onStoreUpdate = (props = this.props, callback) =>
+  onPropsUpdate = (props = this.props, callback) =>
     this.setState({...this.stateFromStores(props)}, () => callback && callback());
 
-  discardChanges = callback => this.onStoreUpdate(this.props, callback);
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   processModel = model => {
     const {entity} = this.props;

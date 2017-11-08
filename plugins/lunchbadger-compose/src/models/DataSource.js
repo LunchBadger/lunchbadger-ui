@@ -39,6 +39,7 @@ export default class DataSource extends BaseModel {
     certPath: '',
   };
   soapOperations = {};
+  soapHeaders = [];
 
   constructor(id, name, connector) {
     super(id);
@@ -111,6 +112,7 @@ export default class DataSource extends BaseModel {
       json.remotingEnabled = this.remotingEnabled;
       json.security = this.security;
       json.operations = this.soapOperations;
+      json.soapHeaders = this.soapHeaders;
     }
     return json;
   }
@@ -356,6 +358,18 @@ export default class DataSource extends BaseModel {
       (model.soapOperations || []).forEach(({key, service, port, operation}) => {
         if (key.trim() !== '') {
           data.soapOperations[key] = {service, port, operation};
+        }
+      });
+      data.soapHeaders = [];
+      (model.soapHeaders || []).forEach(({elementKey, elementValue, prefix, namespace}) => {
+        if (elementKey.trim() !== '') {
+          data.soapHeaders.push({
+            element: {
+              [elementKey]: elementValue,
+            },
+            prefix,
+            namespace,
+          });
         }
       });
     }

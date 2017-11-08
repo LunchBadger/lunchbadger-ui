@@ -25,6 +25,15 @@ const transformOperations = operations => Object.keys(operations).map(key => ({
   operation: operations[key].operation,
 }));
 
+const transformSoapHeaders = headers => headers.map(({element, prefix, namespace}) => {
+  const item = {prefix, namespace};
+  Object.keys(element).forEach((key) => {
+    item.elementKey = key;
+    item.elementValue = element[key];
+  });
+  return item;
+});
+
 export default class Soap extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired,
@@ -53,9 +62,11 @@ export default class Soap extends PureComponent {
     const {entity} = props;
     const security = _.cloneDeep(entity.security);
     const soapOperations = _.cloneDeep(entity.soapOperations);
+    const soapHeaders = _.cloneDeep(entity.soapHeaders);
     return {
       security,
       soapOperations: transformOperations(soapOperations),
+      soapHeaders: transformSoapHeaders(soapHeaders),
     };
   };
 
@@ -111,6 +122,40 @@ export default class Soap extends PureComponent {
     const soapOperations = _.cloneDeep(this.state.soapOperations);
     soapOperations.splice(idx, 1);
     this.changeState({soapOperations});
+  };
+
+  handleAddSoapHeader = () => {
+    const soapHeaders = _.cloneDeep(this.state.soapHeaders);
+    soapHeaders.push({
+      elementKey: '',
+      elementValue: '',
+      prefix: '',
+      namespace: '',
+    });
+    this.changeState({soapHeaders});
+    setTimeout(() => {
+      const idx = soapHeaders.length - 1;
+      const input = document.getElementById(`soapHeaders[${idx}][elementKey]`);
+      input && input.focus();
+    });
+  };
+
+  handleSoapHeaderUpdate = (idx, field) => ({target: {value}}) => {
+    const soapHeaders = _.cloneDeep(this.state.soapHeaders);
+    soapHeaders[idx][field] = value;
+    this.changeState({soapHeaders});
+  };
+
+  handleSoapHeaderTab = (event) => {
+    if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey) {
+      this.handleAddSoapHeader();
+    }
+  };
+
+  handleRemoveSoapHeader = idx => () => {
+    const soapHeaders = _.cloneDeep(this.state.soapHeaders);
+    soapHeaders.splice(idx, 1);
+    this.changeState({soapHeaders});
   };
 
   renderProperties = () => {
@@ -263,6 +308,61 @@ export default class Soap extends PureComponent {
     );
   };
 
+  renderSoapHeaders = () => {
+    const columns = [
+      'Element Key',
+      'Element Value',
+      'Prefix',
+      'Namespace',
+      <IconButton icon="iconPlus" onClick={this.handleAddSoapHeader} />,
+    ];
+    const {soapHeaders} = this.state;
+    const soapHeadersSize = soapHeaders.length - 1;
+    const data = soapHeaders.map(({elementKey, elementValue, prefix, namespace}, idx) => ([
+      <Input
+        name={`soapHeaders[${idx}][elementKey]`}
+        value={elementKey}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleSoapHeaderUpdate(idx, 'elementKey')}
+      />,
+      <Input
+        name={`soapHeaders[${idx}][elementValue]`}
+        value={elementValue}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleSoapHeaderUpdate(idx, 'elementValue')}
+      />,
+      <Input
+        name={`soapHeaders[${idx}][prefix]`}
+        value={prefix}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleSoapHeaderUpdate(idx, 'prefix')}
+      />,
+      <Input
+        name={`soapHeaders[${idx}][namespace]`}
+        value={namespace}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleSoapHeaderUpdate(idx, 'namespace')}
+        handleKeyDown={idx === soapHeadersSize ? this.handleSoapHeaderTab : undefined}
+      />,
+      <IconButton icon="iconDelete" onClick={this.handleRemoveSoapHeader(idx)} />,
+    ]));
+    return <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+      centers={centers}
+    />;
+  };
+
   render() {
     const {entity: {url}, plain} = this.props;
     const properties = [{title: 'Url', name: 'url', value: url}];
@@ -291,6 +391,12 @@ export default class Soap extends PureComponent {
           <CollapsibleProperties
             bar={<EntityPropertyLabel>Security</EntityPropertyLabel>}
             collapsible={this.renderSecurity()}
+            defaultOpened
+            barToggable
+          />
+          <CollapsibleProperties
+            bar={<EntityPropertyLabel>SOAP Headers</EntityPropertyLabel>}
+            collapsible={this.renderSoapHeaders()}
             defaultOpened
             barToggable
           />

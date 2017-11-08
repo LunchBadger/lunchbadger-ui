@@ -199,6 +199,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           name={`${prefix}[${item.name}]`}
           value={value}
           onBlur={this.handlePropertyValueChange(item.name)}
+          width="calc(100% - 185px)"
         />
       );
     }
@@ -216,27 +217,25 @@ export default class GatewayPolicyCondition extends PureComponent {
     );
     if (item.name === 'conditions') return (
       <span key={item.name}>
-        <div className="GatewayPolicyCondition__button">
+        <div className="GatewayPolicyCondition__button add">
           <IconButton icon="iconPlus" onClick={this.handleAddCondition} />
         </div>
-        <div className="GatewayPolicyCondition__C">
-          {data.conditions.map((condition, idx) => (
-            <div key={condition.id}>
-              {data.conditions.length !== 1 && (
-                <div className="GatewayPolicyCondition__button">
-                  <IconButton icon="iconDelete" onClick={this.handleRemoveCondition(idx)} />
-                </div>
-              )}
-              <GatewayPolicyCondition
-                ref={r => this.policyConditionRef = r}
-                condition={condition}
-                schemas={schemas}
-                prefix={`${prefix}[conditions][${idx}]`}
-                onChangeState={onChangeState}
-              />
-            </div>
-          ))}
-        </div>
+        {data.conditions.map((condition, idx) => (
+          <div key={condition.id} className="GatewayPolicyCondition__C">
+            <GatewayPolicyCondition
+              ref={r => this.policyConditionRef = r}
+              condition={condition}
+              schemas={schemas}
+              prefix={`${prefix}[conditions][${idx}]`}
+              onChangeState={onChangeState}
+            />
+            {data.conditions.length !== 1 && (
+              <div className="GatewayPolicyCondition__button remove">
+                <IconButton icon="iconDelete" onClick={this.handleRemoveCondition(idx)} />
+              </div>
+            )}
+          </div>
+        ))}
       </span>
     );
     if (item.type === 'array') {

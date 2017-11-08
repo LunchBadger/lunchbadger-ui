@@ -336,13 +336,7 @@ export default [
       "type": "object",
       "properties": {
         "methods": {
-          "type": [
-            "string",
-            "array"
-          ],
-          "items": {
-            "type": "string"
-          }
+          "type": "string"
         }
       },
       "required": [

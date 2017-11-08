@@ -26,7 +26,10 @@ class EntityProperty extends Component {
     selected: PropTypes.bool,
     options: PropTypes.array,
     onTab: PropTypes.func,
-    width: PropTypes.number,
+    width: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
   }
 
   static defaultProps = {
@@ -172,7 +175,7 @@ class EntityProperty extends Component {
     }
     const plainName = getPlainText(name);
     const style = {};
-    if (width > 0) {
+    if (typeof width === 'string' || width > 0) {
       style.width = width;
     }
     return (

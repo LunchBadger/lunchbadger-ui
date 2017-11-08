@@ -109,7 +109,9 @@ export const addServiceEndpointIntoProxy = (serviceEndpoint, pipelineId) => (dis
 
 export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
   const state = getState();
-  const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
+  let gateway = storeUtils.findGatewayByPipelineId(state, pipelineId);
+  if (!gateway) return;
+  gateway = gateway.recreate();
   const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
   pipeline.policies
     .filter(({name}) => name === GATEWAY_POLICIES.PROXY)

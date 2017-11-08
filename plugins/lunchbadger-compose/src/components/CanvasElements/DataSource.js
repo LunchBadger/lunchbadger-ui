@@ -25,6 +25,7 @@ class DataSource extends Component {
           way={port.portType}
           elementId={port.id}
           scope={port.portGroup}
+          className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
         />
       );
     });

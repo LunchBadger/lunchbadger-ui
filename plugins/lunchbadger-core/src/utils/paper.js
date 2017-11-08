@@ -14,6 +14,7 @@ const jsPlumbConfig = {
     'Flowchart',
     {
       cornerRadius: 15,
+      stub: 7,
     },
   ],
   Container: 'canvas',

@@ -72,3 +72,7 @@ export const clearServer = () => async (dispatch) => {
 export const saveOrder = orderedIds => (dispatch, getState) => {
   getState().plugins.onSaveOrder.forEach(action => dispatch(action(orderedIds)));
 };
+
+export const logout = () => () => {
+  LoginManager().logout();
+};

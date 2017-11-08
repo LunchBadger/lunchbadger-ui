@@ -4,7 +4,7 @@ import {inject, observer} from 'mobx-react';
 import {Table} from '../../../../../lunchbadger-ui/src';
 import '../Function.scss';
 
-const {utils: {storeUtils:{findGatewayByPipelineId}}} = LunchBadgerCore;
+const {utils: {storeUtils: {findGatewayByPipelineId, findEntity}}} = LunchBadgerCore;
 const columns = ['Type', 'Source', 'Details'];
 const widths = [300, 300, undefined];
 const paddings = [false, false, false];
@@ -44,24 +44,34 @@ class FunctionTriggers extends PureComponent {
     const connsFrom = connectionsStore.search({fromId: id});
     const gateways = {};
     connsFrom.forEach((conn) => {
+      const model = findEntity(state, 1, conn.toId);
+      if (model) {
+        triggers.push({
+          type: 'Model',
+          source: model.name,
+          details: [['on.save', 'after.save'].map(item => <code>{item}</code>)],
+        });
+      }
       const gateway = findGatewayByPipelineId(state, conn.toId);
       const connsApiEndpoints = connectionsStore.search({fromId: conn.toId});
       connsApiEndpoints.forEach((connAE) => {
-        if (!gateways[gateway.id]) {
-          gateways[gateway.id] = {
-            name: gateway.name,
-            apiEndpoints: [],
+        if (state.entities.apiEndpoints[connAE.toId]) {
+          if (!gateways[gateway.id]) {
+            gateways[gateway.id] = {
+              name: gateway.name,
+              apiEndpoints: [],
+            }
           }
+          gateways[gateway.id].apiEndpoints.push([
+            state.entities.apiEndpoints[connAE.toId].name,
+            <code>GET</code>,
+            <code>POST</code>,
+          ]);
         }
-        gateways[gateway.id].apiEndpoints.push([
-          state.entities.apiEndpoints[connAE.toId].name,
-          <code>GET</code>,
-          <code>POST</code>,
-        ]);
       });
     });
     Object.keys(gateways).forEach((key) => {
-      triggers.push({
+      triggers.unshift({
         type: 'API Gateway',
         source: gateways[key].name,
         details: gateways[key].apiEndpoints,

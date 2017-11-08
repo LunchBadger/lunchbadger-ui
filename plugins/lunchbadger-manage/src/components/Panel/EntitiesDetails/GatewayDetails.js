@@ -154,7 +154,13 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].policies[idx + step] = pipelines[pipelineIdx].policies[idx];
     pipelines[pipelineIdx].policies[idx] = tmp;
     this.changeState({pipelines});
-  }
+  };
+
+  updatePolicyName = (pipelineIdx, policyIdx) => name => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].name = name;
+    this.changeState({pipelines});
+  };
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
@@ -294,7 +300,7 @@ class GatewayDetails extends PureComponent {
   };
 
   renderCAPairs = (policy, pipelineIdx, policyIdx) => {
-    const {conditionAction} = policy;
+    const {conditionAction, name} = policy;
     const {length} = conditionAction;
     return (
       <div>
@@ -313,6 +319,7 @@ class GatewayDetails extends PureComponent {
             pipelineIdx={pipelineIdx}
             policyIdx={policyIdx}
             pair={pair}
+            policyName={name}
           />
         ))}
       </div>
@@ -353,6 +360,7 @@ class GatewayDetails extends PureComponent {
         value={policy.name || options[0].value}
         options={options}
         hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
+        onChange={this.updatePolicyName(pipelineIdx, policyIdx)}
       />
     );
   };

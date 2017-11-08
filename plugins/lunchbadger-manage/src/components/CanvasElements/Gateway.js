@@ -157,6 +157,7 @@ class Gateway extends Component {
                 pipelineIdx={pipelineIdx}
                 policyIdx={policyIdx}
                 pair={pair}
+                policyName={policy.name}
                 hidden
               />
             ))}

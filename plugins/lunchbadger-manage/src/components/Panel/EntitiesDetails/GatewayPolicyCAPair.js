@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import GatewayPolicyCondition from './GatewayPolicyCondition';
+import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
+import PolicyProxyActionPair from './PolicyProxyActionPair';
 import {
   EntityPropertyLabel,
   CollapsibleProperties,
@@ -25,6 +27,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     policyIdx: PropTypes.number,
     pair: PropTypes.object,
     hidden: PropTypes.bool,
+    policyName: PropTypes.string,
   };
 
   static defaultProps = {
@@ -85,10 +88,12 @@ export default class GatewayPolicyCAPair extends PureComponent {
       pipelineIdx,
       policyIdx,
       pair,
-      hidden
+      hidden,
+      policyName,
     } = this.props;
     const conditionSchemas = this.context.store.getState().entities.gatewaySchemas.condition;
     const conditionPrefix = `pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`;
+    const isProxyPolicy = policyName === GATEWAY_POLICIES.PROXY;
     const collapsible = (
       <div className="GatewayPolicyCAPair__CA">
         <Input
@@ -110,7 +115,13 @@ export default class GatewayPolicyCAPair extends PureComponent {
         </div>
         <div className="GatewayPolicyCAPair__CA__A">
           <EntityPropertyLabel>Action</EntityPropertyLabel>
-          {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action')}
+          {isProxyPolicy && (
+            <PolicyProxyActionPair
+              pair={pair}
+              namePrefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`}
+            />
+          )}
+          {!isProxyPolicy && this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action')}
         </div>
       </div>
     );

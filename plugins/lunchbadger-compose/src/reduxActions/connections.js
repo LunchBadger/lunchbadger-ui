@@ -63,23 +63,27 @@ export const reattach = info => async (dispatch, getState) => {
     Connections.moveConnection(info);
     if (originalTargetId !== newTargetId) {
       const originalModel = storeUtils.findEntity(state, 1, originalTargetId);
-      await ModelService.upsertModelConfig({
-        name: originalModel.name,
-        id: `server.${originalModel.name}`,
-        facetName: 'server',
-        dataSource: null,
-        public: originalModel.public,
-      });
+      if (originalModel.constructor.type === 'Model') {
+        await ModelService.upsertModelConfig({
+          name: originalModel.name,
+          id: `server.${originalModel.name}`,
+          facetName: 'server',
+          dataSource: null,
+          public: originalModel.public,
+        });
+      }
     }
     const dataSource = storeUtils.findEntity(state, 0, newSourceId);
     const model = storeUtils.findEntity(state, 1, newTargetId);
-    await ModelService.upsertModelConfig({
-      name: model.name,
-      id: `server.${model.name}`,
-      facetName: 'server',
-      dataSource: dataSource.name,
-      public: model.public,
-    });
+    if (model.constructor.type === 'Model') {
+      await ModelService.upsertModelConfig({
+        name: model.name,
+        id: `server.${model.name}`,
+        facetName: 'server',
+        dataSource: dataSource.name,
+        public: model.public,
+      });
+    }
     info.connection.removeType('wip');
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));

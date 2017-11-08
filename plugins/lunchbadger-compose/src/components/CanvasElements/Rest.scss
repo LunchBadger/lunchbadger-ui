@@ -1,0 +1,38 @@
+.Rest.plain {
+  .Rest {
+    &__plain {
+      display: none;
+    }
+    &__predefined {
+      padding: 16px 16px 0;
+    }
+    &__operations {
+      padding-left: 24px;
+      margin-top: -12px;
+      &__collapsible {
+        margin: 15px -23px 0 -17px;
+        &__operation {
+          margin: 20px 0 -22px -15px;
+        }
+      }
+    }
+    &__url {
+      display: block;
+      margin-top: -10px;
+    }
+  }
+  .IconButton {
+    display: none;
+  }
+}
+
+.editable {
+  .Rest.plain {
+    .CollapsibleProperties__bar__left {
+      transform: translateX(8px) !important;
+    }
+    .IconButton {
+      display: inline-block;
+    }
+  }
+}

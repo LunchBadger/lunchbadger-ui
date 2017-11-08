@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import {update, remove} from '../reduxActions/dataSources';
+import predefinedRests from '../utils/predefinedRests';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -18,6 +20,9 @@ export default class DataSource extends BaseModel {
   _keyId = '';
   _password = '';
   _type = '';
+  predefined = 'custom';
+  operations = _.merge([], predefinedRests.custom.operations);
+  options = undefined;
 
   constructor(id, name, connector) {
     super(id);
@@ -63,6 +68,8 @@ export default class DataSource extends BaseModel {
       delete json.database;
       delete json.username;
       delete json.password;
+      json.predefined = this.predefined;
+      json.options = this.options;
       json.operations = this.operations;
     }
     if (this.isSoap || this.isEthereum) {
@@ -263,6 +270,65 @@ export default class DataSource extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  processModel(model) {
+    const data = _.merge({}, model);
+    if (data.hasOwnProperty('predefined')) {
+      const options = data.options;
+      if (!options.enabled) {
+        data.options = undefined;
+      } else {
+        data.options = {};
+        if (options.hasOwnProperty('strictSSL')) {
+          data.options.strictSSL = options.strictSSL;
+        }
+        if (options.hasOwnProperty('useQuerystring')) {
+          data.options.useQuerystring = options.useQuerystring;
+        }
+        if (options.headers.enabled) {
+          data.options.headers = {};
+          (options.headers.params || []).forEach(({key, value}) => {
+            if (key.trim() !== '') {
+              data.options.headers[key.trim()] = value;
+            }
+          });
+        }
+      }
+      if (!data.operations) {
+        data.operations = undefined;
+      } else {
+        data.operations.forEach((operation) => {
+          if (!operation.template.options.enabled) {
+            operation.template.options = undefined;
+          } else {
+            delete operation.template.options.enabled;
+          }
+          const headers = operation.template.headers || [];
+          operation.template.headers = {};
+          headers.forEach(({key, value}) => {
+            if (key.trim() !== '') {
+              operation.template.headers[key.trim()] = value;
+            }
+          });
+          const query = operation.template.query || [];
+          operation.template.query = {};
+          query.forEach(({key, value}) => {
+            if (key.trim() !== '') {
+              operation.template.query[key.trim()] = value;
+            }
+          });
+          const functions = operation.functions || [];
+          operation.functions = {};
+          functions.forEach(({key, value}) => {
+            if (key.trim() !== '') {
+              operation.functions[key.trim()] = value.split(',').map(i => i.trim()).filter(i => i !== '');
+            }
+          });
+        });
+      }
+    }
+    return data;
   }
 
 }

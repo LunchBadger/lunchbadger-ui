@@ -69,7 +69,7 @@ class Gateway extends Component {
       }
     });
     this.onPropsUpdate(this.props, callback);
-  }
+  };
 
   processModel = model => {
     const {entity} = this.props;

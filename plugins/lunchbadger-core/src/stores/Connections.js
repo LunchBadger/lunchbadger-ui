@@ -27,7 +27,7 @@ class Connections {
   }
 
   @computed get report() {
-    return [this.connections.map(item => item), this.connectionsHistory.map(a => a)];
+    return this.connections.map(({fromId, toId, info}) => ({fromId, toId, info}));
   }
 
   toJSON() {
@@ -35,11 +35,8 @@ class Connections {
   }
 
   addConnectionByInfo(info) {
-    this.includeConnection(ConnectionFactory.create({
-      fromId: formatId(info.sourceId),
-      toId: formatId(info.targetId),
-      info,
-    }));
+    const {sourceId, targetId} = info;
+    this.addConnection(sourceId, targetId, info);
   }
 
   addConnection(fromId, toId, info) {
@@ -51,12 +48,42 @@ class Connections {
   }
 
   moveConnection(info) {
-    const {originalSourceId, originalTargetId, newSourceId, newTargetId} = info;
-    const currentConnectionIndex = this.findEntityIndexBySourceAndTarget(originalSourceId, originalTargetId);
+    const {
+      originalSourceId,
+      originalTargetId,
+      newSourceId,
+      newSourceEndpoint,
+      newTargetId,
+      newTargetEndpoint,
+    } = info;
+    const {element: {parentElement: {classList: source}}} = newSourceEndpoint;
+    const {element: {parentElement: {classList: target}}} = newTargetEndpoint;
+    let currentConnectionIndex = this.findEntityIndexBySourceAndTarget(originalSourceId, originalTargetId);
     if (currentConnectionIndex > -1) {
       this.deleteConnection(currentConnectionIndex);
-      this.addConnection(newSourceId, newTargetId, info);
     }
+    currentConnectionIndex = this.findEntityIndexBySourceAndTarget(originalTargetId, originalSourceId);
+    if (currentConnectionIndex > -1) {
+      this.deleteConnection(currentConnectionIndex);
+    }
+    let flip = false;
+    if (source.contains('port-in')) {
+      if (!(source.contains('port-Function') && target.contains('port-Model'))) {
+        flip = true;
+      }
+    }
+    if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function')) {
+      flip = true;
+    }
+    const sourceId = flip ? newTargetId : newSourceId;
+    const targetId = flip ? newSourceId : newTargetId;
+    if (flip) {
+      info.newSourceEndpoint = newTargetEndpoint;
+      info.newTargetEndpoint = newSourceEndpoint;
+      info.newSourceId = newTargetId;
+      info.newTargetId = newSourceId;
+    }
+    this.addConnection(sourceId, targetId, info);
   }
 
   removeConnection(fromId, toId) {
@@ -81,6 +108,11 @@ class Connections {
       fromId: formatId(fromId),
       toId: formatId(toId),
     });
+  }
+
+  connectionExists(sourceId, targetId) {
+    return this.findEntityIndexBySourceAndTarget(sourceId, targetId) >= 0 ||
+      this.findEntityIndexBySourceAndTarget(targetId, sourceId) >= 0;
   }
 
   isFromTo(fromId, toId) {
@@ -121,58 +153,28 @@ class Connections {
     if (way === 'out') {
       const conns = this.connections
         .filter(({fromId, toId}) => fromId === id || toId === id)
-        .filter(({fromId, info: {source, target}}) => {
-          if (!source || !target) return false;
-          const sc = source.parentElement.classList;
-          const tc = target.parentElement.classList;
-          return (
-            (
-              fromId === id
-              &&
-              sc.contains('port-out')
-              &&
-              tc.contains('port-in')
-            )
-            ||
-            (
-              sc.contains('port-out')
-              &&
-              tc.contains('port-out')
-              &&
-              sc.contains('port-Function')
-              &&
-              tc.contains('port-Model')
-            )
-          );
+        .filter(({fromId, info: {source, newSourceEndpoint, target, newTargetEndpoint}}) => {
+          const sourceEndpoint = newSourceEndpoint ? newSourceEndpoint.element : source;
+          const targetEndpoint = newTargetEndpoint ? newTargetEndpoint.element : target;
+          if (!sourceEndpoint || !targetEndpoint) return false;
+          const sc = sourceEndpoint.parentElement.classList;
+          const tc = targetEndpoint.parentElement.classList;
+          return ((fromId === id && sc.contains('port-out') && tc.contains('port-in'))
+            || (sc.contains('port-out') && tc.contains('port-out') && sc.contains('port-Function') && tc.contains('port-Model')));
         });
       return conns.length > 0;
     }
     if (way === 'in') {
       const conns = this.connections
         .filter(({fromId, toId}) => fromId === id || toId === id)
-        .filter(({toId, info: {source, target}}) => {
-          if (!source || !target) return false;
-          const sc = source.parentElement.classList;
-          const tc = target.parentElement.classList;
-          return (
-            (
-              toId === id
-              &&
-              sc.contains('port-out')
-              &&
-              tc.contains('port-in')
-            )
-            ||
-            (
-              sc.contains('port-in')
-              &&
-              tc.contains('port-in')
-              &&
-              sc.contains('port-Function')
-              &&
-              tc.contains('port-Model')
-            )
-          );
+        .filter(({toId, info: {source, newSourceEndpoint, target, newTargetEndpoint}}) => {
+          const sourceEndpoint = newSourceEndpoint ? newSourceEndpoint.element : source;
+          const targetEndpoint = newTargetEndpoint ? newTargetEndpoint.element : target;
+          if (!sourceEndpoint || !targetEndpoint) return false;
+          const sc = sourceEndpoint.parentElement.classList;
+          const tc = targetEndpoint.parentElement.classList;
+          return ((toId === id && sc.contains('port-out') && tc.contains('port-in'))
+            || (sc.contains('port-in') && tc.contains('port-in') && sc.contains('port-Function') && tc.contains('port-Model')));
         });
       return conns.length > 0;
     }

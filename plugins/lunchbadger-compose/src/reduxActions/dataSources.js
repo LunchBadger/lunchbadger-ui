@@ -46,7 +46,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     const {body} = await DataSourceService.upsert(updatedEntity.toJSON());
     if (body.hasOwnProperty('wsdl')) {
-      body.soapOperations = body.operations;
+      body.soapOperations = body.operations || {};
       delete body.operations;
     }
     updatedEntity = DataSource.create(body);

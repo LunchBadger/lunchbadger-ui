@@ -31,7 +31,12 @@ export default class GatewayPolicyCAPair extends PureComponent {
   };
 
   static defaultProps = {
+    onRemoveCAPair: () => {},
+    onReorderCAPairUp: () => {},
+    onReorderCAPairDown: () => {},
     onAddParameter: () => () => {},
+    onRemoveParameter: () => () => {},
+    onParameterTab: () => () => {},
     hidden: false,
   };
 
@@ -39,7 +44,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     store: PropTypes.object,
   };
 
-  discardChanges = () => this.policyConditionRef.discardChanges();
+  discardChanges = () => {}; //this.policyConditionRef.discardChanges();
 
   renderParameters = (pipelineIdx, policyIdx, pairIdx, pair, kind) => {
     const {onAddParameter, onRemoveParameter, onParameterTab} = this.props;
@@ -103,7 +108,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
         />
         <div className="GatewayPolicyCAPair__CA__C">
           <EntityPropertyLabel>Condition</EntityPropertyLabel>
-          <div className="GatewayPolicyCAPair__CA__C__box">
+          {/*<div className="GatewayPolicyCAPair__CA__C__box">
             <GatewayPolicyCondition
               ref={r => this.policyConditionRef = r}
               condition={pair.condition}
@@ -111,7 +116,8 @@ export default class GatewayPolicyCAPair extends PureComponent {
               prefix={conditionPrefix}
               onChangeState={onChangeState}
             />
-          </div>
+          </div>*/}
+          {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'condition')}
         </div>
         <div className="GatewayPolicyCAPair__CA__A">
           <EntityPropertyLabel>Action</EntityPropertyLabel>

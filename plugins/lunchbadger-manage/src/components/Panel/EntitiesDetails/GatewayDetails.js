@@ -164,7 +164,8 @@ class GatewayDetails extends PureComponent {
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    const condition = {id: uuid.v4(), name: 'always'};
+    // const condition = {id: uuid.v4(), name: 'always'};
+    const condition = {name: 'always'};
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({condition}));
     const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
     pipelines[pipelineIdx]

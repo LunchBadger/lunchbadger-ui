@@ -311,11 +311,21 @@ class GatewayDetails extends PureComponent {
         space="10px 0"
       />
     ));
+    let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
+    if (policy.name === GATEWAY_POLICIES.PROXY) {
+      const state = this.context.store.getState();
+      const {serviceEndpointEntities} = state.plugins.quadrants[1];
+      const {entities} = state;
+      const endpointsAmount = serviceEndpointEntities.reduce((amount, type) => amount += Object.keys(entities[type]).length, 0);
+      if (endpointsAmount === 0) {
+        button = null;
+      }
+    }
     return (
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>}
         collapsible={collapsible}
-        button={<IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />}
+        button={button}
         defaultOpened
         untoggable
         space="15px 0 10px"

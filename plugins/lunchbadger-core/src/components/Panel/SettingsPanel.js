@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
 import {addSystemDefcon1} from '../../reduxActions/systemDefcon1';
@@ -8,6 +9,7 @@ import ConfigStoreService from '../../services/ConfigStoreService';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import {getUser} from '../../utils/auth';
+import './SettingsPanel.scss';
 
 class SettingsPanel extends Component {
   static type = 'SettingsPanel';
@@ -99,7 +101,14 @@ class SettingsPanel extends Component {
               Access via Git
             </label>
             <div className="details-panel__static-field">
-              <pre>{cloneCommand}</pre>
+              <pre className="gitCloneCommand">
+                {cloneCommand}
+              </pre>
+              {cloneCommand !== '...' && (
+                <CopyToClipboard text={cloneCommand}>
+                  <i className="fa fa-copy iconCopy" />
+                </CopyToClipboard>
+              )}
             </div>
             <div>
               <button onClick={this.onRegenerate}>Regenerate</button>

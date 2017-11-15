@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import cs from 'classnames';
 import {SmoothCollapse} from '../';
 import {toggleSystemDefcon1, removeSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
+import LoginManager from '../../../../plugins/lunchbadger-core/src/utils/auth';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
@@ -30,7 +31,7 @@ class SystemDefcon1Box extends Component {
   handleClose = () => {
     const {dispatch, server} = this.props;
     if (server) {
-      document.location.reload();
+      LoginManager().logout();
     } else {
       dispatch(toggleSystemDefcon1());
     }

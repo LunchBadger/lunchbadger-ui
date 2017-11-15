@@ -1,7 +1,13 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {Input, Table, Select} from '../../../../../lunchbadger-ui/src';
+import {
+  EntityPropertyLabel,
+  CollapsibleProperties,
+  Input,
+  Table,
+  Select,
+} from '../../../../../lunchbadger-ui/src';
 
 class PolicyProxyActionPair extends PureComponent {
   render() {
@@ -52,12 +58,19 @@ class PolicyProxyActionPair extends PureComponent {
         />,
       ]
     ];
+    const table = <Table
+      columns={columns}
+      data={data}
+      widths={widths}
+      paddings={paddings}
+    />;
     return (
-      <Table
-        columns={columns}
-        data={data}
-        widths={widths}
-        paddings={paddings}
+      <CollapsibleProperties
+        bar={<EntityPropertyLabel>Action</EntityPropertyLabel>}
+        collapsible={table}
+        defaultOpened
+        untoggable
+        space="20px 0 0"
       />
     );
   }

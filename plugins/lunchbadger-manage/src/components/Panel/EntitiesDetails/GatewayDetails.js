@@ -1,7 +1,6 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import uuid from 'uuid';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -10,7 +9,6 @@ import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import PolicyProxyActionPair from './PolicyProxyActionPair';
-import GatewayPolicyCAPair from './GatewayPolicyCAPair';
 
 import {
   EntityProperty,
@@ -37,8 +35,7 @@ class GatewayDetails extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = this.stateFromStores(props);
-    this.policyCAPairRefs = {};
+    this.state = {...this.stateFromStores(props)};
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,16 +52,9 @@ class GatewayDetails extends PureComponent {
     admin: _.cloneDeep(props.entity.admin),
   });
 
-  onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
+  onPropsUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
 
-  discardChanges = (callback) => {
-    Object.keys(this.policyCAPairRefs).forEach((key) => {
-      if (this.policyCAPairRefs[key]) {
-        this.policyCAPairRefs[key].discardChanges();
-      }
-    });
-    this.onPropsUpdate(this.props, callback);
-  };
+  discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   processModel = model => {
     const {entity} = this.props;
@@ -154,19 +144,11 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].policies[idx + step] = pipelines[pipelineIdx].policies[idx];
     pipelines[pipelineIdx].policies[idx] = tmp;
     this.changeState({pipelines});
-  };
-
-  updatePolicyName = (pipelineIdx, policyIdx) => name => {
-    const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].name = name;
-    this.changeState({pipelines});
-  };
+  }
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    // const condition = {id: uuid.v4(), name: 'always'};
-    const condition = {name: 'always'};
-    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({condition}));
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({}));
     const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
     pipelines[pipelineIdx]
       .policies[policyIdx]
@@ -300,35 +282,35 @@ class GatewayDetails extends PureComponent {
     );
   };
 
-  renderCAPairs = (policy, pipelineIdx, policyIdx) => {
-    const {conditionAction, name} = policy;
-    const {length} = conditionAction;
-    return (
-      <div>
-        {conditionAction.map((pair, idx) => (
-          <GatewayPolicyCAPair
-            key={pair.id}
-            ref={r => this.policyCAPairRefs[pair.id] = r}
-            pairIdx={idx}
-            onRemoveCAPair={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-            onReorderCAPairUp={idx === 0 ? undefined : this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-            onReorderCAPairDown={idx === length - 1 ? undefined : this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-            onAddParameter={this.addParameter}
-            onRemoveParameter={this.removeParameter}
-            onParameterTab={this.handleParametersTab}
-            onChangeState={this.changeState}
-            pipelineIdx={pipelineIdx}
-            policyIdx={policyIdx}
-            pair={pair}
-            policyName={name}
-          />
-        ))}
-      </div>
-    );
-  }
-
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
-    const collapsible = this.renderCAPairs(policy, pipelineIdx, policyIdx);
+    const collapsible = policy.conditionAction.map((pair, idx) => (
+      <CollapsibleProperties
+        key={pair.id}
+        bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
+        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
+        button={(
+          <span>
+            <IconButton
+              icon="iconDelete"
+              onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+            />
+            <IconButton
+              icon="iconArrowDown"
+              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+              disabled={idx === policy.conditionAction.length - 1}
+            />
+            <IconButton
+              icon="iconArrowUp"
+              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+              disabled={idx === 0}
+            />
+          </span>
+        )}
+        barToggable
+        defaultOpened
+        space="10px 0"
+      />
+    ));
     let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
     if (policy.name === GATEWAY_POLICIES.PROXY) {
       const state = this.context.store.getState();
@@ -361,7 +343,6 @@ class GatewayDetails extends PureComponent {
         value={policy.name || options[0].value}
         options={options}
         hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
-        onChange={this.updatePolicyName(pipelineIdx, policyIdx)}
       />
     );
   };

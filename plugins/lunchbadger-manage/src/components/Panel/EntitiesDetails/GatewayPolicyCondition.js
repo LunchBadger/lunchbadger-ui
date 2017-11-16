@@ -51,6 +51,13 @@ export default class GatewayPolicyCondition extends PureComponent {
   };
 
   getState = (name, condition) => {
+    const id = uuid.v4();
+    if (!name) return {
+      id,
+      name: 'always',
+      custom: false,
+      properties: [],
+    };
     const {schemas} = this.props;
     const propSchemas = {...(schemas[name] || {properties: {}}).properties};
     Object.keys(condition).forEach((key) => {
@@ -77,7 +84,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       }
     });
     return {
-      id: uuid.v4(),
+      id,
       name,
       custom: !schemas[name],
       properties,

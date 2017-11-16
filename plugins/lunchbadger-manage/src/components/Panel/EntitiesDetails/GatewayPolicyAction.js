@@ -4,9 +4,8 @@ import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
 import {EntityProperty, IconButton, IconMenu} from '../../../../../lunchbadger-ui/src';
+import GatewayProxyServiceEndpoint from './Subelements/GatewayProxyServiceEndpoint';
 import './GatewayPolicyAction.scss';
-
-const {diff} = LunchBadgerCore.utils;
 
 const customPropertyTypes = [
   'string',
@@ -342,6 +341,16 @@ export default class GatewayPolicyAction extends PureComponent {
           autocomplete={autocomplete}
         />
       );
+    }
+    if (type === 'serviceEndpoint') {
+      return (
+        <GatewayProxyServiceEndpoint
+          name={`${prefix}[${name}]`}
+          value={value}
+          description={description}
+          onChange={this.handlePropertyValueChange(id)}
+        />
+      )
     }
     return null;
   };

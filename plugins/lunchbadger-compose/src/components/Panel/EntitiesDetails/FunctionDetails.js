@@ -6,14 +6,6 @@ import {createSelector} from 'reselect';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-import brace from 'brace';
-import AceEditor from 'react-ace';
-import {ResizableBox} from 'react-resizable';
-import 'brace/mode/javascript';
-import 'brace/mode/java';
-import 'brace/mode/python';
-import 'brace/mode/csharp';
-import 'brace/theme/monokai';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -23,6 +15,7 @@ import {
   Select,
   Table,
   IconButton,
+  CodeEditor,
 } from '../../../../../lunchbadger-ui/src';
 import runtimeOptions from '../../../utils/runtimeOptions';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
@@ -44,8 +37,6 @@ const editorCodeLanguages = {
 };
 
 const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
-
-const initialEditorCodeWidth = Math.floor(window.innerWidth * 0.75);
 
 // const userFieldsTypeOptions = [
 //   {label: 'String', value: 'string'},
@@ -88,16 +79,8 @@ class FunctionDetails extends PureComponent {
     //   addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
     //   return data;
     // };
-    this.state = {
-      ...this.initState(props),
-      // ...stateFromStores(props),
-    };
-    this.onPropsUpdate = (props = this.props, callback) => {
-      this.setState({
-        ...this.initState(props),
-        // ...stateFromStores(props),
-      }, callback);
-    };
+    this.state = this.initState(props);
+    this.onPropsUpdate = (props = this.props, callback) => this.setState(this.initState(props), callback);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,15 +91,12 @@ class FunctionDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name, runtime, code} = props.entity;
+    const {contextPath, name, runtime} = props.entity;
     return {
       changed: false,
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
       editorCodeLanguage: getEditorCodeLanguage(runtime),
-      code,
-      editorCodeWidth: initialEditorCodeWidth,
-      editorCodeHeight: 350,
     };
   }
 
@@ -155,12 +135,14 @@ class FunctionDetails extends PureComponent {
       }
       delete model.dataSource;
     }
-    model.code = this.state.code;
     return model;
     // return entity.processModel(model, this.state.properties);
   }
 
-  discardChanges = callback => this.onPropsUpdate(this.props, callback);
+  discardChanges = callback => {
+    this.codeEditorRef.discardChanges();
+    this.onPropsUpdate(this.props, callback);
+  }
 
   // handlePropertyToggleCollapse = id => () => {
   //   const properties = [...this.state.properties];
@@ -554,41 +536,22 @@ class FunctionDetails extends PureComponent {
   //   />;
   // }
 
-  handleFunctionCodeChange = code => this.setState({code, changed: true}, () => this.props.parent.checkPristine());
+  handleFunctionCodeChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
 
-  handleFunctionCodeResize = (_, {size: {width: editorCodeWidth, height: editorCodeHeight}}) =>
-    this.setState({editorCodeWidth, editorCodeHeight});
-
-  renderFunctionCodeSection() {
-    const {editorCodeLanguage, code, editorCodeWidth, editorCodeHeight} = this.state;
-    const options = {
-      enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true,
-      enableSnippets: true,
-      showLineNumbers: true,
-      tabSize: 2,
-    };
-    const maxWidth = window.innerWidth - 170;
+  renderFunctionCodeSection = () => {
+    const {code} = this.props.entity;
+    const {editorCodeLanguage} = this.state;
     return (
-      <ResizableBox
-        width={initialEditorCodeWidth}
-        height={350}
-        minConstraints={[200, 100]}
-        maxConstraints={[maxWidth, 2000]}
-        onResize={this.handleFunctionCodeResize}
-      >
-        <AceEditor
-          width={`${editorCodeWidth}px`}
-          height={`${editorCodeHeight}px`}
-          theme="monokai"
-          mode={editorCodeLanguage}
-          value={code}
-          onChange={this.handleFunctionCodeChange}
-          setOptions={options}
-        />
-      </ResizableBox>
+      <CodeEditor
+        ref={r => this.codeEditorRef = r}
+        lang={editorCodeLanguage}
+        value={code}
+        name="code"
+        onChange={this.handleFunctionCodeChange}
+        mode="editor"
+      />
     );
-  }
+  };
 
   render() {
     const sections = [

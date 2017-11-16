@@ -24,6 +24,7 @@ import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValida
 import Input from './Form/Input';
 import Checkbox from './Form/Checkbox';
 import Select from './Form/Select';
+import CodeEditor from './Form/CodeEditor';
 
 import Table from './Table/Table';
 
@@ -78,6 +79,7 @@ export {
   Aside,
   Button,
   Checkbox,
+  CodeEditor,
   CollapsibleProperties,
   ContextualInformationMessage,
   ContextualMenu,

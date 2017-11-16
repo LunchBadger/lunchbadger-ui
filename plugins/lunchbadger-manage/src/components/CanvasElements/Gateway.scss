@@ -44,6 +44,9 @@
     top: 50%;
     transform: translateY(-50%);
   }
+  &__CA {
+    display: none;
+  }
 }
 
 .editable .Gateway {

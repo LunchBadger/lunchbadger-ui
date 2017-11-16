@@ -95,6 +95,12 @@
       .multiEnvNotDev .editable .EntityHeader & {
         display: none;
       }
+      &.checkbox {
+        height: 48px;
+        padding-top: 8px;
+        font-size: 14px;
+        font-weight: 300;
+      }
     }
   }
   &__delete {
@@ -172,5 +178,18 @@
       z-index: -1;
       border-radius: 5px;
     }
+  }
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    &__chip {
+      margin: 2px !important;
+      font-family: monospace !important;
+    }
+  }
+  &__button {
+    position: absolute;
+    top: 30px;
+    right: -30px;
   }
 }

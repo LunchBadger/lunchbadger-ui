@@ -8,8 +8,8 @@ import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
-import PolicyProxyActionPair from './PolicyProxyActionPair';
 import GatewayPolicyCondition from './GatewayPolicyCondition';
+import GatewayPolicyAction from './GatewayPolicyAction';
 import './GatewayDetails.scss';
 
 import {
@@ -38,7 +38,7 @@ class GatewayDetails extends PureComponent {
   constructor(props) {
     super(props);
     this.state = this.stateFromStores(props);
-    this.policyConditionRefs = {};
+    this.policyCARefs = {};
   }
 
   componentWillMount() {
@@ -64,7 +64,7 @@ class GatewayDetails extends PureComponent {
   onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
   discardChanges = (callback) => {
-    Object.keys(this.policyConditionRefs).forEach(key => this.policyConditionRefs[key] && this.policyConditionRefs[key].discardChanges());
+    Object.keys(this.policyCARefs).forEach(key => this.policyCARefs[key] && this.policyCARefs[key].discardChanges());
     this.onPropsUpdate(this.props, callback);
   };
 
@@ -103,8 +103,9 @@ class GatewayDetails extends PureComponent {
     return entity.processModel(model);
   };
 
-  changeState = obj => this.setState({...obj, changed: true}, () => {
+  changeState = (obj, cb) => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();
+    cb && cb();
   });
 
   addPipeline = () => {
@@ -259,20 +260,13 @@ class GatewayDetails extends PureComponent {
   };
 
   renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx, policyName) => {
-    const actionParameters = policyName === GATEWAY_POLICIES.PROXY
-      ? <PolicyProxyActionPair
-          pair={pair}
-          namePrefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`}
-        />
-      : this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action');
-    const {conditionSchemas} = this;
+    const {conditionSchemas, policiesSchemas} = this;
     return (
       <div>
         <div className="GatewayDetails__CA__pair__section">
           <EntityPropertyLabel noMargin>Condition</EntityPropertyLabel>
-          <div style={{height: 15}} />
           <GatewayPolicyCondition
-            ref={r => this.policyConditionRefs[pair.id] = r}
+            ref={r => this.policyCARefs[`${pairIdx}_condition`] = r}
             condition={pair.condition}
             schemas={conditionSchemas}
             prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
@@ -282,7 +276,13 @@ class GatewayDetails extends PureComponent {
         </div>
         <div className="GatewayDetails__CA__pair__section">
           <EntityPropertyLabel noMargin>Action</EntityPropertyLabel>
-          {actionParameters}
+          <GatewayPolicyAction
+            ref={r => this.policyCARefs[`${pairIdx}_action`] = r}
+            action={pair.action}
+            schemas={policiesSchemas[policyName]}
+            prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
+            onChangeState={this.changeState}
+          />
         </div>
       </div>
     );

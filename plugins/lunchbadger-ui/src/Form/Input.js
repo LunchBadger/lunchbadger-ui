@@ -24,10 +24,12 @@ class Input extends Component {
     isInvalid: PropTypes.bool,
     hideUnderline: PropTypes.bool,
     textarea: PropTypes.bool,
+    alignRight: PropTypes.bool,
   };
 
   static defaultProps = {
     textarea: false,
+    alignRight: false,
   }
 
   _handleKeyPress = (event) => {
@@ -79,6 +81,7 @@ class Input extends Component {
       isInvalid,
       hideUnderline,
       textarea,
+      alignRight,
     } = this.props;
     const rootStyle = {
       fontWeight: 'inherit',
@@ -89,6 +92,9 @@ class Input extends Component {
       ...rootStyle,
       padding: '0 8px',
     };
+    if (alignRight) {
+      inputStyle.textAlign = 'right';
+    }
     const underlineStyles = {
       ...underlineStyle,
     };

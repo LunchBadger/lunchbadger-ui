@@ -9,6 +9,7 @@ import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 import PipelineComponent from './Subelements/Pipeline';
 import GatewayPolicyCondition from '../Panel/EntitiesDetails/GatewayPolicyCondition';
+import GatewayPolicyAction from '../Panel/EntitiesDetails/GatewayPolicyAction';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -37,7 +38,7 @@ class Gateway extends Component {
   constructor(props) {
     super(props);
     this.state = this.stateFromStores(props);
-    this.policyConditionRefs = {};
+    this.policyCARefs = {};
   }
 
   componentWillMount() {
@@ -63,7 +64,10 @@ class Gateway extends Component {
 
   onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
-  discardChanges = callback => this.onPropsUpdate(this.props, callback);
+  discardChanges = callback => {
+    Object.keys(this.policyCARefs).forEach(key => this.policyCARefs[key] && this.policyCARefs[key].discardChanges());
+    this.onPropsUpdate(this.props, callback);
+  };
 
   processModel = model => {
     const {entity} = this.props;
@@ -153,14 +157,21 @@ class Gateway extends Component {
             />
             <div className="Gateway__CA">
               {policy.conditionAction.map((pair, pairIdx) => (
-                <GatewayPolicyCondition
-                  key={pairIdx}
-                  ref={r => this.policyConditionRefs[pair.id] = r}
-                  condition={pair.condition}
-                  schemas={this.conditionSchemas}
-                  prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
-                  root
-                />
+                <div key={pairIdx}>
+                  <GatewayPolicyCondition
+                    ref={r => this.policyCARefs[`${pairIdx}_condition`] = r}
+                    condition={pair.condition}
+                    schemas={this.conditionSchemas}
+                    prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
+                    root
+                  />
+                  <GatewayPolicyAction
+                    ref={r => this.policyCARefs[`${pairIdx}_action`] = r}
+                    action={pair.action}
+                    schemas={this.policiesSchemas[policy.name]}
+                    prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
+                  />
+                </div>
               ))}
             </div>
           </div>

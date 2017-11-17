@@ -325,7 +325,7 @@ export default [
           "type": "integer",
           "default": 5,
           "description": "max number of connections during windowMs milliseconds before sending a 429 response. Defaults to 5. Set to 0 to disable.",
-          "postfix": "connections",
+          "postfix": "connections"
         },
         "message": {
           "type": "string",

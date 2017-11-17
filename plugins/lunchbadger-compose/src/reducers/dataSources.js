@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import DataSource from '../models/DataSource';
 import {actionTypes} from '../reduxActions/actions';
 
@@ -8,6 +9,9 @@ export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.onLoadCompose:
       return action.payload[0].body.reduce((map, item) => {
+        if (!item.lunchbadgerId) {
+          item.lunchbadgerId = uuid.v4();
+        }
         if (item.hasOwnProperty('wsdl')) {
           item.soapOperations = item.operations || {};
           delete item.operations;

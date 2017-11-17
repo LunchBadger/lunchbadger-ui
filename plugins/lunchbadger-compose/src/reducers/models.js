@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import Model from '../models/Model';
 import {actionTypes} from '../reduxActions/actions';
 
@@ -10,6 +11,9 @@ export default (state = {}, action) => {
       return action.payload[1].body.reduce((map, item) => {
         if (item.kind === 'function') return map;
         if (item.wasBundled) return map;
+        if (!item.lunchbadgerId) {
+          item.lunchbadgerId = uuid.v4();
+        }
         map[item.lunchbadgerId] = Model.create(item);
         return map;
       }, {});

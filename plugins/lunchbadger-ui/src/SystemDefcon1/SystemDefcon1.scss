@@ -115,6 +115,8 @@
           }
           pre {
             margin-bottom: 10px;
+            user-select: text;
+            cursor: auto;
           }
         }
       }

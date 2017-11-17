@@ -317,7 +317,8 @@ class GatewayDetails extends PureComponent {
     );
   };
 
-  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
+  getPolicyInputOptions = () => Object.keys(this.context.store.getState().entities.gatewaySchemas.policy)
+    .map(label => ({label, value: label}));
 
   renderPolicyInput = (pipelineIdx, policyIdx, policy) => {
     const options = this.getPolicyInputOptions();

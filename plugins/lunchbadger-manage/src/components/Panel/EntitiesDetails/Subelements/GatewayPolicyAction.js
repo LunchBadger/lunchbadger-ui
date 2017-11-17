@@ -28,8 +28,6 @@ const determineType = value => {
   return typeof value;
 };
 
-const CUSTOM_PARAMETER = 'custom parameter';
-
 export default class GatewayPolicyAction extends PureComponent {
   static propTypes = {
     action: PropTypes.object,
@@ -118,14 +116,15 @@ export default class GatewayPolicyAction extends PureComponent {
   handleAddParameter = (name) => {
     const state = _.cloneDeep(this.state);
     const id = uuid.v4();
-    if (name === CUSTOM_PARAMETER) {
+    const custom = customPropertyTypes.includes(name);
+    if (custom) {
       state.parameters.push({
         id,
         name: '',
-        type: 'string',
+        type: name,
         types: customPropertyTypes,
-        value: '',
-        custom: true,
+        value: getDefaultValueByType(name),
+        custom,
         enum: [],
       });
     } else {
@@ -136,17 +135,14 @@ export default class GatewayPolicyAction extends PureComponent {
         type,
         types,
         value: def || getDefaultValueByType(type),
-        custom: false,
+        custom,
         enum: enum_ || [],
         description,
         postfix,
       });
     }
     this.changeState(state, () => setTimeout(() => {
-      let elementId = `${this.props.prefix}[${name}]`;
-      if (name === CUSTOM_PARAMETER) {
-        elementId = `${this.tmpPrefix}[${id}][name]`;
-      }
+      const elementId = custom ? `${this.tmpPrefix}[${id}][name]` : `${this.props.prefix}[${name}]`;
       const input = document.getElementById(elementId);
       input && input.focus();
     }), 200);
@@ -165,26 +161,18 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
-  handlePropertyTab = id => () => {
-    const {parameters} = this.state;
-    const idx = _.findIndex(parameters, item => item.id === id);
-    if (idx === parameters.length - 1) {
-      this.handleAddParameter(CUSTOM_PARAMETER);
-    }
-  };
+  // handlePropertyTab = id => () => { // TODO - consider auto-create new custom parameter
+  //   const {parameters} = this.state;
+  //   const idx = _.findIndex(parameters, item => item.id === id);
+  //   if (idx === parameters.length - 1) {
+  //     this.handleAddParameter('string');
+  //   }
+  // };
 
   handleCustomParameterNameChange = id => ({target: {value}}) => {
     const state = _.cloneDeep(this.state);
     const property = state.parameters.find(item => item.id === id);
     property.name = value;
-    this.changeState(state);
-  };
-
-  handleCustomParameterTypeChange = id => type => {
-    const state = _.cloneDeep(this.state);
-    const property = state.parameters.find(item => item.id === id);
-    property.type = type;
-    property.value = getDefaultValueByType(type);
     this.changeState(state);
   };
 
@@ -217,18 +205,8 @@ export default class GatewayPolicyAction extends PureComponent {
 
   renderProperty = (item) => {
     const {id, name, value, type, types, description, label, width, custom, postfix} = item;
-    const {prefix, horizontal} = this.props;
+    const {prefix} = this.props;
     if (types) {
-      const parameterValue = this.renderProperty({
-        id,
-        type,
-        name,
-        value,
-        label: custom ? 'Parameter Value' : name,
-        width: `calc(100% - ${custom ? (horizontal ? 25 : 410) : 190}px)`,
-        enum: item.enum,
-        custom,
-      });
       return (
         <div key={id} className="GatewayPolicyAction">
           {custom && (
@@ -237,20 +215,20 @@ export default class GatewayPolicyAction extends PureComponent {
               name={`${this.tmpPrefix}[${id}][name]`}
               value={name}
               onBlur={this.handleCustomParameterNameChange(id)}
-              width={200}
+              width={150}
               placeholder=" "
             />
           )}
-          <EntityProperty
-            title={custom ? 'Parameter Type' : `${name} Type`}
-            name={`${this.tmpPrefix}[${id}][type]`}
-            value={type}
-            options={types.map(label => ({label, value: label}))}
-            onChange={this.handleCustomParameterTypeChange(id)}
-            width={120}
-          />
-          {horizontal && <div className="GatewayPolicyAction__indent">{parameterValue}</div>}
-          {!horizontal && parameterValue}
+          {this.renderProperty({
+            id,
+            type,
+            name,
+            value,
+            label: custom ? 'Parameter Value' : name,
+            width: `calc(100% - ${custom ? 220 : 190}px)`,
+            enum: item.enum,
+            custom,
+          })}
         </div>
       );
     }
@@ -277,7 +255,7 @@ export default class GatewayPolicyAction extends PureComponent {
           name={`${prefix}[${name}]`}
           value={value}
           onBlur={this.handlePropertyValueChange(id)}
-          onTab={this.handlePropertyTab(id)}
+          // onTab={this.handlePropertyTab(id)}
           width={150} //width || 'calc(100% - 50px)'}
           description={description}
           placeholder=" "
@@ -295,7 +273,7 @@ export default class GatewayPolicyAction extends PureComponent {
           name={`${prefix}[${name}]`}
           value={value}
           onBlur={this.handlePropertyValueChange(id)}
-          onTab={this.handlePropertyTab(id)}
+          // onTab={this.handlePropertyTab(id)}
           width={width || 'calc(100% - 50px)'}
           description={description}
           placeholder=" "
@@ -339,7 +317,7 @@ export default class GatewayPolicyAction extends PureComponent {
           width={width || 'calc(100% - 50px)'}
           onAddChip={this.handleArrayItemAdd(id)}
           onRemoveChip={this.handleArrayItemRemove(id)}
-          onTab={this.handlePropertyTab(id)}
+          // onTab={this.handlePropertyTab(id)}
           description={item.description}
           options={options}
           autocomplete={autocomplete}
@@ -364,21 +342,15 @@ export default class GatewayPolicyAction extends PureComponent {
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
     const availableParameters = _.difference(Object.keys(schemas.properties), currParameters);
-    let addButton = (
-      <div className="GatewayPolicyAction__button add">
-        <IconButton icon="iconPlus" onClick={() => this.handleAddParameter(CUSTOM_PARAMETER)} />
+    const addButton = (
+      <div className="GatewayPolicyAction__button add menu">
+        <IconMenu
+          options={availableParameters}
+          secondaryOptions={customPropertyTypes}
+          onClick={this.handleAddParameter}
+        />
       </div>
     );
-    if (availableParameters.length > 0) {
-      addButton = (
-        <div className="GatewayPolicyAction__button add menu">
-          <IconMenu
-            options={availableParameters.concat([CUSTOM_PARAMETER])}
-            onClick={this.handleAddParameter}
-          />
-        </div>
-      );
-    }
     return (
       <div className="GatewayPolicyAction">
         {addButton}

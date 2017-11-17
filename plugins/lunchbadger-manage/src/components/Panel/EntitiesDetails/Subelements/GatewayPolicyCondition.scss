@@ -54,31 +54,10 @@
   &__array {
     margin: -15px 0 15px 15px;
   }
-  &__indent {
-    margin-left: 25px;
+  &__add {
     position: relative;
-    &:before {
-      display: block;
-      content: '';
-      position: absolute;
-      width: 2px;
-      top: -13px;
-      left: -13px;
-      height: 55px;
-      background-color: #4190CE;
-      opacity: 0.3;
-    }
-    &:after {
-      display: block;
-      content: '';
-      position: absolute;
-      height: 2px;
-      top: 40px;
-      left: -11px;
-      width: 9px;
-      background-color: #4190CE;
-      opacity: 0.3;
-    }
+    top: -12px;
+    left: 12px;
   }
 }
 

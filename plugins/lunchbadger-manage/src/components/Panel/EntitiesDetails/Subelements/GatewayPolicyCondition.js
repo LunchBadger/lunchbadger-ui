@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
 import './GatewayPolicyCondition.scss';
 
 const customPropertyTypes = [
@@ -128,14 +128,14 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
-  handleAddCustomParameter = () => {
+  handleAddCustomParameter = (type) => {
     const state = _.cloneDeep(this.state);
     state.properties.push({
       id: uuid.v4(),
       name: '',
-      type: 'string',
+      type,
       types: customPropertyTypes,
-      value: '',
+      value: getDefaultValueByType(type),
       custom: true,
     });
     this.changeState(state);
@@ -157,13 +157,6 @@ export default class GatewayPolicyCondition extends PureComponent {
   handleCustomParameterNameChange = propIdx => ({target: {value}}) => {
     const state = _.cloneDeep(this.state);
     state.properties[propIdx].name = value;
-    this.changeState(state);
-  };
-
-  handleCustomParameterTypeChange = propIdx => type => {
-    const state = _.cloneDeep(this.state);
-    state.properties[propIdx].type = type;
-    state.properties[propIdx].value = getDefaultValueByType(type);
     this.changeState(state);
   };
 
@@ -238,16 +231,6 @@ export default class GatewayPolicyCondition extends PureComponent {
       horizontal,
     } = this.props;
     if (types) {
-      const parameterValue = this.renderProperty({
-        id,
-        type,
-        name,
-        value,
-        label: 'Parameter Value',
-        width: `calc(100% - ${horizontal ? 25 : 410}px)`,
-        enum: [],
-        custom,
-      }, propIdx);
       return (
         <div key={id} className="GatewayPolicyCondition">
           <EntityProperty
@@ -255,19 +238,19 @@ export default class GatewayPolicyCondition extends PureComponent {
             name={`${this.tmpPrefix}[${propIdx}][name]`}
             value={name}
             onBlur={this.handleCustomParameterNameChange(propIdx)}
-            width={200}
+            width={150}
             placeholder=" "
           />
-          <EntityProperty
-            title="Parameter Type"
-            name={`${this.tmpPrefix}[${propIdx}][type]`}
-            value={type}
-            options={types.map(label => ({label, value: label}))}
-            onChange={this.handleCustomParameterTypeChange(propIdx)}
-            width={120}
-          />
-          {horizontal && <div className="GatewayPolicyCondition__indent">{parameterValue}</div>}
-          {!horizontal && parameterValue}
+          {this.renderProperty({
+            id,
+            type,
+            name,
+            value,
+            label: 'Parameter Value',
+            width: 'calc(100% - 220px)',
+            enum: [],
+            custom,
+          }, propIdx)}
           <div className="GatewayPolicyCondition__button">
             <IconButton icon="iconDelete" onClick={this.handleCustomParameterRemove(propIdx)} />
           </div>
@@ -290,6 +273,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       }
       if (type === 'integer') {
         props.number = true;
+        props.alignRight = true;
         props.onChange = this.handlePropertyValueChange(name);
       }
       if ((type === 'string' && custom) || type === 'jscode') {
@@ -361,7 +345,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           placeholder=" "
           hiddenInputs={hiddenInputs}
           chips
-          width={width || 'calc(100% - 190px)'}
+          width={width || `calc(100% - ${horizontal ? 25 : 190}px)`}
           onAddChip={this.handleArrayItemAdd(propIdx)}
           onRemoveChip={this.handleArrayItemRemove(propIdx)}
           description={item.description}
@@ -388,7 +372,16 @@ export default class GatewayPolicyCondition extends PureComponent {
       button = <IconButton icon="iconPlus" onClick={this.handleAddCondition} />;
     }
     if (custom) {
-      button = <IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
+      button = (
+        <div className="GatewayPolicyCondition__add">
+          <IconMenu
+            options={customPropertyTypes}
+            onClick={this.handleAddCustomParameter}
+            horizontal="left"
+          />
+        </div>
+      );
+      //<IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
     }
     return (
       <div className={cs('GatewayPolicyCondition', {nested: !!nested, [nested]: true, nestedSingle})}>

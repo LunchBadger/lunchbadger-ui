@@ -8,8 +8,9 @@ import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
-import GatewayPolicyCondition from './GatewayPolicyCondition';
-import GatewayPolicyAction from './GatewayPolicyAction';
+import GatewayPolicyCAPair from './Subelements/GatewayPolicyCAPair';
+import GatewayPolicyCondition from './Subelements/GatewayPolicyCondition';
+import GatewayPolicyAction from './Subelements/GatewayPolicyAction';
 import './GatewayDetails.scss';
 
 import {
@@ -259,34 +260,28 @@ class GatewayDetails extends PureComponent {
     return table;
   };
 
-  renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx, policyName) => {
-    const {conditionSchemas, policiesSchemas} = this;
-    return (
-      <div>
-        <div className="GatewayDetails__CA__pair__section">
-          <EntityPropertyLabel noMargin>Condition</EntityPropertyLabel>
-          <GatewayPolicyCondition
-            ref={r => this.policyCARefs[`${pairIdx}_condition`] = r}
-            condition={pair.condition}
-            schemas={conditionSchemas}
-            prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
-            onChangeState={this.changeState}
-            root
-          />
-        </div>
-        <div className="GatewayDetails__CA__pair__section">
-          <EntityPropertyLabel noMargin>Action</EntityPropertyLabel>
-          <GatewayPolicyAction
-            ref={r => this.policyCARefs[`${pairIdx}_action`] = r}
-            action={pair.action}
-            schemas={policiesSchemas[policyName]}
-            prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
-            onChangeState={this.changeState}
-          />
-        </div>
-      </div>
-    );
-  };
+  renderPolicyCondition = (pair, pipelineIdx, policyIdx, pairIdx) => horizontal => (
+    <GatewayPolicyCondition
+      ref={r => this.policyCARefs[`${pairIdx}_condition`] = r}
+      condition={pair.condition}
+      schemas={this.conditionSchemas}
+      prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
+      onChangeState={this.changeState}
+      root
+      horizontal={horizontal}
+    />
+  );
+
+  renderPolicyAction = (pair, pipelineIdx, policyIdx, pairIdx, policyName) => horizontal => (
+    <GatewayPolicyAction
+      ref={r => this.policyCARefs[`${pairIdx}_action`] = r}
+      action={pair.action}
+      schemas={this.policiesSchemas[policyName]}
+      prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
+      onChangeState={this.changeState}
+      horizontal={horizontal}
+    />
+  );
 
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
     let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
@@ -306,36 +301,17 @@ class GatewayDetails extends PureComponent {
           <EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>
         </div>
         {policy.conditionAction.map((pair, idx) => (
-          <div
+          <GatewayPolicyCAPair
             key={pair.id}
-            className="GatewayDetails__CA__pair"
-          >
-            <CollapsibleProperties
-              bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
-              collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
-              button={(
-                <span>
-                  <IconButton
-                    icon="iconDelete"
-                    onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-                  />
-                  <IconButton
-                    icon="iconArrowDown"
-                    onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-                    disabled={idx === policy.conditionAction.length - 1}
-                  />
-                  <IconButton
-                    icon="iconArrowUp"
-                    onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-                    disabled={idx === 0}
-                  />
-                </span>
-              )}
-              barToggable
-              defaultOpened
-              space="10px 0"
-            />
-          </div>
+            nr={idx + 1}
+            renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
+            renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
+            onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+            onMoveDown={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+            onMoveUp={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+            moveDownDisabled={idx === policy.conditionAction.length - 1}
+            moveUpDisabled={idx === 0}
+          />
         ))}
       </div>
     );

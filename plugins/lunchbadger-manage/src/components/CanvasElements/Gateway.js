@@ -8,8 +8,8 @@ import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 import PipelineComponent from './Subelements/Pipeline';
-import GatewayPolicyCondition from '../Panel/EntitiesDetails/GatewayPolicyCondition';
-import GatewayPolicyAction from '../Panel/EntitiesDetails/GatewayPolicyAction';
+import GatewayPolicyCondition from '../Panel/EntitiesDetails/Subelements/GatewayPolicyCondition';
+import GatewayPolicyAction from '../Panel/EntitiesDetails/Subelements/GatewayPolicyAction';
 import {
   EntityProperty,
   EntityPropertyLabel,

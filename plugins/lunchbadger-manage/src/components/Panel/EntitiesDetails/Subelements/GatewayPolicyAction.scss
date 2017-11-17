@@ -1,0 +1,55 @@
+.GatewayPolicyAction {
+  position: relative;
+  .EntityProperty {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    &Label {
+      text-transform: capitalize !important;
+    }
+  }
+  &__button {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    &.add {
+      top: -34px;
+      &.menu {
+        top: -48px;
+        right: -12px;
+      }
+    }
+  }
+  &__parameter {
+    position: relative;
+  }
+  &__indent {
+    margin-left: 25px;
+    position: relative;
+    &:before {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 2px;
+      top: -13px;
+      left: -13px;
+      height: 55px;
+      background-color: #4190CE;
+      opacity: 0.3;
+    }
+    &:after {
+      display: block;
+      content: '';
+      position: absolute;
+      height: 2px;
+      top: 40px;
+      left: -11px;
+      width: 9px;
+      background-color: #4190CE;
+      opacity: 0.3;
+    }
+  }
+}
+
+.panel__details .GatewayPolicyAction .EntityProperty {
+  vertical-align: top;
+}

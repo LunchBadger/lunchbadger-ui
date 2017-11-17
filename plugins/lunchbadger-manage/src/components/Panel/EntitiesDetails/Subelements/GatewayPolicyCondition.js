@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton} from '../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton} from '../../../../../../lunchbadger-ui/src';
 import './GatewayPolicyCondition.scss';
 
 const customPropertyTypes = [
@@ -33,10 +33,12 @@ export default class GatewayPolicyCondition extends PureComponent {
     schemas: PropTypes.object,
     prefix: PropTypes.string,
     onChangeState: PropTypes.func,
+    horizontal: PropTypes.bool,
   };
 
   static defaultProps = {
     onChangeState: () => {},
+    horizontal: true,
   };
 
   constructor(props) {
@@ -233,8 +235,19 @@ export default class GatewayPolicyCondition extends PureComponent {
       schemas,
       prefix,
       onChangeState,
+      horizontal,
     } = this.props;
     if (types) {
+      const parameterValue = this.renderProperty({
+        id,
+        type,
+        name,
+        value,
+        label: 'Parameter Value',
+        width: `calc(100% - ${horizontal ? 25 : 410}px)`,
+        enum: [],
+        custom,
+      }, propIdx);
       return (
         <div key={id} className="GatewayPolicyCondition">
           <EntityProperty
@@ -253,80 +266,40 @@ export default class GatewayPolicyCondition extends PureComponent {
             onChange={this.handleCustomParameterTypeChange(propIdx)}
             width={120}
           />
-          {this.renderProperty({
-            id,
-            type,
-            name,
-            value,
-            label: 'Parameter Value',
-            width: 'calc(100% - 410px)',
-            enum: [],
-            custom,
-          }, propIdx)}
+          {horizontal && <div className="GatewayPolicyCondition__indent">{parameterValue}</div>}
+          {!horizontal && parameterValue}
           <div className="GatewayPolicyCondition__button">
             <IconButton icon="iconDelete" onClick={this.handleCustomParameterRemove(propIdx)} />
           </div>
         </div>
       );
     }
-    if (type === 'boolean') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onChange={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          bool
-        />
-      );
-    }
-    if (type === 'integer') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          number
-        />
-      );
-    }
-    if ((type === 'string' && custom) || type === 'jscode') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          codeEditor
-        />
-      );
-    }
-    if (type === 'string') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-        />
-      );
+    if (['boolean', 'integer', 'string', 'jscode'].includes(type)) {
+      const props = {
+        key: id,
+        title: label || name,
+        name: `${prefix}[${name}]`,
+        value,
+        width: width || `calc(100% - ${horizontal ? 25 : 190}px)`,
+        description,
+        placeholder: ' '
+      }
+      if (type === 'boolean') {
+        props.bool = true;
+        props.onChange = this.handlePropertyValueChange(name);
+      }
+      if (type === 'integer') {
+        props.number = true;
+        props.onChange = this.handlePropertyValueChange(name);
+      }
+      if ((type === 'string' && custom) || type === 'jscode') {
+        props.codeEditor = true;
+        props.onBlur = this.handlePropertyValueChange(name);
+      }
+      if (type === 'string') {
+        props.onBlur = this.handlePropertyValueChange(name);
+      }
+      return <EntityProperty {...props} />;
     }
     if (name === 'condition') return (
       <span key={id}>
@@ -406,6 +379,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       prefix,
       nested,
       nestedSingle,
+      horizontal,
     } = this.props;
     const options = Object.keys(schemas).map(label => ({label, value: label}));
     const {name, properties, custom} = this.state;
@@ -429,7 +403,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           button={button}
         />
         {properties.map((item, idx) => {
-          if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
+          if (custom || horizontal) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
           return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
         })}
       </div>

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu} from '../../../../../lunchbadger-ui/src';
-import GatewayProxyServiceEndpoint from './Subelements/GatewayProxyServiceEndpoint';
+import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
+import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import './GatewayPolicyAction.scss';
 
 const customPropertyTypes = [
@@ -36,10 +36,12 @@ export default class GatewayPolicyAction extends PureComponent {
     schemas: PropTypes.object,
     prefix: PropTypes.string,
     onChangeState: PropTypes.func,
+    horizontal: PropTypes.bool,
   };
 
   static defaultProps = {
     onChangeState: () => {},
+    horizontal: true,
   };
 
   constructor(props) {
@@ -215,8 +217,18 @@ export default class GatewayPolicyAction extends PureComponent {
 
   renderProperty = (item) => {
     const {id, name, value, type, types, description, label, width, custom, postfix} = item;
-    const {prefix} = this.props;
+    const {prefix, horizontal} = this.props;
     if (types) {
+      const parameterValue = this.renderProperty({
+        id,
+        type,
+        name,
+        value,
+        label: custom ? 'Parameter Value' : name,
+        width: `calc(100% - ${custom ? (horizontal ? 25 : 410) : 190}px)`,
+        enum: item.enum,
+        custom,
+      });
       return (
         <div key={id} className="GatewayPolicyAction">
           {custom && (
@@ -237,16 +249,8 @@ export default class GatewayPolicyAction extends PureComponent {
             onChange={this.handleCustomParameterTypeChange(id)}
             width={120}
           />
-          {this.renderProperty({
-            id,
-            type,
-            name,
-            value,
-            label: custom ? 'Parameter Value' : name,
-            width: `calc(100% - ${custom ? 410 : 190}px)`,
-            enum: item.enum,
-            custom,
-          })}
+          {horizontal && <div className="GatewayPolicyAction__indent">{parameterValue}</div>}
+          {!horizontal && parameterValue}
         </div>
       );
     }

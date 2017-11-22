@@ -9,6 +9,8 @@ import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
 import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import PolicyProxyActionPair from './PolicyProxyActionPair';
+import GatewayPolicyCondition from './GatewayPolicyCondition';
+import './GatewayDetails.scss';
 
 import {
   EntityProperty,
@@ -35,7 +37,14 @@ class GatewayDetails extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {...this.stateFromStores(props)};
+    this.state = this.stateFromStores(props);
+    this.policyConditionRefs = {};
+  }
+
+  componentWillMount() {
+    const {condition, policy} = this.context.store.getState().entities.gatewaySchemas;
+    this.conditionSchemas = condition;
+    this.policiesSchemas = policy;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,15 +55,18 @@ class GatewayDetails extends PureComponent {
 
   stateFromStores = props => ({
     changed: false,
-    pipelines: props.entity.pipelines.slice(),
+    pipelines: _.cloneDeep(props.entity.pipelines),
     http: _.cloneDeep(props.entity.http),
     https: _.cloneDeep(props.entity.https),
     admin: _.cloneDeep(props.entity.admin),
   });
 
-  onPropsUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
+  onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
-  discardChanges = callback => this.onPropsUpdate(this.props, callback);
+  discardChanges = (callback) => {
+    Object.keys(this.policyConditionRefs).forEach(key => this.policyConditionRefs[key] && this.policyConditionRefs[key].discardChanges());
+    this.onPropsUpdate(this.props, callback);
+  };
 
   processModel = model => {
     const {entity} = this.props;
@@ -74,10 +86,9 @@ class GatewayDetails extends PureComponent {
             paper.detach(conn.info.connection);
           });
           // restoring current serviceEndpoints connections
-          (policy.pairs || []).forEach((pair) => {
-            const serviceEndpointId = pair.action.find(p => p.name === 'serviceEndpoint').value;
+          (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
             paper.connect({
-              source: document.getElementById(`port_out_${serviceEndpointId}`).querySelector('.port__anchor'),
+              source: document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor'),
               target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
               parameters: {
                 forceDropped: true,
@@ -144,23 +155,25 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].policies[idx + step] = pipelines[pipelineIdx].policies[idx];
     pipelines[pipelineIdx].policies[idx] = tmp;
     this.changeState({pipelines});
-  }
+  };
+
+  handlePolicyChange = (pipelineIdx, policyIdx) => (policyName) => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].name = policyName;
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+    this.changeState({pipelines});
+  };
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({}));
-    const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
-    pipelines[pipelineIdx]
-      .policies[policyIdx]
-      .conditionAction[pairIdx]
-      .action.addParameter(Parameter.create({name: '', value: ''}));
-    this.changeState({pipelines})
-    setTimeout(() => {
-      const input = policyName === GATEWAY_POLICIES.PROXY
-        ? document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action0value button`)
-        : document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action][0][name]`);
-      input && input.focus();
-    });
+    const pair = {
+      condition: {
+        name: 'always',
+      },
+      action: {},
+    };
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+    this.changeState({pipelines});
   };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
@@ -183,17 +196,8 @@ class GatewayDetails extends PureComponent {
       .policies[policyIdx]
       .conditionAction[pairIdx]
       [kind]
-      .addParameter(Parameter.create({name: '', value: ''}));
+      .addParameter(Parameter.create({name: '', value: '', type: 'string'}));
     this.changeState({pipelines});
-    setTimeout(() => {
-      const idx = pipelines[pipelineIdx]
-        .policies[policyIdx]
-        .conditionAction[pairIdx]
-        [kind]
-        .parameters.length - 1;
-      const input = document.getElementById(`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][${kind}][${idx}][name]`);
-      input && input.focus();
-    });
   };
 
   removeParameter = (kind, pipelineIdx, policyIdx, pairIdx, idx) => () => {
@@ -203,7 +207,7 @@ class GatewayDetails extends PureComponent {
       .conditionAction[pairIdx]
       [kind]
       .parameters
-      .splice(idx, 1)
+      .splice(idx, 1);
     this.changeState({pipelines});
   };
 
@@ -251,15 +255,7 @@ class GatewayDetails extends PureComponent {
       widths={widths}
       paddings={paddings}
     />;
-    return (
-      <CollapsibleProperties
-        bar={<EntityPropertyLabel>{kind}</EntityPropertyLabel>}
-        collapsible={table}
-        defaultOpened
-        untoggable
-        space={`${kind === 'action' ? 2 : 1}0px 0 0`}
-      />
-    );
+    return table;
   };
 
   renderCAPair = (pair, pipelineIdx, policyIdx, pairIdx, policyName) => {
@@ -269,48 +265,30 @@ class GatewayDetails extends PureComponent {
           namePrefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`}
         />
       : this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'action');
+    const {conditionSchemas} = this;
     return (
       <div>
-        <Input
-          type="hidden"
-          name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][id]`}
-          value={pair.id}
-        />
-        {this.renderParameters(pipelineIdx, policyIdx, pairIdx, pair, 'condition')}
-        {actionParameters}
+        <div className="GatewayDetails__CA__pair__section">
+          <EntityPropertyLabel noMargin>Condition</EntityPropertyLabel>
+          <div style={{height: 15}} />
+          <GatewayPolicyCondition
+            ref={r => this.policyConditionRefs[pair.id] = r}
+            condition={pair.condition}
+            schemas={conditionSchemas}
+            prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
+            onChangeState={this.changeState}
+            root
+          />
+        </div>
+        <div className="GatewayDetails__CA__pair__section">
+          <EntityPropertyLabel noMargin>Action</EntityPropertyLabel>
+          {actionParameters}
+        </div>
       </div>
     );
   };
 
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
-    const collapsible = policy.conditionAction.map((pair, idx) => (
-      <CollapsibleProperties
-        key={pair.id}
-        bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
-        collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
-        button={(
-          <span>
-            <IconButton
-              icon="iconDelete"
-              onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-            />
-            <IconButton
-              icon="iconArrowDown"
-              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-              disabled={idx === policy.conditionAction.length - 1}
-            />
-            <IconButton
-              icon="iconArrowUp"
-              onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-              disabled={idx === 0}
-            />
-          </span>
-        )}
-        barToggable
-        defaultOpened
-        space="10px 0"
-      />
-    ));
     let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
     if (policy.name === GATEWAY_POLICIES.PROXY) {
       const state = this.context.store.getState();
@@ -322,14 +300,44 @@ class GatewayDetails extends PureComponent {
       }
     }
     return (
-      <CollapsibleProperties
-        bar={<EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>}
-        collapsible={collapsible}
-        button={button}
-        defaultOpened
-        untoggable
-        space="15px 0 10px"
-      />
+      <div className="GatewayDetails__CA">
+        <div className="GatewayDetails__CA__header">
+          {button}
+          <EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>
+        </div>
+        {policy.conditionAction.map((pair, idx) => (
+          <div
+            key={pair.id}
+            className="GatewayDetails__CA__pair"
+          >
+            <CollapsibleProperties
+              bar={<EntityPropertyLabel plain>C/A Pair {idx + 1}</EntityPropertyLabel>}
+              collapsible={this.renderCAPair(pair, pipelineIdx, policyIdx, idx, policy.name)}
+              button={(
+                <span>
+                  <IconButton
+                    icon="iconDelete"
+                    onClick={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+                  />
+                  <IconButton
+                    icon="iconArrowDown"
+                    onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+                    disabled={idx === policy.conditionAction.length - 1}
+                  />
+                  <IconButton
+                    icon="iconArrowUp"
+                    onClick={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+                    disabled={idx === 0}
+                  />
+                </span>
+              )}
+              barToggable
+              defaultOpened
+              space="10px 0"
+            />
+          </div>
+        ))}
+      </div>
     );
   };
 
@@ -343,6 +351,7 @@ class GatewayDetails extends PureComponent {
         value={policy.name || options[0].value}
         options={options}
         hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
+        onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
       />
     );
   };
@@ -632,7 +641,7 @@ class GatewayDetails extends PureComponent {
       {title: 'Pipelines'},
     ];
     return (
-      <div className="panel__details">
+      <div className="panel__details GatewayDetails">
         {sections.map(({title, render}) => this[`render${render || title}Section`]())}
       </div>
     );

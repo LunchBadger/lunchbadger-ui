@@ -1,0 +1,54 @@
+.GatewayDetails {
+  &__CA {
+    .EntityPropertyLabel {
+      color: #4190CE;
+    }
+
+    &__header {
+      padding: 10px 0 5px;
+    }
+    &__pair {
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      margin: 10px 15px 15px 0;
+      &__section {
+        border-top: 1px solid #e0e0e0;
+        padding: 20px 15px 20px 33px;
+        &__params {
+          margin-top: 20px;
+          &__param {
+            display: inline-block;
+            vertical-align: top;
+            &.name {
+              width: 200px;
+              margin-right: 20px;
+            }
+            &.value {
+              width: calc(100% - 250px);
+            }
+            &.button {
+              width: 30px;
+              margin-top: 25px;
+            }
+            &.type {
+              width: 110px;
+              margin-right: 20px;
+            }
+            &.content {
+              width: calc(100% - 130px);
+            }
+          }
+        }
+      }
+      & > .CollapsibleProperties {
+        padding: 0;
+        & > .CollapsibleProperties__bar {
+          margin: 10px 15px 10px 5px;
+        }
+        & > div > div > .CollapsibleProperties__collapsible {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

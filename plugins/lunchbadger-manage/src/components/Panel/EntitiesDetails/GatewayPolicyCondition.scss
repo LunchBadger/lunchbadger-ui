@@ -1,0 +1,60 @@
+.GatewayPolicyCondition {
+  position: relative;
+  &.nested {
+    &:after {
+      display: block;
+      content: '';
+      position: absolute;
+      height: 1px;
+      top: 43px;
+      left: -13px;
+      width: 11px;
+      background-color: #e0e0e0;
+      transform-origin: 0 0;
+    }
+    &:before {
+      display: block;
+      content: '';
+      position: absolute;
+      width: 1px;
+      background-color: #e0e0e0;
+      left: -13px;
+      top: -25px;
+      bottom: 25px;
+    }
+    &.nestedSingle:before {
+      bottom: auto;
+      height: 57px;
+    }
+    &.first:before {
+      top: -13px;
+    }
+    &.last:before {
+      bottom: auto;
+      height: 69px;
+    }
+  }
+  .EntityProperty {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    &Label {
+      text-transform: capitalize !important;
+    }
+  }
+  &__C {
+    margin-left: 25px;
+    position: relative;
+  }
+  &__button {
+    position: absolute;
+    top: 30px;
+    right: 0;
+  }
+  &__array {
+    margin: -15px 0 15px 15px;
+  }
+}
+
+.panel__details .GatewayPolicyCondition .EntityProperty {
+  vertical-align: top;
+}

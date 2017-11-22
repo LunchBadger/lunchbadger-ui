@@ -8,7 +8,7 @@ import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 import PipelineComponent from './Subelements/Pipeline';
-// import {removePipeline} from '../../reduxActions/gateways';
+import GatewayPolicyCondition from '../Panel/EntitiesDetails/GatewayPolicyCondition';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -30,61 +30,26 @@ class Gateway extends Component {
   };
 
   static contextTypes = {
+    store: PropTypes.object,
     paper: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
-    this.state = {...this.stateFromStores(props)};
+    this.state = this.stateFromStores(props);
+    this.policyConditionRefs = {};
+  }
+
+  componentWillMount() {
+    const {condition, policy} = this.context.store.getState().entities.gatewaySchemas;
+    this.conditionSchemas = condition;
+    this.policiesSchemas = policy;
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
       this.onPropsUpdate(nextProps);
     }
-    // if (nextProps.entity !== this.props.entity) {
-    //   this.setState({
-    //     dnsPrefix: nextProps.entity.dnsPrefix,
-    //     pipelinesOpened: {},
-    //     showRemovingModal: false,
-    //     pipelineToRemove: null,
-    //   });
-    // }
-    // // if (nextProps.ready && !this.props.ready) {
-    // //   this._onDeploy();
-    // // }
-    // // if (nextState === null || this.state.hasInConnection !== nextState.hasInConnection) {
-    // //   const hasInConnection = nextProps.entity.pipelines.some((pipeline) => {
-    // //     return Connection.getConnectionsForTarget(pipeline.id).length;
-    // //   });
-    // //   if (hasInConnection) {
-    // //     this.setState({hasInConnection: true});
-    // //   } else {
-    // //     this.setState({hasInConnection: false});
-    // //   }
-    // // }
-    // // if (nextState === null || this.state.hasOutConnection !== nextState.hasOutConnection) {
-    // //   const hasOutConnection = nextProps.entity.pipelines.some((pipeline) => {
-    // //     return Connection.getConnectionsForSource(pipeline.id).length;
-    // //   });
-    // //   if (hasOutConnection) {
-    // //     this.setState({hasOutConnection: true});
-    // //   } else {
-    // //     this.setState({hasOutConnection: false});
-    // //   }
-    // // }
-    // // if (!this.props.parent.state.editable) { //FIXME
-    // //   this.setState({dnsPrefix: nextProps.entity.dnsPrefix});
-    // // }
-    // const pipelinesOpened = {...this.state.pipelinesOpened};
-    // let pipelinesAdded = false;
-    // nextProps.entity.pipelines.forEach(({id}) => {
-    //   if (typeof pipelinesOpened[id] === 'undefined') {
-    //     pipelinesOpened[id] = false;
-    //     pipelinesAdded = true;
-    //   }
-    // });
-    // if (pipelinesAdded) this.setState({pipelinesOpened});
   }
 
   stateFromStores = props => {
@@ -96,8 +61,7 @@ class Gateway extends Component {
     return newState;
   };
 
-  onPropsUpdate = (props = this.props, callback) =>
-    this.setState({...this.stateFromStores(props)}, () => callback && callback());
+  onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
@@ -165,53 +129,41 @@ class Gateway extends Component {
     this.changeState({pipelines});
   };
 
-  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
+  handlePolicyChange = (pipelineIdx, policyIdx) => (policyName) => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].name = policyName;
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+    this.changeState({pipelines});
+  };
 
-  getPolicyHiddenInputs = (pipelineIdx, policyIdx, policy) => {
-    const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}]`;
-    const hiddenInputs = [{name: `${prefix}[id]`, value: policy.id}];
-    policy.conditionAction.forEach((pair, pairIdx) => {
-      hiddenInputs.push({
-        name: `${prefix}[pairs][${pairIdx}][id]`,
-        value: pair.id,
-      });
-      pair.condition.parameters.forEach((parameter, idx) => {
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][name]`,
-          value: parameter.name,
-        });
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][condition][${idx}][value]`,
-          value: parameter.value,
-        });
-      });
-      pair.action.parameters.forEach((parameter, idx) => {
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][action][${idx}][name]`,
-          value: parameter.name,
-        });
-        hiddenInputs.push({
-          name: `${prefix}[pairs][${pairIdx}][action][${idx}][value]`,
-          value: parameter.value,
-        });
-      });
-    });
-    return hiddenInputs;
-  }
+  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
 
   renderPipeline = (pipeline, pipelineIdx) => {
     const options = this.getPolicyInputOptions();
     const collapsible = (
       <div>
-        {pipeline.policies.map((policy, idx) => (
-          <EntityProperty
-            key={idx}
-            name={`pipelines[${pipelineIdx}][policies][${idx}][name]`}
-            value={policy.name || options[0].value}
-            options={options}
-            hiddenInputs={this.getPolicyHiddenInputs(pipelineIdx, idx, policy)}
-            onDelete={this.deletePipelinePolicy(pipelineIdx, idx)}
-          />
+        {pipeline.policies.map((policy, policyIdx) => (
+          <div key={policyIdx}>
+            <EntityProperty
+              name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
+              value={policy.name || options[0].value}
+              options={options}
+              onDelete={this.deletePipelinePolicy(pipelineIdx, policyIdx)}
+              onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
+            />
+            <div className="Gateway__CA">
+              {policy.conditionAction.map((pair, pairIdx) => (
+                <GatewayPolicyCondition
+                  key={pairIdx}
+                  ref={r => this.policyConditionRefs[pair.id] = r}
+                  condition={pair.condition}
+                  schemas={this.conditionSchemas}
+                  prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
+                  root
+                />
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     );
@@ -301,28 +253,7 @@ class Gateway extends Component {
     const {validations: {data}, entity, entityDevelopment, onResetField, multiEnvIndex} = this.props;
     const elementClass = cs('Gateway', {
       'multi': multiEnvIndex > 0,
-      // 'has-connection-in': this.state.hasInConnection,
-      // 'has-connection-out': this.state.hasOutConnection
     });
-    // const mainProperties = [
-    //   {
-    //     name: 'rootURL',
-    //     title: 'root URL',
-    //     value: `http://${this.state.dnsPrefix}.customer.lunchbadger.com`,
-    //     fake: true,
-    //   },
-    //   {
-    //     name: 'dnsPrefix',
-    //     title: 'DNS prefix',
-    //     value: this.props.entity.dnsPrefix,
-    //     editableOnly: true,
-    //     invalid: data.dnsPrefix,
-    //     onChange: this.onPrefixChange,
-    //     onBlur: this.handleFieldChange('dnsPrefix'),
-    //   },
-    // ];
-    // mainProperties[0].isDelta = this.state.dnsPrefix !== entityDevelopment.dnsPrefix;
-    // mainProperties[0].onResetField = () => onResetField('dnsPrefix');
     return (
       <div className={elementClass}>
         {this.renderHiddenFields()}

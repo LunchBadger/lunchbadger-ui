@@ -2,6 +2,7 @@ import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
 import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowUp from './icon-arrow-up.svg';
+import iconCodeEditor from './icon-code-editor.svg';
 import iconDataSource from './icon-datasource.svg';
 import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
 import iconDataSourceMemory from './icon-datasource-memory.svg';
@@ -28,6 +29,7 @@ import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
 import iconRevert from './icon-revert.svg';
+import iconTextField from './icon-text-field.svg';
 import iconTrash from './icon-trash.svg';
 import iconUser from './icon-user.svg';
 import iconWand from './icon-wand.svg';
@@ -37,6 +39,7 @@ export {
   iconArrow,
   iconArrowDown,
   iconArrowUp,
+  iconCodeEditor,
   iconDataSource,
   iconDataSourceEthereum,
   iconDataSourceMemory,
@@ -63,6 +66,7 @@ export {
   iconPlane,
   iconPortal,
   iconRevert,
+  iconTextField,
   iconTrash,
   iconUser,
   iconWand

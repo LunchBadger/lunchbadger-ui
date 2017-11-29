@@ -34,7 +34,7 @@ export default {
     microservices: true,
     apis: true,
     portals: true,
-    metrics: true,
-    forecasts: true
+    metrics: false,
+    forecasts: false
   }
 };

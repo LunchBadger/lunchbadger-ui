@@ -30,11 +30,11 @@ export default {
   envId: 'dev',
   features: {
     tritonLogo: false,
-    tritonObjectStorage: false,
-    microservices: false,
-    apis: false,
-    portals: false,
-    metrics: false,
-    forecasts: false
+    tritonObjectStorage: true,
+    microservices: true,
+    apis: true,
+    portals: true,
+    metrics: true,
+    forecasts: true
   }
 };

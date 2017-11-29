@@ -48,8 +48,9 @@ export default (ComposedComponent) => {
     }
 
     setFlatModel = () => {
-      if (this.refs.form) {
+      if (this.refs && this.refs.form) {
         this.state.model = getFlatModel(this.refs.form.getModel());
+        this.discardChanges();
       }
     }
 
@@ -83,15 +84,10 @@ export default (ComposedComponent) => {
         }
       });
       if (!validations.isValid) return;
-      this.setState({isPristine: true});
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
-      setTimeout(() => {
-        if (this.refs && this.refs.form) {
-          this.state.model = getFlatModel(this.refs.form.getModel());
-        }
-      });
+      setTimeout(this.setFlatModel);
     }
 
     checkPristine = (_model, changed) => {

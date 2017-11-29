@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 // import {connect} from 'react-redux';
 import {EntityProperties} from '../../../../lunchbadger-ui/src';
 import Rest from './Subelements/Rest';
+import Soap from './Subelements/Soap';
 import './Rest.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
@@ -22,8 +23,8 @@ class DataSource extends Component {
   };
 
   discardChanges = callback => {
-    if (this.restRef) {
-      this.restRef.onPropsUpdate(callback);
+    if (this.compRef) {
+      this.compRef.onPropsUpdate(callback);
     } else {
       callback();
     }
@@ -116,20 +117,19 @@ class DataSource extends Component {
     return <EntityProperties properties={mainProperties} />;
   };
 
-  render() {
+  renderContent = () => {
     const {entity} = this.props;
-    const {isRest} = entity;
+    const {isRest, isSoap} = this.props.entity;
+    if (isRest) return <Rest ref={r => this.compRef = r} entity={entity} plain />;
+    if (isSoap) return <Soap ref={r => this.compRef = r} entity={entity} plain />;
+    return this.renderMainProperties();
+  };
+
+  render() {
     return (
       <div>
         {this.renderPorts()}
-        {isRest && (
-          <Rest
-            ref={r => this.restRef = r}
-            entity={entity}
-            plain
-          />
-        )}
-        {!isRest && this.renderMainProperties()}
+        {this.renderContent()}
       </div>
     );
   }

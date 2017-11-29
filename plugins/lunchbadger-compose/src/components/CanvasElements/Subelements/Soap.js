@@ -13,6 +13,13 @@ import {
   Table,
 } from '../../../../../lunchbadger-ui/src';
 
+const sections = [
+  {label: 'Properties', render: 'Properties'},
+  {label: 'WSDL Options', render: 'WsdlOptions'},
+  {label: 'Operations', render: 'Operations'},
+  {label: 'Security', render: 'Security'},
+  {label: 'SOAP Headers', render: 'SoapHeaders'},
+];
 const widths = [200, 200, 200, undefined, 70];
 const paddings = [true, true, true, true, false];
 const centers = [false, false, false, false, false];
@@ -190,34 +197,38 @@ export default class Soap extends PureComponent {
     );
   };
 
+  renderWsdlOptionsInput = (label, name, value) => (
+    <span>
+      <Checkbox
+        label={label}
+        name={`wsdl_options[${name}]`}
+        value={value || false}
+      />
+    </span>
+  );
+
   renderWsdlOptions = () => {
     const {wsdl_options: {rejectUnauthorized, strictSSL, requestCert}} = this.props.entity;
     return (
       <div className="Soap__options">
-        <span>
-          <Checkbox
-            label="Reject Unauthorized"
-            name="wsdl_options[rejectUnauthorized]"
-            value={rejectUnauthorized || false}
-          />
-        </span>
-        <span>
-          <Checkbox
-            label="Strict SSL"
-            name="wsdl_options[strictSSL]"
-            value={strictSSL || false}
-          />
-        </span>
-        <span>
-          <Checkbox
-            label="Request Certificate"
-            name="wsdl_options[requestCert]"
-            value={requestCert || false}
-          />
-        </span>
+        {this.renderWsdlOptionsInput('Reject Unauthorized', 'rejectUnauthorized', rejectUnauthorized)}
+        {this.renderWsdlOptionsInput('Strict SSL', 'strictSSL', strictSSL)}
+        {this.renderWsdlOptionsInput('Request Certificate', 'requestCert', requestCert)}
       </div>
     );
   };
+
+  renderOperationsInput = (idx, name, value, handleKeyDown) => (
+    <Input
+      name={`soapOperations[${idx}][${name}]`}
+      value={value}
+      underlineStyle={{bottom: 0}}
+      fullWidth
+      hideUnderline
+      handleBlur={this.handleOperationUpdate(idx, name)}
+      handleKeyDown={handleKeyDown}
+    />
+  );
 
   renderOperations = () => {
     const columns = [
@@ -230,39 +241,10 @@ export default class Soap extends PureComponent {
     const {soapOperations} = this.state;
     const soapOperationsSize = soapOperations.length - 1;
     const data = soapOperations.map(({key, service, port, operation}, idx) => ([
-      <Input
-        name={`soapOperations[${idx}][key]`}
-        value={key}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleOperationUpdate(idx, 'key')}
-      />,
-      <Input
-        name={`soapOperations[${idx}][service]`}
-        value={service}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleOperationUpdate(idx, 'service')}
-      />,
-      <Input
-        name={`soapOperations[${idx}][port]`}
-        value={port}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleOperationUpdate(idx, 'port')}
-      />,
-      <Input
-        name={`soapOperations[${idx}][operation]`}
-        value={operation}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleOperationUpdate(idx, 'operation')}
-        handleKeyDown={idx === soapOperationsSize ? this.handleOperationTab : undefined}
-      />,
+      this.renderOperationsInput(idx, 'key', key),
+      this.renderOperationsInput(idx, 'service', service),
+      this.renderOperationsInput(idx, 'port', port),
+      this.renderOperationsInput(idx, 'operation', operation, idx === soapOperationsSize ? this.handleOperationTab : undefined),
       <IconButton icon="iconDelete" onClick={this.handleRemoveOperation(idx)} />,
     ]));
     return <Table
@@ -308,6 +290,18 @@ export default class Soap extends PureComponent {
     );
   };
 
+  renderSoapHeadersInput = (idx, name, value, handleKeyDown) => (
+    <Input
+      name={`soapHeaders[${idx}][${name}]`}
+      value={value}
+      underlineStyle={{bottom: 0}}
+      fullWidth
+      hideUnderline
+      handleBlur={this.handleSoapHeaderUpdate(idx, name)}
+      handleKeyDown={handleKeyDown}
+    />
+  );
+
   renderSoapHeaders = () => {
     const columns = [
       'Element Key',
@@ -319,39 +313,10 @@ export default class Soap extends PureComponent {
     const {soapHeaders} = this.state;
     const soapHeadersSize = soapHeaders.length - 1;
     const data = soapHeaders.map(({elementKey, elementValue, prefix, namespace}, idx) => ([
-      <Input
-        name={`soapHeaders[${idx}][elementKey]`}
-        value={elementKey}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleSoapHeaderUpdate(idx, 'elementKey')}
-      />,
-      <Input
-        name={`soapHeaders[${idx}][elementValue]`}
-        value={elementValue}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleSoapHeaderUpdate(idx, 'elementValue')}
-      />,
-      <Input
-        name={`soapHeaders[${idx}][prefix]`}
-        value={prefix}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleSoapHeaderUpdate(idx, 'prefix')}
-      />,
-      <Input
-        name={`soapHeaders[${idx}][namespace]`}
-        value={namespace}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleSoapHeaderUpdate(idx, 'namespace')}
-        handleKeyDown={idx === soapHeadersSize ? this.handleSoapHeaderTab : undefined}
-      />,
+      this.renderSoapHeadersInput(idx, 'elementKey', elementKey),
+      this.renderSoapHeadersInput(idx, 'elementValue', elementValue),
+      this.renderSoapHeadersInput(idx, 'prefix', prefix),
+      this.renderSoapHeadersInput(idx, 'namespace', namespace, idx === soapHeadersSize ? this.handleSoapHeaderTab : undefined),
       <IconButton icon="iconDelete" onClick={this.handleRemoveSoapHeader(idx)} />,
     ]));
     return <Table
@@ -370,36 +335,15 @@ export default class Soap extends PureComponent {
       <div className={cs('Soap', {plain, notPlain: !plain})}>
         {plain && <EntityProperties properties={properties} />}
         <div style={{display: plain ? 'none' : 'block'}}>
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
-            collapsible={this.renderProperties()}
-            defaultOpened
-            barToggable
-          />
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>WSDL Options</EntityPropertyLabel>}
-            collapsible={this.renderWsdlOptions()}
-            defaultOpened
-            barToggable
-          />
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Operations</EntityPropertyLabel>}
-            collapsible={this.renderOperations()}
-            defaultOpened
-            barToggable
-          />
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Security</EntityPropertyLabel>}
-            collapsible={this.renderSecurity()}
-            defaultOpened
-            barToggable
-          />
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>SOAP Headers</EntityPropertyLabel>}
-            collapsible={this.renderSoapHeaders()}
-            defaultOpened
-            barToggable
-          />
+          {sections.map(({label, render}) => (
+            <CollapsibleProperties
+              key={render}
+              bar={<EntityPropertyLabel>{label}</EntityPropertyLabel>}
+              collapsible={this[`render${render}`]()}
+              defaultOpened
+              barToggable
+            />
+          ))}
         </div>
       </div>
     );

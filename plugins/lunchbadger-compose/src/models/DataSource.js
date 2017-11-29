@@ -107,12 +107,8 @@ export default class DataSource extends BaseModel {
       json.keyId = this.keyId;
     }
     if (this.isSoap) {
-      json.wsdl = this.wsdl;
-      json.wsdl_options = this.wsdl_options;
-      json.remotingEnabled = this.remotingEnabled;
-      json.security = this.security;
-      json.operations = this.soapOperations;
-      json.soapHeaders = this.soapHeaders;
+      const {wsdl, wsdl_options, remotingEnabled, security, operations, soapHeaders} = this;
+      Object.assign(json, {wsdl, wsdl_options, remotingEnabled, security, operations, soapHeaders});
     }
     return json;
   }

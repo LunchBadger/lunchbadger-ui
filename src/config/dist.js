@@ -27,5 +27,14 @@ export default {
       }
     ]
   },
-  envId: 'dev'
+  envId: 'dev',
+  features: {
+    tritonLogo: false,
+    tritonObjectStorage: false,
+    microservices: false,
+    apis: false,
+    portals: false,
+    metrics: false,
+    forecasts: false
+  }
 };

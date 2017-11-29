@@ -14,5 +14,14 @@ export default {
     email: 'foo@lunchbadger.com',
     preferred_username: 'User Userman'
   },
-  envId: 'dev'
+  envId: 'dev',
+  features: {
+    tritonLogo: true,
+    tritonObjectStorage: true,
+    microservices: true,
+    apis: true,
+    portals: true,
+    metrics: true,
+    forecasts: true
+  }
 };

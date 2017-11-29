@@ -5,7 +5,7 @@ export default {
   workspaceApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/workspace-api/api',
   forecastApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
   workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io',
-  expressGatewayAdminApiUrl: 'http://admin-gateway-{USER}-{ENV}-{ID}.lunchbadger.io',
+  expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   oauth: {
     authority: 'https://www.lunchbadger.com',

@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Rest from '../../CanvasElements/Subelements/Rest';
+import Soap from '../../CanvasElements/Subelements/Soap';
 import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
 } from '../../../../../lunchbadger-ui/src';
 import './Rest.scss';
+import './Soap.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 
@@ -27,8 +29,8 @@ class DataSourceDetails extends Component {
   processModel = model => this.props.entity.processModel(model);
 
   discardChanges = callback => {
-    if (this.restRef) {
-      this.restRef.onPropsUpdate(() => this.setState({changed: false}, callback));
+    if (this.compRef) {
+      this.compRef.onPropsUpdate(() => this.setState({changed: false}, callback));
     } else {
       callback();
     }
@@ -138,20 +140,19 @@ class DataSourceDetails extends Component {
     );
   };
 
-  render() {
+  renderContent = () => {
     const {entity} = this.props;
-    const {isMemory, isRest} = entity;
-    if (isMemory) return null;
+    const {isRest, isSoap} = this.props.entity;
+    if (isRest) return <Rest ref={r => this.compRef = r} entity={entity} onStateChange={this.handleStateChange} />;
+    if (isSoap) return <Soap ref={r => this.compRef = r} entity={entity} onStateChange={this.handleStateChange} />;
+    return this.renderMainProperties();
+  }
+
+  render() {
+    if (this.props.entity.isMemory) return null;
     return (
       <div className="panel__details">
-        {isRest && (
-          <Rest
-            ref={r => this.restRef = r}
-            entity={entity}
-            onStateChange={this.handleStateChange}
-          />
-        )}
-        {!isRest && this.renderMainProperties()}
+        {this.renderContent()}
       </div>
     );
   }

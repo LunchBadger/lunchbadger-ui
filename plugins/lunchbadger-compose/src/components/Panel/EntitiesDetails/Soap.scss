@@ -1,0 +1,9 @@
+.Soap {
+  &__options {
+    & > span {
+      display: inline-block;
+      vertical-align: middle;
+      width: 380px;
+    }
+  }
+}

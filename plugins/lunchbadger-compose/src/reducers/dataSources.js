@@ -12,6 +12,10 @@ export default (state = {}, action) => {
         if (!item.lunchbadgerId) {
           item.lunchbadgerId = uuid.v4();
         }
+        if (item.hasOwnProperty('wsdl')) {
+          item.soapOperations = item.operations || {};
+          delete item.operations;
+        }
         map[item.lunchbadgerId] = DataSource.create(item);
         return map;
       }, {});

@@ -14,6 +14,8 @@ const customPropertyTypes = [
   'array',
 ];
 
+const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
+
 const getDefaultValueByType = type => ({
   string: '',
   boolean: false,
@@ -44,7 +46,7 @@ export default class GatewayPolicyAction extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = this.stateFromStores(props);
+    this.state = this.stateFromProps(props);
     this.tmpPrefix = props.prefix.replace('pipelines', 'tmp[pipelines]');
   }
 
@@ -73,7 +75,6 @@ export default class GatewayPolicyAction extends PureComponent {
       if (parameters[name]) return;
       const {description, type, types, default: def, enum: enum_, postfix} = (properties[name] || {
         description: '',
-        // type: determineType(action[name]),
         types: customPropertyTypes,
         value: action[name],
         default: getDefaultValueByType(determineType(action[name])),
@@ -92,12 +93,12 @@ export default class GatewayPolicyAction extends PureComponent {
         postfix,
       };
     });
-    return {parameters: Object.keys(parameters).map(key => parameters[key])};
+    return {parameters: Object.values(parameters)};
   };
 
-  stateFromStores = props => this.getState(props);
+  stateFromProps = props => this.getState(props);
 
-  onPropsUpdate = (props = this.props) => this.setState(this.stateFromStores(props));
+  onPropsUpdate = (props = this.props) => this.setState(this.stateFromProps(props));
 
   changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState({}, cb));
 
@@ -160,14 +161,6 @@ export default class GatewayPolicyAction extends PureComponent {
     }
     this.changeState(state);
   };
-
-  // handlePropertyTab = id => () => { // TODO - consider auto-create new custom parameter
-  //   const {parameters} = this.state;
-  //   const idx = _.findIndex(parameters, item => item.id === id);
-  //   if (idx === parameters.length - 1) {
-  //     this.handleAddParameter('string');
-  //   }
-  // };
 
   handleCustomParameterNameChange = id => ({target: {value}}) => {
     const state = _.cloneDeep(this.state);
@@ -232,108 +225,70 @@ export default class GatewayPolicyAction extends PureComponent {
         </div>
       );
     }
-    if (type === 'boolean') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onChange={this.handlePropertyValueChange(id)}
-          width={width || 'calc(100% - 50px)'}
-          description={description}
-          placeholder=" "
-          bool
-        />
-      );
-    }
-    if (type === 'integer') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(id)}
-          // onTab={this.handlePropertyTab(id)}
-          width={150} //width || 'calc(100% - 50px)'}
-          description={description}
-          placeholder=" "
-          number
-          alignRight
-          postfix={postfix}
-        />
-      );
-    }
-    if ((type === 'string' && custom) || type === 'jscode') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(id)}
-          // onTab={this.handlePropertyTab(id)}
-          width={width || 'calc(100% - 50px)'}
-          description={description}
-          placeholder=" "
-          codeEditor
-        />
-      );
-    }
-    if (type === 'string') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(id)}
-          width={width || 'calc(100% - 50px)'}
-          description={description}
-          placeholder=" "
-        />
-      );
-    }
-    if (type === 'array') {
-      const hiddenInputs = value.map((value, idx) => ({
-        id: uuid.v4(),
-        name: `${prefix}[${name}][${idx}]`,
+    if (handledPropertyTypes.includes(type)) {
+      const props = {
+        key: id,
+        title: label || name,
+        name: `${prefix}[${name}]`,
         value,
-      }));
-      const options = item.enum
-        ? _.difference(item.enum, value).map(label => ({label, value: label}))
-        : undefined;
-      const autocomplete = !!item.enum;
-      return (
-        <EntityProperty
-          key={`${id}_${hiddenInputs.length}`}
-          title={label || name}
-          name={`${name}_name`}
-          value=""
-          placeholder=" "
-          hiddenInputs={hiddenInputs}
-          chips
-          width={width || 'calc(100% - 50px)'}
-          onAddChip={this.handleArrayItemAdd(id)}
-          onRemoveChip={this.handleArrayItemRemove(id)}
-          // onTab={this.handlePropertyTab(id)}
-          description={item.description}
-          options={options}
-          autocomplete={autocomplete}
-        />
-      );
+        onBlur: this.handlePropertyValueChange(id),
+        width: width || 'calc(100% - 50px)',
+        description,
+        placeholder: ' ',
+      };
+      if (type === 'boolean') {
+        Object.assign(props, {
+          onBlur: undefined,
+          onChange: this.handlePropertyValueChange(id),
+          bool: true,
+        });
+      }
+      if (type === 'integer') {
+        Object.assign(props, {
+          width: 150,
+          number: true,
+          alignRight: true,
+          postfix,
+        });
+      }
+      if ((type === 'string' && custom) || type === 'jscode') {
+        Object.assign(props, {
+          codeEditor: true,
+        });
+      }
+      if (type === 'array') {
+        const hiddenInputs = value.map((value, idx) => ({
+          id: uuid.v4(),
+          name: `${prefix}[${name}][${idx}]`,
+          value,
+        }));
+        const options = item.enum
+          ? _.difference(item.enum, value).map(label => ({label, value: label}))
+          : undefined;
+        const autocomplete = !!item.enum;
+        Object.assign(props, {
+          key: `${id}_${hiddenInputs.length}`,
+          name: `${name}_name`,
+          value: '',
+          hiddenInputs,
+          chips: true,
+          onBlur: undefined,
+          onAddChip: this.handleArrayItemAdd(id),
+          onRemoveChip: this.handleArrayItemRemove(id),
+          options,
+          autocomplete,
+        });
+      }
+      return <EntityProperty {...props} />;
     }
-    if (type === 'serviceEndpoint') {
-      return (
-        <GatewayProxyServiceEndpoint
-          name={`${prefix}[${name}]`}
-          value={value}
-          description={description}
-          onChange={this.handlePropertyValueChange(id)}
-        />
-      )
-    }
+    if (type === 'serviceEndpoint') return (
+      <GatewayProxyServiceEndpoint
+        name={`${prefix}[${name}]`}
+        value={value}
+        description={description}
+        onChange={this.handlePropertyValueChange(id)}
+      />
+    );
     return null;
   };
 

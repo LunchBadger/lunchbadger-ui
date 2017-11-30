@@ -7,6 +7,7 @@ class ApiClient {
   constructor(url, idToken) {
     this.url = url;
     this.idToken = idToken;
+    console.info('ApiClient', url, {idToken});
   }
 
   _getHeaders() {

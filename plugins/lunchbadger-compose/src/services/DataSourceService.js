@@ -4,7 +4,7 @@ const {ApiClient, getUser} = LunchBadgerCore.utils;
 
 class DataSourceService {
 
-  initialize = () => this.api = new ApiClient(Config.get('workspaceApiUrl'), getUser().idToken);
+  initialize = () => this.api = new ApiClient(Config.get('workspaceApiUrl'), getUser().id_token);
 
   load = () => this.api.get('Facets/server/datasources');
 

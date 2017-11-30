@@ -4,7 +4,7 @@ const {ApiClient, getUser} = LunchBadgerCore.utils;
 
 class ForecastService {
 
-  initialize = () => this.api = new ApiClient(Config.get('forecastApiUrl'), getUser().idToken);
+  initialize = () => this.api = new ApiClient(Config.get('forecastApiUrl'), getUser().id_token);
 
   get = id => this.api.get('Forecasts', {
     qs: {

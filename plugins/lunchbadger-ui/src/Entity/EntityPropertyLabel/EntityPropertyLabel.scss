@@ -17,16 +17,8 @@
     margin-bottom: 15px;
   }
   &__help {
-    opacity: 0;
-    transition: opacity 300ms;
-    background-color: red;
     & > div > div > span {
       white-space: normal !important;
-    }
-  }
-  &:hover {
-    .EntityPropertyLabel__help {
-      opacity: 1;
     }
   }
 }

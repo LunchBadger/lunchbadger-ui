@@ -82,6 +82,7 @@ class EntityProperty extends Component {
     super(props);
     this.state = {
       contextualVisible: false,
+      tooltipVisible: false,
     }
   }
 
@@ -116,6 +117,10 @@ class EntityProperty extends Component {
       onTab(event);
     }
   }
+
+  handleMouseEnter = () => this.setState({tooltipVisible: true});
+
+  handleMouseLeave = () => this.setState({tooltipVisible: false});
 
   renderChips = () => {
     const {chips, hiddenInputs, onRemoveChip} = this.props;
@@ -263,7 +268,7 @@ class EntityProperty extends Component {
       button,
       postfix,
     } = this.props;
-    const {contextualVisible} = this.state;
+    const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', {
       ['EntityProperty__fake']: fake,
@@ -306,9 +311,14 @@ class EntityProperty extends Component {
       style.width = width;
     }
     return (
-      <div className={classNames} style={style}>
+      <div
+        className={classNames}
+        style={style}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
         {title !== '' && (
-          <EntityPropertyLabel description={description}>
+          <EntityPropertyLabel description={tooltipVisible ? description : ''}>
             {title}
           </EntityPropertyLabel>
         )}

@@ -272,7 +272,7 @@ export default class GatewayPolicyCondition extends PureComponent {
         title: label || name,
         name: `${prefix}[${name}]`,
         value,
-        width: width || `calc(100% - ${horizontal ? 25 : 190}px)`,
+        width: width || 'calc(100% - 190px)',
         description,
         placeholder: ' '
       }
@@ -306,6 +306,7 @@ export default class GatewayPolicyCondition extends PureComponent {
             onChange={this.onChange('condition', propIdx)}
             nested="first"
             nestedSingle
+            horizontal={horizontal}
           />
         </div>
       </span>
@@ -324,6 +325,7 @@ export default class GatewayPolicyCondition extends PureComponent {
                 onChange={this.onChange('conditions', propIdx, idx)}
                 nested={idx === 0 ? 'first' : (idx === value.length - 1 ? 'last': 'other')}
                 nestedSingle={value.length === 1}
+                horizontal={horizontal}
               />
               {value.length !== 1 && (
                 <div className="GatewayPolicyCondition__button">
@@ -417,7 +419,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           button={button}
         />
         {properties.map((item, idx) => {
-          if (custom || horizontal) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
+          if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
           return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
         })}
       </div>

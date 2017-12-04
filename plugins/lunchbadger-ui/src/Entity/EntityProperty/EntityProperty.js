@@ -16,6 +16,15 @@ import getPlainText from '../../utils/getPlainText';
 import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
 
+const chipStyle = {
+  opacity: 1,
+};
+
+const chipLabelStyle = {
+  fontSize: 16,
+  lineHeight: '26px',
+};
+
 class EntityProperty extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
@@ -132,9 +141,11 @@ class EntityProperty extends Component {
           <Chip
             key={item.id}
             className="EntityProperty__chips__chip"
-            backgroundColor="#019abc"
+            backgroundColor="#4b4b4b"
             labelColor="#FFF"
             onRequestDelete={() => onRemoveChip(idx)}
+            style={chipStyle}
+            labelStyle={chipLabelStyle}
           >
             {item.value}
           </Chip>

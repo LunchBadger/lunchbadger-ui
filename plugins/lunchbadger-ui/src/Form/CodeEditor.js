@@ -28,6 +28,7 @@ export default class CodeEditor extends PureComponent {
   static propTypes = {
     lang: PropTypes.string,
     onChange: PropTypes.func,
+    onTab: PropTypes.func,
     value: PropTypes.string,
     fullWidth: PropTypes.bool,
     initialHeight: PropTypes.number,
@@ -80,7 +81,7 @@ export default class CodeEditor extends PureComponent {
   handleEditorChange = code => this.changeCode(code);
 
   render() {
-    const {lang, fullWidth, initialHeight, name} = this.props;
+    const {lang, fullWidth, initialHeight, name, onTab} = this.props;
     const {width, height, editorMode, code, mode} = this.state;
     const icon = editorMode ? 'iconTextField' : 'iconCodeEditor';
     return (
@@ -94,6 +95,7 @@ export default class CodeEditor extends PureComponent {
             value={code}
             width="100%"
             onBlur={this.handleInputChange}
+            onTab={onTab}
             placeholder=" "
           />
         </div>

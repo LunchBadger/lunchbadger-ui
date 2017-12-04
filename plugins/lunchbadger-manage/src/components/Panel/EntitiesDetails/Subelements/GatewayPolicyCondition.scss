@@ -5,22 +5,23 @@
       display: block;
       content: '';
       position: absolute;
-      height: 1px;
-      top: 43px;
-      left: -13px;
-      width: 11px;
-      background-color: #e0e0e0;
-      transform-origin: 0 0;
+      height: 2px;
+      top: 42px;
+      left: -11px;
+      width: 9px;
+      background-color: #4190CE;
+      opacity: 0.3;
     }
     &:before {
       display: block;
       content: '';
       position: absolute;
-      width: 1px;
-      background-color: #e0e0e0;
+      width: 2px;
+      background-color: #4190CE;
       left: -13px;
       top: -25px;
       bottom: 25px;
+      opacity: 0.3;
     }
     &.nestedSingle:before {
       bottom: auto;
@@ -52,6 +53,11 @@
   }
   &__array {
     margin: -15px 0 15px 15px;
+  }
+  &__add {
+    position: relative;
+    top: -12px;
+    left: 12px;
   }
 }
 

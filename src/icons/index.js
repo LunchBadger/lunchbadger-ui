@@ -23,6 +23,8 @@ import iconGateway from './icon-gateway.svg';
 import iconLeaf from './icon-leaf.svg';
 import iconLogout from './icon-logout.svg';
 import iconMicroservice from './icon-microservice.svg';
+import iconModeHorizontal from './icon-mode-horizontal.svg';
+import iconModeVertical from './icon-mode-vertical.svg';
 import iconModel from './icon-model.svg';
 import iconMouse from './icon-mouse.svg';
 import iconPlane from './icon-plane.svg';
@@ -60,6 +62,8 @@ export {
   iconLeaf,
   iconLogout,
   iconMicroservice,
+  iconModeHorizontal,
+  iconModeVertical,
   iconModel,
   iconMouse,
   iconPlus,

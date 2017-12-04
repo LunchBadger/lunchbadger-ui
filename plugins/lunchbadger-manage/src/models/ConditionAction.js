@@ -1,5 +1,3 @@
-import Action from './Action';
-
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
 export default class ConditionAction extends BaseModel {
@@ -12,7 +10,7 @@ export default class ConditionAction extends BaseModel {
     return super.create({
       ...data,
       condition: data.condition || {},
-      action: Action.create(data.action),
+      action: data.action || {},
     });
   }
 
@@ -20,14 +18,14 @@ export default class ConditionAction extends BaseModel {
     return {
       id: this.id,
       condition: this.condition,
-      action: this.action.toJSON(),
+      action: this.action,
     };
   }
 
   toApiJSON() {
     return {
       condition: this.condition,
-      action: this.action.toJSON(),
+      action: this.action,
     };
   }
 

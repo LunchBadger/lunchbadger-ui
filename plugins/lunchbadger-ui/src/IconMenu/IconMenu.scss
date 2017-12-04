@@ -1,0 +1,14 @@
+.IconMenu {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  &:hover svg {
+    stroke: #3B85BF;
+  }
+  &:active svg {
+    stroke: #377CB3;
+  }
+  svg {
+    stroke: #3F8FCD;
+  }
+}

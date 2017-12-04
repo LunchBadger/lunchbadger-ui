@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import cs from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -19,12 +20,14 @@ class Select extends Component {
     type: PropTypes.string,
     multiple: PropTypes.bool,
     options: PropTypes.array.isRequired,
+    secondaryOptions: PropTypes.array,
     hideUnderline: PropTypes.bool,
     autocomplete: PropTypes.bool,
   };
 
   static defaultProps = {
     autocomplete: false,
+    secondaryOptions: [],
   };
 
   constructor(props) {
@@ -55,7 +58,11 @@ class Select extends Component {
     }
   };
 
-  _handleAutoCompleteChange = (val) => {
+  _handleAutoCompleteChange = (value) => {
+    let val = value;
+    if (typeof value === 'object') {
+      val = value.text;
+    }
     this.props.setValue(val);
     this.setState({focused: false, val});
     if (typeof this.props.handleBlur === 'function') {
@@ -70,6 +77,12 @@ class Select extends Component {
 
   handleAutoCompleteMenuClose = () => this.setState({focused: false});
 
+  getDataSource = () => {
+    const {options, secondaryOptions} = this.props;
+    return options.map(({value: text, icon}) => ({text, value: <MenuItem primaryText={text} rightIcon={icon} />}))
+      .concat(secondaryOptions.map(({value}) => ({text: value, value})));
+  };
+
   renderField = () => {
     const {
       getValue,
@@ -80,6 +93,13 @@ class Select extends Component {
       autocomplete,
     } = this.props;
     const {focused, val} = this.state;
+    let icon = null;
+    if (!focused) {
+      const selectedOption = options.find(({value}) => value === getValue());
+      if (selectedOption && selectedOption.icon) {
+        icon = selectedOption.icon;
+      }
+    }
     const style = {
       fontWeight: 'inherit',
       fontSize: 'inherit',
@@ -89,30 +109,45 @@ class Select extends Component {
       ...style,
       padding: '0 8px',
     }
+    if (icon) {
+      Object.assign(labelStyle, {
+        textIndent: 25,
+        color: '#4190CE',
+        fontWeight: 600,
+        fontSize: 14,
+      });
+    }
     const underlineStyle = {};
     if (hideUnderline) {
       underlineStyle.display = 'none';
     }
+    let searchText = focused ? val : getValue();
+    if (icon) {
+      searchText = _.upperCase(searchText);
+    }
     if (autocomplete) return (
-      <AutoComplete
-        ref={r => this.autocompleteRef = r}
-        name={name}
-        searchText={focused ? val : getValue()}
-        filter={AutoComplete.fuzzyFilter}
-        openOnFocus
-        dataSource={options.map(({value}) => value)}
-        onKeyDown={this._handleKeyDown}
-        onBlur={this._handleBlur}
-        onNewRequest={this._handleAutoCompleteChange}
-        onFocus={this.handleAutoCompleteFocus}
-        fullWidth
-        style={style}
-        inputStyle={labelStyle}
-        listStyle={{...style, fontWeight: 400}}
-        underlineStyle={underlineStyle}
-        menuProps={{desktop: true, maxHeight: 250}}
-        onClose={this.handleAutoCompleteMenuClose}
-      />
+      <span className="Select__autocomplete">
+        <AutoComplete
+          ref={r => this.autocompleteRef = r}
+          name={name}
+          searchText={searchText}
+          filter={AutoComplete.fuzzyFilter}
+          openOnFocus
+          dataSource={this.getDataSource()}
+          onKeyDown={this._handleKeyDown}
+          onBlur={this._handleBlur}
+          onNewRequest={this._handleAutoCompleteChange}
+          onFocus={this.handleAutoCompleteFocus}
+          fullWidth
+          style={style}
+          inputStyle={labelStyle}
+          listStyle={{...style, fontWeight: 400}}
+          underlineStyle={underlineStyle}
+          menuProps={{desktop: true, maxHeight: 250}}
+          onClose={this.handleAutoCompleteMenuClose}
+        />
+        {icon}
+      </span>
     );
     return (
       <SelectField

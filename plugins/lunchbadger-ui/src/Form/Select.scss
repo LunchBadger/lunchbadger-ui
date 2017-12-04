@@ -1,3 +1,14 @@
 .Select {
   height: 48px;
+  &__autocomplete {
+    position: relative;
+    svg {
+      pointer-events: none;
+      left: 0;
+      top: 1px !important;
+      right: auto !important;
+      stroke: #4190CE !important;
+      fill: #4190CE !important;
+    }
+  }
 }

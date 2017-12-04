@@ -40,6 +40,7 @@ class EntityProperty extends Component {
     onClick: PropTypes.func,
     selected: PropTypes.bool,
     options: PropTypes.array,
+    secondaryOptions: PropTypes.array,
     onTab: PropTypes.func,
     width:PropTypes.oneOfType([
       PropTypes.number,
@@ -146,6 +147,7 @@ class EntityProperty extends Component {
     const {
       name,
       options,
+      secondaryOptions,
       onBlur,
       onChange,
       password,
@@ -200,6 +202,7 @@ class EntityProperty extends Component {
             name={name}
             value={value}
             options={options}
+            secondaryOptions={secondaryOptions}
             handleChange={onChange}
             handleBlur={this.handleBlur}
             handleKeyDown={this.handleTab}

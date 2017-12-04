@@ -3,8 +3,17 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
+import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
 import './GatewayPolicyCondition.scss';
+
+const iconCondition = {
+  allOf: iconConditionAllOf,
+  oneOf: iconConditionOneOf,
+  not: iconConditionNot,
+};
+
+const groupingParameters = Object.keys(iconCondition);
 
 const customPropertyTypes = [
   'string',
@@ -365,7 +374,19 @@ export default class GatewayPolicyCondition extends PureComponent {
       nestedSingle,
       horizontal,
     } = this.props;
-    const options = Object.keys(schemas).map(label => ({label, value: label}));
+    const groupingOptions = Object.keys(schemas)
+      .filter(key => groupingParameters.includes(key))
+      .map(label => ({
+        label,
+        value: label,
+        icon: <IconSVG className="GatewayPolicyCondition__optionIcon" svg={iconCondition[label]} />,
+      }));
+    const otherOptions = Object.keys(schemas)
+      .filter(key => !groupingParameters.includes(key))
+      .map(label => ({
+        label,
+        value: label,
+      }));
     const {name, properties, custom} = this.state;
     let button = null;
     if (properties.find(i => i.name === 'conditions')) {
@@ -381,7 +402,6 @@ export default class GatewayPolicyCondition extends PureComponent {
           />
         </div>
       );
-      //<IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
     }
     return (
       <div className={cs('GatewayPolicyCondition', {nested: !!nested, [nested]: true, nestedSingle})}>
@@ -389,7 +409,8 @@ export default class GatewayPolicyCondition extends PureComponent {
           title="Name"
           name={`${prefix}[name]`}
           value={name}
-          options={options}
+          options={groupingOptions}
+          secondaryOptions={otherOptions}
           onBlur={this.handleNameChange}
           width={140}
           autocomplete

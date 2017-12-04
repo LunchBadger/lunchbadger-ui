@@ -5,34 +5,32 @@
       display: block;
       content: '';
       position: absolute;
-      height: 2px;
-      top: 42px;
-      left: -11px;
-      width: 9px;
-      background-color: #4190CE;
-      opacity: 0.3;
+      height: 1px;
+      top: 55px;
+      left: -12px;
+      width: 12px;
+      background-color: #e0e0e0;
     }
     &:before {
       display: block;
       content: '';
       position: absolute;
-      width: 2px;
-      background-color: #4190CE;
+      width: 1px;
+      background-color: #e0e0e0;
       left: -13px;
       top: -25px;
       bottom: 25px;
-      opacity: 0.3;
     }
     &.nestedSingle:before {
       bottom: auto;
-      height: 57px;
+      height: 69px;
     }
     &.first:before {
       top: -13px;
     }
     &.last:before {
       bottom: auto;
-      height: 69px;
+      height: 81px;
     }
   }
   .EntityProperty {
@@ -58,6 +56,17 @@
     position: relative;
     top: -12px;
     left: 12px;
+  }
+  &__optionIcon {
+    svg {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      right: 15px;
+      top: 4px;
+      stroke: #999;
+      fill: #999;
+    }
   }
 }
 

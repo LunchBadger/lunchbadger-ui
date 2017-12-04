@@ -272,7 +272,7 @@ export default class GatewayPolicyCondition extends PureComponent {
         title: label || name,
         name: `${prefix}[${name}]`,
         value,
-        width: width || 'calc(100% - 190px)',
+        width: width || 'calc(100% - 170px)',
         description,
         placeholder: ' '
       }
@@ -356,7 +356,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           placeholder=" "
           hiddenInputs={hiddenInputs}
           chips
-          width={width || `calc(100% - ${horizontal ? 25 : 190}px)`}
+          width={width || 'calc(100% - 170px)'}
           onAddChip={this.handleArrayItemAdd(propIdx)}
           onRemoveChip={this.handleArrayItemRemove(propIdx)}
           description={item.description}

@@ -256,6 +256,12 @@ export default class GatewayPolicyAction extends PureComponent {
           codeEditor: true,
         });
       }
+      if (type === 'string' && item.enum) {
+        Object.assign(props, {
+          options: item.enum.map(label => ({label, value: label})),
+          autocomplete: true,
+        });
+      }
       if (type === 'array') {
         const hiddenInputs = value.map((value, idx) => ({
           id: uuid.v4(),

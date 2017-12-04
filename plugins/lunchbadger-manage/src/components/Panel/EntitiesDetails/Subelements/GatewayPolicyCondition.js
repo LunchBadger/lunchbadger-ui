@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton} from '../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
 import './GatewayPolicyCondition.scss';
 
 const customPropertyTypes = [
@@ -33,10 +33,12 @@ export default class GatewayPolicyCondition extends PureComponent {
     schemas: PropTypes.object,
     prefix: PropTypes.string,
     onChangeState: PropTypes.func,
+    horizontal: PropTypes.bool,
   };
 
   static defaultProps = {
     onChangeState: () => {},
+    horizontal: true,
   };
 
   constructor(props) {
@@ -51,6 +53,13 @@ export default class GatewayPolicyCondition extends PureComponent {
   };
 
   getState = (name, condition) => {
+    const id = uuid.v4();
+    if (!name) return {
+      id,
+      name: 'always',
+      custom: false,
+      properties: [],
+    };
     const {schemas} = this.props;
     const propSchemas = {...(schemas[name] || {properties: {}}).properties};
     Object.keys(condition).forEach((key) => {
@@ -77,7 +86,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       }
     });
     return {
-      id: uuid.v4(),
+      id,
       name,
       custom: !schemas[name],
       properties,
@@ -119,14 +128,14 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
-  handleAddCustomParameter = () => {
+  handleAddCustomParameter = (type) => {
     const state = _.cloneDeep(this.state);
     state.properties.push({
       id: uuid.v4(),
       name: '',
-      type: 'string',
+      type,
       types: customPropertyTypes,
-      value: '',
+      value: getDefaultValueByType(type),
       custom: true,
     });
     this.changeState(state);
@@ -148,13 +157,6 @@ export default class GatewayPolicyCondition extends PureComponent {
   handleCustomParameterNameChange = propIdx => ({target: {value}}) => {
     const state = _.cloneDeep(this.state);
     state.properties[propIdx].name = value;
-    this.changeState(state);
-  };
-
-  handleCustomParameterTypeChange = propIdx => type => {
-    const state = _.cloneDeep(this.state);
-    state.properties[propIdx].type = type;
-    state.properties[propIdx].value = getDefaultValueByType(type);
     this.changeState(state);
   };
 
@@ -226,6 +228,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       schemas,
       prefix,
       onChangeState,
+      horizontal,
     } = this.props;
     if (types) {
       return (
@@ -235,16 +238,8 @@ export default class GatewayPolicyCondition extends PureComponent {
             name={`${this.tmpPrefix}[${propIdx}][name]`}
             value={name}
             onBlur={this.handleCustomParameterNameChange(propIdx)}
-            width={200}
+            width={150}
             placeholder=" "
-          />
-          <EntityProperty
-            title="Parameter Type"
-            name={`${this.tmpPrefix}[${propIdx}][type]`}
-            value={type}
-            options={types.map(label => ({label, value: label}))}
-            onChange={this.handleCustomParameterTypeChange(propIdx)}
-            width={120}
           />
           {this.renderProperty({
             id,
@@ -252,7 +247,7 @@ export default class GatewayPolicyCondition extends PureComponent {
             name,
             value,
             label: 'Parameter Value',
-            width: 'calc(100% - 410px)',
+            width: 'calc(100% - 220px)',
             enum: [],
             custom,
           }, propIdx)}
@@ -262,64 +257,33 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       );
     }
-    if (type === 'boolean') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onChange={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          bool
-        />
-      );
-    }
-    if (type === 'integer') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          number
-        />
-      );
-    }
-    if ((type === 'string' && custom) || type === 'jscode') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-          codeEditor
-        />
-      );
-    }
-    if (type === 'string') {
-      return (
-        <EntityProperty
-          key={id}
-          title={label || name}
-          name={`${prefix}[${name}]`}
-          value={value}
-          onBlur={this.handlePropertyValueChange(name)}
-          width={width || 'calc(100% - 190px)'}
-          description={description}
-          placeholder=" "
-        />
-      );
+    if (['boolean', 'integer', 'string', 'jscode'].includes(type)) {
+      const props = {
+        key: id,
+        title: label || name,
+        name: `${prefix}[${name}]`,
+        value,
+        width: width || `calc(100% - ${horizontal ? 25 : 190}px)`,
+        description,
+        placeholder: ' '
+      }
+      if (type === 'boolean') {
+        props.bool = true;
+        props.onChange = this.handlePropertyValueChange(name);
+      }
+      if (type === 'integer') {
+        props.number = true;
+        props.alignRight = true;
+        props.onChange = this.handlePropertyValueChange(name);
+      }
+      if ((type === 'string' && custom) || type === 'jscode') {
+        props.codeEditor = true;
+        props.onBlur = this.handlePropertyValueChange(name);
+      }
+      if (type === 'string') {
+        props.onBlur = this.handlePropertyValueChange(name);
+      }
+      return <EntityProperty {...props} />;
     }
     if (name === 'condition') return (
       <span key={id}>
@@ -381,7 +345,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           placeholder=" "
           hiddenInputs={hiddenInputs}
           chips
-          width={width || 'calc(100% - 190px)'}
+          width={width || `calc(100% - ${horizontal ? 25 : 190}px)`}
           onAddChip={this.handleArrayItemAdd(propIdx)}
           onRemoveChip={this.handleArrayItemRemove(propIdx)}
           description={item.description}
@@ -399,6 +363,7 @@ export default class GatewayPolicyCondition extends PureComponent {
       prefix,
       nested,
       nestedSingle,
+      horizontal,
     } = this.props;
     const options = Object.keys(schemas).map(label => ({label, value: label}));
     const {name, properties, custom} = this.state;
@@ -407,7 +372,16 @@ export default class GatewayPolicyCondition extends PureComponent {
       button = <IconButton icon="iconPlus" onClick={this.handleAddCondition} />;
     }
     if (custom) {
-      button = <IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
+      button = (
+        <div className="GatewayPolicyCondition__add">
+          <IconMenu
+            options={customPropertyTypes}
+            onClick={this.handleAddCustomParameter}
+            horizontal="left"
+          />
+        </div>
+      );
+      //<IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
     }
     return (
       <div className={cs('GatewayPolicyCondition', {nested: !!nested, [nested]: true, nestedSingle})}>
@@ -422,7 +396,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           button={button}
         />
         {properties.map((item, idx) => {
-          if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
+          if (custom || horizontal) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
           return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
         })}
       </div>

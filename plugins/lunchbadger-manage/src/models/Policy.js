@@ -64,8 +64,7 @@ export default class Policy extends BaseModel {
 
   removeConditionActionByServiceEndpoint(serviceEndpoint) {
     this._conditionAction = this._conditionAction.filter(pair =>
-      !pair.action.parameters
-        .find(({name, value}) => name === 'serviceEndpoint' && value === serviceEndpoint)
+      !(pair.action.serviceEndpoint && pair.action.serviceEndpoint === serviceEndpoint)
     );
   }
 

@@ -1,0 +1,39 @@
+.GatewayPolicyCAPair {
+  .EntityPropertyLabel {
+    color: #4190CE;
+  }
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  margin: 10px 15px 15px 0;
+  position: relative;
+  &__section {
+    border-top: 1px solid #e0e0e0;
+    padding: 20px 15px 20px 33px;
+  }
+  & > .CollapsibleProperties {
+    padding: 0;
+    & > .CollapsibleProperties__bar {
+      margin: 10px 15px 10px 5px;
+    }
+    & > div > div > .CollapsibleProperties__collapsible {
+      margin: 0;
+    }
+  }
+  &.horizontal {
+    &:before {
+      display: block;
+      content: '';
+      width: 1px;
+      top: 65px;
+      bottom: 0;
+      position: absolute;
+      left: 50%;
+      background-color: #e0e0e0;
+    }
+    .GatewayPolicyCAPair__wrapper {
+      width: 50%;
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+}

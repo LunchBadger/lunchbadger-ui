@@ -192,4 +192,12 @@
     top: 30px;
     right: -30px;
   }
+  &__postfix {
+    position: absolute;
+    bottom: 18px;
+    left: calc(100% + 5px);
+    color: #999;
+    font-size: 12px;
+    font-weight: 300;
+  }
 }

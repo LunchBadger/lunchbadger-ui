@@ -3,6 +3,7 @@ import Tool from './Aside/Tool/Tool';
 import Button from './Button/Button';
 import CollapsibleProperties from './CollapsibleProperties/CollapsibleProperties';
 import IconButton from './IconButton/IconButton';
+import IconMenu from './IconMenu/IconMenu';
 import IconSVG from './IconSVG/IconSVG';
 import Toolbox from './Toolbox/Toolbox';
 import ContextualInformationMessage from './ContextualInformationMessage/ContextualInformationMessage';
@@ -91,6 +92,7 @@ export {
   EntityValidationErrors,
   Form,
   IconButton,
+  IconMenu,
   IconSVG,
   Input,
   PanelBar,

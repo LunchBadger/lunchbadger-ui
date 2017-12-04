@@ -1,0 +1,29 @@
+.GatewayPolicyAction {
+  position: relative;
+  .EntityProperty {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    &Label {
+      text-transform: capitalize !important;
+    }
+  }
+  &__button {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    &.add {
+      top: -34px;
+      &.menu {
+        top: -48px;
+        right: -12px;
+      }
+    }
+  }
+  &__parameter {
+    position: relative;
+  }
+}
+
+.panel__details .GatewayPolicyAction .EntityProperty {
+  vertical-align: top;
+}

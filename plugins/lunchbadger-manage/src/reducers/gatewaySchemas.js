@@ -1,5 +1,19 @@
 import gatewaySchemasMock from '../gatewaySchemasMock';
 
+const determineType = value => {
+  if (Array.isArray(value)) return 'array';
+  if (typeof value === 'number') return 'integer';
+  return typeof value;
+};
+
+const getDefaultValueByType = type => ({
+  string: '',
+  boolean: false,
+  integer: 0,
+  jscode: '',
+  array: [],
+})[type];
+
 const transformSchemas = schema => {
   const data = {
     defs: {},
@@ -28,10 +42,21 @@ const transformSchemas = schema => {
   });
   Object.keys(data.policy).forEach((key) => {
     const policy = data.policy[key];
+    if (!policy.required) {
+      policy.required = [];
+    }
     Object.keys(policy.properties).forEach((k) => {
       const prop = policy.properties[k];
       if (prop.enum && prop.enum.$ref) {
         prop.enum = data.defs[prop.enum.$ref];
+      }
+      if (Array.isArray(prop.type)) {
+        prop.types = [...prop.type];
+        if (prop.hasOwnProperty('default')) {
+          prop.type = determineType(prop.default);
+        } else {
+          prop.type = getDefaultValueByType(prop.types[0]);
+        }
       }
     });
   });
@@ -41,6 +66,14 @@ const transformSchemas = schema => {
       const prop = condition.properties[k];
       if (prop.enum && prop.enum.$ref) {
         prop.enum = data.defs[prop.enum.$ref];
+      }
+      if (Array.isArray(prop.type)) {
+        prop.types = [...prop.type];
+        if (prop.hasOwnProperty('default')) {
+          prop.type = determineType(prop.default);
+        } else {
+          prop.type = getDefaultValueByType(prop.types[0]);
+        }
       }
     });
   });

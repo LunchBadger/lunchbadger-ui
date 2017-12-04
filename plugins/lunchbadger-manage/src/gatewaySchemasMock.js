@@ -101,32 +101,19 @@ export default [
     "schema": {
       "type": "object",
       "properties": {
-        "myString": {
-          "type": "string",
-          "default": "Lorem ipsum",
-          "description": "myString description"
-        },
         "origin": {
           "type": [
-            "string",
             "boolean",
             "array"
           ],
           "items": {
             "type": "string"
           },
-          "default": "*",
+          "default": [],
           "description": "Configures the Access-Control-Allow-Origin CORS header."
         },
-        "jscode": { // FIXME - skasowac
-          "$ref": "defs.json#/definitions/jscode",
-          "description": "Valid JS code to execute. Note that egContext object will be used as global object for code. All Node.JS global variables like process, require etc. will not be available for security reasons"
-        },
         "methods": {
-          "type": [
-            "string",
-            "array"
-          ],
+          "type": "array",
           "items": {
             "type": "string"
           },
@@ -144,10 +131,7 @@ export default [
           "description": "Configures the Access-Control-Allow-Methods CORS header."
         },
         "allowedHeaders": {
-          "type": [
-            "string",
-            "array"
-          ],
+          "type": "array",
           "items": {
             "type": "string"
           },
@@ -168,36 +152,19 @@ export default [
         },
         "credentials": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Configures the Access-Control-Allow-Credentials CORS header."
         },
         "maxAge": {
           "type": "integer",
           "description": "Configures the Access-Control-Max-Age CORS header."
         },
-        "preflightContinue": {
-          "type": "boolean",
-          "default": false,
-          "description": "Pass the CORS preflight response to the next handler."
-        },
         "optionsSuccessStatus": {
           "type": "integer",
           "default": 204,
           "description": "Provides a status code to use for successful OPTIONS requests, since some legacy browsers (IE11, various SmartTVs) choke on 204."
         }
-      },
-      "required": [ // FIXME - skasowac
-        "myString",
-        "origin",
-        "methods",
-        // "allowedHeaders",
-        "exposedHeaders",
-        "jscode",
-        "credentials",
-        "maxAge",
-        // "preflightContinue",
-        // "optionsSuccessStatus",
-      ]
+      }
     }
   },
   {
@@ -247,17 +214,17 @@ export default [
         },
         "disableHeaders": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Disable apikey lookup in headers."
         },
         "disableHeadersScheme": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Disable verification of scheme in header."
         },
         "disableQueryParam": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Set to true to disable api key lookup in query string."
         }
       }
@@ -273,7 +240,7 @@ export default [
       "properties": {
         "message": {
           "type": "string",
-          "default": "",
+          "default": "${req.ip} ${req.method} ${req.originalUrl}",
           "description": "String specifiying the message to log."
         }
       },
@@ -306,7 +273,7 @@ export default [
         },
         "changeOrigin": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Changes the origin of the host header to the target URL."
         },
         "strategy": {
@@ -339,22 +306,26 @@ export default [
         "windowMs": {
           "type": "integer",
           "default": 60000,
-          "description": "milliseconds - how long to keep records of requests in memory."
+          "description": "milliseconds - how long to keep records of requests in memory.",
+          "postfix": "milliseconds"
         },
         "delayAfter": {
           "type": "integer",
           "default": 1,
-          "description": "max number of connections during windowMs before starting to delay responses. Defaults to 1. Set to 0 to disable delaying."
+          "description": "max number of connections during windowMs before starting to delay responses. Defaults to 1. Set to 0 to disable delaying.",
+          "postfix": "connections"
         },
         "delayMs": {
           "type": "integer",
           "default": 1000,
-          "description": "milliseconds - how long to delay the response, multiplied by (number of recent hits - delayAfter). Defaults to 1000 (1 second). Set to 0 to disable delaying."
+          "description": "milliseconds - how long to delay the response, multiplied by (number of recent hits - delayAfter). Defaults to 1000 (1 second). Set to 0 to disable delaying.",
+          "postfix": "milliseconds"
         },
         "max": {
           "type": "integer",
           "default": 5,
-          "description": "max number of connections during windowMs milliseconds before sending a 429 response. Defaults to 5. Set to 0 to disable."
+          "description": "max number of connections during windowMs milliseconds before sending a 429 response. Defaults to 5. Set to 0 to disable.",
+          "postfix": "connections"
         },
         "message": {
           "type": "string",
@@ -365,18 +336,12 @@ export default [
           "type": "integer",
           "default": 429,
           "description": "HTTP status code returned when max is exceeded."
-        },
-        "myBool": {
-          "type": "boolean",
-          "default": true,
-          "description": "myBool description"
         }
       },
       "required": [
         "rateLimitBy",
         "message",
-        "statusCode",
-        "myBool"
+        "statusCode"
       ]
     }
   },

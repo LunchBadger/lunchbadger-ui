@@ -52,6 +52,8 @@ class EntityProperty extends Component {
     onRemoveChip: PropTypes.func,
     description: PropTypes.string,
     button: PropTypes.node,
+    alignRight: PropTypes.bool,
+    postfix: PropTypes.string,
   };
 
   static defaultProps = {
@@ -72,6 +74,8 @@ class EntityProperty extends Component {
     codeEditor: false,
     chips: false,
     description: '',
+    alignRight: false,
+    postfix: '',
   };
 
   constructor(props) {
@@ -101,14 +105,15 @@ class EntityProperty extends Component {
     onBlur(event);
   }
 
-  handleTab = ({which, keyCode, shiftKey, target: {value}}) => {
+  handleTab = (event) => {
+    const {which, keyCode, shiftKey, target: {value}} = event;
     const {onTab, onBlur, chips} = this.props;
     if (value.trim() !== '' && chips && typeof onBlur === 'function' && (which === 13 || keyCode === 13)) {
       onBlur(value);
     }
     if (typeof onTab === 'function') {
       if (!((which === 9 || keyCode === 9) && !shiftKey)) return;
-      onTab();
+      onTab(event);
     }
   }
 
@@ -149,6 +154,7 @@ class EntityProperty extends Component {
       autocomplete,
       codeEditor,
       chips,
+      alignRight,
     } = this.props;
     if (codeEditor) {
       return (
@@ -157,6 +163,7 @@ class EntityProperty extends Component {
             name={name}
             value={value}
             onChange={value => onBlur({target: {value}})}
+            onTab={this.handleTab}
             fullWidth
             initialHeight={200}
           />
@@ -220,6 +227,7 @@ class EntityProperty extends Component {
           underlineStyle={underlineStyle}
           isInvalid={isInvalid}
           handleKeyDown={this.handleTab}
+          alignRight={alignRight}
         />
         {this.renderChips()}
       </span>
@@ -253,6 +261,7 @@ class EntityProperty extends Component {
       chips,
       description,
       button,
+      postfix,
     } = this.props;
     const {contextualVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -310,6 +319,7 @@ class EntityProperty extends Component {
             </span>
           </div>
           {!fake && this.renderField()}
+          {postfix !== '' && <span className="EntityProperty__postfix">{postfix}</span>}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
           <Toolbox config={toolboxConfig} />
         </div>

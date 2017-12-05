@@ -29,7 +29,7 @@ const AppLoader = LunchBadgerCore.components.AppLoader;
 const storeReducers = LunchBadgerCore.utils.storeReducers;
 LunchBadgerCore.multiEnvIndex = 0;
 
-console.info('Application started..!');
+console.info('Application started, ver. 0.3');
 
 const loginManager = LunchBadgerCore.utils.createLoginManager();
 

@@ -2,6 +2,7 @@ import {add as addDataSource} from '../reduxActions/dataSources';
 import {add as addModel} from '../reduxActions/models';
 import {add as addMicroservice} from '../reduxActions/microservices';
 import {add as addFunction} from '../reduxActions/functions';
+import Config from '../../../../src/config';
 
 const dataSources = [
   'Memory',
@@ -12,8 +13,11 @@ const dataSources = [
   'MySQL',
   'Ethereum',
   'Salesforce',
-  'TritonObjectStorage',
 ];
+
+if (Config.get('features').tritonObjectStorage) {
+  dataSources.push('TritonObjectStorage');
+}
 
 const dataSourcesWizard = [
   'MongoDB',
@@ -44,7 +48,7 @@ const microserviceAction = () => dispatch => dispatch(addMicroservice());
 
 const functionAction = () => dispatch => dispatch(addFunction());
 
-export default {
+const tools = {
   0: [
     {
       name: 'dataSource',
@@ -71,11 +75,16 @@ export default {
       tooltip: 'Function',
       action: functionAction,
     },
-    {
-      name: 'microservice',
-      icon: 'iconMicroservice',
-      tooltip: 'Microservice',
-      action: microserviceAction,
-    },
   ],
 };
+
+if (Config.get('features').microservices) {
+  tools[0].push({
+    name: 'microservice',
+    icon: 'iconMicroservice',
+    tooltip: 'Microservice',
+    action: microserviceAction,
+  });
+}
+
+export default tools;

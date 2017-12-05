@@ -374,7 +374,6 @@ export default class GatewayPolicyCondition extends PureComponent {
       prefix,
       nested,
       nestedSingle,
-      horizontal,
     } = this.props;
     const groupingOptions = Object.keys(schemas)
       .filter(key => groupingParameters.includes(key))
@@ -411,8 +410,8 @@ export default class GatewayPolicyCondition extends PureComponent {
           title="Name"
           name={`${prefix}[name]`}
           value={name}
-          options={groupingOptions}
-          secondaryOptions={otherOptions}
+          options={otherOptions}
+          secondaryOptions={groupingOptions}
           onBlur={this.handleNameChange}
           width={140}
           autocomplete

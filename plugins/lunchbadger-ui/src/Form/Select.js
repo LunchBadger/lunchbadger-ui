@@ -9,6 +9,8 @@ import HOC from '../utils/Formsy/HOC';
 import getPlainText from '../utils/getPlainText';
 import './Select.scss';
 
+const optionsMapping = ({value: text, icon}) => ({text, value: <MenuItem primaryText={text} rightIcon={icon} />});
+
 class Select extends Component {
   static propTypes = {
     getValue: PropTypes.func,
@@ -79,8 +81,7 @@ class Select extends Component {
 
   getDataSource = () => {
     const {options, secondaryOptions} = this.props;
-    return options.map(({value: text, icon}) => ({text, value: <MenuItem primaryText={text} rightIcon={icon} />}))
-      .concat(secondaryOptions.map(({value}) => ({text: value, value})));
+    return options.map(optionsMapping).concat(secondaryOptions.map(optionsMapping));
   };
 
   renderField = () => {
@@ -88,6 +89,7 @@ class Select extends Component {
       getValue,
       multiple,
       options,
+      secondaryOptions,
       hideUnderline,
       name,
       autocomplete,
@@ -95,7 +97,7 @@ class Select extends Component {
     const {focused, val} = this.state;
     let icon = null;
     if (!focused) {
-      const selectedOption = options.find(({value}) => value === getValue());
+      const selectedOption = (options.concat(secondaryOptions)).find(({value}) => value === getValue());
       if (selectedOption && selectedOption.icon) {
         icon = selectedOption.icon;
       }

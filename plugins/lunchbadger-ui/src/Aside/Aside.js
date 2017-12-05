@@ -53,7 +53,7 @@ const selector = createSelector(
   state => state.plugins.tools || [],
   state => state.states.currentEditElement,
   (tools, currentElement) => ({
-    groups: Object.keys(tools).map(key => tools[key]).filter(item => item.length > 0),
+    groups: Object.values(tools).filter(item => item.length > 0),
     currentType: currentElement && !currentElement.loaded ? currentElement.constructor.type.toLowerCase() : '',
   }),
 );

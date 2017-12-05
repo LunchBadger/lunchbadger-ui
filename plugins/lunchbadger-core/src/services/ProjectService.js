@@ -3,7 +3,7 @@ import Config from '../../../../src/config';
 import {getUser} from '../utils/auth';
 
 class ProjectService {
-  initialize = () => this.api = new ApiClient(Config.get('projectApiUrl'), getUser().idToken);
+  initialize = () => this.api = new ApiClient(Config.get('projectApiUrl'), getUser().id_token);
 
   getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
 

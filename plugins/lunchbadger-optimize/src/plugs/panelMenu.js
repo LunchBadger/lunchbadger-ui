@@ -1,9 +1,15 @@
-const {coreActions} = LunchBadgerCore.utils;
+import {FORECASTS_PANEL} from '../components/Panel/ForecastsPanel';
+import Config from '../../../../src/config';
 
-export default {
-  4: {
+const {coreActions} = LunchBadgerCore.utils;
+const panelMenu = {};
+
+if (Config.get('features').forecasts) {
+  panelMenu[4] = {
     icon: 'icon-icon-forecaster',
-    panel: 'FORECASTS_PANEL',
-    action: coreActions.togglePanel('FORECASTS_PANEL'),
-  },
-};
+    panel: FORECASTS_PANEL,
+    action: coreActions.togglePanel(FORECASTS_PANEL),
+  };
+}
+
+export default panelMenu;

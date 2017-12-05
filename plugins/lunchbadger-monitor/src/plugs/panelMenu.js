@@ -1,10 +1,15 @@
 import {METRICS_PANEL} from '../components/Panel/MetricsPanel';
-const {coreActions} = LunchBadgerCore.utils;
+import Config from '../../../../src/config';
 
-export default {
-  3: {
+const {coreActions} = LunchBadgerCore.utils;
+const panelMenu = {};
+
+if (Config.get('features').metrics) {
+  panelMenu[3] = {
     icon: 'icon-icon-metrics',
     panel: METRICS_PANEL,
     action: coreActions.togglePanel(METRICS_PANEL),
-  },
-};
+  };
+}
+
+export default panelMenu;

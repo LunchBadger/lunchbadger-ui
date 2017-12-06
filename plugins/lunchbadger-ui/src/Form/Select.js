@@ -5,6 +5,7 @@ import cs from 'classnames';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
+import Multiselect from './Multiselect';
 import HOC from '../utils/Formsy/HOC';
 import getPlainText from '../utils/getPlainText';
 import './Select.scss';
@@ -84,6 +85,8 @@ class Select extends Component {
     return options.map(optionsMapping).concat(secondaryOptions.map(optionsMapping));
   };
 
+  handleMultiselectChange = values => this.props.handleChange(values.map(({value}) => value));
+
   renderField = () => {
     const {
       getValue,
@@ -93,6 +96,7 @@ class Select extends Component {
       hideUnderline,
       name,
       autocomplete,
+      placeholder,
     } = this.props;
     const {focused, val} = this.state;
     let icon = null;
@@ -127,8 +131,8 @@ class Select extends Component {
     if (icon) {
       searchText = _.upperCase(searchText);
     }
-    if (autocomplete) return (
-      <span className="Select__autocomplete">
+    if (autocomplete && !multiple) return (
+      <span className="SelectComp__autocomplete">
         <AutoComplete
           ref={r => this.autocompleteRef = r}
           name={name}
@@ -150,6 +154,16 @@ class Select extends Component {
         />
         {icon}
       </span>
+    );
+    if (autocomplete) return (
+      <Multiselect
+        name={name}
+        options={options.concat(secondaryOptions)}
+        value={getValue()}
+        multi={multiple}
+        onChange={this.handleMultiselectChange}
+        placeholder={placeholder}
+      />
     );
     return (
       <SelectField
@@ -176,9 +190,10 @@ class Select extends Component {
   }
 
   render() {
-    const {className, name} = this.props;
+    const {className, name, autocomplete, multiple} = this.props;
+    const multiselect = autocomplete && multiple;
     return (
-      <div className={cs('Select', className, getPlainText(`select__${name}`))}>
+      <div className={cs(className, getPlainText(`select__${name}`), {SelectComp: !multiselect})}>
         {this.renderField()}
       </div>
     );

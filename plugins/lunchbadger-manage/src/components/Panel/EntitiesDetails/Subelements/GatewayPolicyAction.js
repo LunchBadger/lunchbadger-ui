@@ -175,22 +175,10 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
-  handleArrayItemAdd = id => (value) => {
+  handleArrayChange = id => (values) => {
     const state = _.cloneDeep(this.state);
     const parameter = state.parameters.find(item => item.id === id);
-    value.split(',').forEach((val) => {
-      const item = val.trim();
-      if (item !== '' && !parameter.value.includes(item)) {
-        parameter.value.push(item);
-      }
-    });
-    this.changeState(state);
-  };
-
-  handleArrayItemRemove = id => (idx) => {
-    const state = _.cloneDeep(this.state);
-    const parameter = state.parameters.find(item => item.id === id);
-    parameter.value.splice(idx, 1);
+    parameter.value = values;
     this.changeState(state);
   };
 
@@ -263,24 +251,14 @@ export default class GatewayPolicyAction extends PureComponent {
         });
       }
       if (type === 'array') {
-        const hiddenInputs = value.map((value, idx) => ({
-          id: uuid.v4(),
-          name: `${prefix}[${name}][${idx}]`,
-          value,
-        }));
         const options = item.enum
-          ? _.difference(item.enum, value).map(label => ({label, value: label}))
+          ? item.enum.map(label => ({label, value: label}))
           : undefined;
         const autocomplete = !!item.enum;
         Object.assign(props, {
-          key: `${id}_${hiddenInputs.length}`,
-          name: `${name}_name`,
-          value: '',
-          hiddenInputs,
           chips: true,
           onBlur: undefined,
-          onAddChip: this.handleArrayItemAdd(id),
-          onRemoveChip: this.handleArrayItemRemove(id),
+          onChange: this.handleArrayChange(id),
           options,
           autocomplete,
         });

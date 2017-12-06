@@ -179,17 +179,6 @@
       border-radius: 5px;
     }
   }
-  &__chips {
-    display: flex;
-    flex-wrap: wrap;
-    &__chip {
-      margin: 2px !important;
-      & > svg {
-        fill: #FFF !important;
-        margin: 1px 1px 1px -8px !important;
-      }
-    }
-  }
   &__button {
     position: absolute;
     top: 30px;

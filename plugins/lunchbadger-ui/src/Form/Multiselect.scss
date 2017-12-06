@@ -1,0 +1,77 @@
+.Multiselect {
+  margin-top: 4px;
+  .Select-control {
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0;
+  }
+  .Select-control:hover {
+    box-shadow: none;
+  }
+  .is-focused:not(.is-open) > .Select-control {
+    border-color: #e0e0e0;
+    box-shadow: none;
+  }
+  .Select--multi .Select-value {
+    background-color: #4e4e4e;
+    color: #FFF;
+    border: none;
+    position: relative;
+    padding: 0 22px 0 4px;
+    border-radius: 13px;
+    margin: 4px 2px 4px 0;
+  }
+  .Select--multi .Select-value-icon {
+    padding: 0;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    background-color: #FFF;
+    color: #4d4d4d;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    border: none;
+    font-size: 19px;
+    line-height: 20px;
+  }
+  .Select-input > input {
+    padding: 5px 0 0 0;
+    line-height: inherit;
+  }
+  .Select-menu-outer {
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    border-radius: 2px;
+    line-height: 32px;
+    z-index: 100;
+  }
+  .Select-menu {
+    padding: 16px 0;
+  }
+  .Select-option {
+    color: rgba(0, 0, 0, 0.87);
+    padding: 0 24px;
+  }
+  .Select-option:last-child {
+    border-radius: 0;
+  }
+  .Select-option.is-focused {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.87);
+  }
+  .Select-clear-zone {
+    vertical-align: baseline;
+    color: #e0e0e0;
+  }
+  .Select-arrow-zone {
+    vertical-align: baseline;
+  }
+  .Select-arrow {
+    border-color: #e0e0e0 transparent transparent;
+  }
+  .is-open .Select-arrow, .Select-arrow-zone:hover > .Select-arrow {
+    border-top-color: #e0e0e0;
+  }
+}

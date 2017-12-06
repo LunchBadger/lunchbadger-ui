@@ -175,20 +175,9 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
-  handleArrayItemAdd = propIdx => (value) => {
+  handleArrayChange = propIdx => (values) => {
     const state = _.cloneDeep(this.state);
-    value.split(',').forEach((val) => {
-      const item = val.trim();
-      if (item !== '' && !state.properties[propIdx].value.includes(item)) {
-        state.properties[propIdx].value.push(item);
-      }
-    });
-    this.changeState(state);
-  };
-
-  handleArrayItemRemove = propIdx => (idx) => {
-    const state = _.cloneDeep(this.state);
-    state.properties[propIdx].value.splice(idx, 1);
+    state.properties[propIdx].value = values;
     this.changeState(state);
   };
 
@@ -239,61 +228,6 @@ export default class GatewayPolicyCondition extends PureComponent {
       onChangeState,
       horizontal,
     } = this.props;
-    if (types) {
-      return (
-        <div key={id} className="GatewayPolicyCondition">
-          <EntityProperty
-            title="Parameter Name"
-            name={`${this.tmpPrefix}[${propIdx}][name]`}
-            value={name}
-            onBlur={this.handleCustomParameterNameChange(propIdx)}
-            width={150}
-            placeholder=" "
-          />
-          {this.renderProperty({
-            id,
-            type,
-            name,
-            value,
-            label: 'Parameter Value',
-            width: 'calc(100% - 220px)',
-            enum: [],
-            custom,
-          }, propIdx)}
-          <div className="GatewayPolicyCondition__button">
-            <IconButton icon="iconDelete" onClick={this.handleCustomParameterRemove(propIdx)} />
-          </div>
-        </div>
-      );
-    }
-    if (['boolean', 'integer', 'string', 'jscode'].includes(type)) {
-      const props = {
-        key: id,
-        title: label || name,
-        name: `${prefix}[${name}]`,
-        value,
-        width: width || 'calc(100% - 170px)',
-        description,
-        placeholder: ' '
-      }
-      if (type === 'boolean') {
-        props.bool = true;
-        props.onChange = this.handlePropertyValueChange(name);
-      }
-      if (type === 'integer') {
-        props.number = true;
-        props.alignRight = true;
-        props.onChange = this.handlePropertyValueChange(name);
-      }
-      if ((type === 'string' && custom) || type === 'jscode') {
-        props.codeEditor = true;
-        props.onBlur = this.handlePropertyValueChange(name);
-      }
-      if (type === 'string') {
-        props.onBlur = this.handlePropertyValueChange(name);
-      }
-      return <EntityProperty {...props} />;
-    }
     if (name === 'condition') return (
       <span key={id}>
         <div className="GatewayPolicyCondition__C">
@@ -337,33 +271,78 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       </span>
     );
-    if (type === 'array') {
-      const hiddenInputs = value.map((value, idx) => ({
-        id: uuid.v4(),
-        name: `${prefix}[${name}][${idx}]`,
-        value,
-      }));
-      const options = item.enum
-        ? _.difference(item.enum, value).map(label => ({label, value: label}))
-        : undefined;
-      const autocomplete = !!item.enum;
+    if (types) {
       return (
-        <EntityProperty
-          key={`${id}_${hiddenInputs.length}`}
-          title={label || name}
-          name={`${name}_name`}
-          value=""
-          placeholder=" "
-          hiddenInputs={hiddenInputs}
-          chips
-          width={width || 'calc(100% - 170px)'}
-          onAddChip={this.handleArrayItemAdd(propIdx)}
-          onRemoveChip={this.handleArrayItemRemove(propIdx)}
-          description={item.description}
-          options={options}
-          autocomplete={autocomplete}
-        />
+        <div key={id} className="GatewayPolicyCondition">
+          <EntityProperty
+            title="Parameter Name"
+            name={`${this.tmpPrefix}[${propIdx}][name]`}
+            value={name}
+            onBlur={this.handleCustomParameterNameChange(propIdx)}
+            width={150}
+            placeholder=" "
+          />
+          {this.renderProperty({
+            id,
+            type,
+            name,
+            value,
+            label: 'Parameter Value',
+            width: 'calc(100% - 220px)',
+            enum: [],
+            custom,
+          }, propIdx)}
+          <div className="GatewayPolicyCondition__button">
+            <IconButton icon="iconDelete" onClick={this.handleCustomParameterRemove(propIdx)} />
+          </div>
+        </div>
       );
+    }
+    if (['boolean', 'integer', 'string', 'jscode', 'array'].includes(type)) {
+      const props = {
+        key: id,
+        title: label || name,
+        name: `${prefix}[${name}]`,
+        value,
+        width: width || 'calc(100% - 170px)',
+        description,
+        placeholder: ' '
+      }
+      if (type === 'boolean') {
+        Object.assign(props, {
+          bool: true,
+          onChange: this.handlePropertyValueChange(name),
+        });
+      }
+      if (type === 'integer') {
+        Object.assign(props, {
+          number: true,
+          alignRight: true,
+          onChange: this.handlePropertyValueChange(name),
+        });
+      }
+      if ((type === 'string' && custom) || type === 'jscode') {
+        Object.assign(props, {
+          codeEditor: true,
+          onBlur: this.handlePropertyValueChange(name),
+        });
+      }
+      if (type === 'string') {
+        props.onBlur = this.handlePropertyValueChange(name);
+      }
+      if (type === 'array') {
+        const options = item.enum
+          ? item.enum.map(label => ({label, value: label}))
+          : undefined;
+        const autocomplete = !!item.enum;
+        Object.assign(props, {
+          chips: true,
+          onChange: this.handleArrayChange(propIdx),
+          options,
+          autocomplete,
+        });
+      }
+      return <EntityProperty {...props} />;
     }
     return null;
   };

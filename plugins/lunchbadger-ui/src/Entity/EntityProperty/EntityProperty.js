@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import Chip from 'material-ui/Chip';
 import {
   Input,
   Select,
@@ -15,15 +14,6 @@ import {
 import getPlainText from '../../utils/getPlainText';
 import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
-
-const chipStyle = {
-  opacity: 1,
-};
-
-const chipLabelStyle = {
-  fontSize: 16,
-  lineHeight: '26px',
-};
 
 class EntityProperty extends Component {
   static propTypes = {
@@ -59,7 +49,6 @@ class EntityProperty extends Component {
     autocomplete: PropTypes.bool,
     codeEditor: PropTypes.bool,
     chips: PropTypes.bool,
-    onRemoveChip: PropTypes.func,
     description: PropTypes.string,
     button: PropTypes.node,
     alignRight: PropTypes.bool,
@@ -105,13 +94,9 @@ class EntityProperty extends Component {
   }
 
   handleBlur = (event) => {
-    const {contextual, onBlur, onAddChip, chips} = this.props;
+    const {contextual, onBlur} = this.props;
     if (contextual !== '') {
       this.setState({contextualVisible: false});
-    }
-    if (chips && event.target.value.trim() !== '') {
-      onAddChip(event.target.value);
-      return;
     }
     onBlur(event);
   }
@@ -131,28 +116,6 @@ class EntityProperty extends Component {
   handleMouseEnter = () => this.setState({tooltipVisible: true});
 
   handleMouseLeave = () => this.setState({tooltipVisible: false});
-
-  renderChips = () => {
-    const {chips, hiddenInputs, onRemoveChip} = this.props;
-    if (!chips) return null;
-    return (
-      <div className="EntityProperty__chips">
-        {hiddenInputs.map((item, idx) => (
-          <Chip
-            key={item.id}
-            className="EntityProperty__chips__chip"
-            backgroundColor="#4b4b4b"
-            labelColor="#FFF"
-            onRequestDelete={() => onRemoveChip(idx)}
-            style={chipStyle}
-            labelStyle={chipLabelStyle}
-          >
-            {item.value}
-          </Chip>
-        ))}
-      </div>
-    );
-  };
 
   renderField = () => {
     const {
@@ -206,21 +169,20 @@ class EntityProperty extends Component {
     const filler = placeholder || `Enter ${title} here`;
     if (options) {
       return (
-        <span>
-          <Select
-            ref={(r) => {this.inputRef = r;}}
-            className="EntityProperty__field--input"
-            name={name}
-            value={value}
-            options={options}
-            secondaryOptions={secondaryOptions}
-            handleChange={onChange}
-            handleBlur={this.handleBlur}
-            handleKeyDown={this.handleTab}
-            autocomplete={autocomplete}
-          />
-          {this.renderChips()}
-        </span>
+        <Select
+          ref={(r) => {this.inputRef = r;}}
+          className="EntityProperty__field--input"
+          name={name}
+          value={value}
+          options={options}
+          secondaryOptions={secondaryOptions}
+          handleChange={onChange}
+          handleBlur={this.handleBlur}
+          handleKeyDown={this.handleTab}
+          autocomplete={autocomplete}
+          multiple={chips}
+          placeholder={filler}
+        />
       );
     }
     let type = 'text';
@@ -231,25 +193,22 @@ class EntityProperty extends Component {
       type = 'number';
     }
     return (
-      <span>
-        <Input
-          ref={(r) => {this.inputRef = r;}}
-          className="EntityProperty__field--input"
-          name={name}
-          value={chips ? '' : value}
-          placeholder={filler}
-          handleChange={onChange}
-          handleFocus={this.handleFocus}
-          handleBlur={this.handleBlur}
-          type={type}
-          fullWidth
-          underlineStyle={underlineStyle}
-          isInvalid={isInvalid}
-          handleKeyDown={this.handleTab}
-          alignRight={alignRight}
-        />
-        {this.renderChips()}
-      </span>
+      <Input
+        ref={(r) => {this.inputRef = r;}}
+        className="EntityProperty__field--input"
+        name={name}
+        value={chips ? '' : value}
+        placeholder={filler}
+        handleChange={onChange}
+        handleFocus={this.handleFocus}
+        handleBlur={this.handleBlur}
+        type={type}
+        fullWidth
+        underlineStyle={underlineStyle}
+        isInvalid={isInvalid}
+        handleKeyDown={this.handleTab}
+        alignRight={alignRight}
+      />
     );
   }
 

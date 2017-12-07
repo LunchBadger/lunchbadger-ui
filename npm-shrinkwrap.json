@@ -1318,9 +1318,9 @@
       "resolved": "https://registry.npmjs.org/bowser/-/bowser-1.6.1.tgz"
     },
     "brace": {
-      "version": "0.10.0",
-      "from": "brace@>=0.10.0 <0.11.0",
-      "resolved": "https://registry.npmjs.org/brace/-/brace-0.10.0.tgz"
+      "version": "0.11.0",
+      "from": "brace@>=0.11.0 <0.12.0",
+      "resolved": "https://registry.npmjs.org/brace/-/brace-0.11.0.tgz"
     },
     "brace-expansion": {
       "version": "1.1.6",
@@ -5228,9 +5228,9 @@
       }
     },
     "react-ace": {
-      "version": "5.3.0",
+      "version": "5.8.0",
       "from": "react-ace@latest",
-      "resolved": "https://registry.npmjs.org/react-ace/-/react-ace-5.3.0.tgz"
+      "resolved": "https://registry.npmjs.org/react-ace/-/react-ace-5.8.0.tgz"
     },
     "react-addons-create-fragment": {
       "version": "15.5.4",
@@ -6765,11 +6765,6 @@
       "from": "vm-browserify@0.0.4",
       "resolved": "https://registry.npmjs.org/vm-browserify/-/vm-browserify-0.0.4.tgz",
       "dev": true
-    },
-    "w3c-blob": {
-      "version": "0.0.1",
-      "from": "w3c-blob@0.0.1",
-      "resolved": "https://registry.npmjs.org/w3c-blob/-/w3c-blob-0.0.1.tgz"
     },
     "warning": {
       "version": "3.0.0",

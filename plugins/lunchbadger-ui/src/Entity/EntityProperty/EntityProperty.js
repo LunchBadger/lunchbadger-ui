@@ -164,12 +164,13 @@ class EntityProperty extends Component {
     this.handleObjectAddKey(key);
   }
 
+  handleCodeEditorChange = value => this.props.onBlur({target: {value}});
+
   renderField = () => {
     const {
       name,
       options,
       secondaryOptions,
-      onBlur,
       onChange,
       password,
       invalid,
@@ -228,7 +229,7 @@ class EntityProperty extends Component {
           <CodeEditor
             name={name}
             value={value}
-            onChange={value => onBlur({target: {value}})}
+            onChange={this.handleCodeEditorChange}
             onTab={this.handleTab}
             fullWidth
             initialHeight={200}

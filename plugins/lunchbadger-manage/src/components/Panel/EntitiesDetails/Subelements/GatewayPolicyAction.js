@@ -12,6 +12,7 @@ const customPropertyTypes = [
   'boolean',
   'integer',
   'array',
+  'object',
 ];
 
 const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
@@ -22,6 +23,7 @@ const getDefaultValueByType = type => ({
   integer: 0,
   jscode: '',
   array: [],
+  object: {},
 })[type];
 
 const determineType = value => {
@@ -175,11 +177,11 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
-  handleArrayChange = id => (values) => {
+  handleArrayChange = id => (values, cb) => {
     const state = _.cloneDeep(this.state);
     const parameter = state.parameters.find(item => item.id === id);
     parameter.value = values;
-    this.changeState(state);
+    this.changeState(state, cb);
   };
 
   handleNameChange = ({target: {value: name}}) => this.changeState(this.getState(name, {}));
@@ -263,6 +265,14 @@ export default class GatewayPolicyAction extends PureComponent {
           autocomplete,
         });
       }
+      if (type === 'object') {
+        Object.assign(props, {
+          object: true,
+          onBlur: undefined,
+          onChange: this.handleArrayChange(id),
+          tmpPrefix: this.tmpPrefix,
+        });
+      }
       return <EntityProperty {...props} />;
     }
     if (type === 'serviceEndpoint') return (
@@ -297,7 +307,7 @@ export default class GatewayPolicyAction extends PureComponent {
           <div key={item.id} className="GatewayPolicyAction__parameter">
             {this.renderProperty(item)}
             {!schemas.required.includes(item.name) && (
-              <div className="GatewayPolicyAction__button">
+              <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
                 <IconButton icon="iconDelete" onClick={this.handleParameterRemove(item.id)} />
               </div>
             )}

@@ -76,7 +76,7 @@ class Select extends Component {
     }
   };
 
-  handleAutoCompleteFocus = () => this.setState({focused: true, val: ''}); //this.autocompleteRef.refs.searchTextField.input.select();
+  handleAutoCompleteFocus = () => this.setState({focused: true, val: ''});
 
   handleAutoCompleteMenuClose = () => this.setState({focused: false});
 

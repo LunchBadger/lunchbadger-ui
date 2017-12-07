@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import cs from 'classnames';
 import {
   Input,
@@ -7,13 +8,19 @@ import {
   Checkbox,
   EntityPropertyLabel,
   IconSVG,
+  IconButton,
   SmoothCollapse,
   Toolbox,
   CodeEditor,
+  Table,
 } from '../../';
 import getPlainText from '../../utils/getPlainText';
 import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
+
+const widths = [120, undefined, 50];
+const paddings = [true, true, false];
+const centers = [false, false, false];
 
 class EntityProperty extends Component {
   static propTypes = {
@@ -23,6 +30,7 @@ class EntityProperty extends Component {
       PropTypes.number,
       PropTypes.bool,
       PropTypes.array,
+      PropTypes.object,
     ]).isRequired,
     title: PropTypes.string,
     placeholder: PropTypes.string,
@@ -53,6 +61,8 @@ class EntityProperty extends Component {
     button: PropTypes.node,
     alignRight: PropTypes.bool,
     postfix: PropTypes.string,
+    object: PropTypes.bool,
+    tmpPrefix: PropTypes.string,
   };
 
   static defaultProps = {
@@ -75,6 +85,7 @@ class EntityProperty extends Component {
     description: '',
     alignRight: false,
     postfix: '',
+    object: false,
   };
 
   constructor(props) {
@@ -117,6 +128,42 @@ class EntityProperty extends Component {
 
   handleMouseLeave = () => this.setState({tooltipVisible: false});
 
+  handleObjectAddKey = () => {
+    const {value, onChange, tmpPrefix} = this.props;
+    onChange({...value, '': ''}, () => setTimeout(() => {
+      const input = document.getElementById(`${tmpPrefix}[_]`);
+      input && input.focus();
+    }));
+  };
+
+  handleObjectRemoveKey = key => () => {
+    const {value, onChange} = this.props;
+    const values = {...value};
+    delete values[key];
+    onChange(values);
+  };
+
+  handleObjectChangeKey = key => ({target: {value: newKey}}) => {
+    if (key === newKey) return;
+    const {value, onChange} = this.props;
+    const values = {...value};
+    const val = values[key];
+    delete values[key];
+    values[newKey] = val;
+    onChange(values);
+  };
+
+  handleObjectChangeValue = key => ({target: {value: val}}) => {
+    const {value, onChange} = this.props;
+    onChange({...value, [key]: val});
+  };
+
+  handleObjectTab = key => ({which, keyCode, shiftKey}) => {
+    if (!((which === 9 || keyCode === 9) && !shiftKey)) return;
+    if (Object.keys(this.props.value).pop() !== key) return;
+    this.handleObjectAddKey(key);
+  }
+
   renderField = () => {
     const {
       name,
@@ -136,7 +183,45 @@ class EntityProperty extends Component {
       codeEditor,
       chips,
       alignRight,
+      object,
+      tmpPrefix,
     } = this.props;
+    if (object) {
+      const columns = [
+        'Key',
+        'Value',
+        <IconButton icon="iconPlus" onClick={this.handleObjectAddKey} />,
+      ];
+      const data = Object.keys(value).map(key => [
+        <Input
+          name={`${tmpPrefix}[${key || '_'}]`}
+          value={key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleObjectChangeKey(key)}
+        />,
+        <Input
+          name={`${name}[${key}]`}
+          value={value[key]}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleObjectChangeValue(key)}
+          handleKeyDown={this.handleObjectTab(key)}
+        />,
+        <IconButton icon="iconDelete" onClick={this.handleObjectRemoveKey(key)} />,
+      ]);
+      return (
+        <Table
+          columns={columns}
+          data={data}
+          widths={widths}
+          paddings={paddings}
+          centers={centers}
+        />
+      );
+    }
     if (codeEditor) {
       return (
         <span className="EntityProperty__field--input">
@@ -240,6 +325,7 @@ class EntityProperty extends Component {
       description,
       button,
       postfix,
+      object,
     } = this.props;
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -257,6 +343,9 @@ class EntityProperty extends Component {
     let textValue = value || filler;
     if (bool) {
       textValue = value.toString();
+    }
+    if (object) {
+      textValue = '';
     }
     if (password && value.length > 0) {
       textValue = '•'.repeat(value.length);

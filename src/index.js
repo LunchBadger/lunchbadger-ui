@@ -13,6 +13,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
+console.info('LBAPP VERSION 0.1');
+
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -28,8 +30,6 @@ const muiTheme = getMuiTheme({
 const AppLoader = LunchBadgerCore.components.AppLoader;
 const storeReducers = LunchBadgerCore.utils.storeReducers;
 LunchBadgerCore.multiEnvIndex = 0;
-
-console.info('Application started, ver. 0.3');
 
 const loginManager = LunchBadgerCore.utils.createLoginManager();
 

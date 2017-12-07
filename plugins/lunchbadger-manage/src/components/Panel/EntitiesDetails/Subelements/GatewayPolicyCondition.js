@@ -325,6 +325,7 @@ export default class GatewayPolicyCondition extends PureComponent {
         Object.assign(props, {
           codeEditor: true,
           onBlur: this.handlePropertyValueChange(name),
+          width: width || 'calc(100% - 200px)',
         });
       }
       if (type === 'string') {

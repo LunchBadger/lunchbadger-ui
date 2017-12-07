@@ -171,6 +171,15 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
+  handleTypeChange = id => (type) => {
+    const state = _.cloneDeep(this.state);
+    const property = state.parameters.find(item => item.id === id);
+    if (property.type === type) return;
+    property.type = type;
+    property.value = getDefaultValueByType(type);
+    this.changeState(state);
+  };
+
   handleParameterRemove = id => () => {
     const state = _.cloneDeep(this.state);
     state.parameters = state.parameters.filter(item => item.id !== id);
@@ -200,6 +209,17 @@ export default class GatewayPolicyAction extends PureComponent {
               onBlur={this.handleCustomParameterNameChange(id)}
               width={150}
               placeholder=" "
+            />
+          )}
+          {!custom && (
+            <EntityProperty
+              title="Type"
+              name={`${this.tmpPrefix}[${id}][type]`}
+              value={type}
+              onChange={this.handleTypeChange(id)}
+              width={150}
+              placeholder=" "
+              options={types.map(label => ({label, value: label}))}
             />
           )}
           {this.renderProperty({

@@ -136,7 +136,8 @@ class GatewayDetails extends PureComponent {
 
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].addPolicy(Policy.create({'': []}));
+    const defaultPolicy = Object.keys(this.policiesSchemas)[0];
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     this.changeState({pipelines});
     setTimeout(() => {
       const policyIdx = pipelines[pipelineIdx].policies.length - 1;

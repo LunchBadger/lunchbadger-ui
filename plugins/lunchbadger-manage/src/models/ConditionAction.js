@@ -9,7 +9,7 @@ export default class ConditionAction extends BaseModel {
   static create(data) {
     return super.create({
       ...data,
-      condition: data.condition || {},
+      condition: data.condition || {name: 'always'},
       action: data.action || {},
     });
   }

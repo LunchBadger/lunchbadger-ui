@@ -246,7 +246,7 @@ export default class GatewayPolicyAction extends PureComponent {
           codeEditor: true,
         });
       }
-      if (type === 'string' && item.enum) {
+      if (type === 'string' && item.enum.length) {
         Object.assign(props, {
           options: item.enum.map(label => ({label, value: label})),
           autocomplete: true,

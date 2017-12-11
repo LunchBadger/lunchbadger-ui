@@ -1,0 +1,35 @@
+.RnD {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+  &__wrapper {
+    height: 100%;
+  }
+  &__header {
+    height: 48px;
+    background-color: #4190CE;
+    cursor: move;
+    &__icon {
+      svg {
+        width: 34px;
+        height: 34px;
+        stroke: #FFF;
+        position: absolute;
+        top: 7px;
+        left: 12px;
+      }
+    }
+    &__name {
+      margin-left: 58px;
+      color: #FFF;
+      line-height: 48px;
+      text-align: center;
+      font-weight: 400;
+    }
+  }
+  &__content {
+    height: calc(100% - 48px);
+    overflow: auto;
+    background-color: #FFF;
+  }
+}

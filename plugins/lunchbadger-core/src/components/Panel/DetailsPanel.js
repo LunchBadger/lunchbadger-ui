@@ -2,17 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
-import Panel from './Panel';
-import panelKeys from '../../constants/panelKeys';
+import {RnD} from '../../../../lunchbadger-ui/src';
 
 @inject('connectionsStore') @observer
 class DetailsPanel extends Component {
   static type = 'DetailsPanel';
-
-  constructor(props) {
-    super(props);
-    props.parent.storageKey = panelKeys.DETAILS_PANEL;
-  }
 
   renderDetails() {
     const {currentElement, panels, connectionsStore} = this.props;
@@ -20,23 +14,32 @@ class DetailsPanel extends Component {
       const {type} = currentElement.constructor;
       const DetailsPanelComponent = panels[type];
       if (DetailsPanelComponent) {
-        return <DetailsPanelComponent
-          entity={currentElement}
-          sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
-          targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
-        />;
+        return (
+          <div className="panel panel__body details highlighted editable">
+            <DetailsPanelComponent
+              entity={currentElement}
+              sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
+              targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
+            />
+          </div>
+        );
       }
     }
   }
 
   render() {
+    const {zoom, currentElement} = this.props;
+    if (!zoom) return null;
+    const {name} = currentElement;
+    const type = currentElement.constructor.type;
     return (
-      <div className="panel__body details">
-        <div className="panel__title">
-          Details
-          {this.renderDetails()}
-        </div>
-      </div>
+      <RnD
+        rect={zoom}
+        name={name}
+        type={type}
+      >
+        {this.renderDetails()}
+      </RnD>
     );
   }
 }
@@ -45,10 +48,12 @@ const selector = createSelector(
   state => state.states.currentElement,
   state => state.states.currentlySelectedSubelements,
   state => state.plugins.panelDetailsElements,
-  (currentElement, subelements, panels) => ({
+  state => state.states.zoom,
+  (currentElement, subelements, panels, zoom) => ({
     currentElement: subelements && subelements.length === 1 ? subelements[0] : currentElement,
     panels,
+    zoom,
   }),
 );
 
-export default connect(selector)(Panel(DetailsPanel));
+export default connect(selector)(DetailsPanel);

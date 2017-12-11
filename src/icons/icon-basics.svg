@@ -1,0 +1,12 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 240 240" xml:space="preserve">
+<style type="text/css">
+	.icon-basics-0{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+  <circle class="icon-basics-0" cx="120" cy="120" r="114" stroke-width="10" />
+  <circle class="icon-basics-0" cx="120" cy="120" r="10" stroke-width="15" />
+  <circle class="icon-basics-0" cx="60" cy="120" r="10" stroke-width="15" />
+  <circle class="icon-basics-0" cx="180" cy="120" r="10" stroke-width="15" />
+</g>
+</svg>

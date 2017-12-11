@@ -17,6 +17,7 @@
   cursor: pointer;
   padding: 0;
   outline: none;
+  transition: opacity 300ms;
   &:hover {
     background-color: rgb(242, 242, 242);
   }
@@ -33,5 +34,9 @@
     &:active {
       background-color: rgb(47, 113, 165);
     }
+  }
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.3;
   }
 }

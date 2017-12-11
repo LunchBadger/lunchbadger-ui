@@ -1,6 +1,6 @@
 import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
-import {iconDetails, iconLogout} from '../../../../src/icons';
+import {iconLogout} from '../../../../src/icons';
 
 export default {
   0: {
@@ -16,11 +16,6 @@ export default {
   1: {
     icon: 'fa-floppy-o',
     action: saveToServer(),
-  },
-  2: {
-    svg: iconDetails,
-    panel: 'DETAILS_PANEL',
-    action: togglePanel('DETAILS_PANEL'),
   },
   10: {
     icon: 'icon-icon-settings',

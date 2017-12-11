@@ -2,6 +2,7 @@ import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
 import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowUp from './icon-arrow-up.svg';
+import iconBasics from './icon-basics.svg';
 import iconCodeEditor from './icon-code-editor.svg';
 import iconDataSource from './icon-datasource.svg';
 import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
@@ -41,6 +42,7 @@ export {
   iconArrow,
   iconArrowDown,
   iconArrowUp,
+  iconBasics,
   iconCodeEditor,
   iconDataSource,
   iconDataSourceEthereum,

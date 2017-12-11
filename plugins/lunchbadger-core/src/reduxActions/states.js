@@ -58,6 +58,12 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
   ]));
 };
 
+export const setCurrentZoom = value => (dispatch, getState) => {
+  const {zoom} = getState().states;
+  if (zoom === value) return;
+  dispatch(actions.setState({key: 'zoom', value}));
+};
+
 export const togglePanel = panel => (dispatch, getState) => {
   const value = getState().states.currentlyOpenedPanel === panel ? null : panel;
   dispatch(actions.setState({key: 'currentlyOpenedPanel', value}));

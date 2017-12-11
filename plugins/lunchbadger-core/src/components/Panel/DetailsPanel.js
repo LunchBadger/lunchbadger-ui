@@ -35,7 +35,7 @@ class DetailsPanel extends Component {
     const {zoom, currentElement} = this.props;
     if (!zoom) return null;
     const {name} = currentElement;
-    const type = currentElement.constructor.type;
+    const {type} = currentElement.constructor;
     return (
       <RnD
         rect={zoom}

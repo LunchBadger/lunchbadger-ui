@@ -12,11 +12,14 @@
   }
   &__wrapper {
     background-color: #FFF;
+    border-radius: 5px;
   }
   &__header {
     height: 48px;
     background-color: #4190CE;
     cursor: move;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     &__icon {
       svg {
         width: 34px;
@@ -40,5 +43,6 @@
     height: calc(100% - 48px);
     opacity: 1;
     transition: opacity 600ms;
+    border-radius: 3px;
   }
 }

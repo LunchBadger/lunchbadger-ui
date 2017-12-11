@@ -282,7 +282,7 @@ export default (ComposedComponent) => {
           multiEnvIndex={multiEnvIndex}
         />
       );
-      const {ready} = entity;
+      const {ready, isZoomDisabled} = entity;
       const processing = !ready;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
@@ -303,11 +303,13 @@ export default (ComposedComponent) => {
             onClick: () => this.setState({showRemovingModal: true}),
           });
         }
-        toolboxConfig.push({
-          action: 'zoom',
-          icon: 'iconBasics',
-          onClick: this.handleZoom,
-        });
+        if (!isZoomDisabled) {
+          toolboxConfig.push({
+            action: 'zoom',
+            icon: 'iconBasics',
+            onClick: this.handleZoom,
+          });
+        }
         toolboxConfig.push({
           action: 'edit',
           icon: 'iconEdit',

@@ -1,9 +1,17 @@
 .RnD {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
-  overflow: hidden;
+  &.transitioning {
+    background-color: #FFF;
+    transition-duration: 300ms;
+    transition-property: width, height, transform;
+    border-top: 48px solid #4190CE;
+    .RnD__content {
+      opacity: 0;
+    }
+  }
   &__wrapper {
-    height: 100%;
+    background-color: #FFF;
   }
   &__header {
     height: 48px;
@@ -28,8 +36,9 @@
     }
   }
   &__content {
-    height: calc(100% - 48px);
-    overflow: auto;
     background-color: #FFF;
+    height: calc(100% - 48px);
+    opacity: 1;
+    transition: opacity 600ms;
   }
 }

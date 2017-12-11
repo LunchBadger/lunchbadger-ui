@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
+import {setCurrentZoom} from '../../reduxActions';
 import {RnD} from '../../../../lunchbadger-ui/src';
 
 @inject('connectionsStore') @observer
@@ -9,7 +10,7 @@ class DetailsPanel extends Component {
   static type = 'DetailsPanel';
 
   renderDetails() {
-    const {currentElement, panels, connectionsStore} = this.props;
+    const {currentElement, panels, connectionsStore, zoom} = this.props;
     if (currentElement) {
       const {type} = currentElement.constructor;
       const DetailsPanelComponent = panels[type];
@@ -20,12 +21,15 @@ class DetailsPanel extends Component {
               entity={currentElement}
               sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
               targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
+              rect={zoom}
             />
           </div>
         );
       }
     }
   }
+
+  handleClosePopup = () => this.props.dispatch(setCurrentZoom(undefined));
 
   render() {
     const {zoom, currentElement} = this.props;
@@ -37,6 +41,7 @@ class DetailsPanel extends Component {
         rect={zoom}
         name={name}
         type={type}
+        onClose={this.handleClosePopup}
       >
         {this.renderDetails()}
       </RnD>

@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import Rnd from 'react-rnd';
 import {IconSVG, entityIcons} from '../';
 import './RnD.scss';
@@ -18,13 +19,7 @@ export default class RnD extends PureComponent {
 
   constructor(props) {
     super(props);
-    const {x, y, width, height} = props.rect;
-    this.state = {
-      x: Math.round(x),
-      y: Math.round(y),
-      width: Math.round(width),
-      height: Math.round(height),
-    };
+    this.state = {...props.rect, transitioning: true};
   }
 
   componentDidMount() {
@@ -33,20 +28,42 @@ export default class RnD extends PureComponent {
     const y = 100;
     const width = innerWidth - 2 * x;
     const height = innerHeight - 2 * y;
-    const newState = {
+    const state = {
       x,
       y,
       width,
       height,
     };
-    setTimeout(() => {
-      this.setState(newState);
-    }, 0);
+    this.transitions(state);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rect.close) {
+      this.transitions(nextProps.rect, this.props.onClose);
+    }
+  }
+
+  transitions = (state, cb) => {
+    setTimeout(() => {
+      this.setState({transitioning: true}, () => {
+        setTimeout(() => {
+          this.setState(state, () => {
+            setTimeout(() => this.setState({transitioning: false}, cb), 310);
+          });
+        });
+      });
+    });
+  };
 
   handleDragStop = (_, {x, y}) => this.setState({x, y});
 
-  handleResize = (_, __, {offsetWidth: width, offsetHeight: height}, ___, position) => this.setState({width, height, ...position});
+  handleResize = (_, direction, {offsetWidth: width, offsetHeight: height}, ___, position) => {
+    const state = {width, ...position};
+    if (direction !== 'left' && direction !== 'right') {
+      Object.assign(state, {height});
+    }
+    this.setState(state);
+  }
 
   render() {
     const {
@@ -54,11 +71,13 @@ export default class RnD extends PureComponent {
       name,
       type,
     } = this.props;
-    const {x, y, width, height} = this.state;
+    const {x, y, width, height, transitioning} = this.state;
+    const size = {width, height};
+    const position = {x, y};
     return (
       <Rnd
         ref={r => this.rndRef = r}
-        className="RnD"
+        className={cs('RnD', {transitioning})}
         minWidth={250}
         minHeight={145}
         maxWidth="100%"
@@ -66,24 +85,29 @@ export default class RnD extends PureComponent {
         z={1005}
         bounds=".canvas__zoom-area"
         dragHandleClassName=".RnD__header"
-        size={{width, height}}
-        position={{x, y}}
+        size={size}
+        position={position}
         onDragStop={this.handleDragStop}
         onResize={this.handleResize}
       >
-        <div className="RnD__wrapper">
-          <div className="RnD__header">
-            <div className="RnD__header__icon">
-              <IconSVG svg={entityIcons[type]} />
+        {!transitioning && (
+          <div
+            className="RnD__wrapper"
+            style={size}
+          >
+            <div className="RnD__header">
+              <div className="RnD__header__icon">
+                <IconSVG svg={entityIcons[type]} />
+              </div>
+              <div className="RnD__header__name">
+                {name}
+              </div>
             </div>
-            <div className="RnD__header__name">
-              {name}
+            <div className="RnD__content">
+              {children}
             </div>
           </div>
-          <div className="RnD__content">
-            {children}
-          </div>
-        </div>
+        )}
       </Rnd>
     );
   }

@@ -63,7 +63,11 @@ export default (ComposedComponent) => {
       }
     }
 
-    resetFormModel = () => this.refs.form.reset(this.state.model);
+    resetFormModel = () => {
+      if (this.refs && this.refs.form) {
+        this.refs.form.reset(this.state.model);
+      }
+    }
 
     discardChanges = () => {
       const element = this.element.wrappedInstance || this.element;
@@ -129,7 +133,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    closePopup = () => this.context.store.dispatch(setCurrentZoom(undefined));
+    closePopup = () => this.context.store.dispatch(setCurrentZoom({...this.props.rect, close: true}));
 
     render() {
       const {validations} = this.state;

@@ -188,7 +188,14 @@ export default (ComposedComponent) => {
 
     handleZoom = (event) => {
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
-      this.props.dispatch(setCurrentZoom(elementDOMRect));
+      const {x, y, width, height} = elementDOMRect;
+      const rect = {
+        x: Math.round(x),
+        y: Math.round(y),
+        width: Math.round(width),
+        height: Math.round(height),
+      };
+      this.props.dispatch(setCurrentZoom(rect));
       event.stopPropagation();
     };
 

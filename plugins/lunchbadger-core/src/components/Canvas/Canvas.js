@@ -311,7 +311,6 @@ class Canvas extends Component {
             />
           </div>
         </section>
-        {zoom && <div className="SystemDefcon1" />}
         <div className="canvas__zoom-area" />
       </div>
     );

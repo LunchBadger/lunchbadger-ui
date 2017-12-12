@@ -4,6 +4,7 @@ import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowUp from './icon-arrow-up.svg';
 import iconBasics from './icon-basics.svg';
 import iconCodeEditor from './icon-code-editor.svg';
+import iconCustomerManagement from './icon-customer-management.svg';
 import iconDataSource from './icon-datasource.svg';
 import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
 import iconDataSourceMemory from './icon-datasource-memory.svg';
@@ -28,6 +29,7 @@ import iconModeHorizontal from './icon-mode-horizontal.svg';
 import iconModeVertical from './icon-mode-vertical.svg';
 import iconModel from './icon-model.svg';
 import iconMouse from './icon-mouse.svg';
+import iconPipelines from './icon-pipelines.svg';
 import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
@@ -44,6 +46,7 @@ export {
   iconArrowUp,
   iconBasics,
   iconCodeEditor,
+  iconCustomerManagement,
   iconDataSource,
   iconDataSourceEthereum,
   iconDataSourceMemory,
@@ -69,6 +72,7 @@ export {
   iconModel,
   iconMouse,
   iconPlus,
+  iconPipelines,
   iconPlane,
   iconPortal,
   iconRevert,

@@ -138,7 +138,7 @@ export default (ComposedComponent) => {
     render() {
       const {validations} = this.state;
       return (
-        <div className={cs('BaseDetails', 'details-panel__element')}>
+        <div className={cs('BaseDetails', 'details-panel__element', this.props.rect.tab)}>
           <Form
             name="panelForm"
             ref="form"

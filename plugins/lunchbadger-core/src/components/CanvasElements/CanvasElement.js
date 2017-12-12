@@ -186,7 +186,7 @@ export default (ComposedComponent) => {
       event.stopPropagation();
     }
 
-    handleZoom = (event) => {
+    handleZoom = tab => (event) => {
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
       const rect = {
@@ -194,6 +194,7 @@ export default (ComposedComponent) => {
         y: Math.round(y),
         width: Math.round(width),
         height: Math.round(height),
+        tab,
       };
       this.props.dispatch(setCurrentZoom(rect));
       event.stopPropagation();
@@ -294,6 +295,7 @@ export default (ComposedComponent) => {
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
+      const tabs = entity.tabs || [];
       if (multiEnvDelta) {
         if (isDelta) {
           toolboxConfig.push({
@@ -314,7 +316,14 @@ export default (ComposedComponent) => {
           toolboxConfig.push({
             action: 'zoom',
             icon: 'iconBasics',
-            onClick: this.handleZoom,
+            onClick: this.handleZoom('general'),
+          });
+          tabs.forEach(({name, icon}) => {
+            toolboxConfig.push({
+              action: name,
+              icon,
+              onClick: this.handleZoom(name),
+            });
           });
         }
         toolboxConfig.push({

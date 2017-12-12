@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import Rnd from 'react-rnd';
-import {IconSVG, entityIcons} from '../';
+import {IconSVG, entityIcons, Toolbox} from '../';
 import './RnD.scss';
 
 export default class RnD extends PureComponent {
@@ -25,7 +25,7 @@ export default class RnD extends PureComponent {
   componentDidMount() {
     const {innerWidth, innerHeight} = window;
     const x = 100;
-    const y = 100;
+    const y = 20;
     const width = innerWidth - 2 * x;
     const height = innerHeight - 2 * y;
     const state = {
@@ -33,6 +33,7 @@ export default class RnD extends PureComponent {
       y,
       width,
       height,
+      max: false,
     };
     this.transitions(state);
   }
@@ -55,6 +56,22 @@ export default class RnD extends PureComponent {
     });
   };
 
+  handleDoubleClick = () => {
+    if (this.state.max) {
+      this.setState(this.prevState);
+    } else {
+      this.prevState = {...this.state};
+      const {innerWidth, innerHeight} = window;
+      this.setState({
+        x: 0,
+        y: 20,
+        width: innerWidth,
+        height: innerHeight - 20,
+        max: true,
+      });
+    }
+  };
+
   handleDragStop = (_, {x, y}) => this.setState({x, y});
 
   handleResize = (_, direction, {offsetWidth: width, offsetHeight: height}, ___, position) => {
@@ -70,6 +87,7 @@ export default class RnD extends PureComponent {
       children,
       name,
       type,
+      toolbox,
     } = this.props;
     const {x, y, width, height, transitioning} = this.state;
     const size = {width, height};
@@ -95,7 +113,8 @@ export default class RnD extends PureComponent {
             className="RnD__wrapper"
             style={size}
           >
-            <div className="RnD__header">
+            <Toolbox config={toolbox} zoom />
+            <div className="RnD__header" onDoubleClick={this.handleDoubleClick}>
               <div className="RnD__header__icon">
                 <IconSVG svg={entityIcons[type]} />
               </div>

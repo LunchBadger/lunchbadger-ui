@@ -50,6 +50,7 @@ class Multiselect extends Component {
           closeOnSelect={false}
           placeholder={placeholder}
           onOpen={this.handleOpen}
+          clearable={false}
         />
       </div>
     );

@@ -1,0 +1,11 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" xml:space="preserve">
+  <style type="text/css">
+  	.icon-condition-one-of{stroke-miterlimit:10;stroke-width:3;}
+  </style>
+  <g>
+    <circle class="icon-condition-one-of" cx="20" cy="12" r="5" />
+    <circle class="icon-condition-one-of" cx="10" cy="27" r="5" fill="none" />
+    <circle class="icon-condition-one-of" cx="30" cy="27" r="5" fill="none" />
+  </g>
+</svg>

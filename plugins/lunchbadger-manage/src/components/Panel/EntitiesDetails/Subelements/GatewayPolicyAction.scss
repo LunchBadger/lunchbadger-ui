@@ -11,6 +11,9 @@
     position: absolute;
     top: 30px;
     right: 0;
+    &.object {
+      top: -5px;
+    }
     &.add {
       top: -34px;
       &.menu {
@@ -21,6 +24,7 @@
   }
   &__parameter {
     position: relative;
+    margin-top: 10px;
   }
 }
 

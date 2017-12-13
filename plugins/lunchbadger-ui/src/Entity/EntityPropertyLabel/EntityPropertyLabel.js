@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import IconButton from 'material-ui/IconButton';
-import ActionHelp from 'material-ui/svg-icons/action/help';
+import ActionHelp from 'material-ui/svg-icons/action/info-outline';
 import './EntityPropertyLabel.scss';
 
 const iconSize = 16;

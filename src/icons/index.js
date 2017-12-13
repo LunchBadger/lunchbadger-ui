@@ -3,6 +3,9 @@ import iconArrow from './icon-arrow.svg';
 import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowUp from './icon-arrow-up.svg';
 import iconCodeEditor from './icon-code-editor.svg';
+import iconConditionAllOf from './icon-condition-all-of.svg';
+import iconConditionNot from './icon-condition-not.svg';
+import iconConditionOneOf from './icon-condition-one-of.svg';
 import iconDataSource from './icon-datasource.svg';
 import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
 import iconDataSourceMemory from './icon-datasource-memory.svg';
@@ -42,6 +45,9 @@ export {
   iconArrowDown,
   iconArrowUp,
   iconCodeEditor,
+  iconConditionAllOf,
+  iconConditionNot,
+  iconConditionOneOf,
   iconDataSource,
   iconDataSourceEthereum,
   iconDataSourceMemory,

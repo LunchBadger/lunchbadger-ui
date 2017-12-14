@@ -50,7 +50,7 @@ class Select extends Component {
       padding: '0 8px',
     }
     return (
-      <div className={cs('Select', className)}>
+      <div className={cs('SelectComp', className)}>
         <SelectField
           value={getValue()}
           multiple={multiple}

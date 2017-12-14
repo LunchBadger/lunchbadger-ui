@@ -3,8 +3,17 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
+import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
 import './GatewayPolicyCondition.scss';
+
+const iconCondition = {
+  allOf: iconConditionAllOf,
+  oneOf: iconConditionOneOf,
+  not: iconConditionNot,
+};
+
+const groupingParameters = Object.keys(iconCondition);
 
 const customPropertyTypes = [
   'string',
@@ -166,20 +175,9 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
-  handleArrayItemAdd = propIdx => (value) => {
+  handleArrayChange = propIdx => (values) => {
     const state = _.cloneDeep(this.state);
-    value.split(',').forEach((val) => {
-      const item = val.trim();
-      if (item !== '' && !state.properties[propIdx].value.includes(item)) {
-        state.properties[propIdx].value.push(item);
-      }
-    });
-    this.changeState(state);
-  };
-
-  handleArrayItemRemove = propIdx => (idx) => {
-    const state = _.cloneDeep(this.state);
-    state.properties[propIdx].value.splice(idx, 1);
+    state.properties[propIdx].value = values;
     this.changeState(state);
   };
 
@@ -230,6 +228,49 @@ export default class GatewayPolicyCondition extends PureComponent {
       onChangeState,
       horizontal,
     } = this.props;
+    if (name === 'condition') return (
+      <span key={id}>
+        <div className="GatewayPolicyCondition__C">
+          <GatewayPolicyCondition
+            ref={r => this.policyConditionRef = r}
+            condition={value}
+            schemas={schemas}
+            prefix={`${prefix}[condition]`}
+            onChangeState={onChangeState}
+            onChange={this.onChange('condition', propIdx)}
+            nested="first"
+            nestedSingle
+            horizontal={horizontal}
+          />
+        </div>
+      </span>
+    );
+    if (name === 'conditions') return (
+      <span key={id}>
+        <div>
+          {value.map((condition, idx) => (
+            <div key={condition.id} className="GatewayPolicyCondition__C">
+              <GatewayPolicyCondition
+                ref={r => this.policyConditionRef = r}
+                condition={condition}
+                schemas={schemas}
+                prefix={`${prefix}[conditions][${idx}]`}
+                onChangeState={onChangeState}
+                onChange={this.onChange('conditions', propIdx, idx)}
+                nested={idx === 0 ? 'first' : (idx === value.length - 1 ? 'last': 'other')}
+                nestedSingle={value.length === 1}
+                horizontal={horizontal}
+              />
+              {value.length !== 1 && (
+                <div className="GatewayPolicyCondition__button">
+                  <IconButton icon="iconDelete" onClick={this.handleRemoveCondition(idx)} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </span>
+    );
     if (types) {
       return (
         <div key={id} className="GatewayPolicyCondition">
@@ -257,102 +298,52 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       );
     }
-    if (['boolean', 'integer', 'string', 'jscode'].includes(type)) {
+    if (['boolean', 'integer', 'string', 'jscode', 'array'].includes(type)) {
       const props = {
         key: id,
         title: label || name,
         name: `${prefix}[${name}]`,
         value,
-        width: width || `calc(100% - ${horizontal ? 25 : 190}px)`,
+        width: width || 'calc(100% - 170px)',
         description,
         placeholder: ' '
       }
       if (type === 'boolean') {
-        props.bool = true;
-        props.onChange = this.handlePropertyValueChange(name);
+        Object.assign(props, {
+          bool: true,
+          onChange: this.handlePropertyValueChange(name),
+        });
       }
       if (type === 'integer') {
-        props.number = true;
-        props.alignRight = true;
-        props.onChange = this.handlePropertyValueChange(name);
+        Object.assign(props, {
+          number: true,
+          alignRight: true,
+          onChange: this.handlePropertyValueChange(name),
+        });
       }
       if ((type === 'string' && custom) || type === 'jscode') {
-        props.codeEditor = true;
-        props.onBlur = this.handlePropertyValueChange(name);
+        Object.assign(props, {
+          codeEditor: true,
+          onBlur: this.handlePropertyValueChange(name),
+          width: width || 'calc(100% - 200px)',
+        });
       }
       if (type === 'string') {
         props.onBlur = this.handlePropertyValueChange(name);
       }
+      if (type === 'array') {
+        const options = item.enum
+          ? item.enum.map(label => ({label, value: label}))
+          : undefined;
+        const autocomplete = !!item.enum;
+        Object.assign(props, {
+          chips: true,
+          onChange: this.handleArrayChange(propIdx),
+          options,
+          autocomplete,
+        });
+      }
       return <EntityProperty {...props} />;
-    }
-    if (name === 'condition') return (
-      <span key={id}>
-        <div className="GatewayPolicyCondition__C">
-          <GatewayPolicyCondition
-            ref={r => this.policyConditionRef = r}
-            condition={value}
-            schemas={schemas}
-            prefix={`${prefix}[condition]`}
-            onChangeState={onChangeState}
-            onChange={this.onChange('condition', propIdx)}
-            nested="first"
-            nestedSingle
-          />
-        </div>
-      </span>
-    );
-    if (name === 'conditions') return (
-      <span key={id}>
-        <div>
-          {value.map((condition, idx) => (
-            <div key={condition.id} className="GatewayPolicyCondition__C">
-              <GatewayPolicyCondition
-                ref={r => this.policyConditionRef = r}
-                condition={condition}
-                schemas={schemas}
-                prefix={`${prefix}[conditions][${idx}]`}
-                onChangeState={onChangeState}
-                onChange={this.onChange('conditions', propIdx, idx)}
-                nested={idx === 0 ? 'first' : (idx === value.length - 1 ? 'last': 'other')}
-                nestedSingle={value.length === 1}
-              />
-              {value.length !== 1 && (
-                <div className="GatewayPolicyCondition__button">
-                  <IconButton icon="iconDelete" onClick={this.handleRemoveCondition(idx)} />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </span>
-    );
-    if (type === 'array') {
-      const hiddenInputs = value.map((value, idx) => ({
-        id: uuid.v4(),
-        name: `${prefix}[${name}][${idx}]`,
-        value,
-      }));
-      const options = item.enum
-        ? _.difference(item.enum, value).map(label => ({label, value: label}))
-        : undefined;
-      const autocomplete = !!item.enum;
-      return (
-        <EntityProperty
-          key={`${id}_${hiddenInputs.length}`}
-          title={label || name}
-          name={`${name}_name`}
-          value=""
-          placeholder=" "
-          hiddenInputs={hiddenInputs}
-          chips
-          width={width || `calc(100% - ${horizontal ? 25 : 190}px)`}
-          onAddChip={this.handleArrayItemAdd(propIdx)}
-          onRemoveChip={this.handleArrayItemRemove(propIdx)}
-          description={item.description}
-          options={options}
-          autocomplete={autocomplete}
-        />
-      );
     }
     return null;
   };
@@ -363,9 +354,20 @@ export default class GatewayPolicyCondition extends PureComponent {
       prefix,
       nested,
       nestedSingle,
-      horizontal,
     } = this.props;
-    const options = Object.keys(schemas).map(label => ({label, value: label}));
+    const groupingOptions = Object.keys(schemas)
+      .filter(key => groupingParameters.includes(key))
+      .map(label => ({
+        label,
+        value: label,
+        icon: <IconSVG className="GatewayPolicyCondition__optionIcon" svg={iconCondition[label]} />,
+      }));
+    const otherOptions = Object.keys(schemas)
+      .filter(key => !groupingParameters.includes(key))
+      .map(label => ({
+        label,
+        value: label,
+      }));
     const {name, properties, custom} = this.state;
     let button = null;
     if (properties.find(i => i.name === 'conditions')) {
@@ -381,7 +383,6 @@ export default class GatewayPolicyCondition extends PureComponent {
           />
         </div>
       );
-      //<IconButton icon="iconPlus" onClick={this.handleAddCustomParameter} />;
     }
     return (
       <div className={cs('GatewayPolicyCondition', {nested: !!nested, [nested]: true, nestedSingle})}>
@@ -389,14 +390,15 @@ export default class GatewayPolicyCondition extends PureComponent {
           title="Name"
           name={`${prefix}[name]`}
           value={name}
-          options={options}
+          options={otherOptions}
+          secondaryOptions={groupingOptions}
           onBlur={this.handleNameChange}
           width={140}
           autocomplete
           button={button}
         />
         {properties.map((item, idx) => {
-          if (custom || horizontal) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
+          if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
           return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
         })}
       </div>

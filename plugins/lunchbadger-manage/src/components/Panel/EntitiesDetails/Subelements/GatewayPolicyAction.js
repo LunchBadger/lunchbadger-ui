@@ -12,6 +12,7 @@ const customPropertyTypes = [
   'boolean',
   'integer',
   'array',
+  'object',
 ];
 
 const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
@@ -22,6 +23,7 @@ const getDefaultValueByType = type => ({
   integer: 0,
   jscode: '',
   array: [],
+  object: {},
 })[type];
 
 const determineType = value => {
@@ -169,29 +171,26 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
+  handleTypeChange = id => (type) => {
+    const state = _.cloneDeep(this.state);
+    const property = state.parameters.find(item => item.id === id);
+    if (property.type === type) return;
+    property.type = type;
+    property.value = getDefaultValueByType(type);
+    this.changeState(state);
+  };
+
   handleParameterRemove = id => () => {
     const state = _.cloneDeep(this.state);
     state.parameters = state.parameters.filter(item => item.id !== id);
     this.changeState(state);
   };
 
-  handleArrayItemAdd = id => (value) => {
+  handleArrayChange = id => (values, cb) => {
     const state = _.cloneDeep(this.state);
     const parameter = state.parameters.find(item => item.id === id);
-    value.split(',').forEach((val) => {
-      const item = val.trim();
-      if (item !== '' && !parameter.value.includes(item)) {
-        parameter.value.push(item);
-      }
-    });
-    this.changeState(state);
-  };
-
-  handleArrayItemRemove = id => (idx) => {
-    const state = _.cloneDeep(this.state);
-    const parameter = state.parameters.find(item => item.id === id);
-    parameter.value.splice(idx, 1);
-    this.changeState(state);
+    parameter.value = values;
+    this.changeState(state, cb);
   };
 
   handleNameChange = ({target: {value: name}}) => this.changeState(this.getState(name, {}));
@@ -210,6 +209,17 @@ export default class GatewayPolicyAction extends PureComponent {
               onBlur={this.handleCustomParameterNameChange(id)}
               width={150}
               placeholder=" "
+            />
+          )}
+          {!custom && (
+            <EntityProperty
+              title="Type"
+              name={`${this.tmpPrefix}[${id}][type]`}
+              value={type}
+              onChange={this.handleTypeChange(id)}
+              width={150}
+              placeholder=" "
+              options={types.map(label => ({label, value: label}))}
             />
           )}
           {this.renderProperty({
@@ -256,27 +266,31 @@ export default class GatewayPolicyAction extends PureComponent {
           codeEditor: true,
         });
       }
+      if (type === 'string' && item.enum.length) {
+        Object.assign(props, {
+          options: item.enum.map(label => ({label, value: label})),
+          autocomplete: true,
+        });
+      }
       if (type === 'array') {
-        const hiddenInputs = value.map((value, idx) => ({
-          id: uuid.v4(),
-          name: `${prefix}[${name}][${idx}]`,
-          value,
-        }));
         const options = item.enum
-          ? _.difference(item.enum, value).map(label => ({label, value: label}))
+          ? item.enum.map(label => ({label, value: label}))
           : undefined;
         const autocomplete = !!item.enum;
         Object.assign(props, {
-          key: `${id}_${hiddenInputs.length}`,
-          name: `${name}_name`,
-          value: '',
-          hiddenInputs,
           chips: true,
           onBlur: undefined,
-          onAddChip: this.handleArrayItemAdd(id),
-          onRemoveChip: this.handleArrayItemRemove(id),
+          onChange: this.handleArrayChange(id),
           options,
           autocomplete,
+        });
+      }
+      if (type === 'object') {
+        Object.assign(props, {
+          object: true,
+          onBlur: undefined,
+          onChange: this.handleArrayChange(id),
+          tmpPrefix: this.tmpPrefix,
         });
       }
       return <EntityProperty {...props} />;
@@ -313,7 +327,7 @@ export default class GatewayPolicyAction extends PureComponent {
           <div key={item.id} className="GatewayPolicyAction__parameter">
             {this.renderProperty(item)}
             {!schemas.required.includes(item.name) && (
-              <div className="GatewayPolicyAction__button">
+              <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
                 <IconButton icon="iconDelete" onClick={this.handleParameterRemove(item.id)} />
               </div>
             )}

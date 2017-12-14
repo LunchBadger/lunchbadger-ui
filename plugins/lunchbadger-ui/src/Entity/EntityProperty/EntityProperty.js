@@ -1,20 +1,26 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import cs from 'classnames';
-import Chip from 'material-ui/Chip';
 import {
   Input,
   Select,
   Checkbox,
   EntityPropertyLabel,
   IconSVG,
+  IconButton,
   SmoothCollapse,
   Toolbox,
   CodeEditor,
+  Table,
 } from '../../';
 import getPlainText from '../../utils/getPlainText';
 import {iconDelete, iconRevert} from '../../../../../src/icons';
 import './EntityProperty.scss';
+
+const widths = [120, undefined, 50];
+const paddings = [true, true, false];
+const centers = [false, false, false];
 
 class EntityProperty extends Component {
   static propTypes = {
@@ -24,6 +30,7 @@ class EntityProperty extends Component {
       PropTypes.number,
       PropTypes.bool,
       PropTypes.array,
+      PropTypes.object,
     ]).isRequired,
     title: PropTypes.string,
     placeholder: PropTypes.string,
@@ -40,6 +47,7 @@ class EntityProperty extends Component {
     onClick: PropTypes.func,
     selected: PropTypes.bool,
     options: PropTypes.array,
+    secondaryOptions: PropTypes.array,
     onTab: PropTypes.func,
     width:PropTypes.oneOfType([
       PropTypes.number,
@@ -49,11 +57,12 @@ class EntityProperty extends Component {
     autocomplete: PropTypes.bool,
     codeEditor: PropTypes.bool,
     chips: PropTypes.bool,
-    onRemoveChip: PropTypes.func,
     description: PropTypes.string,
     button: PropTypes.node,
     alignRight: PropTypes.bool,
     postfix: PropTypes.string,
+    object: PropTypes.bool,
+    tmpPrefix: PropTypes.string,
   };
 
   static defaultProps = {
@@ -76,12 +85,14 @@ class EntityProperty extends Component {
     description: '',
     alignRight: false,
     postfix: '',
+    object: false,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       contextualVisible: false,
+      tooltipVisible: false,
     }
   }
 
@@ -94,13 +105,9 @@ class EntityProperty extends Component {
   }
 
   handleBlur = (event) => {
-    const {contextual, onBlur, onAddChip, chips} = this.props;
+    const {contextual, onBlur} = this.props;
     if (contextual !== '') {
       this.setState({contextualVisible: false});
-    }
-    if (chips && event.target.value.trim() !== '') {
-      onAddChip(event.target.value);
-      return;
     }
     onBlur(event);
   }
@@ -117,31 +124,53 @@ class EntityProperty extends Component {
     }
   }
 
-  renderChips = () => {
-    const {chips, hiddenInputs, onRemoveChip} = this.props;
-    if (!chips) return null;
-    return (
-      <div className="EntityProperty__chips">
-        {hiddenInputs.map((item, idx) => (
-          <Chip
-            key={item.id}
-            className="EntityProperty__chips__chip"
-            backgroundColor="#019abc"
-            labelColor="#FFF"
-            onRequestDelete={() => onRemoveChip(idx)}
-          >
-            {item.value}
-          </Chip>
-        ))}
-      </div>
-    );
+  handleMouseEnter = () => this.setState({tooltipVisible: true});
+
+  handleMouseLeave = () => this.setState({tooltipVisible: false});
+
+  handleObjectAddKey = () => {
+    const {value, onChange, tmpPrefix} = this.props;
+    onChange({...value, '': ''}, () => setTimeout(() => {
+      const input = document.getElementById(`${tmpPrefix}[_]`);
+      input && input.focus();
+    }));
   };
+
+  handleObjectRemoveKey = key => () => {
+    const {value, onChange} = this.props;
+    const values = {...value};
+    delete values[key];
+    onChange(values);
+  };
+
+  handleObjectChangeKey = key => ({target: {value: newKey}}) => {
+    if (key === newKey) return;
+    const {value, onChange} = this.props;
+    const values = {...value};
+    const val = values[key];
+    delete values[key];
+    values[newKey] = val;
+    onChange(values);
+  };
+
+  handleObjectChangeValue = key => ({target: {value: val}}) => {
+    const {value, onChange} = this.props;
+    onChange({...value, [key]: val});
+  };
+
+  handleObjectTab = key => ({which, keyCode, shiftKey}) => {
+    if (!((which === 9 || keyCode === 9) && !shiftKey)) return;
+    if (Object.keys(this.props.value).pop() !== key) return;
+    this.handleObjectAddKey(key);
+  }
+
+  handleCodeEditorChange = value => this.props.onBlur({target: {value}});
 
   renderField = () => {
     const {
       name,
       options,
-      onBlur,
+      secondaryOptions,
       onChange,
       password,
       invalid,
@@ -155,14 +184,52 @@ class EntityProperty extends Component {
       codeEditor,
       chips,
       alignRight,
+      object,
+      tmpPrefix,
     } = this.props;
+    if (object) {
+      const columns = [
+        'Key',
+        'Value',
+        <IconButton icon="iconPlus" onClick={this.handleObjectAddKey} />,
+      ];
+      const data = Object.keys(value).map(key => [
+        <Input
+          name={`${tmpPrefix}[${key || '_'}]`}
+          value={key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleObjectChangeKey(key)}
+        />,
+        <Input
+          name={`${name}[${key}]`}
+          value={value[key]}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleObjectChangeValue(key)}
+          handleKeyDown={this.handleObjectTab(key)}
+        />,
+        <IconButton icon="iconDelete" onClick={this.handleObjectRemoveKey(key)} />,
+      ]);
+      return (
+        <Table
+          columns={columns}
+          data={data}
+          widths={widths}
+          paddings={paddings}
+          centers={centers}
+        />
+      );
+    }
     if (codeEditor) {
       return (
         <span className="EntityProperty__field--input">
           <CodeEditor
             name={name}
             value={value}
-            onChange={value => onBlur({target: {value}})}
+            onChange={this.handleCodeEditorChange}
             onTab={this.handleTab}
             fullWidth
             initialHeight={200}
@@ -188,20 +255,20 @@ class EntityProperty extends Component {
     const filler = placeholder || `Enter ${title} here`;
     if (options) {
       return (
-        <span>
-          <Select
-            ref={(r) => {this.inputRef = r;}}
-            className="EntityProperty__field--input"
-            name={name}
-            value={value}
-            options={options}
-            handleChange={onChange}
-            handleBlur={this.handleBlur}
-            handleKeyDown={this.handleTab}
-            autocomplete={autocomplete}
-          />
-          {this.renderChips()}
-        </span>
+        <Select
+          ref={(r) => {this.inputRef = r;}}
+          className="EntityProperty__field--input"
+          name={name}
+          value={value}
+          options={options}
+          secondaryOptions={secondaryOptions}
+          handleChange={onChange}
+          handleBlur={this.handleBlur}
+          handleKeyDown={this.handleTab}
+          autocomplete={autocomplete}
+          multiple={chips}
+          placeholder={filler}
+        />
       );
     }
     let type = 'text';
@@ -212,25 +279,22 @@ class EntityProperty extends Component {
       type = 'number';
     }
     return (
-      <span>
-        <Input
-          ref={(r) => {this.inputRef = r;}}
-          className="EntityProperty__field--input"
-          name={name}
-          value={chips ? '' : value}
-          placeholder={filler}
-          handleChange={onChange}
-          handleFocus={this.handleFocus}
-          handleBlur={this.handleBlur}
-          type={type}
-          fullWidth
-          underlineStyle={underlineStyle}
-          isInvalid={isInvalid}
-          handleKeyDown={this.handleTab}
-          alignRight={alignRight}
-        />
-        {this.renderChips()}
-      </span>
+      <Input
+        ref={(r) => {this.inputRef = r;}}
+        className="EntityProperty__field--input"
+        name={name}
+        value={chips ? '' : value}
+        placeholder={filler}
+        handleChange={onChange}
+        handleFocus={this.handleFocus}
+        handleBlur={this.handleBlur}
+        type={type}
+        fullWidth
+        underlineStyle={underlineStyle}
+        isInvalid={isInvalid}
+        handleKeyDown={this.handleTab}
+        alignRight={alignRight}
+      />
     );
   }
 
@@ -262,8 +326,9 @@ class EntityProperty extends Component {
       description,
       button,
       postfix,
+      object,
     } = this.props;
-    const {contextualVisible} = this.state;
+    const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', {
       ['EntityProperty__fake']: fake,
@@ -279,6 +344,9 @@ class EntityProperty extends Component {
     let textValue = value || filler;
     if (bool) {
       textValue = value.toString();
+    }
+    if (object) {
+      textValue = '';
     }
     if (password && value.length > 0) {
       textValue = '•'.repeat(value.length);
@@ -306,9 +374,14 @@ class EntityProperty extends Component {
       style.width = width;
     }
     return (
-      <div className={classNames} style={style}>
+      <div
+        className={classNames}
+        style={style}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
         {title !== '' && (
-          <EntityPropertyLabel description={description}>
+          <EntityPropertyLabel description={tooltipVisible ? description : ''}>
             {title}
           </EntityPropertyLabel>
         )}

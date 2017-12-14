@@ -90,7 +90,12 @@ export default [
     "name": "basic-auth",
     "description": "The Basic Authorization policy follows the RFC-7617 standard. From the standard, if a user agent wanted to send the user-id “Aladdin” and password “open sesame”, it would use the following HTTP header.",
     "schema": {
-
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "boolean"
+        }
+      }
     }
   },
   {
@@ -187,6 +192,23 @@ export default [
     }
   },
   {
+    "key": "policy:headers",
+    "type": "policy",
+    "name": "headers",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "headersPrefix": {
+          "type": "string",
+          "description": "String with prefix to be added for each header."
+        },
+        "forwardHeaders": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  {
     "key": "policy:key-auth",
     "type": "policy",
     "name": "key-auth",
@@ -255,7 +277,12 @@ export default [
     "name": "oauth2",
     "description": "The OAuth 2.0 policy follows the RFC-6749 standard.",
     "schema": {
-
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "boolean"
+        }
+      }
     }
   },
   {
@@ -275,6 +302,10 @@ export default [
           "type": "boolean",
           "default": true,
           "description": "Changes the origin of the host header to the target URL."
+        },
+        "proxyUrl": {
+          "type": "string",
+          "description": "Address of the intermediate proxy. Example: http://corporate.proxy:3128."
         },
         "strategy": {
           "type": "string",
@@ -343,6 +374,26 @@ export default [
         "message",
         "statusCode"
       ]
+    }
+  },
+  {
+    "key": "policy:terminate",
+    "type": "policy",
+    "name": "terminate",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer",
+          "description": "Status code to return in the response.",
+          "default": 400
+        },
+        "message": {
+          "type": "string",
+          "description": "String body to return in the response.",
+          "default": "Terminated"
+        }
+      }
     }
   },
   {

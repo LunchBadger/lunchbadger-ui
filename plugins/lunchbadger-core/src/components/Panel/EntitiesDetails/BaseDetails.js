@@ -63,11 +63,7 @@ export default (ComposedComponent) => {
       }
     }
 
-    resetFormModel = () => {
-      if (this.refs && this.refs.form) {
-        this.refs.form.reset(this.state.model);
-      }
-    }
+    resetFormModel = () => this.refs.form && this.refs.form.reset(this.state.model);
 
     discardChanges = () => {
       const element = this.element.wrappedInstance || this.element;

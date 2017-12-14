@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Slider from 'rc-slider';
+import {Range} from 'rc-slider';
 import DateSliderMark from './DateSliderMark';
 import {setForecast} from '../../../reduxActions/forecasts';
 import 'rc-slider/assets/index.css';
@@ -119,7 +119,7 @@ export default class DateSlider extends Component {
     return (
       <div className="date-slider" style={{width: '97%'}}>
         <div className="date-slider__slider">
-          <Slider range
+          <Range
                   defaultValue={this.state.range}
                   value={this.state.range}
                   marks={this.state.marks}

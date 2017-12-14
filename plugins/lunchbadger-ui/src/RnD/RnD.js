@@ -19,7 +19,7 @@ export default class RnD extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {...props.rect, transitioning: true};
+    this.state = {...props.rect, transitioning: true, opacity: 0};
   }
 
   componentDidMount() {
@@ -34,13 +34,14 @@ export default class RnD extends PureComponent {
       width,
       height,
       max: false,
+      opacity: 1,
     };
     this.transitions(state);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.rect.close) {
-      this.transitions(nextProps.rect, this.props.onClose);
+      this.transitions({...nextProps.rect, opacity: 0}, this.props.onClose);
     }
   }
 
@@ -49,7 +50,7 @@ export default class RnD extends PureComponent {
       this.setState({transitioning: true}, () => {
         setTimeout(() => {
           this.setState(state, () => {
-            setTimeout(() => this.setState({transitioning: false}, cb), 310);
+            setTimeout(() => this.setState({transitioning: false}, cb), 450);
           });
         });
       });
@@ -89,13 +90,13 @@ export default class RnD extends PureComponent {
       type,
       toolbox,
     } = this.props;
-    const {x, y, width, height, transitioning} = this.state;
+    const {x, y, width, height, transitioning, opacity, close} = this.state;
     const size = {width, height};
     const position = {x, y};
     return (
       <Rnd
         ref={r => this.rndRef = r}
-        className={cs('RnD', {transitioning})}
+        className={cs('RnD', {transitioning, close})}
         minWidth={250}
         minHeight={145}
         maxWidth="100%"
@@ -107,6 +108,7 @@ export default class RnD extends PureComponent {
         position={position}
         onDragStop={this.handleDragStop}
         onResize={this.handleResize}
+        style={{opacity}}
       >
         {!transitioning && (
           <div

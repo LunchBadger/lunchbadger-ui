@@ -1,14 +1,17 @@
 .RnD {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
+  opacity: 0;
   &.transitioning {
     background-color: #FFF;
-    transition-duration: 300ms;
-    transition-property: width, height, transform;
+    transition: width 300ms ease-in-out 100ms, height 300ms ease-in-out 100ms, transform 300ms ease-in-out 100ms, opacity 100ms;
     border-top: 48px solid #4190CE;
     .RnD__content {
       opacity: 0;
     }
+  }
+  &.transitioning.close {
+    transition: width 300ms ease-in-out, height 300ms ease-in-out, transform 300ms ease-in-out, opacity 100ms linear 300ms;
   }
   &__wrapper {
     background-color: #FFF;

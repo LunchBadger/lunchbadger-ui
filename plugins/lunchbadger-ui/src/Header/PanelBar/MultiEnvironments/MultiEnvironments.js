@@ -17,20 +17,11 @@ class MultiEnvironments extends Component {
     disabled: PropTypes.bool,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      balloonVisible: false,
-    };
-  }
-
   handleSelect = index =>
     this.props.dispatch(coreActions.multiEnvironmentsSetSelected(index));
 
   handleToggleDelta = index => () =>
     this.props.dispatch(coreActions.multiEnvironmentsToggleDelta(index));
-
-  toggleBalloon = balloonVisible => () => this.setState({balloonVisible});
 
   handleToggleNameEdit = (index, edit) =>
     this.props.dispatch(coreActions.multiEnvironmentsToggleNameEdit({index, edit}));
@@ -38,14 +29,10 @@ class MultiEnvironments extends Component {
   handleUpdateName = (index, name) =>
     this.props.dispatch(coreActions.multiEnvironmentsUpdateName({index, name}));
 
-  add = () => {
-    this.toggleBalloon(false)();
-    this.props.dispatch(coreActions.multiEnvironmentsAdd());
-  }
+  add = () => this.props.dispatch(coreActions.multiEnvironmentsAdd());
 
   render() {
     const {environments, selected, disabled} = this.props;
-    const {balloonVisible} = this.state;
     return (
       <div className={cs('MultiEnv', {disabled})}>
         {environments.map((item, idx) => (
@@ -62,19 +49,11 @@ class MultiEnvironments extends Component {
           />
         ))}
         {environments.length <= 4 && (
-          <div
-            className="MultiEnv__add"
-            onClick={this.add}
-            onMouseEnter={this.toggleBalloon(true)}
-            onMouseLeave={this.toggleBalloon(false)}
-          >
-            <IconSVG svg={iconPlus} />
-            {balloonVisible && (
-              <ContextualInformationMessage type={environments.length === 1 ? 'left' : undefined}>
-                Create environment
-              </ContextualInformationMessage>
-            )}
-          </div>
+          <ContextualInformationMessage direction="bottom" tooltip="Create environment">
+            <div className="MultiEnv__add" onClick={this.add}>
+              <IconSVG svg={iconPlus} />
+            </div>
+          </ContextualInformationMessage>
         )}
       </div>
     );

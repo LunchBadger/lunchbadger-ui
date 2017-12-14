@@ -18,7 +18,6 @@ class WorkspaceStatus extends Component {
       status: null,
       output: '',
       instance: null,
-      visible: false,
       isShowingModal: false,
     };
   }
@@ -45,14 +44,6 @@ class WorkspaceStatus extends Component {
     }
   }
 
-  onEnter = () => {
-    if (['running', 'installing'].includes(this.state.status)) {
-      this.setState({visible: true});
-    }
-  }
-
-  onLeave = () => this.setState({visible: false});
-
   onStatusReceived = (message) => {
     let status = JSON.parse(message.data).data;
     console.log('Status from server', status);
@@ -78,7 +69,7 @@ class WorkspaceStatus extends Component {
 
   render() {
     const {isSystemDefcon1} = this.props;
-    const {connected, status, visible} = this.state;
+    const {connected, status} = this.state;
     const classes = ['fa'];
     let message = null;
     if (status === 'installing') {
@@ -96,17 +87,15 @@ class WorkspaceStatus extends Component {
     }
     return (
       <span className="workspace-status">
-        <span className={classnames(classes)}
-          onClick={this.onClick}
-          onMouseEnter={this.onEnter}
-          onMouseLeave={this.onLeave}
+        <ContextualInformationMessage
+          tooltip={['running', 'installing'].includes(status) ? message : ''}
+          direction="bottom"
         >
-          {visible && (
-            <ContextualInformationMessage>
-              {message}
-            </ContextualInformationMessage>
-          )}
-        </span>
+          <span className={classnames(classes)}
+            onClick={this.onClick}
+          >
+          </span>
+        </ContextualInformationMessage>
         {this.state.isShowingModal && (
           <OneOptionModal
             confirmText="Reload"

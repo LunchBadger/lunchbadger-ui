@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {Range} from 'rc-slider';
+import Slider from 'rc-slider';
 import DateSliderMark from './DateSliderMark';
 import {setForecast} from '../../../reduxActions/forecasts';
 import 'rc-slider/assets/index.css';
 import './DateSlider.scss';
+
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 
 export default class DateSlider extends Component {
   static propTypes = {
@@ -68,9 +71,7 @@ export default class DateSlider extends Component {
     return marks;
   }
 
-  formatToolTip = (tooltip) => {
-    return moment.months(tooltip - 1);
-  }
+  formatToolTip = tooltip => moment.months(tooltip - 1);
 
   renderSliderMarks() {
     return Object.keys(this.state.marks).map((mark, index) => {
@@ -126,7 +127,12 @@ export default class DateSlider extends Component {
                   min={1}
                   max={this.state.count}
                   onChange={this._handleOnChange}
-                  tipFormatter={this.formatToolTip}/>
+                  tipFormatter={this.formatToolTip}
+                  tipProps={{
+                    placement: 'top',
+                    prefixCls: 'rc-tooltip',
+                  }}
+          />
           <div className="date-slider__marks">
             {this.renderSliderMarks()}
           </div>

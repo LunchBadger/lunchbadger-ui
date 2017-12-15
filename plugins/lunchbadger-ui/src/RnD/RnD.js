@@ -5,6 +5,8 @@ import Rnd from 'react-rnd';
 import {IconSVG, entityIcons, Toolbox} from '../';
 import './RnD.scss';
 
+const headerHeight = 48;
+
 export default class RnD extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -93,6 +95,8 @@ export default class RnD extends PureComponent {
     const {x, y, width, height, transitioning, opacity, close} = this.state;
     const size = {width, height};
     const position = {x, y};
+    const contentStyle = {transform: `translate(-${x}px, -${y + headerHeight}px)`};
+    const contentInnerStyle = {left: x, top: y + headerHeight};
     return (
       <Rnd
         ref={r => this.rndRef = r}
@@ -124,8 +128,10 @@ export default class RnD extends PureComponent {
                 {name}
               </div>
             </div>
-            <div className="RnD__content">
-              {children}
+            <div className="RnD__content" style={contentStyle}>
+              <div className="RnD__content__inner" style={contentInnerStyle}>
+                {children}
+              </div>
             </div>
           </div>
         )}

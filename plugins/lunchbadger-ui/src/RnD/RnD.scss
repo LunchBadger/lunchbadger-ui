@@ -42,10 +42,16 @@
     }
   }
   &__content {
-    background-color: #FFF;
+    position: absolute;
+    width: 100%;
     height: calc(100% - 48px);
     opacity: 1;
     transition: opacity 600ms;
     border-radius: 3px;
+    &__inner {
+      position: relative;
+      height: 100%;
+      background-color: #FFF;
+    }
   }
 }

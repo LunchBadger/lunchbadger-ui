@@ -10,6 +10,7 @@ import {
   togglePanel,
   changePanelStatus,
   toggleSubelement,
+  clearCurrentEditElement,
 } from './states';
 import {
   addSystemDefcon1,
@@ -29,6 +30,7 @@ export {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+  clearCurrentEditElement,
 
   addSystemDefcon1,
   toggleSystemDefcon1,

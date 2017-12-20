@@ -1,5 +1,6 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import slug from 'slug';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import './CanvasElement.scss';
@@ -10,9 +11,11 @@ import {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+  clearCurrentEditElement,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
 import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 import getFlatModel from '../../utils/getFlatModel';
@@ -33,19 +36,13 @@ const boxTarget = {
     if (!item) return;
     const dragIndex = item.itemOrder;
     const hoverIndex = props.itemOrder;
-    // if (dragIndex === hoverIndex) {
-    //   return;
-    // }
     if (props.isPanelOpened) return;
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
-    // const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
     const clientOffset = monitor.getClientOffset();
-    // const hoverClientY = clientOffset.y - hoverBoundingRect.top;
     if (dragIndex < hoverIndex && clientOffset.y < hoverBoundingRect.bottom - 15) return;
     if (dragIndex > hoverIndex && clientOffset.y > hoverBoundingRect.top + 15) return;
     if (item.subelement) return;
     props.moveEntity(item.id, dragIndex || 0, hoverIndex || 0);
-    // monitor.getItem().itemOrder = hoverIndex;
   }, 300),
 
   canDrop(props, monitor) {
@@ -91,86 +88,31 @@ export default (ComposedComponent) => {
       super(props);
       this.state = {
         showRemovingModal: false,
+        showNotRunningModal: false,
         validations: {
           isValid: true,
           data: {}
         },
-        // modelBeforeEdit: null,
-        // modelEnv_0: null,
       };
-      // this.multiEnvIndex = 0;
-      // this.checkHighlightAndEditableState = (props) => {
-      //   const currentElement = props.currentElement;
-      //   if (currentElement && currentElement.data.id === this.props.entity.data.id) {
-      //     if (!this.state.highlighted) {
-      //       console.log(111, currentElement.data.id, this.props.entity.data.id);
-      //       this.setState({highlighted: true});
-      //     }
-      //   } else {
-      //     this.setState({highlighted: false});
-      //   }
-      // };
     }
 
     componentWillReceiveProps(props) {
+      const {entity, running, dispatch} = this.props;
+      const {editable, highlighted} = props;
       this._handleDrop(props);
-      if (props.entity !== this.props.entity) {
+      if (props.entity !== entity) {
         setTimeout(this.setFlatModel);
       }
-      // this.checkHighlightAndEditableState(props);
+      if ((editable || highlighted) && running && !props.running) {
+        dispatch(clearCurrentEditElement());
+        if (editable) {
+          this.setState({showNotRunningModal: true});
+        }
+      }
     }
 
     componentDidMount() {
       this.setFlatModel();
-      // this.handleChangeListeners('addChangeListener');
-      // if (this.props.entity.metadata.wasBundled) {
-      //   this.setState({
-      //     editable: false,
-      //     expanded: false,
-      //     validations: {isValid: true, data:{}}
-      //   });
-      //   return;
-      // }
-      // if (this.props.entity.metadata.loaded) {
-      //   this.setState({
-      //     editable: false,
-      //     // expanded: false,
-      //     validations: {isValid: true, data:{}},
-      //     modelBeforeEdit: this.entityRef.getFormRef().getModel(),
-      //     modelEnv_0: this.entityRef.getFormRef().getModel(),
-      //   });
-      // } else if (this.props.entity.metadata.ready) {
-      //   this.triggerElementAutofocus();
-      // }
-      // // this.checkHighlightAndEditableState(this.props);
-      // this.props.entity.metadata.elementDOM = this.elementDOM;
-    }
-
-    componentDidUpdate() {
-      // const element = this.element.decoratedComponentInstance || this.element;
-      // if (typeof element.getEntityDiffProps === 'function') {
-      //   const modelBeforeEdit = element.getEntityDiffProps(this.state.modelBeforeEdit);
-      //   if (modelBeforeEdit !== null) {
-      //     this.setState({
-      //       modelBeforeEdit,
-      //       modelEnv_0: modelBeforeEdit,
-      //     });
-      //   }
-      // }
-      // this.props.entity.metadata.elementDOM = this.elementDOM;
-      // const {multiEnvIndex} = this.context;
-      // if (this.multiEnvIndex !== multiEnvIndex) {
-      //   LunchBadgerCore.multiEnvIndex = multiEnvIndex;
-      //   this.multiEnvIndex = multiEnvIndex;
-      //   const newState = {...this.state};
-      //   if (!this.state[`modelEnv_${multiEnvIndex}`]) {
-      //     newState[`modelEnv_${multiEnvIndex}`] = _.cloneDeep(this.state.modelEnv_0);
-      //   }
-      //   this.setState(newState, () => {
-      //     this.entityRef.getFormRef().reset(this.state[`modelEnv_${multiEnvIndex}`]);
-      //     this.forceUpdate();
-      //   });
-      // }
     }
 
     setFlatModel = () => {
@@ -194,8 +136,6 @@ export default (ComposedComponent) => {
       this.setState({validations});
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
-      // const onUpdate = entity.update;
-      // const updatedEntity = await dispatch(onUpdate(_.merge({}, entity, model)));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
       setTimeout(() => {
@@ -203,72 +143,6 @@ export default (ComposedComponent) => {
           this.setFlatModel();
         }
       });
-      // update currentElement
-
-      // const {multiEnvIndex, multiEnvAmount} = this.context;
-      // if (multiEnvIndex === 0 && this.state.modelEnv_0) {
-      //   const newState = {};
-      //   let isChange = false;
-      //   Object.keys(model).forEach((key) => {
-      //     if (this.state.modelEnv_0[key] !== model[key]) {
-      //       isChange = true;
-      //       for (let i = 1; i < multiEnvAmount; i += 1) {
-      //         if (!newState[`modelEnv_${i}`]) {
-      //           newState[`modelEnv_${i}`] = {...this.state[`modelEnv_${i}`]};
-      //         }
-      //         newState[`modelEnv_${i}`][key] = model[key];
-      //       }
-      //     }
-      //   });
-      //   if (isChange) {
-      //     this.setState(newState);
-      //   }
-      // }
-      // const element = this.element.decoratedComponentInstance || this.element;
-      // let updated;
-      // if (typeof element.update === 'function') {
-      //   // updated = element.update(model);
-      //   const {store: {dispatch, getState}} = this.context;
-      //   const entity = _.merge({}, this.props.entity, {data: model});
-      //   dispatch(getState().plugins.onUpdate[entity.metadata.type](entity));
-      //   this.setState({
-      //     modelBeforeEdit: model,
-      //     [`modelEnv_${multiEnvIndex}`]: model,
-      //   });
-      // }
-      // if (typeof updated === 'undefined' || updated) {
-      //   if (updated) {
-      //     this.setState({validations: updated});
-      //     if (!updated.isValid) {
-      //       return;
-      //     }
-      //   }
-      //   this.setState({editable: false, validations: {isValid: true, data:{}}});
-      // }
-// =======
-//       let updated;
-//       if (typeof element.update === 'function') {
-//         updated = element.update(model);
-//       }
-//       if (typeof updated === 'undefined' || updated) {
-//         if (updated) {
-//           this.setState({validations: updated});
-//           if (!updated.isValid) {
-//             return;
-//           }
-//         }
-//         this.setState({editable: false, validations: {isValid: true, data:{}}});
-//         toggleEdit(null);
-//       }
-//       let modelBeforeEdit = this.entityRef.getFormRef().getModel();
-//       if (typeof element.getModelAfterUpdate === 'function') {
-//         modelBeforeEdit = element.getModelAfterUpdate(modelBeforeEdit);
-//       }
-//       this.setState({
-//         modelBeforeEdit,
-//         [`modelEnv_${multiEnvIndex}`]: modelBeforeEdit,
-//       });
-// >>>>>>> development
     }
 
     updateName = (evt) => {
@@ -349,69 +223,8 @@ export default (ComposedComponent) => {
         }
       }
       dispatch(setCurrentEditElement(null));
-      // if (this.state.modelBeforeEdit === null) {
-      //   // this.handleRemove();
-      //   event.preventDefault();
-      //   event.stopPropagation();
-      //   return;
-      // }
-      // if (this.entityRef.getFormRef()) {
-      //   this.entityRef.getFormRef().reset(this.state.modelBeforeEdit);
-      // }
-      // const element = this.element.decoratedComponentInstance || this.element;
-      // if (typeof element.discardChanges === 'function') {
-      //   element.discardChanges();
-      // }
-      // this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
-      //   this.toggleHighlighted();
-      // });
-      // if (this.element && this.element.discardChanges) {
-      //   this.element.discardChanges();
-      // }
       event.preventDefault();
       event.stopPropagation();
-// =======
-//     getFlatModel = () => {
-//       const model = {};
-//       this.feedFlatModel(this.state.modelBeforeEdit, model);
-//       return model;
-//     }
-//
-//     feedFlatModel = (json, data, prefix = '') => {
-//       Object.keys(json).forEach((key) => {
-//         const pfx = prefix ? `[${key}]` : key;
-//         if (Array.isArray(json[key])) {
-//           json[key].forEach((item, idx) => {
-//             this.feedFlatModel(item, data, `${prefix}${pfx}[${idx}]`);
-//           });
-//         } else {
-//           data[`${prefix}${pfx}`] = json[key];
-//         }
-//       });
-//     }
-//
-//     _handleCancel = (evt) => {
-//       evt.persist();
-//       if (this.state.modelBeforeEdit === null) {
-//         this._handleRemove();
-//         evt.preventDefault();
-//         evt.stopPropagation();
-//         return;
-//       }
-//       const element = this.element.decoratedComponentInstance || this.element;
-//       if (typeof element.discardChanges === 'function') {
-//         element.discardChanges();
-//       }
-//       if (this.entityRef.getFormRef()) {
-//         this.entityRef.getFormRef().reset(this.getFlatModel());
-//       }
-//       toggleEdit(null);
-//       this.setState({editable: false, validations: {isValid: true, data:{}}}, () => {
-//         this.toggleHighlighted();
-//       });
-//       evt.preventDefault();
-//       evt.stopPropagation();
-// >>>>>>> development
     }
 
     handleFieldUpdate = (field, value) => {
@@ -461,6 +274,7 @@ export default (ComposedComponent) => {
         multiEnvDelta,
         multiEnvEntity,
         nested,
+        running,
       } = this.props;
       if (nested) return (
         <ComposedComponent
@@ -476,7 +290,7 @@ export default (ComposedComponent) => {
         />
       );
       const {ready} = entity;
-      const processing = !ready;
+      const processing = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
@@ -502,12 +316,13 @@ export default (ComposedComponent) => {
           onClick: this.handleEdit,
         });
       }
-      // console.log('RENDER CANVASELEMENT', this.props.entity.name);
+      const {type} = this.props.entity.constructor;
       return (
+        <div>
             <Entity
               ref={(r) => {this.entityRef = r}}
-              type={this.props.entity.constructor.type}
-              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
+              type={type}
+              connector={type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={editable}
               highlighted={highlighted}
               dragging={isDragging}
@@ -553,6 +368,15 @@ export default (ComposedComponent) => {
                 </TwoOptionModal>
               )}
             </Entity>
+            {this.state.showNotRunningModal && (
+              <OneOptionModal
+                confirmText="OK"
+                onClose={() => this.setState({showNotRunningModal: false})}
+              >
+                Currently edited {type} stopped running.
+              </OneOptionModal>
+            )}
+        </div>
       );
     }
   }
@@ -563,22 +387,29 @@ export default (ComposedComponent) => {
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
     (_, props) => props.entity,
+    state => state.entitiesStatus,
     (
       multiEnvironments,
       currentElement,
       currentEditElement,
       isPanelOpened,
       entity,
+      entitiesStatus,
     ) => {
-      const {id} = entity;
+      const {id, name, loaded} = entity;
       const multiEnvIndex = multiEnvironments.selected;
       const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
       let multiEnvEntity = entity;
       if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
         multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
       }
-      const highlighted = !!currentElement && currentElement.id === id;
-      const editable = !!currentEditElement && currentEditElement.id === id;
+      let running = true;
+      const statuses = entitiesStatus[entity.constructor.type.toLowerCase()];
+      if (statuses && loaded) {
+        running = statuses[slug(name, {lower: true})] || false;
+      }
+      const highlighted = running && !!currentElement && currentElement.id === id;
+      const editable = running && !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,
         multiEnvDelta,
@@ -586,6 +417,7 @@ export default (ComposedComponent) => {
         isPanelOpened,
         highlighted,
         editable,
+        running,
       };
     },
   );

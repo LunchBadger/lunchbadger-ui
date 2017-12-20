@@ -1,6 +1,8 @@
 import config from 'config';
 
-const mkUrl = (url, user, env) => url.replace('{USER}', user).replace('{ENV}', env);
+const userRegExp = new RegExp('{USER}', 'g');
+const envRegExp = new RegExp('{ENV}', 'g');
+const mkUrl = (url, user, env) => url.replace(userRegExp, user).replace(envRegExp, env);
 
 const serviceUrls = [
   'workspaceUrl',
@@ -8,7 +10,8 @@ const serviceUrls = [
   'workspaceApiUrl',
   'forecastApiUrl',
   'expressGatewayAdminApiUrl',
-  'customerUrl'
+  'customerUrl',
+  'kubeWatcherApiUrl'
 ];
 
 class Cfg {

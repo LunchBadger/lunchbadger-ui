@@ -20,7 +20,8 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const isAutoSave = !entity.loaded;
+  const isNameChange = entity.loaded && model.name !== entity.name;
+  const isAutoSave = !entity.loaded || isNameChange;
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;

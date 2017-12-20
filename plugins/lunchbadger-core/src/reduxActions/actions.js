@@ -8,6 +8,7 @@ const {actions, actionTypes} = actionsCreator(
     'setStates',
     'onLoadProject',
     'changePanelStatus',
+    'setEntitiesStatus',
 
     'addSystemDefcon1',
     'toggleSystemDefcon1',

@@ -58,6 +58,15 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
   ]));
 };
 
+export const clearCurrentEditElement = () => (dispatch) => {
+  dispatch(actions.setStates([
+    {key: 'currentElement', value: null},
+    {key: 'currentEditElement', value: null},
+    {key: 'currentlySelectedParent', value: null},
+    {key: 'currentlySelectedSubelements', value: []},
+  ]));
+};
+
 export const togglePanel = panel => (dispatch, getState) => {
   const value = getState().states.currentlyOpenedPanel === panel ? null : panel;
   dispatch(actions.setState({key: 'currentlyOpenedPanel', value}));

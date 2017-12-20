@@ -46,6 +46,7 @@ import portGroups from './constants/portGroups';
 // services
 import ProjectService from './services/ProjectService';
 import ConfigStoreService from './services/ConfigStoreService';
+import KubeWatcherService from './services/KubeWatcherService';
 
 // utils
 import ApiClient from './utils/ApiClient';
@@ -137,7 +138,8 @@ let LunchBadgerCore = {
   },
   services: {
     ProjectService: ProjectService,
-    ConfigStoreService: ConfigStoreService
+    ConfigStoreService: ConfigStoreService,
+    KubeWatcherService: KubeWatcherService
   },
   utils: {
     ApiClient: ApiClient,

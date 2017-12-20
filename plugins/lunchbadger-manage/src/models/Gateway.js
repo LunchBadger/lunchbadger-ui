@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import slug from 'slug';
 import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
 import HttpsTlsDomain from './HttpsTlsDomain';
@@ -72,7 +73,9 @@ export default class Gateway extends BaseModel {
   }
 
   async onSave(state) {
-    if (this.loaded) {
+    const {entitiesStatus} = state;
+    const running = entitiesStatus.gateway[slug(this.name, {lower: true})] === true;
+    if (this.loaded && running) {
       const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([
         this.adminApi.getServiceEndpoints(),
         this.adminApi.getApiEndpoints(),

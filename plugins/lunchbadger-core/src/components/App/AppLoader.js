@@ -10,7 +10,7 @@ import paper from '../../utils/paper';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {getUser} from '../../utils/auth';
-import {actions} from '../../reduxActions/actions';
+import {setEntitiesStatus} from '../../reduxActions';
 import './AppLoader.scss';
 
 const envId = Config.get('envId');
@@ -33,7 +33,6 @@ class AppLoader extends Component {
   componentDidMount() {
     this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
     this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
-    this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
   }
 
   componentWillUnmount() {
@@ -64,11 +63,9 @@ class AppLoader extends Component {
     });
     if (this.prevEntitiesStatus !== JSON.stringify(entitiesStatus)) {
       this.prevEntitiesStatus = JSON.stringify(entitiesStatus);
-      this.props.dispatch(actions.setEntitiesStatus(entitiesStatus));
+      this.props.dispatch(setEntitiesStatus(entitiesStatus));
     }
   };
-
-  onKubeWatcherError = () => this.setState({workspaceRunning: false});
 
   load() {
     ConfigStoreService.upsertProject()

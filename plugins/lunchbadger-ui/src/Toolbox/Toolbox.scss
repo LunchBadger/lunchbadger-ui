@@ -33,6 +33,8 @@
     display: inline-block;
     cursor: pointer;
     text-align: center;
+    background-color: #FFF;
+    transition: background-color 200ms;
     &:hover {
       background-color: hsl(0, 0%, 95%);
     }

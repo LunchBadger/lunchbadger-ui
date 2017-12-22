@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
+import cs from 'classnames';
 import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
@@ -18,6 +19,21 @@ class DetailsPanel extends Component {
       showRemovingModal: false,
     };
   }
+
+  handleClosePopup = () => this.props.dispatch(setCurrentZoom(undefined));
+
+  handleTabChange = tab => () => {
+    const {dispatch, zoom} = this.props;
+    dispatch(setCurrentZoom({...zoom, tab}));
+  };
+
+  handleRemove = () => {
+    const {currentElement, dispatch} = this.props;
+    dispatch(setCurrentZoom(undefined));
+    dispatch(currentElement.remove());
+    dispatch(actions.removeEntity(currentElement));
+    dispatch(clearCurrentElement());
+  };
 
   renderDetails() {
     const {currentElement, panels, connectionsStore, zoom} = this.props;
@@ -39,24 +55,9 @@ class DetailsPanel extends Component {
     }
   }
 
-  handleClosePopup = () => this.props.dispatch(setCurrentZoom(undefined));
-
-  handleTabChange = tab => () => {
-    const {dispatch, zoom} = this.props;
-    dispatch(setCurrentZoom({...zoom, tab}));
-  };
-
-  handleRemove = () => {
-    const {currentElement, dispatch} = this.props;
-    dispatch(setCurrentZoom(undefined));
-    dispatch(currentElement.remove());
-    dispatch(actions.removeEntity(currentElement));
-    dispatch(clearCurrentElement());
-  };
-
-  render() {
+  renderDnD = () => {
     const {zoom, currentElement} = this.props;
-    if (!zoom) return null;
+    if (!(zoom && currentElement)) return <div />;
     const {tab} = zoom;
     const {name} = currentElement;
     const {type} = currentElement.constructor;
@@ -78,16 +79,23 @@ class DetailsPanel extends Component {
       }));
     }
     return (
-      <div className="DetailsPanel">
-        <RnD
-          rect={zoom}
-          name={name}
-          type={type}
-          onClose={this.handleClosePopup}
-          toolbox={toolboxConfig}
-        >
-          {this.renderDetails()}
-        </RnD>
+      <RnD
+        rect={zoom}
+        name={name}
+        type={type}
+        onClose={this.handleClosePopup}
+        toolbox={toolboxConfig}
+      >
+        {this.renderDetails()}
+      </RnD>
+    );
+  };
+
+  render() {
+    const {zoom, currentElement} = this.props;
+    return (
+      <div className={cs('DetailsPanel', {visible: !!zoom && !!currentElement})}>
+        {this.renderDnD()}
         {this.state.showRemovingModal && (
           <TwoOptionModal
             onClose={() => this.setState({showRemovingModal: false})}

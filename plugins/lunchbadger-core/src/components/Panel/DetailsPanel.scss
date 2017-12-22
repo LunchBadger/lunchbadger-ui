@@ -5,5 +5,11 @@
   bottom: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgba(100, 100, 100, 0.75);
+  background-color: rgba(100, 100, 100, 0);
+  pointer-events: none;
+  transition: background-color 200ms;
+  &.visible {
+    background-color: rgba(100, 100, 100, 0.75);
+    pointer-events: auto;
+  }
 }

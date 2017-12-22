@@ -19,6 +19,8 @@ const {actions, actionTypes} = actionsCreator(
 
     'setLoadingProject',
 
+    'setCanvasHeight',
+
     'clearProject',
 
     'updateOrder',

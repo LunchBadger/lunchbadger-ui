@@ -6,6 +6,7 @@ import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
+import {actions} from '../../reduxActions/actions';
 import './Canvas.scss';
 
 class Canvas extends Component {
@@ -18,7 +19,6 @@ class Canvas extends Component {
     super(props);
     this.state = {
       lastUpdate: new Date(),
-      canvasHeight: null,
       scrollLeft: 0,
     };
     this.dropped = false;
@@ -39,6 +39,7 @@ class Canvas extends Component {
   }
 
   componentWillUnmount() {
+    this.props.dispatch(actions.clearProject());
     this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
     this.context.paper.stopRepaintingEverything();
   }
@@ -99,6 +100,7 @@ class Canvas extends Component {
     }
     const source = document.querySelector(`#${sourceElement}`);
     const target = document.querySelector(`#${targetElement}`);
+    if (!source || !target) return null;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       if ((source.parentElement.classList.contains('port-Function') && target.parentElement.classList.contains('port-Model')) ||
@@ -155,7 +157,11 @@ class Canvas extends Component {
         this._disconnect(connection);
         return;
       }
-      if (!this.isConnectionValid(info)) {
+      const isValid = this.isConnectionValid(info);
+      if (isValid === null) {
+        this._disconnect(connection);
+        return;
+      } else if (!isValid) {
         if (this.dropped) {
           this._disconnect(connection);
         } else {
@@ -233,9 +239,9 @@ class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {isPanelClosed} = this.props;
+    const {height} = this.props;
     const {scrollLeft} = this.state;
-    const canvasHeight = isPanelClosed ? null : this.state.canvasHeight;
+    const styles = {height};
     return (
       <section
         className="canvas"
@@ -243,16 +249,15 @@ class Canvas extends Component {
       >
         <CanvasOverlay />
         <div
-          style={{height: canvasHeight}}
+          style={styles}
           className="canvas__wrapper"
-          ref={(r) => {this.canvasWrapperDOM = r;}}
+          ref={r => this.canvasWrapperDOM = r}
         >
-          <div style={{height: canvasHeight}} className="canvas__legend">
+          <div style={styles} className="canvas__legend">
             <div className="canvas__label canvas__label--left">Producers</div>
             <div className="canvas__label canvas__label--right">Consumers</div>
           </div>
           <QuadrantContainer
-            canvasHeight={canvasHeight}
             className="canvas__container"
             id="canvas"
             scrollLeft={scrollLeft}
@@ -264,9 +269,15 @@ class Canvas extends Component {
 }
 
 const selector = createSelector(
-  state => !state.states.currentlyOpenedPanel,
   state => state.loadingProject,
-  (isPanelClosed, loadingProject) => ({isPanelClosed, loadingProject}),
+  state => state.canvasHeight,
+  (
+    loadingProject,
+    height,
+  ) => ({
+    loadingProject,
+    height,
+  }),
 );
 
 export default connect(selector, null, null, {withRef: true})(Canvas);

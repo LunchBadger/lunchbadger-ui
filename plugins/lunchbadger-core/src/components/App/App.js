@@ -1,4 +1,3 @@
-/*eslint no-console:0 */
 import React, {Component} from 'react';
 import cs from 'classnames';
 import PropTypes from 'prop-types';
@@ -55,7 +54,6 @@ class App extends Component {
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
-          ref="header"
           username={username}
           disabledMultiEnvMenu={isEntityEditable || !!this.props.currentlyOpenedPanel}
           headerMenuDisabled={isEntityEditable}
@@ -64,7 +62,6 @@ class App extends Component {
     }
     return (
       <Header
-        ref="header"
         username={username}
         envId={Config.get('envId')}
       />
@@ -95,22 +92,15 @@ class App extends Component {
             <Aside
               disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
             />
-            <div ref="container" className="app__container">
+            <div className="app__container">
               <div className="app__panel-wrapper">
                 <SystemNotifications />
                 <div style={multiEnvDeltaStyle}>
-                  <PanelContainer
-                    canvas={() => this.refs.canvas}
-                    header={() => this.refs.header}
-                    container={() => this.refs.container}
-                  />
+                  <PanelContainer />
                 </div>
               </div>
               <div style={multiEnvDeltaStyle}>
-                <Canvas
-                  ref="canvas"
-                  multiEnvDelta={multiEnvDelta}
-                />
+                <Canvas multiEnvDelta={multiEnvDelta} />
               </div>
             </div>
             <SystemInformationMessages />

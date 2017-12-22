@@ -57,22 +57,26 @@ class DetailsPanel extends Component {
   render() {
     const {zoom, currentElement} = this.props;
     if (!zoom) return null;
+    const {tab} = zoom;
     const {name} = currentElement;
     const {type} = currentElement.constructor;
     const tabs = currentElement.tabs || [];
-    const toolboxConfig = [
-      {
-        icon: 'iconTrash',
-        onClick: () => this.setState({showRemovingModal: true}),
-      },
-      {
+    const toolboxConfig = [{
+      icon: 'iconTrash',
+      onClick: () => this.setState({showRemovingModal: true}),
+    }];
+    if (tabs.length > 0) {
+      toolboxConfig.push({
         icon: 'iconBasics',
         onClick: this.handleTabChange('general'),
-      },
-    ].concat(tabs.map(({name, icon}) => ({
-      icon,
-      onClick: this.handleTabChange(name),
-    })));
+        selected: tab === 'general',
+      });
+      tabs.map(({name, icon}) => toolboxConfig.push({
+        icon,
+        onClick: this.handleTabChange(name),
+        selected: tab === name,
+      }));
+    }
     return (
       <div className="DetailsPanel">
         <RnD

@@ -35,6 +35,7 @@
     &:hover {
       background-color: hsl(0, 0%, 95%);
     }
+    &.selected,
     &:active {
       background-color: #00404f;
       .multiEnvDelta & {

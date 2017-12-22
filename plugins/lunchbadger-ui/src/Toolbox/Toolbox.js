@@ -9,10 +9,10 @@ const Toolbox = ({config, zoom}) => {
   if (config.length === 0) return null;
   return (
     <div className={cs('Toolbox', {zoom})} style={{width: config.length * 50}}>
-      {config.map(({action, icon, onClick}, idx) => (
+      {config.map(({action, icon, onClick, selected}, idx) => (
         <div
           key={idx}
-          className={cs('Toolbox__button', `Toolbox__button--${action}`)}
+          className={cs('Toolbox__button', `Toolbox__button--${action}`, {selected})}
           onClick={onClick}
         >
           <IconSVG className="Toolbox__button__icon" svg={icons[icon]} />

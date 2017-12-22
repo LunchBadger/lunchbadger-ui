@@ -93,8 +93,9 @@ export default class RnD extends PureComponent {
       toolbox,
     } = this.props;
     const {x, y, width, height, transitioning, opacity, close} = this.state;
-    const size = {width, height};
     const position = {x, y};
+    const size = {width, height};
+    const contentSize = {width, height: height - headerHeight};
     const contentStyle = {transform: `translate(-${x}px, -${y + headerHeight}px)`};
     const contentInnerStyle = {left: x, top: y + headerHeight};
     return (
@@ -114,20 +115,21 @@ export default class RnD extends PureComponent {
         onResize={this.handleResize}
         style={{opacity}}
       >
+        <div className="RnD__header" onDoubleClick={this.handleDoubleClick}>
+          <div className="RnD__header__icon">
+            <IconSVG svg={entityIcons[type]} />
+          </div>
+          <div className="RnD__header__name">
+            {name}
+          </div>
+        </div>
+        <Toolbox config={toolbox} zoom />
         {!transitioning && (
           <div
             className="RnD__wrapper"
-            style={size}
+            style={contentSize}
           >
-            <Toolbox config={toolbox} zoom />
-            <div className="RnD__header" onDoubleClick={this.handleDoubleClick}>
-              <div className="RnD__header__icon">
-                <IconSVG svg={entityIcons[type]} />
-              </div>
-              <div className="RnD__header__name">
-                {name}
-              </div>
-            </div>
+
             <div className="RnD__content" style={contentStyle}>
               <div className="RnD__content__inner" style={contentInnerStyle}>
                 {children}

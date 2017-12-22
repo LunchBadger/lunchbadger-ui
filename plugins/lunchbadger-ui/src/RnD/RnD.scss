@@ -5,7 +5,7 @@
   &.transitioning {
     background-color: #FFF;
     transition: width 300ms ease-in-out 100ms, height 300ms ease-in-out 100ms, transform 300ms ease-in-out 100ms, opacity 100ms;
-    border-top: 48px solid #4190CE;
+    // border-top: 48px solid #4190CE;
     .RnD__content {
       opacity: 0;
     }
@@ -36,11 +36,14 @@
       }
     }
     &__name {
-      margin-left: 58px;
+      margin-left: 69px;
       color: #FFF;
       line-height: 48px;
-      text-align: center;
+      text-align: left;
       font-weight: 400;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
   &__content {

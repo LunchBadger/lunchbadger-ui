@@ -117,11 +117,14 @@ class DetailsPanel extends Component {
 
 const selector = createSelector(
   state => state.states.currentElement,
-  state => state.states.currentlySelectedSubelements,
   state => state.plugins.panelDetailsElements,
   state => state.states.zoom,
-  (currentElement, subelements, panels, zoom) => ({
-    currentElement: subelements && subelements.length === 1 ? subelements[0] : currentElement,
+  (
+    currentElement,
+    panels,
+    zoom,
+  ) => ({
+    currentElement,
     panels,
     zoom,
   }),

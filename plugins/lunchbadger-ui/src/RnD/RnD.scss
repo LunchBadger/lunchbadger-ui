@@ -18,6 +18,8 @@
     border-radius: 5px;
   }
   &__header {
+    position: relative;
+    z-index: 1006;
     height: 48px;
     background-color: #4190CE;
     cursor: move;

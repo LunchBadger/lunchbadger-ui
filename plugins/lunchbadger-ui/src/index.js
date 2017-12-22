@@ -13,8 +13,10 @@ import SystemInformationMessages from './SystemInformationMessages/SystemInforma
 import SystemNotifications from './SystemNotifications/SystemNotifications';
 import TopBar from './Header/TopBar/TopBar';
 import PanelBar from './Header/PanelBar/PanelBar';
+import RnD from './RnD/RnD';
 
 import Entity from './Entity/Entity';
+import EntityActionButtons from './Entity/EntityActionButtons/EntityActionButtons';
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
 import EntityProperty from './Entity/EntityProperty/EntityProperty';
 import EntityPropertyLabel from './Entity/EntityPropertyLabel/EntityPropertyLabel';
@@ -84,6 +86,7 @@ export {
   ContextualInformationMessage,
   ContextualMenu,
   Entity,
+  EntityActionButtons,
   EntityProperties,
   EntityProperty,
   EntityPropertyLabel,
@@ -95,6 +98,7 @@ export {
   IconSVG,
   Input,
   PanelBar,
+  RnD,
   Select,
   SmoothCollapse,
   SystemDefcon1,

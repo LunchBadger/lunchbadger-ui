@@ -1,3 +1,27 @@
+.BaseDetails {
+  position: relative;
+  height: 100%;
+  &__form {
+    height: 100%;
+  }
+  &__name {
+    display: none;
+  }
+  &__content {
+    height: calc(100% - 90px);
+    overflow: auto;
+    margin-bottom: 90px;
+    padding: 15px;
+  }
+  &__buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+  }
+}
+
 .details-panel__element {
   text-align: left;
   font-size: 14px;

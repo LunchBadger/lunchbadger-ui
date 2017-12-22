@@ -13,6 +13,15 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  &__zoom-area {
+    position: fixed;
+    top: 17px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1001;
+  }
   .multiEnv & {
     min-height: calc(100vh - 75px);
   }

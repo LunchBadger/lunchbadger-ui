@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import HeaderMenu from './HeaderMenu';
-import CanvasOverlay from '../Canvas/CanvasOverlay';
+// import CanvasOverlay from '../Canvas/CanvasOverlay';
 import Logo from './badger-logo.svg';
 import BrandingLogo from './BrandingLogo.png';
 import Config from '../../../../../src/config';
@@ -14,7 +14,7 @@ export default class Header extends PureComponent {
     const {username, envId, blank} = this.props;
     return (
       <header className="header" ref="headerContainer">
-        {!blank && <CanvasOverlay />}
+        {/*!blank && <CanvasOverlay />*/}
         <img src={Logo} className="Logo" alt="LunchBadger logo - a smiling badger" />
         <p className="logotype" >LunchBadger</p>
         {tritonLogo && <span className="On">on</span>}

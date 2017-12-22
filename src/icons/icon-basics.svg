@@ -1,0 +1,21 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 35 35" xml:space="preserve">
+<style type="text/css">
+  .icon-basics-0{stroke:none}
+	.icon-basics-1{fill:none;stroke-miterlimit:10;}
+</style>
+<g>
+	<g>
+		<g>
+			<circle class="icon-basics-0" cx="12.6" cy="18" r="1.4"/>
+		</g>
+		<g>
+			<circle class="icon-basics-0" cx="17.5" cy="18" r="1.4"/>
+		</g>
+		<g>
+			<circle class="icon-basics-0" cx="22.4" cy="18" r="1.4"/>
+		</g>
+	</g>
+	<circle class="icon-basics-1" cx="17.5" cy="18" r="10.1"/>
+</g>
+</svg>

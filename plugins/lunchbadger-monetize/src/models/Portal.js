@@ -42,6 +42,10 @@ export default class Portal extends BaseModel {
     }
   }
 
+  get isZoomDisabled() {
+    return true;
+  }
+
   /**
    * @param apis {API[]}
    */

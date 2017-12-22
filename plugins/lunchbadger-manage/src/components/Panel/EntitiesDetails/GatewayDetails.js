@@ -507,13 +507,14 @@ class GatewayDetails extends PureComponent {
       </div>
     );
     return (
-      <CollapsibleProperties
-        key="protocol"
-        bar={<EntityPropertyLabel>Protocol</EntityPropertyLabel>}
-        collapsible={collapsible}
-        barToggable
-        defaultOpened={false}
-      />
+      <div className="general" key="protocol">
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Protocol</EntityPropertyLabel>}
+          collapsible={collapsible}
+          barToggable
+          defaultOpened
+        />
+      </div>
     );
   };
 
@@ -560,13 +561,14 @@ class GatewayDetails extends PureComponent {
       </div>
     );
     return (
-      <CollapsibleProperties
-        key="admin"
-        bar={<EntityPropertyLabel>Admin</EntityPropertyLabel>}
-        collapsible={collapsible}
-        barToggable
-        defaultOpened={false}
-      />
+      <div className="general" key="admin">
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Admin</EntityPropertyLabel>}
+          collapsible={collapsible}
+          barToggable
+          defaultOpened
+        />
+      </div>
     );
   };
 
@@ -601,14 +603,15 @@ class GatewayDetails extends PureComponent {
       />
     ));
     return (
-      <CollapsibleProperties
-        key="pipelines"
-        bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
-        collapsible={collapsible}
-        button={<IconButton icon="iconPlus" onClick={this.addPipeline} />}
-        barToggable
-        defaultOpened
-      />
+      <div className="pipelines" key="pipelines">
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
+          collapsible={collapsible}
+          button={<IconButton icon="iconPlus" onClick={this.addPipeline} />}
+          barToggable
+          defaultOpened
+        />
+      </div>
     );
   };
 

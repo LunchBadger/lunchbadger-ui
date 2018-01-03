@@ -1,4 +1,4 @@
-const env = process.env.LB_ENV || 'localhost'; // localhost|staging|triton
+const env = process.env.LB_ENV || 'staging'; // localhost|staging|triton
 
 const isPrefix = env !== 'localhost';
 const prefix = isPrefix ? `${env}-` : '';
@@ -13,7 +13,7 @@ export default {
   workspaceUrl: 'http://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
-  kubeWatcherApiUrl: `http://kube-watcher.${prefix}api.lunchbadger.io`,
+  kubeWatcherApiUrl: `http://kube-watcher.${prefix}api.lunchbadger.com`,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

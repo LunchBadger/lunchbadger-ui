@@ -11,7 +11,7 @@ export default {
   workspaceApiUrl: `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/workspace-api/api`,
   forecastApiUrl: `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/project-api/api`,
   workspaceUrl: `http://{USER}-{ENV}.${subdomain}lunchbadger.io`,
-  expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
+  expressGatewayAdminApiUrl: `http://admin-{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   kubeWatcherApiUrl: `http://kube-watcher.${prefix}api.lunchbadger.com`,
   user: {

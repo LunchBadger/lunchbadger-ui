@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import IconButton from 'material-ui/IconButton';
 import ActionHelp from 'material-ui/svg-icons/action/info-outline';
+import {ContextualInformationMessage} from '../../';
 import './EntityPropertyLabel.scss';
 
 const iconSize = 16;
@@ -22,31 +23,22 @@ const helpIconStyle = {
   color: '#aaa',
 };
 
-const helpTooltipStyle = {
-  transform: 'translate(20px, 12px)',
-  minWidth: 400,
-  maxWidth: 600,
-  lineHeight: 'normal',
-  textAlign: 'left',
-  padding: '5px 16px',
-  opacity: 1,
-};
-
 const EntityPropertyLabel = ({children, className, plain, description = '', noMargin}) => (
   <div className={cs('EntityPropertyLabel', className, {plain, noMargin})}>
     {children}
     {description !== '' && (
-      <IconButton
-        className="EntityPropertyLabel__help"
+      <ContextualInformationMessage
         tooltip={description}
-        touch
-        tooltipPosition="top-right"
-        style={helpRootStyle}
-        iconStyle={helpIconStyle}
-        tooltipStyles={helpTooltipStyle}
+        direction="top"
       >
-        <ActionHelp />
-      </IconButton>
+        <IconButton
+          className="EntityPropertyLabel__help"
+          style={helpRootStyle}
+          iconStyle={helpIconStyle}
+        >
+          <ActionHelp />
+        </IconButton>
+      </ContextualInformationMessage>
     )}
   </div>
 );

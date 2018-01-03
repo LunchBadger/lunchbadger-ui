@@ -11,7 +11,6 @@ import ContextualMenu from './ContextualMenu/ContextualMenu';
 import SystemDefcon1 from './SystemDefcon1/SystemDefcon1';
 import SystemInformationMessages from './SystemInformationMessages/SystemInformationMessages';
 import SystemNotifications from './SystemNotifications/SystemNotifications';
-import TooltipWrapper from './TooltipWrapper/TooltipWrapper';
 import TopBar from './Header/TopBar/TopBar';
 import PanelBar from './Header/PanelBar/PanelBar';
 
@@ -104,7 +103,6 @@ export {
   Table,
   Tool,
   Toolbox,
-  TooltipWrapper,
   TopBar,
   entityIcons,
   dataSourceIcons,

@@ -9,7 +9,6 @@ class MultiEnvironment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      balloonVisible: false,
       name: props.name,
     };
   }
@@ -25,8 +24,6 @@ class MultiEnvironment extends Component {
     if (selected) return;
     onClick(index);
   }
-
-  toggleBalloon = balloonVisible => () => this.setState({balloonVisible});
 
   handleChangeName = event => this.setState({name: event.target.value});
 
@@ -46,9 +43,8 @@ class MultiEnvironment extends Component {
   }
 
   render() {
-    const {delta, index, selected, icon, onClick, onToggleDelta, edit} = this.props;
+    const {delta, index, selected, icon, onToggleDelta, edit} = this.props;
     const {name} = this.state;
-    const {balloonVisible} = this.state;
     const styles = {
       trackStyle: {
         height: 20,
@@ -93,26 +89,22 @@ class MultiEnvironment extends Component {
           </span>
         )}
         {selected && index > 0 && (
-          <div
-            className="MultiEnvironment__switch"
-            onMouseEnter={this.toggleBalloon(true)}
-            onMouseLeave={this.toggleBalloon(false)}
-            >
-            <Toggle
-              onToggle={onToggleDelta(index)}
-              toggled={delta}
-              thumbStyle={styles.thumbOff}
-              trackStyle={styles.trackStyle}
-              thumbSwitchedStyle={styles.thumbSwitched}
-              trackSwitchedStyle={styles.trackStyle}
-              iconStyle={styles.iconStyle}
-            />
-            {!delta && balloonVisible && (
-              <ContextualInformationMessage>
-                Show differences
-              </ContextualInformationMessage>
-            )}
-          </div>
+          <ContextualInformationMessage
+            direction="bottom"
+            tooltip={`${delta ? 'Hide' : 'Show'} differences`}
+          >
+            <div className="MultiEnvironment__switch">
+              <Toggle
+                onToggle={onToggleDelta(index)}
+                toggled={delta}
+                thumbStyle={styles.thumbOff}
+                trackStyle={styles.trackStyle}
+                thumbSwitchedStyle={styles.thumbSwitched}
+                trackSwitchedStyle={styles.trackStyle}
+                iconStyle={styles.iconStyle}
+              />
+            </div>
+          </ContextualInformationMessage>
         )}
       </div>
     );

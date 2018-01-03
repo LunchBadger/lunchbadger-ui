@@ -6,6 +6,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import PlanInfoTooltip from './PlanInfoTooltip';
 import {upgradePlan, removeUpgrade} from '../../../reduxActions/forecasts';
+import sliderHandle from './sliderHandle';
 import './UpgradeSlider.scss';
 
 export default class UpgradeSlider extends Component {
@@ -132,6 +133,7 @@ export default class UpgradeSlider extends Component {
             onAfterChange={this._handleOnChange}
             min={minValue}
             max={maxValue}
+            handle={sliderHandle()}
           />
           <div className="upgrade-slider__slider-legend">
             <div className="upgrade-slider__slider-legend__value upgrade-slider__slider-legend__value--left">

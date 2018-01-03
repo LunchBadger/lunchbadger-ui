@@ -1,9 +1,15 @@
+const env = process.env.LB_ENV || 'localhost'; // localhost|staging|triton
+
+const isPrefix = env !== 'localhost';
+const prefix = isPrefix ? `${env}-` : '';
+const subdomain = isPrefix ? `${env}.` : '';
+
 export default {
-  configStoreApiUrl: 'http://api.lunchbadger.com/api',
-  gitBaseUrl: 'http://api.lunchbadger.com/git',
-  projectApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
-  workspaceApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/workspace-api/api',
-  forecastApiUrl: 'http://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
+  configStoreApiUrl: `http://${prefix}api.lunchbadger.com/api`,
+  gitBaseUrl: `http://${prefix}api.lunchbadger.com/git`,
+  projectApiUrl: `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/project-api/api`,
+  workspaceApiUrl: `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/workspace-api/api`,
+  forecastApiUrl: `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/project-api/api`,
   workspaceUrl: 'http://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'http://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',

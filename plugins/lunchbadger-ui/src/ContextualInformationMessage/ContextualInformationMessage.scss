@@ -1,50 +1,123 @@
-.ContextualInformationMessage {
-  position: absolute;
-  top: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  padding: 10px;
-  border-radius: 3px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
-  color: #FFF;
-  padding: 16px 20px;
-  font-family: 'Open Sans';
-  font-size: 17px;
-  white-space: nowrap;
-  z-index: 810;
-  line-height: 1;
-  &.left {
-    left: -5px;
-    transform: none;
-    &:before {
-      left: 13px;
-      transform: translate(0, -25%) rotate(45deg);
-    }
-  }
-  &:before {
-    display: block;
-    content: '';
-    width: 20px;
-    height: 20px;
+.rc-tooltip {
+  opacity: 1;
+  z-index: 3000 !important;
+  & .rc-tooltip-inner {
+    min-height: 0;
+    height: auto;
     background-color: #333;
-    position: absolute;
-    top: 0;
+    border-radius: 3px;
+    padding: 12px 20px 14px;
+    max-width: 400px;
+    font-size: 17px;
+    line-height: 26px;
+    font-family: 'Open Sans';
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+    color: #FFF;
+    text-align: left;
+  }
+  &.rc-tooltip-placement-top .rc-tooltip-arrow,
+  &.rc-tooltip-placement-topLeft .rc-tooltip-arrow,
+  &.rc-tooltip-placement-topRight .rc-tooltip-arrow {
+    bottom: -1px;
+    margin-left: -10px;
+    border-width: 10px 10px 0;
+    border-top-color: #333;
+  }
+  &.rc-tooltip-placement-right .rc-tooltip-arrow,
+  &.rc-tooltip-placement-rightTop .rc-tooltip-arrow,
+  &.rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
+    left: -1px;
+    margin-top: -10px;
+    border-width: 10px 10px 10px 0;
+    border-right-color: #333;
+  }
+  &.rc-tooltip-placement-bottom .rc-tooltip-arrow,
+  &.rc-tooltip-placement-bottomLeft .rc-tooltip-arrow,
+  &.rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
+    top: -1px;
+    margin-left: -10px;
+    border-width: 0 10px 10px;
+    border-bottom-color: #333;
+  }
+  &.rc-tooltip-placement-left .rc-tooltip-arrow,
+  &.rc-tooltip-placement-leftTop .rc-tooltip-arrow,
+  &.rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
+    right: -1px;
+    margin-top: -10px;
+    border-width: 10px 0 10px 10px;
+    border-left-color: #333;
+  }
+  &.rc-tooltip-placement-top .rc-tooltip-arrow,
+  &.rc-tooltip-placement-bottom .rc-tooltip-arrow {
     left: 50%;
-    transform: translate(-50%, -25%) rotate(45deg);
-    z-index: -1;
   }
-  &.right {
-    left: calc(100% + 9px);
+  &.rc-tooltip-placement-bottomLeft .rc-tooltip-arrow
+  &.rc-tooltip-placement-topLeft .rc-tooltip-arrow {
+    left: 15%;
+  }
+  &.rc-tooltip-placement-bottomRight .rc-tooltip-arrow
+  &.rc-tooltip-placement-topRight .rc-tooltip-arrow {
+    right: 15%;
+  }
+  &.rc-tooltip-placement-right .rc-tooltip-arrow,
+  &.rc-tooltip-placement-left .rc-tooltip-arrow {
     top: 50%;
-    transform: translateY(-50%);
-    &:before {
-      top: 50%;
-      left: 0;
-      transform: translate(-25%, -50%) rotate(45deg);
-    }
   }
-  &.withWidth {
-    white-space: normal;
+  &.rc-tooltip-placement-leftTop .rc-tooltip-arrow
+  &.rc-tooltip-placement-rightTop .rc-tooltip-arrow {
+    top: 15%;
+    margin-top: 0;
+  }
+  &.rc-tooltip-placement-leftBottom .rc-tooltip-arrow
+  &.rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
+    bottom: 15%;
+  }
+}
+
+.rc-tooltip.rc-tooltip-zoom-enter,
+.rc-tooltip.rc-tooltip-zoom-leave {
+  display: block;
+}
+.rc-tooltip-zoom-enter,
+.rc-tooltip-zoom-appear {
+  opacity: 0;
+}
+.rc-tooltip-zoom-enter,
+.rc-tooltip-zoom-appear,
+.rc-tooltip-zoom-leave {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
+  animation-play-state: paused;
+}
+.rc-tooltip-zoom-enter.rc-tooltip-zoom-enter-active,
+.rc-tooltip-zoom-appear.rc-tooltip-zoom-appear-active {
+  animation-name: ToolTipZoomIn;
+  animation-play-state: running;
+}
+.rc-tooltip-zoom-leave.rc-tooltip-zoom-leave-active {
+  animation-name: ToolTipZoomOut;
+  animation-play-state: running;
+}
+
+@keyframes ToolTipZoomIn {
+  0% {
+    opacity: 0;
+    transform: none;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ToolTipZoomOut {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
   }
 }

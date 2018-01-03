@@ -13,11 +13,8 @@ class Tool extends Component {
     super(props);
     this.state = {
       opened: false,
-      tooltipVisible: false,
     };
   }
-
-  toggleTooltip = tooltipVisible => () => this.setState({tooltipVisible});
 
   toggleOpen = opened => this.setState({opened});
 
@@ -34,7 +31,7 @@ class Tool extends Component {
 
   render() {
     const {icon, selected, onClick, submenu, plain, tooltip, name} = this.props;
-    const {opened, tooltipVisible} = this.state;
+    const {opened} = this.state;
     const style = {
       width: '100%',
       height: '100%',
@@ -49,40 +46,37 @@ class Tool extends Component {
     );
     return (
       <div className={cs('Tool', name, {opened, selected})}>
-        <div
-          className={cs('Tool__box', {opened, selected})}
-          onClick={this.onClick}
-          onMouseEnter={this.toggleTooltip(true)}
-          onMouseLeave={this.toggleTooltip(false)}
+        <ContextualInformationMessage
+          tooltip={tooltip}
         >
-          {isSubmenu && (
-            <IconMenu
-              className="Tool__menu"
-              style={style}
-              iconButtonElement={Button}
-              open={opened}
-              onRequestChange={this.toggleOpen}
-              anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-              targetOrigin={{vertical: 'top', horizontal: 'left'}}
-            >
-              {submenu.map((props, idx) => (
-                <SubmenuItem
-                  key={idx}
-                  {...props}
-                  onMenuItemClick={this.onMenuItemClick}
-                  plain={plain}
-                  onClick={onClick}
-                />
-              ))}
-            </IconMenu>
-          )}
-          {!isSubmenu && Button}
-        </div>
-        <div className={cs('Tool__tooltip', {visible: tooltipVisible})}>
-          <ContextualInformationMessage direction="right">
-            {tooltip}
-          </ContextualInformationMessage>
-        </div>
+          <div
+            className={cs('Tool__box', {opened, selected})}
+            onClick={this.onClick}
+          >
+            {isSubmenu && (
+              <IconMenu
+                className="Tool__menu"
+                style={style}
+                iconButtonElement={Button}
+                open={opened}
+                onRequestChange={this.toggleOpen}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                targetOrigin={{vertical: 'top', horizontal: 'left'}}
+              >
+                {submenu.map((props, idx) => (
+                  <SubmenuItem
+                    key={idx}
+                    {...props}
+                    onMenuItemClick={this.onMenuItemClick}
+                    plain={plain}
+                    onClick={onClick}
+                  />
+                ))}
+              </IconMenu>
+            )}
+            {!isSubmenu && Button}
+          </div>
+        </ContextualInformationMessage>
         {isSubmenu && <IconSVG className="Tool__arrow" svg={icons.iconArrow} />}
       </div>
     );

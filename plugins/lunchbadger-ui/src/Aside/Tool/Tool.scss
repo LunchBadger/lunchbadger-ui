@@ -65,6 +65,8 @@
     position: absolute;
     top: 5px;
     right: 16px;
+    width: 23px;
+    height: 23px;
     &__icon {
       svg {
         width: 23px;
@@ -78,20 +80,6 @@
           stroke: #CD6929;
         }
       }
-    }
-  }
-  &__tooltip {
-    opacity: 0;
-    transition: opacity 300ms ease 0ms;
-    pointer-events: none;
-    &.visible {
-      opacity: 1;
-      transition: opacity 300ms ease 500ms;
-      pointer-events: all;
-    }
-    &.submenu {
-      position: fixed;
-      z-index: 99999;
     }
   }
   &__arrow {

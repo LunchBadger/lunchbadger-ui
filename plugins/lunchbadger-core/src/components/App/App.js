@@ -14,7 +14,7 @@ import Spinner from './Spinner';
 import PanelContainer from '../Panel/PanelContainer';
 import DetailsPanel from '../Panel/DetailsPanel';
 import {loadFromServer} from '../../reduxActions';
-import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1, TooltipWrapper} from '../../../../lunchbadger-ui/src';
+import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
@@ -118,7 +118,6 @@ class App extends Component {
             {systemDefcon1Visible && (
               <SystemDefcon1 errors={systemDefcon1Errors} />
             )}
-            <TooltipWrapper />
           </div>
           <DetailsPanel />
         </div>

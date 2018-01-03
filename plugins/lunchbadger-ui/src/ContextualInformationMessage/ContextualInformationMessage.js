@@ -1,28 +1,33 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import cs from 'classnames';
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap.css';
 import './ContextualInformationMessage.scss';
 
-const ContextualInformationMessage = ({children, type, direction, width}) => (
-  <div
-    className={cs('ContextualInformationMessage', type, direction, {withWidth: width !== 'auto'})}
-    style={{width}}
-  >
-    {children}
-  </div>
-);
+export default class ContextualInformationMessage extends PureComponent {
+  static propTypes = {
+    children: PropTypes.node,
+    tooltip: PropTypes.string,
+    direction: PropTypes.string,
+  };
 
-ContextualInformationMessage.propTypes = {
-  children: PropTypes.node,
-  type: PropTypes.string,
-  direction: PropTypes.string,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-};
+  static defaultProps = {
+    tooltip: '',
+    direction: 'right',
+  };
 
-ContextualInformationMessage.defaultProps = {
-  type: '',
-  direction: 'bottom',
-  width: 'auto',
-};
-
-export default ContextualInformationMessage;
+  render() {
+    const {children, direction, tooltip} = this.props;
+    if (tooltip === '') return <span>{children}</span>;
+    return (
+      <Tooltip
+        placement={direction}
+        overlay={tooltip}
+        mouseEnterDelay={0.5}
+        transitionName="rc-tooltip-zoom"
+      >
+        {children}
+      </Tooltip>
+    );
+  }
+}

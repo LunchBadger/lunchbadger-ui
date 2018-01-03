@@ -1,26 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import cs from 'classnames';
 import MenuItem from 'material-ui/MenuItem';
 import {IconSVG, ContextualInformationMessage} from '../../';
 import * as icons from '../../../../../src/icons';
-import {tooltipSet} from '../../actions';
 import './Tool.scss';
 
 class SubmenuItem extends Component {
-  toggleTooltip = (ref, visible, tooltip) => () => {
-    const {top, right} = this[ref].getBoundingClientRect();
-    this.props.setTooltip(
-      visible ? tooltip : null,
-      right + (ref === 'wizardDOM' ?  10 : 0),
-      top + 12,
-    );
-  }
 
   onClick = (event) => {
-    const {onMenuItemClick, onClick, setTooltip, action} = this.props;
-    setTooltip(null);
+    const {onMenuItemClick, onClick, action} = this.props;
     onMenuItemClick();
     if (event.target.closest('.Tool__wizard') === null) {
       onClick(action);
@@ -30,13 +19,11 @@ class SubmenuItem extends Component {
   onWizardClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const {setTooltip, wizard} = this.props;
-    setTooltip(null);
-    wizard();
+    this.props.wizard();
   }
 
   render() {
-    const {icon, label, name, wizard, plain, tooltip, wizardTooltip} = this.props;
+    const {icon, label, name, wizard, plain, wizardTooltip} = this.props;
     return (
       <MenuItem
         onTouchTap={this.onClick}
@@ -47,25 +34,15 @@ class SubmenuItem extends Component {
           className={cs('Tool__submenuItem', name)}
           style={{width: plain ? 130 : 230}}
         >
-          <span
-            ref={(r) => {this.labelDOM = r;}}
-            onMouseEnter={this.toggleTooltip('labelDOM', true, tooltip)}
-            onMouseLeave={this.toggleTooltip('labelDOM', false)}
-          >
-            <IconSVG className={cs('Tool__icon', 'submenu', {plain})} svg={icons[icon]} />
-            <div className={cs('Tool__label', {plain})}>{label}</div>
-          </span>
+          <IconSVG className={cs('Tool__icon', 'submenu', {plain})} svg={icons[icon]} />
+          <div className={cs('Tool__label', {plain})}>{label}</div>
         </div>
         {wizard && (
-          <span
-            ref={(r) => {this.wizardDOM = r;}}
-            className="Tool__wizard"
-            onClick={this.onWizardClick}
-            onMouseEnter={this.toggleTooltip('wizardDOM', true, wizardTooltip)}
-            onMouseLeave={this.toggleTooltip('wizardDOM', false)}
-          >
-            <IconSVG className="Tool__wizard__icon" svg={icons.iconWand} />
-          </span>
+          <ContextualInformationMessage tooltip={wizardTooltip}>
+            <span className="Tool__wizard" onClick={this.onWizardClick}>
+              <IconSVG className="Tool__wizard__icon" svg={icons.iconWand} />
+            </span>
+          </ContextualInformationMessage>
         )}
       </MenuItem>
     );
@@ -78,19 +55,13 @@ SubmenuItem.propTypes = {
   onClick: PropTypes.func,
   onMenuItemClick: PropTypes.func,
   plain: PropTypes.bool,
-  tooltip: PropTypes.string,
   name: PropTypes.string,
   wizardTooltip: PropTypes.string,
   onTooltipToggle: PropTypes.func,
 };
 
 SubmenuItem.defaultProps = {
-  tooltip: null,
   plain: false,
 };
 
-const mapDispatchToProps = dispatch => ({
-  setTooltip: (content, left, top) => dispatch(tooltipSet(content, left, top)),
-});
-
-export default connect(null, mapDispatchToProps)(SubmenuItem);
+export default SubmenuItem;

@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Slider from 'rc-slider';
 import PlanInfoTooltip from './PlanInfoTooltip';
 import {upgradePlan, removeUpgrade} from '../../../reduxActions/forecasts';
+import sliderHandle from './sliderHandle';
 import './UpgradeSlider.scss';
 
 export default class UpgradeSlider extends Component {
@@ -125,13 +126,13 @@ export default class UpgradeSlider extends Component {
           <Slider
             disabled={moment(this.props.upgrade.date, 'M/YYYY').isSameOrBefore(moment(), 'month')}
             step={0.0001}
-            tipFormatter={percentFormatter}
             defaultValue={this.props.upgrade.value}
             value={this.state.value}
             onChange={_.throttle(this._handleOnChange, 600)}
             onAfterChange={this._handleOnChange}
             min={minPercentage}
             max={maxPercentage}
+            handle={sliderHandle(percentFormatter)}
           />
           <div className="upgrade-slider__slider-legend">
             <div className="upgrade-slider__slider-legend__value upgrade-slider__slider-legend__value--left">

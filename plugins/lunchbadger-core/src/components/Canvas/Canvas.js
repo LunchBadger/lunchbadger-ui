@@ -293,7 +293,6 @@ class Canvas extends Component {
           className="canvas"
           onClick={this.handleClick}
         >
-          {/*<CanvasOverlay />*/}
           <div
             style={{height: canvasHeight}}
             className="canvas__wrapper"

@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import classnames from 'classnames';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
-import {addSystemDefcon1, toggleSystemDefcon1} from '../../reduxActions/systemDefcon1';
+import {addSystemDefcon1, toggleSystemDefcon1, clearSystemDefcon1} from '../../reduxActions/systemDefcon1';
 import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
 
@@ -56,7 +56,9 @@ class WorkspaceStatus extends Component {
       output: status.output,
       instance: status.instance,
     });
-    if (status.status === 'crashed') {
+    if (status.status === 'running') {
+      this.props.dispatch(clearSystemDefcon1());
+    } else if (status.status === 'crashed') {
       this.props.dispatch(addSystemDefcon1(status.output));
     }
   }

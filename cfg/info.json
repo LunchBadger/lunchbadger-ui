@@ -1,9 +1,6 @@
 {
   "plugins": [
     "manage",
-    "compose",
-    "monitor",
-    "monetize",
-    "optimize"
+    "compose"
   ]
 }

@@ -334,7 +334,7 @@ export default (ComposedComponent) => {
           action: 'edit',
           icon: 'iconEdit',
           onClick: this.handleEdit,
-          label: 'Edit',
+          label: 'Quick Edit',
         });
       }
       return (

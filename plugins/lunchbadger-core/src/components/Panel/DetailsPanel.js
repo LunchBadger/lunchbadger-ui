@@ -2,8 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
-import Panel from './Panel';
-import panelKeys from '../../constants/panelKeys';
+import cs from 'classnames';
+import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
+import {actions} from '../../reduxActions/actions';
+import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import {RnD} from '../../../../lunchbadger-ui/src';
+import './DetailsPanel.scss';
 
 @inject('connectionsStore') @observer
 class DetailsPanel extends Component {
@@ -11,31 +15,103 @@ class DetailsPanel extends Component {
 
   constructor(props) {
     super(props);
-    props.parent.storageKey = panelKeys.DETAILS_PANEL;
+    this.state = {
+      showRemovingModal: false,
+    };
   }
 
+  handleClosePopup = () => this.props.dispatch(setCurrentZoom(undefined));
+
+  handleTabChange = tab => () => {
+    const {dispatch, zoom} = this.props;
+    dispatch(setCurrentZoom({...zoom, tab}));
+  };
+
+  handleRemove = () => {
+    const {currentElement, dispatch} = this.props;
+    dispatch(setCurrentZoom(undefined));
+    dispatch(currentElement.remove());
+    dispatch(actions.removeEntity(currentElement));
+    dispatch(clearCurrentElement());
+  };
+
   renderDetails() {
-    const {currentElement, panels, connectionsStore} = this.props;
+    const {currentElement, panels, connectionsStore, zoom} = this.props;
     if (currentElement) {
       const {type} = currentElement.constructor;
       const DetailsPanelComponent = panels[type];
       if (DetailsPanelComponent) {
-        return <DetailsPanelComponent
-          entity={currentElement}
-          sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
-          targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
-        />;
+        return (
+          <div className="panel panel__body details highlighted editable">
+            <DetailsPanelComponent
+              entity={currentElement}
+              sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
+              targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
+              rect={zoom}
+            />
+          </div>
+        );
       }
     }
   }
 
-  render() {
+  renderDnD = () => {
+    const {zoom, currentElement} = this.props;
+    if (!(zoom && currentElement)) return <div />;
+    const {tab} = zoom;
+    const {name} = currentElement;
+    const {type} = currentElement.constructor;
+    const tabs = currentElement.tabs || [];
+    const toolboxConfig = [{
+      icon: 'iconTrash',
+      onClick: () => this.setState({showRemovingModal: true}),
+    }];
+    if (tabs.length > 0) {
+      toolboxConfig.push({
+        icon: 'iconBasics',
+        onClick: this.handleTabChange('general'),
+        selected: tab === 'general',
+      });
+      tabs.map(({name, icon}) => toolboxConfig.push({
+        icon,
+        onClick: this.handleTabChange(name),
+        selected: tab === name,
+      }));
+    }
     return (
-      <div className="panel__body details">
-        <div className="panel__title">
-          Details
-          {this.renderDetails()}
-        </div>
+      <RnD
+        rect={zoom}
+        name={name}
+        type={type}
+        onClose={this.handleClosePopup}
+        toolbox={toolboxConfig}
+      >
+        {this.renderDetails()}
+      </RnD>
+    );
+  };
+
+  render() {
+    const {zoom, currentElement} = this.props;
+    const visible = !!currentElement && !!zoom && !zoom.close;
+    const closing = !!currentElement && !!zoom && zoom.close;
+    return (
+      <div className={cs('DetailsPanel', {visible, closing})}>
+        {this.renderDnD()}
+        {this.state.showRemovingModal && (
+          <TwoOptionModal
+            onClose={() => this.setState({showRemovingModal: false})}
+            onSave={this.handleRemove}
+            onCancel={() => this.setState({showRemovingModal: false})}
+            title="Remove entity"
+            confirmText="Remove"
+            discardText="Cancel"
+          >
+            <span>
+              Do you really want to remove that entity?
+            </span>
+          </TwoOptionModal>
+        )}
       </div>
     );
   }
@@ -43,12 +119,17 @@ class DetailsPanel extends Component {
 
 const selector = createSelector(
   state => state.states.currentElement,
-  state => state.states.currentlySelectedSubelements,
   state => state.plugins.panelDetailsElements,
-  (currentElement, subelements, panels) => ({
-    currentElement: subelements && subelements.length === 1 ? subelements[0] : currentElement,
+  state => state.states.zoom,
+  (
+    currentElement,
     panels,
+    zoom,
+  ) => ({
+    currentElement,
+    panels,
+    zoom,
   }),
 );
 
-export default connect(selector)(Panel(DetailsPanel));
+export default connect(selector)(DetailsPanel);

@@ -72,6 +72,21 @@ export default class Gateway extends BaseModel {
     return json;
   }
 
+  get tabs() {
+    return [
+      {
+        name: 'pipelines',
+        label: 'Pipelines',
+        icon: 'iconPipelines',
+      },
+      {
+        name: 'customerMngmt',
+        label: 'Customer Management',
+        icon: 'iconCustomerManagement',
+      },
+    ];
+  }
+
   async onSave(state) {
     const {entitiesStatus} = state;
     const running = entitiesStatus.gateway[slug(this.name, {lower: true})] === true;

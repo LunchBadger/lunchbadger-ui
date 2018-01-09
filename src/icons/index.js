@@ -2,7 +2,9 @@ import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
 import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowUp from './icon-arrow-up.svg';
+import iconBasics from './icon-basics.svg';
 import iconCodeEditor from './icon-code-editor.svg';
+import iconCustomerManagement from './icon-customer-management.svg';
 import iconConditionAllOf from './icon-condition-all-of.svg';
 import iconConditionNot from './icon-condition-not.svg';
 import iconConditionOneOf from './icon-condition-one-of.svg';
@@ -30,6 +32,7 @@ import iconModeHorizontal from './icon-mode-horizontal.svg';
 import iconModeVertical from './icon-mode-vertical.svg';
 import iconModel from './icon-model.svg';
 import iconMouse from './icon-mouse.svg';
+import iconPipelines from './icon-pipelines.svg';
 import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
@@ -44,7 +47,9 @@ export {
   iconArrow,
   iconArrowDown,
   iconArrowUp,
+  iconBasics,
   iconCodeEditor,
+  iconCustomerManagement,
   iconConditionAllOf,
   iconConditionNot,
   iconConditionOneOf,
@@ -73,6 +78,7 @@ export {
   iconModel,
   iconMouse,
   iconPlus,
+  iconPipelines,
   iconPlane,
   iconPortal,
   iconRevert,

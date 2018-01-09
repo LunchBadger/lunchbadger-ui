@@ -5,16 +5,14 @@ import {createSelector} from 'reselect';
 import PanelResizeHandle from './PanelResizeHandle';
 import classNames from 'classnames';
 import lockr from 'lockr';
+import {actions} from '../../reduxActions/actions';
 import './Panel.scss';
+
+const headerHeight = 52;
+const getContainerHeight = () => window.innerHeight;
 
 export default (ComposedComponent) => {
   class Panel extends Component {
-    static propTypes = {
-      canvas: PropTypes.func.isRequired,
-      container: PropTypes.func.isRequired,
-      header: PropTypes.func.isRequired
-    };
-
     constructor(props) {
       super(props);
       this.state = {
@@ -26,18 +24,11 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       window.addEventListener('resize', this.handleWindowResize);
-      setTimeout(() => {
-        this.header = this.props.header().refs.headerContainer;
-        this.canvas = this.props.canvas().getWrappedInstance();
-        this.container = this.props.container();
-        let panelDefaultHeight = '50vh';
-
-        if (lockr.get(this.storageKey)) {
-          panelDefaultHeight = `${parseInt(lockr.get(this.storageKey) / 100 * this.getContainerHeight())}px`;
-        }
-
-        this.setState({height: panelDefaultHeight});
-      });
+      let height = '50vh';
+      if (lockr.get(this.storageKey)) {
+        height = `${parseInt(lockr.get(this.storageKey) / 100 * getContainerHeight())}px`;
+      }
+      this.setState({height});
     }
 
     componentWillUnmount() {
@@ -67,18 +58,15 @@ export default (ComposedComponent) => {
       if (this.state.opened) {
         this.updateCanvasHeight();
       } else {
-        this.canvas.setState({canvasHeight: null});
+        this.setCanvasHeight(null);
       }
     }
 
     updateCanvasHeight = () => {
-      const containerHeight = this.getContainerHeight();
+      const containerHeight = getContainerHeight();
       const heightToCalculation = this.state.height === '50vh' ? containerHeight / 2 : this.state.height;
-      this.canvas.setState({canvasHeight: containerHeight - parseInt(heightToCalculation, 10)});
-    }
-
-    getContainerHeight() {
-      return this.container.getBoundingClientRect().height;
+      const canvasHeight = containerHeight - parseInt(heightToCalculation, 10);
+      this.setCanvasHeight(canvasHeight);
     }
 
     handleWindowResize = (_event) => {
@@ -87,24 +75,19 @@ export default (ComposedComponent) => {
       }
     }
 
+    setCanvasHeight = height => this.props.dispatch(actions.setCanvasHeight(height));
+
     handlePanelResize = (event) => {
-      const container = this.props.container();
-      const containerBBox = container.getBoundingClientRect();
-      const headerBBox = this.header.getBoundingClientRect();
-
+      const containerHeight = getContainerHeight();
       // we need to store percentage value
-      let newPixelHeight = event.clientY - headerBBox.height;
-
-      if (newPixelHeight > containerBBox.height - 100) {
-        newPixelHeight = containerBBox.height - 100;
+      let newPixelHeight = event.clientY - headerHeight;
+      if (newPixelHeight > containerHeight - 100) {
+        newPixelHeight = containerHeight - 100;
       } else if (newPixelHeight < 50) {
         newPixelHeight = 80;
       }
-
-      const newHeight = parseInt(newPixelHeight / containerBBox.height * 100, 10);
-
+      const newHeight = parseInt(newPixelHeight / containerHeight * 100, 10);
       lockr.set(this.storageKey, newHeight);
-
       this.setState({
         dragging: true,
         height: `${newPixelHeight}px`

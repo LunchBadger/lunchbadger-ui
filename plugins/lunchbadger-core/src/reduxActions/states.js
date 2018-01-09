@@ -58,6 +58,15 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
   ]));
 };
 
+export const clearCurrentEditElement = () => (dispatch) => {
+  dispatch(actions.setStates([
+    {key: 'currentElement', value: null},
+    {key: 'currentEditElement', value: null},
+    {key: 'currentlySelectedParent', value: null},
+    {key: 'currentlySelectedSubelements', value: []},
+  ]));
+}
+
 export const setCurrentZoom = value => (dispatch, getState) => {
   const {zoom} = getState().states;
   if (zoom === value) return;

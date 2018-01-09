@@ -49,6 +49,10 @@ export default class API extends BaseModel {
     }
   }
 
+  get isZoomDisabled() {
+    return true;
+  }
+
   /**
    * @param endpoints {Endpoint[]}
    */

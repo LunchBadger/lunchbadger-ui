@@ -7,4 +7,13 @@
       padding: 10px 0 5px;
     }
   }
+  & .general,
+  & .pipelines {
+    display: none;
+  }
+}
+
+.BaseDetails.general .GatewayDetails .general,
+.BaseDetails.pipelines .GatewayDetails .pipelines {
+  display: block;
 }

@@ -1,0 +1,62 @@
+.RnD {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  opacity: 0;
+  &.transitioning {
+    background-color: #FFF;
+    transition: width 300ms ease-in-out 100ms, height 300ms ease-in-out 100ms, transform 300ms ease-in-out 100ms, opacity 100ms;
+    // border-top: 48px solid #4190CE;
+    .RnD__content {
+      opacity: 0;
+    }
+  }
+  &.transitioning.close {
+    transition: width 300ms ease-in-out, height 300ms ease-in-out, transform 300ms ease-in-out, opacity 100ms linear 300ms;
+  }
+  &__wrapper {
+    background-color: #FFF;
+    border-radius: 5px;
+  }
+  &__header {
+    position: relative;
+    z-index: 1006;
+    height: 48px;
+    background-color: #4190CE;
+    cursor: move;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    &__icon {
+      svg {
+        width: 34px;
+        height: 34px;
+        stroke: #FFF;
+        position: absolute;
+        top: 7px;
+        left: 12px;
+      }
+    }
+    &__name {
+      margin-left: 69px;
+      color: #FFF;
+      line-height: 48px;
+      text-align: left;
+      font-weight: 400;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+  &__content {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 48px);
+    opacity: 1;
+    transition: opacity 600ms;
+    border-radius: 3px;
+    &__inner {
+      position: relative;
+      height: 100%;
+      background-color: #FFF;
+    }
+  }
+}

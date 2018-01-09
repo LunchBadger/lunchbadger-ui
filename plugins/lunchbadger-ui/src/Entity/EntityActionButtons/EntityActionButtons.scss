@@ -2,4 +2,8 @@
   padding: 25px 16px 0;
   border-top: 1px solid rgb(248, 248, 248);
   margin: 10px -20px 0 0;
+  &.zoom {
+    margin: 0;
+    padding-left: calc(100% - 270px);
+  }
 }

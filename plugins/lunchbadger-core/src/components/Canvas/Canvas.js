@@ -273,6 +273,7 @@ class Canvas extends Component {
 }
 
 const selector = createSelector(
+  state => !state.states.currentlyOpenedPanel,
   state => state.loadingProject,
   state => state.states.zoom,
   (

@@ -47,6 +47,7 @@ export default class RnD extends PureComponent {
     }
   }
 
+  // TODO: consider getting rid of this (maybe by using css animations?)
   transitions = (state, cb) => {
     setTimeout(() => {
       this.setState({transitioning: true}, () => {
@@ -75,9 +76,9 @@ export default class RnD extends PureComponent {
     }
   };
 
-  handleDragStop = (_, {x, y}) => this.setState({x, y});
+  handleDragStop = (event, {x, y}) => this.setState({x, y});
 
-  handleResize = (_, direction, {offsetWidth: width, offsetHeight: height}, ___, position) => {
+  handleResize = (event, direction, {offsetWidth: width, offsetHeight: height}, delta, position) => {
     const state = {width, ...position};
     if (direction !== 'left' && direction !== 'right') {
       Object.assign(state, {height});

@@ -12,12 +12,12 @@ import {
   clearCurrentElement,
   setCurrentEditElement,
   clearCurrentEditElement,
+  setCurrentZoom,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
-import {iconTrash, iconEdit, iconRevert} from '../../../../../src/icons';
 import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {
@@ -198,6 +198,20 @@ export default (ComposedComponent) => {
       event.stopPropagation();
     }
 
+    handleZoom = tab => (event) => {
+      const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
+      const {x, y, width, height} = elementDOMRect;
+      const rect = {
+        x: Math.round(x),
+        y: Math.round(y),
+        width: Math.round(width),
+        height: Math.round(height),
+        tab,
+      };
+      this.props.dispatch(setCurrentZoom(rect));
+      event.stopPropagation();
+    };
+
     resetFormModel = () => {
       if (this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.model);
@@ -289,17 +303,18 @@ export default (ComposedComponent) => {
           multiEnvIndex={multiEnvIndex}
         />
       );
-      const {ready, deleting, fake} = entity;
+      const {ready, deleting, fake, isZoomDisabled} = entity;
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
+      const tabs = entity.tabs || [];
       if (multiEnvDelta) {
         if (isDelta) {
           toolboxConfig.push({
             action: 'delete',
-            svg: iconRevert,
+            icon: 'iconRevert',
             onClick: this.handleResetMultiEnvEntity,
           });
         }
@@ -307,13 +322,27 @@ export default (ComposedComponent) => {
         if (multiEnvIndex === 0) {
           toolboxConfig.push({
             action: 'delete',
-            svg: iconTrash,
+            icon: 'iconTrash',
             onClick: () => this.setState({showRemovingModal: true}),
+          });
+        }
+        if (!isZoomDisabled) {
+          toolboxConfig.push({
+            action: 'zoom',
+            icon: 'iconBasics',
+            onClick: this.handleZoom('general'),
+          });
+          tabs.forEach(({name, icon}) => {
+            toolboxConfig.push({
+              action: name,
+              icon,
+              onClick: this.handleZoom(name),
+            });
           });
         }
         toolboxConfig.push({
           action: 'edit',
-          svg: iconEdit,
+          icon: 'iconEdit',
           onClick: this.handleEdit,
         });
       }

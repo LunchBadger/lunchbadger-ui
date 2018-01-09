@@ -19,6 +19,7 @@ class Canvas extends Component {
     super(props);
     this.state = {
       lastUpdate: new Date(),
+      canvasHeight: null,
       scrollLeft: 0,
     };
     this.dropped = false;
@@ -239,44 +240,49 @@ class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {height} = this.props;
+    const {isPanelClosed, zoom} = this.props;
     const {scrollLeft} = this.state;
-    const styles = {height};
+    const canvasHeight = isPanelClosed ? null : this.state.canvasHeight;
     return (
-      <section
-        className="canvas"
-        onClick={this.handleClick}
-      >
-        <CanvasOverlay />
-        <div
-          style={styles}
-          className="canvas__wrapper"
-          ref={r => this.canvasWrapperDOM = r}
+      <div>
+        <section
+          className="canvas"
+          onClick={this.handleClick}
         >
-          <div style={styles} className="canvas__legend">
-            <div className="canvas__label canvas__label--left">Producers</div>
-            <div className="canvas__label canvas__label--right">Consumers</div>
+          <div
+            style={{height: canvasHeight}}
+            className="canvas__wrapper"
+            ref={(r) => {this.canvasWrapperDOM = r;}}
+          >
+            <div style={{height: canvasHeight}} className="canvas__legend">
+              <div className="canvas__label canvas__label--left">Producers</div>
+              <div className="canvas__label canvas__label--right">Consumers</div>
+            </div>
+            <QuadrantContainer
+              canvasHeight={canvasHeight}
+              className="canvas__container"
+              id="canvas"
+              scrollLeft={scrollLeft}
+            />
           </div>
-          <QuadrantContainer
-            className="canvas__container"
-            id="canvas"
-            scrollLeft={scrollLeft}
-          />
-        </div>
-      </section>
+        </section>
+        <div className="canvas__zoom-area" />
+      </div>
     );
   }
 }
 
 const selector = createSelector(
   state => state.loadingProject,
-  state => state.canvasHeight,
+  state => state.states.zoom,
   (
+    isPanelClosed,
     loadingProject,
-    height,
+    zoom,
   ) => ({
+    isPanelClosed,
     loadingProject,
-    height,
+    zoom,
   }),
 );
 

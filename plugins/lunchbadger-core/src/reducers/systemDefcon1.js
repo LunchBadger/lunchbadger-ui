@@ -25,6 +25,11 @@ export default (state = initialState, action) => {
         newState.visible = false;
       }
       return newState;
+    case actionTypes.clearSystemDefcon1:
+      return {
+        errors: [],
+        visible: false,
+      };
     default:
       return state;
   }

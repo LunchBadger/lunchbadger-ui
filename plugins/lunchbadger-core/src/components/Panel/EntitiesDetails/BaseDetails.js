@@ -1,9 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Form, EntityProperty, EntityValidationErrors} from '../../../../../lunchbadger-ui/src';
-import CloseButton from '../CloseButton';
-import SaveButton from '../SaveButton';
-import {changePanelStatus, setCurrentEditElement, setCurrentElement} from '../../../reduxActions';
+import cs from 'classnames';
+import {
+  Form,
+  EntityProperty,
+  EntityValidationErrors,
+  EntityActionButtons,
+} from '../../../../../lunchbadger-ui/src';
+import {
+  changePanelStatus,
+  setCurrentEditElement,
+  setCurrentElement,
+  setCurrentZoom,
+} from '../../../reduxActions';
 import getFlatModel from '../../../utils/getFlatModel';
 import './BaseDetails.scss';
 
@@ -87,6 +96,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
+      this.closePopup();
       setTimeout(this.setFlatModel);
     }
 
@@ -107,14 +117,6 @@ export default (ComposedComponent) => {
       }
     }
 
-    _preventSubmit = (event) => {
-      const keyCode = event.keyCode || event.which;
-      if (keyCode === 13) {
-        event.preventDefault();
-        return false;
-      }
-    }
-
     _handleValid = () => {
       if (!this.state.formValid) {
         this.setState({formValid: true});
@@ -127,16 +129,12 @@ export default (ComposedComponent) => {
       }
     }
 
+    closePopup = () => this.context.store.dispatch(setCurrentZoom({...this.props.rect, close: true}));
+
     render() {
       const {validations} = this.state;
       return (
-        <div className="details-panel__element">
-          {!validations.isValid && (
-            <EntityValidationErrors
-              validations={validations}
-              basic
-            />
-          )}
+        <div className={cs('BaseDetails', 'details-panel__element', this.props.rect.tab)}>
           <Form
             name="panelForm"
             ref="form"
@@ -144,31 +142,36 @@ export default (ComposedComponent) => {
             onInvalid={this._handleInvalid}
             onChange={this.checkPristine}
             onValidSubmit={this.update}
+            className="BaseDetails__form"
           >
-            <CloseButton
-              showConfirmation={!this.state.isPristine}
-              onSave={this.update}
-              onCancel={this.discardChanges}
-            />
-            <div className="panel__details panel__details--name">
+            <div className="BaseDetails__name">
               <EntityProperty
-                title="Name"
                 name="name"
                 value={this.props.entity.name}
-                placeholder=" "
-                onChange={this._preventSubmit}
               />
             </div>
-            <ComposedComponent
-              parent={this}
-              ref={(ref) => this.element = ref}
-              {...this.props}
-              {...this.state}
-            />
-            <SaveButton
-              enabled={!this.state.isPristine && this.state.formValid}
-              onSave={this.update}
-            />
+            <div className="BaseDetails__content">
+              {!validations.isValid && (
+                <EntityValidationErrors
+                  validations={validations}
+                  basic
+                />
+              )}
+              <ComposedComponent
+                parent={this}
+                ref={(ref) => this.element = ref}
+                {...this.props}
+                {...this.state}
+              />
+            </div>
+            <div className="BaseDetails__buttons">
+              <EntityActionButtons
+                zoom
+                onCancel={this.closePopup}
+                onOk={this.update}
+                okDisabled={this.state.isPristine || !this.state.formValid}
+              />
+            </div>
           </Form>
         </div>
       )

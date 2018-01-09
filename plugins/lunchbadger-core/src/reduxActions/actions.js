@@ -13,6 +13,7 @@ const {actions, actionTypes} = actionsCreator(
     'addSystemDefcon1',
     'toggleSystemDefcon1',
     'removeSystemDefcon1',
+    'clearSystemDefcon1',
 
     'addSystemInformationMessage',
     'removeSystemInformationMessages',

@@ -84,6 +84,21 @@ export default class Gateway extends BaseModel {
     return json;
   }
 
+  get tabs() {
+    return [
+      {
+        name: 'pipelines',
+        label: 'Pipelines',
+        icon: 'iconPipelines',
+      },
+      {
+        name: 'customerMngmt',
+        label: 'Customer Management',
+        icon: 'iconCustomerManagement',
+      },
+    ];
+  }
+
   async onSave(state) {
     if (this.loaded && this.running) {
       const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([

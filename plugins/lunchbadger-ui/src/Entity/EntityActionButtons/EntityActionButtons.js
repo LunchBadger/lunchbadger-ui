@@ -1,19 +1,47 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {Button} from '../../';
 import './EntityActionButtons.scss';
 
-const EntityActionButtons = ({onCancel}) => (
-  <div className="EntityActionButtons">
-    <div className="EntityActionButtons__inner">
-      <Button name="cancel" onClick={onCancel}>Cancel</Button>
-      <Button name="submit" type="submit">OK</Button>
-    </div>
-  </div>
-);
+export default class EntityActionButtons extends PureComponent {
+  static propTypes = {
+    onOk: PropTypes.func,
+    onCancel: PropTypes.func.isRequired,
+    zoom: PropTypes.bool,
+    okDisabled: PropTypes.bool,
+    okLabel: PropTypes.string,
+  };
 
-EntityActionButtons.propTypes = {
-  onCancel: PropTypes.func,
-};
+  static defaultProps = {
+    onOk: undefined,
+    zoom: false,
+    okDisabled: false,
+    okLabel: 'OK',
+  };
 
-export default EntityActionButtons;
+  render() {
+    const {
+      onCancel,
+      onOk,
+      okDisabled,
+      zoom,
+      okLabel,
+    } = this.props;
+    return (
+      <div className={cs('EntityActionButtons', {zoom})}>
+        <div className="EntityActionButtons__inner">
+          <Button name="cancel" onClick={onCancel}>Cancel</Button>
+          <Button
+            name="submit"
+            type="submit"
+            disabled={okDisabled}
+            onClick={onOk}
+          >
+            {okLabel}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+}

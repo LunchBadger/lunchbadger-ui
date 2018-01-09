@@ -121,6 +121,7 @@
     "react-notify-toast": "^0.1.2",
     "react-redux": "^4.4.7",
     "react-resizable": "^1.7.5",
+    "react-rnd": "^7.3.0",
     "react-select-plus": "git+https://github.com/HubSpot/react-select-plus.git",
     "react-tap-event-plugin": "^2.0.1",
     "react-tooltip": "^2.0.3",

@@ -7,6 +7,7 @@ import {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+  setCurrentZoom,
   togglePanel,
   changePanelStatus,
   toggleSubelement,
@@ -34,6 +35,7 @@ export {
   clearCurrentElement,
   setCurrentEditElement,
   clearCurrentEditElement,
+  setCurrentZoom,
 
   addSystemDefcon1,
   toggleSystemDefcon1,

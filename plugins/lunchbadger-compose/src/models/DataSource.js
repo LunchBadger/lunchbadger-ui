@@ -113,6 +113,10 @@ export default class DataSource extends BaseModel {
     return json;
   }
 
+  get isZoomDisabled() {
+    return this.isMemory;
+  }
+
   get workspaceId() {
     return `server.${this.name}`;
   }

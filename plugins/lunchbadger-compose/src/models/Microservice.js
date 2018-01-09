@@ -32,6 +32,10 @@ export default class Microservice extends BaseModel {
     }
   }
 
+  get isZoomDisabled() {
+    return true;
+  }
+
   /**
    * @param models {Model.lunchbadgerId[]}
    */

@@ -39,7 +39,7 @@ class Canvas extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(actions.clearProject());
+    this.props.dispatch(actions.clearProject(true));
     this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
     this.context.paper.stopRepaintingEverything();
   }

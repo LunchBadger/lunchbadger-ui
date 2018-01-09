@@ -20,6 +20,10 @@ export default class Gateway extends BaseModel {
 
   _policies = gatewayPolicies;
 
+  running = true;
+  deleting = null;
+  fake = null;
+
   constructor(id, name) {
     super(id);
     this.name = name;
@@ -27,8 +31,9 @@ export default class Gateway extends BaseModel {
 
   static create(data) {
     const adminApi = new ExpressGatewayAdminService(data.name);
-    adminApi.initialize(data.name);
-
+    if (!data.deleting) {
+      adminApi.initialize(data.name);
+    }
     return super.create({
       ...data,
       pipelines: Object.keys(data.pipelines || {}).map(name => Pipeline.create({name, ...data.pipelines[name]})),
@@ -43,7 +48,7 @@ export default class Gateway extends BaseModel {
     return Gateway.create(this.toJSON());
   }
 
-  toJSON() {
+  toJSON(isForServer = false) {
     const json = {
       id: this.id,
       name: this.name,
@@ -52,6 +57,13 @@ export default class Gateway extends BaseModel {
       pipelines: this.pipelines.map(item => item.toJSON()),
       itemOrder: this.itemOrder,
     };
+    if (!isForServer) {
+      Object.assign(json, {
+        deleting: this.deleting,
+        running: this.running,
+        fake: this.fake,
+      });
+    }
     if (this.http.enabled) {
       json.http = {
         port: this.http.port,
@@ -73,9 +85,7 @@ export default class Gateway extends BaseModel {
   }
 
   async onSave(state) {
-    const {entitiesStatus} = state;
-    const running = entitiesStatus.gateway[slug(this.name, {lower: true})] === true;
-    if (this.loaded && running) {
+    if (this.loaded && this.running) {
       const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([
         this.adminApi.getServiceEndpoints(),
         this.adminApi.getApiEndpoints(),

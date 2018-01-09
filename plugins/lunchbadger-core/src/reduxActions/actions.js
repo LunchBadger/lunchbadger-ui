@@ -8,7 +8,7 @@ const {actions, actionTypes} = actionsCreator(
     'setStates',
     'onLoadProject',
     'changePanelStatus',
-    'setEntitiesStatus',
+    'setEntitiesStatuses',
 
     'addSystemDefcon1',
     'toggleSystemDefcon1',
@@ -18,6 +18,7 @@ const {actions, actionTypes} = actionsCreator(
     'removeSystemInformationMessages',
 
     'setLoadingProject',
+    'setLoadedProject',
 
     'setCanvasHeight',
 

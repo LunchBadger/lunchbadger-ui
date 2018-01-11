@@ -210,7 +210,12 @@ export default class DataSource extends BaseModel {
   }
 
   get isWithPort() {
-    return ['mysql', 'mongodb', 'redis'].includes(this._connector);
+    return [
+      'mysql',
+      'postgresql',
+      'mongodb',
+      'redis',
+    ].includes(this._connector);
   }
 
   get isMemory() {

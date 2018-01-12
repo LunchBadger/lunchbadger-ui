@@ -32,6 +32,7 @@ class EntityHeader extends Component {
             onBlur={this.handleNameBlur}
             underlineStyle={underlineStyle}
             invalid={invalid}
+            invalidUnderlineColor="#FFF"
           />
         </div>
       </div>

@@ -66,6 +66,10 @@
     }
     .EntityProperty__error {
       margin-top: 0;
+      color: #FFF;
+      &:before {
+        border-color: #FFF;
+      }
     }
   }
 }

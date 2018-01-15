@@ -9,7 +9,6 @@ class QuadrantContainer extends PureComponent {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    canvasHeight: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   };
 
   constructor(props) {
@@ -52,7 +51,6 @@ class QuadrantContainer extends PureComponent {
       );
       return;
     };
-    const {innerWidth} = window;
     const quadrantWidths = {};
     this.quadrantsPercentageWidths.forEach((percentage, idx) => {
       quadrantWidths[idx] = Math.max(percentage * this.getCanvasWidth(), this.quadrantsMinWidths[idx]);
@@ -81,42 +79,16 @@ class QuadrantContainer extends PureComponent {
       }
     }
     this.setState({quadrantWidths});
-    // this.props.paper.repaintEverything();
   }
 
-  // renderQuadrants() {
-  //   const {plugins, appState, paper, scrollLeft} = this.props;
-  //   const pluggedQuadrants = plugins.getQuadrants();
-  //   const {quadrantWidths} = this.state;
-  //   return pluggedQuadrants.map((plugin, index) => {
-  //     const QuadrantComponent = plugin.component;
-  //     return (
-  //       <QuadrantComponent
-  //         key={`plugged-quadrant-${index}-${plugin.title}`}
-  //         appState={appState}
-  //         paper={paper}
-  //         data={plugin.dataStore}
-  //         resizable={index < pluggedQuadrants.length - 1}
-  //         index={index}
-  //         width={quadrantWidths[index]}
-  //         title={plugin.title}
-  //         scrollLeft={scrollLeft}
-  //         recalculateQuadrantsWidths={this.recalculateQuadrantsWidths}
-  //       />
-  //     );
-  //   });
-  // }
-
   render() {
-    const {editing, canvasHeight, className, id, scrollLeft, quadrants} = this.props;
+    const {editing, className, id, scrollLeft, quadrants} = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
     const {quadrantWidths} = this.state;
-    // console.log('RENDER QuadrantContainer');
     return (
       <div
-        style={{minHeight: canvasHeight}}
         className={`${className} ${containerClass}`}
         id={id}
       >

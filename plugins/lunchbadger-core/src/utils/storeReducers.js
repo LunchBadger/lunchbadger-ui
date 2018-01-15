@@ -25,7 +25,8 @@ const objectsToRegister = [
   'onDiscardChanges',
   'onValidate',
   'panelMenu',
-  'models'
+  'models',
+  'onEntityStatusChange',
 ];
 
 const registerArrays = (plugins, plugs) => {

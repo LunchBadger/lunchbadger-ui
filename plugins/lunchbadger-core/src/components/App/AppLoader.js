@@ -1,25 +1,71 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import paper from '../../utils/paper';
+import KubeWatcherService from '../../services/KubeWatcherService';
+import Config from '../../../../../src/config';
+import {getUser} from '../../utils/auth';
+import {setEntitiesStatus} from '../../reduxActions';
 import './AppLoader.scss';
 
-export default class AppLoader extends Component {
+const envId = Config.get('envId');
+
+class AppLoader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loaded: false,
+      workspaceRunning: false,
       error: null,
+      workspaceError: false,
     };
   }
 
   componentWillMount() {
     this.load();
   }
+
+  componentDidMount() {
+    this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
+    this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
+  }
+
+  componentWillUnmount() {
+    if (this.kubeWatcherMonitor) {
+      this.kubeWatcherMonitor.close();
+      this.kubeWatcherMonitor = null;
+    }
+  }
+
+  onKubeWatcherData = (message) => {
+    const projectSlug = `-${getUser().profile.sub}-${envId}-`;
+    const data = JSON.parse(message.data)[envId];
+    let workspaceRunning = false;
+    if (data.workspace) {
+      workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
+    }
+    this.setState({workspaceRunning});
+    const entitiesData = {...data};
+    delete entitiesData.workspace;
+    const entitiesStatus = {};
+    Object.keys(entitiesData).forEach((entity) => {
+      entitiesStatus[entity] = {};
+      Object.keys(entitiesData[entity]).forEach((key) => {
+        const entitySlugArr = key.replace(`${entity}${projectSlug}`, '').split('-');
+        const entitySlugName = entitySlugArr.slice(0, entitySlugArr.length - 2).join('-');
+        entitiesStatus[entity][entitySlugName] = entitiesData[entity][key].status.running;
+      });
+    });
+    if (this.prevEntitiesStatus !== JSON.stringify(entitiesStatus)) {
+      this.prevEntitiesStatus = JSON.stringify(entitiesStatus);
+      this.props.dispatch(setEntitiesStatus(entitiesStatus));
+    }
+  };
 
   load() {
     ConfigStoreService.upsertProject()
@@ -86,12 +132,15 @@ export default class AppLoader extends Component {
   }
 
   render() {
-    if (this.state.loaded) {
+    const {loaded, workspaceRunning, error} = this.state;
+    if (loaded && workspaceRunning) {
       return this.renderApp();
-    } else if (this.state.error) {
+    } else if (error) {
       return this.renderError();
     } else {
       return this.renderLoadingScreen();
     }
   }
 }
+
+export default connect()(AppLoader);

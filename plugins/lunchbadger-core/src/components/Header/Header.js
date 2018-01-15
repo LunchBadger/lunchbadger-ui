@@ -3,7 +3,7 @@ import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import HeaderMenu from './HeaderMenu';
 // import CanvasOverlay from '../Canvas/CanvasOverlay';
 import Logo from './badger-logo.svg';
-import BrandingLogo from './BrandingLogo.png';
+import BrandingLogo from './brandingLogo.png';
 import Config from '../../../../../src/config';
 import './Header.scss';
 

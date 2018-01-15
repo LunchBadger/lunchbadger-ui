@@ -1,5 +1,6 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import slug from 'slug';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import './CanvasElement.scss';
@@ -10,10 +11,12 @@ import {
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
+  clearCurrentEditElement,
   setCurrentZoom,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
+import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {Entity} from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
@@ -85,6 +88,7 @@ export default (ComposedComponent) => {
       super(props);
       this.state = {
         showRemovingModal: false,
+        showNotRunningModal: false,
         validations: {
           isValid: true,
           data: {}
@@ -93,9 +97,17 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(props) {
+      const {entity, running, dispatch} = this.props;
+      const {editable, highlighted} = props;
       this._handleDrop(props);
-      if (props.entity !== this.props.entity) {
+      if (props.entity !== entity) {
         setTimeout(this.setFlatModel);
+      }
+      if ((editable || highlighted) && running && !props.running) {
+        dispatch(clearCurrentEditElement());
+        if (editable) {
+          this.setState({showNotRunningModal: true});
+        }
       }
     }
 
@@ -276,6 +288,7 @@ export default (ComposedComponent) => {
         multiEnvDelta,
         multiEnvEntity,
         nested,
+        running,
       } = this.props;
       if (nested) return (
         <ComposedComponent
@@ -291,7 +304,7 @@ export default (ComposedComponent) => {
         />
       );
       const {ready, isZoomDisabled} = entity;
-      const processing = !ready;
+      const processing = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
@@ -332,11 +345,13 @@ export default (ComposedComponent) => {
           onClick: this.handleEdit,
         });
       }
+      const {type} = this.props.entity.constructor;
       return (
+        <div>
             <Entity
               ref={(r) => {this.entityRef = r}}
-              type={this.props.entity.constructor.type}
-              connector={this.props.entity.constructor.type === 'DataSource' ? this.props.entity.connector : undefined}
+              type={type}
+              connector={type === 'DataSource' ? this.props.entity.connector : undefined}
               editable={editable}
               highlighted={highlighted}
               dragging={isDragging}
@@ -382,6 +397,15 @@ export default (ComposedComponent) => {
                 </TwoOptionModal>
               )}
             </Entity>
+            {this.state.showNotRunningModal && (
+              <OneOptionModal
+                confirmText="OK"
+                onClose={() => this.setState({showNotRunningModal: false})}
+              >
+                Currently edited {type} stopped running.
+              </OneOptionModal>
+            )}
+        </div>
       );
     }
   }
@@ -392,22 +416,29 @@ export default (ComposedComponent) => {
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
     (_, props) => props.entity,
+    state => state.entitiesStatus,
     (
       multiEnvironments,
       currentElement,
       currentEditElement,
       isPanelOpened,
       entity,
+      entitiesStatus,
     ) => {
-      const {id} = entity;
+      const {id, name, loaded} = entity;
       const multiEnvIndex = multiEnvironments.selected;
       const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
       let multiEnvEntity = entity;
       if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
         multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
       }
-      const highlighted = !!currentElement && currentElement.id === id;
-      const editable = !!currentEditElement && currentEditElement.id === id;
+      let running = true;
+      const statuses = entitiesStatus[entity.constructor.type.toLowerCase()];
+      if (statuses && loaded) {
+        running = statuses[slug(name, {lower: true})] || false;
+      }
+      const highlighted = running && !!currentElement && currentElement.id === id;
+      const editable = running && !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,
         multiEnvDelta,
@@ -415,6 +446,7 @@ export default (ComposedComponent) => {
         isPanelOpened,
         highlighted,
         editable,
+        running,
       };
     },
   );

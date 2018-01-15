@@ -58,6 +58,7 @@ loginManager.checkAuth().then(loggedIn => {
 
   LunchBadgerCore.services.ConfigStoreService.initialize();
   LunchBadgerCore.services.ProjectService.initialize();
+  LunchBadgerCore.services.KubeWatcherService.initialize();
   (store.getState().plugins.services || []).map(service => service.initialize());
 
   LunchBadgerCore.isMultiEnv = document.location.search === '?multi';

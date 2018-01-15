@@ -8,6 +8,8 @@ import messages from '../../utils/messages';
 import envs from '../../utils/fakeLoginEnvs';
 import './FakeLogin.scss';
 
+const isPassword = false;
+
 const muiTheme = getMuiTheme({
   fontFamily: 'Open Sans',
   palette: {
@@ -67,15 +69,17 @@ export default class FakeLogin extends PureComponent {
                 invalid={login}
                 onBlur={this.handleResetInvalid('login')}
               />
-              <EntityProperty
-                name="password"
-                title="Password"
-                placeholder="Enter password here"
-                value=""
-                password
-                invalid={password}
-                onBlur={this.handleResetInvalid('password')}
-              />
+              {isPassword && (
+                <EntityProperty
+                  name="password"
+                  title="Password"
+                  placeholder="Enter password here"
+                  value=""
+                  password
+                  invalid={password}
+                  onBlur={this.handleResetInvalid('password')}
+                />
+              )}
               <div className="FakeLogin__button">
                 <Button name="submit" type="submit">LOG IN</Button>
               </div>

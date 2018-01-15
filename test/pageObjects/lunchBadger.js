@@ -5,7 +5,10 @@ var pageCommands = {
   open: function () {
     var page = this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
-    this.waitForElementVisible('.app', 5000);
+    this.waitForElementVisible('.FakeLogin', 5000);
+    this.setValueSlow('.input__login input', 'demo');
+    this.submitForm('.FakeLogin__form form');
+    this.waitForElementVisible('.app', 45000);
     return page;
   },
 

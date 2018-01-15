@@ -1,5 +1,7 @@
+import React from 'react';
 import {actions} from './actions';
 import _ from 'lodash';
+import slug from 'slug';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import initialPipelinePolicies from '../utils/initialPipelinePolicies';
@@ -20,7 +22,8 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const isAutoSave = !entity.loaded;
+  const isNameChange = entity.loaded && model.name !== entity.name;
+  const isAutoSave = !entity.loaded || isNameChange;
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
@@ -41,15 +44,12 @@ export const update = (entity, model) => async (dispatch, getState) => {
   dispatch(actions.updateGateway(updatedEntity));
   if (isAutoSave) {
     await dispatch(coreActions.saveToServer());
+    dispatch(actions.addGatewayStatus(model.name));
   }
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
   updatedEntity.loaded = true;
   dispatch(actions.updateGateway(updatedEntity));
-  dispatch(actionsCore.addSystemInformationMessage({
-    type: 'success',
-    message: 'Gateway successfully deployed',
-  }));
   return updatedEntity;
 };
 
@@ -120,3 +120,38 @@ export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (
     });
   dispatch(actions.updateGateway(gateway));
 };
+
+export const onEntityStatusChange = (statuses) => (dispatch, getState) => {
+  const {gateways, gatewayStatuses} = getState().entities;
+  const messages = [];
+  Object.keys(statuses).forEach((name) => {
+    let message;
+    if (gatewayStatuses[name] === null && statuses[name] === true) {
+      message = 'successfully deployed';
+    }
+    if (gatewayStatuses[name] === false && statuses[name] === true) {
+      message = 'is running';
+    }
+    if (gatewayStatuses[name] === true && statuses[name] === false) {
+      message = 'is not running';
+    }
+    if (message) {
+      messages.push({name, message});
+    }
+  });
+  if (messages.length > 0) {
+    const names = Object.values(gateways).reduce((map, {name}) => ({...map, [slug(name, {lower: true})]: name}), {});
+    messages.forEach(({name, message}) => {
+      dispatch(actionsCore.addSystemInformationMessage({
+        type: 'success',
+        message: (
+          <span>
+            <strong>{names[name]}</strong>
+            {' '}
+            {message}
+          </span>
+        ),
+      }));
+    });
+  }
+}

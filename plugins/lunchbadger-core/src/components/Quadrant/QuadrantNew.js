@@ -56,7 +56,7 @@ class Quadrant extends PureComponent {
     this.state = {
       hasDroppedOnChild: false,
       hasDropped: false,
-      orderedIds: [],
+      orderedIds: this.getOrderedIds(props),
       draggingId: '',
     };
   }
@@ -116,7 +116,6 @@ class Quadrant extends PureComponent {
       transform: `translateX(-${scrollLeft}px)`,
     }
     const {orderedIds, draggingId} = this.state;
-    // console.log('RENDER QuadrantNew', title, orderedIds.map(a => a.type));
     return connectDropTarget(
       <div
         className="quadrant"

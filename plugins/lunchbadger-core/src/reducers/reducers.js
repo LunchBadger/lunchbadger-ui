@@ -4,6 +4,8 @@ import initialConnections from './initialConnections';
 import systemDefcon1 from './systemDefcon1';
 import systemInformationMessages from './systemInformationMessages';
 import multiEnvironments from './multiEnvironments';
+import entitiesStatus from './entitiesStatus';
+import canvasHeight from './canvasHeight';
 
 export default {
   states,
@@ -12,4 +14,6 @@ export default {
   systemDefcon1,
   systemInformationMessages,
   multiEnvironments,
+  entitiesStatus,
+  canvasHeight,
 };

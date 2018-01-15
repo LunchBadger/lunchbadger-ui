@@ -48,17 +48,18 @@ class Paper {
   initialize = () => {
     this.instance = jsPlumb.getInstance(jsPlumbConfig);
     this.instance.registerConnectionTypes(connectionTypes);
-    this.repaint = setInterval(this.repaint, 50);
+    this.repaintInternal = setInterval(this.repaint, 50);
     return this.instance;
   }
 
   getInstance = () => this.instance;
 
-  repaint = () => {
-    this.instance.repaintEverything();
-  }
+  repaint = () => this.instance.repaintEverything();
 
-  stopRepaintingEverything = () => clearInterval(this.repaint);
+  stopRepaintingEverything = () => {
+    clearInterval(this.repaintInternal);
+    this.instance = null;
+  }
 
 }
 

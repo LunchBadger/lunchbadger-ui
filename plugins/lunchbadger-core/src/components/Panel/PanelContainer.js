@@ -7,27 +7,19 @@ import './PanelContainer.scss';
 
 class PanelContainer extends Component {
   static propTypes = {
-    container: PropTypes.func.isRequired,
-    canvas: PropTypes.func.isRequired,
-    header: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    panels: PropTypes.array.isRequired,
   };
 
   render() {
-    const {disabled, canvas, panels, header, container} = this.props;
+    const {disabled, panels} = this.props;
     const panelContainerClass = classNames({
       'panel-container': true,
       'panel-container--disabled': disabled,
     });
     return (
       <div className={panelContainerClass}>
-        {panels.map((PanelComponent, idx) => (
-          <PanelComponent
-            key={idx}
-            canvas={canvas}
-            header={header}
-            container={container}
-          />
-        ))}
+        {panels.map((PanelComponent, idx) => <PanelComponent key={idx} />)}
       </div>
     );
   }

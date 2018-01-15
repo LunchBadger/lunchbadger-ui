@@ -1,5 +1,5 @@
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'API: bundle endpoint - decline': function (browser) {
     var page = browser.page.lunchBadger();
     page.open();

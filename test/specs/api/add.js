@@ -1,5 +1,5 @@
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'API: add': function (browser) {
     var page = browser.page.lunchBadger();
     var elementSelector = '.quadrant:nth-child(4) .Entity.API:last-child';

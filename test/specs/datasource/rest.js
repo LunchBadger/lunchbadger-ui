@@ -4,7 +4,7 @@ module.exports = {
     var page = browser.page.lunchBadger();
     page.open();
     page.testDatasource('rest', [
-      ['BASE URL', 'dumpUrl']
+      ['URL', 'dumpUrl']
     ]);
     page.close();
   }

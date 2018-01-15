@@ -19,8 +19,8 @@ import {
   removeSystemDefcon1,
 } from './systemDefcon1';
 import {
-  setEntitiesStatus,
-} from './entitiesStatus';
+  updateEntitiesStatues,
+} from './entitiesStatuses';
 
 export {
   togglePanel,
@@ -41,5 +41,5 @@ export {
   toggleSystemDefcon1,
   removeSystemDefcon1,
 
-  setEntitiesStatus,
+  updateEntitiesStatues,
 };

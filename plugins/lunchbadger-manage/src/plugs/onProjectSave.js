@@ -6,8 +6,9 @@ export default [
     const apiEndpoints = Object.keys(entities.apiEndpoints)
       .filter(key => entities.apiEndpoints[key].loaded)
       .map(key => entities.apiEndpoints[key].toJSON());
-    const gateways = Object.keys(entities.gateways)
-      .map(key => entities.gateways[key].toJSON());
+    const gateways = Object.values(entities.gateways)
+      .filter(({deleting}) => !deleting)
+      .map(entity => entity.toJSON(true));
     return {
       serviceEndpoints,
       apiEndpoints,

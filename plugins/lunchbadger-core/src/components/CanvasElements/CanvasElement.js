@@ -315,6 +315,7 @@ export default (ComposedComponent) => {
             action: 'delete',
             icon: 'iconRevert',
             onClick: this.handleResetMultiEnvEntity,
+            label:'Revert changes',
           });
         }
       } else {
@@ -323,6 +324,7 @@ export default (ComposedComponent) => {
             action: 'delete',
             icon: 'iconTrash',
             onClick: () => this.setState({showRemovingModal: true}),
+            label: 'Remove',
           });
         }
         if (!isZoomDisabled) {
@@ -330,12 +332,14 @@ export default (ComposedComponent) => {
             action: 'zoom',
             icon: 'iconBasics',
             onClick: this.handleZoom('general'),
+            label: 'Details',
           });
-          tabs.forEach(({name, icon}) => {
+          tabs.forEach(({name, icon, label}) => {
             toolboxConfig.push({
               action: name,
               icon,
               onClick: this.handleZoom(name),
+              label,
             });
           });
         }
@@ -343,6 +347,7 @@ export default (ComposedComponent) => {
           action: 'edit',
           icon: 'iconEdit',
           onClick: this.handleEdit,
+          label: 'Quick Edit',
         });
       }
       const {type} = this.props.entity.constructor;

@@ -65,17 +65,20 @@ class DetailsPanel extends Component {
     const toolboxConfig = [{
       icon: 'iconTrash',
       onClick: () => this.setState({showRemovingModal: true}),
+      label: 'Remove',
     }];
     if (tabs.length > 0) {
       toolboxConfig.push({
         icon: 'iconBasics',
         onClick: this.handleTabChange('general'),
         selected: tab === 'general',
+        label: 'Details',
       });
-      tabs.map(({name, icon}) => toolboxConfig.push({
+      tabs.map(({name, icon, label}) => toolboxConfig.push({
         icon,
         onClick: this.handleTabChange(name),
         selected: tab === name,
+        label,
       }));
     }
     return (

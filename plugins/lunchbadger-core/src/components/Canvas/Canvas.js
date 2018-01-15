@@ -6,6 +6,7 @@ import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import CanvasOverlay from './CanvasOverlay';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
+import {actions} from '../../reduxActions/actions';
 import './Canvas.scss';
 
 class Canvas extends Component {
@@ -24,50 +25,10 @@ class Canvas extends Component {
     this.dropped = false;
   }
 
-  componentWillMount() {
-    // this.repaint = setInterval(() => {
-    //   // this.paper.repaintEverything();
-    // }, 50);
-
-    // Connection.addChangeListener(this.connectionsChanged);
-  }
-
   componentDidMount() {
     this.canvasWrapperDOM.addEventListener('scroll', this.onCanvasScroll);
     this.paper = this.context.paper.initialize();
-    // jsPlumb has to be instantiated here, not in componentWillMount, because
-    // the canvas element has to already be rendered in order for it to work.
-    // this.paper = jsPlumb.getInstance({
-    //   DragOptions: {cursor: 'pointer', zIndex: 2000},
-    //   ReattachConnections: true,
-    //   PaintStyle: {
-    //     strokeStyle: '#ffffff',
-    //     lineWidth: 6
-    //   },
-    //   Connector: ['Flowchart', {cornerRadius: 15}],
-    //   Container: 'canvas',
-    //   ConnectionOverlays: [
-    //     ['Label',
-    //       {
-    //         label: 'X',
-    //         id: 'remove-button',
-    //         cssClass: 'remove-button'
-    //       }
-    //     ]
-    //   ],
-    //   Anchors: [0.5, 0, 0.5, 0.5]
-    // });
-
-    // Children get paper object as props, so we have to force React to re-
-    // deliver props to them after creating this.paper.
-    // this.forceUpdate();
-
-    // LunchBadgerCore.utils.paper = this.paper;
-    //
     this._attachPaperEvents();
-    // this._registerConnectionTypes();
-    //
-    //
     jsPlumb.fire('canvasLoaded', this.paper);
   }
 
@@ -79,9 +40,9 @@ class Canvas extends Component {
   }
 
   componentWillUnmount() {
+    this.props.dispatch(actions.clearProject());
     this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
-    this.paper.stopRepaintingEverything();
-    // Connection.removeChangeListener(this.connectionsChanged);
+    this.context.paper.stopRepaintingEverything();
   }
 
   handleInitialConnections = () => {
@@ -140,6 +101,7 @@ class Canvas extends Component {
     }
     const source = document.querySelector(`#${sourceElement}`);
     const target = document.querySelector(`#${targetElement}`);
+    if (!source || !target) return null;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       if ((source.parentElement.classList.contains('port-Function') && target.parentElement.classList.contains('port-Model')) ||
@@ -153,15 +115,6 @@ class Canvas extends Component {
     }
     return true;
   };
-
-  // _registerConnectionTypes() {
-  //   this.paper.registerConnectionTypes({
-  //     'wip': {
-  //       cssClass: 'loading',
-  //       detachable: false
-  //     }
-  //   });
-  // }
 
   _executeStrategies(strategies, info) {
     const {store: {dispatch}} = this.context;
@@ -205,7 +158,11 @@ class Canvas extends Component {
         this._disconnect(connection);
         return;
       }
-      if (!this.isConnectionValid(info)) {
+      const isValid = this.isConnectionValid(info);
+      if (isValid === null) {
+        this._disconnect(connection);
+        return;
+      } else if (!isValid) {
         if (this.dropped) {
           this._disconnect(connection);
         } else {
@@ -222,7 +179,6 @@ class Canvas extends Component {
       // in the same place.
       if (connection.suspendedElement) return;
       if (dropped) {
-        // let strategies = this.props.plugins.getConnectionCreatedStrategies();
         fulfilled = this._executeStrategies(getState().plugins.onConnectionCreatedStrategy, info);
       }
       if (fulfilled === null) {

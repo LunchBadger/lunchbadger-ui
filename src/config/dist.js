@@ -7,6 +7,7 @@ export default {
   workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'https://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
+  kubeWatcherApiUrl: 'https://kube-watcher.lunchbadger.io',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

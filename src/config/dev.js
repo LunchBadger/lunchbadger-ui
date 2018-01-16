@@ -1,4 +1,4 @@
-const env = process.env.LB_ENV || 'localhost'; // localhost|staging|triton
+const env = process.env.LB_ENV || 'staging'; // localhost|staging|triton
 
 const isPrefix = env !== 'localhost';
 const prefix = isPrefix ? `${env}-` : '';

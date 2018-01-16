@@ -186,6 +186,7 @@ class EntityProperty extends Component {
       alignRight,
       object,
       tmpPrefix,
+      invalidUnderlineColor,
     } = this.props;
     if (object) {
       const columns = [
@@ -294,6 +295,7 @@ class EntityProperty extends Component {
         isInvalid={isInvalid}
         handleKeyDown={this.handleTab}
         alignRight={alignRight}
+        invalidUnderlineColor={invalidUnderlineColor}
       />
     );
   }

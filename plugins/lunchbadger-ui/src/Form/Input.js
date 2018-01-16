@@ -25,11 +25,13 @@ class Input extends Component {
     hideUnderline: PropTypes.bool,
     textarea: PropTypes.bool,
     alignRight: PropTypes.bool,
+    invalidUnderlineColor: PropTypes.string,
   };
 
   static defaultProps = {
     textarea: false,
     alignRight: false,
+    invalidUnderlineColor: '#f44336',
   }
 
   _handleKeyPress = (event) => {
@@ -82,6 +84,7 @@ class Input extends Component {
       hideUnderline,
       textarea,
       alignRight,
+      invalidUnderlineColor,
     } = this.props;
     const rootStyle = {
       fontWeight: 'inherit',
@@ -99,7 +102,7 @@ class Input extends Component {
       ...underlineStyle,
     };
     if (isInvalid) {
-      underlineStyles.borderColor = '#f44336';
+      underlineStyles.borderColor = invalidUnderlineColor;
     }
     const underlineFocusStyle = {...underlineStyles};
     if (hideUnderline) {

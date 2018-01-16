@@ -28,6 +28,6 @@ export default {
     portals: true,
     metrics: true,
     forecasts: true,
-    kubeWatcher: false
+    kubeWatcher: true
   }
 };

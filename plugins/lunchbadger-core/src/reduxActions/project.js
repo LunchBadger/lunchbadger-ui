@@ -2,9 +2,11 @@ import {actions} from './actions';
 import {addSystemDefcon1} from './systemDefcon1';
 import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
+import {updateEntitiesStatues} from './';
 
 export const loadFromServer = () => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(true));
+  dispatch(actions.setLoadedProject(false));
   const {onAppLoad} = getState().plugins;
   try {
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
@@ -21,6 +23,8 @@ export const loadFromServer = () => async (dispatch, getState) => {
     }
   }
   dispatch(actions.setLoadingProject(false));
+  dispatch(actions.setLoadedProject(true));
+  dispatch(updateEntitiesStatues());
 };
 
 export const saveToServer = () => async (dispatch, getState) => {

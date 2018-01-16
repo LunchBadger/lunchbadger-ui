@@ -49,7 +49,10 @@ class Entity extends PureComponent {
       highlighted,
       dragging,
       wip,
+      gray,
+      fake,
       invalid,
+      semitransparent,
       toolboxConfig,
       name,
       onNameChange,
@@ -66,9 +69,20 @@ class Entity extends PureComponent {
     const opacity = dragging ? 0.2 : 1;
     const {expanded} = this.state;
     const collapsed = !expanded;
+    const classNames = cs('Entity', type, connector, {
+      editable,
+      expanded,
+      collapsed,
+      highlighted,
+      dragging,
+      wip,
+      gray,
+      invalid,
+      semitransparent,
+    });
     return connectDragSource(connectDropTarget(
       <div
-        className={cs('Entity', type, connector, {editable, expanded, collapsed, highlighted, dragging, wip, invalid})}
+        className={classNames}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         style={{opacity}}
@@ -84,20 +98,22 @@ class Entity extends PureComponent {
             onNameBlur={onNameBlur}
             invalid={validations.data.name}
           />
-          <div className="Entity__data">
-            <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
-              <div className="Entity__extra" ref="data">
-                <EntityValidationErrors
-                  validations={validations}
-                  onFieldClick={onFieldClick}
-                />
-                {children}
-                <SmoothCollapse expanded={editable} heightTransition="800ms ease">
-                  <EntityActionButtons onCancel={onCancel} />
-                </SmoothCollapse>
-              </div>
-            </SmoothCollapse>
-          </div>
+          {!fake && (
+            <div className="Entity__data">
+              <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
+                <div className="Entity__extra" ref="data">
+                  <EntityValidationErrors
+                    validations={validations}
+                    onFieldClick={onFieldClick}
+                  />
+                  {children}
+                  <SmoothCollapse expanded={editable} heightTransition="800ms ease">
+                    <EntityActionButtons onCancel={onCancel} />
+                  </SmoothCollapse>
+                </div>
+              </SmoothCollapse>
+            </div>
+          )}
         </Form>
       </div>
     ));
@@ -124,6 +140,7 @@ Entity.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   connector: PropTypes.string,
+  semitransparent: PropTypes.bool,
 };
 
 export default Entity;

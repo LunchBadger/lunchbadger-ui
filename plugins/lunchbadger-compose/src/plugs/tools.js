@@ -11,6 +11,7 @@ const dataSources = [
   'MongoDB',
   'Redis',
   'MySQL',
+  'PostgreSQL',
   'Ethereum',
   'Salesforce',
 ];

@@ -13,6 +13,7 @@ import iconDataSourceEthereum from './icon-datasource-ethereum.svg';
 import iconDataSourceMemory from './icon-datasource-memory.svg';
 import iconDataSourceMongoDB from './icon-datasource-mongodb.svg';
 import iconDataSourceMySQL from './icon-datasource-mysql.svg';
+import iconDataSourcePostgreSQL from './icon-datasource-postgresql.svg';
 import iconDataSourceRedis from './icon-datasource-redis.svg';
 import iconDataSourceREST from './icon-datasource-rest.svg';
 import iconDataSourceSalesforce from './icon-datasource-salesforce.svg';
@@ -58,6 +59,7 @@ export {
   iconDataSourceMemory,
   iconDataSourceMongoDB,
   iconDataSourceMySQL,
+  iconDataSourcePostgreSQL,
   iconDataSourceRedis,
   iconDataSourceREST,
   iconDataSourceSalesforce,

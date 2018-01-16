@@ -1,6 +1,6 @@
 import ModelService from '../services/ModelService';
 
-const {storeUtils, actions: coreActions} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const addModelConfigsToConnections = response => (dispatch, getState) => {
@@ -11,7 +11,7 @@ export const addModelConfigsToConnections = response => (dispatch, getState) => 
       fromId: storeUtils.findEntityByName(state, 0, item.dataSource).id,
       toId: storeUtils.findEntityByName(state, 1, item.name).id,
     }));
-  dispatch(coreActions.addInitialConnections(connections));
+  dispatch(actionsCore.addInitialConnections(connections));
 }
 
 export const attach = info => async (dispatch, getState) => {

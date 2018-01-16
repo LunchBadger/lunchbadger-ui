@@ -14,7 +14,8 @@ const arraysToRegister = [
   'onSaveOrder',
   'onConnectionCreatedStrategy',
   'onConnectionMovedStrategy',
-  'onConnectionDeletedStrategy'
+  'onConnectionDeletedStrategy',
+  'onEntitiesStatusesChange',
 ];
 
 const objectsToRegister = [
@@ -26,7 +27,6 @@ const objectsToRegister = [
   'onValidate',
   'panelMenu',
   'models',
-  'onEntityStatusChange',
 ];
 
 const registerArrays = (plugins, plugs) => {

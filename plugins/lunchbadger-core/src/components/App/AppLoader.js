@@ -9,18 +9,19 @@ import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import paper from '../../utils/paper';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
-import {getUser} from '../../utils/auth';
-import {setEntitiesStatus} from '../../reduxActions';
+import {actions} from '../../reduxActions/actions';
+import {updateEntitiesStatues} from '../../reduxActions';
 import './AppLoader.scss';
 
 const envId = Config.get('envId');
+const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
 
 class AppLoader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loaded: false,
-      workspaceRunning: false,
+      workspaceRunning: !isKubeWatcherEnabled,
       error: null,
       workspaceError: false,
     };
@@ -31,8 +32,11 @@ class AppLoader extends Component {
   }
 
   componentDidMount() {
-    this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
-    this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
+    if (isKubeWatcherEnabled) {
+      this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
+      this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
+      this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
+    }
   }
 
   componentWillUnmount() {
@@ -43,29 +47,20 @@ class AppLoader extends Component {
   }
 
   onKubeWatcherData = (message) => {
-    const projectSlug = `-${getUser().profile.sub}-${envId}-`;
     const data = JSON.parse(message.data)[envId];
     let workspaceRunning = false;
     if (data.workspace) {
       workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
     }
     this.setState({workspaceRunning});
-    const entitiesData = {...data};
-    delete entitiesData.workspace;
-    const entitiesStatus = {};
-    Object.keys(entitiesData).forEach((entity) => {
-      entitiesStatus[entity] = {};
-      Object.keys(entitiesData[entity]).forEach((key) => {
-        const entitySlugArr = key.replace(`${entity}${projectSlug}`, '').split('-');
-        const entitySlugName = entitySlugArr.slice(0, entitySlugArr.length - 2).join('-');
-        entitiesStatus[entity][entitySlugName] = entitiesData[entity][key].status.running;
-      });
-    });
-    if (this.prevEntitiesStatus !== JSON.stringify(entitiesStatus)) {
-      this.prevEntitiesStatus = JSON.stringify(entitiesStatus);
-      this.props.dispatch(setEntitiesStatus(entitiesStatus));
+    if (this.prevMessage !== message.data) {
+      this.prevMessage = message.data;
+      this.props.dispatch(actions.setEntitiesStatuses(data));
+      this.props.dispatch(updateEntitiesStatues());
     }
   };
+
+  onKubeWatcherError = () => this.setState({workspaceRunning: false});
 
   load() {
     ConfigStoreService.upsertProject()

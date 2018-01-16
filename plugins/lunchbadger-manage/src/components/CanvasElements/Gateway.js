@@ -51,6 +51,16 @@ class Gateway extends Component {
     if (this.props.entity !== nextProps.entity) {
       this.onPropsUpdate(nextProps);
     }
+    if (!this.props.entity.deleting && nextProps.entity.deleting) {
+      const {paper: paperRef, store: {getState}} = this.context;
+      if (getState().loadingProject) return;
+      const paper = paperRef.getInstance();
+      (this.props.entity.pipelines || []).forEach(({id}) => {
+        const connectionsTo = Connections.search({toId: id});
+        const connectionsFrom = Connections.search({fromId: id});
+        [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
+      });
+    }
   }
 
   stateFromStores = props => {
@@ -200,6 +210,7 @@ class Gateway extends Component {
   );
 
   renderPipelinePorts = pipeline => {
+    const {entity: {deleting}} = this.props;
     const {ports, policies} = pipeline;
     const hasProxyPolicy = !!policies.find(item => item.name === GATEWAY_POLICIES.PROXY);
     return ports.map(port => (
@@ -209,7 +220,7 @@ class Gateway extends Component {
         elementId={port.id}
         middle={true}
         scope={hasProxyPolicy ? port.portGroup : port.id}
-        disabled={!hasProxyPolicy}
+        disabled={!hasProxyPolicy || deleting}
       />
     ));
   }

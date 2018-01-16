@@ -303,8 +303,9 @@ export default (ComposedComponent) => {
           multiEnvIndex={multiEnvIndex}
         />
       );
-      const {ready, isZoomDisabled} = entity;
-      const processing = !ready || !running;
+      const {ready, deleting, fake, isZoomDisabled} = entity;
+      const processing = !ready || !running || !!deleting;
+      const semitransparent = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
@@ -361,6 +362,9 @@ export default (ComposedComponent) => {
               highlighted={highlighted}
               dragging={isDragging}
               wip={processing}
+              gray={deleting}
+              fake={fake}
+              semitransparent={semitransparent}
               invalid={!validations.isValid}
               toolboxConfig={toolboxConfig}
               name={this.props.entity.name}
@@ -376,17 +380,19 @@ export default (ComposedComponent) => {
               connectDropTarget={connectDropTarget}
               isDelta={isDelta}
             >
-              <ComposedComponent
-                ref={(ref) => this.element = ref}
-                parent={this}
-                {...this.props}
-                {...this.state}
-                entity={multiEnvEntity}
-                entityDevelopment={entity}
-                onFieldUpdate={this.handleFieldUpdate}
-                onResetField={this.handleResetMultiEnvEntityField}
-                multiEnvIndex={multiEnvIndex}
-              />
+              {!fake && (
+                <ComposedComponent
+                  ref={(ref) => this.element = ref}
+                  parent={this}
+                  {...this.props}
+                  {...this.state}
+                  entity={multiEnvEntity}
+                  entityDevelopment={entity}
+                  onFieldUpdate={this.handleFieldUpdate}
+                  onResetField={this.handleResetMultiEnvEntityField}
+                  multiEnvIndex={multiEnvIndex}
+                />
+              )}
               {this.state.showRemovingModal && (
                 <TwoOptionModal
                   onClose={() => this.setState({showRemovingModal: false})}
@@ -421,29 +427,23 @@ export default (ComposedComponent) => {
     state => state.states.currentEditElement,
     state => !!state.states.currentlyOpenedPanel,
     (_, props) => props.entity,
-    state => state.entitiesStatus,
     (
       multiEnvironments,
       currentElement,
       currentEditElement,
       isPanelOpened,
       entity,
-      entitiesStatus,
     ) => {
-      const {id, name, loaded} = entity;
+      const {id, name, loaded, running: entityRunning} = entity;
+      const running = entityRunning === undefined ? true : entityRunning;
       const multiEnvIndex = multiEnvironments.selected;
       const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
       let multiEnvEntity = entity;
       if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
         multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
       }
-      let running = true;
-      const statuses = entitiesStatus[entity.constructor.type.toLowerCase()];
-      if (statuses && loaded) {
-        running = statuses[slug(name, {lower: true})] || false;
-      }
-      const highlighted = running && !!currentElement && currentElement.id === id;
-      const editable = running && !!currentEditElement && currentEditElement.id === id;
+      const highlighted = !!running && !!currentElement && currentElement.id === id;
+      const editable = !!running && !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,
         multiEnvDelta,

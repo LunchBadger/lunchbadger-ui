@@ -14,14 +14,14 @@ import {updateEntitiesStatues} from '../../reduxActions';
 import './AppLoader.scss';
 
 const envId = Config.get('envId');
-const isKubeWatcher = Config.get('features').kubeWatcher;
+const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
 
 class AppLoader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loaded: false,
-      workspaceRunning: !isKubeWatcher,
+      workspaceRunning: !isKubeWatcherEnabled,
       error: null,
       workspaceError: false,
     };
@@ -32,7 +32,7 @@ class AppLoader extends Component {
   }
 
   componentDidMount() {
-    if (isKubeWatcher) {
+    if (isKubeWatcherEnabled) {
       this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
       this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
       this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
@@ -53,9 +53,8 @@ class AppLoader extends Component {
       workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
     }
     this.setState({workspaceRunning});
-    const dataStr = JSON.stringify(data);
-    if (this.prevEntitiesStatus !== dataStr) {
-      this.prevEntitiesStatus = dataStr;
+    if (this.prevMessage !== message.data) {
+      this.prevMessage = message.data;
       this.props.dispatch(actions.setEntitiesStatuses(data));
       this.props.dispatch(updateEntitiesStatues());
     }

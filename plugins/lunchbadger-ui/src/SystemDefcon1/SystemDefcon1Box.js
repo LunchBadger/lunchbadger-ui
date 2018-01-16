@@ -70,7 +70,7 @@ class SystemDefcon1Box extends Component {
               </div>
               <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
                 <div className="SystemDefcon1__box__content__details--box">
-                  {errors.map((item, idx) => (
+                  {errors.map(({error: item}, idx) => (
                     <div key={idx}>
                       <h3>
                         Error {idx + 1}

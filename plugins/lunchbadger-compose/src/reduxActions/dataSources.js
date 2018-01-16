@@ -3,7 +3,7 @@ import {DataSourceService, ModelService} from '../services';
 import DataSource from '../models/DataSource';
 import Model from '../models/Model';
 
-const {storeUtils, actions: coreActions} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = (name, connector) => (dispatch, getState) => {
@@ -22,7 +22,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   let updatedEntity;
   if (index > 0) {
     updatedEntity = DataSource.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;

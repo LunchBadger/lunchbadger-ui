@@ -59,7 +59,7 @@ class WorkspaceStatus extends Component {
     if (status.status === 'running') {
       this.props.dispatch(clearSystemDefcon1());
     } else if (status.status === 'crashed') {
-      this.props.dispatch(addSystemDefcon1(status.output));
+      this.props.dispatch(addSystemDefcon1(status.output, 'workspace'));
     }
   }
 

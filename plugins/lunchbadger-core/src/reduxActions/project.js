@@ -1,4 +1,5 @@
 import {actions} from './actions';
+import {addSystemDefcon1} from './systemDefcon1';
 import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
 import {updateEntitiesStatues} from './';
@@ -18,7 +19,7 @@ export const loadFromServer = () => async (dispatch, getState) => {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(actions.addSystemDefcon1(err));
+      dispatch(addSystemDefcon1(err));
     }
   }
   dispatch(actions.setLoadingProject(false));
@@ -35,7 +36,7 @@ export const saveToServer = () => async (dispatch, getState) => {
     try {
       await Promise.all(onSaves.map(item => item.onSave(state)));
     } catch (err) {
-      dispatch(actions.addSystemDefcon1(err));
+      dispatch(addSystemDefcon1(err));
     }
   }
   const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
@@ -45,7 +46,7 @@ export const saveToServer = () => async (dispatch, getState) => {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(actions.addSystemDefcon1(err));
+      dispatch(addSystemDefcon1(err));
     }
   }
   dispatch(actions.addSystemInformationMessage({
@@ -63,7 +64,7 @@ export const clearServer = () => async (dispatch) => {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(actions.addSystemDefcon1(err));
+      dispatch(addSystemDefcon1(err));
     }
   }
   dispatch(actions.addSystemInformationMessage({

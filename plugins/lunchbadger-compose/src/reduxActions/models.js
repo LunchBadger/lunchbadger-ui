@@ -84,30 +84,19 @@ export const update = (entity, model) => async (dispatch, getState) => {
     // await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (err) {
-    dispatch(actionsCore.addSystemDefcon1(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 };
 
-// export const addProperty = modelId => (dispatch, getState) => {
-//   const props = {...getState().entities.models[modelId]};
-//   props.properties = [...props.properties, ModelProperty.create()];
-//   const entity = Model.create(props);
-//   dispatch(actions.updateModelSuccess({entity}));
-// }
-
 export const remove = (entity, action = 'removeModel') => async (dispatch) => {
-  const isAutoSave = entity.loaded && action === 'removeModel';
   try {
     dispatch(actions[action](entity));
     if (entity.loaded) {
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
     }
-    if (isAutoSave) {
-      // await dispatch(coreActions.saveToServer());
-    }
   } catch (err) {
-    dispatch(actionsCore.addSystemDefcon1(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 };
 
@@ -126,7 +115,7 @@ export const saveOrder = orderedIds => async (dispatch, getState) => {
     try {
       await ModelService.upsert(reordered);
     } catch (err) {
-      dispatch(actionsCore.addSystemDefcon1(err));
+      dispatch(coreActions.addSystemDefcon1(err));
     }
   }
 };
@@ -145,7 +134,7 @@ export const bundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateModelBundled(updatedModel));
     dispatch(actions.removeModel(updatedModel));
   } catch (err) {
-    dispatch(actionsCore.addSystemDefcon1(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 };
 
@@ -163,7 +152,7 @@ export const unbundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateModel(updatedModel));
     dispatch(actions.removeModelBundled(updatedModel));
   } catch (err) {
-    dispatch(actionsCore.addSystemDefcon1(err));
+    dispatch(coreActions.addSystemDefcon1(err));
   }
 }
 

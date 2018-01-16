@@ -17,7 +17,7 @@ import ForecastPlans from './Subelements/ForecastPlans';
 import ForecastResizeHandle from './Subelements/ForecastResizeHandle';
 import './APIForecast.scss';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions} = LunchBadgerCore.utils;
 
 const boxSource = {
   beginDrag(props) {

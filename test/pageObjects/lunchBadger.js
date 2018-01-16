@@ -9,9 +9,7 @@ var pageCommands = {
     this.setValueSlow('.input__login input', 'demo');
     this.setValueSlow('.input__password input', 'Demo User');
     this.submitForm('.FakeLogin__form form');
-    this.waitForElementVisible('.app', 5000);
-    this.waitForElementVisible('.spinner__overlay', 5000);
-    this.waitForElementNotPresent('.spinner__overlay', 60000);
+    this.projectLoaded();
     return page;
   },
 
@@ -31,6 +29,22 @@ var pageCommands = {
       fs.writeFileSync(`coverage/coverage-${response.sessionId}.json`,
                        JSON.stringify(response.value));
     }).end();
+  },
+
+  refreshPage: function (cb) {
+    var projectLoaded = this.projectLoaded.bind(this);
+    this.api.refresh(function () {
+      projectLoaded();
+      cb && cb();
+    });
+  },
+
+  projectLoaded: function () {
+    this.waitForElementVisible('.app', 5000);
+    this.waitForElementVisible('.app__loading-message', 5000);
+    this.waitForElementNotPresent('.app__loading-message', 60000);
+    this.waitForElementVisible('.spinner__overlay', 5000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
   },
 
   addElementFromTooltip: function (entity, option) {
@@ -176,8 +190,6 @@ var pageCommands = {
 
   checkEntities: function (dataSources = '', models = '', contextPaths) {
     contextPaths = contextPaths || models.toLowerCase();
-    this.expect.element('.Aside.disabled').to.not.be.present;
-    this.expect.element('.canvas__container--editing').to.not.be.present;
     if (dataSources === '') {
       this.waitForElementNotPresent(this.getDataSourceSelector(1), 5000);
     } else {

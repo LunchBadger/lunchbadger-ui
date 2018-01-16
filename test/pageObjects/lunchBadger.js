@@ -7,8 +7,11 @@ var pageCommands = {
     this.api.resizeWindow(1920, 1080);
     this.waitForElementVisible('.FakeLogin', 5000);
     this.setValueSlow('.input__login input', 'demo');
+    this.setValueSlow('.input__password input', 'Demo User');
     this.submitForm('.FakeLogin__form form');
-    this.waitForElementVisible('.app', 45000);
+    this.waitForElementVisible('.app', 5000);
+    this.waitForElementVisible('.spinner__overlay', 5000);
+    this.waitForElementNotPresent('.spinner__overlay', 5000);
     return page;
   },
 

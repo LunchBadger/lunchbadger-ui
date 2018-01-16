@@ -32,13 +32,18 @@
     }
   }
   &.wip {
-    opacity: .4 !important;
     pointer-events: none !important;
     z-index: 15;
     .canvas-element__extra {
       // max-height: 0;
       visibility: hidden;
     }
+  }
+  &.semitransparent {
+    opacity: .4 !important;
+  }
+  &.gray {
+    filter: grayscale(1);
   }
   &.highlighted {
     color: rgb(65, 144, 206);

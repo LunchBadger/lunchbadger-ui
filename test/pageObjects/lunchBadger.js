@@ -11,7 +11,7 @@ var pageCommands = {
     this.submitForm('.FakeLogin__form form');
     this.waitForElementVisible('.app', 5000);
     this.waitForElementVisible('.spinner__overlay', 5000);
-    this.waitForElementNotPresent('.spinner__overlay', 5000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
     return page;
   },
 

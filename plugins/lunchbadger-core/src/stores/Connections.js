@@ -12,6 +12,10 @@ class Connections {
   //   autorun(() => console.log(this.report));
   // }
 
+  @action removeConnections() {
+    this.connections = [];
+  }
+
   @action includeConnection(connection) {
     this.connections.push(connection);
     const {fromId, toId} = connection;

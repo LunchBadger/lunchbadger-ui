@@ -40,11 +40,16 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: entity.loaded, ready: false});
+  updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: true, ready: false});
+  if (!entity.loaded) {
+    updatedEntity.running = null;
+  }
+  if (isNameChange) {
+    updatedEntity.running = false;
+  }
   dispatch(actions.updateGateway(updatedEntity));
   if (isAutoSave) {
     await dispatch(coreActions.saveToServer());
-    dispatch(actions.addGatewayStatus(model.name));
   }
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
@@ -55,13 +60,15 @@ export const update = (entity, model) => async (dispatch, getState) => {
 
 export const remove = entity => async (dispatch) => {
   const isAutoSave = entity.loaded;
-  entity.pipelines.forEach(({id}) => {
-    Connections.removeConnection(id);
-    Connections.removeConnection(null, id);
-  });
-  dispatch(actions.removeGateway(entity));
   if (isAutoSave) {
-    // await dispatch(coreActions.saveToServer());
+    const updatedEntity = entity.recreate();
+    updatedEntity.deleting = true;
+    const itemName = `gateway-${slug(entity.name, {lower: true})}`;
+    localStorage.setItem(itemName, JSON.stringify(updatedEntity.toJSON()));
+    dispatch(actions.updateGateway(updatedEntity));
+    await dispatch(coreActions.saveToServer());
+  } else {
+    dispatch(actions.removeGateway(entity));
   }
 };
 
@@ -120,38 +127,3 @@ export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (
     });
   dispatch(actions.updateGateway(gateway));
 };
-
-export const onEntityStatusChange = (statuses) => (dispatch, getState) => {
-  const {gateways, gatewayStatuses} = getState().entities;
-  const messages = [];
-  Object.keys(statuses).forEach((name) => {
-    let message;
-    if (gatewayStatuses[name] === null && statuses[name] === true) {
-      message = 'successfully deployed';
-    }
-    if (gatewayStatuses[name] === false && statuses[name] === true) {
-      message = 'is running';
-    }
-    if (gatewayStatuses[name] === true && statuses[name] === false) {
-      message = 'is not running';
-    }
-    if (message) {
-      messages.push({name, message});
-    }
-  });
-  if (messages.length > 0) {
-    const names = Object.values(gateways).reduce((map, {name}) => ({...map, [slug(name, {lower: true})]: name}), {});
-    messages.forEach(({name, message}) => {
-      dispatch(actionsCore.addSystemInformationMessage({
-        type: 'success',
-        message: (
-          <span>
-            <strong>{names[name]}</strong>
-            {' '}
-            {message}
-          </span>
-        ),
-      }));
-    });
-  }
-}

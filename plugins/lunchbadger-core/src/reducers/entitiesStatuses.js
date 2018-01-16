@@ -1,12 +1,8 @@
 import {actionTypes} from '../reduxActions/actions';
 
-const initialState = {
-  gateway: {},
-};
-
-export default (state = initialState, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
-    case actionTypes.setEntitiesStatus:
+    case actionTypes.setEntitiesStatuses:
       return action.payload;
     default:
       return state;

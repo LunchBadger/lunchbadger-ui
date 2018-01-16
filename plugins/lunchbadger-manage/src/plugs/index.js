@@ -9,7 +9,7 @@ import onSaveOrder from './onSaveOrder';
 import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
 import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
-import onEntityStatusChange from './onEntityStatusChange';
+import onEntitiesStatusesChange from './onEntitiesStatusesChange';
 
 export default {
   tools,
@@ -23,5 +23,5 @@ export default {
   onConnectionCreatedStrategy,
   onConnectionDeletedStrategy,
   onConnectionMovedStrategy,
-  onEntityStatusChange,
+  onEntitiesStatusesChange,
 };

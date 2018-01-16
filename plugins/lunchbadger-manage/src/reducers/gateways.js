@@ -1,3 +1,4 @@
+import slug from 'slug';
 import Gateway from '../models/Gateway';
 import {actionTypes} from '../reduxActions/actions';
 import Pipeline from '../models/Pipeline';
@@ -9,6 +10,9 @@ export default (state = {}, action) => {
   switch (action.type) {
     case coreActionTypes.onLoadProject:
       return action.payload.body.gateways.reduce((map, item) => {
+        delete item.running;
+        delete item.fake;
+        delete item.deleting;
         map[item.id] = Gateway.create(item);
         return map;
       }, {});
@@ -24,7 +28,15 @@ export default (state = {}, action) => {
       delete newState[action.payload.id];
       return newState;
     case coreActionTypes.clearProject:
-      return {};
+      if (action.payload) return {};
+      Object.keys(newState).forEach((key) => {
+        newState[key] = Gateway.create(newState[key]);
+        newState[key].deleting = true;
+        if (!newState[key].fake) {
+          localStorage.setItem(`gateway-${slug(newState[key].name, {lower: true})}`, JSON.stringify(newState[key]));
+        }
+      });
+      return newState;
     case actionTypes.addPipeline:
       newState[action.payload].pipelines = [
         ...newState[action.payload].pipelines,

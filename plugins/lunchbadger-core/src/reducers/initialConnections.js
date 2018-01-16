@@ -19,6 +19,7 @@ export default (state = [], action) => {
       Connections.removeConnection(null, id);
       return state;
     case actionTypes.clearProject:
+      Connections.removeConnections();
       return [];
     default:
       return state;

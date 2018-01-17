@@ -13,7 +13,7 @@ module.exports = {
     page.waitForElementNotPresent(page.getApiEndpointSelector(1) + ' .paths0', 5000);
     page.saveProject();
 
-    page.refreshPage(function () {
+    page.refresh(function () {
       page.checkEntities();
       page.expect.element(page.getApiEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ApiEndpoint');
       page.expect.element(page.getApiEndpointSelector(1) + ' .host .EntityProperty__field--text').text.to.equal('*');
@@ -34,7 +34,7 @@ module.exports = {
       page.waitForElementNotPresent(page.getApiEndpointSelector(1) + ' .paths2', 5000);
       page.saveProject();
 
-      page.refreshPage(function () {
+      page.refresh(function () {
         page.checkEntities();
         page.expect.element(page.getApiEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
         page.expect.element(page.getApiEndpointSelector(1) + ' .host .EntityProperty__field--text').text.to.equal('*.cars.com');
@@ -51,7 +51,7 @@ module.exports = {
         page.waitForElementNotPresent(page.getApiEndpointSelector(1) + ' .paths1', 5000);
         page.saveProject();
 
-        page.refreshPage(function () {
+        page.refresh(function () {
           page.checkEntities();
           page.expect.element(page.getApiEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
           page.expect.element(page.getApiEndpointSelector(1) + ' .host .EntityProperty__field--text').text.to.equal('*.cars.com');

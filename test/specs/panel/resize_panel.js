@@ -3,17 +3,13 @@ module.exports = {
   'Panel: resize': function (browser) {
     var page = browser.page.lunchBadger();
     var panelHeight = 0;
-
     page.open();
-
-    page.click('@forecaster');
+    page.click('@settings');
     browser.pause(3000);
-
-    page.getElementSize('@forecasterPanel', function (result) {
+    page.getElementSize('@settingsPanel', function (result) {
       page.assert.notEqual(result.value.height, 0);
       panelHeight = result.value.height;
     });
-
     browser
       .pause(500)
       .useCss()
@@ -22,29 +18,22 @@ module.exports = {
       .moveToElement('body', 0, 150)
       .mouseButtonUp(0)
       .pause(500);
-
-    page.getElementSize('@forecasterPanel', function (result) {
+    page.getElementSize('@settingsPanel', function (result) {
       page.assert.notEqual(result.value.height, panelHeight);
       panelHeight = result.value.height;
     });
-
-    page.click('@forecaster');
+    page.click('@settings');
     browser.pause(3000);
-
-    page.getElementSize('@forecasterPanel', function (result) {
+    page.getElementSize('@settingsPanel', function (result) {
       page.assert.equal(result.value.height, 0);
     });
-
-    page.click('@forecaster');
+    page.click('@settings');
     browser.pause(3000);
-
-    page.getElementSize('@forecasterPanel', function (result) {
+    page.getElementSize('@settingsPanel', function (result) {
       page.assert.equal(result.value.height, panelHeight);
     });
-
-    page.click('@forecaster');
+    page.click('@settings');
     browser.pause(3000);
-
     page.close();
   }
 };

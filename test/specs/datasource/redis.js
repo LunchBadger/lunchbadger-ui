@@ -6,7 +6,7 @@ module.exports = {
     page.testDatasource('redis', [
       ['HOST', 'dumpHost'],
       ['PORT', '8888'],
-      ['DATABASE', 'dumpDatabase'],
+      ['NAMESPACE', 'dumpNamespace'],
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
     ]);

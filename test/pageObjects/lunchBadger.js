@@ -31,7 +31,7 @@ var pageCommands = {
     }).end();
   },
 
-  refreshPage: function (cb) {
+  refresh: function (cb) {
     var projectLoaded = this.projectLoaded.bind(this);
     this.api.refresh(function () {
       projectLoaded();
@@ -75,20 +75,20 @@ var pageCommands = {
   },
 
   selectValueSlow: function (selector, select, value) {
-    this.waitForElementPresent(selector, 500-0);
+    this.waitForElementPresent(selector, 500);
     this.click(selector + ` .select__${select}`);
     this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
     this.api.pause(2000);
     this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
       this.click(`div[role=menu] .${select}__${value}`);
     });
-    this.api.pause(1000);
+    this.waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
   },
 
   editEntity: function (selector) {
     this.click(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
-    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -15, function() {
+    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -10, function() {
       this.click(selector + '.highlighted .Toolbox__button--edit');
       this.waitForElementPresent(selector + '.editable', 50000);
       this.waitForElementVisible(selector + ' .input__name input', 50000);
@@ -140,8 +140,8 @@ var pageCommands = {
 
   removeEntity: function (selector) {
     this.click(selector);
-    this.waitForElementPresent(selector + ' > .Toolbox .Toolbox__button--delete', 5000);
-    this.click(selector + ' > .Toolbox .Toolbox__button--delete');
+    this.waitForElementPresent(selector + ' .Entity > .Toolbox .Toolbox__button--delete', 5000);
+    this.click(selector + ' .Entity > .Toolbox .Toolbox__button--delete');
     this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
     this.click('.SystemDefcon1 .confirm');
     this.waitForElementNotPresent(selector, 5000);
@@ -241,7 +241,7 @@ var pageCommands = {
   },
 
   getDataSourceSelector: function (nth) {
-    return '.canvas__container .quadrant:first-child .quadrant__body .Entity.DataSource:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:first-child .quadrant__body .CanvasElement.DataSource:nth-child(' + nth + ')';
   },
 
   getDataSourceFieldSelector: function (nthEntity, nthProperty) {
@@ -249,23 +249,23 @@ var pageCommands = {
   },
 
   getModelSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.Model:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Model:nth-child(' + nth + ')';
   },
 
   getGatewaySelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .Entity.Gateway:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .CanvasElement.Gateway:nth-child(' + nth + ')';
   },
 
   getApiSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.API:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.API:nth-child(' + nth + ')';
   },
 
   getServiceEndpointSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.ServiceEndpoint:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.ServiceEndpoint:nth-child(' + nth + ')';
   },
 
   getApiEndpointSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.ApiEndpoint:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.ApiEndpoint:nth-child(' + nth + ')';
   },
 
   saveProject: function () {
@@ -317,11 +317,11 @@ module.exports = {
     forecasterPanel: {
       selector: '.panel__container.ForecastsPanel'
     },
-    details: {
-      selector: '.header__menu__element .header__menu__link.DETAILS_PANEL'
+    settings: {
+      selector: '.header__menu__element .header__menu__link.SETTINGS_PANEL'
     },
-    detailsPanel: {
-      selector: '.panel__container.DetailsPanel'
+    settingsPanel: {
+      selector: '.panel__container.SettingsPanel'
     }
   }
 };

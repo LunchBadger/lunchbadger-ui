@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import slug from 'slug';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
 import './ContextualInformationMessage.scss';
@@ -47,6 +48,8 @@ export default class ContextualInformationMessage extends PureComponent {
           mouseEnterDelay={0.5}
           transitionName="rc-tooltip-zoom"
           overlayStyle={overlayStyle}
+          overlayClassName={cs('ContextualInformationMessage', slug(tooltip))}
+          destroyTooltipOnHide
         >
           {children}
         </Tooltip>

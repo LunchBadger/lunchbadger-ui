@@ -109,33 +109,35 @@ var pageCommands = {
     // });
     this.api.pause(500);
     // this.waitForElementPresent(selector + '.wip', 5000);
-    this.waitForElementNotPresent(selector + '.wip', 60000);
+    this.waitForElementNotPresent(selector + '.wip', 120000);
     this.waitForElementNotPresent('.Aside.disabled', 5000);
     this.waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
   submitDetailsPanel: function (selector) {
-    this.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
-    this.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
-      this.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
+    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit', 5000);
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .submit');
     });
-    this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
+    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
-    this.waitForElementNotPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.waitForElementPresent(selector, 5000);
     this.click(selector);
-    this.waitForElementPresent(selector + '.highlighted', 5000);
-    this.click('@details');
-    this.api.pause(2000);
+    this.waitForElementPresent(selector + '.highlighted .Toolbox__button--zoom', 50000);
+    this.moveToElement(selector + '.highlighted .Toolbox__button--zoom', 5, -10, function() {
+      this.click(selector + '.highlighted .Toolbox__button--zoom');
+      this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
+    });
   },
 
   closeDetailsPanel: function () {
-    this.click('@details');
-    this.api.pause(2000);
+    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .cancel', 5000);
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .cancel', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .cancel');
+    });
+    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
   },
 
   removeEntity: function (selector) {
@@ -276,6 +278,8 @@ var pageCommands = {
 
   clearProject: function () {
     this.click('.header__menu__element .fa-trash-o');
+    this.waitForElementPresent('.SystemDefcon1 .ConfirmModal .confirm', 5000);
+    this.click('.SystemDefcon1 .ConfirmModal .confirm');
     this.waitForElementPresent('.spinner__overlay', 5000);
   },
 

@@ -81,10 +81,13 @@ var pageCommands = {
   },
 
   selectValueSlow: function (selector, select, value) {
-    this.waitForElementPresent(selector, 500);
-    this.click(selector + ` .select__${select}`);
+    this.api.pause(1000);
+    this.waitForElementPresent(selector + ` .select__${select}`, 500);
+    this.moveToElement(selector + ` .select__${select}`, 5, 5, function() {
+      this.click(selector + ` .select__${select}`);
+    });
     this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
-    this.api.pause(5000);
+    this.api.pause(3000);
     this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
       this.click(`div[role=menu] .${select}__${value}`);
     });

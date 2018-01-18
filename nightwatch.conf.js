@@ -1,4 +1,4 @@
-const exec = require('child_process').exec;
+var exec = require('child_process').exec;
 
 var phantomCapabilities = {
   "browserName": "phantomjs",

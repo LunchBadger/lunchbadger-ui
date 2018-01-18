@@ -17,6 +17,7 @@ import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1} fr
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
+import Deb from './Deb';
 import './App.scss';
 
 @DragDropContext(HTML5Backend)
@@ -110,6 +111,7 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
+          <Deb />
         </div>
       </Provider>
     );

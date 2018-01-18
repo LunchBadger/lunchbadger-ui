@@ -65,20 +65,26 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
+    var str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
-      for (let c in result.value) {
+      for (let i in result.value.toString()) {
         this.setValue(selector, this.Keys.BACK_SPACE);
       }
     });
-    this.setValue(selector, value);
+    for (let i in str) {
+      this.setValue(selector, str[i].toString());
+      this.api.pause(100);
+    }
+    this.api.pause(500);
+    this.expect.element(selector).value.to.equal(str);
   },
 
   selectValueSlow: function (selector, select, value) {
     this.waitForElementPresent(selector, 500);
     this.click(selector + ` .select__${select}`);
     this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
-    this.api.pause(2000);
+    this.api.pause(5000);
     this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
       this.click(`div[role=menu] .${select}__${value}`);
     });
@@ -163,24 +169,16 @@ var pageCommands = {
       .pause(500);
   },
 
-  discardDetailsPanelChanges: function () {
-    this.waitForElementPresent('.header .canvas-overlay', 5000);
-    this.click('.header .canvas-overlay');
-    this.waitForElementPresent('.SystemDefcon1 .discard', 5000);
-    this.click('.SystemDefcon1 .discard');
-    this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
-    this.api.pause(3000);
+  discardDetailsPanelChanges: function (selector) {
+    this.closeDetailsPanel();
+    this.api.pause(2000);
+    this.openEntityInDetailsPanel(selector);
   },
 
   confirmDetailsPanelChanges: function (selector) {
-    this.waitForElementPresent('.header .canvas-overlay', 5000);
-    this.click('.header .canvas-overlay');
-    this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
-    this.click('.SystemDefcon1 .confirm');
-    this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
-    this.waitForElementNotPresent(selector + '.wip', 60000);
-    this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
+    this.submitDetailsPanel(selector);
+    this.api.pause(2000);
+    this.openEntityInDetailsPanel(selector);
   },
 
   waitUntilWorkspaceLoaded: function() {

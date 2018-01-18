@@ -60,16 +60,20 @@ class Connections {
       newTargetId,
       newTargetEndpoint,
     } = info;
-    const {element: {parentElement: {classList: source}}} = newSourceEndpoint;
-    const {element: {parentElement: {classList: target}}} = newTargetEndpoint;
     let currentConnectionIndex = this.findEntityIndexBySourceAndTarget(originalSourceId, originalTargetId);
     if (currentConnectionIndex > -1) {
       this.deleteConnection(currentConnectionIndex);
+      if (!newSourceEndpoint || !newTargetEndpoint) {
+        this.addConnection(newSourceId, newTargetId, info);
+        return;
+      }
     }
     currentConnectionIndex = this.findEntityIndexBySourceAndTarget(originalTargetId, originalSourceId);
     if (currentConnectionIndex > -1) {
       this.deleteConnection(currentConnectionIndex);
     }
+    const {element: {parentElement: {classList: source}}} = newSourceEndpoint;
+    const {element: {parentElement: {classList: target}}} = newTargetEndpoint;
     let flip = false;
     if (source.contains('port-in')) {
       if (!(source.contains('port-Function') && target.contains('port-Model'))) {
@@ -160,7 +164,7 @@ class Connections {
         .filter(({fromId, info: {source, newSourceEndpoint, target, newTargetEndpoint}}) => {
           const sourceEndpoint = newSourceEndpoint ? newSourceEndpoint.element : source;
           const targetEndpoint = newTargetEndpoint ? newTargetEndpoint.element : target;
-          if (!sourceEndpoint || !targetEndpoint) return false;
+          if (!sourceEndpoint || !targetEndpoint) return !!_.find(this.connections, {fromId: id});
           const sc = sourceEndpoint.parentElement.classList;
           const tc = targetEndpoint.parentElement.classList;
           return ((fromId === id && sc.contains('port-out') && tc.contains('port-in'))
@@ -174,7 +178,7 @@ class Connections {
         .filter(({toId, info: {source, newSourceEndpoint, target, newTargetEndpoint}}) => {
           const sourceEndpoint = newSourceEndpoint ? newSourceEndpoint.element : source;
           const targetEndpoint = newTargetEndpoint ? newTargetEndpoint.element : target;
-          if (!sourceEndpoint || !targetEndpoint) return false;
+          if (!sourceEndpoint || !targetEndpoint) return !!_.find(this.connections, {toId: id});
           const sc = sourceEndpoint.parentElement.classList;
           const tc = targetEndpoint.parentElement.classList;
           return ((toId === id && sc.contains('port-out') && tc.contains('port-in'))

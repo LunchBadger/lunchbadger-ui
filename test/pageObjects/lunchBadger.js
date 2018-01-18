@@ -1,5 +1,5 @@
-const fs = require('fs');
-let notifiedCoverage = false;
+var fs = require('fs');
+var notifiedCoverage = false;
 
 var pageCommands = {
   open: function () {
@@ -68,11 +68,11 @@ var pageCommands = {
     var str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
-      for (let i in result.value.toString()) {
+      for (var i in result.value.toString()) {
         this.setValue(selector, this.Keys.BACK_SPACE);
       }
     });
-    for (let i in str) {
+    for (var i in str) {
       this.setValue(selector, str[i].toString());
       this.api.pause(100);
     }

@@ -7,13 +7,13 @@ const {Connections} = LunchBadgerCore.stores;
 const checkConnection = (info) => (_, getState) => {
   const {sourceId, targetId} = info;
   const state = getState();
-  if (findEntity(state, 1, targetId).constructor.type === 'Function') return null;
+  if (findEntity(state, 1, targetId).constructor.type === 'Function_') return null;
   const isBackend = isInQuadrant(state, 0, sourceId);
   const isPrivate = isInQuadrant(state, 1, targetId);
   if (isBackend && isPrivate) {
     const conns = Connections
       .search({toId: formatId(targetId)})
-      .filter(({info: {source}}) => !source.parentElement.classList.contains('port-Function'));
+      .filter(({info: {source}}) => !source.parentElement.classList.contains('port-Function_'));
     return !conns.length;
   }
   return null;

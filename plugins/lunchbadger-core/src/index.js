@@ -1,4 +1,3 @@
-window.deb('CORE');
 // stores
 import Connections from './stores/Connections';
 
@@ -176,7 +175,7 @@ let LunchBadgerCore = {
     ],
     defaultEntityNames: {
       Model: 'NewModel',
-      Function: 'Function',
+      Function_: 'Function',
     },
     messages,
     checkFields,

@@ -54,7 +54,6 @@ const registerObjects = (plugins, plugs) => {
 }
 
 export const registerPlugin = (_entities, plugs, _reducers = {}) => {
-  window.deb('REG PLUGIN');
   entities = {
     ...entities,
     ..._entities

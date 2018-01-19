@@ -76,11 +76,11 @@ class Connections {
     const {element: {parentElement: {classList: target}}} = newTargetEndpoint;
     let flip = false;
     if (source.contains('port-in')) {
-      if (!(source.contains('port-Function') && target.contains('port-Model'))) {
+      if (!(source.contains('port-Function_') && target.contains('port-Model'))) {
         flip = true;
       }
     }
-    if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function')) {
+    if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function_')) {
       flip = true;
     }
     const sourceId = flip ? newTargetId : newSourceId;
@@ -168,7 +168,7 @@ class Connections {
           const sc = sourceEndpoint.parentElement.classList;
           const tc = targetEndpoint.parentElement.classList;
           return ((fromId === id && sc.contains('port-out') && tc.contains('port-in'))
-            || (sc.contains('port-out') && tc.contains('port-out') && sc.contains('port-Function') && tc.contains('port-Model')));
+            || (sc.contains('port-out') && tc.contains('port-out') && sc.contains('port-Function_') && tc.contains('port-Model')));
         });
       return conns.length > 0;
     }
@@ -182,7 +182,7 @@ class Connections {
           const sc = sourceEndpoint.parentElement.classList;
           const tc = targetEndpoint.parentElement.classList;
           return ((toId === id && sc.contains('port-out') && tc.contains('port-in'))
-            || (sc.contains('port-in') && tc.contains('port-in') && sc.contains('port-Function') && tc.contains('port-Model')));
+            || (sc.contains('port-in') && tc.contains('port-in') && sc.contains('port-Function_') && tc.contains('port-Model')));
         });
       return conns.length > 0;
     }

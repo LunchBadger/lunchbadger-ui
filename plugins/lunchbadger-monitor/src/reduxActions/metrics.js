@@ -5,7 +5,7 @@ import MetricFunction from '../models/MetricFunction';
 import {actions} from './actions';
 
 export const create = (entity, left, top) => (dispatch) => {
-  if (entity.constructor.type === 'Function') {
+  if (entity.constructor.type === 'Function_') {
     return dispatch(actions.updateMetric(
       MetricFunction.create({
         entityId: entity.id,

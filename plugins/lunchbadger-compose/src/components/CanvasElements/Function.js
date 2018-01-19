@@ -11,7 +11,7 @@ import './Function.scss';
 const Port = LunchBadgerCore.components.Port;
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 
-class Function extends Component {
+class Function_ extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
   };
@@ -123,4 +123,4 @@ class Function extends Component {
   }
 }
 
-export default CanvasElement(Function);
+export default CanvasElement(Function_);

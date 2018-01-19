@@ -8,33 +8,10 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,700' rel='stylesheet' type='text/css'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="shortcut icon" href="/favicon.ico" />
-  <script>
-    function _deb (txt) {
-      var el = document.getElementById('deb');
-      var text = el.innerHTML + ' | ' + txt;
-      el.innerHTML = text;
-    }
-    window.deb = _deb;
-  </script>
-  <style>
-    .deb {
-      position: fixed;
-      z-index: 99999;
-      background-color: #800;
-      color: #FFF;
-      font-size: 12px;
-      font-family: courier;
-      font-weight: normal;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 2px;
-    }
-  </style>
 </head>
 <body>
   <div id="app"></div>
-  <div id="deb" class="deb"></div>
+
   <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.1/es6-shim.min.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>

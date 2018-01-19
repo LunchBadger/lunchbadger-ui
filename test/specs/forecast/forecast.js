@@ -6,7 +6,7 @@ var apiForecastSelector = forecasterSelector + ' .api-forecast';
 var moment = require('moment');
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   before: function (browser) {
     page = browser.page.lunchBadger();
 

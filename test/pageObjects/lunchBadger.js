@@ -43,7 +43,7 @@ var pageCommands = {
     this.waitForElementVisible('.app', 5000);
     this.waitForElementVisible('.app__loading-message', 5000);
     this.waitForElementNotPresent('.app__loading-message', 60000);
-    this.waitForElementVisible('.spinner__overlay', 5000);
+    // this.waitForElementVisible('.spinner__overlay', 5000);
     this.waitForElementNotPresent('.spinner__overlay', 60000);
   },
 

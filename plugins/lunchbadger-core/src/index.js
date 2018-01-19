@@ -1,3 +1,4 @@
+window.deb('CORE');
 // stores
 import Connections from './stores/Connections';
 

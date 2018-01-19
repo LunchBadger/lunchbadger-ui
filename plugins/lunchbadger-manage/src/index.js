@@ -1,3 +1,4 @@
+window.deb('MANAGE');
 import {actions} from './reduxActions/actions';
 import ApiEndpoint from './models/ApiEndpoint';
 import ApiEndpointComponent from './components/CanvasElements/ApiEndpoint';
@@ -18,6 +19,11 @@ const LunchBadgerManage = {
     actions,
   },
 };
+
+window.deb('manage: ' + typeof registerPlugin);
+window.deb('manage: ' + Object.keys(reducers).join(', '));
+window.deb('manage: ' + Object.keys(plugs).join(', '));
+window.deb('manage: ' + Object.values(plugs.tools).map(t => t.map(({name}) => name)).join(', '));
 
 if (!global.exports && !global.module && (!global.define || !global.define.amd)) {
   global.LunchBadgerManage = LunchBadgerManage;

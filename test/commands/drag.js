@@ -24,7 +24,7 @@ exports.command = function (dragTarget, dropTarget) {
 };
 
 // helper function to create drag mock (if not already created)
-var init = function (client) {
+const init = function (client) {
   return client.execute(function () {
       return !!window.dragMock
     },

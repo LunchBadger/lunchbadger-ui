@@ -1,5 +1,5 @@
-var fs = require('fs');
-var notifiedCoverage = false;
+const fs = require('fs');
+let notifiedCoverage = false;
 
 var pageCommands = {
   open: function () {

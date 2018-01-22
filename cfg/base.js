@@ -4,7 +4,6 @@ let defaultSettings = require('./defaults');
 let additionalPaths = [];
 
 const infoFile = require('./load');
-console.log('PLUGINS', infoFile);
 
 let pluginDirs = infoFile.plugins.map(plugin => path.resolve(`./plugins/lunchbadger-${plugin}/src`));
 let coreDir = path.resolve('./plugins/lunchbadger-core/src');

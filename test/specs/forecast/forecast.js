@@ -6,7 +6,7 @@ var apiForecastSelector = forecasterSelector + ' .api-forecast';
 var moment = require('moment');
 
 module.exports = {
-  '@disabled': true,
+  '@disabled': true, // FIXME enable when optimize plugin will be turned on
   before: function (browser) {
     page = browser.page.lunchBadger();
 

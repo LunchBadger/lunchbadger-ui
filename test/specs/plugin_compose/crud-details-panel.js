@@ -1,7 +1,7 @@
 var page;
 
 module.exports = {
-  '@disabled': true,
+  '@disabled': true, // FIXME by card 361
   'Compose plugin: CRUD on details panel': function (browser) {
     page = browser.page.lunchBadger();
     page.open();

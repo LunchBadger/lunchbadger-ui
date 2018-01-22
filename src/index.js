@@ -13,7 +13,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.3');
+console.info('LBAPP VERSION 0.1');
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -38,18 +38,17 @@ loginManager.checkAuth().then(loggedIn => {
     return;
   }
 
-  // const {id_token, profile: {email, preferred_username: name}} = loginManager.user;
-  const {id_token} = loginManager.user;
+  const {id_token, profile: {email, preferred_username: name}} = loginManager.user;
 
   global.ID_TOKEN = id_token; // FIXME: quick and dirty fix for urgent demo
 
   // userengage.io integration
-  // window.civchat = {
-  //   apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
-  //   name,
-  //   email,
-  //   state: 'simple'
-  // };
+  window.civchat = {
+    apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
+    name,
+    email,
+    state: 'simple'
+  };
 
   let middleware = compose(applyMiddleware(thunk));
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {

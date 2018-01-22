@@ -1,5 +1,5 @@
 module.exports = {
-  '@disabled': true,
+  '@disabled': true, // FIXME enable when monetize plugin will be turned on
   'API: add': function (browser) {
     var page = browser.page.lunchBadger();
     var elementSelector = '.quadrant:nth-child(4) .Entity.API:last-child';

@@ -52,8 +52,8 @@ module.exports = {
             page.submitDetailsPanel(page.getModelSelector(1));
 
             // check, if Memory-car connection is present
-            browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-            browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+            browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+            browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
             // reload page and check if Memory, REST, Car, Driver and Memory-Car connection are present
             page.refresh(function () {
@@ -74,8 +74,8 @@ module.exports = {
               browser.expect.element(page.getModelSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Car1');
 
               // check, if Memory1New-Car1 connection is present
-              browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-              browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+              browser.waitForElementPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+              browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
               // reload page and check if Memory1, REST, Car1, Driver and Memory1-Car1 connection are present
               page.refresh(function () {
@@ -89,9 +89,9 @@ module.exports = {
                 page.submitDetailsPanel(page.getModelSelector(1));
 
                 // check, if Memory2-Car1 connection is present
-                browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-                browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
-                browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+                browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+                browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
+                browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
                 // reload page and check if Memory1New, Memory2, Car1, Driver and Memory2-Car1 connection are present
                 page.refresh(function () {
@@ -108,15 +108,15 @@ module.exports = {
                   page.submitDetailsPanel(page.getModelSelector(2));
 
                   // check, if Memory2-Driver connection is present
-                  browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
-                  browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
-                  browser.waitForElementPresent(page.getModelSelector(2) + ' .port-in > .port__anchor--connected', 5000);
+                  browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
+                  browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
+                  browser.waitForElementPresent(page.getModelSelector(2) + ' .port-in > .port__anchor--connected', 50000);
 
                   // reload page and check if Memory1New, Memory2, Car1, Driver and Memory2-Driver connection are present
                   page.refresh(function () {
                     page.checkEntities('Memory1New,Memory2', 'Car1,Driver', 'car1,driver');
-                    browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 5000);
-                    browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+                    browser.waitForElementNotPresent(page.getDataSourceSelector(1) + ' .port-out > .port__anchor--connected', 50000);
+                    browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
                     browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
                     browser.waitForElementPresent(page.getModelSelector(2) + ' .port-in > .port__anchor--connected', 50000);
 
@@ -124,12 +124,12 @@ module.exports = {
                     page.removeEntity(page.getModelSelector(2));
 
                     // check, if Memory2-Driver connection is also not present
-                    browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
+                    browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
 
                     // reload page and check if Memory1New, Memory2, Car1 are present, and Memory2 connection out is not present
                     page.refresh(function () {
                       page.checkEntities('Memory1New,Memory2', 'Car1', 'car1');
-                      browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
+                      browser.waitForElementNotPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
 
                       // connect Memory2 with Car1
                       page.openEntityInDetailsPanel(page.getModelSelector(1));
@@ -137,19 +137,19 @@ module.exports = {
                       page.submitDetailsPanel(page.getModelSelector(1));
 
                       // check, if Memory2-Car1 connection is present
-                      browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 5000);
-                      browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+                      browser.waitForElementPresent(page.getDataSourceSelector(2) + ' .port-out > .port__anchor--connected', 50000);
+                      browser.waitForElementPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
                       // remove Memory2
                       page.removeEntity(page.getDataSourceSelector(2));
 
                       // check, is Car1 connection in is also not present
-                      browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+                      browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
 
                       // reload page and check, if Memory1 and Car1 are present, and Car1 connection in is not present
                       page.refresh(function () {
                         page.checkEntities('Memory1New', 'Car1', 'car1');
-                        browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 5000);
+                        browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
                       });
                     });
                   });

@@ -15,6 +15,7 @@ module.exports = {
   'Dependency installation': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
+    page.emptyProject();
 
     //Connector installation: data source add
     page.addElementFromTooltip('dataSource', 'rest');

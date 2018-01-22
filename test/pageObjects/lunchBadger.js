@@ -124,9 +124,9 @@ var pageCommands = {
   },
 
   submitDetailsPanel: function (selector) {
-    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit', 5000);
-    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit', 5, 5, function() {
-      this.click('.DetailsPanel .BaseDetails__buttons .submit');
+    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5000);
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled');
     });
     this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
@@ -282,6 +282,12 @@ var pageCommands = {
     this.waitForElementPresent('.SystemDefcon1 .ConfirmModal .confirm', 5000);
     this.click('.SystemDefcon1 .ConfirmModal .confirm');
     this.waitForElementPresent('.spinner__overlay', 5000);
+  },
+
+  emptyProject: function () {
+    this.clearProject();
+    this.waitForElementNotPresent('.spinner__overlay', 120000);
+    this.saveProject();
   },
 
   testDatasource: function (type, config = []) {

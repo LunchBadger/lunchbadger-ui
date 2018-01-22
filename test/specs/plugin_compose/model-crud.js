@@ -51,6 +51,7 @@ module.exports = {
   'Compose plugin: Model CRUD': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
+    page.emptyProject();
     page.checkEntities();
 
     // create Car model and check, if context path is car

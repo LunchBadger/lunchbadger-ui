@@ -4,6 +4,7 @@ module.exports = {
   'Compose plugin: CRUD on details panel': function (browser) {
     page = browser.page.lunchBadger();
     page.open();
+    page.emptyProject();
     page.checkEntities();
 
     // create Memory1 datasource

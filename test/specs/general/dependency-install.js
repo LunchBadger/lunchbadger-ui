@@ -11,7 +11,7 @@ function expectStatus(browser, status, error) {
 }
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Dependency installation': function(browser) {
     page = browser.page.lunchBadger();
     page.open();

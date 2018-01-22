@@ -48,6 +48,7 @@ function checkDetailsRelations (names = '', types = '', models = '', foreignKeys
 }
 
 module.exports = {
+  '@disabled': true,
   'Compose plugin: Model CRUD': function (browser) {
     page = browser.page.lunchBadger();
     page.open();

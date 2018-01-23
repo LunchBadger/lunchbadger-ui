@@ -3,4 +3,5 @@ export default [
   'kevin',
   'al',
   'skar',
+  'sk',
 ];

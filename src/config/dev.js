@@ -13,7 +13,7 @@ export default {
   workspaceUrl: isPrefix ? `http://{USER}-{ENV}.${subdomain}lunchbadger.io` : 'http://localhost:3000',
   expressGatewayAdminApiUrl: `http://admin-{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
-  kubeWatcherApiUrl: isPrefix ? `http://kube-watcher.${prefix}api.lunchbadger.com` : 'http://localhost:7788',
+  kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

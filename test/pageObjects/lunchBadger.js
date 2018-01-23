@@ -40,10 +40,10 @@ var pageCommands = {
   },
 
   projectLoaded: function () {
+    // TODO consider refactoring using callback or promise
     this.waitForElementVisible('.app', 5000);
     this.waitForElementVisible('.app__loading-message', 5000);
     this.waitForElementNotPresent('.app__loading-message', 60000);
-    // this.waitForElementVisible('.spinner__overlay', 5000);
     this.waitForElementNotPresent('.spinner__overlay', 60000);
   },
 
@@ -65,7 +65,7 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
-    var str = value.toString();
+    const str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
       for (var i in result.value.toString()) {

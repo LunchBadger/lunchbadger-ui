@@ -71,7 +71,7 @@ module.exports = {
 
     browser.pause(500);
 
-    var month = new RegExp('^' + moment().format('MMM')[0]);
+    const month = new RegExp('^' + moment().format('MMM')[0]);
     browser.expect.element(apiForecastSelector + ' .date-slider__mark.current').text.to.match(month);
 
     browser
@@ -98,7 +98,7 @@ module.exports = {
       .mouseButtonClick(0)
       .pause(500);
 
-    var monthAbbr = moment().add(1, 'months').format('MMM')[0];
+    const monthAbbr = moment().add(1, 'months').format('MMM')[0];
     browser.expect.element(apiForecastSelector + ' .date-slider__mark.selected').text.to.match(new RegExp('^' + monthAbbr));
 
     browser.pause(2000);

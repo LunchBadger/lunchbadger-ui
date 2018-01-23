@@ -2,7 +2,7 @@ module.exports = {
   '@disabled': true, // FIXME: enable when EG will start to work fine
   'Connection: proxy endpoint': function (browser) {
     var page = browser.page.lunchBadger();
-    var gatewayName = 'Gateway' + Date.now();
+    const gatewayName = 'Gateway' + Date.now();
     page.open();
     page.addElementFromTooltip('endpoint', 'serviceendpoint');
     page.submitCanvasEntity(page.getServiceEndpointSelector(1));

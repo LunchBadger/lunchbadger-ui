@@ -2,7 +2,7 @@ module.exports = {
   '@disabled': true, // FIXME: enable when EG will start to work fine
   'Connection: proxy model': function (browser) {
     var page = browser.page.lunchBadger();
-    var gatewayName = 'Gateway' + Date.now();
+    const gatewayName = 'Gateway' + Date.now();
     page.open();
     page.addElement('model');
     page.submitCanvasEntity(page.getModelSelector(1));

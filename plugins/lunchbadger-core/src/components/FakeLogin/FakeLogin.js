@@ -40,7 +40,7 @@ export default class FakeLogin extends PureComponent {
       this.setState(state);
       return;
     }
-    if (!envs.includes(login) && !login.startsWith('test')) {
+    if (!envs.includes(login)) {
       this.setState({login: 'Login or password is incorrect'});
       return;
     }

@@ -10,6 +10,7 @@ var pageCommands = {
     this.setValueSlow('.input__password input', 'Test User');
     this.submitForm('.FakeLogin__form form');
     this.projectLoaded();
+    this.emptyProject();
     return page;
   },
 

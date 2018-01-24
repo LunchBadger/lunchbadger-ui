@@ -11,17 +11,19 @@ function expectStatus(browser, status, error) {
 }
 
 module.exports = {
-  // '@disabled': true,
-  'Connector installation: data source add': function(browser) {
+  '@disabled': true, // FIXME by task 360
+  'Dependency installation': function(browser) {
     page = browser.page.lunchBadger();
     page.open();
+    page.emptyProject();
+
+    //Connector installation: data source add
     page.addElementFromTooltip('dataSource', 'rest');
     page.setValueSlow(page.getDataSourceSelector(1) + ' .input__operations0templateurl input', 'http://dumpUrl');
     page.submitCanvasEntity(page.getDataSourceSelector(1));
     expectStatus(browser, 'success');
-  },
 
-  'Connector installation: add more data source': function(browser) {
+    // Connector installation: add more data source
     page.addElementFromTooltip('dataSource', 'soap');
     page.setValueSlow(page.getDataSourceSelector(2) + ' .input__url input', 'https://www.lunchbadger.com');
     page.submitCanvasEntity(page.getDataSourceSelector(2));
@@ -36,9 +38,8 @@ module.exports = {
     page.setValueSlow(page.getDataSourceSelector(3) + ' .input__password input', 'dumpPassword');
     page.submitCanvasEntity(page.getDataSourceSelector(3));
     expectStatus(browser, 'failure', 'ENOTFOUND');
-  },
 
-  'Connector uninstallation: remove datasource': function(browser) {
+    // Connector uninstallation: remove datasource
     browser.click('.SystemDefcon1 button');
     browser.waitForElementNotPresent('.SystemDefcon1', 5000);
     browser.click(page.getDataSourceSelector(3));
@@ -47,9 +48,8 @@ module.exports = {
     browser.waitForElementPresent('.ConfirmModal .confirm', 5000);
     browser.click('.ConfirmModal .confirm');
     expectStatus(browser, 'failure', 'WSDL');
-  },
 
-  'Connector uninstallation: trash workspace and reload page': function(browser) {
+    // Connector uninstallation: trash workspace and reload page
     browser.click('.SystemDefcon1 button');
     page.clearProject();
     browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
@@ -59,9 +59,7 @@ module.exports = {
     browser.refresh(function () {
       browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
     });
-  },
 
-  after: function() {
     page.close();
   }
 }

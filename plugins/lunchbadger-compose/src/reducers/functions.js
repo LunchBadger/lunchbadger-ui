@@ -1,5 +1,5 @@
 import uuid from 'uuid';
-import Function from '../models/Function';
+import Function_ from '../models/Function';
 import {actionTypes} from '../reduxActions/actions';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
@@ -14,7 +14,7 @@ export default (state = {}, action) => {
         if (!item.lunchbadgerId) {
           item.lunchbadgerId = uuid.v4();
         }
-        map[item.lunchbadgerId] = Function.create(item);
+        map[item.lunchbadgerId] = Function_.create(item);
         return map;
       }, {});
     case actionTypes.updateFunction:

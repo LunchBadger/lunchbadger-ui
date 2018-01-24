@@ -59,7 +59,7 @@ export default [
   state => ({
     name: 'main',
     connections: Connections.toJSON().filter(({fromId, toId}) =>
-      !isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function'),
+      !isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_'),
     states: setStatesToSave(state),
   }),
 ];

@@ -112,21 +112,21 @@ module.exports = {
     browser.pause(1000);
   },
 
-  'Tools menu: api selected': function (browser) {
-    page.addElement('api');
-    browser.waitForElementPresent('.api.Tool.selected', 8000);
-    browser.click(publicSelector + '.API.editable .Button.cancel');
-    browser.waitForElementNotPresent('.Aside.disabled', 8000);
-    browser.pause(1000);
-  },
-
-  'Tools menu: portal selected': function (browser) {
-    page.addElement('portal');
-    browser.waitForElementPresent('.portal.Tool.selected', 8000);
-    browser.click(publicSelector + '.Portal.editable .Button.cancel');
-    browser.waitForElementNotPresent('.Aside.disabled', 8000);
-    browser.pause(1000);
-  },
+  // 'Tools menu: api selected': function (browser) {
+  //   page.addElement('api');
+  //   browser.waitForElementPresent('.api.Tool.selected', 8000);
+  //   browser.click(publicSelector + '.API.editable .Button.cancel');
+  //   browser.waitForElementNotPresent('.Aside.disabled', 8000);
+  //   browser.pause(1000);
+  // },
+  //
+  // 'Tools menu: portal selected': function (browser) {
+  //   page.addElement('portal');
+  //   browser.waitForElementPresent('.portal.Tool.selected', 8000);
+  //   browser.click(publicSelector + '.Portal.editable .Button.cancel');
+  //   browser.waitForElementNotPresent('.Aside.disabled', 8000);
+  //   browser.pause(1000);
+  // },
 
   after: function () {
     page.close();

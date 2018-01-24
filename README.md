@@ -44,7 +44,7 @@ Tests run using [nightwatch.js](http://nightwatchjs.org/). Any arguments passed
 to the `npm run test` command will be passed through to nightwatch. To specify
 a test to run, for example:
 
-    npm run test:dev -t test/specs/api/add.js
+    npm run test:dev -t test/specs/datasource/memory.js
 
 To set up a dev/test environment prior to running the above commands, perform
 the following steps:

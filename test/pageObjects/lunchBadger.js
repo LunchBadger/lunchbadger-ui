@@ -5,7 +5,11 @@ var pageCommands = {
   open: function () {
     var page = this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
-    this.waitForElementVisible('.app', 5000);
+    this.waitForElementVisible('.FakeLogin', 5000);
+    this.setValueSlow('.input__login input', 'test');
+    this.setValueSlow('.input__password input', 'Test User');
+    this.submitForm('.FakeLogin__form form');
+    this.projectLoaded();
     return page;
   },
 
@@ -27,6 +31,22 @@ var pageCommands = {
     }).end();
   },
 
+  refresh: function (cb) {
+    var projectLoaded = this.projectLoaded.bind(this);
+    this.api.refresh(function () {
+      projectLoaded();
+      cb && cb();
+    });
+  },
+
+  projectLoaded: function () {
+    // TODO consider refactoring using callback or promise
+    this.waitForElementVisible('.app', 5000);
+    this.waitForElementVisible('.app__loading-message', 5000);
+    this.waitForElementNotPresent('.app__loading-message', 60000);
+    this.waitForElementNotPresent('.spinner__overlay', 60000);
+  },
+
   addElementFromTooltip: function (entity, option) {
     option = option || 'rest';
     this.click('.Tool.' + entity);
@@ -45,30 +65,39 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
+    const str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
-      for (let c in result.value) {
+      for (var i in result.value.toString()) {
         this.setValue(selector, this.Keys.BACK_SPACE);
       }
     });
-    this.setValue(selector, value);
+    for (var i in str) {
+      this.setValue(selector, str[i].toString());
+      this.api.pause(100);
+    }
+    this.api.pause(500);
+    this.expect.element(selector).value.to.equal(str);
   },
 
   selectValueSlow: function (selector, select, value) {
-    this.waitForElementPresent(selector, 500-0);
-    this.click(selector + ` .select__${select}`);
+    this.api.pause(1000);
+    this.waitForElementPresent(selector + ` .select__${select}`, 500);
+    this.moveToElement(selector + ` .select__${select}`, 5, 5, function() {
+      this.click(selector + ` .select__${select}`);
+    });
     this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
-    this.api.pause(2000);
+    this.api.pause(3000);
     this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
       this.click(`div[role=menu] .${select}__${value}`);
     });
-    this.api.pause(1000);
+    this.waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
   },
 
   editEntity: function (selector) {
     this.click(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
-    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -15, function() {
+    this.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -10, function() {
       this.click(selector + '.highlighted .Toolbox__button--edit');
       this.waitForElementPresent(selector + '.editable', 50000);
       this.waitForElementVisible(selector + ' .input__name input', 50000);
@@ -89,39 +118,41 @@ var pageCommands = {
     // });
     this.api.pause(500);
     // this.waitForElementPresent(selector + '.wip', 5000);
-    this.waitForElementNotPresent(selector + '.wip', 60000);
+    this.waitForElementNotPresent(selector + '.wip', 120000);
     this.waitForElementNotPresent('.Aside.disabled', 5000);
     this.waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
   submitDetailsPanel: function (selector) {
-    this.waitForElementPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
-    this.moveToElement('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5, 5, function() {
-      this.click('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button');
+    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5000);
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled');
     });
-    this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
+    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
     this.waitForElementNotPresent(selector + '.wip', 60000);
-    this.waitForElementNotPresent('.DetailsPanel .confirm-button__accept--enabled .confirm-button__button', 5000);
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.waitForElementPresent(selector, 5000);
     this.click(selector);
-    this.waitForElementPresent(selector + '.highlighted', 5000);
-    this.click('@details');
-    this.api.pause(2000);
+    this.waitForElementPresent(selector + '.highlighted .Toolbox__button--zoom', 50000);
+    this.moveToElement(selector + '.highlighted .Toolbox__button--zoom', 5, -10, function() {
+      this.click(selector + '.highlighted .Toolbox__button--zoom');
+      this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
+    });
   },
 
   closeDetailsPanel: function () {
-    this.click('@details');
-    this.api.pause(2000);
+    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .cancel', 5000);
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .cancel', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .cancel');
+    });
+    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
   },
 
   removeEntity: function (selector) {
     this.click(selector);
-    this.waitForElementPresent(selector + ' > .Toolbox .Toolbox__button--delete', 5000);
-    this.click(selector + ' > .Toolbox .Toolbox__button--delete');
+    this.waitForElementPresent(selector + ' .Entity > .Toolbox .Toolbox__button--delete', 5000);
+    this.click(selector + ' .Entity > .Toolbox .Toolbox__button--delete');
     this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
     this.click('.SystemDefcon1 .confirm');
     this.waitForElementNotPresent(selector, 5000);
@@ -141,24 +172,16 @@ var pageCommands = {
       .pause(500);
   },
 
-  discardDetailsPanelChanges: function () {
-    this.waitForElementPresent('.header .canvas-overlay', 5000);
-    this.click('.header .canvas-overlay');
-    this.waitForElementPresent('.SystemDefcon1 .discard', 5000);
-    this.click('.SystemDefcon1 .discard');
-    this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
-    this.api.pause(3000);
+  discardDetailsPanelChanges: function (selector) {
+    this.closeDetailsPanel();
+    this.api.pause(2000);
+    this.openEntityInDetailsPanel(selector);
   },
 
   confirmDetailsPanelChanges: function (selector) {
-    this.waitForElementPresent('.header .canvas-overlay', 5000);
-    this.click('.header .canvas-overlay');
-    this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
-    this.click('.SystemDefcon1 .confirm');
-    this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
-    this.waitForElementNotPresent(selector + '.wip', 60000);
-    this.waitForElementNotPresent('.confirm-button__accept.confirm-button__accept--enabled', 5000);
+    this.submitDetailsPanel(selector);
+    this.api.pause(2000);
+    this.openEntityInDetailsPanel(selector);
   },
 
   waitUntilWorkspaceLoaded: function() {
@@ -170,8 +193,6 @@ var pageCommands = {
 
   checkEntities: function (dataSources = '', models = '', contextPaths) {
     contextPaths = contextPaths || models.toLowerCase();
-    this.expect.element('.Aside.disabled').to.not.be.present;
-    this.expect.element('.canvas__container--editing').to.not.be.present;
     if (dataSources === '') {
       this.waitForElementNotPresent(this.getDataSourceSelector(1), 5000);
     } else {
@@ -223,7 +244,7 @@ var pageCommands = {
   },
 
   getDataSourceSelector: function (nth) {
-    return '.canvas__container .quadrant:first-child .quadrant__body .Entity.DataSource:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:first-child .quadrant__body .CanvasElement.DataSource:nth-child(' + nth + ')';
   },
 
   getDataSourceFieldSelector: function (nthEntity, nthProperty) {
@@ -231,23 +252,23 @@ var pageCommands = {
   },
 
   getModelSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.Model:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Model:nth-child(' + nth + ')';
   },
 
   getGatewaySelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .Entity.Gateway:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(3) .quadrant__body .CanvasElement.Gateway:nth-child(' + nth + ')';
   },
 
   getApiSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.API:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.API:nth-child(' + nth + ')';
   },
 
   getServiceEndpointSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .Entity.ServiceEndpoint:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.ServiceEndpoint:nth-child(' + nth + ')';
   },
 
   getApiEndpointSelector: function (nth) {
-    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .Entity.ApiEndpoint:nth-child(' + nth + ')';
+    return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.ApiEndpoint:nth-child(' + nth + ')';
   },
 
   saveProject: function () {
@@ -258,7 +279,15 @@ var pageCommands = {
 
   clearProject: function () {
     this.click('.header__menu__element .fa-trash-o');
+    this.waitForElementPresent('.SystemDefcon1 .ConfirmModal .confirm', 5000);
+    this.click('.SystemDefcon1 .ConfirmModal .confirm');
     this.waitForElementPresent('.spinner__overlay', 5000);
+  },
+
+  emptyProject: function () {
+    this.clearProject();
+    this.waitForElementNotPresent('.spinner__overlay', 120000);
+    this.saveProject();
   },
 
   testDatasource: function (type, config = []) {
@@ -299,11 +328,11 @@ module.exports = {
     forecasterPanel: {
       selector: '.panel__container.ForecastsPanel'
     },
-    details: {
-      selector: '.header__menu__element .header__menu__link.DETAILS_PANEL'
+    settings: {
+      selector: '.header__menu__element .header__menu__link.SETTINGS_PANEL'
     },
-    detailsPanel: {
-      selector: '.panel__container.DetailsPanel'
+    settingsPanel: {
+      selector: '.panel__container.SettingsPanel'
     }
   }
 };

@@ -1,5 +1,6 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import slug from 'slug';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
@@ -353,7 +354,7 @@ export default (ComposedComponent) => {
       }
       const {type} = this.props.entity.constructor;
       return (
-        <div>
+        <div className={cs('CanvasElement', type, {highlighted, editable, wip: processing})}>
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}

@@ -9,7 +9,9 @@ const SystemInformationMessage = ({message, onRemove}) => (
     <div className="SystemInformationMessages__item__delete" onClick={onRemove}>
       <IconSVG svg={iconDelete} />
     </div>
-    {message}
+    <span className="SystemInformationMessages__item__message">
+      {message}
+    </span>
   </div>
 );
 

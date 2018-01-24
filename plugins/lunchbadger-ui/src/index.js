@@ -58,7 +58,7 @@ const entityIcons = {
   API: iconApi,
   ApiEndpoint: iconEndpoint,
   DataSource: iconDataSource,
-  Function: iconFunction,
+  Function_: iconFunction,
   Gateway: iconGateway,
   Microservice: iconMicroservice,
   Model: iconModel,

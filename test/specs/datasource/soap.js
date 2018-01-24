@@ -4,7 +4,7 @@ module.exports = {
     var page = browser.page.lunchBadger();
     page.open();
     page.testDatasource('soap', [
-      ['BASE URL', 'dumpUrl']
+      ['URL', 'http://www.webservicex.com/globalweather.asmx?WSDL']
     ]);
     page.close();
   }

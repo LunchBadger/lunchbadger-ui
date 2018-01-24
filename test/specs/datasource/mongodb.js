@@ -6,7 +6,7 @@ module.exports = {
     page.testDatasource('mongodb', [
       ['HOST', 'dumpHost'],
       ['PORT', '8888'],
-      ['DATABASE', 'dumpDatabase'],
+      ['COLLECTION', 'dumpCollection'],
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
     ]);

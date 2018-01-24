@@ -1,5 +1,5 @@
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true, // FIXME enable when monetize plugin will be turned on
   'API: bundle endpoint - decline': function (browser) {
     var page = browser.page.lunchBadger();
     page.open();

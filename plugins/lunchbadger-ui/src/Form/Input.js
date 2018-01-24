@@ -129,6 +129,7 @@ class Input extends Component {
           multiLine={textarea}
           rows={textarea ? 2 : 1}
           rowsMax={textarea ? 4 : 1}
+          autoComplete={type === 'password' ? 'off' : undefined}
         />
       </div>
     );

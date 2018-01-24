@@ -9,8 +9,8 @@ const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const {defaultEntityNames} = LunchBadgerCore.utils;
 
-export default class Function extends BaseModel {
-  static type = 'Function';
+export default class Function_ extends BaseModel {
+  static type = 'Function_';
   static entities = 'functions';
   static forbiddenFields = [
     '_id',
@@ -78,7 +78,7 @@ export default class Function extends BaseModel {
   }
 
   recreate() {
-    return Function.create(this);
+    return Function_.create(this);
   }
 
   static get idField() {

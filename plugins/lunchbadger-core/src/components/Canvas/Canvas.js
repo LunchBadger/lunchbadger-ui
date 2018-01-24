@@ -104,8 +104,8 @@ class Canvas extends Component {
     if (!source || !target) return null;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
-      if ((source.parentElement.classList.contains('port-Function') && target.parentElement.classList.contains('port-Model')) ||
-        (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function'))) {
+      if ((source.parentElement.classList.contains('port-Function_') && target.parentElement.classList.contains('port-Model')) ||
+        (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function_'))) {
         if (source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) {
           return false;
         }
@@ -147,13 +147,13 @@ class Canvas extends Component {
       } = info;
       let fulfilled = null;
       if (source.contains('port-in')) {
-        if (!(source.contains('port-Function') && target.contains('port-Model'))) {
+        if (!(source.contains('port-Function_') && target.contains('port-Model'))) {
           this._flipConnection(info);
           this._disconnect(connection);
           return;
         }
       }
-      if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function')) {
+      if (source.contains('port-out') && source.contains('port-Model') && target.contains('port-Function_')) {
         this._flipConnection(info);
         this._disconnect(connection);
         return;

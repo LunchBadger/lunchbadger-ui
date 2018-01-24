@@ -1,6 +1,10 @@
 export default [
+  'al',
   'demo',
   'kevin',
-  'al',
+  'ko',
+  'sk',
   'skar',
+  'test',
+  'vc',
 ];

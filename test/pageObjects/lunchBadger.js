@@ -6,8 +6,8 @@ var pageCommands = {
     var page = this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
     this.waitForElementVisible('.FakeLogin', 5000);
-    this.setValueSlow('.input__login input', 'demo');
-    this.setValueSlow('.input__password input', 'Demo User');
+    this.setValueSlow('.input__login input', 'test');
+    this.setValueSlow('.input__password input', 'Test User');
     this.submitForm('.FakeLogin__form form');
     this.projectLoaded();
     return page;

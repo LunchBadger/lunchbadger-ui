@@ -6,7 +6,7 @@ import Gateway from '../models/Gateway';
 
 const envId = Config.get('envId');
 const {getUser} = LunchBadgerCore.utils;
-const {actions: actionsCore} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 
 const transformGatewayStatuses = (gatewayStatuses) => {
   const statuses = {};
@@ -22,9 +22,11 @@ const transformGatewayStatuses = (gatewayStatuses) => {
 
 const transformGateways = (entities) => {
   const gateways = {};
-  Object.values(entities).forEach((gateway) => {
-    gateways[slug(gateway.name, {lower: true})] = gateway;
-  });
+  Object.values(entities)
+    .filter(({loaded}) => loaded)
+    .forEach((gateway) => {
+      gateways[slug(gateway.name, {lower: true})] = gateway;
+    });
   return gateways;
 };
 
@@ -67,13 +69,14 @@ const showGatewayStatusChangeMessage = (dispatch, name, message) => {
   }));
 };
 
-export const onGatewayStatusChange = () => (dispatch, getState) => {
+export const onGatewayStatusChange = () => async (dispatch, getState) => {
   const {entitiesStatuses, entities: {gateways: entities}} = getState();
   const statuses = transformGatewayStatuses(entitiesStatuses.gateway || {});
   const gateways = transformGateways(entities);
   const entries = combineEntities(statuses, gateways);
   let updatedEntity;
-  Object.keys(entries).forEach((slug) => {
+  let isSave = false;
+  Object.keys(entries).forEach(async (slug) => {
     const {status, entity} = entries[slug];
     const {running: gatewayRunning, deleting: gatewayDeleting, name: gatewayName} = entity || {};
     if (status === null) {
@@ -99,10 +102,14 @@ export const onGatewayStatusChange = () => (dispatch, getState) => {
         if (running !== gatewayRunning) {
           if (gatewayDeleting) return;
           if (gatewayRunning === null && !running) return;
+          const isDeployed = gatewayRunning === null;
+          if (isDeployed) {
+            isSave = true;
+          }
           updatedEntity = entity.recreate();
           updatedEntity.running = running;
           dispatch(actions.updateGateway(updatedEntity));
-          const message = gatewayRunning === null ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
+          const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showGatewayStatusChangeMessage(dispatch, gatewayName, message);
         }
       }
@@ -110,5 +117,8 @@ export const onGatewayStatusChange = () => (dispatch, getState) => {
   });
   if (Object.keys(entries).length === 0) {
     Object.keys(localStorage).filter(key => key.startsWith('gateway-')).map(key => localStorage.removeItem(key));
+  }
+  if (isSave) {
+    await dispatch(coreActions.saveToServer({showMessage: false}));
   }
 };

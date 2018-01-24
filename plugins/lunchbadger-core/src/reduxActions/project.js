@@ -27,7 +27,10 @@ export const loadFromServer = () => async (dispatch, getState) => {
   dispatch(updateEntitiesStatues());
 };
 
-export const saveToServer = () => async (dispatch, getState) => {
+export const saveToServer = (opts) => async (dispatch, getState) => {
+  const options = Object.assign({
+    showMessage: true,
+  }, opts);
   dispatch(actions.setLoadingProject(true));
   const state = getState();
   const {onProjectSave, onBeforeProjectSave} = state.plugins;
@@ -39,7 +42,7 @@ export const saveToServer = () => async (dispatch, getState) => {
       dispatch(addSystemDefcon1(err));
     }
   }
-  const data = onProjectSave.reduce((map, item) => ({...map, ...item(state)}), {});
+  const data = onProjectSave.reduce((map, item) => ({...map, ...item(state, options)}), {});
   try {
     await ProjectService.save(data);
   } catch (err) {
@@ -49,10 +52,12 @@ export const saveToServer = () => async (dispatch, getState) => {
       dispatch(addSystemDefcon1(err));
     }
   }
-  dispatch(actions.addSystemInformationMessage({
-    type: 'success',
-    message: 'All data has been synced with API',
-  }));
+  if (options.showMessage) {
+    dispatch(actions.addSystemInformationMessage({
+      type: 'success',
+      message: 'All data has been synced with API',
+    }));
+  }
   dispatch(actions.setLoadingProject(false));
 };
 

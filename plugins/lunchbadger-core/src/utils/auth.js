@@ -68,7 +68,7 @@ export class LoginManager {
 
   logout() {
     this.um.removeUser().then(() => {
-      this.um.signinRedirect();
+      this.um.signoutRedirect();
     });
   }
 }

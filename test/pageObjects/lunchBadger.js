@@ -66,6 +66,12 @@ var pageCommands = {
     return this;
   },
 
+  clickSlow: function (selector) {
+    this.waitForElementPresent(selector, 5000);
+    this.click(selector);
+    this.api.pause(100);
+  },
+
   setValueSlow: function (selector, value) {
     const str = value.toString();
     this.waitForElementPresent(selector, 50000);
@@ -126,13 +132,21 @@ var pageCommands = {
     this.waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
-  submitDetailsPanel: function (selector) {
+  submitDetailsPanel: function (selector, validationErrors = []) {
     this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5000);
     this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled', 5, 5, function() {
       this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled');
     });
-    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
-    this.waitForElementNotPresent(selector + '.wip', 60000);
+    if (validationErrors.length === 0) {
+      this.waitForElementNotPresent('.DetailsPanel .EntityValidationErrors', 60000);
+      this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
+      this.waitForElementNotPresent(selector + '.wip', 60000);
+    } else {
+      this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
+      validationErrors.forEach((key) => {
+        this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
+      });
+    }
   },
 
   openEntityInDetailsPanel: function (selector) {

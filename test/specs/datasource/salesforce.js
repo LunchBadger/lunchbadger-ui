@@ -4,6 +4,8 @@ module.exports = {
     var page = browser.page.lunchBadger();
     page.open();
     page.testDatasource('salesforce', [
+      'username',
+    ], [
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
     ]);

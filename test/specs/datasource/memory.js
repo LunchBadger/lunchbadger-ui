@@ -3,7 +3,7 @@ module.exports = {
   'Datasource: memory': function (browser) {
     var page = browser.page.lunchBadger();
     page.open();
-    page.testDatasource('memory', []);
+    page.testDatasource('memory');
     page.close();
   }
 };

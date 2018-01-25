@@ -6,6 +6,8 @@ module.exports = {
     var page = browser.page.lunchBadger();
     page.open();
     page.testDatasource('soap', [
+      'url',
+    ], [
       ['URL', TEST_WSDL]
     ], function () {
       page.openEntityInDetailsPanel(page.getDataSourceSelector(1));

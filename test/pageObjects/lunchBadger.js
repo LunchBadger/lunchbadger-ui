@@ -120,16 +120,19 @@ var pageCommands = {
     this.waitForElementNotPresent(selector + '.editable', 5000);
   },
 
-  submitCanvasEntity: function (selector) {
+  submitCanvasEntity: function (selector, validationErrors = []) {
     this.submitForm(selector + ' form');
-    // this.moveToElement(selector + ' .submit', 5, 5, function() {
-    //   this.click(selector + ' .submit');
-    // });
     this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
-    this.waitForElementNotPresent(selector + '.wip', 120000);
-    this.waitForElementNotPresent('.Aside.disabled', 5000);
-    this.waitForElementNotPresent('.SystemDefcon1', 60000);
+    if (validationErrors.length === 0) {
+      this.waitForElementNotPresent(selector + '.wip', 120000);
+      this.waitForElementNotPresent('.Aside.disabled', 5000);
+      this.waitForElementNotPresent('.SystemDefcon1', 60000);
+    } else {
+      this.waitForElementPresent(selector + ' .EntityValidationErrors', 60000);
+      validationErrors.forEach((key) => {
+        this.expect.element(selector + ` .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
+      });
+    }
   },
 
   submitDetailsPanel: function (selector, validationErrors = []) {
@@ -308,8 +311,9 @@ var pageCommands = {
     this.saveProject();
   },
 
-  testDatasource: function (type, config = [], cb) {
+  testDatasource: function (type, required = [], config = [], cb) {
     this.addElementFromTooltip('dataSource', type);
+    this.submitCanvasEntity(this.getDataSourceSelector(1), required);
     if (config.length === 0) {
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
     } else {

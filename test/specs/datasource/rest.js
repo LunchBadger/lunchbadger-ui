@@ -4,6 +4,7 @@ module.exports = {
     var page = browser.page.lunchBadger();
     page.open();
     page.addElementFromTooltip('dataSource', 'rest');
+    page.submitCanvasEntity(page.getDataSourceSelector(1), ['baseUrl']);
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__predefined .EntityPropertyLabel').text.to.equal('PREDEFINED PROPERTIES');
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__method .EntityPropertyLabel').text.to.equal('METHOD');
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__url .EntityPropertyLabel').text.to.equal('URL');

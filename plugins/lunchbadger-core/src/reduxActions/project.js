@@ -18,6 +18,8 @@ export const loadFromServer = () => async (dispatch, getState) => {
   } catch (err) {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();
+    } else if (err.statusCode === 404) {
+      dispatch(saveToServer());
     } else {
       dispatch(addSystemDefcon1(err));
     }

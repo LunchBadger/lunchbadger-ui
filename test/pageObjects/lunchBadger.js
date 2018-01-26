@@ -14,8 +14,10 @@ var pageCommands = {
     return page;
   },
 
-  close: function () {
-    this.emptyProject();
+  close: function (skipEmptyProject = false) {
+    if (!skipEmptyProject) {
+      this.emptyProject();
+    }
     return this.api.execute(function() {
       return window.__coverage__;
     }, [], function(response) {
@@ -66,10 +68,12 @@ var pageCommands = {
     return this;
   },
 
-  clickSlow: function (selector) {
-    this.waitForElementPresent(selector, 5000);
-    this.click(selector);
-    this.api.pause(100);
+  clickSlow: function (selector, amount = 1) {
+    for (let i = 0; i < amount; i++) {
+      this.waitForElementPresent(selector, 5000);
+      this.click(selector);
+      this.api.pause(100);
+    }
   },
 
   setValueSlow: function (selector, value) {
@@ -124,7 +128,7 @@ var pageCommands = {
     this.submitForm(selector + ' form');
     this.api.pause(500);
     if (validationErrors.length === 0) {
-      this.waitForElementNotPresent(selector + '.wip', 120000);
+      this.waitForElementNotPresent(selector + '.wip', 180000);
       this.waitForElementNotPresent('.Aside.disabled', 5000);
       this.waitForElementNotPresent('.SystemDefcon1', 60000);
     } else {
@@ -133,6 +137,13 @@ var pageCommands = {
         this.expect.element(selector + ` .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
       });
     }
+  },
+
+  submitGatewayDeploy: function (selector, gatewayName) {
+    this.submitCanvasEntity(selector);
+    this.waitForElementVisible('.SystemInformationMessages', 180000);
+    this.expect.element('.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message').text.to.equal(gatewayName + ' successfully deployed');
+    this.waitForElementNotPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
   },
 
   submitDetailsPanel: function (selector, validationErrors = []) {
@@ -180,14 +191,18 @@ var pageCommands = {
     this.api.pause(3000);
   },
 
-  connectPorts: function (fromSelector, fromDir, toSelector, toDir) {
-    var bothOutDir = fromDir === 'out' && toDir === 'out';
+  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
+    const bothOutDir = fromDir === 'out' && toDir === 'out';
+    const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
+    const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    this.waitForElementPresent(startSelector, 10000);
+    this.waitForElementPresent(endSelector, 10000);
     this.api
       .pause(500)
       .useCss()
-      .moveToElement(fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`, bothOutDir ? 7 : null, bothOutDir ? 9 : null)
+      .moveToElement(startSelector, bothOutDir ? 7 : null, bothOutDir ? 9 : null)
       .mouseButtonDown(0)
-      .moveToElement(toSelector + ` .port-${toDir} > .port__anchor > .port__inside`, null, null)
+      .moveToElement(endSelector, null, null)
       .pause(500)
       .mouseButtonUp(0)
       .pause(500);
@@ -359,6 +374,14 @@ var pageCommands = {
     notPresent.forEach((elem) => {
       this.expect.element(`.DetailsPanel ${elem}`).to.not.be.present;
     });
+  },
+
+  createUniqueName: function (prefix) {
+    return prefix + '_' + Math.random().toString(36).substr(2, 5);
+  },
+
+  createGatewayName: function () {
+    return this.createUniqueName('gateway');
   }
 };
 

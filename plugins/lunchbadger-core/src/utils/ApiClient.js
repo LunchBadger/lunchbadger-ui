@@ -29,6 +29,7 @@ class ApiClient {
       }, options);
       request(req, (error, response, body) => {
         if (error) {
+          error.statusCode = 0;
           return reject(error);
         }
         if (response.statusCode >= 400) {

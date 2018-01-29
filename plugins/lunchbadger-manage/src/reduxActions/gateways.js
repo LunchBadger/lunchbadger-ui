@@ -49,7 +49,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   dispatch(actions.updateGateway(updatedEntity));
   if (isAutoSave) {
-    await dispatch(coreActions.saveToServer());
+    await dispatch(coreActions.saveToServer({plain: updatedEntity.id}));
   }
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;

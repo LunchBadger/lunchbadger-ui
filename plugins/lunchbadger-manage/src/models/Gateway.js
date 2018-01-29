@@ -48,7 +48,10 @@ export default class Gateway extends BaseModel {
     return Gateway.create(this.toJSON());
   }
 
-  toJSON(isForServer = false) {
+  toJSON(opts) {
+    const options = Object.assign({
+      isForServer: false,
+    }, opts);
     const json = {
       id: this.id,
       name: this.name,
@@ -57,7 +60,7 @@ export default class Gateway extends BaseModel {
       pipelines: this.pipelines.map(item => item.toJSON()),
       itemOrder: this.itemOrder,
     };
-    if (!isForServer) {
+    if (!options.isForServer) {
       Object.assign(json, {
         deleting: this.deleting,
         running: this.running,
@@ -80,6 +83,9 @@ export default class Gateway extends BaseModel {
         hostname: this.admin.hostname,
         port: this.admin.port,
       };
+    }
+    if (options.plain === this.id) {
+      json.pipelines = [];
     }
     return json;
   }

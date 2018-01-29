@@ -66,6 +66,12 @@ var pageCommands = {
     return this;
   },
 
+  clickSlow: function (selector) {
+    this.waitForElementPresent(selector, 5000);
+    this.click(selector);
+    this.api.pause(100);
+  },
+
   setValueSlow: function (selector, value) {
     const str = value.toString();
     this.waitForElementPresent(selector, 50000);

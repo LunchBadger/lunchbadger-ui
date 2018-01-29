@@ -9,10 +9,11 @@ module.exports = {
     page.expect.element('.workspace-status').to.be.present;
     browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
 
+    browser.pause(10000);
+
     // info panel shows OK status
     page.moveToElement('.workspace-status', 5, 5, function () {
-      page.waitForElementPresent('.ContextualInformationMessage.Workspace-OK', 3000);
-      page.expect.element('.ContextualInformationMessage.Workspace-OK .rc-tooltip-inner').text.to.contain('Workspace OK');
+      page.expect.element('.ContextualInformationMessage.Workspace-OK .rc-tooltip-inner').text.to.contain('Workspace OK').before(6000);
     });
 
     // info panel can close

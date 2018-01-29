@@ -68,7 +68,7 @@ module.exports = {
           page.assert.equal(getModelBody, `[${expect}]`);
           request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
             page.assert.equal(getServiceEndpointBody, SERVICE_ENDPOINT_RESPONSE);
-            page.close(true);
+            page.close();
           });
         });
       });

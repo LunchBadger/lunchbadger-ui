@@ -15,6 +15,7 @@ var pageCommands = {
   },
 
   close: function () {
+    this.emptyProject();
     return this.api.execute(function() {
       return window.__coverage__;
     }, [], function(response) {

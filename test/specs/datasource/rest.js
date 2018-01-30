@@ -233,6 +233,7 @@ module.exports = {
           page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'p221,  p222');
           page.submitDetailsPanel(page.getDataSourceSelector(1));
           page.refresh(function () {
+            page.closeWhenSystemDefcon1();
             page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
             page.checkEntityDetails({
               text: {
@@ -334,6 +335,7 @@ module.exports = {
             page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'p231 ,  p232');
             page.submitDetailsPanel(page.getDataSourceSelector(1));
             page.refresh(function () {
+              page.closeWhenSystemDefcon1();
               page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
               page.checkEntityDetails({
                 text: {
@@ -407,6 +409,7 @@ module.exports = {
               page.clickSlow('.DetailsPanel .button__remove__operation0function0');
               page.submitDetailsPanel(page.getDataSourceSelector(1));
               page.refresh(function () {
+                page.closeWhenSystemDefcon1();
                 page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
                 page.checkEntityDetails({
                   text: {

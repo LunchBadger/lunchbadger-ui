@@ -308,6 +308,11 @@ var pageCommands = {
     this.saveProject();
   },
 
+  closeWhenSystemDefcon1: function () {
+    this.waitForElementPresent('.SystemDefcon1 button', 120000);
+    this.clickSlow('.SystemDefcon1 button');
+  },
+
   testDatasource: function (type, config = [], cb) {
     this.addElementFromTooltip('dataSource', type);
     if (config.length === 0) {

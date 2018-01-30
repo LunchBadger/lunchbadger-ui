@@ -10,8 +10,7 @@ module.exports = {
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
     ], function () {
-      page.waitForElementPresent('.SystemDefcon1 button', 120000);
-      page.clickSlow('.SystemDefcon1 button');
+      page.closeWhenSystemDefcon1();
       page.removeEntity(page.getDataSourceSelector(1));
       page.close();
     });

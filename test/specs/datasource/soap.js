@@ -40,25 +40,25 @@ module.exports = {
       page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
       page.selectValueSlow('.DetailsPanel', 'securitypasswordType', 'PasswordDigest');
       page.clickSlow('.DetailsPanel .button__add__operation');
-      page.setValueSlow('.DetailsPanel .input__soapOperations0key input', 'key1');
-      page.setValueSlow('.DetailsPanel .input__soapOperations0service input', 'service1');
+      page.setValueSlow('.DetailsPanel .input__soapOperations0key input', 'k1');
+      page.setValueSlow('.DetailsPanel .input__soapOperations0service input', 's1');
       page.setValueSlow('.DetailsPanel .input__soapOperations0port input', '7');
-      page.setValueSlow('.DetailsPanel .input__soapOperations0operation input', 'operation1');
+      page.setValueSlow('.DetailsPanel .input__soapOperations0operation input', 'o1');
       page.clickSlow('.DetailsPanel .button__add__operation');
-      page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'key2');
-      page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 'service2');
+      page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'k2');
+      page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 's2');
       page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '8');
-      page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'operation2');
+      page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'o2');
       page.clickSlow('.DetailsPanel .button__add__soapHeader');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders0elementKey input', 'elKey1');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders0elementValue input', 'elVal1');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders0prefix input', 'prefix1');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders0namespace input', 'namespace1');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders0elementKey input', 'ek1');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders0elementValue input', 'ev1');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders0prefix input', 'p1');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders0namespace input', 'n1');
       page.clickSlow('.DetailsPanel .button__add__soapHeader');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'elKey2');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'elVal2');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'prefix2');
-      page.setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'namespace2');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'ek2');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'ev2');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p2');
+      page.setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'n2');
       page.submitDetailsPanel(page.getDataSourceSelector(1));
       page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
       page.checkEntityDetails({
@@ -67,22 +67,22 @@ module.exports = {
           wsdl: TEST_WSDL + '?wsdl',
           securityusername: 'testuser',
           securitypassword: 'passwd',
-          soapOperations0key: 'key1',
-          soapOperations0service: 'service1',
+          soapOperations0key: 'k1',
+          soapOperations0service: 's1',
           soapOperations0port: '7',
-          soapOperations0operation: 'operation1',
-          soapOperations1key: 'key2',
-          soapOperations1service: 'service2',
+          soapOperations0operation: 'o1',
+          soapOperations1key: 'k2',
+          soapOperations1service: 's2',
           soapOperations1port: '8',
-          soapOperations1operation: 'operation2',
-          soapHeaders0elementKey: 'elKey1',
-          soapHeaders0elementValue: 'elVal1',
-          soapHeaders0prefix: 'prefix1',
-          soapHeaders0namespace: 'namespace1',
-          soapHeaders1elementKey: 'elKey2',
-          soapHeaders1elementValue: 'elVal2',
-          soapHeaders1prefix: 'prefix2',
-          soapHeaders1namespace: 'namespace2',
+          soapOperations1operation: 'o2',
+          soapHeaders0elementKey: 'ek1',
+          soapHeaders0elementValue: 'ev1',
+          soapHeaders0prefix: 'p1',
+          soapHeaders0namespace: 'n1',
+          soapHeaders1elementKey: 'ek2',
+          soapHeaders1elementValue: 'ev2',
+          soapHeaders1prefix: 'p2',
+          soapHeaders1namespace: 'n2',
         },
         checkbox: {
           remotingEnabled: true,
@@ -107,22 +107,22 @@ module.exports = {
             wsdl: TEST_WSDL + '?wsdl',
             securityusername: 'testuser',
             securitypassword: 'passwd',
-            soapOperations0key: 'key1',
-            soapOperations0service: 'service1',
+            soapOperations0key: 'k1',
+            soapOperations0service: 's1',
             soapOperations0port: '7',
-            soapOperations0operation: 'operation1',
-            soapOperations1key: 'key2',
-            soapOperations1service: 'service2',
+            soapOperations0operation: 'o1',
+            soapOperations1key: 'k2',
+            soapOperations1service: 's2',
             soapOperations1port: '8',
-            soapOperations1operation: 'operation2',
-            soapHeaders0elementKey: 'elKey1',
-            soapHeaders0elementValue: 'elVal1',
-            soapHeaders0prefix: 'prefix1',
-            soapHeaders0namespace: 'namespace1',
-            soapHeaders1elementKey: 'elKey2',
-            soapHeaders1elementValue: 'elVal2',
-            soapHeaders1prefix: 'prefix2',
-            soapHeaders1namespace: 'namespace2',
+            soapOperations1operation: 'o2',
+            soapHeaders0elementKey: 'ek1',
+            soapHeaders0elementValue: 'ev1',
+            soapHeaders0prefix: 'p1',
+            soapHeaders0namespace: 'n1',
+            soapHeaders1elementKey: 'ek2',
+            soapHeaders1elementValue: 'ev2',
+            soapHeaders1prefix: 'p2',
+            soapHeaders1namespace: 'n2',
           },
           checkbox: {
             remotingEnabled: true,
@@ -161,14 +161,14 @@ module.exports = {
             wsdl: TEST_WSDL + '?wsdl',
             securityusername: 'bauser',
             securitypassword: 'bapasswd',
-            soapOperations0key: 'key2',
-            soapOperations0service: 'service2',
+            soapOperations0key: 'k2',
+            soapOperations0service: 's2',
             soapOperations0port: '8',
-            soapOperations0operation: 'operation2',
-            soapHeaders0elementKey: 'elKey2',
-            soapHeaders0elementValue: 'elVal2',
-            soapHeaders0prefix: 'prefix2',
-            soapHeaders0namespace: 'namespace2',
+            soapOperations0operation: 'o2',
+            soapHeaders0elementKey: 'ek2',
+            soapHeaders0elementValue: 'ev2',
+            soapHeaders0prefix: 'p2',
+            soapHeaders0namespace: 'n2',
           },
           checkbox: {
             remotingEnabled: true,
@@ -193,14 +193,14 @@ module.exports = {
               wsdl: TEST_WSDL + '?wsdl',
               securityusername: 'bauser',
               securitypassword: 'bapasswd',
-              soapOperations0key: 'key2',
-              soapOperations0service: 'service2',
+              soapOperations0key: 'k2',
+              soapOperations0service: 's2',
               soapOperations0port: '8',
-              soapOperations0operation: 'operation2',
-              soapHeaders0elementKey: 'elKey2',
-              soapHeaders0elementValue: 'elVal2',
-              soapHeaders0prefix: 'prefix2',
-              soapHeaders0namespace: 'namespace2',
+              soapOperations0operation: 'o2',
+              soapHeaders0elementKey: 'ek2',
+              soapHeaders0elementValue: 'ev2',
+              soapHeaders0prefix: 'p2',
+              soapHeaders0namespace: 'n2',
             },
             checkbox: {
               remotingEnabled: true,
@@ -239,15 +239,15 @@ module.exports = {
           page.setValueSlow('.DetailsPanel .input__securityusername input', 'testuser');
           page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
           page.clickSlow('.DetailsPanel .button__add__operation');
-          page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'key3');
-          page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 'service3');
+          page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'k3');
+          page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 's3');
           page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '9');
-          page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'operation3');
+          page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'o3');
           page.clickSlow('.DetailsPanel .button__add__soapHeader');
-          page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'elKey3');
-          page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'elVal3');
-          page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'prefix3');
-          page.setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'namespace3');
+          page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'ek3');
+          page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'ev3');
+          page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p3');
+          page.setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'n3');
           page.submitDetailsPanel(page.getDataSourceSelector(1));
           page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
           page.checkEntityDetails({
@@ -256,22 +256,22 @@ module.exports = {
               wsdl: TEST_WSDL + '?wsdl',
               securityusername: 'testuser',
               securitypassword: 'passwd',
-              soapOperations0key: 'key2',
-              soapOperations0service: 'service2',
+              soapOperations0key: 'k2',
+              soapOperations0service: 's2',
               soapOperations0port: '8',
-              soapOperations0operation: 'operation2',
-              soapOperations1key: 'key3',
-              soapOperations1service: 'service3',
+              soapOperations0operation: 'o2',
+              soapOperations1key: 'k3',
+              soapOperations1service: 's3',
               soapOperations1port: '9',
-              soapOperations1operation: 'operation3',
-              soapHeaders0elementKey: 'elKey2',
-              soapHeaders0elementValue: 'elVal2',
-              soapHeaders0prefix: 'prefix2',
-              soapHeaders0namespace: 'namespace2',
-              soapHeaders1elementKey: 'elKey3',
-              soapHeaders1elementValue: 'elVal3',
-              soapHeaders1prefix: 'prefix3',
-              soapHeaders1namespace: 'namespace3',
+              soapOperations1operation: 'o3',
+              soapHeaders0elementKey: 'ek2',
+              soapHeaders0elementValue: 'ev2',
+              soapHeaders0prefix: 'p2',
+              soapHeaders0namespace: 'n2',
+              soapHeaders1elementKey: 'ek3',
+              soapHeaders1elementValue: 'ev3',
+              soapHeaders1prefix: 'p3',
+              soapHeaders1namespace: 'n3',
             },
             checkbox: {
               remotingEnabled: false,
@@ -298,22 +298,22 @@ module.exports = {
                 wsdl: TEST_WSDL + '?wsdl',
                 securityusername: 'testuser',
                 securitypassword: 'passwd',
-                soapOperations0key: 'key2',
-                soapOperations0service: 'service2',
+                soapOperations0key: 'k2',
+                soapOperations0service: 's2',
                 soapOperations0port: '8',
-                soapOperations0operation: 'operation2',
-                soapOperations1key: 'key3',
-                soapOperations1service: 'service3',
+                soapOperations0operation: 'o2',
+                soapOperations1key: 'k3',
+                soapOperations1service: 's3',
                 soapOperations1port: '9',
-                soapOperations1operation: 'operation3',
-                soapHeaders0elementKey: 'elKey2',
-                soapHeaders0elementValue: 'elVal2',
-                soapHeaders0prefix: 'prefix2',
-                soapHeaders0namespace: 'namespace2',
-                soapHeaders1elementKey: 'elKey3',
-                soapHeaders1elementValue: 'elVal3',
-                soapHeaders1prefix: 'prefix3',
-                soapHeaders1namespace: 'namespace3',
+                soapOperations1operation: 'o3',
+                soapHeaders0elementKey: 'ek2',
+                soapHeaders0elementValue: 'ev2',
+                soapHeaders0prefix: 'p2',
+                soapHeaders0namespace: 'n2',
+                soapHeaders1elementKey: 'ek3',
+                soapHeaders1elementValue: 'ev3',
+                soapHeaders1prefix: 'p3',
+                soapHeaders1namespace: 'n3',
               },
               checkbox: {
                 remotingEnabled: false,

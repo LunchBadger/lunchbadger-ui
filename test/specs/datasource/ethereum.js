@@ -5,7 +5,10 @@ module.exports = {
     page.open();
     page.testDatasource('ethereum', [
       ['URL', 'dumpUrl']
-    ]);
-    page.close();
+    ], function () {
+      page.closeWhenSystemDefcon1();
+      page.removeEntity(page.getDataSourceSelector(1));
+      page.close();
+    });
   }
 };

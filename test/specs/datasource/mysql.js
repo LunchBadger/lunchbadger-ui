@@ -9,7 +9,11 @@ module.exports = {
       ['DATABASE', 'dumpDatabase'],
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
-    ]);
-    page.close();
+    ], function () {
+      page.waitForElementPresent('.SystemDefcon1 button', 120000);
+      page.clickSlow('.SystemDefcon1 button');
+      page.removeEntity(page.getDataSourceSelector(1));
+      page.close();
+    });
   }
 };

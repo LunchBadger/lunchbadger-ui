@@ -134,8 +134,8 @@ var pageCommands = {
 
   submitDetailsPanel: function (selector, validationErrors = []) {
     this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5000);
-    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled', 5, 5, function() {
-      this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled');
+    this.moveToElement('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5, 5, function() {
+      this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)');
     });
     if (validationErrors.length === 0) {
       this.waitForElementNotPresent('.DetailsPanel .EntityValidationErrors', 60000);

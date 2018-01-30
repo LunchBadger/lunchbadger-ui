@@ -83,8 +83,12 @@ export default class RnD extends PureComponent {
     if (direction !== 'left' && direction !== 'right') {
       Object.assign(state, {height});
     }
-    this.setState(state);
-  }
+    this.setState(state, this.dispatchResizeEvent);
+  };
+
+  dispatchResizeEvent = () => {
+    window.dispatchEvent(new Event('rndresized'));
+  };
 
   render() {
     const {

@@ -1,5 +1,6 @@
-const env = process.env.LB_ENV || 'staging'; // localhost|staging|triton
+const env = process.env.LB_ENV || 'staging'; // staging|triton|localhost
 
+const isTriton = env === 'triton';
 const isPrefix = env !== 'localhost';
 const prefix = isPrefix ? `${env}-` : '';
 const subdomain = isPrefix ? `${env}.` : '';
@@ -21,7 +22,7 @@ export default {
   },
   envId: 'dev',
   features: {
-    tritonLogo: true,
+    tritonLogo: isTriton,
     tritonObjectStorage: true,
     microservices: true,
     apis: true,

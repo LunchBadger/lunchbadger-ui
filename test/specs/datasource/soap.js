@@ -32,29 +32,29 @@ module.exports = {
         ],
       });
       page.setValueSlow('.DetailsPanel .input__wsdl input', TEST_WSDL + '?wsdl');
-      page.click('.DetailsPanel .checkbox__remotingEnabled');
-      page.click('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
-      page.click('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
-      page.click('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
+      page.clickSlow('.DetailsPanel .checkbox__remotingEnabled');
+      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
+      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
+      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
       page.setValueSlow('.DetailsPanel .input__securityusername input', 'testuser');
       page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
       page.selectValueSlow('.DetailsPanel', 'securitypasswordType', 'PasswordDigest');
-      page.click('.DetailsPanel .button__add__operation');
+      page.clickSlow('.DetailsPanel .button__add__operation');
       page.setValueSlow('.DetailsPanel .input__soapOperations0key input', 'key1');
       page.setValueSlow('.DetailsPanel .input__soapOperations0service input', 'service1');
       page.setValueSlow('.DetailsPanel .input__soapOperations0port input', '7');
       page.setValueSlow('.DetailsPanel .input__soapOperations0operation input', 'operation1');
-      page.click('.DetailsPanel .button__add__operation');
+      page.clickSlow('.DetailsPanel .button__add__operation');
       page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'key2');
       page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 'service2');
       page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '8');
       page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'operation2');
-      page.click('.DetailsPanel .button__add__soapHeader');
+      page.clickSlow('.DetailsPanel .button__add__soapHeader');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0elementKey input', 'elKey1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0elementValue input', 'elVal1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0prefix input', 'prefix1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0namespace input', 'namespace1');
-      page.click('.DetailsPanel .button__add__soapHeader');
+      page.clickSlow('.DetailsPanel .button__add__soapHeader');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'elKey2');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'elVal2');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'prefix2');
@@ -151,8 +151,8 @@ module.exports = {
         });
         page.setValueSlow('.DetailsPanel .input__securityusername input', 'bauser');
         page.setValueSlow('.DetailsPanel .input__securitypassword input', 'bapasswd');
-        page.click('.DetailsPanel .button__remove__operation0');
-        page.click('.DetailsPanel .button__remove__soapHeader0');
+        page.clickSlow('.DetailsPanel .button__remove__operation0');
+        page.clickSlow('.DetailsPanel .button__remove__soapHeader0');
         page.submitDetailsPanel(page.getDataSourceSelector(1));
         page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
         page.checkEntityDetails({
@@ -217,26 +217,33 @@ module.exports = {
               '.select__securitypasswordType',
             ],
           });
-          page.click('.DetailsPanel .checkbox__remotingEnabled');
-          page.click('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
-          page.click('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
-          page.click('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
+          page.clickSlow('.DetailsPanel .checkbox__remotingEnabled');
+          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
+          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
+          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
           page.selectValueSlow('.DetailsPanel', 'securityscheme', 'ClientSSL');
+          page.setValueSlow('.DetailsPanel .input__securitykeyPath input', 'testKeyPath');
+          page.setValueSlow('.DetailsPanel .input__securitycertPath input', 'testCertPath');
           page.checkEntityDetails({
+            text: {
+              securitykeyPath: 'testKeyPath',
+              securitycertPath: 'testCertPath',
+            },
             notPresent: [
               '.input__securityusername',
               '.input__securitypassword',
               '.select__securitypasswordType',
             ],
           });
-          page.setValueSlow('.DetailsPanel .input__securitykeyPath input', 'testKeyPath');
-          page.setValueSlow('.DetailsPanel .input__securitycertPath input', 'testCertPath');
-          page.click('.DetailsPanel .button__add__operation');
+          page.selectValueSlow('.DetailsPanel', 'securityscheme', 'WS');
+          page.setValueSlow('.DetailsPanel .input__securityusername input', 'testuser');
+          page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
+          page.clickSlow('.DetailsPanel .button__add__operation');
           page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'key3');
           page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 'service3');
           page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '9');
           page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'operation3');
-          page.click('.DetailsPanel .button__add__soapHeader');
+          page.clickSlow('.DetailsPanel .button__add__soapHeader');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'elKey3');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'elVal3');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'prefix3');
@@ -247,8 +254,8 @@ module.exports = {
             text: {
               url: TEST_WSDL,
               wsdl: TEST_WSDL + '?wsdl',
-              securitykeyPath: 'testKeyPath',
-              securitycertPath: 'testCertPath',
+              securityusername: 'testuser',
+              securitypassword: 'passwd',
               soapOperations0key: 'key2',
               soapOperations0service: 'service2',
               soapOperations0port: '8',
@@ -273,12 +280,12 @@ module.exports = {
               wsdl_optionsrequestCert: false,
             },
             select: {
-              securityscheme: 'ClientSSL',
+              securityscheme: 'WS',
+              securitypasswordType: 'PasswordText',
             },
             notPresent: [
-              '.input__securityusername',
-              '.input__securitypassword',
-              '.select__securitypasswordType',
+              '.input__securitykeyPath',
+              '.input__securitycertPath',
               '.input__soapOperations2key',
               '.input__soapHeaders2elementKey',
             ],
@@ -289,8 +296,8 @@ module.exports = {
               text: {
                 url: TEST_WSDL,
                 wsdl: TEST_WSDL + '?wsdl',
-                securitykeyPath: 'testKeyPath',
-                securitycertPath: 'testCertPath',
+                securityusername: 'testuser',
+                securitypassword: 'passwd',
                 soapOperations0key: 'key2',
                 soapOperations0service: 'service2',
                 soapOperations0port: '8',
@@ -315,12 +322,12 @@ module.exports = {
                 wsdl_optionsrequestCert: false,
               },
               select: {
-                securityscheme: 'ClientSSL',
+                securityscheme: 'WS',
+                securitypasswordType: 'PasswordText',
               },
               notPresent: [
-                '.input__securityusername',
-                '.input__securitypassword',
-                '.select__securitypasswordType',
+                '.input__securitykeyPath',
+                '.input__securitycertPath',
                 '.input__soapOperations2key',
                 '.input__soapHeaders2elementKey',
               ],

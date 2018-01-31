@@ -67,9 +67,10 @@ var pageCommands = {
   },
 
   clickSlow: function (selector) {
+    this.api.pause(1000);
     this.waitForElementPresent(selector, 5000);
     this.click(selector);
-    this.api.pause(100);
+    this.api.pause(1000);
   },
 
   setValueSlow: function (selector, value) {
@@ -147,11 +148,12 @@ var pageCommands = {
         this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
       });
     }
+    this.api.pause(2000);
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.api.pause(1000);
-    this.click(selector);
+    this.api.pause(2000);
+    this.clickSlow(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--zoom', 50000);
     this.moveToElement(selector + '.highlighted .Toolbox__button--zoom', 5, -10, function() {
       this.click(selector + '.highlighted .Toolbox__button--zoom');

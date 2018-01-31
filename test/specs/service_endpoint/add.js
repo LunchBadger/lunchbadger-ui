@@ -57,12 +57,9 @@ module.exports = {
           page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
           page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
           page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls2', 5000);
+          page.close();
         });
       });
     });
-  },
-
-  after: function () {
-    page.close();
   }
 };

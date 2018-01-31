@@ -1,189 +1,496 @@
 export default [
   {
-    "key": "http://express-gateway.io/schemas/config.json",
-    "type": "core",
-    "name": "http://express-gateway.io/schemas/config.json",
+    "type": "config",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/config.json",
-      "gateway": {
-        "serviceEndpoint": {
-          "type": "string"
+      "$id": "http://express-gateway.io/models/gateway.config.json",
+      "type": "object",
+      "properties": {
+        "http": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            }
+          }
+        },
+        "https": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            },
+            "tls": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "cert": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "admin": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            },
+            "hostname": {
+              "type": "string"
+            }
+          }
+        },
+        "apiEndpoints": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "pathRegex": {
+                "type": "string",
+                "format": "regex"
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "methods": {
+                "type": [
+                  "string",
+                  "array"
+                ],
+                "items": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "serviceEndpoints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "urls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pipelines": {
+          "type": [
+            "object",
+            "array"
+          ],
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "apiEndpoints": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "policies": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "condition": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
         }
       }
     }
   },
   {
-    "key": "http://express-gateway.io/schemas/defs.json",
-    "type": "core",
-    "name": "http://express-gateway.io/schemas/defs.json",
+    "type": "config",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/defs.json",
-      "definitions": {
-        "jscode": {
-          "type": "string"
-        },
-        "condition": {
+      "$id": "http://express-gateway.io/models/system.config.json",
+      "type": "object",
+      "properties": {
+        "db": {
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string"
+            "redis": {
+              "type": "object",
+              "properties": {
+                "emulate": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "emulate"
+              ]
             }
           },
           "required": [
-            "name"
+            "redis"
           ]
         },
-        "httpHeaders": [
-          "Accept",
-          "Accept-Charset",
-          "Accept-Encoding",
-          "Accept-Language",
-          "Accept-Datetime",
-          "Access-Control-Request-Method",
-          "Access-Control-Request-Headers",
-          "Authorization",
-          "Cache-Control",
-          "Connection",
-          "Cookie",
-          "Content-Length",
-          "Content-MD5",
-          "Content-Type",
-          "Date",
-          "Expect",
-          "Forwarded",
-          "From",
-          "Host",
-          "If-Match",
-          "If-Modified-Since",
-          "If-None-Match",
-          "If-Range",
-          "If-Unmodified-Since",
-          "Max-Forwards",
-          "Origin",
-          "Pragma",
-          "Proxy-Authorization",
-          "Range",
-          "Referer",
-          "TE",
-          "User-Agent",
-          "Upgrade",
-          "Via",
-          "Warning"
-        ],
-        "httpMethods": [
-          "GET",
-          "HEAD",
-          "POST",
-          "PUT",
-          "DELETE",
-          "TRACE",
-          "OPTIONS",
-          "CONNECT",
-          "PATCH"
-        ]
-      }
+        "crypto": {
+          "type": "object",
+          "properties": {
+            "cipherKey": {
+              "type": "string",
+              "default": "sensitiveKey"
+            },
+            "algorithm": {
+              "type": "string",
+              "default": "aes256"
+            },
+            "saltRounds": {
+              "type": "number",
+              "default": 10
+            }
+          },
+          "required": [
+            "cipherKey",
+            "algorithm",
+            "saltRounds"
+          ]
+        },
+        "session": {
+          "type": "object"
+        },
+        "accessTokens": {
+          "type": "object",
+          "properties": {
+            "tokenType": {
+              "type": "string",
+              "enum": [
+                "jwt",
+                "opaque"
+              ],
+              "default": "opaque"
+            },
+            "timeToExpiry": {
+              "type": "number",
+              "default": 720000
+            }
+          },
+          "required": [
+            "tokenType",
+            "timeToExpiry"
+          ]
+        },
+        "refreshTokens": {
+          "type": "object",
+          "properties": {
+            "timeToExpiry": {
+              "type": "number",
+              "default": 720000
+            }
+          },
+          "required": [
+            "timeToExpiry"
+          ]
+        },
+        "authorizationCodes": {
+          "type": "object",
+          "properties": {
+            "timeToExpiry": {
+              "type": "number",
+              "default": 300000
+            }
+          },
+          "required": [
+            "timeToExpiry"
+          ]
+        },
+        "plugins": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "db",
+        "crypto",
+        "session",
+        "accessTokens",
+        "refreshTokens",
+        "authorizationCodes"
+      ]
     }
   },
   {
-    "key": "policy:basic-auth",
-    "type": "policy",
-    "name": "basic-auth",
-    "description": "The Basic Authorization policy follows the RFC-7617 standard. From the standard, if a user agent wanted to send the user-id “Aladdin” and password “open sesame”, it would use the following HTTP header.",
+    "type": "model",
     "schema": {
+      "$id": "http://express-gateway.io/models/users.json",
       "type": "object",
       "properties": {
-        "passThrough": {
-          "type": "boolean"
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "redirectUri": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "username",
+        "firstname",
+        "lastname"
+      ]
+    }
+  },
+  {
+    "type": "model",
+    "schema": {
+      "$id": "http://express-gateway.io/models/credentials.json",
+      "type": "object",
+      "definitions": {
+        "credentialBase": {
+          "type": "object",
+          "required": [
+            "autoGeneratePassword"
+          ],
+          "properties": {
+            "autoGeneratePassword": {
+              "type": "boolean",
+              "default": true
+            },
+            "scopes": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "properties": {
+        "basic-auth": {
+          "type": "object",
+          "required": [
+            "autoGeneratePassword",
+            "passwordKey"
+          ],
+          "properties": {
+            "autoGeneratePassword": {
+              "type": "boolean",
+              "default": true
+            },
+            "scopes": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "passwordKey": {
+              "type": "string",
+              "default": "password"
+            }
+          }
+        },
+        "key-auth": {
+          "type": "object",
+          "properties": {
+            "scopes": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "jwt": {
+          "type": "object"
+        },
+        "oauth2": {
+          "type": "object",
+          "required": [
+            "autoGeneratePassword",
+            "passwordKey"
+          ],
+          "properties": {
+            "autoGeneratePassword": {
+              "type": "boolean",
+              "default": true
+            },
+            "scopes": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "passwordKey": {
+              "type": "string",
+              "default": "secret"
+            }
+          }
         }
       }
     }
   },
   {
-    "key": "policy:cors",
-    "type": "policy",
-    "name": "cors",
-    "description": "The CORS Policy Enables Cross-origin resource sharing (CORS) in Express Gateway. CORS defines a way in which a browser and server can interact and determine whether or not it is safe to allow a cross-origin request.",
+    "type": "model",
     "schema": {
+      "$id": "http://express-gateway.io/models/applications.json",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/basic-auth.json",
+      "type": "object",
+      "properties": {
+        "passThrough": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/cors.json",
       "type": "object",
       "properties": {
         "origin": {
           "type": [
+            "string",
             "boolean",
             "array"
           ],
           "items": {
             "type": "string"
-          },
-          "default": [],
-          "description": "Configures the Access-Control-Allow-Origin CORS header."
+          }
         },
         "methods": {
-          "type": "array",
+          "type": [
+            "string",
+            "array"
+          ],
           "items": {
             "type": "string"
-          },
-          "enum": {
-            "$ref": "defs.json#/definitions/httpMethods"
-          },
-          "default": [
-            "GET",
-            "HEAD",
-            "PUT",
-            "PATCH",
-            "POST",
-            "DELETE"
-          ],
-          "description": "Configures the Access-Control-Allow-Methods CORS header."
+          }
         },
         "allowedHeaders": {
-          "type": "array",
+          "type": [
+            "string",
+            "array"
+          ],
           "items": {
             "type": "string"
-          },
-          "enum": {
-            "$ref": "defs.json#/definitions/httpHeaders"
-          },
-          "description": "Configures the Access-Control-Allow-Headers CORS header."
+          }
         },
         "exposedHeaders": {
           "type": "array",
           "items": {
             "type": "string"
-          },
-          "enum": {
-            "$ref": "defs.json#/definitions/httpHeaders"
-          },
-          "description": "Configures the Access-Control-Expose-Headers CORS header."
+          }
         },
         "credentials": {
-          "type": "boolean",
-          "default": true,
-          "description": "Configures the Access-Control-Allow-Credentials CORS header."
+          "type": "boolean"
         },
         "maxAge": {
-          "type": "integer",
-          "description": "Configures the Access-Control-Max-Age CORS header."
+          "type": "integer"
         },
         "optionsSuccessStatus": {
-          "type": "integer",
-          "default": 204,
-          "description": "Provides a status code to use for successful OPTIONS requests, since some legacy browsers (IE11, various SmartTVs) choke on 204."
+          "type": "integer"
         }
       }
     }
   },
   {
-    "key": "policy:expression",
     "type": "policy",
-    "name": "expression",
-    "description": "The Expression policy allows you to execute arbitrary JavaScript code in secured shared memory or “sandbox”.",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/expression.json",
+      "$id": "http://express-gateway.io/schemas/policies/expression.json",
       "type": "object",
       "properties": {
         "jscode": {
-          "$ref": "defs.json#/definitions/jscode",
-          "description": "Valid JS code to execute. Note that egContext object will be used as global object for code. All Node.JS global variables like process, require etc. will not be available for security reasons"
+          "type": "string"
         }
       },
       "required": [
@@ -192,78 +499,118 @@ export default [
     }
   },
   {
-    "key": "policy:headers",
     "type": "policy",
-    "name": "headers",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/headers.json",
       "type": "object",
       "properties": {
         "headersPrefix": {
           "type": "string",
-          "description": "String with prefix to be added for each header."
+          "default": ""
         },
         "forwardHeaders": {
           "type": "object"
         }
-      }
+      },
+      "required": [
+        "headersPrefix",
+        "forwardHeaders"
+      ]
     }
   },
   {
-    "key": "policy:key-auth",
     "type": "policy",
-    "name": "key-auth",
-    "description": "The Key Authorization policy is an efficient way of securing restricting access to your API endpoints for applications through API keys. The Express Gateway API key is a key pair separated by colon. The first part of the key pair is a UUID representing the identity of the consumer. The second part of the key pair is a UUID representing the secret.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/jwt.json",
+      "type": "object",
+      "properties": {
+        "secretOrPublicKey": {
+          "type": "string"
+        },
+        "secretOrPublicKeyFile": {
+          "type": "string"
+        },
+        "jwtExtractor": {
+          "type": "string",
+          "enum": [
+            "header",
+            "query",
+            "authScheme",
+            "authBearer"
+          ],
+          "default": "authBearer"
+        },
+        "jwtExtractorField": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "checkCredentialExistence": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [
+        "jwtExtractor",
+        "checkCredentialExistence"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "secretOrPublicKey"
+          ]
+        },
+        {
+          "required": [
+            "secretOrPublicKeyFile"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/keyauth.json",
       "type": "object",
       "properties": {
         "apiKeyHeader": {
-          "type": "string",
-          "default": "Authorization",
-          "enum": {
-            "$ref": "defs.json#/definitions/httpHeaders"
-          },
-          "description": "The name of the header that should contain the API key."
+          "type": "string"
         },
         "apiKeyHeaderScheme": {
-          "type": "string",
-          "default": "apiKey",
-          "description": "The enforced scheme in the header."
+          "type": "string"
         },
         "apiKeyField": {
-          "type": "string",
-          "default": "apiKey",
-          "description": "Name of field to check in query parameter."
+          "type": "string"
+        },
+        "passThrough": {
+          "type": "boolean",
+          "default": false
         },
         "disableHeaders": {
-          "type": "boolean",
-          "default": true,
-          "description": "Disable apikey lookup in headers."
+          "type": "boolean"
         },
         "disableHeadersScheme": {
-          "type": "boolean",
-          "default": true,
-          "description": "Disable verification of scheme in header."
+          "type": "boolean"
         },
         "disableQueryParam": {
-          "type": "boolean",
-          "default": true,
-          "description": "Set to true to disable api key lookup in query string."
+          "type": "boolean"
         }
       }
     }
   },
   {
-    "key": "policy:log",
     "type": "policy",
-    "name": "log",
-    "description": "The Simpler Logger policy provides capability for logging with basic message output. JavaScript ES6 template literal syntax is supported.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/log.json",
       "type": "object",
       "properties": {
         "message": {
-          "type": "string",
-          "default": "${req.ip} ${req.method} ${req.originalUrl}",
-          "description": "String specifiying the message to log."
+          "type": "string"
         }
       },
       "required": [
@@ -272,161 +619,141 @@ export default [
     }
   },
   {
-    "key": "policy:oauth2",
     "type": "policy",
-    "name": "oauth2",
-    "description": "The OAuth 2.0 policy follows the RFC-6749 standard.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/oauth2.json",
       "type": "object",
       "properties": {
         "passThrough": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
+        },
+        "jwt": {
+          "$ref": "jwt.json"
         }
-      }
+      },
+      "required": [
+        "passThrough"
+      ]
     }
   },
   {
-    "key": "policy:proxy",
     "type": "policy",
-    "name": "proxy",
-    "description": "The Proxy policy forwards the request to a service endpoint.",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/proxy.json",
+      "$id": "http://express-gateway.io/schemas/policies/proxy.json",
       "type": "object",
       "properties": {
         "serviceEndpoint": {
-          "$ref": "config.json#/gateway/serviceEndpoint",
-          "description": "The name of the service endpoint to forward to"
+          "type": "string"
         },
         "changeOrigin": {
           "type": "boolean",
-          "default": true,
-          "description": "Changes the origin of the host header to the target URL."
+          "default": true
         },
         "proxyUrl": {
-          "type": "string",
-          "description": "Address of the intermediate proxy. Example: http://corporate.proxy:3128."
+          "type": "string"
         },
         "strategy": {
           "type": "string",
           "enum": [
             "round-robin"
           ],
-          "default": "round-robin",
-          "description": "Assigns a load-balancing strategy for serviceEndpoint declarations that have more than one URL."
+          "default": "round-robin"
         }
       },
       "required": [
-        "serviceEndpoint"
+        "serviceEndpoint",
+        "strategy",
+        "changeOrigin"
       ]
     }
   },
   {
-    "key": "policy:rate-limit",
     "type": "policy",
-    "name": "rate-limit",
-    "description": "The Rate Limiter policy is used to limit the number of requests received and processed by the API endpoint. Limits are useful to prevent your system from being overwhelmed in both benign and malevolent situations where the number of requests processed can overwhelm your underlying APIs and supporting services. Rate limits are also useful to control the amount of API consumption to a known capacity of quantity.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/rate-limit.json",
       "type": "object",
       "properties": {
         "rateLimitBy": {
-          "type": "string",
-          "default": "${req.ip}",
-          "description": "The criteria that is used to limit the number of requests by. By default will limit based on IP address. Use JS template string to configure. Example “${req.ip}”, “${req.hostname}” etc."
+          "type": "string"
         },
         "windowMs": {
-          "type": "integer",
-          "default": 60000,
-          "description": "milliseconds - how long to keep records of requests in memory.",
-          "postfix": "milliseconds"
+          "type": "integer"
         },
         "delayAfter": {
-          "type": "integer",
-          "default": 1,
-          "description": "max number of connections during windowMs before starting to delay responses. Defaults to 1. Set to 0 to disable delaying.",
-          "postfix": "connections"
+          "type": "integer"
         },
         "delayMs": {
-          "type": "integer",
-          "default": 1000,
-          "description": "milliseconds - how long to delay the response, multiplied by (number of recent hits - delayAfter). Defaults to 1000 (1 second). Set to 0 to disable delaying.",
-          "postfix": "milliseconds"
+          "type": "integer"
         },
         "max": {
-          "type": "integer",
-          "default": 5,
-          "description": "max number of connections during windowMs milliseconds before sending a 429 response. Defaults to 5. Set to 0 to disable.",
-          "postfix": "connections"
+          "type": "integer"
         },
         "message": {
-          "type": "string",
-          "default": "Too many requests, please try again later.",
-          "description": "Error message returned when max is exceeded."
+          "type": "string"
         },
         "statusCode": {
-          "type": "integer",
-          "default": 429,
-          "description": "HTTP status code returned when max is exceeded."
-        }
-      },
-      "required": [
-        "rateLimitBy",
-        "message",
-        "statusCode"
-      ]
-    }
-  },
-  {
-    "key": "policy:terminate",
-    "type": "policy",
-    "name": "terminate",
-    "schema": {
-      "type": "object",
-      "properties": {
-        "statusCode": {
-          "type": "integer",
-          "description": "Status code to return in the response.",
-          "default": 400
-        },
-        "message": {
-          "type": "string",
-          "description": "String body to return in the response.",
-          "default": "Terminated"
+          "type": "integer"
         }
       }
     }
   },
   {
-    "key": "condition:always",
-    "type": "condition",
-    "name": "always",
-    "description": "",
+    "type": "policy",
     "schema": {
-
+      "$id": "http://express-gateway.io/schemas/policies/terminate.json",
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "number",
+          "default": 400
+        },
+        "message": {
+          "type": "string",
+          "default": "Terminated"
+        }
+      },
+      "required": [
+        "statusCode",
+        "message"
+      ]
     }
   },
   {
-    "key": "condition:never",
-    "type": "condition",
-    "name": "never",
-    "description": "",
+    "type": "policy",
     "schema": {
-
+      "$id": "http://express-gateway.io/policies/cAdvisor.json",
+      "type": "object",
+      "properties": {
+        "headerName": {
+          "type": "string",
+          "default": "eg-consumer-id"
+        }
+      }
     }
   },
   {
-    "key": "condition:allOf",
     "type": "condition",
-    "name": "allOf",
-    "description": "Matches only if all of its parameters match.",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/allOf.json",
+      "$id": "http://express-gateway.io/schemas/conditions/always.json"
+    }
+  },
+  {
+    "type": "condition",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/never.json"
+    }
+  },
+  {
+    "type": "condition",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/allOf.json",
       "type": "object",
       "properties": {
         "conditions": {
           "type": "array",
           "items": {
-            "$ref": "defs.json#/definitions/condition"
+            "$ref": "base.json"
           }
         }
       },
@@ -436,18 +763,15 @@ export default [
     }
   },
   {
-    "key": "condition:oneOf",
     "type": "condition",
-    "name": "oneOf",
-    "description": "Matches if at least one of its parameters matches.",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/oneOf.json",
+      "$id": "http://express-gateway.io/schemas/conditions/oneOf.json",
       "type": "object",
       "properties": {
         "conditions": {
           "type": "array",
           "items": {
-            "$ref": "defs.json#/definitions/condition"
+            "$ref": "base.json"
           }
         }
       },
@@ -457,16 +781,13 @@ export default [
     }
   },
   {
-    "key": "condition:not",
     "type": "condition",
-    "name": "not",
-    "description": "Invert condition result.",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/not.json",
+      "$id": "http://express-gateway.io/schemas/conditions/not.json",
       "type": "object",
       "properties": {
         "condition": {
-          "$ref": "defs.json#/definitions/condition"
+          "$ref": "base.json"
         }
       },
       "required": [
@@ -475,16 +796,14 @@ export default [
     }
   },
   {
-    "key": "condition:pathMatch",
     "type": "condition",
-    "name": "pathMatch",
-    "description": "Matches if the request’s path matches the given regular expression parameter.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/pathMatch.json",
       "type": "object",
       "properties": {
         "pattern": {
           "type": "string",
-          "description": "Matches if the request’s path matches the given regular expression parameter."
+          "format": "regex"
         }
       },
       "required": [
@@ -493,16 +812,13 @@ export default [
     }
   },
   {
-    "key": "condition:pathExact",
     "type": "condition",
-    "name": "pathExact",
-    "description": "Matches if the request’s path is equal to path parameter.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/pathExact.json",
       "type": "object",
       "properties": {
         "path": {
-          "type": "string",
-          "description": "Matches if the request’s path is equal to path parameter."
+          "type": "string"
         }
       },
       "required": [
@@ -511,22 +827,37 @@ export default [
     }
   },
   {
-    "key": "condition:method",
     "type": "condition",
-    "name": "method",
-    "description": "Matches if the request’s method matches the methods parameter. The parameter can be either a string (e.g. ‘GET’) or an array of such strings.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/method.json",
+      "definitions": {
+        "httpMethod": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "HEAD",
+            "OPTIONS"
+          ]
+        }
+      },
       "type": "object",
       "properties": {
         "methods": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "enum": {
-            "$ref": "defs.json#/definitions/httpMethods"
-          },
-          "description": "Matches if the request’s method matches the methods parameter. The parameter can be either a string (e.g. ‘GET’) or an array of such strings."
+          "anyOf": [
+            {
+              "$ref": "#/definitions/httpMethod"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/httpMethod"
+              }
+            }
+          ]
         }
       },
       "required": [
@@ -535,16 +866,13 @@ export default [
     }
   },
   {
-    "key": "condition:hostMatch",
     "type": "condition",
-    "name": "hostMatch",
-    "description": "Matches if the Host header passed with the request matches the parameter. Parameter pattern should be a wildcard\string expression.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/hostMatch.json",
       "type": "object",
       "properties": {
         "pattern": {
-          "type": "string",
-          "description": "Matches if the Host header passed with the request matches the parameter. Parameter pattern should be a wildcard\string expression."
+          "type": "string"
         }
       },
       "required": [
@@ -553,21 +881,30 @@ export default [
     }
   },
   {
-    "key": "condition:expression",
     "type": "condition",
-    "name": "expression",
-    "description": "Matches execution result of JS code provided in expression property. Code is executed in limited space that has access only to egContext.",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/expression.json",
       "type": "object",
       "properties": {
         "expression": {
-          "$ref": "defs.json#/definitions/jscode",
-          "description": "Matches execution result of JS code provided in expression property. Code is executed in limited space that has access only to egContext."
+          "type": "string"
         }
       },
       "required": [
         "expression"
       ]
+    }
+  },
+  {
+    "type": "condition",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/authenticated.json"
+    }
+  },
+  {
+    "type": "condition",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/anonymous.json"
     }
   }
 ];

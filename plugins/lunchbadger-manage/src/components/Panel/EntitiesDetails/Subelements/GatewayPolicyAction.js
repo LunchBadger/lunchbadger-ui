@@ -11,6 +11,7 @@ const customPropertyTypes = [
   'string',
   'boolean',
   'integer',
+  'number',
   'array',
   'object',
 ];
@@ -21,6 +22,7 @@ const getDefaultValueByType = type => ({
   string: '',
   boolean: false,
   integer: 0,
+  number: 0,
   jscode: '',
   array: [],
   object: {},
@@ -156,7 +158,7 @@ export default class GatewayPolicyAction extends PureComponent {
     const property = state.parameters.find(item => item.id === id);
     if (property.type === 'boolean') {
       property.value = checked;
-    } else if (property.type === 'integer') {
+    } else if (property.type === 'integer' || property.type === 'number') {
       property.value = +value;
     } else {
       property.value = value;
@@ -253,7 +255,7 @@ export default class GatewayPolicyAction extends PureComponent {
           bool: true,
         });
       }
-      if (type === 'integer') {
+      if (type === 'integer' || type === 'number') {
         Object.assign(props, {
           width: 150,
           number: true,

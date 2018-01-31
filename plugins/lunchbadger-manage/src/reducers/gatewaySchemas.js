@@ -19,6 +19,7 @@ const transformSchemas = schema => {
     defs: {},
   };
   schema.forEach((item) => {
+    item.name = item.schema.$id.split('/').pop().replace('.json', '');
     if (!data[item.type]) {
       data[item.type] = {};
     }

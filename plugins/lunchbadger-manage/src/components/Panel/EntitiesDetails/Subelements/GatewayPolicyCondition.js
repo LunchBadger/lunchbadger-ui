@@ -155,7 +155,7 @@ export default class GatewayPolicyCondition extends PureComponent {
     const property = state.properties.find(item => item.name === name);
     if (property.type === 'boolean') {
       property.value = checked;
-    } else if (property.type === 'integer') {
+    } else if (property.type === 'integer' || property.type === 'number') {
       property.value = +value;
     } else {
       property.value = value;
@@ -298,7 +298,7 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       );
     }
-    if (['boolean', 'integer', 'string', 'jscode', 'array'].includes(type)) {
+    if (['boolean', 'integer', 'number', 'string', 'jscode', 'array'].includes(type)) {
       const props = {
         key: id,
         title: label || name,
@@ -314,7 +314,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           onChange: this.handlePropertyValueChange(name),
         });
       }
-      if (type === 'integer') {
+      if (type === 'integer' || type === 'number') {
         Object.assign(props, {
           number: true,
           alignRight: true,

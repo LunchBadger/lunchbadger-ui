@@ -57,6 +57,7 @@ class AppLoader extends Component {
       this.prevMessage = message.data;
       this.props.dispatch(actions.setEntitiesStatuses(data));
       this.props.dispatch(updateEntitiesStatues());
+      console.log('Status from kubeWatcher', data);
     }
   };
 

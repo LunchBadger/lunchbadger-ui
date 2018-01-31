@@ -150,7 +150,8 @@ class Gateway extends Component {
     this.changeState({pipelines});
   };
 
-  getPolicyInputOptions = () => this.props.entity.policies.map(label => ({label, value: label}));
+  getPolicyInputOptions = () => Object.keys(this.context.store.getState().entities.gatewaySchemas.policy)
+    .map(label => ({label, value: label}));
 
   renderPipeline = (pipeline, pipelineIdx) => {
     const options = this.getPolicyInputOptions();

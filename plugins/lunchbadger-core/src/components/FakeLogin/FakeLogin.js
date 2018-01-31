@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import md5 from 'md5';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Header from '../Header/Header';
@@ -6,6 +7,7 @@ import {Form, EntityProperty, Button} from '../../../../lunchbadger-ui/src/';
 import isStorageSupported from '../../utils/isStorageSupported';
 import messages from '../../utils/messages';
 import envs from '../../utils/fakeLoginEnvs';
+import Config from '../../../../../src/config';
 import './FakeLogin.scss';
 
 const muiTheme = getMuiTheme({
@@ -33,6 +35,7 @@ export default class FakeLogin extends PureComponent {
   handleResetInvalid = field => () => this.setState({[field]: ''});
 
   handleSubmit = ({login, password}) => {
+    const logins = Config.get('logins') || {};
     if (login === '' || password === '') {
       const state = {};
       if (login === '') state.login = messages.fieldCannotBeEmpty;
@@ -40,13 +43,26 @@ export default class FakeLogin extends PureComponent {
       this.setState(state);
       return;
     }
-    if (!envs.includes(login)) {
+    let wrongUser = true;
+    let preferredUsername;
+    if (Object.keys(logins).length === 0) {
+      if (envs.includes(login)) {
+        wrongUser = false;
+        preferredUsername = password;
+      }
+    } else {
+      if (logins[login] === md5(password)) {
+        wrongUser = false;
+        preferredUsername = login;
+      }
+    }
+    if (wrongUser) {
       this.setState({login: 'Login or password is incorrect'});
       return;
     }
     if (login !== '' && isStorageSupported) {
       localStorage.setItem('fakeLogin', login);
-      localStorage.setItem('preferred_username', password);
+      localStorage.setItem('preferred_username', preferredUsername);
       document.location.reload();
     }
   }

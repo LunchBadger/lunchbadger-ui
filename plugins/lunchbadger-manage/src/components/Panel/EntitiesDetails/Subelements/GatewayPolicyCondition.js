@@ -5,6 +5,7 @@ import _ from 'lodash';
 import cs from 'classnames';
 import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
 import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
+import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyCondition.scss';
 
 const iconCondition = {
@@ -21,20 +22,6 @@ const customPropertyTypes = [
   'integer',
   'array',
 ];
-
-const getDefaultValueByType = type => ({
-  string: '',
-  boolean: false,
-  integer: 0,
-  jscode: '',
-  array: [],
-})[type];
-
-const determineType = value => {
-  if (Array.isArray(value)) return 'array';
-  if (typeof value === 'number') return 'integer';
-  return typeof value;
-};
 
 export default class GatewayPolicyCondition extends PureComponent {
   static propTypes = {

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import cs from 'classnames';
 import {EntityProperty, IconButton, IconMenu, EntityPropertyLabel} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
+import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
 
 const customPropertyTypes = [
@@ -17,22 +18,6 @@ const customPropertyTypes = [
 ];
 
 const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
-
-const getDefaultValueByType = type => ({
-  string: '',
-  boolean: false,
-  integer: 0,
-  number: 0,
-  jscode: '',
-  array: [],
-  object: {},
-})[type];
-
-const determineType = value => {
-  if (Array.isArray(value)) return 'array';
-  if (typeof value === 'number') return 'integer';
-  return typeof value;
-};
 
 export default class GatewayPolicyAction extends PureComponent {
   static propTypes = {

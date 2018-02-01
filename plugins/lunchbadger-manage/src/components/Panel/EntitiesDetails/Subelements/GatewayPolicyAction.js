@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu, EntityPropertyLabel} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import './GatewayPolicyAction.scss';
 
@@ -73,6 +73,7 @@ export default class GatewayPolicyAction extends PureComponent {
         description,
         enum: enum_ || [],
         postfix,
+        schemas: properties[name],
       };
     });
     Object.keys(action).forEach((name) => {
@@ -95,6 +96,7 @@ export default class GatewayPolicyAction extends PureComponent {
         custom: !properties[name],
         types,
         postfix,
+        schemas: properties[name],
       };
     });
     return {parameters: Object.values(parameters)};
@@ -133,7 +135,8 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: [],
       });
     } else {
-      const {description, type, types, default: def, enum: enum_, postfix} = this.props.schemas.properties[name];
+      const schemas = this.props.schemas.properties[name];
+      const {description, type, types, default: def, enum: enum_, postfix} = schemas;
       state.parameters.push({
         id,
         name,
@@ -144,6 +147,7 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_ || [],
         description,
         postfix,
+        schemas,
       });
     }
     this.changeState(state, () => setTimeout(() => {
@@ -294,6 +298,21 @@ export default class GatewayPolicyAction extends PureComponent {
           onChange: this.handleArrayChange(id),
           tmpPrefix: this.tmpPrefix,
         });
+        if (item.schemas) {
+          const {prefix, horizontal} = this.props;
+          return (
+            <div className="GatewayPolicyAction__object">
+              <EntityPropertyLabel>{name}</EntityPropertyLabel>
+              <GatewayPolicyAction
+                action={value}
+                schemas={item.schemas}
+                prefix={`${prefix}[${name}]`}
+                onChangeState={this.changeState}
+                horizontal={horizontal}
+              />
+            </div>
+          );
+        }
       }
       return <EntityProperty {...props} />;
     }

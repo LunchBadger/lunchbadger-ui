@@ -830,9 +830,13 @@ export default [
     "type": "condition",
     "schema": {
       "$id": "http://express-gateway.io/schemas/conditions/method.json",
-      "definitions": {
-        "httpMethod": {
-          "type": "string",
+      "type": "object",
+      "properties": {
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "enum": [
             "GET",
             "POST",
@@ -841,22 +845,6 @@ export default [
             "DELETE",
             "HEAD",
             "OPTIONS"
-          ]
-        }
-      },
-      "type": "object",
-      "properties": {
-        "methods": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/httpMethod"
-            },
-            {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/httpMethod"
-              }
-            }
           ]
         }
       },

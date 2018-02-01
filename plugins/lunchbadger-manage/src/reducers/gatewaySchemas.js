@@ -33,8 +33,18 @@ const transformSchemas = schema => {
     }
     const {properties} = data[item.type][item.name];
     Object.keys(properties || {}).forEach((key) => {
+      if (item.name === 'proxy' && key === 'serviceEndpoint') {
+        properties[key].type = 'serviceEndpoint';
+      }
+      if (item.name === 'expression' && key === 'jscode') {
+        properties[key].type = 'jscode';
+      }
       if (properties[key].$ref) {
-        properties[key].type = properties[key].$ref.split('/').pop();
+        if (properties[key].$ref === 'jwt.json') {
+          properties[key] = data.policy.jwt;
+        } else {
+          properties[key].type = properties[key].$ref.split('/').pop();
+        }
       }
       if (properties[key].enum && properties[key].enum.$ref) {
         properties[key].enum.$ref = properties[key].enum.$ref.split('/').pop();

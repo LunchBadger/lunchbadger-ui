@@ -300,7 +300,7 @@ var pageCommands = {
     this.saveProject();
   },
 
-  testDatasource: function (type, config = [], cb) {
+  testDatasource: function (type, config = [], advancedTests) {
     this.addElementFromTooltip('dataSource', type);
     if (config.length === 0) {
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
@@ -322,8 +322,8 @@ var pageCommands = {
       });
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
     }
-    if (cb) {
-      cb();
+    if (advancedTests) {
+      advancedTests();
     } else {
       this.removeEntity(this.getDataSourceSelector(1));
     }

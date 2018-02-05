@@ -151,6 +151,7 @@ module.exports = {
                       page.refresh(function () {
                         page.checkEntities('Memory1New', 'Car1', 'car1');
                         browser.waitForElementNotPresent(page.getModelSelector(1) + ' .port-in > .port__anchor--connected', 50000);
+                        page.close();
                       });
                     });
                   });
@@ -161,9 +162,5 @@ module.exports = {
         });
       });
     });
-  },
-
-  after: function () {
-    page.close();
   }
 };

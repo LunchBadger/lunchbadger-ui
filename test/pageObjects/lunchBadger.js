@@ -66,6 +66,12 @@ var pageCommands = {
     return this;
   },
 
+  clickSlow: function (selector) {
+    this.waitForElementPresent(selector, 5000);
+    this.click(selector);
+    this.api.pause(100);
+  },
+
   setValueSlow: function (selector, value) {
     const str = value.toString();
     this.waitForElementPresent(selector, 50000);
@@ -76,7 +82,7 @@ var pageCommands = {
     });
     for (var i in str) {
       this.setValue(selector, str[i].toString());
-      this.api.pause(100);
+      this.api.pause(50);
     }
     this.api.pause(500);
     this.expect.element(selector).value.to.equal(str);
@@ -94,6 +100,7 @@ var pageCommands = {
       this.click(`div[role=menu] .${select}__${value}`);
     });
     this.waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
+    this.api.pause(1000);
   },
 
   editEntity: function (selector) {
@@ -135,6 +142,7 @@ var pageCommands = {
   },
 
   openEntityInDetailsPanel: function (selector) {
+    this.api.pause(1000);
     this.click(selector);
     this.waitForElementPresent(selector + '.highlighted .Toolbox__button--zoom', 50000);
     this.moveToElement(selector + '.highlighted .Toolbox__button--zoom', 5, -10, function() {
@@ -292,7 +300,7 @@ var pageCommands = {
     this.saveProject();
   },
 
-  testDatasource: function (type, config = []) {
+  testDatasource: function (type, config = [], advancedTests) {
     this.addElementFromTooltip('dataSource', type);
     if (config.length === 0) {
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
@@ -314,7 +322,31 @@ var pageCommands = {
       });
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
     }
-    this.removeEntity(this.getDataSourceSelector(1));
+    if (advancedTests) {
+      advancedTests();
+    } else {
+      this.removeEntity(this.getDataSourceSelector(1));
+    }
+  },
+
+  checkEntityDetails: function ({
+    text = {},
+    checkbox = {},
+    select = {},
+    notPresent = [],
+  }) {
+    Object.keys(text).forEach((key) => {
+      this.expect.element(`.DetailsPanel .input__${key} input`).value.to.equal(text[key]);
+    });
+    Object.keys(checkbox).forEach((key) => {
+      this.expect.element(`.DetailsPanel .checkbox__${key}__${checkbox[key] ? 'checked' : 'unchecked'}`).to.be.present;
+    });
+    Object.keys(select).forEach((key) => {
+      this.expect.element(`.DetailsPanel .select__${key} .${key}__${select[key]}`).to.be.present;
+    });
+    notPresent.forEach((elem) => {
+      this.expect.element(`.DetailsPanel ${elem}`).to.not.be.present;
+    });
   }
 };
 

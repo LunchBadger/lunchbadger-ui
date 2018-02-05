@@ -236,7 +236,7 @@ export default class Soap extends PureComponent {
       'Service',
       'Port',
       'Operation',
-      <IconButton icon="iconPlus" onClick={this.handleAddOperation} />,
+      <IconButton icon="iconPlus" name="add__operation" onClick={this.handleAddOperation} />,
     ];
     const {soapOperations} = this.state;
     const soapOperationsSize = soapOperations.length - 1;
@@ -245,7 +245,7 @@ export default class Soap extends PureComponent {
       this.renderOperationsInput(idx, 'service', service),
       this.renderOperationsInput(idx, 'port', port),
       this.renderOperationsInput(idx, 'operation', operation, idx === soapOperationsSize ? this.handleOperationTab : undefined),
-      <IconButton icon="iconDelete" onClick={this.handleRemoveOperation(idx)} />,
+      <IconButton icon="iconDelete" name={`remove__operation${idx}`} onClick={this.handleRemoveOperation(idx)} />,
     ]));
     return <Table
       columns={columns}
@@ -308,7 +308,7 @@ export default class Soap extends PureComponent {
       'Element Value',
       'Prefix',
       'Namespace',
-      <IconButton icon="iconPlus" onClick={this.handleAddSoapHeader} />,
+      <IconButton icon="iconPlus" name="add__soapHeader" onClick={this.handleAddSoapHeader} />,
     ];
     const {soapHeaders} = this.state;
     const soapHeadersSize = soapHeaders.length - 1;
@@ -317,7 +317,7 @@ export default class Soap extends PureComponent {
       this.renderSoapHeadersInput(idx, 'elementValue', elementValue),
       this.renderSoapHeadersInput(idx, 'prefix', prefix),
       this.renderSoapHeadersInput(idx, 'namespace', namespace, idx === soapHeadersSize ? this.handleSoapHeaderTab : undefined),
-      <IconButton icon="iconDelete" onClick={this.handleRemoveSoapHeader(idx)} />,
+      <IconButton icon="iconDelete" name={`remove__soapHeader${idx}`} onClick={this.handleRemoveSoapHeader(idx)} />,
     ]));
     return <Table
       columns={columns}

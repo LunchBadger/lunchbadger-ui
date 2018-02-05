@@ -305,6 +305,8 @@ module.exports = {
                         checkDetailsProperties('windows,temp', 'Number,String', '6,', 'notes windows,', 'checked,unchecked', 'checked,unchecked');
                         checkDetailsUDF(browser, 'field2,field3', 'Number,Object', '12,');
                         checkDetailsRelations('relation2,relation3', 'belongsTo,hasAndBelongsToMany', 'Car1,Car1', 'bus1,bus2');
+                        page.closeDetailsPanel();
+                        page.close();
                       });
                     });
                   });
@@ -315,9 +317,5 @@ module.exports = {
         });
       });
     });
-  },
-
-  after: function () {
-    page.close();
   }
 };

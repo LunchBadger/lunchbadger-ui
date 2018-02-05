@@ -283,8 +283,7 @@ var pageCommands = {
 
   saveProject: function () {
     this.click('.header__menu .fa-floppy-o');
-    this.waitForElementPresent('.spinner__overlay', 5000);
-    this.waitForElementNotPresent('.spinner__overlay', 60000);
+    this.closeSystemInformationMessage('All-data-has-been-synced-with-API');
   },
 
   clearProject: function () {
@@ -296,8 +295,16 @@ var pageCommands = {
 
   emptyProject: function () {
     this.clearProject();
+    this.closeSystemInformationMessage('All-data-removed-from-server');
     this.waitForElementNotPresent('.spinner__overlay', 120000);
     this.saveProject();
+  },
+
+  closeSystemInformationMessage: function (message) {
+    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
+    this.waitForElementPresent(selector, 180000);
+    this.click(selector);
+    this.waitForElementNotPresent(selector, 15000);
   },
 
   testDatasource: function (type, config = [], advancedTests) {

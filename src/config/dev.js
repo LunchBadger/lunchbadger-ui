@@ -1,9 +1,15 @@
-const env = process.env.LB_ENV || 'staging'; // staging | triton | localhost
+const env = process.env.LB_ENV || 'staging'; // staging|triton|sra|localhost
 
-const isTriton = env === 'triton';
+const tritonLogo = ['triton', 'sra'].includes(env);
 const isPrefix = env !== 'localhost';
 const prefix = isPrefix ? `${env}-` : '';
 const subdomain = isPrefix ? `${env}.` : '';
+const logins = ({
+  sra: {
+    minseok: '29ffbd5102a98623a02489108492cc19'
+  }
+})[env] || {};
+
 
 export default {
   configStoreApiUrl: isPrefix ? `http://${prefix}api.lunchbadger.com/api` : 'http://localhost:3002/api',
@@ -22,7 +28,7 @@ export default {
   },
   envId: 'dev',
   features: {
-    tritonLogo: isTriton,
+    tritonLogo,
     tritonObjectStorage: true,
     microservices: true,
     apis: true,
@@ -30,5 +36,6 @@ export default {
     metrics: true,
     forecasts: true,
     kubeWatcher: true
-  }
+  },
+  logins
 };

@@ -1491,6 +1491,11 @@
       "from": "change-emitter@>=0.1.2 <0.2.0",
       "resolved": "https://registry.npmjs.org/change-emitter/-/change-emitter-0.1.6.tgz"
     },
+    "charenc": {
+      "version": "0.0.2",
+      "from": "charenc@>=0.0.1 <0.1.0",
+      "resolved": "https://registry.npmjs.org/charenc/-/charenc-0.0.2.tgz"
+    },
     "chokidar": {
       "version": "1.6.1",
       "from": "chokidar@>=1.0.0 <2.0.0",
@@ -2048,6 +2053,11 @@
           "dev": true
         }
       }
+    },
+    "crypt": {
+      "version": "0.0.2",
+      "from": "crypt@>=0.0.1 <0.1.0",
+      "resolved": "https://registry.npmjs.org/crypt/-/crypt-0.0.2.tgz"
     },
     "cryptiles": {
       "version": "2.0.5",
@@ -3421,8 +3431,7 @@
     "is-buffer": {
       "version": "1.1.4",
       "from": "is-buffer@>=1.0.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.4.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.4.tgz"
     },
     "is-builtin-module": {
       "version": "1.0.0",
@@ -4197,6 +4206,11 @@
       "from": "math-expression-evaluator@>=1.2.14 <2.0.0",
       "resolved": "https://registry.npmjs.org/math-expression-evaluator/-/math-expression-evaluator-1.2.16.tgz",
       "dev": true
+    },
+    "md5": {
+      "version": "2.2.1",
+      "from": "md5@latest",
+      "resolved": "https://registry.npmjs.org/md5/-/md5-2.2.1.tgz"
     },
     "media-typer": {
       "version": "0.3.0",

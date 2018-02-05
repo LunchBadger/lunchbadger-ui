@@ -99,6 +99,7 @@
     "lockr": "^0.8.4",
     "lodash": "^4.11.2",
     "material-ui": "^0.18.1",
+    "md5": "^2.2.1",
     "mobx": "https://registry.npmjs.org/mobx/-/mobx-2.7.0.tgz",
     "mobx-react": "^4.2.2",
     "moment": "^2.13.0",

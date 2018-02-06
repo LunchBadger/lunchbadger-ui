@@ -71,7 +71,6 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
-    const str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
       for (var i in result.value.toString()) {
@@ -79,7 +78,7 @@ var pageCommands = {
       }
     });
     this.setValue(selector, value);
-    this.expect.element(selector).value.to.equal(str);
+    this.expect.element(selector).value.to.equal(value);
   },
 
   selectValueSlow: function (selector, select, value) {
@@ -129,6 +128,7 @@ var pageCommands = {
       this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
       this.waitForElementNotPresent(selector + '.wip', 60000);
     } else {
+      this.api.pause(2000);
       this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
       validationErrors.forEach((key) => {
         this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
@@ -291,6 +291,12 @@ var pageCommands = {
     this.clickSlow('.SystemDefcon1 button');
   },
 
+  waitForUninstallDependency: function () {
+    this.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
+    this.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
+    this.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
+  },
+
   testDatasource: function (type, required = [], config = [], advancedTests) {
     this.addElementFromTooltip('dataSource', type);
     this.waitForElementPresent('.dataSource.Tool.selected', 8000);
@@ -319,6 +325,9 @@ var pageCommands = {
       advancedTests();
     } else {
       this.removeEntity(this.getDataSourceSelector(1));
+      if (config.length > 0) {
+        this.waitForUninstallDependency();
+      }
     }
   },
 

@@ -4,6 +4,7 @@ export default [
   'kevin',
   'ko',
   'sk',
+  'shubhra',
   'skar',
   'test',
   'vc',

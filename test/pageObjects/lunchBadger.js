@@ -51,10 +51,9 @@ var pageCommands = {
 
   addElementFromTooltip: function (entity, option) {
     option = option || 'rest';
-    this.click('.Tool.' + entity);
+    this.clickSlow('.Tool.' + entity);
     this.api.pause(1500);
-    this.waitForElementPresent('.Tool__submenuItem.' + option, 5000);
-    this.click('.Tool__submenuItem.' + option);
+    this.clickSlow('.Tool__submenuItem.' + option);
   },
 
   addElement: function (entity) {
@@ -67,10 +66,8 @@ var pageCommands = {
   },
 
   clickSlow: function (selector) {
-    this.api.pause(1000);
-    this.waitForElementPresent(selector, 5000);
+    this.waitForElementVisible(selector, 5000);
     this.click(selector);
-    this.api.pause(1000);
   },
 
   setValueSlow: function (selector, value) {
@@ -81,27 +78,16 @@ var pageCommands = {
         this.setValue(selector, this.Keys.BACK_SPACE);
       }
     });
-    for (var i in str) {
-      this.setValue(selector, str[i].toString());
-      this.api.pause(50);
-    }
-    this.api.pause(500);
+    this.setValue(selector, value);
     this.expect.element(selector).value.to.equal(str);
   },
 
   selectValueSlow: function (selector, select, value) {
-    this.api.pause(1000);
-    this.waitForElementPresent(selector + ` .select__${select}`, 500);
-    this.moveToElement(selector + ` .select__${select}`, 5, 5, function() {
-      this.click(selector + ` .select__${select}`);
-    });
-    this.waitForElementPresent(`div[role=menu] .${select}__${value}`, 10000);
-    this.api.pause(3000);
-    this.moveToElement(`div[role=menu] .${select}__${value}`, 5, 5, function() {
-      this.click(`div[role=menu] .${select}__${value}`);
-    });
+    this.clickSlow(selector + ` .select__${select}`);
+    this.api.pause(2000);
+    this.clickSlow(`div[role=menu] .${select}__${value}`);
     this.waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
-    this.api.pause(1000);
+    this.api.pause(500);
   },
 
   editEntity: function (selector) {
@@ -123,23 +109,17 @@ var pageCommands = {
 
   submitCanvasEntity: function (selector) {
     this.submitForm(selector + ' form');
-    // this.moveToElement(selector + ' .submit', 5, 5, function() {
-    //   this.click(selector + ' .submit');
-    // });
-    this.api.pause(500);
-    // this.waitForElementPresent(selector + '.wip', 5000);
     this.waitForElementNotPresent(selector + '.wip', 120000);
     this.waitForElementNotPresent('.Aside.disabled', 5000);
     this.waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
   submitDetailsPanel: function (selector, validationErrors = []) {
-    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', 5000);
-    this.click('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)');
+    this.clickSlow('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)');
     if (validationErrors.length === 0) {
       this.waitForElementPresent(selector + '.wip', 60000);
-      this.waitForElementNotPresent('.DetailsPanel .EntityValidationErrors', 60000);
-      this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
+      this.waitForElementPresent('.DetailsPanel.closing', 60000);
+      this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
       this.waitForElementNotPresent(selector + '.wip', 60000);
     } else {
       this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
@@ -147,35 +127,27 @@ var pageCommands = {
         this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
       });
     }
-    this.api.pause(2000);
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.api.pause(2000);
-    this.clickSlow(selector);
-    this.waitForElementPresent(selector + '.highlighted .Toolbox__button--zoom', 50000);
-    this.moveToElement(selector + '.highlighted .Toolbox__button--zoom', 5, -10, function() {
-      this.click(selector + '.highlighted .Toolbox__button--zoom');
-      this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
-    });
+    this.clickSlow('.canvas__container .quadrant:first-child .quadrant__title');
+    this.waitForElementNotPresent('.CanvasElement.highlighted', 5000);
+    this.clickSlow(selector, 5000);
+    this.clickSlow(selector + '.highlighted .Toolbox__button--zoom');
+    this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
   },
 
   closeDetailsPanel: function () {
-    this.waitForElementPresent('.DetailsPanel .BaseDetails__buttons .cancel', 5000);
-    this.moveToElement('.DetailsPanel .BaseDetails__buttons .cancel', 5, 5, function() {
-      this.click('.DetailsPanel .BaseDetails__buttons .cancel');
-    });
-    this.waitForElementNotPresent('.DetailsPanel .BaseDetails', 60000);
+    this.clickSlow('.DetailsPanel .BaseDetails__buttons .cancel', 5000);
+    this.waitForElementPresent('.DetailsPanel.closing', 60000);
+    this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
   },
 
   removeEntity: function (selector) {
     this.click(selector);
-    this.waitForElementPresent(selector + ' .Entity > .Toolbox .Toolbox__button--delete', 5000);
-    this.click(selector + ' .Entity > .Toolbox .Toolbox__button--delete');
-    this.waitForElementPresent('.SystemDefcon1 .confirm', 5000);
-    this.click('.SystemDefcon1 .confirm');
+    this.clickSlow(selector + ' .Entity > .Toolbox .Toolbox__button--delete');
+    this.clickSlow('.SystemDefcon1 .confirm');
     this.waitForElementNotPresent(selector, 5000);
-    this.api.pause(3000);
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir) {
@@ -193,21 +165,12 @@ var pageCommands = {
 
   discardDetailsPanelChanges: function (selector) {
     this.closeDetailsPanel();
-    this.api.pause(2000);
     this.openEntityInDetailsPanel(selector);
   },
 
   confirmDetailsPanelChanges: function (selector) {
     this.submitDetailsPanel(selector);
-    this.api.pause(2000);
     this.openEntityInDetailsPanel(selector);
-  },
-
-  waitUntilWorkspaceLoaded: function() {
-    this.waitForElementPresent('.header', 60000);
-    this.api.pause(500);
-    // this.waitForElementPresent('.spinner__overlay', 60000);
-    this.waitForElementNotPresent('.spinner__overlay', 60000);
   },
 
   checkEntities: function (dataSources = '', models = '', contextPaths) {
@@ -316,6 +279,7 @@ var pageCommands = {
 
   testDatasource: function (type, config = [], advancedTests) {
     this.addElementFromTooltip('dataSource', type);
+    this.waitForElementPresent('.dataSource.Tool.selected', 8000);
     if (config.length === 0) {
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
     } else {

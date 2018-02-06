@@ -6,6 +6,7 @@ module.exports = {
     page = browser.page.lunchBadger();
     page.open();
     page.addElementFromTooltip('endpoint', 'apiendpoint');
+    page.waitForElementPresent('.endpoint.Tool.selected', 8000);
     page.submitCanvasEntity(page.getApiEndpointSelector(1));
     browser.waitForElementPresent(page.getApiEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text', 5000);
     page.expect.element(page.getApiEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ApiEndpoint');
@@ -57,12 +58,9 @@ module.exports = {
           page.expect.element(page.getApiEndpointSelector(1) + ' .host .EntityProperty__field--text').text.to.equal('*.cars.com');
           page.expect.element(page.getApiEndpointSelector(1) + ' .paths0 .EntityProperty__field--text').text.to.equal('/cars');
           page.waitForElementNotPresent(page.getApiEndpointSelector(1) + ' .paths1', 5000);
+          page.close();
         });
       });
     });
-  },
-
-  after: function () {
-    page.close();
   }
 };

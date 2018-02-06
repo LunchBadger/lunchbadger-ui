@@ -6,6 +6,7 @@ module.exports = {
     page = browser.page.lunchBadger();
     page.open();
     page.addElementFromTooltip('endpoint', 'serviceendpoint');
+    page.waitForElementPresent('.endpoint.Tool.selected', 8000);
     page.submitCanvasEntity(page.getServiceEndpointSelector(1));
     browser.waitForElementPresent(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text', 5000);
     page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ServiceEndpoint');

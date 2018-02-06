@@ -10,6 +10,7 @@ module.exports = {
     page.expect.element('.canvas__container--editing').to.not.be.present;
 
     page.addElement('api');
+    page.waitForElementPresent('.api.Tool.selected', 8000);
 
     browser.pause(1000);
 

@@ -14,7 +14,10 @@ module.exports = {
       ['DATABASE', 'dumpDatabase'],
       ['USERNAME', 'dumpUsername'],
       ['PASSWORD', 'dumpPassword']
-    ]);
-    page.close();
+    ], function () {
+      page.closeWhenSystemDefcon1();
+      page.removeEntity(page.getDataSourceSelector(1));
+      page.close();
+    });
   }
 };

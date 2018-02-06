@@ -51,7 +51,8 @@ module.exports = {
         '.input__operations1templateurl',
       ],
     });
-    page.refresh(function() {
+
+    page.refresh(function () {
       page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
       page.checkEntityDetails({
         text: {
@@ -92,7 +93,8 @@ module.exports = {
       });
       page.selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode');
       page.submitDetailsPanel(page.getDataSourceSelector(1));
-      page.refresh(function() {
+
+      page.refresh(function () {
         page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
         page.checkEntityDetails({
           text: {
@@ -135,17 +137,18 @@ module.exports = {
         });
         page.selectValueSlow('.DetailsPanel', 'predefined', 'Custom');
         page.submitDetailsPanel(page.getDataSourceSelector(1), ['baseUrl']);
-        page.setValueSlow('.DetailsPanel .input__operations0templateurl input', 'http://test1.com');
+        page.setValueSlow('.DetailsPanel .input__operations0templateurl input', 'http://example.com');
         page.clickSlow('.DetailsPanel .button__add__operation');
-        page.setValueSlow('.DetailsPanel .input__operations1templateurl input', 'http://test2.com');
+        page.setValueSlow('.DetailsPanel .input__operations1templateurl input', 'http://example.org');
         page.submitDetailsPanel(page.getDataSourceSelector(1));
+
         page.refresh(function () {
           page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
           page.checkEntityDetails({
             text: {
-              operations0templateurl: 'http://test1.com',
+              operations0templateurl: 'http://example.com',
               operations0templateresponsePath: '',
-              operations1templateurl: 'http://test2.com',
+              operations1templateurl: 'http://example.org',
               operations1templateresponsePath: '',
             },
             checkbox: {
@@ -233,7 +236,10 @@ module.exports = {
           page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn2');
           page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'p221,  p222');
           page.submitDetailsPanel(page.getDataSourceSelector(1));
+          page.closeWhenSystemDefcon1();
+
           page.refresh(function () {
+            page.closeWhenSystemDefcon1();
             page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
             page.checkEntityDetails({
               text: {
@@ -241,7 +247,7 @@ module.exports = {
                 optionsheadersparams0value: 'hpv1',
                 optionsheadersparams1key: 'hpn2',
                 optionsheadersparams1value: 'hpv2',
-                operations0templateurl: 'http://test1.com',
+                operations0templateurl: 'http://example.com',
                 operations0templateresponsePath: '$.test1',
                 operations0templateheaders0key: 'o1hpn1',
                 operations0templateheaders0value: 'o1hpv1',
@@ -255,7 +261,7 @@ module.exports = {
                 operations0functions0value: 'p111,p112',
                 operations0functions1key: 'o1fn2',
                 operations0functions1value: 'p121,p122',
-                operations1templateurl: 'http://test2.com',
+                operations1templateurl: 'http://example.org',
                 operations1templateresponsePath: '$.test2',
                 operations1templateheaders0key: 'o2hpn1',
                 operations1templateheaders0value: 'o2hpv1',
@@ -334,7 +340,10 @@ module.exports = {
             page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn3');
             page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'p231 ,  p232');
             page.submitDetailsPanel(page.getDataSourceSelector(1));
+            page.closeWhenSystemDefcon1();
+
             page.refresh(function () {
+              page.closeWhenSystemDefcon1();
               page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
               page.checkEntityDetails({
                 text: {
@@ -342,7 +351,7 @@ module.exports = {
                   optionsheadersparams0value: 'hpv2',
                   optionsheadersparams1key: 'hpn3',
                   optionsheadersparams1value: 'hpv3',
-                  operations0templateurl: 'http://test1.com',
+                  operations0templateurl: 'http://example.com',
                   operations0templateresponsePath: '$.test1',
                   operations0templateheaders0key: 'o1hpn2',
                   operations0templateheaders0value: 'o1hpv2',
@@ -356,7 +365,7 @@ module.exports = {
                   operations0functions0value: 'p121,p122',
                   operations0functions1key: 'o1fn3',
                   operations0functions1value: 'p131,p132',
-                  operations1templateurl: 'http://test2.com',
+                  operations1templateurl: 'http://example.org',
                   operations1templateresponsePath: '$.test2',
                   operations1templateheaders0key: 'o2hpn2',
                   operations1templateheaders0value: 'o2hpv2',
@@ -407,11 +416,14 @@ module.exports = {
               page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
               page.clickSlow('.DetailsPanel .button__remove__operation0function0');
               page.submitDetailsPanel(page.getDataSourceSelector(1));
+              page.closeWhenSystemDefcon1();
+
               page.refresh(function () {
+                page.closeWhenSystemDefcon1();
                 page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
                 page.checkEntityDetails({
                   text: {
-                    operations0templateurl: 'http://test1.com',
+                    operations0templateurl: 'http://example.com',
                     operations0templateresponsePath: '$.test1',
                     operations0templateheaders0key: 'o1hpn3',
                     operations0templateheaders0value: 'o1hpv3',
@@ -447,11 +459,12 @@ module.exports = {
                 page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
                 page.clickSlow('.DetailsPanel .button__remove__operation0function0');
                 page.submitDetailsPanel(page.getDataSourceSelector(1));
+
                 page.refresh(function () {
                   page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
                   page.checkEntityDetails({
                     text: {
-                      operations0templateurl: 'http://test1.com',
+                      operations0templateurl: 'http://example.com',
                       operations0templateresponsePath: '$.test1',
                     },
                     checkbox: {

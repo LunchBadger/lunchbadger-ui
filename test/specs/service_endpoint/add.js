@@ -6,6 +6,7 @@ module.exports = {
     page = browser.page.lunchBadger();
     page.open();
     page.addElementFromTooltip('endpoint', 'serviceendpoint');
+    page.waitForElementPresent('.endpoint.Tool.selected', 8000);
     page.submitCanvasEntity(page.getServiceEndpointSelector(1));
     browser.waitForElementPresent(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text', 5000);
     page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ServiceEndpoint');
@@ -57,12 +58,9 @@ module.exports = {
           page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
           page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
           page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls2', 5000);
+          page.close();
         });
       });
     });
-  },
-
-  after: function () {
-    page.close();
   }
 };

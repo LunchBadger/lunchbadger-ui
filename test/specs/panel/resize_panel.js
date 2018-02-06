@@ -33,7 +33,6 @@ module.exports = {
       page.assert.equal(result.value.height, panelHeight);
     });
     page.click('@settings');
-    browser.pause(3000);
     page.close();
   }
 };

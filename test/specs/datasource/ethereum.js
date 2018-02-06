@@ -7,7 +7,10 @@ module.exports = {
       'url',
     ], [
       ['URL', 'dumpUrl']
-    ]);
-    page.close();
+    ], function () {
+      page.closeWhenSystemDefcon1();
+      page.removeEntity(page.getDataSourceSelector(1));
+      page.close();
+    });
   }
 };

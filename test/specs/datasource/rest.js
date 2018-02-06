@@ -489,6 +489,8 @@ module.exports = {
                     ],
                   });
                   page.closeDetailsPanel();
+                  page.removeEntity(page.getDataSourceSelector(1));
+                  page.waitForUninstallDependency();
                   page.close();
                 });
               });

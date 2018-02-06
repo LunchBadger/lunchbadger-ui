@@ -71,7 +71,6 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
-    const str = value.toString();
     this.waitForElementPresent(selector, 50000);
     this.getValue(selector, function (result) {
       for (var i in result.value.toString()) {
@@ -79,7 +78,7 @@ var pageCommands = {
       }
     });
     this.setValue(selector, value);
-    this.expect.element(selector).value.to.equal(str);
+    this.expect.element(selector).value.to.equal(value);
   },
 
   selectValueSlow: function (selector, select, value) {
@@ -284,6 +283,12 @@ var pageCommands = {
     this.clickSlow('.SystemDefcon1 button');
   },
 
+  waitForUninstallDependency: function () {
+    this.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
+    this.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
+    this.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
+  },
+
   testDatasource: function (type, config = [], advancedTests) {
     this.addElementFromTooltip('dataSource', type);
     this.waitForElementPresent('.dataSource.Tool.selected', 8000);
@@ -311,6 +316,9 @@ var pageCommands = {
       advancedTests();
     } else {
       this.removeEntity(this.getDataSourceSelector(1));
+      if (config.length > 0) {
+        this.waitForUninstallDependency();
+      }
     }
   },
 

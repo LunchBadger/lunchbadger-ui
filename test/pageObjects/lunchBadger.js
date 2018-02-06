@@ -121,6 +121,7 @@ var pageCommands = {
       this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
       this.waitForElementNotPresent(selector + '.wip', 60000);
     } else {
+      this.api.pause(2000);
       this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
       validationErrors.forEach((key) => {
         this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;

@@ -12,6 +12,7 @@ module.exports = {
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__url .EntityPropertyLabel').text.to.equal('URL');
     page.selectValueSlow('.Rest__predefined', 'predefined', 'Google-Maps-Location');
     page.submitCanvasEntity(page.getDataSourceSelector(1));
+    page.waitForDependencyFinish();
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__predefined .EntityProperty__field--textValue').text.to.equal('Google Maps - Location');
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__method .EntityProperty__field--textValue').text.to.equal('GET');
     page.expect.element(page.getDataSourceSelector(1) + ' .Rest__url .EntityProperty__field--textValue').text.to.equal('https://maps.googleapis.com/maps/api/geocode/json');
@@ -96,7 +97,7 @@ module.exports = {
       page.selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode');
       page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-      page.refresh(function () {
+      // page.refresh(function () {
         page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
         page.checkEntityDetails({
           text: {
@@ -144,7 +145,7 @@ module.exports = {
         page.setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2);
         page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-        page.refresh(function () {
+        // page.refresh(function () {
           page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
           page.checkEntityDetails({
             text: {
@@ -239,7 +240,7 @@ module.exports = {
           page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22');
           page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-          page.refresh(function () {
+          // page.refresh(function () {
             page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
             page.checkEntityDetails({
               text: {
@@ -341,7 +342,7 @@ module.exports = {
             page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32');
             page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-            page.refresh(function () {
+            // page.refresh(function () {
               page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
               page.checkEntityDetails({
                 text: {
@@ -415,7 +416,7 @@ module.exports = {
               page.clickSlow('.DetailsPanel .button__remove__operation0function0');
               page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-              page.refresh(function () {
+              // page.refresh(function () {
                 page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
                 page.checkEntityDetails({
                   text: {
@@ -456,7 +457,7 @@ module.exports = {
                 page.clickSlow('.DetailsPanel .button__remove__operation0function0');
                 page.submitDetailsPanel(page.getDataSourceSelector(1));
 
-                page.refresh(function () {
+                // page.refresh(function () {
                   page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
                   page.checkEntityDetails({
                     text: {
@@ -487,14 +488,14 @@ module.exports = {
                   });
                   page.closeDetailsPanel();
                   page.removeEntity(page.getDataSourceSelector(1));
-                  page.waitForUninstallDependency();
+                  page.waitForDependencyFinish();
                   page.close();
-                });
-              });
-            });
-          });
-        });
-      });
+                // });
+              // });
+            // });
+          // });
+        // });
+      // });
     });
   }
 };

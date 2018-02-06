@@ -130,8 +130,6 @@ var pageCommands = {
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.clickSlow('.canvas__container .quadrant:first-child .quadrant__title');
-    this.waitForElementNotPresent('.CanvasElement.highlighted', 5000);
     this.clickSlow(selector, 5000);
     this.clickSlow(selector + '.highlighted .Toolbox__button--zoom');
     this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
@@ -284,7 +282,7 @@ var pageCommands = {
     this.clickSlow('.SystemDefcon1 button');
   },
 
-  waitForUninstallDependency: function () {
+  waitForDependencyFinish: function () {
     this.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
     this.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
     this.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
@@ -318,7 +316,7 @@ var pageCommands = {
     } else {
       this.removeEntity(this.getDataSourceSelector(1));
       if (config.length > 0) {
-        this.waitForUninstallDependency();
+        this.waitForDependencyFinish();
       }
     }
   },

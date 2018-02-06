@@ -12,7 +12,7 @@ module.exports = {
     ], function () {
       page.closeWhenSystemDefcon1();
       page.removeEntity(page.getDataSourceSelector(1));
-      page.waitForUninstallDependency();
+      page.waitForDependencyFinish();
       page.close();
     });
   }

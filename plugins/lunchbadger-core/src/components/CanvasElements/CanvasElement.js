@@ -283,7 +283,7 @@ export default (ComposedComponent) => {
         connectDragSource,
         connectDropTarget,
         isDragging,
-        editable,
+        editable: editable_,
         highlighted,
         multiEnvIndex,
         multiEnvDelta,
@@ -304,7 +304,7 @@ export default (ComposedComponent) => {
           multiEnvIndex={multiEnvIndex}
         />
       );
-      const {ready, deleting, fake, isZoomDisabled} = entity;
+      const {ready, deleting, fake, isZoomDisabled, loaded} = entity;
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
@@ -353,6 +353,7 @@ export default (ComposedComponent) => {
         });
       }
       const {type} = this.props.entity.constructor;
+      const editable = editable_ || !loaded;
       return (
         <div className={cs('CanvasElement', type, {highlighted, editable, wip: processing})}>
             <Entity

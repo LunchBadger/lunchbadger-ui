@@ -145,20 +145,110 @@ module.exports = {
         page.clickSlow('.DetailsPanel .button__add__operation');
         page.setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2);
         page.setValueSlow('.DetailsPanel .operations1templateresponsePath input', '$');
+        page.clickSlow('.DetailsPanel .checkbox__optionsenabled');
+        page.clickSlow('.DetailsPanel .checkbox__optionsstrictSSL');
+        page.clickSlow('.DetailsPanel .checkbox__optionsuseQuerystring');
+        page.clickSlow('.DetailsPanel .checkbox__optionsheadersenabled');
+        page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
+        page.setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts');
+        page.setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json');
+        page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
+        page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type');
+        page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json');
+        page.selectValueSlow('.DetailsPanel', 'operations0templatemethod', 'GET');
+        page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsenabled');
+        page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL');
+        page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring');
+        page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
+        page.setValueSlow('.DetailsPanel .input__operations0templateheaders0key input', 'accepts');
+        page.setValueSlow('.DetailsPanel .input__operations0templateheaders0value input', 'application/json');
+        page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
+        page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-type');
+        page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'application/json');
+        page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
+        page.setValueSlow('.DetailsPanel .input__operations0templatequery0key input', 'o1qpn1');
+        page.setValueSlow('.DetailsPanel .input__operations0templatequery0value input', '{o1qpv11},{o1qpv12}');
+        page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
+        page.setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn2');
+        page.setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv21},{o1qpv22}');
+        page.clickSlow('.DetailsPanel .button__add__operation0function');
+        page.setValueSlow('.DetailsPanel .input__operations0functions0key input', 'o1fn1');
+        page.setValueSlow('.DetailsPanel .input__operations0functions0value input', 'o1qpv11 ,  o1qpv12');
+        page.clickSlow('.DetailsPanel .button__add__operation0function');
+        page.setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn2');
+        page.setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv21,  o1qpv22');
+        page.selectValueSlow('.DetailsPanel', 'operations1templatemethod', 'GET');
+        page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsenabled');
+        page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL');
+        page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring');
+        page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
+        page.setValueSlow('.DetailsPanel .input__operations1templateheaders0key input', 'accepts');
+        page.setValueSlow('.DetailsPanel .input__operations1templateheaders0value input', 'application/json');
+        page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
+        page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-type');
+        page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'application/json');
+        page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
+        page.setValueSlow('.DetailsPanel .input__operations1templatequery0key input', 'o2qpn1');
+        page.setValueSlow('.DetailsPanel .input__operations1templatequery0value input', '{o2qpv11},{o2qpv12}');
+        page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
+        page.setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn2');
+        page.setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv21},{o2qpv22}');
+        page.clickSlow('.DetailsPanel .button__add__operation1function');
+        page.setValueSlow('.DetailsPanel .input__operations1functions0key input', 'o2fn1');
+        page.setValueSlow('.DetailsPanel .input__operations1functions0value input', 'o2qpv11 ,  o2qpv12');
+        page.clickSlow('.DetailsPanel .button__add__operation1function');
+        page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn2');
+        page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22');
         page.submitDetailsPanel(page.getDataSourceSelector(1));
 
         // page.refresh(function () {
           page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
           page.checkEntityDetails({
             text: {
+              optionsheadersparams0key: 'accepts',
+              optionsheadersparams0value: 'application/json',
+              optionsheadersparams1key: 'content-type',
+              optionsheadersparams1value: 'application/json',
               operations0templateurl: customEndpoint1,
               operations0templateresponsePath: '$',
+              operations0templateheaders0key: 'accepts',
+              operations0templateheaders0value: 'application/json',
+              operations0templateheaders1key: 'content-type',
+              operations0templateheaders1value: 'application/json',
+              operations0templatequery0key: 'o1qpn1',
+              operations0templatequery0value: '{o1qpv11},{o1qpv12}',
+              operations0templatequery1key: 'o1qpn2',
+              operations0templatequery1value: '{o1qpv21},{o1qpv22}',
+              operations0functions0key: 'o1fn1',
+              operations0functions0value: 'o1qpv11,o1qpv12',
+              operations0functions1key: 'o1fn2',
+              operations0functions1value: 'o1qpv21,o1qpv22',
               operations1templateurl: customEndpoint2,
               operations1templateresponsePath: '$',
+              operations1templateheaders0key: 'accepts',
+              operations1templateheaders0value: 'application/json',
+              operations1templateheaders1key: 'content-type',
+              operations1templateheaders1value: 'application/json',
+              operations1templatequery0key: 'o2qpn1',
+              operations1templatequery0value: '{o2qpv11},{o2qpv12}',
+              operations1templatequery1key: 'o2qpn2',
+              operations1templatequery1value: '{o2qpv21},{o2qpv22}',
+              operations1functions0key: 'o2fn1',
+              operations1functions0value: 'o2qpv11,o2qpv12',
+              operations1functions1key: 'o2fn2',
+              operations1functions1value: 'o2qpv21,o2qpv22',
             },
             checkbox: {
-              optionsenabled: false,
-              operations0templateoptionsenabled: false,
+              optionsenabled: true,
+              optionsstrictSSL: true,
+              optionsuseQuerystring: true,
+              optionsheadersenabled: true,
+              operations0templateoptionsenabled: true,
+              operations0templateoptionsstrictSSL: true,
+              operations0templateoptionsuseQuerystring: true,
+              operations1templateoptionsenabled: true,
+              operations1templateoptionsstrictSSL: true,
+              operations1templateoptionsuseQuerystring: true,
             },
             select: {
               predefined: 'Custom',
@@ -167,127 +257,100 @@ module.exports = {
             },
             notPresent: [
               '.button__remove__operation0',
-              '.checkbox__optionsstrictSSL',
-              '.checkbox__optionsuseQuerystring',
-              '.checkbox__optionsheadersenabled',
-              '.input__optionsheadersparams0key',
-              '.checkbox__operations0templateoptionsstrictSSL',
-              '.checkbox__operations0templateoptionsuseQuerystring',
-              '.input__operations0templateheaders0key',
-              '.input__operations0templatequery0key',
-              '.input__operations0functions0key',
-              '.checkbox__operations1templateoptionsstrictSSL',
-              '.checkbox__operations1templateoptionsuseQuerystring',
-              '.input__operations1templateheaders0key',
-              '.input__operations1templatequery0key',
-              '.input__operations1functions0key',
+              '.input__optionsheadersparams2key',
+              '.input__operations0templateheaders2key',
+              '.input__operations0templatequery2key',
+              '.input__operations0functions2key',
+              '.input__operations1templateheaders2key',
+              '.input__operations1templatequery2key',
+              '.input__operations1functions2key',
               '.input__operations2templateurl',
             ],
           });
-          page.clickSlow('.DetailsPanel .checkbox__optionsenabled');
           page.clickSlow('.DetailsPanel .checkbox__optionsstrictSSL');
           page.clickSlow('.DetailsPanel .checkbox__optionsuseQuerystring');
-          page.clickSlow('.DetailsPanel .checkbox__optionsheadersenabled');
+          page.clickSlow('.DetailsPanel .button__remove__optionsHeadersParameter0');
           page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json');
-          page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json');
-          page.selectValueSlow('.DetailsPanel', 'operations0templatemethod', 'GET');
-          page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsenabled');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US');
           page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL');
           page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring');
+          page.clickSlow('.DetailsPanel .button__remove__operation0headersParameter0');
           page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0key input', 'accepts');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0value input', 'application/json');
-          page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-type');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'application/json');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US');
+          page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
           page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templatequery0key input', 'o1qpn1');
-          page.setValueSlow('.DetailsPanel .input__operations0templatequery0value input', '{o1qpv11},{o1qpv12}');
-          page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn2');
-          page.setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv21},{o1qpv22}');
+          page.setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn3');
+          page.setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv31},{o1qpv32}');
+          page.clickSlow('.DetailsPanel .button__remove__operation0function0');
           page.clickSlow('.DetailsPanel .button__add__operation0function');
-          page.setValueSlow('.DetailsPanel .input__operations0functions0key input', 'o1fn1');
-          page.setValueSlow('.DetailsPanel .input__operations0functions0value input', 'o1qpv11 ,  o1qpv12');
-          page.clickSlow('.DetailsPanel .button__add__operation0function');
-          page.setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn2');
-          page.setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv21,  o1qpv22');
-          page.selectValueSlow('.DetailsPanel', 'operations1templatemethod', 'GET');
-          page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsenabled');
+          page.setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn3');
+          page.setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv31 ,  o1qpv32');
           page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL');
           page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring');
+          page.clickSlow('.DetailsPanel .button__remove__operation1headersParameter0');
           page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0key input', 'accepts');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0value input', 'application/json');
-          page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-type');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'application/json');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-language');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'en-US');
+          page.clickSlow('.DetailsPanel .button__remove__operation1queryParameter0');
           page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templatequery0key input', 'o2qpn1');
-          page.setValueSlow('.DetailsPanel .input__operations1templatequery0value input', '{o2qpv11},{o2qpv12}');
-          page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn2');
-          page.setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv21},{o2qpv22}');
+          page.setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn3');
+          page.setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv31},{o2qpv32}');
+          page.clickSlow('.DetailsPanel .button__remove__operation1function0');
           page.clickSlow('.DetailsPanel .button__add__operation1function');
-          page.setValueSlow('.DetailsPanel .input__operations1functions0key input', 'o2fn1');
-          page.setValueSlow('.DetailsPanel .input__operations1functions0value input', 'o2qpv11 ,  o2qpv12');
-          page.clickSlow('.DetailsPanel .button__add__operation1function');
-          page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn2');
-          page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22');
+          page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn3');
+          page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32');
           page.submitDetailsPanel(page.getDataSourceSelector(1));
 
           // page.refresh(function () {
             page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
             page.checkEntityDetails({
               text: {
-                optionsheadersparams0key: 'accepts',
+                optionsheadersparams0key: 'content-type',
                 optionsheadersparams0value: 'application/json',
-                optionsheadersparams1key: 'content-type',
-                optionsheadersparams1value: 'application/json',
+                optionsheadersparams1key: 'content-language',
+                optionsheadersparams1value: 'en-US',
                 operations0templateurl: customEndpoint1,
                 operations0templateresponsePath: '$',
-                operations0templateheaders0key: 'accepts',
+                operations0templateheaders0key: 'content-type',
                 operations0templateheaders0value: 'application/json',
-                operations0templateheaders1key: 'content-type',
-                operations0templateheaders1value: 'application/json',
-                operations0templatequery0key: 'o1qpn1',
-                operations0templatequery0value: '{o1qpv11},{o1qpv12}',
-                operations0templatequery1key: 'o1qpn2',
-                operations0templatequery1value: '{o1qpv21},{o1qpv22}',
-                operations0functions0key: 'o1fn1',
-                operations0functions0value: 'o1qpv11,o1qpv12',
-                operations0functions1key: 'o1fn2',
-                operations0functions1value: 'o1qpv21,o1qpv22',
+                operations0templateheaders1key: 'content-language',
+                operations0templateheaders1value: 'en-US',
+                operations0templatequery0key: 'o1qpn2',
+                operations0templatequery0value: '{o1qpv21},{o1qpv22}',
+                operations0templatequery1key: 'o1qpn3',
+                operations0templatequery1value: '{o1qpv31},{o1qpv32}',
+                operations0functions0key: 'o1fn2',
+                operations0functions0value: 'o1qpv21,o1qpv22',
+                operations0functions1key: 'o1fn3',
+                operations0functions1value: 'o1qpv31,o1qpv32',
                 operations1templateurl: customEndpoint2,
                 operations1templateresponsePath: '$',
-                operations1templateheaders0key: 'accepts',
+                operations1templateheaders0key: 'content-type',
                 operations1templateheaders0value: 'application/json',
-                operations1templateheaders1key: 'content-type',
-                operations1templateheaders1value: 'application/json',
-                operations1templatequery0key: 'o2qpn1',
-                operations1templatequery0value: '{o2qpv11},{o2qpv12}',
-                operations1templatequery1key: 'o2qpn2',
-                operations1templatequery1value: '{o2qpv21},{o2qpv22}',
-                operations1functions0key: 'o2fn1',
-                operations1functions0value: 'o2qpv11,o2qpv12',
-                operations1functions1key: 'o2fn2',
-                operations1functions1value: 'o2qpv21,o2qpv22',
+                operations1templateheaders1key: 'content-language',
+                operations1templateheaders1value: 'en-US',
+                operations1templatequery0key: 'o2qpn2',
+                operations1templatequery0value: '{o2qpv21},{o2qpv22}',
+                operations1templatequery1key: 'o2qpn3',
+                operations1templatequery1value: '{o2qpv31},{o2qpv32}',
+                operations1functions0key: 'o2fn2',
+                operations1functions0value: 'o2qpv21,o2qpv22',
+                operations1functions1key: 'o2fn3',
+                operations1functions1value: 'o2qpv31,o2qpv32',
               },
               checkbox: {
                 optionsenabled: true,
-                optionsstrictSSL: true,
-                optionsuseQuerystring: true,
+                optionsstrictSSL: false,
+                optionsuseQuerystring: false,
                 optionsheadersenabled: true,
                 operations0templateoptionsenabled: true,
-                operations0templateoptionsstrictSSL: true,
-                operations0templateoptionsuseQuerystring: true,
+                operations0templateoptionsstrictSSL: false,
+                operations0templateoptionsuseQuerystring: false,
                 operations1templateoptionsenabled: true,
-                operations1templateoptionsstrictSSL: true,
-                operations1templateoptionsuseQuerystring: true,
+                operations1templateoptionsstrictSSL: false,
+                operations1templateoptionsuseQuerystring: false,
               },
               select: {
                 predefined: 'Custom',
@@ -306,111 +369,50 @@ module.exports = {
                 '.input__operations2templateurl',
               ],
             });
-            page.clickSlow('.DetailsPanel .checkbox__optionsstrictSSL');
-            page.clickSlow('.DetailsPanel .checkbox__optionsuseQuerystring');
-            page.clickSlow('.DetailsPanel .button__remove__optionsHeadersParameter0');
-            page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language');
-            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US');
-            page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL');
-            page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring');
+            page.clickSlow('.DetailsPanel .checkbox__optionsheadersenabled');
+            page.clickSlow('.DetailsPanel .button__remove__operation1');
+            page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsenabled');
             page.clickSlow('.DetailsPanel .button__remove__operation0headersParameter0');
-            page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language');
-            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US');
             page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
-            page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
-            page.setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn3');
-            page.setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv31},{o1qpv32}');
             page.clickSlow('.DetailsPanel .button__remove__operation0function0');
-            page.clickSlow('.DetailsPanel .button__add__operation0function');
-            page.setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn3');
-            page.setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv31 ,  o1qpv32');
-            page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL');
-            page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring');
-            page.clickSlow('.DetailsPanel .button__remove__operation1headersParameter0');
-            page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-language');
-            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'en-US');
-            page.clickSlow('.DetailsPanel .button__remove__operation1queryParameter0');
-            page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
-            page.setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn3');
-            page.setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv31},{o2qpv32}');
-            page.clickSlow('.DetailsPanel .button__remove__operation1function0');
-            page.clickSlow('.DetailsPanel .button__add__operation1function');
-            page.setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn3');
-            page.setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32');
             page.submitDetailsPanel(page.getDataSourceSelector(1));
 
             // page.refresh(function () {
               page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
               page.checkEntityDetails({
                 text: {
-                  optionsheadersparams0key: 'content-type',
-                  optionsheadersparams0value: 'application/json',
-                  optionsheadersparams1key: 'content-language',
-                  optionsheadersparams1value: 'en-US',
                   operations0templateurl: customEndpoint1,
                   operations0templateresponsePath: '$',
-                  operations0templateheaders0key: 'content-type',
-                  operations0templateheaders0value: 'application/json',
-                  operations0templateheaders1key: 'content-language',
-                  operations0templateheaders1value: 'en-US',
-                  operations0templatequery0key: 'o1qpn2',
-                  operations0templatequery0value: '{o1qpv21},{o1qpv22}',
-                  operations0templatequery1key: 'o1qpn3',
-                  operations0templatequery1value: '{o1qpv31},{o1qpv32}',
-                  operations0functions0key: 'o1fn2',
-                  operations0functions0value: 'o1qpv21,o1qpv22',
-                  operations0functions1key: 'o1fn3',
-                  operations0functions1value: 'o1qpv31,o1qpv32',
-                  operations1templateurl: customEndpoint2,
-                  operations1templateresponsePath: '$',
-                  operations1templateheaders0key: 'content-type',
-                  operations1templateheaders0value: 'application/json',
-                  operations1templateheaders1key: 'content-language',
-                  operations1templateheaders1value: 'en-US',
-                  operations1templatequery0key: 'o2qpn2',
-                  operations1templatequery0value: '{o2qpv21},{o2qpv22}',
-                  operations1templatequery1key: 'o2qpn3',
-                  operations1templatequery1value: '{o2qpv31},{o2qpv32}',
-                  operations1functions0key: 'o2fn2',
-                  operations1functions0value: 'o2qpv21,o2qpv22',
-                  operations1functions1key: 'o2fn3',
-                  operations1functions1value: 'o2qpv31,o2qpv32',
+                  operations0templateheaders0key: 'content-language',
+                  operations0templateheaders0value: 'en-US',
+                  operations0templatequery0key: 'o1qpn3',
+                  operations0templatequery0value: '{o1qpv31},{o1qpv32}',
+                  operations0functions0key: 'o1fn3',
+                  operations0functions0value: 'o1qpv31,o1qpv32',
                 },
                 checkbox: {
                   optionsenabled: true,
                   optionsstrictSSL: false,
                   optionsuseQuerystring: false,
-                  optionsheadersenabled: true,
-                  operations0templateoptionsenabled: true,
-                  operations0templateoptionsstrictSSL: false,
-                  operations0templateoptionsuseQuerystring: false,
-                  operations1templateoptionsenabled: true,
-                  operations1templateoptionsstrictSSL: false,
-                  operations1templateoptionsuseQuerystring: false,
+                  optionsheadersenabled: false,
+                  operations0templateoptionsenabled: false,
                 },
                 select: {
                   predefined: 'Custom',
                   operations0templatemethod: 'GET',
-                  operations1templatemethod: 'GET',
                 },
                 notPresent: [
                   '.button__remove__operation0',
-                  '.input__optionsheadersparams2key',
-                  '.input__operations0templateheaders2key',
-                  '.input__operations0templatequery2key',
-                  '.input__operations0functions2key',
-                  '.input__operations1templateheaders2key',
-                  '.input__operations1templatequery2key',
-                  '.input__operations1functions2key',
-                  '.input__operations2templateurl',
+                  '.checkbox__operations0templateoptionsstrictSSL',
+                  '.checkbox__operations0templateoptionsuseQuerystring',
+                  '.input__optionsheadersparams0key',
+                  '.input__operations0templateheaders1key',
+                  '.input__operations0templatequery1key',
+                  '.input__operations0functions1key',
+                  '.input__operations1templateurl',
                 ],
               });
-              page.clickSlow('.DetailsPanel .checkbox__optionsheadersenabled');
-              page.clickSlow('.DetailsPanel .button__remove__operation1');
-              page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsenabled');
+              page.clickSlow('.DetailsPanel .checkbox__optionsenabled');
               page.clickSlow('.DetailsPanel .button__remove__operation0headersParameter0');
               page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
               page.clickSlow('.DetailsPanel .button__remove__operation0function0');
@@ -422,18 +424,9 @@ module.exports = {
                   text: {
                     operations0templateurl: customEndpoint1,
                     operations0templateresponsePath: '$',
-                    operations0templateheaders0key: 'content-language',
-                    operations0templateheaders0value: 'en-US',
-                    operations0templatequery0key: 'o1qpn3',
-                    operations0templatequery0value: '{o1qpv31},{o1qpv32}',
-                    operations0functions0key: 'o1fn3',
-                    operations0functions0value: 'o1qpv31,o1qpv32',
                   },
                   checkbox: {
-                    optionsenabled: true,
-                    optionsstrictSSL: false,
-                    optionsuseQuerystring: false,
-                    optionsheadersenabled: false,
+                    optionsenabled: false,
                     operations0templateoptionsenabled: false,
                   },
                   select: {
@@ -441,56 +434,23 @@ module.exports = {
                     operations0templatemethod: 'GET',
                   },
                   notPresent: [
+                    '.checkbox__optionsstrictSSL',
+                    '.checkbox__optionsuseQuerystring',
+                    '.checkbox__optionsheadersenabled',
                     '.button__remove__operation0',
                     '.checkbox__operations0templateoptionsstrictSSL',
                     '.checkbox__operations0templateoptionsuseQuerystring',
                     '.input__optionsheadersparams0key',
-                    '.input__operations0templateheaders1key',
-                    '.input__operations0templatequery1key',
-                    '.input__operations0functions1key',
+                    '.input__operations0templateheaders0key',
+                    '.input__operations0templatequery0key',
+                    '.input__operations0functions0key',
                     '.input__operations1templateurl',
                   ],
                 });
-                page.clickSlow('.DetailsPanel .checkbox__optionsenabled');
-                page.clickSlow('.DetailsPanel .button__remove__operation0headersParameter0');
-                page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
-                page.clickSlow('.DetailsPanel .button__remove__operation0function0');
-                page.submitDetailsPanel(page.getDataSourceSelector(1));
-
-                // page.refresh(function () {
-                  page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
-                  page.checkEntityDetails({
-                    text: {
-                      operations0templateurl: customEndpoint1,
-                      operations0templateresponsePath: '$',
-                    },
-                    checkbox: {
-                      optionsenabled: false,
-                      operations0templateoptionsenabled: false,
-                    },
-                    select: {
-                      predefined: 'Custom',
-                      operations0templatemethod: 'GET',
-                    },
-                    notPresent: [
-                      '.checkbox__optionsstrictSSL',
-                      '.checkbox__optionsuseQuerystring',
-                      '.checkbox__optionsheadersenabled',
-                      '.button__remove__operation0',
-                      '.checkbox__operations0templateoptionsstrictSSL',
-                      '.checkbox__operations0templateoptionsuseQuerystring',
-                      '.input__optionsheadersparams0key',
-                      '.input__operations0templateheaders0key',
-                      '.input__operations0templatequery0key',
-                      '.input__operations0functions0key',
-                      '.input__operations1templateurl',
-                    ],
-                  });
-                  page.closeDetailsPanel();
-                  page.removeEntity(page.getDataSourceSelector(1));
-                  page.waitForDependencyFinish();
-                  page.close();
-                // });
+                page.closeDetailsPanel();
+                page.removeEntity(page.getDataSourceSelector(1));
+                page.waitForDependencyFinish();
+                page.close();
               // });
             // });
           // });

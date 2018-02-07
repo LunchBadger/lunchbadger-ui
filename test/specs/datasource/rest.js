@@ -1,5 +1,5 @@
-const customEndpoint1 = 'http://example.com';
-const customEndpoint2 = 'http://example.org';
+const customEndpoint1 = 'https://jsonplaceholder.typicode.com/users';
+const customEndpoint2 = 'https://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
   // '@disabled': true,
@@ -141,8 +141,10 @@ module.exports = {
         page.selectValueSlow('.DetailsPanel', 'predefined', 'Custom');
         page.submitDetailsPanel(page.getDataSourceSelector(1), ['baseUrl']);
         page.setValueSlow('.DetailsPanel .input__operations0templateurl input', customEndpoint1);
+        page.setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$');
         page.clickSlow('.DetailsPanel .button__add__operation');
         page.setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2);
+        page.setValueSlow('.DetailsPanel .operations1templateresponsePath input', '$');
         page.submitDetailsPanel(page.getDataSourceSelector(1));
 
         // page.refresh(function () {
@@ -150,9 +152,9 @@ module.exports = {
           page.checkEntityDetails({
             text: {
               operations0templateurl: customEndpoint1,
-              operations0templateresponsePath: '',
+              operations0templateresponsePath: '$',
               operations1templateurl: customEndpoint2,
-              operations1templateresponsePath: '',
+              operations1templateresponsePath: '$',
             },
             checkbox: {
               optionsenabled: false,
@@ -187,22 +189,21 @@ module.exports = {
           page.clickSlow('.DetailsPanel .checkbox__optionsuseQuerystring');
           page.clickSlow('.DetailsPanel .checkbox__optionsheadersenabled');
           page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'hpn1');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'hpv1');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json');
           page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'hpn2');
-          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'hpv2');
-          page.selectValueSlow('.DetailsPanel', 'operations0templatemethod', 'CONNECT');
-          page.setValueSlow('.DetailsPanel .input__operations0templateresponsePath input', '$.test1');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type');
+          page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json');
+          page.selectValueSlow('.DetailsPanel', 'operations0templatemethod', 'GET');
           page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsenabled');
           page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL');
           page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring');
           page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0key input', 'o1hpn1');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0value input', 'o1hpv1');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0key input', 'accepts');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders0value input', 'application/json');
           page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'o1hpn2');
-          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'o1hpv2');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-type');
+          page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'application/json');
           page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
           page.setValueSlow('.DetailsPanel .input__operations0templatequery0key input', 'o1qpn1');
           page.setValueSlow('.DetailsPanel .input__operations0templatequery0value input', '{o1qpv11},{o1qpv12}');
@@ -215,17 +216,16 @@ module.exports = {
           page.clickSlow('.DetailsPanel .button__add__operation0function');
           page.setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn2');
           page.setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv21,  o1qpv22');
-          page.selectValueSlow('.DetailsPanel', 'operations1templatemethod', 'OPTIONS');
-          page.setValueSlow('.DetailsPanel .input__operations1templateresponsePath input', '$.test2');
+          page.selectValueSlow('.DetailsPanel', 'operations1templatemethod', 'GET');
           page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsenabled');
           page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL');
           page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring');
           page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0key input', 'o2hpn1');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0value input', 'o2hpv1');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0key input', 'accepts');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders0value input', 'application/json');
           page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'o2hpn2');
-          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'o2hpv2');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-type');
+          page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'application/json');
           page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
           page.setValueSlow('.DetailsPanel .input__operations1templatequery0key input', 'o2qpn1');
           page.setValueSlow('.DetailsPanel .input__operations1templatequery0value input', '{o2qpv11},{o2qpv12}');
@@ -244,16 +244,16 @@ module.exports = {
             page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
             page.checkEntityDetails({
               text: {
-                optionsheadersparams0key: 'hpn1',
-                optionsheadersparams0value: 'hpv1',
-                optionsheadersparams1key: 'hpn2',
-                optionsheadersparams1value: 'hpv2',
+                optionsheadersparams0key: 'accepts',
+                optionsheadersparams0value: 'application/json',
+                optionsheadersparams1key: 'content-type',
+                optionsheadersparams1value: 'application/json',
                 operations0templateurl: customEndpoint1,
-                operations0templateresponsePath: '$.test1',
-                operations0templateheaders0key: 'o1hpn1',
-                operations0templateheaders0value: 'o1hpv1',
-                operations0templateheaders1key: 'o1hpn2',
-                operations0templateheaders1value: 'o1hpv2',
+                operations0templateresponsePath: '$',
+                operations0templateheaders0key: 'accepts',
+                operations0templateheaders0value: 'application/json',
+                operations0templateheaders1key: 'content-type',
+                operations0templateheaders1value: 'application/json',
                 operations0templatequery0key: 'o1qpn1',
                 operations0templatequery0value: '{o1qpv11},{o1qpv12}',
                 operations0templatequery1key: 'o1qpn2',
@@ -263,11 +263,11 @@ module.exports = {
                 operations0functions1key: 'o1fn2',
                 operations0functions1value: 'o1qpv21,o1qpv22',
                 operations1templateurl: customEndpoint2,
-                operations1templateresponsePath: '$.test2',
-                operations1templateheaders0key: 'o2hpn1',
-                operations1templateheaders0value: 'o2hpv1',
-                operations1templateheaders1key: 'o2hpn2',
-                operations1templateheaders1value: 'o2hpv2',
+                operations1templateresponsePath: '$',
+                operations1templateheaders0key: 'accepts',
+                operations1templateheaders0value: 'application/json',
+                operations1templateheaders1key: 'content-type',
+                operations1templateheaders1value: 'application/json',
                 operations1templatequery0key: 'o2qpn1',
                 operations1templatequery0value: '{o2qpv11},{o2qpv12}',
                 operations1templatequery1key: 'o2qpn2',
@@ -291,8 +291,8 @@ module.exports = {
               },
               select: {
                 predefined: 'Custom',
-                operations0templatemethod: 'CONNECT',
-                operations1templatemethod: 'OPTIONS',
+                operations0templatemethod: 'GET',
+                operations1templatemethod: 'GET',
               },
               notPresent: [
                 '.button__remove__operation0',
@@ -310,14 +310,14 @@ module.exports = {
             page.clickSlow('.DetailsPanel .checkbox__optionsuseQuerystring');
             page.clickSlow('.DetailsPanel .button__remove__optionsHeadersParameter0');
             page.clickSlow('.DetailsPanel .button__add__optionsHeadersParameter');
-            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'hpn3');
-            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'hpv3');
+            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language');
+            page.setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US');
             page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL');
             page.clickSlow('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring');
             page.clickSlow('.DetailsPanel .button__remove__operation0headersParameter0');
             page.clickSlow('.DetailsPanel .button__add__operation0headersParameter');
-            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'o1hpn3');
-            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'o1hpv3');
+            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language');
+            page.setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US');
             page.clickSlow('.DetailsPanel .button__remove__operation0queryParameter0');
             page.clickSlow('.DetailsPanel .button__add__operation0queryParameter');
             page.setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn3');
@@ -330,8 +330,8 @@ module.exports = {
             page.clickSlow('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring');
             page.clickSlow('.DetailsPanel .button__remove__operation1headersParameter0');
             page.clickSlow('.DetailsPanel .button__add__operation1headersParameter');
-            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'o2hpn3');
-            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'o2hpv3');
+            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-language');
+            page.setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'en-US');
             page.clickSlow('.DetailsPanel .button__remove__operation1queryParameter0');
             page.clickSlow('.DetailsPanel .button__add__operation1queryParameter');
             page.setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn3');
@@ -346,16 +346,16 @@ module.exports = {
               page.openEntityInDetailsPanel(page.getDataSourceSelector(1));
               page.checkEntityDetails({
                 text: {
-                  optionsheadersparams0key: 'hpn2',
-                  optionsheadersparams0value: 'hpv2',
-                  optionsheadersparams1key: 'hpn3',
-                  optionsheadersparams1value: 'hpv3',
+                  optionsheadersparams0key: 'content-type',
+                  optionsheadersparams0value: 'application/json',
+                  optionsheadersparams1key: 'content-language',
+                  optionsheadersparams1value: 'en-US',
                   operations0templateurl: customEndpoint1,
-                  operations0templateresponsePath: '$.test1',
-                  operations0templateheaders0key: 'o1hpn2',
-                  operations0templateheaders0value: 'o1hpv2',
-                  operations0templateheaders1key: 'o1hpn3',
-                  operations0templateheaders1value: 'o1hpv3',
+                  operations0templateresponsePath: '$',
+                  operations0templateheaders0key: 'content-type',
+                  operations0templateheaders0value: 'application/json',
+                  operations0templateheaders1key: 'content-language',
+                  operations0templateheaders1value: 'en-US',
                   operations0templatequery0key: 'o1qpn2',
                   operations0templatequery0value: '{o1qpv21},{o1qpv22}',
                   operations0templatequery1key: 'o1qpn3',
@@ -365,11 +365,11 @@ module.exports = {
                   operations0functions1key: 'o1fn3',
                   operations0functions1value: 'o1qpv31,o1qpv32',
                   operations1templateurl: customEndpoint2,
-                  operations1templateresponsePath: '$.test2',
-                  operations1templateheaders0key: 'o2hpn2',
-                  operations1templateheaders0value: 'o2hpv2',
-                  operations1templateheaders1key: 'o2hpn3',
-                  operations1templateheaders1value: 'o2hpv3',
+                  operations1templateresponsePath: '$',
+                  operations1templateheaders0key: 'content-type',
+                  operations1templateheaders0value: 'application/json',
+                  operations1templateheaders1key: 'content-language',
+                  operations1templateheaders1value: 'en-US',
                   operations1templatequery0key: 'o2qpn2',
                   operations1templatequery0value: '{o2qpv21},{o2qpv22}',
                   operations1templatequery1key: 'o2qpn3',
@@ -393,8 +393,8 @@ module.exports = {
                 },
                 select: {
                   predefined: 'Custom',
-                  operations0templatemethod: 'CONNECT',
-                  operations1templatemethod: 'OPTIONS',
+                  operations0templatemethod: 'GET',
+                  operations1templatemethod: 'GET',
                 },
                 notPresent: [
                   '.button__remove__operation0',
@@ -421,9 +421,9 @@ module.exports = {
                 page.checkEntityDetails({
                   text: {
                     operations0templateurl: customEndpoint1,
-                    operations0templateresponsePath: '$.test1',
-                    operations0templateheaders0key: 'o1hpn3',
-                    operations0templateheaders0value: 'o1hpv3',
+                    operations0templateresponsePath: '$',
+                    operations0templateheaders0key: 'content-language',
+                    operations0templateheaders0value: 'en-US',
                     operations0templatequery0key: 'o1qpn3',
                     operations0templatequery0value: '{o1qpv31},{o1qpv32}',
                     operations0functions0key: 'o1fn3',
@@ -438,7 +438,7 @@ module.exports = {
                   },
                   select: {
                     predefined: 'Custom',
-                    operations0templatemethod: 'CONNECT',
+                    operations0templatemethod: 'GET',
                   },
                   notPresent: [
                     '.button__remove__operation0',
@@ -462,7 +462,7 @@ module.exports = {
                   page.checkEntityDetails({
                     text: {
                       operations0templateurl: customEndpoint1,
-                      operations0templateresponsePath: '$.test1',
+                      operations0templateresponsePath: '$',
                     },
                     checkbox: {
                       optionsenabled: false,
@@ -470,7 +470,7 @@ module.exports = {
                     },
                     select: {
                       predefined: 'Custom',
-                      operations0templatemethod: 'CONNECT',
+                      operations0templatemethod: 'GET',
                     },
                     notPresent: [
                       '.checkbox__optionsstrictSSL',

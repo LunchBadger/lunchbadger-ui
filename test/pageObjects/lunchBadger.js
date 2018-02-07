@@ -65,9 +65,11 @@ var pageCommands = {
     return this;
   },
 
-  clickSlow: function (selector) {
+  clickSlow: function (selector, cb) {
     this.waitForElementVisible(selector, 5000);
-    this.click(selector);
+    this.click(selector, () => {
+      cb && cb();
+    });
   },
 
   setValueSlow: function (selector, value) {
@@ -114,29 +116,30 @@ var pageCommands = {
   },
 
   submitDetailsPanel: function (selector, validationErrors = []) {
-    this.clickSlow('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)');
-    if (validationErrors.length === 0) {
-      this.waitForElementPresent(selector + '.wip', 60000);
-      this.waitForElementPresent('.DetailsPanel.closing', 60000);
-      this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
-      this.waitForElementNotPresent(selector + '.wip', 60000);
-    } else {
-      this.api.pause(2000);
-      this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
-      validationErrors.forEach((key) => {
-        this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
-      });
-    }
+    this.clickSlow('.DetailsPanel .BaseDetails__buttons .submit:not(.disabled)', () => {
+      if (validationErrors.length === 0) {
+        this.waitForElementPresent(selector + '.wip', 60000);
+        this.waitForElementPresent('.DetailsPanel.closing', 60000);
+        this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
+        this.waitForElementNotPresent(selector + '.wip', 60000);
+      } else {
+        this.api.pause(2000);
+        this.waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
+        validationErrors.forEach((key) => {
+          this.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
+        });
+      }
+    });
   },
 
   openEntityInDetailsPanel: function (selector) {
-    this.clickSlow(selector, 5000);
+    this.clickSlow(selector);
     this.clickSlow(selector + '.highlighted .Toolbox__button--zoom');
     this.waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
   },
 
   closeDetailsPanel: function () {
-    this.clickSlow('.DetailsPanel .BaseDetails__buttons .cancel', 5000);
+    this.clickSlow('.DetailsPanel .BaseDetails__buttons .cancel');
     this.waitForElementPresent('.DetailsPanel.closing', 60000);
     this.waitForElementNotPresent('.DetailsPanel.closing', 60000);
   },

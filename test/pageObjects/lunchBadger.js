@@ -34,9 +34,8 @@ var pageCommands = {
   },
 
   refresh: function (cb) {
-    var projectLoaded = this.projectLoaded.bind(this);
-    this.api.refresh(function () {
-      projectLoaded();
+    this.api.refresh(() => {
+      this.projectLoaded();
       cb && cb();
     });
   },
@@ -44,7 +43,8 @@ var pageCommands = {
   projectLoaded: function () {
     // TODO consider refactoring using callback or promise
     this.waitForElementVisible('.app', 120000);
-    this.waitForElementVisible('.app__loading-message', 5000);
+    this.waitForElementNotPresent('.app__loading-error', 5000);
+    this.waitForElementVisible('.app__loading-message', 60000);
     this.waitForElementNotPresent('.app__loading-message', 60000);
     this.waitForElementNotPresent('.spinner__overlay', 60000);
   },

@@ -152,7 +152,7 @@ var pageCommands = {
 
   openEntityInDetailsPanel: function (selector) {
     return this
-      .clickVisible(selector)
+      .clickVisible(selector + ' .EntityHeader__name')
       .clickVisible(selector + '.highlighted .Toolbox__button--zoom')
       .waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
   },

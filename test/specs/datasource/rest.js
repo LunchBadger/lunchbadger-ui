@@ -8,8 +8,6 @@ module.exports = {
     const restSelector = page.getDataSourceSelector(1);
     page
       .open()
-      .refreshBrowser()
-      .refreshBrowser()
       .addElementFromTooltip('dataSource', 'rest')
       // .expect.element(restSelector + ' .Rest__predefined .EntityPropertyLabel').text.to.equal('PREDEFINED PROPERTIES')
       // .expect.element(restSelector + ' .Rest__method .EntityPropertyLabel').text.to.equal('METHOD')

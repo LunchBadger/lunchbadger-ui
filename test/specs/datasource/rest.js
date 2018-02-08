@@ -21,13 +21,13 @@ module.exports = {
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint0)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint1)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       .submitDetailsPanel(restSelector)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint2)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Custom')
@@ -93,7 +93,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22')
       .submitDetailsPanel(restSelector)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint3)
       .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
@@ -132,7 +132,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32')
       .submitDetailsPanel(restSelector)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint4)
       .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
@@ -143,7 +143,7 @@ module.exports = {
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint5)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
@@ -152,7 +152,7 @@ module.exports = {
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector)
 
-      .refreshBrowser()
+      .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint6)
       .closeDetailsPanel()

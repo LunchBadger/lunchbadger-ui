@@ -7,7 +7,7 @@ var pageCommands = {
     this.api.resizeWindow(1920, 1080);
     return this
       .waitForElementVisible('.FakeLogin', 5000)
-      .setValueSlow('.input__login input', 'test')
+      .setValueSlow('.input__login input', 'ko')
       .setValueSlow('.input__password input', 'Test User')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()

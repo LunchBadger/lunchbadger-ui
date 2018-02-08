@@ -4,8 +4,8 @@ let notifiedCoverage = false;
 var pageCommands = {
   open: function () {
     this.api.page.lunchBadger().navigate();
+    this.api.resizeWindow(1920, 1080);
     return this
-      .resizeWindow(1920, 1080)
       .waitForElementVisible('.FakeLogin', 5000)
       .setValueSlow('.input__login input', 'test')
       .setValueSlow('.input__password input', 'Test User')
@@ -13,16 +13,6 @@ var pageCommands = {
       .projectLoaded()
       .emptyProject();
   },
-
-  resizeWindow: function (w, h) {
-    this.api.resizeWindow(w, h);
-    return this;
-  },
-
-  // submit: function (selector) {
-  //   this.api.submitForm(selector);
-  //   return this;
-  // },
 
   close: function () {
     this.emptyProject();
@@ -42,7 +32,7 @@ var pageCommands = {
     return this;
   },
 
-  refresh: function () {
+  refreshBrowser: function () {
     this.api.refresh();
     return this
       .projectLoaded();

@@ -8,6 +8,8 @@ module.exports = {
     const restSelector = page.getDataSourceSelector(1);
     page
       .open()
+      .refreshBrowser()
+      .refreshBrowser()
       .addElementFromTooltip('dataSource', 'rest')
       // .expect.element(restSelector + ' .Rest__predefined .EntityPropertyLabel').text.to.equal('PREDEFINED PROPERTIES')
       // .expect.element(restSelector + ' .Rest__method .EntityPropertyLabel').text.to.equal('METHOD')
@@ -21,13 +23,13 @@ module.exports = {
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint0)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint1)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       .submitDetailsPanel(restSelector)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint2)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Custom')
@@ -93,7 +95,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22')
       .submitDetailsPanel(restSelector)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint3)
       .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
@@ -132,7 +134,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32')
       .submitDetailsPanel(restSelector)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint4)
       .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
@@ -143,7 +145,7 @@ module.exports = {
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint5)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
@@ -152,7 +154,7 @@ module.exports = {
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector)
 
-      .refresh()
+      .refreshBrowser()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint6)
       .closeDetailsPanel()

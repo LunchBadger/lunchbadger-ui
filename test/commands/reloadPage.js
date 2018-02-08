@@ -1,5 +1,5 @@
 exports.command = function (callback) {
-  var self = this;
+  const self = this;
   this.refresh(function () {
     self
       .waitForElementVisible('.app', 120000)

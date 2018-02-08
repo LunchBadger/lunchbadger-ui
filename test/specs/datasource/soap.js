@@ -32,29 +32,29 @@ module.exports = {
         ],
       });
       page.setValueSlow('.DetailsPanel .input__wsdl input', TEST_WSDL + '?wsdl');
-      page.clickSlow('.DetailsPanel .checkbox__remotingEnabled');
-      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
-      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
-      page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
+      page.clickVisible('.DetailsPanel .checkbox__remotingEnabled');
+      page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
+      page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
+      page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
       page.setValueSlow('.DetailsPanel .input__securityusername input', 'testuser');
       page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
       page.selectValueSlow('.DetailsPanel', 'securitypasswordType', 'PasswordDigest');
-      page.clickSlow('.DetailsPanel .button__add__operation');
+      page.clickVisible('.DetailsPanel .button__add__operation');
       page.setValueSlow('.DetailsPanel .input__soapOperations0key input', 'k1');
       page.setValueSlow('.DetailsPanel .input__soapOperations0service input', 's1');
       page.setValueSlow('.DetailsPanel .input__soapOperations0port input', '7');
       page.setValueSlow('.DetailsPanel .input__soapOperations0operation input', 'o1');
-      page.clickSlow('.DetailsPanel .button__add__operation');
+      page.clickVisible('.DetailsPanel .button__add__operation');
       page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'k2');
       page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 's2');
       page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '8');
       page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'o2');
-      page.clickSlow('.DetailsPanel .button__add__soapHeader');
+      page.clickVisible('.DetailsPanel .button__add__soapHeader');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0elementKey input', 'ek1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0elementValue input', 'ev1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0prefix input', 'p1');
       page.setValueSlow('.DetailsPanel .input__soapHeaders0namespace input', 'n1');
-      page.clickSlow('.DetailsPanel .button__add__soapHeader');
+      page.clickVisible('.DetailsPanel .button__add__soapHeader');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'ek2');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'ev2');
       page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p2');
@@ -113,8 +113,8 @@ module.exports = {
         });
         page.setValueSlow('.DetailsPanel .input__securityusername input', 'bauser');
         page.setValueSlow('.DetailsPanel .input__securitypassword input', 'bapasswd');
-        page.clickSlow('.DetailsPanel .button__remove__operation0');
-        page.clickSlow('.DetailsPanel .button__remove__soapHeader0');
+        page.clickVisible('.DetailsPanel .button__remove__operation0');
+        page.clickVisible('.DetailsPanel .button__remove__soapHeader0');
         page.submitDetailsPanel(page.getDataSourceSelector(1));
 
         page.refresh(function () {
@@ -149,10 +149,10 @@ module.exports = {
               '.select__securitypasswordType',
             ],
           });
-          page.clickSlow('.DetailsPanel .checkbox__remotingEnabled');
-          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
-          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
-          page.clickSlow('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
+          page.clickVisible('.DetailsPanel .checkbox__remotingEnabled');
+          page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized');
+          page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsstrictSSL');
+          page.clickVisible('.DetailsPanel .checkbox__wsdl_optionsrequestCert');
           page.selectValueSlow('.DetailsPanel', 'securityscheme', 'ClientSSL');
           page.setValueSlow('.DetailsPanel .input__securitykeyPath input', 'testKeyPath');
           page.setValueSlow('.DetailsPanel .input__securitycertPath input', 'testCertPath');
@@ -170,12 +170,12 @@ module.exports = {
           page.selectValueSlow('.DetailsPanel', 'securityscheme', 'WS');
           page.setValueSlow('.DetailsPanel .input__securityusername input', 'testuser');
           page.setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd');
-          page.clickSlow('.DetailsPanel .button__add__operation');
+          page.clickVisible('.DetailsPanel .button__add__operation');
           page.setValueSlow('.DetailsPanel .input__soapOperations1key input', 'k3');
           page.setValueSlow('.DetailsPanel .input__soapOperations1service input', 's3');
           page.setValueSlow('.DetailsPanel .input__soapOperations1port input', '9');
           page.setValueSlow('.DetailsPanel .input__soapOperations1operation input', 'o3');
-          page.clickSlow('.DetailsPanel .button__add__soapHeader');
+          page.clickVisible('.DetailsPanel .button__add__soapHeader');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1elementKey input', 'ek3');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'ev3');
           page.setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p3');

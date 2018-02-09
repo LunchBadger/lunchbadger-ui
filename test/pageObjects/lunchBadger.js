@@ -66,10 +66,15 @@ var pageCommands = {
       .drag(dragTarget, dropTarget);
   },
 
-  clickPresent: function (selector, timeout = 5000) {
+  clickPresent: function (selector, timeout = 5000, cb) {
+    const self = this;
     return this
       .waitForElementPresent(selector, timeout)
-      .click(selector);
+      .click(selector, function () {
+        console.log('clickPresent cb', cb);
+        cb && cb();
+        return self;
+      });
   },
 
   clickVisible: function (selector, timeout = 5000) {
@@ -129,16 +134,21 @@ var pageCommands = {
       .waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
-  submitDetailsPanel: function (selector) { //}, validationErrors = []) {
+  submitDetailsPanel: function (selector, cb) { //}, validationErrors = []) {
+    const self = this;
     return this
       .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
-      .clickPresent('.DetailsPanel .BaseDetails__buttons .submit') //, () => {
+      .clickPresent('.DetailsPanel .BaseDetails__buttons .submit', 5000, function () {
       //   if (validationErrors.length === 0) {
       //     return this
-      .waitForElementPresent(selector + '.wip', 5000)
-      .waitForElementPresent('.DetailsPanel.closing', 5000)
-      .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-      .waitForElementNotPresent(selector + '.wip', 60000);
+        return self
+          .waitForElementPresent(selector + '.wip', 5000)
+          .waitForElementPresent('.DetailsPanel.closing', 5000)
+          .waitForElementNotPresent('.DetailsPanel.closing', 15000)
+          .waitForElementNotPresent(selector + '.wip', 60000, function () {
+            console.log('submitDetailsPanel cb', cb);
+            cb && cb();
+          });
       //   } else {
       //     // this.api.pause(2000);
       //     return this
@@ -147,7 +157,7 @@ var pageCommands = {
       //     //   this.api.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
       //     // });
       //   }
-      // });
+      });
   },
 
   openEntityInDetailsPanel: function (selector) {

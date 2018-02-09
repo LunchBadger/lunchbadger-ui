@@ -33,28 +33,30 @@ module.exports = {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
-      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
-      .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
-      .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
-      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json')
-      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
+      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
+      // .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
+      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json')
+      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
       .submitDetailsPanel(restSelector);
       // .checkEntityDetails(checkpoint2)
   },
   'Datasource rest: edit options 2': function () {
     page
       .openEntityInDetailsPanel(restSelector)
-      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
-      .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
-      .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
-      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
+      // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
+      // .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
+      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language')
+      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
       .submitDetailsPanel(restSelector);
   },
   'Datasource rest: remove': function () {

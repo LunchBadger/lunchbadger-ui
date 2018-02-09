@@ -161,7 +161,8 @@ var pageCommands = {
           .waitForElementPresent(selector + '.wip', 5000)
           .waitForElementPresent('.DetailsPanel.closing', 5000)
           .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-          .waitForElementNotPresent(selector + '.wip', 60000); //, function () {
+          .waitForElementNotPresent(selector + '.wip', 60000)
+          .pause(1000); //, function () {
           //   console.log('submitDetailsPanel cb', cb);
           //   cb && cb();
           //   return self;

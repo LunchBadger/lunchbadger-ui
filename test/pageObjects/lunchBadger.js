@@ -38,6 +38,11 @@ var pageCommands = {
       .projectLoaded();
   },
 
+  pause: function (ms) {
+    this.api.pause(ms);
+    return this;
+  },
+
   projectLoaded: function () {
     return this
       .waitForElementVisible('.app', 120000)
@@ -75,6 +80,12 @@ var pageCommands = {
       //   cb && cb();
       //   return self;
       // });
+  },
+
+  clickPresentPause: function (selector, timeout = 15000) {
+    return this
+      .pause(1000)
+      .clickPresent(selector, timeout);
   },
 
   clickVisible: function (selector, timeout = 15000) {

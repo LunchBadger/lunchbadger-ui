@@ -66,26 +66,26 @@ var pageCommands = {
       .drag(dragTarget, dropTarget);
   },
 
-  clickPresent: function (selector, timeout = 5000, cb) {
-    const self = this;
+  clickPresent: function (selector, timeout = 5000) {
+    // const self = this;
     return this
       .waitForElementPresent(selector, timeout)
-      .click(selector, function () {
-        console.log('clickPresent cb', cb);
-        cb && cb();
-        return self;
-      });
+      .click(selector); //, function () {
+      //   console.log('clickPresent cb', cb);
+      //   cb && cb();
+      //   return self;
+      // });
   },
 
-  clickVisible: function (selector, timeout = 5000, cb) {
-    const self = this;
+  clickVisible: function (selector, timeout = 5000) {
+    // const self = this;
     return this
       .waitForElementVisible(selector, timeout)
-      .click(selector, function () {
-        console.log('clickVisible cb', cb);
-        cb && cb();
-        return self;
-      });
+      .click(selector); //, function () {
+      //   console.log('clickVisible cb', cb);
+      //   cb && cb();
+      //   return self;
+      // });
   },
 
   setValueSlow: function (selector, value) {

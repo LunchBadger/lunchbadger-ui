@@ -66,7 +66,7 @@ var pageCommands = {
       .drag(dragTarget, dropTarget);
   },
 
-  clickPresent: function (selector, timeout = 5000) {
+  clickPresent: function (selector, timeout = 15000) {
     // const self = this;
     return this
       .waitForElementPresent(selector, timeout)
@@ -77,7 +77,7 @@ var pageCommands = {
       // });
   },
 
-  clickVisible: function (selector, timeout = 5000) {
+  clickVisible: function (selector, timeout = 15000) {
     // const self = this;
     return this
       .waitForElementVisible(selector, timeout)

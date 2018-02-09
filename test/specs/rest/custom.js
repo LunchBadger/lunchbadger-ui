@@ -26,9 +26,9 @@ module.exports = {
     page
       .openEntityInDetailsPanel(restSelector)
       .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$')
-      .clickPresentPause('.DetailsPanel .button__add__operation')
-      .setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2)
-      .setValueSlow('.DetailsPanel .operations1templateresponsePath input', '$')
+      // .clickPresentPause('.DetailsPanel .button__add__operation')
+      // .setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2)
+      // .setValueSlow('.DetailsPanel .operations1templateresponsePath input', '$')
       // .clickPresentPause('.DetailsPanel .checkbox__optionsenabled')
       // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')

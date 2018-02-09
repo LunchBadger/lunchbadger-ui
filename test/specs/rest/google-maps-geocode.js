@@ -3,7 +3,7 @@ var restSelector;
 const datasourceName = 'Google-Maps-GeoCode';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Rest: Google Maps GeoCode': function (browser) {
     page = browser.page.lunchBadger();
     restSelector = page.getDataSourceSelector(1);

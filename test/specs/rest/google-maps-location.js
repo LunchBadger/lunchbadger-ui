@@ -3,7 +3,7 @@ var restSelector;
 const datasourceName = 'Google-Maps-Location';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Rest: Google Maps Location': function (browser) {
     page = browser.page.lunchBadger();
     restSelector = page.getDataSourceSelector(1);

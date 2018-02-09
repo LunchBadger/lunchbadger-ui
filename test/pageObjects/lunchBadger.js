@@ -129,32 +129,32 @@ var pageCommands = {
       .waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
-  // submitDetailsPanel: function (selector) { //}, validationErrors = []) {
-  //   return this
-  //     .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
-  //     .clickVisible('.DetailsPanel .BaseDetails__buttons .submit') //, () => {
-  //     //   if (validationErrors.length === 0) {
-  //     //     return this
-  //           .waitForElementPresent(selector + '.wip', 5000)
-  //           .waitForElementPresent('.DetailsPanel.closing', 5000)
-  //           .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-  //           .waitForElementNotPresent(selector + '.wip', 60000);
-  //     //   } else {
-  //     //     // this.api.pause(2000);
-  //     //     return this
-  //     //       .waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
-  //     //     // validationErrors.forEach((key) => {
-  //     //     //   this.api.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
-  //     //     // });
-  //     //   }
-  //     // });
-  // },
+  submitDetailsPanel: function (selector) { //}, validationErrors = []) {
+    return this
+      .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
+      .clickPresent('.DetailsPanel .BaseDetails__buttons .submit') //, () => {
+      //   if (validationErrors.length === 0) {
+      //     return this
+      .waitForElementPresent(selector + '.wip', 5000)
+      .waitForElementPresent('.DetailsPanel.closing', 5000)
+      .waitForElementNotPresent('.DetailsPanel.closing', 15000)
+      .waitForElementNotPresent(selector + '.wip', 60000);
+      //   } else {
+      //     // this.api.pause(2000);
+      //     return this
+      //       .waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
+      //     // validationErrors.forEach((key) => {
+      //     //   this.api.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
+      //     // });
+      //   }
+      // });
+  },
 
   openEntityInDetailsPanel: function (selector) {
     return this
       .clickVisible(selector + ' .EntityHeader__name')
       .clickVisible(selector + '.highlighted .Toolbox__button--zoom')
-      .waitForElementPresent('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
+      .waitForElementVisible('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
   },
 
   closeDetailsPanel: function () {

@@ -3,7 +3,7 @@ var privateSelector = '.quadrant:nth-child(2) .Entity:last-child';
 // var publicSelector = '.quadrant:nth-child(4) .Entity:last-child';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Tools menu: microservice selected': function (browser) {
     page = browser.page.lunchBadger();
     page.open();

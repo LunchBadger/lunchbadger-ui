@@ -1,5 +1,5 @@
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Datasource: salesforce': function (browser) {
     var page = browser.page.lunchBadger();
     page.open();

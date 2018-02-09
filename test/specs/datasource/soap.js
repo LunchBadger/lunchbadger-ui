@@ -1,7 +1,7 @@
 const TEST_WSDL = 'http://www.webservicex.com/globalweather.asmx';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Datasource: soap': function (browser) {
     var page = browser.page.lunchBadger();
     page.open();

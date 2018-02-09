@@ -1,7 +1,7 @@
 var page;
 var restSelector;
-const datasourceName = 'Google-Maps-GeoCode';
-const customEndpoint1 = 'http://jsonplaceholder.typicode.com/users';
+const datasourceName = 'Custom';
+const customEndpoint1 = 'https://maps.googleapis.com/maps/api/geocode/json';
 const customEndpoint2 = 'http://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
       // .expect.element(restSelector + ' .Rest__url .EntityPropertyLabel').text.to.equal('URL')
       // .setValueSlow(restSelector + ' .input__name input', datasourceName)
       .selectValueSlow(restSelector, 'predefined', datasourceName)
-      // .setValueSlow(restSelector + ' .input__operations0templateurl input', customEndpoint1)
+      .setValueSlow(restSelector + ' .input__operations0templateurl input', customEndpoint1)
       .submitCanvasEntity(restSelector)
       .waitForDependencyFinish();
       // .submitDetailsPanel(restSelector) //, ['baseUrl'])
@@ -25,8 +25,7 @@ module.exports = {
   'Rest: custom edit 1': function () {
     page
       .openEntityInDetailsPanel(restSelector)
-      .selectValueSlow('.DetailsPanel', 'predefined', datasourceName)
-      // .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$')
+      .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$')
       // .clickPresentPause('.DetailsPanel .button__add__operation')
       // .setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2)
       // .setValueSlow('.DetailsPanel .operations1templateresponsePath input', '$')
@@ -90,8 +89,7 @@ module.exports = {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .selectValueSlow('.DetailsPanel', 'predefined', datasourceName)
-      // .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a')
+      .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a')
       // .checkEntityDetails(checkpoint3)
       // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
@@ -133,8 +131,7 @@ module.exports = {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .selectValueSlow('.DetailsPanel', 'predefined', datasourceName)
-      // .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a.b')
+      .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a.b')
       // .checkEntityDetails(checkpoint4)
       // .clickPresentPause('.DetailsPanel .checkbox__optionsheadersenabled')
       // .clickPresentPause('.DetailsPanel .button__remove__operation1')
@@ -149,8 +146,7 @@ module.exports = {
 
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .selectValueSlow('.DetailsPanel', 'predefined', datasourceName)
-      // .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a.b.c')
+      .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$.a.b.c')
       // .checkEntityDetails(checkpoint5)
       // .clickPresentPause('.DetailsPanel .checkbox__optionsenabled')
       // .clickPresentPause('.DetailsPanel .button__remove__operation0headersParameter0')

@@ -77,10 +77,15 @@ var pageCommands = {
       });
   },
 
-  clickVisible: function (selector, timeout = 5000) {
+  clickVisible: function (selector, timeout = 5000, cb) {
+    const self = this;
     return this
       .waitForElementVisible(selector, timeout)
-      .click(selector);
+      .click(selector, function () {
+        console.log('clickVisible cb', cb);
+        cb && cb();
+        return self;
+      });
   },
 
   setValueSlow: function (selector, value) {
@@ -134,21 +139,22 @@ var pageCommands = {
       .waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
-  submitDetailsPanel: function (selector, cb) { //}, validationErrors = []) {
-    const self = this;
+  submitDetailsPanel: function (selector) { //}, validationErrors = []) {
+    // const self = this;
     return this
       .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
-      .clickPresent('.DetailsPanel .BaseDetails__buttons .submit', 5000, function () {
+      .submitForm('.DetailsPanel .BaseDetails form') // .BaseDetails__buttons .submit', 5000) //, function () {
       //   if (validationErrors.length === 0) {
       //     return this
-        return self
+        // return self
           .waitForElementPresent(selector + '.wip', 5000)
           .waitForElementPresent('.DetailsPanel.closing', 5000)
           .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-          .waitForElementNotPresent(selector + '.wip', 60000, function () {
-            console.log('submitDetailsPanel cb', cb);
-            cb && cb();
-          });
+          .waitForElementNotPresent(selector + '.wip', 60000); //, function () {
+          //   console.log('submitDetailsPanel cb', cb);
+          //   cb && cb();
+          //   return self;
+          // });
       //   } else {
       //     // this.api.pause(2000);
       //     return this
@@ -157,7 +163,7 @@ var pageCommands = {
       //     //   this.api.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
       //     // });
       //   }
-      });
+      // });
   },
 
   openEntityInDetailsPanel: function (selector) {

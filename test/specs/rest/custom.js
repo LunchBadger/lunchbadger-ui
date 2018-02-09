@@ -1,8 +1,8 @@
 var page;
 var restSelector;
 const datasourceName = 'Custom';
-const customEndpoint1 = 'https://jsonplaceholder.typicode.com/users';
-const customEndpoint2 = 'https://jsonplaceholder.typicode.com/posts';
+const customEndpoint1 = 'http://jsonplaceholder.typicode.com/users';
+const customEndpoint2 = 'http://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
   // '@disabled': true,

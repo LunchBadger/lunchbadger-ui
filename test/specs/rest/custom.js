@@ -1,11 +1,12 @@
 var page;
 var restSelector;
+const datasourceName = 'Custom';
 const customEndpoint1 = 'https://jsonplaceholder.typicode.com/users';
 const customEndpoint2 = 'https://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
-  '@disabled': true,
-  'Datasource rest: predefined Google Maps Location': function (browser) {
+  // '@disabled': true,
+  'Rest: Custom create': function (browser) {
     page = browser.page.lunchBadger();
     restSelector = page.getDataSourceSelector(1);
     page
@@ -14,31 +15,16 @@ module.exports = {
       // .expect.element(restSelector + ' .Rest__predefined .EntityPropertyLabel').text.to.equal('PREDEFINED PROPERTIES')
       // .expect.element(restSelector + ' .Rest__method .EntityPropertyLabel').text.to.equal('METHOD')
       // .expect.element(restSelector + ' .Rest__url .EntityPropertyLabel').text.to.equal('URL')
-      .selectValueSlow('.Rest__predefined', 'predefined', 'Google-Maps-Location')
-      .submitCanvasEntity(restSelector);
-      // .waitForDependencyFinish()
-      // .expect.element(restSelector + ' .Rest__predefined .EntityProperty__field--textValue').text.to.equal('Google Maps - Location')
-      // .expect.element(restSelector + ' .Rest__method .EntityProperty__field--textValue').text.to.equal('GET')
-      // .expect.element(restSelector + ' .Rest__url .EntityProperty__field--textValue').text.to.equal('https://maps.googleapis.com/maps/api/geocode/json')
-      // .openEntityInDetailsPanel(restSelector)
-      // .checkEntityDetails(checkpoint0)
-  },
-  'Datasource rest: predefined Google Maps GeoCode': function () {
-    page
-      // .reloadPage()
-      .openEntityInDetailsPanel(restSelector)
-      // .checkEntityDetails(checkpoint1)
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanel(restSelector);
-  },
-  'Datasource rest: custom': function () {
-    page
-      // .reloadPage()
-      .openEntityInDetailsPanel(restSelector)
-      // .checkEntityDetails(checkpoint2)
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Custom')
+      // .setValueSlow(restSelector + ' .input__name input', datasourceName)
+      .selectValueSlow(restSelector, 'predefined', datasourceName)
+      .setValueSlow(restSelector + ' .input__operations0templateurl input', customEndpoint1)
+      .submitCanvasEntity(restSelector)
+      .waitForDependencyFinish();
       // .submitDetailsPanel(restSelector) //, ['baseUrl'])
-      .setValueSlow('.DetailsPanel .input__operations0templateurl input', customEndpoint1)
+  },
+  'Rest: custom edit 1': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
       .setValueSlow('.DetailsPanel .operations0templateresponsePath input', '$')
       .clickPresentPause('.DetailsPanel .button__add__operation')
       .setValueSlow('.DetailsPanel .input__operations1templateurl input', customEndpoint2)
@@ -99,7 +85,7 @@ module.exports = {
         .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'sqpvsf,  sqpvss')
       .submitDetailsPanel(restSelector);
   },
-  'Datasource rest: custom edit': function () {
+  'Rest: custom edit 2': function () {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
@@ -140,7 +126,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'sqpvtf ,  sqpvts')
       .submitDetailsPanel(restSelector);
   },
-  'Datasource rest: custom remove 1': function () {
+  'Rest: custom remove 1': function () {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
@@ -153,7 +139,7 @@ module.exports = {
       .clickPresentPause('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector);
   },
-  'Datasource rest: custom remove 2': function () {
+  'Rest: custom remove 2': function () {
     page
 
       // .reloadPage()
@@ -165,7 +151,7 @@ module.exports = {
       .clickPresentPause('.DetailsPanel .button__remove__operation0function0')
       .submitDetailsPanel(restSelector);
   },
-  'Datasource rest: custom delete': function () {
+  'Rest: custom delete': function () {
     page
 
       // .reloadPage()
@@ -178,119 +164,6 @@ module.exports = {
   }
 };
 
-// const checkpoint0 = {
-//   text: {
-//     operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
-//     operations0templateresponsePath: '$.results[0].formatted_address',
-//     operations0templateheaders0key: 'accepts',
-//     operations0templateheaders0value: 'application/json',
-//     operations0templateheaders1key: 'content-type',
-//     operations0templateheaders1value: 'application/json',
-//     operations0templatequery0key: 'key',
-//     operations0templatequery0value: '',
-//     operations0templatequery1key: 'latlng',
-//     operations0templatequery1value: '{lat},{long}',
-//     operations0functions0key: 'location',
-//     operations0functions0value: 'lat,long'
-//   },
-//   checkbox: {
-//     optionsenabled: false,
-//     operations0templateoptionsenabled: false
-//   },
-//   select: {
-//     predefined: 'Google-Maps-Location',
-//     operations0templatemethod: 'GET'
-//   },
-//   notPresent: [
-//     '.button__remove__operation0',
-//     '.checkbox__optionsstrictSSL',
-//     '.checkbox__optionsuseQuerystring',
-//     '.checkbox__optionsheadersenabled',
-//     '.input__optionsheadersparams0key',
-//     '.checkbox__operations0templateoptionsstrictSSL',
-//     '.checkbox__operations0templateoptionsuseQuerystring',
-//     '.input__operations0templateheaders2key',
-//     '.input__operations0templatequery2key',
-//     '.input__operations0functions1key',
-//     '.input__operations1templateurl'
-//   ]
-// };
-// const checkpoint1 = {
-//   text: {
-//     operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
-//     operations0templateresponsePath: '$.results[0].formatted_address',
-//     operations0templateheaders0key: 'accepts',
-//     operations0templateheaders0value: 'application/json',
-//     operations0templateheaders1key: 'content-type',
-//     operations0templateheaders1value: 'application/json',
-//     operations0templatequery0key: 'key',
-//     operations0templatequery0value: '',
-//     operations0templatequery1key: 'latlng',
-//     operations0templatequery1value: '{lat},{long}',
-//     operations0functions0key: 'location',
-//     operations0functions0value: 'lat,long'
-//   },
-//   checkbox: {
-//     optionsenabled: false,
-//     operations0templateoptionsenabled: false
-//   },
-//   select: {
-//     predefined: 'Google-Maps-Location',
-//     operations0templatemethod: 'GET'
-//   },
-//   notPresent: [
-//     '.button__remove__operation0',
-//     '.checkbox__optionsstrictSSL',
-//     '.checkbox__optionsuseQuerystring',
-//     '.checkbox__optionsheadersenabled',
-//     '.input__optionsheadersparams0key',
-//     '.checkbox__operations0templateoptionsstrictSSL',
-//     '.checkbox__operations0templateoptionsuseQuerystring',
-//     '.input__operations0templateheaders2key',
-//     '.input__operations0templatequery2key',
-//     '.input__operations0functions1key',
-//     '.input__operations1templateurl'
-//   ]
-// };
-// const checkpoint2 = {
-//   text: {
-//     operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
-//     operations0templateresponsePath: '$.results[0].geometry.location',
-//     operations0templateheaders0key: 'accepts',
-//     operations0templateheaders0value: 'application/json',
-//     operations0templateheaders1key: 'content-type',
-//     operations0templateheaders1value: 'application/json',
-//     operations0templatequery0key: 'key',
-//     operations0templatequery0value: '',
-//     operations0templatequery1key: 'address',
-//     operations0templatequery1value: '{street},{city},{zipcode}',
-//     operations0templatequery2key: 'sensor',
-//     operations0templatequery2value: '{sensor=false}',
-//     operations0functions0key: 'geocode',
-//     operations0functions0value: 'street,city,zipcode'
-//   },
-//   checkbox: {
-//     optionsenabled: false,
-//     operations0templateoptionsenabled: false
-//   },
-//   select: {
-//     predefined: 'Google-Maps-GeoCode',
-//     operations0templatemethod: 'GET'
-//   },
-//   notPresent: [
-//     '.button__remove__operation0',
-//     '.checkbox__optionsstrictSSL',
-//     '.checkbox__optionsuseQuerystring',
-//     '.checkbox__optionsheadersenabled',
-//     '.input__optionsheadersparams0key',
-//     '.checkbox__operations0templateoptionsstrictSSL',
-//     '.checkbox__operations0templateoptionsuseQuerystring',
-//     '.input__operations0templateheaders2key',
-//     '.input__operations0templatequery3key',
-//     '.input__operations0functions1key',
-//     '.input__operations1templateurl'
-//   ]
-// };
 // const checkpoint3 = {
 //   text: {
 //     optionsheadersparams0key: 'accepts',

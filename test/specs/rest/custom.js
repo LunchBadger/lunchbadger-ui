@@ -5,7 +5,7 @@ const customEndpoint1 = 'https://maps.googleapis.com/maps/api/geocode/json';
 const customEndpoint2 = 'http://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Rest: Custom create': function (browser) {
     page = browser.page.lunchBadger();
     restSelector = page.getDataSourceSelector(1);

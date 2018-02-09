@@ -1,11 +1,13 @@
+var page;
+var restSelector;
 const customEndpoint1 = 'https://jsonplaceholder.typicode.com/users';
 const customEndpoint2 = 'https://jsonplaceholder.typicode.com/posts';
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: rest': function (browser) {
-    const page = browser.page.lunchBadger();
-    const restSelector = page.getDataSourceSelector(1);
+  'Datasource rest: predefined Google Maps Location': function (browser) {
+    page = browser.page.lunchBadger();
+    restSelector = page.getDataSourceSelector(1);
     page
       .open()
       .addElementFromTooltip('dataSource', 'rest')
@@ -13,20 +15,24 @@ module.exports = {
       // .expect.element(restSelector + ' .Rest__method .EntityPropertyLabel').text.to.equal('METHOD')
       // .expect.element(restSelector + ' .Rest__url .EntityPropertyLabel').text.to.equal('URL')
       .selectValueSlow('.Rest__predefined', 'predefined', 'Google-Maps-Location')
-      .submitCanvasEntity(restSelector)
+      .submitCanvasEntity(restSelector);
       // .waitForDependencyFinish()
       // .expect.element(restSelector + ' .Rest__predefined .EntityProperty__field--textValue').text.to.equal('Google Maps - Location')
       // .expect.element(restSelector + ' .Rest__method .EntityProperty__field--textValue').text.to.equal('GET')
       // .expect.element(restSelector + ' .Rest__url .EntityProperty__field--textValue').text.to.equal('https://maps.googleapis.com/maps/api/geocode/json')
       // .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint0)
-
+  },
+  'Datasource rest: predefined Google Maps GeoCode': function () {
+    page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint1)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanel(restSelector)
-
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: custom': function () {
+    page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint2)
@@ -44,9 +50,9 @@ module.exports = {
       .clickVisible('.DetailsPanel .button__add__optionsHeadersParameter')
       .setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts')
       .setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json')
-      .clickVisible('.DetailsPanel .button__add__optionsHeadersParameter')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
-      .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
+        .clickVisible('.DetailsPanel .button__add__optionsHeadersParameter')
+        .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
+        .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
       // .selectValueSlow('.DetailsPanel', 'operations0templatemethod', 'GET')
       .clickVisible('.DetailsPanel .checkbox__operations0templateoptionsenabled')
       .clickVisible('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL')
@@ -54,21 +60,21 @@ module.exports = {
       .clickVisible('.DetailsPanel .button__add__operation0headersParameter')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders0key input', 'accepts')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders0value input', 'application/json')
-      .clickVisible('.DetailsPanel .button__add__operation0headersParameter')
-      .setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-type')
-      .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'application/json')
+        .clickVisible('.DetailsPanel .button__add__operation0headersParameter')
+        .setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-type')
+        .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'application/json')
       .clickVisible('.DetailsPanel .button__add__operation0queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery0key input', 'o1qpn1')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery0value input', '{o1qpv11},{o1qpv12}')
-      .clickVisible('.DetailsPanel .button__add__operation0queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn2')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv21},{o1qpv22}')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery0key input', 'fqpnf')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery0value input', '{fqpvff},{fqpvfs}')
+        .clickVisible('.DetailsPanel .button__add__operation0queryParameter')
+        .setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'fqpns')
+        .setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{fqpvsf},{fqpvss}')
       .clickVisible('.DetailsPanel .button__add__operation0function')
-      .setValueSlow('.DetailsPanel .input__operations0functions0key input', 'o1fn1')
-      .setValueSlow('.DetailsPanel .input__operations0functions0value input', 'o1qpv11 ,  o1qpv12')
-      .clickVisible('.DetailsPanel .button__add__operation0function')
-      .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn2')
-      .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv21,  o1qpv22')
+      .setValueSlow('.DetailsPanel .input__operations0functions0key input', 'ffnf')
+      .setValueSlow('.DetailsPanel .input__operations0functions0value input', 'fqpvff ,  fqpvfs')
+        .clickVisible('.DetailsPanel .button__add__operation0function')
+        .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'ffns')
+        .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'fqpvsf,  fqpvss')
       // .selectValueSlow('.DetailsPanel', 'operations1templatemethod', 'GET')
       .clickVisible('.DetailsPanel .checkbox__operations1templateoptionsenabled')
       .clickVisible('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL')
@@ -76,23 +82,25 @@ module.exports = {
       .clickVisible('.DetailsPanel .button__add__operation1headersParameter')
       .setValueSlow('.DetailsPanel .input__operations1templateheaders0key input', 'accepts')
       .setValueSlow('.DetailsPanel .input__operations1templateheaders0value input', 'application/json')
-      .clickVisible('.DetailsPanel .button__add__operation1headersParameter')
-      .setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-type')
-      .setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'application/json')
+        .clickVisible('.DetailsPanel .button__add__operation1headersParameter')
+        .setValueSlow('.DetailsPanel .input__operations1templateheaders1key input', 'content-type')
+        .setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'application/json')
       .clickVisible('.DetailsPanel .button__add__operation1queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery0key input', 'o2qpn1')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery0value input', '{o2qpv11},{o2qpv12}')
-      .clickVisible('.DetailsPanel .button__add__operation1queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn2')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv21},{o2qpv22}')
+      .setValueSlow('.DetailsPanel .input__operations1templatequery0key input', 'sqpnf')
+      .setValueSlow('.DetailsPanel .input__operations1templatequery0value input', '{sqpvff},{sqpvfs}')
+        .clickVisible('.DetailsPanel .button__add__operation1queryParameter')
+        .setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'sqpns')
+        .setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{sqpvsf},{sqpvss}')
       .clickVisible('.DetailsPanel .button__add__operation1function')
-      .setValueSlow('.DetailsPanel .input__operations1functions0key input', 'o2fn1')
-      .setValueSlow('.DetailsPanel .input__operations1functions0value input', 'o2qpv11 ,  o2qpv12')
-      .clickVisible('.DetailsPanel .button__add__operation1function')
-      .setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn2')
-      .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv21,  o2qpv22')
-      .submitDetailsPanel(restSelector)
-
+      .setValueSlow('.DetailsPanel .input__operations1functions0key input', 'sfnf')
+      .setValueSlow('.DetailsPanel .input__operations1functions0value input', 'sqpvff ,  sqpvfs')
+        .clickVisible('.DetailsPanel .button__add__operation1function')
+        .setValueSlow('.DetailsPanel .input__operations1functions1key input', 'sfns')
+        .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'sqpvsf,  sqpvss')
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: custom edit': function () {
+    page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint3)
@@ -110,12 +118,12 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US')
       .clickVisible('.DetailsPanel .button__remove__operation0queryParameter0')
       .clickVisible('.DetailsPanel .button__add__operation0queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'o1qpn3')
-      .setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{o1qpv31},{o1qpv32}')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery1key input', 'fqpnt')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery1value input', '{fqpvtf},{fqpvts}')
       .clickVisible('.DetailsPanel .button__remove__operation0function0')
       .clickVisible('.DetailsPanel .button__add__operation0function')
-      .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'o1fn3')
-      .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'o1qpv31 ,  o1qpv32')
+      .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'ffnt')
+      .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'fqpvtf ,  fqpvts')
       .clickVisible('.DetailsPanel .checkbox__operations1templateoptionsstrictSSL')
       .clickVisible('.DetailsPanel .checkbox__operations1templateoptionsuseQuerystring')
       .clickVisible('.DetailsPanel .button__remove__operation1headersParameter0')
@@ -124,14 +132,16 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__operations1templateheaders1value input', 'en-US')
       .clickVisible('.DetailsPanel .button__remove__operation1queryParameter0')
       .clickVisible('.DetailsPanel .button__add__operation1queryParameter')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'o2qpn3')
-      .setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{o2qpv31},{o2qpv32}')
+      .setValueSlow('.DetailsPanel .input__operations1templatequery1key input', 'sqpnt')
+      .setValueSlow('.DetailsPanel .input__operations1templatequery1value input', '{sqpvtf},{sqpvts}')
       .clickVisible('.DetailsPanel .button__remove__operation1function0')
       .clickVisible('.DetailsPanel .button__add__operation1function')
-      .setValueSlow('.DetailsPanel .input__operations1functions1key input', 'o2fn3')
-      .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'o2qpv31 ,  o2qpv32')
-      .submitDetailsPanel(restSelector)
-
+      .setValueSlow('.DetailsPanel .input__operations1functions1key input', 'sfnt')
+      .setValueSlow('.DetailsPanel .input__operations1functions1value input', 'sqpvtf ,  sqpvts')
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: custom remove 1': function () {
+    page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       // .checkEntityDetails(checkpoint4)
@@ -141,7 +151,10 @@ module.exports = {
       .clickVisible('.DetailsPanel .button__remove__operation0headersParameter0')
       .clickVisible('.DetailsPanel .button__remove__operation0queryParameter0')
       .clickVisible('.DetailsPanel .button__remove__operation0function0')
-      .submitDetailsPanel(restSelector)
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: custom remove 2': function () {
+    page
 
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
@@ -150,7 +163,10 @@ module.exports = {
       .clickVisible('.DetailsPanel .button__remove__operation0headersParameter0')
       .clickVisible('.DetailsPanel .button__remove__operation0queryParameter0')
       .clickVisible('.DetailsPanel .button__remove__operation0function0')
-      .submitDetailsPanel(restSelector)
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: custom delete': function () {
+    page
 
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
@@ -287,28 +303,28 @@ module.exports = {
 //     operations0templateheaders0value: 'application/json',
 //     operations0templateheaders1key: 'content-type',
 //     operations0templateheaders1value: 'application/json',
-//     operations0templatequery0key: 'o1qpn1',
-//     operations0templatequery0value: '{o1qpv11},{o1qpv12}',
-//     operations0templatequery1key: 'o1qpn2',
-//     operations0templatequery1value: '{o1qpv21},{o1qpv22}',
-//     operations0functions0key: 'o1fn1',
-//     operations0functions0value: 'o1qpv11,o1qpv12',
-//     operations0functions1key: 'o1fn2',
-//     operations0functions1value: 'o1qpv21,o1qpv22',
+//     operations0templatequery0key: 'fqpnf',
+//     operations0templatequery0value: '{fqpvff},{fqpvfs}',
+//     operations0templatequery1key: 'fqpns',
+//     operations0templatequery1value: '{fqpvsf},{fqpvss}',
+//     operations0functions0key: 'ffnf',
+//     operations0functions0value: 'fqpvff,fqpvfs',
+//     operations0functions1key: 'ffns',
+//     operations0functions1value: 'fqpvsf,fqpvss',
 //     operations1templateurl: customEndpoint2,
 //     operations1templateresponsePath: '$',
 //     operations1templateheaders0key: 'accepts',
 //     operations1templateheaders0value: 'application/json',
 //     operations1templateheaders1key: 'content-type',
 //     operations1templateheaders1value: 'application/json',
-//     operations1templatequery0key: 'o2qpn1',
-//     operations1templatequery0value: '{o2qpv11},{o2qpv12}',
-//     operations1templatequery1key: 'o2qpn2',
-//     operations1templatequery1value: '{o2qpv21},{o2qpv22}',
-//     operations1functions0key: 'o2fn1',
-//     operations1functions0value: 'o2qpv11,o2qpv12',
-//     operations1functions1key: 'o2fn2',
-//     operations1functions1value: 'o2qpv21,o2qpv22'
+//     operations1templatequery0key: 'sqpnf',
+//     operations1templatequery0value: '{sqpvff},{sqpvfs}',
+//     operations1templatequery1key: 'sqpns',
+//     operations1templatequery1value: '{sqpvsf},{sqpvss}',
+//     operations1functions0key: 'sfnf',
+//     operations1functions0value: 'sqpvff,sqpvfs',
+//     operations1functions1key: 'sfns',
+//     operations1functions1value: 'sqpvsf,sqpvss'
 //   },
 //   checkbox: {
 //     optionsenabled: true,
@@ -351,28 +367,28 @@ module.exports = {
 //     operations0templateheaders0value: 'application/json',
 //     operations0templateheaders1key: 'content-language',
 //     operations0templateheaders1value: 'en-US',
-//     operations0templatequery0key: 'o1qpn2',
-//     operations0templatequery0value: '{o1qpv21},{o1qpv22}',
-//     operations0templatequery1key: 'o1qpn3',
-//     operations0templatequery1value: '{o1qpv31},{o1qpv32}',
-//     operations0functions0key: 'o1fn2',
-//     operations0functions0value: 'o1qpv21,o1qpv22',
-//     operations0functions1key: 'o1fn3',
-//     operations0functions1value: 'o1qpv31,o1qpv32',
+//     operations0templatequery0key: 'fqpns',
+//     operations0templatequery0value: '{fqpvsf},{fqpvss}',
+//     operations0templatequery1key: 'fqpnt',
+//     operations0templatequery1value: '{fqpvtf},{fqpvts}',
+//     operations0functions0key: 'ffns',
+//     operations0functions0value: 'fqpvsf,fqpvss',
+//     operations0functions1key: 'ffnt',
+//     operations0functions1value: 'fqpvtf,fqpvts',
 //     operations1templateurl: customEndpoint2,
 //     operations1templateresponsePath: '$',
 //     operations1templateheaders0key: 'content-type',
 //     operations1templateheaders0value: 'application/json',
 //     operations1templateheaders1key: 'content-language',
 //     operations1templateheaders1value: 'en-US',
-//     operations1templatequery0key: 'o2qpn2',
-//     operations1templatequery0value: '{o2qpv21},{o2qpv22}',
-//     operations1templatequery1key: 'o2qpn3',
-//     operations1templatequery1value: '{o2qpv31},{o2qpv32}',
-//     operations1functions0key: 'o2fn2',
-//     operations1functions0value: 'o2qpv21,o2qpv22',
-//     operations1functions1key: 'o2fn3',
-//     operations1functions1value: 'o2qpv31,o2qpv32'
+//     operations1templatequery0key: 'sqpns',
+//     operations1templatequery0value: '{sqpvsf},{sqpvss}',
+//     operations1templatequery1key: 'sqpnt',
+//     operations1templatequery1value: '{sqpvtf},{sqpvts}',
+//     operations1functions0key: 'sfns',
+//     operations1functions0value: 'sqpvsf,sqpvss',
+//     operations1functions1key: 'sfnt',
+//     operations1functions1value: 'sqpvtf,sqpvts'
 //   },
 //   checkbox: {
 //     optionsenabled: true,
@@ -409,10 +425,10 @@ module.exports = {
 //     operations0templateresponsePath: '$',
 //     operations0templateheaders0key: 'content-language',
 //     operations0templateheaders0value: 'en-US',
-//     operations0templatequery0key: 'o1qpn3',
-//     operations0templatequery0value: '{o1qpv31},{o1qpv32}',
-//     operations0functions0key: 'o1fn3',
-//     operations0functions0value: 'o1qpv31,o1qpv32'
+//     operations0templatequery0key: 'fqpnt',
+//     operations0templatequery0value: '{fqpvtf},{fqpvts}',
+//     operations0functions0key: 'ffnt',
+//     operations0functions0value: 'fqpvtf,fqpvts'
 //   },
 //   checkbox: {
 //     optionsenabled: true,

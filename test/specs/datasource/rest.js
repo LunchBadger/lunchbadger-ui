@@ -1,42 +1,42 @@
 var page;
-var restSelector;
+var entitySelector;
 
 module.exports = {
   // '@disabled': true,
   'Datasource rest: add predefined Google Maps Location': function (browser) {
     page = browser.page.lunchBadger();
-    restSelector = page.getDataSourceSelector(1);
+    entitySelector = page.getDataSourceSelector(1);
     page
       .open()
       .addElementFromTooltip('dataSource', 'rest')
       .check({
         text: {
-          [`${restSelector} .Rest__predefined .EntityPropertyLabel`]: 'PREDEFINED PROPERTIES',
-          [`${restSelector} .Rest__method .EntityPropertyLabel`]: 'METHOD',
-          [`${restSelector} .Rest__url .EntityPropertyLabel`]: 'URL'
+          [`${entitySelector} .Rest__predefined .EntityPropertyLabel`]: 'PREDEFINED PROPERTIES',
+          [`${entitySelector} .Rest__method .EntityPropertyLabel`]: 'METHOD',
+          [`${entitySelector} .Rest__url .EntityPropertyLabel`]: 'URL'
         }
       })
-      .selectValueSlow(restSelector, 'predefined', 'Google-Maps-Location')
-      .submitCanvasEntity(restSelector)
+      .selectValueSlow(entitySelector, 'predefined', 'Google-Maps-Location')
+      .submitCanvasEntity(entitySelector)
       .waitForDependencyFinish()
       .check({
         text: {
-          [`${restSelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',
-          [`${restSelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
-          [`${restSelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
+          [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',
+          [`${entitySelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
+          [`${entitySelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
         }
       })
   },
   'Datasource rest: change to predefined Google Maps GeoCode': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
+      .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsLocation)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanel(restSelector);
+      .submitDetailsPanel(entitySelector);
   },
   'Datasource rest: options': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
+      .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsGeoCode)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
@@ -126,7 +126,7 @@ module.exports = {
   'Datasource rest: remove': function () {
     page
       .reloadPage()
-      .removeEntity(restSelector)
+      .removeEntity(entitySelector)
       .waitForDependencyFinish()
       .close();
   }

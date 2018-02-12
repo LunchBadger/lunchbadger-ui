@@ -1,15 +1,19 @@
+var page;
+var entitySelector;
+
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Datasource: ethereum': function (browser) {
-    var page = browser.page.lunchBadger();
-    page.open();
-    page.testDatasource('ethereum', [
-      ['URL', 'dumpUrl']
-    ], function () {
-      page.closeWhenSystemDefcon1();
-      page.removeEntity(page.getDataSourceSelector(1));
-      page.waitForDependencyFinish();
-      page.close();
-    });
+    page = browser.page.lunchBadger();
+    entitySelector = page.getDataSourceSelector(1);
+    page
+      .open()
+      .testDatasource('ethereum', [
+        ['URL', 'dumpUrl']
+      ])
+      .closeWhenSystemDefcon1()
+      .removeEntity(entitySelector)
+      .waitForDependencyFinish()
+      .close();
   }
 };

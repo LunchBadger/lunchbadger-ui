@@ -310,28 +310,30 @@ var pageCommands = {
       .waitForElementPresent('.workspace-status .workspace-status__success', 120000);
   },
 
-  testDatasource: function (type, config = []) {
-    this.addElementFromTooltip('dataSource', type);
-    this.waitForElementPresent('.dataSource.Tool.selected', 8000);
+  testDatasource: function (type = 'memory', config = []) {
+    const selector = this.getDataSourceSelector(1);
+    this
+      .addElementFromTooltip('dataSource', type)
+      .waitForElementPresent('.dataSource.Tool.selected', 8000);
     if (config.length === 0) {
-      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+      this.waitForElementNotPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
     } else {
       config.forEach((option, idx) => {
-        this.api.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
+        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
         this.setValueSlow(this.getDataSourceFieldSelector(1, idx + 1), option[1]);
       });
-      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+      this.waitForElementNotPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
     }
-    this.submitCanvasEntity(this.getDataSourceSelector(1));
+    this.submitCanvasEntity(selector);
     if (config.length === 0) {
-      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+      this.waitForElementNotPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
     } else {
       config.forEach((option, idx) => {
-        this.api.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
-        this.api.expect.element(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityProperty__field--text`).text.to.equal(option[0] === 'PASSWORD' ? '••••••••••••' : option[1]);
+        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
+        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityProperty__field--text`).text.to.equal(option[0] === 'PASSWORD' ? '••••••••••••' : option[1]);
         this.api.expect.element(this.getDataSourceFieldSelector(1, idx + 1)).value.to.equal(option[1]);
       });
-      this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+      this.waitForElementNotPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
     }
     return this;
   },

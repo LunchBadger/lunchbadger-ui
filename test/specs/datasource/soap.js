@@ -1,9 +1,12 @@
+// var page;
+// var entitySelector;
 const TEST_WSDL = 'http://www.webservicex.com/globalweather.asmx';
 
 module.exports = {
   '@disabled': true,
   'Datasource: soap': function (browser) {
     var page = browser.page.lunchBadger();
+    // entitySelector = page.getDataSourceSelector(1);
     page.open();
     page.testDatasource('soap', [
       ['URL', TEST_WSDL]

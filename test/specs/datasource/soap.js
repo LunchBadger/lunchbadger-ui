@@ -53,15 +53,7 @@ module.exports = {
   'Datasource: basic auth': function () {
     page
       .selectValueSlow('.DetailsPanel', 'securityscheme', 'BasicAuth')
-      .checkEntityDetails({
-        text: {
-          securityusername: 'testuser',
-          securitypassword: 'passwd'
-        },
-        notPresent: [
-          '.select__securitypasswordType'
-        ]
-      });
+      .checkEntityDetails(expectBasicAuth);
   },
   'Datasource: removed options': function () {
     page
@@ -88,6 +80,7 @@ module.exports = {
   'Datasource: WS': function () {
     page
       .selectValueSlow('.DetailsPanel', 'securityscheme', 'WS')
+      .checkEntityDetails(expectPlainWS)
       .setValueSlow('.DetailsPanel .input__securityusername input', 'testuser')
       .setValueSlow('.DetailsPanel .input__securitypassword input', 'passwd')
       .clickPresent('.DetailsPanel .button__add__operation')
@@ -222,6 +215,38 @@ const expectClientSSL = {
     '.input__securityusername',
     '.input__securitypassword',
     '.select__securitypasswordType'
+  ]
+};
+const expectPlainWS = {
+  value: {
+    url: TEST_WSDL,
+    wsdl: TEST_WSDL + '?wsdl',
+    securityusername: '',
+    securitypassword: '',
+    soapOperations0key: 'k2',
+    soapOperations0service: 's2',
+    soapOperations0port: '8',
+    soapOperations0operation: 'o2',
+    soapHeaders0elementKey: 'ek2',
+    soapHeaders0elementValue: 'ev2',
+    soapHeaders0prefix: 'p2',
+    soapHeaders0namespace: 'n2'
+  },
+  checkbox: {
+    remotingEnabled: false,
+    wsdl_optionsrejectUnauthorized: false,
+    wsdl_optionsstrictSSL: false,
+    wsdl_optionsrequestCert: false
+  },
+  select: {
+    securityscheme: 'WS',
+    securitypasswordType: 'PasswordText'
+  },
+  notPresent: [
+    '.input__securitykeyPath',
+    '.input__securitycertPath',
+    '.input__soapOperations1key',
+    '.input__soapHeaders1elementKey'
   ]
 };
 const expectWS = {

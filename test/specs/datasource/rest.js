@@ -38,18 +38,20 @@ function getCheckPoint (point) {
     let optionsuseQuerystring;
     let optionsheadersenabled;
     if (point >= 4) {
-      optionsstrictSSL = point === 4;
+      optionsstrictSSL = false; //point === 4;
       optionsuseQuerystring = point === 4;
-      optionsheadersenabled = point >= 4;
+      optionsheadersenabled = [4, 5].includes(point);
       const optionsheadersparams0key = point === 4 ? 'accepts' : 'content-type';
       const optionsheadersparams1key = point === 4 ? 'content-type' : 'content-language';
       const optionsheadersparams1value = point === 4 ? 'application/json' : 'en-US';
-      Object.assign(value, {
-        optionsheadersparams0key,
-        optionsheadersparams0value: 'application/json',
-        optionsheadersparams1key,
-        optionsheadersparams1value
-      });
+      if (point <= 5) {
+        Object.assign(value, {
+          optionsheadersparams0key,
+          optionsheadersparams0value: 'application/json',
+          optionsheadersparams1key,
+          optionsheadersparams1value
+        });
+      }
       Object.assign(checkbox, {
         optionsstrictSSL,
         optionsuseQuerystring,
@@ -132,7 +134,7 @@ module.exports = {
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(3))
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
-      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
       .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
       .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
@@ -148,7 +150,7 @@ module.exports = {
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(4))
-      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
       .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
       .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
@@ -156,22 +158,30 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
       .submitDetailsPanel(restSelector);
   },
-  // 'Datasource rest: advanced edit 3': function () {
+  'Datasource rest: advanced edit 3': function () {
+    page
+      // .reloadPage()
+      .openEntityInDetailsPanel(restSelector)
+      .checkEntityDetails(getCheckPoint(5))
+      .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
+      .submitDetailsPanel(restSelector);
+  },
+  // 'Datasource rest: advanced edit 4': function () {
   //   page
   //     // .reloadPage()
   //     .openEntityInDetailsPanel(restSelector)
   //     .checkEntityDetails(getCheckPoint(5))
-  //
+  //     .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
   //     .submitDetailsPanel(restSelector);
   // },
   'Datasource rest: remove': function () {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(getCheckPoint(5))
+      .checkEntityDetails(getCheckPoint(6))
       .closeDetailsPanel()
-      .removeEntity(restSelector)
-      .waitForDependencyFinish()
+      // .removeEntity(restSelector)
+      // .waitForDependencyFinish()
       .close();
   }
 };

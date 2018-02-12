@@ -357,6 +357,24 @@ var pageCommands = {
     return this;
   },
 
+  checkStatusTooltip: function (status) {
+    const self = this;
+    return this
+      .moveToElement('.workspace-status', 5, 5, function () {
+        self.api.expect.element('.ContextualInformationMessage.Workspace-OK .rc-tooltip-inner').text.to.contain(status).before(6000);
+        return self;
+      });
+  },
+
+  checkStatusTooltipNotPresent: function () {
+    const self = this;
+    return this
+      .moveToElement('.header', 5, 5, function () {
+        self.waitForElementNotPresent('.ContextualInformationMessage.Workspace-OK', 3000);
+        return self;
+      });
+  },
+
   check: function ({
     text = {},
     value = {},

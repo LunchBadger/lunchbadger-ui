@@ -7,7 +7,7 @@ var pageCommands = {
     this.api.resizeWindow(1920, 1080);
     return this
       .waitForElementVisible('.FakeLogin', 5000)
-      .setValueSlow('.input__login input', 'test')
+      .setValueSlow('.input__login input', 'ko')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
@@ -85,13 +85,15 @@ var pageCommands = {
   },
 
   setValueSlow: function (selector, value) {
+    const self = this;
     return this
       .waitForElementPresent(selector, 50000)
-      // this.api.getValue(selector, function (result) {
-      //   for (var i in result.value.toString()) {
-      //     this.api.setValue(selector, this.Keys.BACK_SPACE);
-      //   }
-      // });
+      .getValue(selector, function (result) {
+        for (var i in result.value.toString()) {
+          self.setValue(selector, this.Keys.BACK_SPACE);
+        }
+        return self;
+      })
       .clearValue(selector)
       .setValue(selector, value)
       .check({
@@ -103,8 +105,8 @@ var pageCommands = {
 
   selectValueSlow: function (selector, select, value) {
     return this
-      .clickVisible(selector + ` .select__${select}`)
-      .clickVisible(`div[role=menu] .${select}__${value}`)
+      .clickPresent(selector + ` .select__${select}`)
+      .clickPresent(`div[role=menu] .${select}__${value}`)
       .waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
   },
 

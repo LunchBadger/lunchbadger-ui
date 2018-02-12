@@ -7,8 +7,8 @@ var pageCommands = {
     this.api.resizeWindow(1920, 1080);
     return this
       .waitForElementVisible('.FakeLogin', 5000)
-      .setValueSlow('.input__login input', 'test')
-      .setValueSlow('.input__password input', 'Test User')
+      .setValueSlow('.input__login input', 'circleci')
+      .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
       .emptyProject();
@@ -386,25 +386,58 @@ var pageCommands = {
   //
   // },
 
-  checkEntityDetails: function ({
+  check: function ({
     text = {},
+    value = {},
+    present = [],
+    notPresent = []
+  }) {
+    Object.keys(text).forEach((key) => {
+      this.api.expect.element(key).text.to.equal(text[key]);
+    });
+    Object.keys(value).forEach((key) => {
+      this.api.expect.element(key).value.to.equal(value[key]);
+    });
+    present.forEach((selector) => {
+      this.api.expect.element(selector).to.be.present;
+    });
+    notPresent.forEach((selector) => {
+      this.api.expect.element(selector).to.not.be.present;
+    });
+    return this;
+  },
+
+  checkEntityDetails: function ({
+    value = {},
     checkbox = {},
     select = {},
     notPresent = []
   }) {
-    Object.keys(text).forEach((key) => {
-      this.api.expect.element(`.DetailsPanel .input__${key} input`).value.to.equal(text[key]);
-    });
-    Object.keys(checkbox).forEach((key) => {
-      this.api.expect.element(`.DetailsPanel .checkbox__${key}__${checkbox[key] ? 'checked' : 'unchecked'}`).to.be.present;
-    });
-    Object.keys(select).forEach((key) => {
-      this.api.expect.element(`.DetailsPanel .select__${key} .${key}__${select[key]}`).to.be.present;
-    });
-    notPresent.forEach((elem) => {
-      this.api.expect.element(`.DetailsPanel ${elem}`).to.not.be.present;
-    });
-    return this;
+    // Object.keys(text).forEach((key) => {
+    //   this.api.expect.element(`.DetailsPanel .input__${key} input`).value.to.equal(text[key]);
+    // });
+    // Object.keys(checkbox).forEach((key) => {
+    //   this.api.expect.element(`.DetailsPanel .checkbox__${key}__${checkbox[key] ? 'checked' : 'unchecked'}`).to.be.present;
+    // });
+    // Object.keys(select).forEach((key) => {
+    //   this.api.expect.element(`.DetailsPanel .select__${key} .${key}__${select[key]}`).to.be.present;
+    // });
+    // notPresent.forEach((elem) => {
+    //   this.api.expect.element(`.DetailsPanel ${elem}`).to.not.be.present;
+    // });
+    const data = {
+      value: Object.keys(value).reduce((map, key) => {
+        map[`.DetailsPanel .input__${key} input`] = value[key];
+        return map;
+      }, {}),
+      present: [
+        ...Object.keys(checkbox).map(key => `.DetailsPanel .checkbox__${key}__${checkbox[key] ? 'checked' : 'unchecked'}`),
+        ...Object.keys(select).map(key => `.DetailsPanel .select__${key} .${key}__${select[key]}`)
+      ],
+      notPresent: notPresent.map(item => `.DetailsPanel ${item}`)
+    };
+    return this
+      .check(data);
   }
 };
 

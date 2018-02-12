@@ -1,6 +1,7 @@
 export default [
   'al',
   'circleci',
+  'citests',
   'demo',
   'kevin',
   'ko',

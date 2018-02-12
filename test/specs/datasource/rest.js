@@ -196,8 +196,8 @@ module.exports = {
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(3))
-      // .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
+      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       // // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
       // .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
@@ -217,8 +217,8 @@ module.exports = {
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(4))
-      // .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
+      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       // // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
       // .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
@@ -232,9 +232,9 @@ module.exports = {
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(5))
-      // .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       // .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
-      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       .submitDetailsPanel(restSelector);
   },
   // 'Datasource rest: advanced edit 4': function () {

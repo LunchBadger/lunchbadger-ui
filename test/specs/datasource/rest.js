@@ -8,6 +8,9 @@ module.exports = {
     restSelector = page.getDataSourceSelector(1);
     page
       .open()
+      .reloadPage()
+      .reloadPage()
+      .reloadPage()
       .addElementFromTooltip('dataSource', 'rest')
       .check({
         text: {
@@ -18,7 +21,7 @@ module.exports = {
       })
       .selectValueSlow(restSelector, 'predefined', 'Google-Maps-Location')
       .submitCanvasEntity(restSelector)
-      // .waitForDependencyFinish()
+      .waitForDependencyFinish()
       .check({
         text: {
           [`${restSelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',

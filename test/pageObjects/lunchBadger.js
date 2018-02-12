@@ -32,10 +32,14 @@ var pageCommands = {
     return this;
   },
 
-  refreshBrowser: function () {
+  reloadPage: function () {
     this.api.refresh();
     return this
-      .projectLoaded();
+      .waitForElementVisible('.app', 120000)
+      .waitForElementNotPresent('.app__loading-error', 5000)
+      .waitForElementVisible('.app__loading-message', 60000)
+      .waitForElementNotPresent('.app__loading-message', 60000)
+      .waitForElementNotPresent('.spinner__overlay', 60000);
   },
 
   pause: function (ms) {
@@ -80,12 +84,6 @@ var pageCommands = {
       //   cb && cb();
       //   return self;
       // });
-  },
-
-  clickPresentPause: function (selector, timeout = 15000) {
-    return this
-      .pause(1000)
-      .clickPresent(selector, timeout);
   },
 
   clickVisible: function (selector, timeout = 15000) {
@@ -150,8 +148,7 @@ var pageCommands = {
       .waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
-  submitDetailsPanel: function (selector) { //}, validationErrors = []) {
-    // const self = this;
+  submitDetailsPanel: function (selector) {
     return this
       .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
       .submitForm('.DetailsPanel .BaseDetails form') // .BaseDetails__buttons .submit', 5000) //, function () {
@@ -161,8 +158,8 @@ var pageCommands = {
           .waitForElementPresent(selector + '.wip', 5000)
           .waitForElementPresent('.DetailsPanel.closing', 5000)
           .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-          .waitForElementNotPresent(selector + '.wip', 60000)
-          .pause(1000); //, function () {
+          .waitForElementNotPresent(selector + '.wip', 60000);
+          // .pause(1000); //, function () {
           //   console.log('submitDetailsPanel cb', cb);
           //   cb && cb();
           //   return self;
@@ -187,10 +184,10 @@ var pageCommands = {
 
   closeDetailsPanel: function () {
     return this
-      .clickVisible('.DetailsPanel .BaseDetails__buttons .cancel')
-      .waitForElementPresent('.DetailsPanel.closing', 60000)
-      .waitForElementNotPresent('.DetailsPanel.closing', 60000)
-      .pause(1000);
+      .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
+      .waitForElementPresent('.DetailsPanel.closing', 5000)
+      .waitForElementNotPresent('.DetailsPanel.closing', 15000);
+      // .pause(1000);
   },
 
   removeEntity: function (selector) {

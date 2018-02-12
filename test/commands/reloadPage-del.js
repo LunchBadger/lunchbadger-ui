@@ -7,7 +7,6 @@ exports.command = function (callback) {
       .waitForElementVisible('.app__loading-message', 60000)
       .waitForElementNotPresent('.app__loading-message', 60000)
       .waitForElementNotPresent('.spinner__overlay', 60000);
-    console.log(11, callback);
     if (typeof callback === 'function') {
       callback.call(self);
     }

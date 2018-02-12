@@ -8,9 +8,6 @@ module.exports = {
     restSelector = page.getDataSourceSelector(1);
     page
       .open()
-      .reloadPage()
-      .reloadPage()
-      .reloadPage()
       .addElementFromTooltip('dataSource', 'rest')
       .check({
         text: {
@@ -62,25 +59,19 @@ module.exports = {
       .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
       .checkEntityDetails(expectOptionsHeadersDisabled)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
-      .checkEntityDetails(expectPlainGoogleMapsGeoCode)
-      .closeDetailsPanel();
+      .checkEntityDetails(expectPlainGoogleMapsGeoCode);
   },
   'Datasource rest: operations options': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectPlainGoogleMapsGeoCode)
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring')
       .checkEntityDetails(expectOperations0TemplateOptionsEnabled)
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
-      .checkEntityDetails(expectPlainGoogleMapsGeoCode)
-      .closeDetailsPanel();
+      .checkEntityDetails(expectPlainGoogleMapsGeoCode);
   },
   'Datasource rest: operations headers remove': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectPlainGoogleMapsGeoCode)
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
       .checkEntityDetails(expectOperations0HeadersParameterRemoved)
       .submitDetailsPanel(restSelector);

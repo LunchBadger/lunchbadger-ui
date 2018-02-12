@@ -39,6 +39,7 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsGeoCode)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .checkEntityDetails(expectGoogleMapsGeoCodeWithOptionsEnabled)
       .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
       .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
@@ -196,6 +197,40 @@ const expectPlainGoogleMapsGeoCode = {
     'checkbox__optionsstrictSSL',
     'checkbox__optionsuseQuerystring',
     'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams2key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
+};
+const expectGoogleMapsGeoCodeWithOptionsEnabled = {
+  value: {
+    operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+    operations0templateresponsePath: '$.results[0].geometry.location',
+    operations0templateheaders0key: 'accepts',
+    operations0templateheaders0value: 'application/json',
+    operations0templateheaders1key: 'content-type',
+    operations0templateheaders1value: 'application/json',
+    operations0templatequery0key: 'key',
+    operations0templatequery0value: '',
+    operations0templatequery1key: 'address',
+    operations0templatequery1value: '{street},{city},{zipcode}',
+    operations0templatequery2key: 'sensor',
+    operations0templatequery2value: '{sensor=false}',
+    operations0functions0key: 'geocode',
+    operations0functions0value: 'street,city,zipcode'
+  },
+  checkbox: {
+    optionsenabled: true,
+    operations0templateoptionsenabled: false
+  },
+  select: {
+    predefined: 'Google-Maps-GeoCode',
+    operations0templatemethod: 'GET'
+  },
+  notPresent: [
     'input__optionsheadersparams2key',
     'checkbox__operations0templateoptionsstrictSSL',
     'checkbox__operations0templateoptionsuseQuerystring',

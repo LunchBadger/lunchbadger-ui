@@ -154,8 +154,8 @@ module.exports = {
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(expectOperations0QueryAllParameterRemoved)
       .closeDetailsPanel()
-      // .removeEntity(restSelector)
-      // .waitForDependencyFinish()
+      .removeEntity(restSelector)
+      .waitForDependencyFinish()
       .close();
   }
 };

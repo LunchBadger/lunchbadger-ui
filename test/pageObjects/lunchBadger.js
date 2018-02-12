@@ -15,7 +15,7 @@ var pageCommands = {
   },
 
   close: function () {
-    // this.emptyProject();
+    this.emptyProject();
     this.api.execute(function () {
       return window.__coverage__;
     }, [], function (response) {
@@ -59,11 +59,8 @@ var pageCommands = {
   addElementFromTooltip: function (entity, option = 'rest') {
     return this
       .clickVisible('.Tool.' + entity)
-      // .pause(1500)
       .clickVisible('.Tool__submenuItem.' + option);
   },
-
-  // pause
 
   addElement: function (entity) {
     return this
@@ -76,67 +73,52 @@ var pageCommands = {
   },
 
   clickPresent: function (selector, timeout = 15000) {
-    // const self = this;
     return this
       .waitForElementPresent(selector, timeout)
-      .click(selector); //, function () {
-      //   console.log('clickPresent cb', cb);
-      //   cb && cb();
-      //   return self;
-      // });
+      .click(selector);
   },
 
   clickVisible: function (selector, timeout = 15000) {
-    // const self = this;
     return this
       .waitForElementVisible(selector, timeout)
-      .click(selector); //, function () {
-      //   console.log('clickVisible cb', cb);
-      //   cb && cb();
-      //   return self;
-      // });
+      .click(selector);
   },
 
   setValueSlow: function (selector, value) {
     return this
       .waitForElementPresent(selector, 50000)
-    // this.api.getValue(selector, function (result) {
-    //   for (var i in result.value.toString()) {
-    //     this.api.setValue(selector, this.Keys.BACK_SPACE);
-    //   }
-    // });
+      // this.api.getValue(selector, function (result) {
+      //   for (var i in result.value.toString()) {
+      //     this.api.setValue(selector, this.Keys.BACK_SPACE);
+      //   }
+      // });
       .clearValue(selector)
-      .setValue(selector, value);
-    // this.api.expect.element(selector).value.to.equal(value);
-    // return this;
+      .setValue(selector, value)
+      .check({
+        value: {
+          [selector]: value
+        }
+      });
   },
 
   selectValueSlow: function (selector, select, value) {
     return this
       .clickVisible(selector + ` .select__${select}`)
-    // this.api.pause(2000);
       .clickVisible(`div[role=menu] .${select}__${value}`)
       .waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
-    // this.api.pause(500);
-    // return this;
   },
 
   editEntity: function (selector) {
     return this
       .clickVisible(selector)
-    // this.waitForElementPresent(selector + '.highlighted .Toolbox__button--edit', 50000);
-    // this.api.moveToElement(selector + '.highlighted .Toolbox__button--edit', 5, -10, function() {
       .clickVisible(selector + '.highlighted .Toolbox__button--edit')
       .waitForElementPresent(selector + '.editable', 50000)
       .waitForElementVisible(selector + ' .input__name input', 50000);
-    // });
   },
 
   discardCanvasEntityChanges: function (selector) {
     return this
-    // this.moveToElement(selector + ' .cancel', 5, 5, function() {
       .clickVisible(selector + ' .cancel')
-    // });
       .waitForElementNotPresent(selector + '.editable', 5000);
   },
 
@@ -151,28 +133,11 @@ var pageCommands = {
   submitDetailsPanel: function (selector) {
     return this
       .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
-      .submitForm('.DetailsPanel .BaseDetails form') // .BaseDetails__buttons .submit', 5000) //, function () {
-      //   if (validationErrors.length === 0) {
-      //     return this
-        // return self
-          .waitForElementPresent(selector + '.wip', 5000)
-          .waitForElementPresent('.DetailsPanel.closing', 5000)
-          .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-          .waitForElementNotPresent(selector + '.wip', 60000);
-          // .pause(1000); //, function () {
-          //   console.log('submitDetailsPanel cb', cb);
-          //   cb && cb();
-          //   return self;
-          // });
-      //   } else {
-      //     // this.api.pause(2000);
-      //     return this
-      //       .waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000);
-      //     // validationErrors.forEach((key) => {
-      //     //   this.api.expect.element(`.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`).to.be.present;
-      //     // });
-      //   }
-      // });
+      .submitForm('.DetailsPanel .BaseDetails form')
+      .waitForElementPresent(selector + '.wip', 5000)
+      .waitForElementPresent('.DetailsPanel.closing', 5000)
+      .waitForElementNotPresent('.DetailsPanel.closing', 15000)
+      .waitForElementNotPresent(selector + '.wip', 60000);
   },
 
   openEntityInDetailsPanel: function (selector) {
@@ -187,7 +152,6 @@ var pageCommands = {
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
       .waitForElementPresent('.DetailsPanel.closing', 5000)
       .waitForElementNotPresent('.DetailsPanel.closing', 15000);
-      // .pause(1000);
   },
 
   removeEntity: function (selector) {
@@ -370,19 +334,7 @@ var pageCommands = {
       this.waitForElementNotPresent(this.getDataSourceSelector(1) + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
     }
     return this;
-    // if (advancedTests) {
-    //   advancedTests();
-    // } else {
-    //   this.removeEntity(this.getDataSourceSelector(1));
-    //   if (config.length > 0) {
-    //     this.waitForDependencyFinish();
-    //   }
-    // }
   },
-
-  // expect: function ({}) {
-  //
-  // },
 
   check: function ({
     text = {},

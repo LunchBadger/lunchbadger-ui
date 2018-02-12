@@ -58,8 +58,8 @@ var pageCommands = {
 
   addElementFromTooltip: function (entity, option = 'rest') {
     return this
-      .clickVisible('.Tool.' + entity)
-      .clickVisible('.Tool__submenuItem.' + option);
+      .clickPresent('.Tool.' + entity)
+      .clickPresent('.Tool__submenuItem.' + option);
   },
 
   addElement: function (entity) {
@@ -173,6 +173,18 @@ var pageCommands = {
       .mouseButtonDown(0)
       .moveToElement(toSelector + ` .port-${toDir} > .port__anchor > .port__inside`, null, null)
       .pause(500)
+      .mouseButtonUp(0)
+      .pause(500);
+    return this;
+  },
+
+  moveElement: function (fromSelector, toSelector) {
+    this.api
+      .pause(500)
+      .useCss()
+      .moveToElement(fromSelector, 0, 0)
+      .mouseButtonDown(0)
+      .moveToElement(toSelector, 0, 150)
       .mouseButtonUp(0)
       .pause(500);
     return this;
@@ -344,7 +356,9 @@ var pageCommands = {
     text = {},
     value = {},
     present = [],
-    notPresent = []
+    notPresent = [],
+    equal = [],
+    notEqual = []
   }) {
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
@@ -357,6 +371,12 @@ var pageCommands = {
     });
     notPresent.forEach((selector) => {
       this.api.expect.element(selector).to.not.be.present;
+    });
+    equal.forEach((item) => {
+      this.api.assert.equal(item[0], item[1]);
+    });
+    notEqual.forEach((item) => {
+      this.api.assert.notEqual(item[0], item[1]);
     });
     return this;
   },

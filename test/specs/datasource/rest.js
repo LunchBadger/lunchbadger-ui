@@ -34,7 +34,8 @@ function getCheckPoint (point) {
       operations0functions0value: 'lat,long'
     },
     checkbox: {
-      optionsenabled: false
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
     },
     select: {
       predefined: 'Google-Maps-Location',
@@ -60,7 +61,8 @@ function getCheckPoint (point) {
       operations0functions0value: 'street,city,zipcode'
     },
     checkbox: {
-      optionsenabled: false
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
     },
     select: {
       predefined: 'Google-Maps-GeoCode',
@@ -75,8 +77,10 @@ function getCheckPoint (point) {
       optionsheadersparams1value: 'application/json',
       operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
       operations0templateresponsePath: '$.results[0].geometry.location',
-      operations0templateheaders0key: 'content-type',
+      operations0templateheaders0key: 'accepts',
       operations0templateheaders0value: 'application/json',
+      operations0templateheaders1key: 'content-type',
+      operations0templateheaders1value: 'application/json',
       operations0templatequery0key: 'key',
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
@@ -86,9 +90,10 @@ function getCheckPoint (point) {
     },
     checkbox: {
       optionsenabled: true,
-      optionsstrictSSL: false,
+      optionsstrictSSL: true,
       optionsuseQuerystring: true,
-      optionsheadersenabled: true
+      optionsheadersenabled: true,
+      operations0templateoptionsenabled: false
     },
     select: {
       predefined: 'Google-Maps-GeoCode',
@@ -103,8 +108,10 @@ function getCheckPoint (point) {
       optionsheadersparams1value: 'en-US',
       operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
       operations0templateresponsePath: '$.results[0].geometry.location',
-      operations0templateheaders0key: 'content-type',
+      operations0templateheaders0key: 'accepts',
       operations0templateheaders0value: 'application/json',
+      operations0templateheaders1key: 'content-type',
+      operations0templateheaders1value: 'application/json',
       operations0templatequery0key: 'key',
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
@@ -116,7 +123,8 @@ function getCheckPoint (point) {
       optionsenabled: true,
       optionsstrictSSL: false,
       optionsuseQuerystring: false,
-      optionsheadersenabled: true
+      optionsheadersenabled: true,
+      operations0templateoptionsenabled: false
     },
     select: {
       predefined: 'Google-Maps-GeoCode',
@@ -124,6 +132,59 @@ function getCheckPoint (point) {
     }
   }
   if (point === 6) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templateheaders0key: 'accepts',
+      operations0templateheaders0value: 'application/json',
+      operations0templateheaders1key: 'content-type',
+      operations0templateheaders1value: 'application/json',
+      operations0templatequery0key: 'key',
+      operations0templatequery0value: '',
+      operations0templatequery1key: 'address',
+      operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: true,
+      optionsstrictSSL: false,
+      optionsuseQuerystring: false,
+      optionsheadersenabled: false,
+      operations0templateoptionsenabled: false
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
+  if (point === 7) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templateheaders0key: 'accepts',
+      operations0templateheaders0value: 'application/json',
+      operations0templateheaders1key: 'content-type',
+      operations0templateheaders1value: 'application/json',
+      operations0templatequery0key: 'key',
+      operations0templatequery0value: '',
+      operations0templatequery1key: 'address',
+      operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: false,
+      operations0templateoptionsenabled: true,
+      operations0templateoptionsstrictSSL: true,
+      operations0templateoptionsuseQuerystring: true
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
+  if (point === 8) return {
     value: {
       operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
       operations0templateresponsePath: '$.results[0].geometry.location',
@@ -137,36 +198,58 @@ function getCheckPoint (point) {
       operations0functions0value: 'street,city,zipcode'
     },
     checkbox: {
-      optionsenabled: true,
-      optionsstrictSSL: false,
-      optionsuseQuerystring: false,
-      optionsheadersenabled: false
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
     },
     select: {
       predefined: 'Google-Maps-GeoCode',
       operations0templatemethod: 'GET'
     }
   }
-  // if (point >= 4) {
-  //   notPresent: [
-  //     // '.input__optionsheadersparams0key',
-  //     '.checkbox__operations0templateoptionsstrictSSL',
-  //     '.checkbox__operations0templateoptionsuseQuerystring',
-  //     '.input__operations0templateheaders2key',
-  //     // '.input__operations0templatequery2key',
-  //     '.input__operations0functions1key',
-  //     '.input__operations1templateurl'
-  //   ]
-  // }
-  // if (point <= 3) {
-  //   checkpoint.notPresent = [
-  //     ...checkpoint.notPresent,
-  //     '.checkbox__optionsstrictSSL',
-  //     '.checkbox__optionsuseQuerystring',
-  //     '.checkbox__optionsheadersenabled',
-  //     '.button__remove__operation0'
-  //   ];
-  // }
+  if (point === 9) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templateheaders0key: 'content-type',
+      operations0templateheaders0value: 'application/json',
+      operations0templateheaders1key: 'content-language',
+      operations0templateheaders1value: 'en-US',
+      operations0templatequery0key: 'key',
+      operations0templatequery0value: '',
+      operations0templatequery1key: 'address',
+      operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
+  if (point === 10) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templatequery0key: 'key',
+      operations0templatequery0value: '',
+      operations0templatequery1key: 'address',
+      operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
 }
 
 module.exports = {
@@ -185,71 +268,89 @@ module.exports = {
   },
   'Datasource rest: change to predefined Google Maps GeoCode': function () {
     page
-      // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(2))
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       .submitDetailsPanel(restSelector);
   },
-  'Datasource rest: advanced edit 1': function () {
+  'Datasource rest: options': function () {
     page
-      // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(3))
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
-      // // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
-      // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
-      // .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
-      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json')
-      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
-      // .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
+      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
+      .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
+      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams0key input', 'accepts')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams0value input', 'application/json')
+      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-type')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'application/json')
+
       // .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
       // .clickPresent('.DetailsPanel .button__remove__operation0function0')
-      .submitDetailsPanel(restSelector);
-  },
-  'Datasource rest: advanced edit 2': function () {
-    page
-      // .reloadPage()
-      .openEntityInDetailsPanel(restSelector)
       .checkEntityDetails(getCheckPoint(4))
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
-      // // .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
-      // .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
-      // .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
-      // .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language')
-      // .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
-      .submitDetailsPanel(restSelector);
-  },
-  'Datasource rest: advanced edit 3': function () {
-    page
-      // .reloadPage()
-      .openEntityInDetailsPanel(restSelector)
+      .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
+      .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
+      .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
+      .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language')
+      .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
       .checkEntityDetails(getCheckPoint(5))
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      // .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
-      // .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
+      .checkEntityDetails(getCheckPoint(6))
+      .clickPresent('.DetailsPanel .checkbox__optionsenabled')
+      .checkEntityDetails(getCheckPoint(3))
+      .closeDetailsPanel();
+  },
+  'Datasource rest: operations options': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
+      .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL')
+      .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsuseQuerystring')
+      .checkEntityDetails(getCheckPoint(7))
+      .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
+      .checkEntityDetails(getCheckPoint(3))
+      .closeDetailsPanel();
+  },
+  'Datasource rest: operations headers remove': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
       .submitDetailsPanel(restSelector);
   },
-  // 'Datasource rest: advanced edit 4': function () {
+  'Datasource rest: operations headers add': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .checkEntityDetails(getCheckPoint(8))
+      .clickPresent('.DetailsPanel .button__add__operation0headersParameter')
+      .setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language')
+      .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US')
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: operations headers remove all': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .checkEntityDetails(getCheckPoint(9))
+      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
+      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
+      .submitDetailsPanel(restSelector);
+  },
+  // 'Datasource rest: operations headers remove all': function () {
   //   page
-  //     // .reloadPage()
   //     .openEntityInDetailsPanel(restSelector)
-  //     .checkEntityDetails(getCheckPoint(5))
-  //     .clickPresent('.DetailsPanel .checkbox__optionsheadersenabled')
+  //     .checkEntityDetails(getCheckPoint(9))
+  //     .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
+  //     .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
   //     .submitDetailsPanel(restSelector);
   // },
   'Datasource rest: remove': function () {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(getCheckPoint(6))
+      .checkEntityDetails(getCheckPoint(10))
       .closeDetailsPanel()
       // .removeEntity(restSelector)
       // .waitForDependencyFinish()

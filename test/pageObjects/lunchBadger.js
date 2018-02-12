@@ -59,6 +59,7 @@ var pageCommands = {
   addElementFromTooltip: function (entity, option = 'rest') {
     return this
       .clickPresent('.Tool.' + entity)
+      .pause(3000)
       .clickPresent('.Tool__submenuItem.' + option);
   },
 
@@ -277,6 +278,10 @@ var pageCommands = {
     return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.API:nth-child(' + nth + ')';
   },
 
+  getMicroserviceSelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Microservice:nth-child(' + nth + ')';
+  },
+
   getServiceEndpointSelector: function (nth) {
     return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.ServiceEndpoint:nth-child(' + nth + ')';
   },
@@ -358,7 +363,8 @@ var pageCommands = {
     present = [],
     notPresent = [],
     equal = [],
-    notEqual = []
+    notEqual = [],
+    hasClass = {}
   }) {
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
@@ -378,6 +384,9 @@ var pageCommands = {
     notEqual.forEach((item) => {
       this.api.assert.notEqual(item[0], item[1]);
     });
+    Object.keys(hasClass).forEach((key) => {
+      this.api.expect.element(key).to.have.attribute('class').which.contains(hasClass[key]);
+    })
     return this;
   },
 

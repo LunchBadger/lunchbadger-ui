@@ -142,8 +142,8 @@ var pageCommands = {
 
   openEntityInDetailsPanel: function (selector) {
     return this
-      .clickVisible(selector + ' .EntityHeader__name')
-      .clickVisible(selector + '.highlighted .Toolbox__button--zoom')
+      .clickPresent(selector + ' .EntityHeader__name')
+      .clickPresent(selector + '.highlighted .Toolbox__button--zoom')
       .waitForElementVisible('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
   },
 

@@ -73,87 +73,59 @@ module.exports = {
   'Datasource rest: operations headers remove': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
-      .checkEntityDetails(expectOperations0HeadersParameterRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0HeadersParameterRemoved);
   },
   'Datasource rest: operations headers add': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0HeadersParameterRemoved)
       .clickPresent('.DetailsPanel .button__add__operation0headersParameter')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US')
-      .checkEntityDetails(expectOperations0HeadersParameterAdded)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0HeadersParameterAdded);
   },
   'Datasource rest: operations headers remove all': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0HeadersParameterAdded)
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
-      .checkEntityDetails(expectOperations0HeadersAllParametersRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0HeadersAllParametersRemoved);
   },
   'Datasource rest: operations query remove': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0HeadersAllParametersRemoved)
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
-      .checkEntityDetails(expectOperations0QueryParameterRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0QueryParameterRemoved);
   },
   'Datasource rest: operations query add': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0QueryParameterRemoved)
       .clickPresent('.DetailsPanel .button__add__operation0queryParameter')
       .setValueSlow('.DetailsPanel .input__operations0templatequery2key input', 'myparam')
       .setValueSlow('.DetailsPanel .input__operations0templatequery2value input', '{myparam=7}')
-      .checkEntityDetails(expectOperations0QueryParameterAdded)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0QueryParameterAdded);
   },
   'Datasource rest: operations functions add': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0QueryParameterAdded)
       .clickPresent('.DetailsPanel .button__add__operation0function')
       .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'myfunc')
       .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'myparam')
-      .checkEntityDetails(expectOperations0FunctionsParameterAdded)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0FunctionsParameterAdded);
   },
   'Datasource rest: operations functions remove': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0FunctionsParameterAdded)
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
-      .checkEntityDetails(expectOperations0FunctionsParameterRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0FunctionsParameterRemoved);
   },
   'Datasource rest: operations functions remove all': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0FunctionsParameterRemoved)
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
-      .checkEntityDetails(expectOperations0FunctionsAllParametersRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0FunctionsAllParametersRemoved);
   },
   'Datasource rest: operations query remove all': function () {
     page
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0FunctionsAllParametersRemoved)
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter1')
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
-      .checkEntityDetails(expectOperations0QueryAllParameterRemoved)
-      .submitDetailsPanel(restSelector);
+      .checkEntityDetails(expectOperations0QueryAllParameterRemoved);
   },
   'Datasource rest: remove': function () {
     page
       .reloadPage()
-      .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(expectOperations0QueryAllParameterRemoved)
-      .closeDetailsPanel()
       .removeEntity(restSelector)
       .waitForDependencyFinish()
       .close();
@@ -184,7 +156,15 @@ const expectPlainGoogleMapsLocation = {
     operations0templatemethod: 'GET'
   },
   notPresent: [
-
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams2key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery2key',
+    'input__operations0functions1key'
   ]
 };
 const expectPlainGoogleMapsGeoCode = {
@@ -211,7 +191,18 @@ const expectPlainGoogleMapsGeoCode = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams2key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOptionsHeadersAdded = {
   value: {
@@ -244,7 +235,15 @@ const expectOptionsHeadersAdded = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'input__optionsheadersparams2key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOptionsHeadersChanged = {
   value: {
@@ -277,7 +276,15 @@ const expectOptionsHeadersChanged = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'input__optionsheadersparams2key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOptionsHeadersDisabled = {
   value: {
@@ -306,7 +313,15 @@ const expectOptionsHeadersDisabled = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0TemplateOptionsEnabled = {
   value: {
@@ -334,7 +349,16 @@ const expectOperations0TemplateOptionsEnabled = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0HeadersParameterRemoved = {
   value: {
@@ -358,7 +382,18 @@ const expectOperations0HeadersParameterRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders1key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0HeadersParameterAdded = {
   value: {
@@ -384,7 +419,18 @@ const expectOperations0HeadersParameterAdded = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders2key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0HeadersAllParametersRemoved = {
   value: {
@@ -406,7 +452,18 @@ const expectOperations0HeadersAllParametersRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0QueryParameterRemoved = {
   value: {
@@ -426,7 +483,18 @@ const expectOperations0QueryParameterRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery2key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0QueryParameterAdded = {
   value: {
@@ -448,7 +516,18 @@ const expectOperations0QueryParameterAdded = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery3key',
+    'input__operations0functions1key'
+  ]
 };
 const expectOperations0FunctionsParameterAdded = {
   value: {
@@ -472,7 +551,18 @@ const expectOperations0FunctionsParameterAdded = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery3key',
+    'input__operations0functions2key'
+  ]
 };
 const expectOperations0FunctionsParameterRemoved = {
   value: {
@@ -492,7 +582,18 @@ const expectOperations0FunctionsParameterRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery3key',
+    'input__operations0functions0key'
+  ]
 };
 const expectOperations0FunctionsAllParametersRemoved = {
   value: {
@@ -510,7 +611,18 @@ const expectOperations0FunctionsAllParametersRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery2key',
+    'input__operations0functions0key'
+  ]
 };
 const expectOperations0QueryAllParameterRemoved = {
   value: {
@@ -524,5 +636,16 @@ const expectOperations0QueryAllParameterRemoved = {
   select: {
     predefined: 'Google-Maps-GeoCode',
     operations0templatemethod: 'GET'
-  }
+  },
+  notPresent: [
+    'checkbox__optionsstrictSSL',
+    'checkbox__optionsuseQuerystring',
+    'checkbox__optionsheadersenabled',
+    'input__optionsheadersparams0key',
+    'checkbox__operations0templateoptionsstrictSSL',
+    'checkbox__operations0templateoptionsuseQuerystring',
+    'input__operations0templateheaders0key',
+    'input__operations0templatequery0key',
+    'input__operations0functions0key'
+  ]
 };

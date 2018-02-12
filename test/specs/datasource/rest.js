@@ -57,6 +57,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -85,6 +87,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -116,6 +120,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -143,6 +149,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -170,6 +178,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -194,6 +204,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -218,6 +230,8 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -238,6 +252,50 @@ function getCheckPoint (point) {
       operations0templatequery0value: '',
       operations0templatequery1key: 'address',
       operations0templatequery1value: '{street},{city},{zipcode}',
+      operations0templatequery2key: 'sensor',
+      operations0templatequery2value: '{sensor=false}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
+  if (point === 11) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templatequery0key: 'address',
+      operations0templatequery0value: '{street},{city},{zipcode}',
+      operations0templatequery1key: 'sensor',
+      operations0templatequery1value: '{sensor=false}',
+      operations0functions0key: 'geocode',
+      operations0functions0value: 'street,city,zipcode'
+    },
+    checkbox: {
+      optionsenabled: false,
+      operations0templateoptionsenabled: false
+    },
+    select: {
+      predefined: 'Google-Maps-GeoCode',
+      operations0templatemethod: 'GET'
+    }
+  }
+  if (point === 12) return {
+    value: {
+      operations0templateurl: 'https://maps.googleapis.com/maps/api/geocode/json',
+      operations0templateresponsePath: '$.results[0].geometry.location',
+      operations0templatequery0key: 'address',
+      operations0templatequery0value: '{street},{city},{zipcode}',
+      operations0templatequery1key: 'sensor',
+      operations0templatequery1value: '{sensor=false}',
+      operations0templatequery2key: 'myparam',
+      operations0templatequery2value: '{myparam=7}',
       operations0functions0key: 'geocode',
       operations0functions0value: 'street,city,zipcode'
     },
@@ -338,19 +396,27 @@ module.exports = {
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
       .submitDetailsPanel(restSelector);
   },
-  // 'Datasource rest: operations headers remove all': function () {
-  //   page
-  //     .openEntityInDetailsPanel(restSelector)
-  //     .checkEntityDetails(getCheckPoint(9))
-  //     .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
-  //     .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
-  //     .submitDetailsPanel(restSelector);
-  // },
+  'Datasource rest: operations query remove': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .checkEntityDetails(getCheckPoint(10))
+      .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
+      .submitDetailsPanel(restSelector);
+  },
+  'Datasource rest: operations query add': function () {
+    page
+      .openEntityInDetailsPanel(restSelector)
+      .checkEntityDetails(getCheckPoint(11))
+      .clickPresent('.DetailsPanel .button__add__operation0queryParameter')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery2key input', 'myparam')
+      .setValueSlow('.DetailsPanel .input__operations0templatequery2value input', '{myparam=7}')
+      .submitDetailsPanel(restSelector);
+  },
   'Datasource rest: remove': function () {
     page
       // .reloadPage()
       .openEntityInDetailsPanel(restSelector)
-      .checkEntityDetails(getCheckPoint(10))
+      .checkEntityDetails(getCheckPoint(12))
       .closeDetailsPanel()
       // .removeEntity(restSelector)
       // .waitForDependencyFinish()

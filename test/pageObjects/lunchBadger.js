@@ -189,7 +189,8 @@ var pageCommands = {
     return this
       .clickVisible('.DetailsPanel .BaseDetails__buttons .cancel')
       .waitForElementPresent('.DetailsPanel.closing', 60000)
-      .waitForElementNotPresent('.DetailsPanel.closing', 60000);
+      .waitForElementNotPresent('.DetailsPanel.closing', 60000)
+      .pause(1000);
   },
 
   removeEntity: function (selector) {

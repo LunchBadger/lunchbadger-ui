@@ -1,66 +1,73 @@
 var page;
+var entitySelector;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Service Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
-    page.open();
-    page.addElementFromTooltip('endpoint', 'serviceendpoint');
-    page.waitForElementPresent('.endpoint.Tool.selected', 8000);
-    page.submitCanvasEntity(page.getServiceEndpointSelector(1));
-    browser.waitForElementPresent(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text', 5000);
-    page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ServiceEndpoint');
-    page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-    page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls1', 5000);
-    page.saveProject();
-
-    page.refresh(function () {
-      page.checkEntities();
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('ServiceEndpoint');
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-      page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls1', 5000);
-
-      page.editEntity(page.getServiceEndpointSelector(1));
-      page.setValueSlow(page.getServiceEndpointSelector(1) + ' .input__name input', 'Cars');
-      page.click(page.getServiceEndpointSelector(1) + ' .button__add__URL');
-      page.click(page.getServiceEndpointSelector(1) + ' .button__add__URLS');
-      page.setValueSlow(page.getServiceEndpointSelector(1) + ' .input__urls1 input', 'http://service/car');
-      page.setValueSlow(page.getServiceEndpointSelector(1) + ' .input__urls2 input', 'http://service/driver');
-      page.submitCanvasEntity(page.getServiceEndpointSelector(1));
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
-      page.expect.element(page.getServiceEndpointSelector(1) + ' .urls2 .EntityProperty__field--text').text.to.equal('http://service/driver');
-      page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls3', 5000);
-      page.saveProject();
-
-      page.refresh(function () {
-        page.checkEntities();
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .urls2 .EntityProperty__field--text').text.to.equal('http://service/driver');
-        page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls3', 5000);
-
-        page.editEntity(page.getServiceEndpointSelector(1));
-        page.click(page.getServiceEndpointSelector(1) + ' .button__remove__urls2');
-        page.waitForElementNotVisible(page.getServiceEndpointSelector(1) + ' .button__remove__urls0', 5000);
-        page.submitCanvasEntity(page.getServiceEndpointSelector(1));
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-        page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
-        page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls2', 5000);
-        page.saveProject();
-
-        page.refresh(function () {
-          page.checkEntities();
-          page.expect.element(page.getServiceEndpointSelector(1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal('Cars');
-          page.expect.element(page.getServiceEndpointSelector(1) + ' .urls0 .EntityProperty__field--text').text.to.equal('http://example.org');
-          page.expect.element(page.getServiceEndpointSelector(1) + ' .urls1 .EntityProperty__field--text').text.to.equal('http://service/car');
-          page.waitForElementNotPresent(page.getServiceEndpointSelector(1) + ' .urls2', 5000);
-          page.close();
-        });
+    entitySelector = page.getServiceEndpointSelector(1);
+    page
+      .open()
+      .addElementFromTooltip('endpoint', 'serviceendpoint')
+      .waitForElementPresent('.endpoint.Tool.selected', 8000)
+      .submitCanvasEntity(entitySelector)
+      .saveProject()
+      .reloadPage()
+      .check({
+        text: {
+          [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'ServiceEndpoint',
+          [`${entitySelector} .urls0 .EntityProperty__field--text`]: 'http://example.org'
+        },
+        notPresent: [
+          `${entitySelector} .urls1`
+        ]
       });
-    });
+  },
+  'Service Endpoint: add urls': function () {
+    page
+      .editEntity(entitySelector)
+      .setValueSlow(entitySelector + ' .input__name input', 'Cars')
+      .clickPresent(entitySelector + ' .button__add__URL')
+      .setValueSlow(entitySelector + ' .input__urls1 input', 'http://service/car')
+      .clickPresent(entitySelector + ' .button__add__URLS')
+      .setValueSlow(entitySelector + ' .input__urls2 input', 'http://service/driver')
+      .submitCanvasEntity(entitySelector)
+      .saveProject()
+      .reloadPage()
+      .check({
+        text: {
+          [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
+          [`${entitySelector} .urls0 .EntityProperty__field--text`]: 'http://example.org',
+          [`${entitySelector} .urls1 .EntityProperty__field--text`]: 'http://service/car',
+          [`${entitySelector} .urls2 .EntityProperty__field--text`]: 'http://service/driver'
+        },
+        notPresent: [
+          `${entitySelector} .urls3`
+        ]
+      });
+  },
+  'Service endpoint: remove url': function () {
+    page
+      .editEntity(entitySelector)
+      .clickPresent(entitySelector + ' .button__remove__urls1')
+      .waitForElementNotVisible(entitySelector + ' .button__remove__urls0', 5000)
+      .submitCanvasEntity(entitySelector)
+      .saveProject()
+      .reloadPage()
+      .check({
+        text: {
+          [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
+          [`${entitySelector} .urls0 .EntityProperty__field--text`]: 'http://example.org',
+          [`${entitySelector} .urls1 .EntityProperty__field--text`]: 'http://service/driver'
+        },
+        notPresent: [
+          `${entitySelector} .urls2`
+        ]
+      });
+  },
+  'Service endpoint: remove': function () {
+    page
+      .removeEntity(entitySelector)
+      .close();
   }
 };

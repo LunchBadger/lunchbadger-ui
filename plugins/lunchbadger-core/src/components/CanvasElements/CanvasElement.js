@@ -355,7 +355,7 @@ export default (ComposedComponent) => {
       const {type} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
       return (
-        <div className={cs('CanvasElement', type, {highlighted, editable, wip: processing})}>
+        <div className={cs('CanvasElement', type, {highlighted, editable, wip: processing, semitransparent})}>
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}

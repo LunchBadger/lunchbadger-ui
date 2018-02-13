@@ -198,27 +198,20 @@ var pageCommands = {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
-    this.waitForElementPresent(startSelector, 10000);
-    this.waitForElementPresent(endSelector, 10000);
-    this.api
-      .pause(500)
-      .useCss()
-      .moveToElement(startSelector, bothOutDir ? 7 : null, bothOutDir ? 9 : null)
-      .mouseButtonDown(0)
-      .moveToElement(endSelector, null, null)
-      .pause(500)
-      .mouseButtonUp(0)
-      .pause(500);
-    return this;
+    return this
+      .waitForElementPresent(startSelector, 10000)
+      .waitForElementPresent(endSelector, 10000)
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null]);
   },
 
-  moveElement: function (fromSelector, toSelector) {
+  moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {
     this.api
       .pause(500)
       .useCss()
-      .moveToElement(fromSelector, 0, 0)
+      .moveToElement(fromSelector, offsetFrom[0], offsetFrom[1])
       .mouseButtonDown(0)
-      .moveToElement(toSelector, 0, 150)
+      .moveToElement(toSelector, offsetTo[0], offsetTo[1])
+      .pause(500)
       .mouseButtonUp(0)
       .pause(500);
     return this;
@@ -324,11 +317,7 @@ var pageCommands = {
   },
 
   getUniqueName: function (prefix) {
-    return prefix + '_' + Math.random().toString(36).substr(2, 5);
-  },
-
-  getUniqueGatewayName: function () {
-    return this.getUniqueName('gateway');
+    return prefix + '' + Math.random().toString(36).substr(2, 5);
   },
 
   saveProject: function () {

@@ -8,7 +8,7 @@ var gatewaySelector;
 var apiEndpointModelSelector;
 var apiEndpointServiceEndpointSelector;
 var SERVICE_ENDPOINT_URL = 'https://api.ipify.org/';
-var SERVICE_ENDPOINT_RESPONSE = '188.252.18.27';
+var SERVICE_ENDPOINT_RESPONSE = '54.221.82.10';
 var MEMORY_NAME;
 var MODEL_NAME;
 var GATEWAY_NAME;

@@ -7,10 +7,10 @@ var serviceEndpointSelector;
 var gatewaySelector;
 var apiEndpointModelSelector;
 var apiEndpointServiceEndpointSelector;
-var SERVICE_ENDPOINT_URL = 'https://httpbin.org/user-agent';
-var SERVICE_ENDPOINT_RESPONSE = `{
-  "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
-}`;
+var SERVICE_ENDPOINT_URL = 'https://httpbin.org';
+var SERVICE_ENDPOINT_RESPONSE = `User-agent: *
+Disallow: /deny
+`;
 var MEMORY_NAME;
 var MODEL_NAME;
 var GATEWAY_NAME;
@@ -42,7 +42,7 @@ module.exports = {
     API_ENDPOINT_1_NAME = `${MODEL_NAME}ApiEndpoint`;
     API_ENDPOINT_2_NAME = `${SERVICE_ENDPOINT_NAME}ApiEndpoint`;
     GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-test-dev.staging.lunchbadger.io/api/${MODEL_NAME}`;
-    GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-test-dev.staging.lunchbadger.io`;
+    GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-test-dev.staging.lunchbadger.io/robots.txt`;
     url = `http://test-dev.staging.lunchbadger.io/api/${MODEL_NAME}`;
     model = page.getUniqueName('model');
     color = page.getUniqueName('color');
@@ -81,7 +81,10 @@ module.exports = {
       .setValueSlow(gatewaySelector + ' .input__name input', GATEWAY_NAME)
       .clickPresent(gatewaySelector + ' .button__add__pipelines0policy')
       .selectValueSlow(gatewaySelector, 'pipelines0policies0name', 'proxy')
-      .submitGatewayDeploy(gatewaySelector, GATEWAY_NAME)
+      .submitGatewayDeploy(gatewaySelector, GATEWAY_NAME);
+  },
+  'EG integration: edit pipelines': function () {
+    page
       .editEntity(gatewaySelector)
       .clickPresent(gatewaySelector + ' .button__add__Pipelines')
       .check({
@@ -116,7 +119,10 @@ module.exports = {
           [`${gatewaySelector} .pipelines1name`]: 'Pipeline',
           [`${gatewaySelector} .pipelines1policies0name`]: 'proxy'
         }
-      })
+      });
+  },
+  'EG integration: proxy model': function () {
+    page
       .connectPorts(modelSelector, 'out', gatewaySelector, 'in', 0)
       .waitForElementVisible(apiEndpointModelSelector + ' .EntityHeader .EntityProperty__field--input input', 60000)
       .check({
@@ -126,21 +132,19 @@ module.exports = {
       })
       .clickPresent(apiEndpointModelSelector + ' .button__add__PATHS')
       .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/api/${MODEL_NAME}*`)
-      .submitCanvasEntity(apiEndpointModelSelector)
+      .submitCanvasEntity(apiEndpointModelSelector);
+  },
+  'EG integration: proxy service endpoint': function () {
+    page
       .connectPorts(serviceEndpointSelector, 'out', gatewaySelector, 'in', 1)
       .waitForElementVisible(apiEndpointServiceEndpointSelector + ' .EntityHeader .EntityProperty__field--input input', 60000)
       .check({
         value: {
           [`${apiEndpointServiceEndpointSelector} .EntityHeader .EntityProperty__field--input input`]: API_ENDPOINT_2_NAME
-        },
-        equal: [
-          [url, url],
-          [GATEWAY_MODEL_URL, GATEWAY_MODEL_URL],
-          [GATEWAY_SERVICE_ENDPOINT_URL, GATEWAY_SERVICE_ENDPOINT_URL]
-        ]
+        }
       })
       .clickPresent(apiEndpointServiceEndpointSelector + ' .button__add__PATHS')
-      .setValueSlow(apiEndpointServiceEndpointSelector + ' .input__paths0 input', '/')
+      .setValueSlow(apiEndpointServiceEndpointSelector + ' .input__paths0 input', '/robots*')
       .submitCanvasEntity(apiEndpointServiceEndpointSelector)
       .saveProject()
       .pause(30000);

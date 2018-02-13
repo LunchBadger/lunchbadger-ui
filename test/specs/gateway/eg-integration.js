@@ -3,7 +3,7 @@ const SERVICE_ENDPOINT_URL = 'https://api.ipify.org/';
 const SERVICE_ENDPOINT_RESPONSE = '188.252.18.27';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Gateway: EG integration': function (browser) {
     var page = browser.page.lunchBadger();
     const MEMORY_NAME = page.createUniqueName('memory');

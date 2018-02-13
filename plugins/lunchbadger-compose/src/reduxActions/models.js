@@ -90,11 +90,18 @@ export const update = (entity, model) => async (dispatch, getState) => {
 
 export const remove = (entity, action = 'removeModel') => async (dispatch) => {
   try {
-    dispatch(actions[action](entity));
     if (entity.loaded) {
+      let updateAction = 'updateModel';
+      if (entity.wasBundled) {
+        updateAction += 'Bundled';
+      }
+      const updatedEntity = entity.recreate();
+      updatedEntity.ready = false;
+      dispatch(actions[updateAction](updatedEntity));
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
     }
+    dispatch(actions[action](entity));
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

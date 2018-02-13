@@ -1,6 +1,7 @@
 var page;
 
 module.exports = {
+  '@disabled': true,
   'Compose plugin: CRUD on canvas': function (browser) {
     page = browser.page.lunchBadger();
     page.open();

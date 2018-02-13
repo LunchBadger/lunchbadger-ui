@@ -2,7 +2,7 @@ var page;
 var entitySelector;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Service Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getServiceEndpointSelector(1);

@@ -1,9 +1,15 @@
+var page;
+var entitySelector;
+
 module.exports = {
   // '@disabled': true,
   'Datasource: memory': function (browser) {
-    var page = browser.page.lunchBadger();
-    page.open();
-    page.testDatasource('memory', []);
-    page.close();
+    page = browser.page.lunchBadger();
+    entitySelector = page.getDataSourceSelector(1);
+    page
+      .open()
+      .testDatasource()
+      .removeEntity(entitySelector)
+      .close();
   }
 };

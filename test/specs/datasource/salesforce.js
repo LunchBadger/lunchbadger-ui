@@ -1,12 +1,22 @@
+var page;
+var entitySelector;
+
 module.exports = {
   // '@disabled': true,
   'Datasource: salesforce': function (browser) {
-    var page = browser.page.lunchBadger();
-    page.open();
-    page.testDatasource('salesforce', [
-      ['USERNAME', 'dumpUsername'],
-      ['PASSWORD', 'dumpPassword']
-    ]);
-    page.close();
+    page = browser.page.lunchBadger();
+    entitySelector = page.getDataSourceSelector(1);
+    page
+      .open()
+      .testDatasource('salesforce', [
+        ['USERNAME', 'dumpUsername'],
+        ['PASSWORD', 'dumpPassword']
+      ], [
+        'username'
+      ])
+      .closeWhenSystemDefcon1()
+      .removeEntity(entitySelector)
+      .waitForDependencyFinish()
+      .close();
   }
 };

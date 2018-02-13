@@ -54,6 +54,15 @@ export default class DataSource extends BaseModel {
     ];
   }
 
+  static create(data) {
+    const obj = {...data};
+    if (obj.connector === 'soap') {
+      obj.soapOperations = obj.soapOperations || obj.operations || {};
+      delete obj.operations;
+    }
+    return super.create(obj);
+  }
+
   recreate() {
     return DataSource.create(this);
   }
@@ -107,8 +116,22 @@ export default class DataSource extends BaseModel {
       json.keyId = this.keyId;
     }
     if (this.isSoap) {
-      const {wsdl, wsdl_options, remotingEnabled, security, operations, soapHeaders} = this;
-      Object.assign(json, {wsdl, wsdl_options, remotingEnabled, security, operations, soapHeaders});
+      const {
+        wsdl,
+        wsdl_options,
+        remotingEnabled,
+        security,
+        soapOperations: operations,
+        soapHeaders,
+      } = this;
+      Object.assign(json, {
+        wsdl,
+        wsdl_options,
+        remotingEnabled,
+        security,
+        operations,
+        soapHeaders,
+      });
     }
     return json;
   }

@@ -29,7 +29,7 @@ class EntityValidationErrors extends Component {
             {validations.data && Object.keys(validations.data).map(key => (
               <div key={key}>
                 <div
-                  className="EntityValidationErrors__fields__field"
+                  className={cs('EntityValidationErrors__fields__field', `validationError__${key}`)}
                   onClick={onFieldClick(key)}
                 >
                   {key.replace(/([A-Z])/g, ' $1')}

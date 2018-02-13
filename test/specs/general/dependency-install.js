@@ -54,11 +54,9 @@ module.exports = {
     browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
     browser.waitForElementNotPresent('.spinner__overlay', 60000);
     browser.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
-    browser.pause(10000);
-    browser.refresh(function () {
+    page.refresh(function () {
       browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
+      page.close();
     });
-
-    page.close();
   }
 }

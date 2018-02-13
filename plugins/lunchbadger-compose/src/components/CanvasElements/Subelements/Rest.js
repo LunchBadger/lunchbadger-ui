@@ -275,7 +275,11 @@ export default class Rest extends PureComponent {
     const columns = [
       'Parameter name',
       'Parameter value',
-      <IconButton icon="iconPlus" onClick={this.handleAddOptionsHeadersParameter} />,
+      <IconButton
+        icon="iconPlus"
+        name="add__optionsHeadersParameter"
+        onClick={this.handleAddOptionsHeadersParameter}
+      />,
     ];
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
@@ -299,7 +303,11 @@ export default class Rest extends PureComponent {
         handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'value')}
         handleKeyDown={idx === paramsSize ? this.checkOptionHeadersParameterTabButton : undefined}
       />,
-      <IconButton icon="iconDelete" onClick={this.handleRemoveOptionsHeadersParameter(idx)} />,
+      <IconButton
+        icon="iconDelete"
+        name={`remove__optionsHeadersParameter${idx}`}
+        onClick={this.handleRemoveOptionsHeadersParameter(idx)}
+      />,
     ]));
     return <Table
       columns={columns}
@@ -356,7 +364,11 @@ export default class Rest extends PureComponent {
     const columns = [
       'Parameter name',
       'Parameter value',
-      <IconButton icon="iconPlus" onClick={this.handleAddParameter(kind, operationIdx)} />,
+      <IconButton
+        icon="iconPlus"
+        name={`add__operation${operationIdx}${kind}Parameter`}
+        onClick={this.handleAddParameter(kind, operationIdx)}
+      />,
     ];
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
@@ -380,7 +392,11 @@ export default class Rest extends PureComponent {
         handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'value')}
         handleKeyDown={idx === paramsSize ? this.checkParameterTabButton(kind, operationIdx) : undefined}
       />,
-      <IconButton icon="iconDelete" onClick={this.handleRemoveParameter(kind, operationIdx, idx)} />,
+      <IconButton
+        icon="iconDelete"
+        name={`remove__operation${operationIdx}${kind}Parameter${idx}`}
+        onClick={this.handleRemoveParameter(kind, operationIdx, idx)}
+      />,
     ]));
     return <Table
       columns={columns}
@@ -395,7 +411,11 @@ export default class Rest extends PureComponent {
     const columns = [
       'Function name',
       'Function parameters (comma separated)',
-      <IconButton icon="iconPlus" onClick={this.handleAddFunction(operationIdx)} />,
+      <IconButton
+        icon="iconPlus"
+        name={`add__operation${operationIdx}function`}
+        onClick={this.handleAddFunction(operationIdx)}
+      />,
     ];
     const widths = [300, undefined, 70];
     const paddings = [true, true, false];
@@ -419,7 +439,11 @@ export default class Rest extends PureComponent {
         handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'value')}
         handleKeyDown={idx === paramsSize ? this.checkFunctionsTabButton(operationIdx) : undefined}
       />,
-      <IconButton icon="iconDelete" onClick={this.handleRemoveFunction(operationIdx, idx)} />,
+      <IconButton
+        icon="iconDelete"
+        name={`remove__operation${operationIdx}function${idx}`}
+        onClick={this.handleRemoveFunction(operationIdx, idx)}
+      />,
     ]));
     return <Table
       columns={columns}
@@ -528,7 +552,14 @@ export default class Rest extends PureComponent {
             <CollapsibleProperties
               bar={<EntityPropertyLabel plain>Operation {idx + 1}</EntityPropertyLabel>}
               collapsible={this.renderOperation(operation, idx)}
-              button={idx === 0 ? null : <IconButton icon="iconDelete" onClick={this.handleRemoveOperation(idx)} />}
+              button={idx === 0
+                ? null
+                : <IconButton
+                    icon="iconDelete"
+                    name={`remove__operation${idx}`}
+                    onClick={this.handleRemoveOperation(idx)}
+                  />
+              }
               defaultOpened
               barToggable
             />
@@ -559,7 +590,7 @@ export default class Rest extends PureComponent {
           <CollapsibleProperties
             bar={<EntityPropertyLabel>Operations</EntityPropertyLabel>}
             collapsible={operationsCollapsible}
-            button={<IconButton icon="iconPlus" onClick={this.handleAddOperation} />}
+            button={<IconButton icon="iconPlus" name="add__operation" onClick={this.handleAddOperation} />}
             defaultOpened
             barToggable={!plain}
             untoggable={plain}

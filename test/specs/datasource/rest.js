@@ -2,7 +2,7 @@ var page;
 var entitySelector;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Datasource rest: add predefined Google Maps Location': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);

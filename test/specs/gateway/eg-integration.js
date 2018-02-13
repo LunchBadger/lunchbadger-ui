@@ -7,8 +7,10 @@ var serviceEndpointSelector;
 var gatewaySelector;
 var apiEndpointModelSelector;
 var apiEndpointServiceEndpointSelector;
-var SERVICE_ENDPOINT_URL = 'https://api.ipify.org/';
-var SERVICE_ENDPOINT_RESPONSE = '54.221.82.10';
+var SERVICE_ENDPOINT_URL = 'https://httpbin.org/user-agent';
+var SERVICE_ENDPOINT_RESPONSE = `{
+  "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+}`;
 var MEMORY_NAME;
 var MODEL_NAME;
 var GATEWAY_NAME;

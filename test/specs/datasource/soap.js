@@ -3,7 +3,7 @@ var entitySelector;
 const TEST_WSDL = 'http://www.webservicex.com/globalweather.asmx';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Datasource: plain soap': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);

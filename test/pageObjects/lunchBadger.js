@@ -104,11 +104,32 @@ var pageCommands = {
       });
   },
 
+  setValueWithEnter: function (selector, value) {
+    return this
+      .setValueSlow(selector, value)
+      .setValue(selector, this.api.Keys.ENTER);
+  },
+
   selectValueSlow: function (selector, select, value) {
     return this
       .clickPresent(selector + ` .select__${select}`)
       .clickPresent(`div[role=menu] .${select}__${value}`)
       .waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
+  },
+
+  setAutocomplete: function (selector, keys) {
+    // this.api.pause(1000);
+    // this.click(selector);
+    // this.api.keys(keys);
+    return this
+      .clickSlow(selector)
+      .sentKeys(keys);
+  },
+
+  selectIconMenu: function (selector, button, option) {
+    return this
+      .clickSlow(`${selector} .button__${button}`)
+      .clickSlow(`.IconMenuItem__${button}__${option}`);
   },
 
   editEntity: function (selector) {
@@ -440,6 +461,13 @@ var pageCommands = {
       this.api.expect.element(key).to.have.attribute('class').which.contains(hasClass[key]);
     })
     return this;
+  },
+
+  expectAutocompleteValue: function (selector, values) {
+    return this
+      .check({
+        present: [`.DetailsPanel .${selector} .Multiselect${values.map(a => '.' + a).join('')}`]
+      });
   },
 
   checkEntityDetails: function ({

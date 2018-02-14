@@ -14,6 +14,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     onMoveUp: PropTypes.func,
     moveDownDisabled: PropTypes.bool,
     moveUpDisabled: PropTypes.bool,
+    prefix: PropTypes.string,
   };
 
   constructor(props) {
@@ -54,6 +55,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
       onMoveUp,
       moveDownDisabled,
       moveUpDisabled,
+      prefix,
     } = this.props;
     const {horizontal} = this.state;
     return (
@@ -63,11 +65,35 @@ export default class GatewayPolicyCAPair extends PureComponent {
           collapsible={this.renderCA()}
           button={(
             <span>
-              <IconButton icon="iconDelete" onClick={onRemove} />
-              <IconButton icon="iconArrowDown" onClick={onMoveDown} disabled={moveDownDisabled} />
-              <IconButton icon="iconArrowUp" onClick={onMoveUp} disabled={moveUpDisabled} />
-              <IconButton icon="iconModeHorizontal" onClick={this.toggleMode} disabled={horizontal} />
-              <IconButton icon="iconModeVertical" onClick={this.toggleMode} disabled={!horizontal} />
+              <IconButton
+                icon="iconDelete"
+                name={`remove__${prefix}`}
+                onClick={onRemove}
+              />
+              <IconButton
+                icon="iconArrowDown"
+                name={`moveDown__${prefix}`}
+                onClick={onMoveDown}
+                disabled={moveDownDisabled}
+              />
+              <IconButton
+                icon="iconArrowUp"
+                name={`moveUp__${prefix}`}
+                onClick={onMoveUp}
+                disabled={moveUpDisabled}
+              />
+              <IconButton
+                icon="iconModeHorizontal"
+                name={`modeHorizontal__${prefix}`}
+                onClick={this.toggleMode}
+                disabled={horizontal}
+              />
+              <IconButton
+                icon="iconModeVertical"
+                name={`modeVertical__${prefix}`}
+                onClick={this.toggleMode}
+                disabled={!horizontal}
+              />
             </span>
           )}
           barToggable

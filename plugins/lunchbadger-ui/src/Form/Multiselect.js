@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Select from 'react-select-plus';
+import cs from 'classnames';
 import 'react-select-plus/dist/react-select-plus.css';
+import getPlainText from '../utils/getPlainText';
 import './Multiselect.scss';
 
 class Multiselect extends Component {
@@ -38,7 +40,7 @@ class Multiselect extends Component {
       value,
     } = this.props;
     return (
-      <div className="Multiselect">
+      <div className={cs('Multiselect', value.map(label => getPlainText(label)))}>
         <Select.Creatable
           ref={r => this.selectRef = r}
           multi={multi}

@@ -11,8 +11,6 @@ import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import GatewayPolicyCAPair from './Subelements/GatewayPolicyCAPair';
 import GatewayPolicyCondition from './Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from './Subelements/GatewayPolicyAction';
-import './GatewayDetails.scss';
-
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -22,6 +20,7 @@ import {
   Table,
   IconButton,
 } from '../../../../../lunchbadger-ui/src';
+import './GatewayDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const {Connections} = LunchBadgerCore.stores;
@@ -230,7 +229,11 @@ class GatewayDetails extends PureComponent {
     const columns = [
       'Parameter Name',
       'Parameter Value',
-      <IconButton icon="iconPlus" onClick={this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)} />,
+      <IconButton
+        icon="iconPlus"
+        name={`add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}${kind}parameter`}
+        onClick={this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)}
+      />,
     ];
     const widths = [350, undefined, 70];
     const paddings = [true, true, false];
@@ -250,7 +253,11 @@ class GatewayDetails extends PureComponent {
         hideUnderline
         handleKeyDown={this.handleParametersTab(kind, pipelineIdx, policyIdx, pairIdx, idx)}
       />,
-      <IconButton icon="iconDelete" onClick={this.removeParameter(kind, pipelineIdx, policyIdx, pairIdx, idx)} />,
+      <IconButton
+        icon="iconDelete"
+        name={`remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}${kind}parameter${idx}`}
+        onClick={this.removeParameter(kind, pipelineIdx, policyIdx, pairIdx, idx)}
+      />,
     ]);
     const table = <Table
       columns={columns}
@@ -285,7 +292,11 @@ class GatewayDetails extends PureComponent {
   );
 
   renderPolicy = (policy, pipelineIdx, policyIdx) => {
-    let button = <IconButton icon="iconPlus" onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)} />;
+    let button = <IconButton
+      icon="iconPlus"
+      name={`add__pipeline${pipelineIdx}policy${policyIdx}CAPair`}
+      onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)}
+    />;
     if (policy.name === GATEWAY_POLICIES.PROXY) {
       const state = this.context.store.getState();
       const {serviceEndpointEntities} = state.plugins.quadrants[1];
@@ -312,6 +323,7 @@ class GatewayDetails extends PureComponent {
             onMoveUp={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
             moveDownDisabled={idx === policy.conditionAction.length - 1}
             moveUpDisabled={idx === 0}
+            prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
           />
         ))}
       </div>
@@ -344,15 +356,18 @@ class GatewayDetails extends PureComponent {
           <span>
             <IconButton
               icon="iconDelete"
+              name={`remove__pipelines${pipelineIdx}policies${idx}`}
               onClick={this.removePipelinePolicy(pipelineIdx, idx)}
             />
             <IconButton
               icon="iconArrowDown"
+              name={`moveDown__pipelines${pipelineIdx}policies${idx}`}
               onClick={this.reorderPipelinePolicy(pipelineIdx, idx, 1)}
               disabled={idx === pipeline.policies.length - 1}
             />
             <IconButton
               icon="iconArrowUp"
+              name={`moveUp__pipelines${pipelineIdx}policies${idx}`}
               onClick={this.reorderPipelinePolicy(pipelineIdx, idx, -1)}
               disabled={idx === 0}
             />
@@ -366,7 +381,13 @@ class GatewayDetails extends PureComponent {
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
         collapsible={collapsible}
-        button={<IconButton icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
+        button={
+          <IconButton
+            icon="iconPlus"
+            name={`add__pipelines${pipelineIdx}policy`}
+            onClick={this.addPipelinePolicy(pipelineIdx)}
+          />
+        }
         defaultOpened
         untoggable
         space="15px 0 5px"
@@ -426,7 +447,11 @@ class GatewayDetails extends PureComponent {
       'Host Domain',
       'TLS Key',
       'TLS Certificate',
-      <IconButton icon="iconPlus" onClick={this.addHttpsTlsDomain} />,
+      <IconButton
+        icon="iconPlus"
+        name="add__gatewayHttpsTlsDomain"
+        onClick={this.addHttpsTlsDomain}
+      />,
     ];
     const widths = [250, 300, undefined, 70];
     const paddings = [true, true, true, false];
@@ -453,7 +478,11 @@ class GatewayDetails extends PureComponent {
         hideUnderline
         handleKeyDown={this.handleHttpsTlsTab(idx)}
       />,
-      <IconButton icon="iconDelete" onClick={this.removeHttpsTlsDomain(idx)} />,
+      <IconButton
+        icon="iconDelete"
+        name={`remove__gatewayHttpsTlsDomain${idx}`}
+        onClick={this.removeHttpsTlsDomain(idx)}
+      />,
     ]);
     const table = <Table
       columns={columns}
@@ -583,15 +612,18 @@ class GatewayDetails extends PureComponent {
           <span>
             <IconButton
               icon="iconDelete"
+              name={`remove__pipeline${idx}`}
               onClick={this.removePipeline(idx)}
             />
             <IconButton
               icon="iconArrowDown"
+              name={`moveDown__pipeline${idx}`}
               onClick={this.reorderPipeline(idx, 1)}
               disabled={idx === pipelines.length - 1}
             />
             <IconButton
               icon="iconArrowUp"
+              name={`moveUp__pipeline${idx}`}
               onClick={this.reorderPipeline(idx, -1)}
               disabled={idx === 0}
             />
@@ -607,7 +639,13 @@ class GatewayDetails extends PureComponent {
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
           collapsible={collapsible}
-          button={<IconButton icon="iconPlus" onClick={this.addPipeline} />}
+          button={
+            <IconButton
+              icon="iconPlus"
+              name="add__pipeline"
+              onClick={this.addPipeline}
+            />
+          }
           barToggable
           defaultOpened
         />

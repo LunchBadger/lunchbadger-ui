@@ -11,6 +11,8 @@ module.exports = {
       .testDatasource('salesforce', [
         ['USERNAME', 'dumpUsername'],
         ['PASSWORD', 'dumpPassword']
+      ], [
+        'username'
       ])
       .closeWhenSystemDefcon1()
       .removeEntity(entitySelector)

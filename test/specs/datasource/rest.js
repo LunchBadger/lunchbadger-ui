@@ -16,6 +16,7 @@ module.exports = {
           [`${entitySelector} .Rest__url .EntityPropertyLabel`]: 'URL'
         }
       })
+      .submitCanvasEntityWithExpectedValidationErrors(entitySelector, ['baseUrl'])
       .selectValueSlow(entitySelector, 'predefined', 'Google-Maps-Location')
       .submitCanvasEntity(entitySelector)
       .waitForDependencyFinish()

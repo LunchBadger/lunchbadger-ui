@@ -11,6 +11,8 @@ module.exports = {
       .open()
       .testDatasource('soap', [
         ['URL', TEST_WSDL]
+      ], [
+        'url'
       ])
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainSoap);

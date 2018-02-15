@@ -133,6 +133,15 @@ var pageCommands = {
       .waitForElementNotPresent('.SystemDefcon1', 60000);
   },
 
+  submitCanvasEntityWithExpectedValidationErrors: function (selector, validationErrors = []) {
+    const present = validationErrors.map(key => `${selector} .EntityValidationErrors__fields__field.validationError__${key}`)
+    return this
+      .submitForm(selector + ' form')
+      .waitForElementPresent(selector + ' .EntityValidationErrors', 15000)
+      .check({present})
+      .pause(3000);
+  },
+
   submitDetailsPanel: function (selector) {
     return this
       .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
@@ -141,6 +150,15 @@ var pageCommands = {
       .waitForElementPresent('.DetailsPanel.closing', 5000)
       .waitForElementNotPresent('.DetailsPanel.closing', 15000)
       .waitForElementNotPresent(selector + '.wip', 60000);
+  },
+
+  submitDetailsPanelWithExpectedValidationErrors: function (validationErrors = []) {
+    const present = validationErrors.map(key => `.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`);
+    return this
+      .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
+      .submitForm('.DetailsPanel .BaseDetails form')
+      .waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000)
+      .check({present});
   },
 
   openEntityInDetailsPanel: function (selector) {
@@ -329,11 +347,15 @@ var pageCommands = {
       .waitForElementPresent('.workspace-status .workspace-status__success', 120000);
   },
 
-  testDatasource: function (type = 'memory', config = []) {
+  testDatasource: function (type = 'memory', config = [], required) {
     const selector = this.getDataSourceSelector(1);
     this
       .addElementFromTooltip('dataSource', type)
       .waitForElementPresent('.dataSource.Tool.selected', 8000);
+    if (required) {
+      this
+        .submitCanvasEntityWithExpectedValidationErrors(selector, required);
+    }
     if (config.length === 0) {
       this.waitForElementNotPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
     } else {

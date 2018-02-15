@@ -14,6 +14,11 @@ module.exports = {
         ['NAMESPACE', 'dumpNamespace'],
         ['USERNAME', 'dumpUsername'],
         ['PASSWORD', 'dumpPassword']
+      ], [
+        'host',
+        'port',
+        'database',
+        'username'
       ])
       .closeWhenSystemDefcon1()
       .removeEntity(entitySelector)

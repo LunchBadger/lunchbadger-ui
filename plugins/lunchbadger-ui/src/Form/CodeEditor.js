@@ -12,9 +12,6 @@ import 'brace/theme/monokai';
 import './CodeEditor.scss';
 import {EntityProperty, IconButton} from '../';
 
-const windowWidth = window.innerWidth;
-const initialEditorCodeWidth = Math.floor(windowWidth * 0.75);
-const maxWidth = windowWidth - 170;
 const options = {
   enableBasicAutocompletion: true,
   enableLiveAutocompletion: true,
@@ -49,7 +46,8 @@ export default class CodeEditor extends PureComponent {
     const multiline = isMultiline(code);
     this.state = {
       editorMode: multiline || mode === 'editor',
-      width: initialEditorCodeWidth,
+      width: 9999,
+      maxWidth: 0,
       height: initialHeight,
       code,
       mode: multiline ? 'editor' : mode,
@@ -57,9 +55,22 @@ export default class CodeEditor extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.fullWidth) {
-      this.setState({width: this.boxRef.getBoundingClientRect().width});
+    this.recalculateWidth();
+    window.addEventListener('rndresized', this.recalculateWidth);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('rndresized', this.recalculateWidth);
+  }
+
+  recalculateWidth = () => {
+    const {width, maxWidth} = this.state;
+    const max = this.boxRef.getBoundingClientRect().width - 5;
+    const state = {maxWidth: max};
+    if (width > max || width === maxWidth) {
+      state.width = max;
     }
+    this.setState(state);
   }
 
   discardChanges = () => this.setState({code: this.props.value, mode: this.props.mode});
@@ -81,8 +92,8 @@ export default class CodeEditor extends PureComponent {
   handleEditorChange = (_, editor) => this.changeCode(editor.getValue());
 
   render() {
-    const {lang, fullWidth, initialHeight, name, onTab} = this.props;
-    const {width, height, editorMode, code, mode} = this.state;
+    const {lang, fullWidth, name, onTab} = this.props;
+    const {width, maxWidth, height, editorMode, code, mode} = this.state;
     const icon = editorMode ? 'iconTextField' : 'iconCodeEditor';
     return (
       <div
@@ -101,8 +112,8 @@ export default class CodeEditor extends PureComponent {
         </div>
         <div className="CodeEditor__editor">
           <ResizableBox
-            width={fullWidth ? width : initialEditorCodeWidth}
-            height={initialHeight}
+            width={width}
+            height={height}
             minConstraints={[200, 100]}
             maxConstraints={[maxWidth, 2000]}
             onResize={this.handleFunctionCodeResize}

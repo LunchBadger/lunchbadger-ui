@@ -5,6 +5,7 @@ import _ from 'lodash';
 import cs from 'classnames';
 import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
 import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
+import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyCondition.scss';
 
 const iconCondition = {
@@ -21,20 +22,6 @@ const customPropertyTypes = [
   'integer',
   'array',
 ];
-
-const getDefaultValueByType = type => ({
-  string: '',
-  boolean: false,
-  integer: 0,
-  jscode: '',
-  array: [],
-})[type];
-
-const determineType = value => {
-  if (Array.isArray(value)) return 'array';
-  if (typeof value === 'number') return 'integer';
-  return typeof value;
-};
 
 export default class GatewayPolicyCondition extends PureComponent {
   static propTypes = {
@@ -155,7 +142,7 @@ export default class GatewayPolicyCondition extends PureComponent {
     const property = state.properties.find(item => item.name === name);
     if (property.type === 'boolean') {
       property.value = checked;
-    } else if (property.type === 'integer') {
+    } else if (property.type === 'integer' || property.type === 'number') {
       property.value = +value;
     } else {
       property.value = value;
@@ -306,7 +293,7 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       );
     }
-    if (['boolean', 'integer', 'string', 'jscode', 'array'].includes(type)) {
+    if (['boolean', 'integer', 'number', 'string', 'jscode', 'array'].includes(type)) {
       const props = {
         key: id,
         title: label || name,
@@ -322,7 +309,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           onChange: this.handlePropertyValueChange(name),
         });
       }
-      if (type === 'integer') {
+      if (type === 'integer' || type === 'number') {
         Object.assign(props, {
           number: true,
           alignRight: true,

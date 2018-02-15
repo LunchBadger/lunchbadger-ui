@@ -26,6 +26,21 @@
     position: relative;
     margin-top: 10px;
   }
+  &__object {
+    padding-top: 3px;
+    & > .EntityPropertyLabel {
+      color: #999 !important;
+      font-weight: 300;
+      font-size: 12px;
+      margin-left: 0;
+    }
+    & > .GatewayPolicyAction {
+      margin-left: 15px;
+      & > .GatewayPolicyAction__button.add.menu {
+        margin-right: 30px;
+      }
+    }
+  }
 }
 
 .panel__details .GatewayPolicyAction .EntityProperty {

@@ -125,6 +125,17 @@ var pageCommands = {
       .waitForElementNotPresent(selector + '.editable', 5000);
   },
 
+  submitGatewayDeploy: function (selector, gatewayName) {
+    const text = {
+      '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': gatewayName + ' successfully deployed'
+    };
+    return this
+      .submitCanvasEntity(selector)
+      .waitForElementVisible('.SystemInformationMessages', 180000)
+      .check({text})
+      .waitForElementNotPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
+  },
+
   submitCanvasEntity: function (selector) {
     return this
       .submitForm(selector + ' form')
@@ -183,27 +194,24 @@ var pageCommands = {
       .waitForElementNotPresent(selector, 5000);
   },
 
-  connectPorts: function (fromSelector, fromDir, toSelector, toDir) {
-    var bothOutDir = fromDir === 'out' && toDir === 'out';
-    this.api
-      .pause(500)
-      .useCss()
-      .moveToElement(fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`, bothOutDir ? 7 : null, bothOutDir ? 9 : null)
-      .mouseButtonDown(0)
-      .moveToElement(toSelector + ` .port-${toDir} > .port__anchor > .port__inside`, null, null)
-      .pause(500)
-      .mouseButtonUp(0)
-      .pause(500);
-    return this;
+  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
+    const bothOutDir = fromDir === 'out' && toDir === 'out';
+    const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
+    const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    return this
+      .waitForElementPresent(startSelector, 10000)
+      .waitForElementPresent(endSelector, 10000)
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null]);
   },
 
-  moveElement: function (fromSelector, toSelector) {
+  moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {
     this.api
       .pause(500)
       .useCss()
-      .moveToElement(fromSelector, 0, 0)
+      .moveToElement(fromSelector, offsetFrom[0], offsetFrom[1])
       .mouseButtonDown(0)
-      .moveToElement(toSelector, 0, 150)
+      .moveToElement(toSelector, offsetTo[0], offsetTo[1])
+      .pause(500)
       .mouseButtonUp(0)
       .pause(500);
     return this;
@@ -306,6 +314,10 @@ var pageCommands = {
 
   getApiEndpointSelector: function (nth) {
     return '.canvas__container .quadrant:nth-child(4) .quadrant__body .CanvasElement.ApiEndpoint:nth-child(' + nth + ')';
+  },
+
+  getUniqueName: function (prefix) {
+    return prefix + '' + Math.random().toString(36).substr(2, 5);
   },
 
   saveProject: function () {

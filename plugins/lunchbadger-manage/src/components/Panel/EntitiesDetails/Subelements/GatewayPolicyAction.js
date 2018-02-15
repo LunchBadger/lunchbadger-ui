@@ -3,34 +3,21 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, IconButton, IconMenu, EntityPropertyLabel} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
+import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
 
 const customPropertyTypes = [
   'string',
   'boolean',
   'integer',
+  'number',
   'array',
   'object',
 ];
 
 const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
-
-const getDefaultValueByType = type => ({
-  string: '',
-  boolean: false,
-  integer: 0,
-  jscode: '',
-  array: [],
-  object: {},
-})[type];
-
-const determineType = value => {
-  if (Array.isArray(value)) return 'array';
-  if (typeof value === 'number') return 'integer';
-  return typeof value;
-};
 
 export default class GatewayPolicyAction extends PureComponent {
   static propTypes = {
@@ -71,6 +58,7 @@ export default class GatewayPolicyAction extends PureComponent {
         description,
         enum: enum_ || [],
         postfix,
+        schemas: properties[name],
       };
     });
     Object.keys(action).forEach((name) => {
@@ -93,6 +81,7 @@ export default class GatewayPolicyAction extends PureComponent {
         custom: !properties[name],
         types,
         postfix,
+        schemas: properties[name],
       };
     });
     return {parameters: Object.values(parameters)};
@@ -131,7 +120,8 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: [],
       });
     } else {
-      const {description, type, types, default: def, enum: enum_, postfix} = this.props.schemas.properties[name];
+      const schemas = this.props.schemas.properties[name];
+      const {description, type, types, default: def, enum: enum_, postfix} = schemas;
       state.parameters.push({
         id,
         name,
@@ -142,6 +132,7 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_ || [],
         description,
         postfix,
+        schemas,
       });
     }
     this.changeState(state, () => setTimeout(() => {
@@ -156,7 +147,7 @@ export default class GatewayPolicyAction extends PureComponent {
     const property = state.parameters.find(item => item.id === id);
     if (property.type === 'boolean') {
       property.value = checked;
-    } else if (property.type === 'integer') {
+    } else if (property.type === 'integer' || property.type === 'number') {
       property.value = +value;
     } else {
       property.value = value;
@@ -253,7 +244,7 @@ export default class GatewayPolicyAction extends PureComponent {
           bool: true,
         });
       }
-      if (type === 'integer') {
+      if (type === 'integer' || type === 'number') {
         Object.assign(props, {
           width: 150,
           number: true,
@@ -292,6 +283,21 @@ export default class GatewayPolicyAction extends PureComponent {
           onChange: this.handleArrayChange(id),
           tmpPrefix: this.tmpPrefix,
         });
+        if (item.schemas) {
+          const {prefix, horizontal} = this.props;
+          return (
+            <div className="GatewayPolicyAction__object">
+              <EntityPropertyLabel>{name}</EntityPropertyLabel>
+              <GatewayPolicyAction
+                action={value}
+                schemas={item.schemas}
+                prefix={`${prefix}[${name}]`}
+                onChangeState={this.changeState}
+                horizontal={horizontal}
+              />
+            </div>
+          );
+        }
       }
       return <EntityProperty {...props} />;
     }

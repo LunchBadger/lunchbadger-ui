@@ -105,9 +105,9 @@ class AppLoader extends Component {
 
   renderLoadingScreen() {
     return (
-      <div className='app'>
+      <div className="app">
         <Spinner force />
-        <div className='app__loading-message'>
+        <div className="app__loading-message">
           Baking your workspace, please wait...
         </div>
       </div>
@@ -116,8 +116,10 @@ class AppLoader extends Component {
 
   renderError() {
     return (
-      <div className='app'>
-        <SystemDefcon1 server errors={[this.state.error.message]} />
+      <div className="app">
+        <div className="app__loading-error">
+          <SystemDefcon1 server errors={[this.state.error.message]} />
+        </div>
       </div>
     );
   }

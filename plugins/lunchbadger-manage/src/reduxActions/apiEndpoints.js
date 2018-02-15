@@ -28,10 +28,12 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
     });
     Connections.addConnection(fromId, entity.id, {source: outPort});
     dispatch(actions.updateApiEndpoint(entity));
-    dispatch(actionsCore.setStates([
-      {key: 'currentElement', value: entity},
-      {key: 'currentEditElement', value: entity},
-    ]));
+    setTimeout(() => {
+      dispatch(actionsCore.setStates([
+        {key: 'currentElement', value: entity},
+        {key: 'currentEditElement', value: entity},
+      ]));
+    });
   }
 }
 

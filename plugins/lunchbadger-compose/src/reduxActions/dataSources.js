@@ -59,9 +59,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
 
 export const remove = entity => async (dispatch, getState) => {
   try {
-    const state = getState();
-    dispatch(actions.removeDataSource(entity));
     if (entity.loaded) {
+      const state = getState();
+      const updatedEntity = entity.recreate();
+      updatedEntity.ready = false;
+      dispatch(actions.updateDataSource(updatedEntity));
       Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))
         .filter(item => item instanceof Model)
@@ -76,6 +78,7 @@ export const remove = entity => async (dispatch, getState) => {
         });
       await DataSourceService.delete(entity.workspaceId);
     }
+    dispatch(actions.removeDataSource(entity));
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

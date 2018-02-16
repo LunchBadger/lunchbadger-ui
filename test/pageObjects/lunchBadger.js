@@ -621,7 +621,7 @@ var pageCommands = {
       .pause(1500);
   },
 
-  setConditionName: function (pipelineIdx, policyIdx, pairIdx, text, listItemIdx = 0, expect, postfix = '') {
+  setConditionName: function (pipelineIdx, policyIdx, pairIdx, text, listItemIdx = 0, expect, field = '', postfix = '') {
     const {ENTER, ARROW_DOWN, ARROW_UP} = this.api.Keys;
     const keys = [
       ...text.split(''),
@@ -630,9 +630,18 @@ var pageCommands = {
       ENTER
     ];
     const selector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}name input`;
+    const present = [];
+    if (field !== '') {
+      present.push(`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}${field} input`);
+    }
     return this
       .setAutocomplete(selector, keys)
-      .check({value: {[selector]: expect}});
+      .check({value: {[selector]: expect}, present});
+  },
+
+  setConditionParameter: function (pipelineIdx, policyIdx, pairIdx, field, value, postfix = '') {
+    return this
+      .setInput('.DetailsPanel', `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}${field}`, value);
   },
 
   setEnum: function (pipelineIdx, policyIdx, pairIdx, field, values, expect) {
@@ -664,11 +673,6 @@ var pageCommands = {
     return this
       .setAutocomplete(`.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field} .Select-input input`, keys)
       .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field}`, expect);
-  },
-
-  setConditionParameter: function (pipelineIdx, policyIdx, pairIdx, field, value, postfix = '') {
-    return this
-      .setInput('.DetailsPanel', `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}${field}`, value);
   },
 
   moveCAPairUp: function (pipelineIdx, policyIdx, pairIdx) {

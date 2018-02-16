@@ -58,10 +58,15 @@ export default class GatewayPolicyCAPair extends PureComponent {
       prefix,
     } = this.props;
     const {horizontal} = this.state;
+    const bar = (
+      <EntityPropertyLabel plain className={`CAPair${nr}Label`}>
+        C/A Pair {nr}
+      </EntityPropertyLabel>
+    );
     return (
       <div className={cs('GatewayPolicyCAPair', {horizontal, vertical: !horizontal})}>
         <CollapsibleProperties
-          bar={<EntityPropertyLabel plain>C/A Pair {nr}</EntityPropertyLabel>}
+          bar={bar}
           collapsible={this.renderCA()}
           button={(
             <span>

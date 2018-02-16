@@ -6,7 +6,7 @@ var pageCommands = {
     this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
     return this
-      .waitForElementVisible('.FakeLogin', 5000)
+      .present('.FakeLogin')
       .setValueSlow('.input__login input', 'test')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
@@ -35,11 +35,7 @@ var pageCommands = {
   reloadPage: function () {
     this.api.refresh();
     return this
-      .waitForElementVisible('.app', 120000)
-      .waitForElementNotPresent('.app__loading-error', 5000)
-      .waitForElementVisible('.app__loading-message', 60000)
-      .waitForElementNotPresent('.app__loading-message', 60000)
-      .waitForElementNotPresent('.spinner__overlay', 60000);
+      .projectLoaded();
   },
 
   pause: function (ms) {
@@ -49,11 +45,26 @@ var pageCommands = {
 
   projectLoaded: function () {
     return this
-      .waitForElementVisible('.app', 120000)
-      .waitForElementNotPresent('.app__loading-error', 5000)
-      .waitForElementVisible('.app__loading-message', 60000)
-      .waitForElementNotPresent('.app__loading-message', 60000)
-      .waitForElementNotPresent('.spinner__overlay', 60000);
+      .present('.app', 120000)
+      .notPresent('.app__loading-error')
+      .present('.app__loading-message', 60000)
+      .notPresent('.app__loading-message', 60000)
+      .notPresent('.spinner__overlay', 60000);
+  },
+
+  present: function (selector, timeout = 5000) {
+    return this
+      .waitForElementPresent(selector, timeout);
+  },
+
+  notPresent: function (selector, timeout = 5000) {
+    return this
+      .waitForElementNotPresent(selector, timeout);
+  },
+
+  visible: function (selector, timeout = 5000) {
+    return this
+      .waitForElementVisible(selector, timeout);
   },
 
   addElementFromTooltip: function (entity, option = 'rest') {
@@ -65,7 +76,7 @@ var pageCommands = {
 
   addElement: function (entity) {
     return this
-      .clickVisible('.Tool.' + entity);
+      .clickPresent('.Tool.' + entity);
   },
 
   dragDropElement: function (dragTarget, dropTarget) {
@@ -75,20 +86,20 @@ var pageCommands = {
 
   clickPresent: function (selector, timeout = 15000) {
     return this
-      .waitForElementPresent(selector, timeout)
+      .present(selector, timeout)
       .click(selector);
   },
 
   clickVisible: function (selector, timeout = 15000) {
     return this
-      .waitForElementVisible(selector, timeout)
+      .visible(selector, timeout)
       .click(selector);
   },
 
   setValueSlow: function (selector, value) {
     const self = this;
     return this
-      .waitForElementPresent(selector, 50000)
+      .present(selector)
       .getValue(selector, function (result) {
         for (var i in result.value.toString()) {
           self.setValue(selector, this.Keys.BACK_SPACE);
@@ -104,6 +115,15 @@ var pageCommands = {
       });
   },
 
+  setInput: function (selector, field, value, type = 'text') {
+    const sel = `${selector} .${field} input[type=${type}]`;
+    return this
+      .check({
+        present: [sel]
+      })
+      .setValueSlow(sel, value);
+  },
+
   setValueWithEnter: function (selector, value) {
     return this
       .setValueSlow(selector, value)
@@ -113,37 +133,36 @@ var pageCommands = {
   selectValueSlow: function (selector, select, value) {
     return this
       .clickPresent(selector + ` .select__${select}`)
+      .pause(2000)
       .clickPresent(`div[role=menu] .${select}__${value}`)
-      .waitForElementPresent(selector + ` .select__${select} .${select}__${value}`, 5000);
+      .present(selector + ` .select__${select} .${select}__${value}`);
   },
 
   setAutocomplete: function (selector, keys) {
-    // this.api.pause(1000);
-    // this.click(selector);
-    // this.api.keys(keys);
     return this
-      .clickSlow(selector)
-      .sentKeys(keys);
+      .clickPresent(selector)
+      .sendKeys(selector, keys);
   },
 
   selectIconMenu: function (selector, button, option) {
     return this
-      .clickSlow(`${selector} .button__${button}`)
-      .clickSlow(`.IconMenuItem__${button}__${option}`);
+      .clickPresent(`${selector} .button__${button}`)
+      .pause(2000)
+      .clickPresent(`.IconMenuItem__${button}__${option}`);
   },
 
   editEntity: function (selector) {
     return this
-      .clickVisible(selector)
+      .clickVisible(selector + ' .EntityHeader__name')
       .clickVisible(selector + '.highlighted .Toolbox__button--edit')
-      .waitForElementPresent(selector + '.editable', 50000)
-      .waitForElementVisible(selector + ' .input__name input', 50000);
+      .present(selector + '.editable')
+      .present(selector + ' .input__name input');
   },
 
   discardCanvasEntityChanges: function (selector) {
     return this
       .clickVisible(selector + ' .cancel')
-      .waitForElementNotPresent(selector + '.editable', 5000);
+      .notPresent(selector + '.editable');
   },
 
   submitGatewayDeploy: function (selector, gatewayName) {
@@ -152,59 +171,73 @@ var pageCommands = {
     };
     return this
       .submitCanvasEntity(selector)
-      .waitForElementVisible('.SystemInformationMessages', 180000)
+      .visible('.SystemInformationMessages', 180000)
       .check({text})
-      .waitForElementNotPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
+      .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
   },
 
   submitCanvasEntity: function (selector) {
     return this
       .submitForm(selector + ' form')
-      .waitForElementNotPresent(selector + '.wip', 120000)
-      .waitForElementNotPresent('.Aside.disabled', 5000)
-      .waitForElementNotPresent('.SystemDefcon1', 60000);
+      .notPresent(selector + '.wip', 120000)
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000);
   },
 
   submitCanvasEntityWithExpectedValidationErrors: function (selector, validationErrors = []) {
     const present = validationErrors.map(key => `${selector} .EntityValidationErrors__fields__field.validationError__${key}`)
     return this
       .submitForm(selector + ' form')
-      .waitForElementPresent(selector + ' .EntityValidationErrors', 15000)
+      .present(selector + ' .EntityValidationErrors')
       .check({present})
       .pause(3000);
   },
 
   submitDetailsPanel: function (selector) {
     return this
-      .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
+      .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
       .submitForm('.DetailsPanel .BaseDetails form')
-      .waitForElementPresent(selector + '.wip', 5000)
-      .waitForElementPresent('.DetailsPanel.closing', 5000)
-      .waitForElementNotPresent('.DetailsPanel.closing', 15000)
-      .waitForElementNotPresent(selector + '.wip', 60000);
+      .present(selector + '.wip')
+      .present('.DetailsPanel.closing')
+      .notPresent('.DetailsPanel.closing', 15000)
+      .notPresent(selector + '.wip', 60000);
+  },
+
+  submitDetailsPanelWithoutWip: function () {
+    return this
+      .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
+      .submitForm('.DetailsPanel .BaseDetails form')
+      .present('.DetailsPanel.closing')
+      .notPresent('.DetailsPanel.closing', 15000);
   },
 
   submitDetailsPanelWithExpectedValidationErrors: function (validationErrors = []) {
     const present = validationErrors.map(key => `.DetailsPanel .EntityValidationErrors__fields__field.validationError__${key}`);
     return this
-      .waitForElementNotPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled', 5000)
+      .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
       .submitForm('.DetailsPanel .BaseDetails form')
-      .waitForElementPresent('.DetailsPanel .EntityValidationErrors', 60000)
+      .present('.DetailsPanel .EntityValidationErrors', 60000)
       .check({present});
   },
 
-  openEntityInDetailsPanel: function (selector) {
+  openEntityInDetailsPanel: function (selector, tab = 'zoom') {
+    const panel = tab === 'zoom' ? 'general' : tab;
     return this
       .clickPresent(selector + ' .EntityHeader__name')
-      .clickPresent(selector + '.highlighted .Toolbox__button--zoom')
-      .waitForElementVisible('.DetailsPanel.visible .panel .BaseDetails.general', 50000);
+      .clickPresent(selector + '.highlighted .Toolbox__button--' + tab)
+      .visible('.DetailsPanel.visible .panel .BaseDetails.' + panel, 15000);
+  },
+
+  openPipelinesInDetailsPanel: function (selector) {
+    return this
+      .openEntityInDetailsPanel(selector, 'pipelines');
   },
 
   closeDetailsPanel: function () {
     return this
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
-      .waitForElementPresent('.DetailsPanel.closing', 5000)
-      .waitForElementNotPresent('.DetailsPanel.closing', 15000);
+      .present('.DetailsPanel.closing')
+      .notPresent('.DetailsPanel.closing', 15000);
   },
 
   removeEntity: function (selector) {
@@ -212,7 +245,7 @@ var pageCommands = {
       .clickVisible(selector)
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
-      .waitForElementNotPresent(selector, 5000);
+      .notPresent(selector);
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
@@ -220,8 +253,8 @@ var pageCommands = {
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
     return this
-      .waitForElementPresent(startSelector, 10000)
-      .waitForElementPresent(endSelector, 10000)
+      .present(startSelector)
+      .present(endSelector)
       .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null]);
   },
 
@@ -256,23 +289,23 @@ var pageCommands = {
       this.waitForElementNotPresent(this.getDataSourceSelector(1), 5000);
     } else {
       dataSources.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(this.getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
+        this.present(this.getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text');
         this.api.expect.element(this.getDataSourceSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
       });
-      this.waitForElementNotPresent(this.getDataSourceSelector(dataSources.split(',').length + 1), 5000);
+      this.notPresent(this.getDataSourceSelector(dataSources.split(',').length + 1));
     }
     if (models === '') {
-      this.waitForElementNotPresent(this.getModelSelector(1), 5000);
+      this.notPresent(this.getModelSelector(1));
     } else {
       models.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(this.getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text', 5000);
+        this.present(this.getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text');
         this.api.expect.element(this.getModelSelector(idx + 1) + ' .EntityHeader .EntityProperty__field--text').text.to.equal(name);
       });
-      this.waitForElementNotPresent(this.getModelSelector(models.split(',').length + 1), 5000);
+      this.notPresent(this.getModelSelector(models.split(',').length + 1));
     }
     if (contextPaths !== '') {
       contextPaths.split(',').forEach((name, idx) => {
-        this.waitForElementPresent(this.getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text', 5000);
+        this.present(this.getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text');
         this.api.expect.element(this.getModelSelector(idx + 1) + ' .EntityProperty__field.httppath .EntityProperty__field--text').text.to.equal(name);
       });
     }
@@ -280,16 +313,22 @@ var pageCommands = {
   },
 
   checkModelDetails: function (name, contextPath, plural = '', base = 'PersistedModel') {
-    this.api.expect.element('.DetailsPanel .input__name input').value.to.equal(name);
-    this.api.expect.element('.DetailsPanel .input__httppath input').value.to.equal(contextPath);
-    this.api.expect.element('.DetailsPanel .input__plural input').value.to.equal(plural);
-    this.api.expect.element('.DetailsPanel .select__base').text.to.equal(base);
-    return this;
+    return this
+      .checkEntityDetails({
+        value: {
+          name,
+          httppath: contextPath,
+          plural
+        },
+        select: {
+          base
+        }
+      });
   },
 
-  checkDetailsFields: function (names, prefix, postfix, kind = 'string') {
+  checkDetailsFields: function (names, prefix, postfix, kind = 'string') { // TODO: refactor
     if (names === '') {
-      this.waitForElementNotPresent(`.DetailsPanel .input__${prefix}0${postfix}`, 5000);
+      this.notPresent(`.DetailsPanel .input__${prefix}0${postfix}`);
     } else {
       names.split(',').forEach((name, idx) => {
         if (kind === 'select') {
@@ -300,7 +339,7 @@ var pageCommands = {
           this.api.expect.element(`.DetailsPanel .input__${prefix}${idx}${postfix} input`).value.to.equal(name);
         }
       });
-      this.waitForElementNotPresent(`.DetailsPanel .input__properties${names.split(',').length}name`, 5000);
+      this.notPresent(`.DetailsPanel .input__properties${names.split(',').length}name`);
     }
     return this;
   },
@@ -351,14 +390,14 @@ var pageCommands = {
     return this
       .clickPresent('.header__menu__element .fa-trash-o')
       .clickVisible('.SystemDefcon1 .ConfirmModal .confirm')
-      .waitForElementPresent('.spinner__overlay', 5000);
+      .present('.spinner__overlay');
   },
 
   emptyProject: function () {
     return this
       .clearProject()
       .closeSystemInformationMessage('All-data-removed-from-server')
-      .waitForElementNotPresent('.spinner__overlay', 120000)
+      .notPresent('.spinner__overlay', 120000)
       .saveProject();
   },
 
@@ -366,7 +405,7 @@ var pageCommands = {
     const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
     return this
       .clickVisible(selector, 180000)
-      .waitForElementNotPresent(selector, 15000);
+      .notPresent(selector, 15000);
   },
 
   closeWhenSystemDefcon1: function () {
@@ -375,39 +414,39 @@ var pageCommands = {
 
   waitForDependencyFinish: function () {
     return this
-      .waitForElementPresent('.workspace-status .workspace-status__progress', 120000)
-      .waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000)
-      .waitForElementPresent('.workspace-status .workspace-status__success', 120000);
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .notPresent('.workspace-status .workspace-status__progress', 120000)
+      .present('.workspace-status .workspace-status__success', 120000);
   },
 
   testDatasource: function (type = 'memory', config = [], required) {
     const selector = this.getDataSourceSelector(1);
     this
       .addElementFromTooltip('dataSource', type)
-      .waitForElementPresent('.dataSource.Tool.selected', 8000);
+      .present('.dataSource.Tool.selected');
     if (required) {
       this
         .submitCanvasEntityWithExpectedValidationErrors(selector, required);
     }
     if (config.length === 0) {
-      this.waitForElementNotPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+      this.notPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)');
     } else {
       config.forEach((option, idx) => {
         this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
         this.setValueSlow(this.getDataSourceFieldSelector(1, idx + 1), option[1]);
       });
-      this.waitForElementNotPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+      this.notPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`);
     }
     this.submitCanvasEntity(selector);
     if (config.length === 0) {
-      this.waitForElementNotPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)', 5000);
+      this.notPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)');
     } else {
       config.forEach((option, idx) => {
         this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
         this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityProperty__field--text`).text.to.equal(option[0] === 'PASSWORD' ? '••••••••••••' : option[1]);
         this.api.expect.element(this.getDataSourceFieldSelector(1, idx + 1)).value.to.equal(option[1]);
       });
-      this.waitForElementNotPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`, 5000);
+      this.notPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`);
     }
     return this;
   },
@@ -425,7 +464,7 @@ var pageCommands = {
     const self = this;
     return this
       .moveToElement('.header', 5, 5, function () {
-        self.waitForElementNotPresent('.ContextualInformationMessage.Workspace-OK', 3000);
+        self.notPresent('.ContextualInformationMessage.Workspace-OK');
         return self;
       });
   },
@@ -437,16 +476,17 @@ var pageCommands = {
     notPresent = [],
     equal = [],
     notEqual = [],
-    hasClass = {}
+    hasClass = {},
+    className = {}
   }) {
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
     });
     Object.keys(value).forEach((key) => {
-      this.api.expect.element(key).value.to.equal(value[key]);
+      this.api.expect.element(key).value.to.equal(value[key]).before(5000);
     });
     present.forEach((selector) => {
-      this.api.expect.element(selector).to.be.present;
+      this.api.expect.element(selector).to.be.present.before(5000);
     });
     notPresent.forEach((selector) => {
       this.api.expect.element(selector).to.not.be.present;
@@ -459,6 +499,9 @@ var pageCommands = {
     });
     Object.keys(hasClass).forEach((key) => {
       this.api.expect.element(key).to.have.attribute('class').which.contains(hasClass[key]);
+    })
+    Object.keys(className).forEach((key) => {
+      this.api.assert.attributeEquals(key, 'class', className[key]);
     })
     return this;
   },
@@ -489,6 +532,208 @@ var pageCommands = {
     };
     return this
       .check(data);
+  },
+
+  addPolicyCAPair: function (pipelineIdx, policyIdx, pairIdx) {
+    return this
+      .clickPresent(`.DetailsPanel .button__add__pipeline${pipelineIdx}policy${policyIdx}CAPair`)
+      .present(`.DetailsPanel .CAPair${pairIdx + 1}Label`);
+  },
+
+  getConditionFieldSelector: function (pipelineIdx, policyIdx, pairIdx, key, postfix, prefix = '') {
+    return `.DetailsPanel .${key === 'name' ? 'select__' : ''}pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}${key} ${postfix}`
+  },
+
+  checkCondition: function (dataRef, pipelineIdx, policyIdx, pairIdx, condition, prefix = '') {
+    Object.keys(condition).forEach((key) => {
+      if (key === 'conditions') {
+        condition[key].forEach((conditions, idx) => {
+          this.checkCondition(dataRef, pipelineIdx, policyIdx, pairIdx, conditions, `${prefix}conditions${idx}`);
+          // Object.keys(conditions).forEach((key2) => {
+          //   this.checkCondition(dataRef, pipelineIdx, policyIdx, pairIdx, conditions[key2], `conditions${idx}`);
+          //   // if (Array.isArray(conditions[key2])) {
+          //   //   dataRef.className[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key2, '.Multiselect', `conditions${idx}`)] = `Multiselect ${conditions[key2].join(' ')}`;
+          //   // } else {
+          //   //   dataRef.value[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key2, 'input', `conditions${idx}`)] = conditions[key2];
+          //   // }
+          // });
+        });
+      } else if (Array.isArray(condition[key])) {
+        dataRef.className[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key, '.Multiselect', prefix)] = `Multiselect ${condition[key].join(' ')}`;
+      } else if (typeof condition[key] === 'boolean') {
+        dataRef.present.push(`.DetailsPanel .checkbox__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}${key}__${condition[key] ? '' : 'un'}checked`)
+      } else {
+        dataRef.value[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key, 'input', prefix)] = condition[key];
+      }
+    });
+  },
+
+  checkPipelines: function (gatewaySelector, expect) {
+    const data = {
+      value: {},
+      present: [],
+      className: {}
+    };
+    expect.forEach(({name, policies}, pipelineIdx) => {
+      data.value[`.DetailsPanel .pipelines${pipelineIdx}name input`] = name;
+      policies.forEach(({policy, ca = []}, policyIdx) => {
+        data.present.push(`.pipelines${pipelineIdx}policies${policyIdx}name__${policy}`);
+        ca.forEach(({condition = {}}, pairIdx) => {
+          this.checkCondition(data, pipelineIdx, policyIdx, pairIdx, condition);
+        });
+      });
+    });
+    return this
+      .submitDetailsPanelWithoutWip()
+      .saveProject()
+      .openPipelinesInDetailsPanel(gatewaySelector)
+      .check(data);
+  },
+
+  checkAutocomplete: function (selector, expect) {
+    return this
+      .check({
+        className: {
+          [`.DetailsPanel .select__${selector} .Multiselect`]: `Multiselect ${expect}`
+        }
+      });
+  },
+
+  addPipeline: function (gatewaySelector, pipelineIdx, pipelineName) {
+    return this
+      .clickPresent(`${gatewaySelector} .button__add__Pipelines`)
+      .setInput(gatewaySelector, `pipelines${pipelineIdx}name`, pipelineName);
+  },
+
+  removePipeline: function (gatewaySelector, pipelineIdx) {
+    const selector = `${gatewaySelector} .button__remove__pipelines${pipelineIdx}`;
+    return this
+      .clickPresent(selector)
+      .notPresent(selector);
+  },
+
+  addPolicy: function (gatewaySelector, pipelineIdx, policyIdx, policyName) {
+    const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
+    return this
+      .clickPresent(`${gatewaySelector} .button__add__pipelines${pipelineIdx}policy`)
+      .present(`${gatewaySelector} .select__${selectSelector}`)
+      .selectValueSlow(gatewaySelector, selectSelector, policyName)
+      .pause(1500);
+  },
+
+  setConditionName: function (pipelineIdx, policyIdx, pairIdx, text, listItemIdx = 0, expect, postfix = '') {
+    const {ENTER, ARROW_DOWN, ARROW_UP} = this.api.Keys;
+    const keys = [
+      ...text.split(''),
+      ARROW_DOWN, ARROW_DOWN, ARROW_UP,
+      ...Array(listItemIdx).fill(0).map(_ => ARROW_DOWN),
+      ENTER
+    ];
+    const selector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}name input`;
+    return this
+      .setAutocomplete(selector, keys)
+      .check({value: {[selector]: expect}});
+  },
+
+  setEnum: function (pipelineIdx, policyIdx, pairIdx, field, values, expect) {
+    const {ENTER, ARROW_DOWN} = this.api.Keys;
+    const selector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field} .Select-input input`;
+    values.forEach(([text, entersAmount]) => {
+      const keys = [
+        ...text.split(''),
+        ...Array(entersAmount).fill(0).map(_ => ARROW_DOWN),
+        ENTER
+      ]
+      this.setAutocomplete(selector, keys);
+    });
+    return this
+      .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field}`, expect);
+  },
+
+  deleteEnumByClick: function (pipelineIdx, policyIdx, pairIdx, field, idxs, expect) {
+    idxs.forEach((idx) => {
+      this.clickPresent(`.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field} .Select-multi-value-wrapper .Select-value:nth-child(${idx}) .Select-value-icon`);
+    });
+    return this
+      .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field}`, expect);
+  },
+
+  deleteEnumByKeyPress: function (pipelineIdx, policyIdx, pairIdx, field, deletesAmount, expect) {
+    const {BACK_SPACE} = this.api.Keys;
+    const keys = Array(deletesAmount).fill(0).map(_ => BACK_SPACE);
+    return this
+      .setAutocomplete(`.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field} .Select-input input`, keys)
+      .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field}`, expect);
+  },
+
+  setConditionParameter: function (pipelineIdx, policyIdx, pairIdx, field, value, postfix = '') {
+    return this
+      .setInput('.DetailsPanel', `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}${field}`, value);
+  },
+
+  moveCAPairUp: function (pipelineIdx, policyIdx, pairIdx) {
+    return this
+      .clickPresent(`.DetailsPanel .button__moveUp__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`);
+  },
+
+  moveCAPairDown: function (pipelineIdx, policyIdx, pairIdx) {
+    return this
+      .clickPresent(`.DetailsPanel .button__moveDown__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`);
+  },
+
+  removeCondition: function (pipelineIdx, policyIdx, pairIdx) {
+    return this
+      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`);
+  },
+
+  addSubCondition: function (pipelineIdx, policyIdx, pairIdx, prefix = '') {
+    return this
+      .clickPresent(`.DetailsPanel .button__add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}Condition`);
+  },
+
+  removeSubCondition: function (pipelineIdx, policyIdx, pairIdx, conditionIdx, prefix = '') {
+    return this
+      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}condition${conditionIdx}`);
+  },
+
+  addConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, option, prefix = '') {
+    return this
+      .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter`, option);
+  },
+
+  setConditionCustomParameterName: function (pipelineIdx, policyIdx, pairIdx, paramIdx, name, prefix = '') {
+    const {TAB} = this.api.Keys;
+    const selector = `tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}${prefix}condition${paramIdx}name`;
+    return this
+      .setInput('.DetailsPanel', selector, name)
+      .setAutocomplete(`.DetailsPanel .${selector} input`, [TAB]);
+  },
+
+  setConditionCustomParameterValue: function (pipelineIdx, policyIdx, pairIdx, name, value, type, prefix = '') {
+    return this
+      .setInput('.DetailsPanel', `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}${prefix}condition${name}`, value, type);
+  },
+
+  clickConditionCustomParameterBoolean: function (pipelineIdx, policyIdx, pairIdx, name, prefix = '') {
+    return this
+      .clickPresent(`.DetailsPanel .checkbox__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}${name}`);
+  },
+
+  setConditionCustomParameterEnum: function (pipelineIdx, policyIdx, pairIdx, name, values, prefix = '') {
+    const {ENTER} = this.api.Keys;
+    const keys = [];
+    values.forEach((item) => {
+      item.split('').forEach(char => keys.push(char));
+      keys.push(ENTER);
+    });
+    return this
+      .setAutocomplete(`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}${prefix}condition${name} input`, keys)
+      .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${name}`, values.join(' '));
+  },
+
+  removeConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, paramIdx, prefix = '') {
+    return this
+      .clickPresent(`.DetailsPanel .button__remove__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter${paramIdx}`);
   }
 };
 

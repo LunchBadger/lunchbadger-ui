@@ -636,7 +636,8 @@ var pageCommands = {
     }
     return this
       .setAutocomplete(selector, keys)
-      .check({value: {[selector]: expect}, present});
+      .check({value: {[selector]: expect}, present})
+      .pause(3000);
   },
 
   setConditionParameter: function (pipelineIdx, policyIdx, pairIdx, field, value, postfix = '') {

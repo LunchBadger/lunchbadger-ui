@@ -549,14 +549,6 @@ var pageCommands = {
       if (key === 'conditions') {
         condition[key].forEach((conditions, idx) => {
           this.checkCondition(dataRef, pipelineIdx, policyIdx, pairIdx, conditions, `${prefix}conditions${idx}`);
-          // Object.keys(conditions).forEach((key2) => {
-          //   this.checkCondition(dataRef, pipelineIdx, policyIdx, pairIdx, conditions[key2], `conditions${idx}`);
-          //   // if (Array.isArray(conditions[key2])) {
-          //   //   dataRef.className[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key2, '.Multiselect', `conditions${idx}`)] = `Multiselect ${conditions[key2].join(' ')}`;
-          //   // } else {
-          //   //   dataRef.value[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key2, 'input', `conditions${idx}`)] = conditions[key2];
-          //   // }
-          // });
         });
       } else if (Array.isArray(condition[key])) {
         dataRef.className[this.getConditionFieldSelector(pipelineIdx, policyIdx, pairIdx, key, '.Multiselect', prefix)] = `Multiselect ${condition[key].join(' ')}`;
@@ -632,12 +624,11 @@ var pageCommands = {
     const selector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}name input`;
     const present = [];
     if (field !== '') {
-      present.push(`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${postfix}${field} input`);
+      present.push(`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${field} input`);
     }
     return this
       .setAutocomplete(selector, keys)
-      .check({value: {[selector]: expect}, present})
-      .pause(3000);
+      .check({value: {[selector]: expect}, present});
   },
 
   setConditionParameter: function (pipelineIdx, policyIdx, pairIdx, field, value, postfix = '') {
@@ -701,9 +692,12 @@ var pageCommands = {
       .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}condition${conditionIdx}`);
   },
 
-  addConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, option, prefix = '') {
+  addConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, option, paramIdx, prefix = '') {
+    const selector = `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`;
+    const present = [`.DetailsPanel .tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${paramIdx}name input`];
     return this
-      .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter`, option);
+      .selectIconMenu('.DetailsPanel', `add__${selector}condition${prefix}CustomParameter`, option)
+      .check({present});
   },
 
   setConditionCustomParameterName: function (pipelineIdx, policyIdx, pairIdx, paramIdx, name, prefix = '') {

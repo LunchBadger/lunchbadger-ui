@@ -83,37 +83,34 @@ module.exports = {
       .addPolicyCAPair(0, 1, 8)
       .setConditionName(0, 1, 8, 's', 3, 'anonymous')
       .addPolicyCAPair(0, 1, 9)
-      .setConditionName(0, 1, 9, 'a', 6, 'ALL OF')
+      .setConditionName(0, 1, 9, 'a', 6, 'ALL OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 10)
-      .setConditionName(0, 1, 10, 'f', 1, 'ONE OF')
+      .setConditionName(0, 1, 10, 'f', 1, 'ONE OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 11)
       .setConditionName(0, 1, 11, 'not', 0, 'NOT')
       .addPolicyCAPair(0, 1, 12)
       .setConditionName(0, 1, 12, 'myParam', 0, 'myParam')
-      .addConditionCustomParameter(0, 1, 12, 'string')
+      .addConditionCustomParameter(0, 1, 12, 'string', 0)
       .setConditionCustomParameterName(0, 1, 12, 0, 'myString')
       .setConditionCustomParameterValue(0, 1, 12, 'myString', 'myValue', 'text')
-      .addConditionCustomParameter(0, 1, 12, 'string')
+      .addConditionCustomParameter(0, 1, 12, 'string', 1)
       .setConditionCustomParameterName(0, 1, 12, 1, 'myString2')
       .setConditionCustomParameterValue(0, 1, 12, 'myString2', 'myValue2', 'text')
-      .addConditionCustomParameter(0, 1, 12, 'integer')
+      .addConditionCustomParameter(0, 1, 12, 'integer', 2)
       .setConditionCustomParameterName(0, 1, 12, 2, 'myInt')
       .setConditionCustomParameterValue(0, 1, 12, 'myInt', '12', 'number')
-      .addConditionCustomParameter(0, 1, 12, 'integer')
+      .addConditionCustomParameter(0, 1, 12, 'integer', 3)
       .setConditionCustomParameterName(0, 1, 12, 3, 'myInt2')
       .setConditionCustomParameterValue(0, 1, 12, 'myInt2', '23', 'number')
-      .addConditionCustomParameter(0, 1, 12, 'boolean')
+      .addConditionCustomParameter(0, 1, 12, 'boolean', 4)
       .setConditionCustomParameterName(0, 1, 12, 4, 'myBool')
       .clickConditionCustomParameterBoolean(0, 1, 12, 'myBool')
-      .addConditionCustomParameter(0, 1, 12, 'boolean')
+      .addConditionCustomParameter(0, 1, 12, 'boolean', 5)
       .setConditionCustomParameterName(0, 1, 12, 5, 'myBool2')
       .clickConditionCustomParameterBoolean(0, 1, 12, 'myBool2')
-      .addConditionCustomParameter(0, 1, 12, 'array')
+      .addConditionCustomParameter(0, 1, 12, 'array', 6)
       .setConditionCustomParameterName(0, 1, 12, 6, 'myArr')
       .setConditionCustomParameterEnum(0, 1, 12, 'myArr', ['one', 'two', 'three'])
-      .addConditionCustomParameter(0, 1, 12, 'array')
-      .setConditionCustomParameterName(0, 1, 12, 7, 'myArr2')
-      .setConditionCustomParameterEnum(0, 1, 12, 'myArr2', ['one2', 'two2', 'three2'])
       .checkPipelines(gatewaySelector, expectConditionsPlain)
   },
   'EG integration: remove custom params': function () {
@@ -124,7 +121,7 @@ module.exports = {
   },
   'EG integration: custom params into allOf': function () {
     page
-      .setConditionName(0, 1, 12, 'a', 6, 'ALL OF')
+      .setConditionName(0, 1, 12, 'a', 6, 'ALL OF', 'conditions0name')
       .checkPipelines(gatewaySelector, expectCustomConditions)
   },
   'EG integration: remove C/A pair': function () {
@@ -152,7 +149,7 @@ module.exports = {
     page
       .setConditionName(0, 1, 0, '', 5, 'hostMatch', 'pattern')
       .setConditionParameter(0, 1, 0, 'pattern', '/wasPathMatch*')
-      .setConditionName(0, 1, 1, 'a', 6, 'ALL OF')
+      .setConditionName(0, 1, 1, 'a', 6, 'ALL OF', 'conditions0name')
       .setConditionParameter(0, 1, 3, 'path', '/somePath')
       .setConditionName(0, 1, 5, 'e', 1, 'pathExact', 'path')
       .setConditionParameter(0, 1, 5, 'path', '/exact')
@@ -197,18 +194,18 @@ module.exports = {
   },
   'EG integration: into allOf': function () {
     page
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF')
+      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name')
       .checkPipelines(gatewaySelector, expectIntoAllOf)
   },
   'EG integration: add allOf conditions': function () {
     page
       .addSubCondition(0, 1, 0)
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', '', 'conditions1')
+      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name', 'conditions1')
       .addSubCondition(0, 1, 0)
-      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'path', 'conditions2')
+      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions2path', 'conditions2')
       .setConditionParameter(0, 1, 0, 'path', '/a', 'conditions2')
       .addSubCondition(0, 1, 0)
-      .setConditionName(0, 1, 0, '', 5, 'hostMatch', 'pattern', 'conditions3')
+      .setConditionName(0, 1, 0, '', 5, 'hostMatch', 'conditions3pattern', 'conditions3')
       .setConditionParameter(0, 1, 0, 'pattern', '/a*', 'conditions3')
       .checkPipelines(gatewaySelector, expectAddedAllOf)
   },
@@ -216,16 +213,16 @@ module.exports = {
   'EG integration: edit allOf conditions': function () {
     page
       .addSubCondition(0, 1, 0)
-      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'path', 'conditions4')
+      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions4path', 'conditions4')
       .setConditionParameter(0, 1, 0, 'path', '/last', 'conditions4')
       .removeSubCondition(0, 1, 0, 2)
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', '', 'conditions0')
-      .setConditionName(0, 1, 0, 'f', 1, 'ONE OF', '', 'conditions1')
+      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name', 'conditions0')
+      .setConditionName(0, 1, 0, 'f', 1, 'ONE OF', 'conditions1name', 'conditions1')
       .addSubCondition(0, 1, 0, 'conditions1')
       .addSubCondition(0, 1, 0, 'conditions1')
-      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'path', 'conditions1conditions1')
+      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions1conditions1path', 'conditions1conditions1')
       .setConditionParameter(0, 1, 0, 'path', '/afterAlways', 'conditions1conditions1')
-      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'path', 'conditions1conditions2')
+      .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions1conditions2path', 'conditions1conditions2')
       .setConditionParameter(0, 1, 0, 'path', '/afterPathExact', 'conditions1conditions2')
       .checkPipelines(gatewaySelector, expectChangedAllOf)
   },
@@ -431,8 +428,7 @@ const expectConditionsPlain = [
               myInt2: 23,
               myBool: true,
               myBool2: true,
-              myArr: ['one two three'],
-              myArr2: ['one2 two2 three2']
+              myArr: ['one two three']
             }
           }
         ]
@@ -532,8 +528,7 @@ const expectCustomConditionsRemoved = [
               myInt: 12,
               myBool: true,
               myBool2: true,
-              myArr: ['one two three'],
-              myArr2: ['one2 two2 three2']
+              myArr: ['one two three']
             }
           }
         ]
@@ -726,8 +721,7 @@ const expectCustomConditions = [
                   myInt: 12,
                   myBool: true,
                   myBool2: true,
-                  myArr: ['one two three'],
-                  myArr2: ['one2 two2 three2']
+                  myArr: ['one two three']
                 }
               ]
             }

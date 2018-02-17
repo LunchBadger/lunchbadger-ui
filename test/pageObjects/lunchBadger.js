@@ -578,6 +578,7 @@ var pageCommands = {
     return this
       .submitDetailsPanelWithoutWip()
       .saveProject()
+      .reloadPage()
       .openPipelinesInDetailsPanel(gatewaySelector)
       .check(data);
   },

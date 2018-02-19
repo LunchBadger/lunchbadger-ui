@@ -1,4 +1,4 @@
-const request = require('request');
+// const request = require('request');
 
 var page;
 var memorySelector;
@@ -274,7 +274,14 @@ module.exports = {
       })
       .clickPresent(apiEndpointModelSelector + ' .button__add__PATHS')
       .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/api/${MODEL_NAME}*`)
-      .submitCanvasEntity(apiEndpointModelSelector);
+      .submitCanvasEntity(apiEndpointModelSelector)
+      .saveProject()
+      .apiCall('put', {url, form}, function (body) {
+        return page
+          .check({
+            equal: [[body, expectedModelJSON]]
+          });
+      });
   },
   'EG integration: proxy service endpoint': function () {
     page
@@ -295,27 +302,40 @@ module.exports = {
     const expectedModelBody = `[${expectedModelJSON}]`;
     page
       .waitForElementNotPresent(gatewaySelector + '.semitransparent', 60000)
-    request.put({url, form}, (err, res, putBody) => {
-      page
-        .check({
-          equal: [[putBody, expectedModelJSON]]
-        });
-      console.log('GET MODEL', GATEWAY_MODEL_URL);
-      request(GATEWAY_MODEL_URL, function (errModel, resModel, getModelBody) {
-        page
+      .apiCall('get', GATEWAY_MODEL_URL, function (body) {
+        return page
           .check({
-            equal: [[getModelBody, expectedModelBody]]
+            equal: [[body, expectedModelBody]]
           });
-        console.log('GET SE', GATEWAY_SERVICE_ENDPOINT_URL)
-        request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
-          page
-            .check({
-              equal: [[getServiceEndpointBody, SERVICE_ENDPOINT_RESPONSE]]
-            })
-            .close();
-        });
-      });
-    });
+      })
+      .apiCall('get', GATEWAY_SERVICE_ENDPOINT_URL, function (body) {
+        return page
+          .check({
+            equal: [[body, SERVICE_ENDPOINT_RESPONSE]]
+          });
+      })
+      .close();
+    // request.put({url, form}, (err, res, putBody) => {
+    //   page
+    //     .check({
+    //       equal: [[putBody, expectedModelJSON]]
+    //     });
+    //   console.log('GET MODEL', GATEWAY_MODEL_URL);
+    //   request(GATEWAY_MODEL_URL, function (errModel, resModel, getModelBody) {
+    //     page
+    //       .check({
+    //         equal: [[getModelBody, expectedModelBody]]
+    //       });
+    //     console.log('GET SE', GATEWAY_SERVICE_ENDPOINT_URL)
+    //     request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
+    //       page
+    //         .check({
+    //           equal: [[getServiceEndpointBody, SERVICE_ENDPOINT_RESPONSE]]
+    //         })
+    //         .close();
+    //     });
+    //   });
+    // });
   }
 };
 

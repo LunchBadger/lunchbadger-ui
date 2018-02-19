@@ -145,18 +145,6 @@ module.exports = {
       .moveCAPairDown(0, 1, 10)
       .checkPipelines(gatewaySelector, expectConditionsReordered)
   },
-  'EG integration: conditions change': function () {
-    page
-      .setConditionName(0, 1, 0, '', 5, 'hostMatch', 'pattern')
-      .setConditionParameter(0, 1, 0, 'pattern', '/wasPathMatch*')
-      .setConditionName(0, 1, 1, 'a', 6, 'ALL OF', 'conditions0name')
-      .setConditionParameter(0, 1, 3, 'path', '/somePath')
-      .setConditionName(0, 1, 5, 'e', 1, 'pathExact', 'path')
-      .setConditionParameter(0, 1, 5, 'path', '/exact')
-      .setConditionName(0, 1, 10, 'e', 1, 'pathExact', 'path')
-      .setConditionParameter(0, 1, 10, 'path', '/wasAllOf')
-      .checkPipelines(gatewaySelector, expectConditionsChanged)
-  },
   'EG integration: remove conditions': function () {
     page
       .removeCondition(0, 1, 0)

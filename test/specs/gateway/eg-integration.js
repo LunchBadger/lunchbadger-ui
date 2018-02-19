@@ -292,8 +292,9 @@ module.exports = {
       .pause(30000);
   },
   'EG integration: api calls': function () {
+    const expectedModelBody = `[${expectedModelJSON}]`;
     page
-      .waitForElementNotPresent(gatewaySelector + '.semitransparent', 60000);
+      .waitForElementNotPresent(gatewaySelector + '.semitransparent', 60000)
     request.put({url, form}, (err, res, putBody) => {
       page
         .check({
@@ -303,22 +304,18 @@ module.exports = {
       request(GATEWAY_MODEL_URL, function (errModel, resModel, getModelBody) {
         page
           .check({
-            equal: [[getModelBody, `[${expectedModelJSON}]`]]
+            equal: [[getModelBody, expectedModelBody]]
           });
         console.log('GET SE', GATEWAY_SERVICE_ENDPOINT_URL)
         request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
           page
             .check({
               equal: [[getServiceEndpointBody, SERVICE_ENDPOINT_RESPONSE]]
-            });
+            })
+            .close();
         });
       });
     });
-  },
-  after: function () {
-    page
-      .pause(10000)
-      .close();
   }
 };
 

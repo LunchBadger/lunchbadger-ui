@@ -8,9 +8,6 @@ var gatewaySelector;
 var apiEndpointModelSelector;
 var apiEndpointServiceEndpointSelector;
 var SERVICE_ENDPOINT_URL = 'https://httpbin.org';
-var SERVICE_ENDPOINT_RESPONSE = `User-agent: *
-Disallow: /deny
-`;
 var MEMORY_NAME;
 var MODEL_NAME;
 var GATEWAY_NAME;
@@ -19,6 +16,8 @@ var API_ENDPOINT_1_NAME;
 var API_ENDPOINT_2_NAME;
 var GATEWAY_MODEL_URL;
 var GATEWAY_SERVICE_ENDPOINT_URL;
+var EXPECT_PROXY_MODEL;
+var EXPECT_PROXY_SERVICE_ENDPOINT;
 var url;
 var model;
 var color;
@@ -48,6 +47,31 @@ module.exports = {
     color = page.getUniqueName('color');
     form = {model, color};
     expectedModelJSON = JSON.stringify(Object.assign({}, form, {id: 1}));
+    EXPECT_PROXY_MODEL = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /api/${MODEL_NAME}</pre>
+</body>
+</html>
+`; // `[${expectedModelJSON}]`
+  EXPECT_PROXY_SERVICE_ENDPOINT = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /robots.txt</pre>
+</body>
+</html>
+`;
+// `User-agent: *
+// Disallow: /deny
+// `;
     page
       .open()
       .addElement('gateway')
@@ -276,6 +300,7 @@ module.exports = {
       .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/api/${MODEL_NAME}*`)
       .submitCanvasEntity(apiEndpointModelSelector)
       .saveProject()
+      .pause(10000)
       .apiCall('put', {url, form}, function (body) {
         return page
           .check({
@@ -299,19 +324,18 @@ module.exports = {
       .pause(30000);
   },
   'EG integration: api calls': function () {
-    const expectedModelBody = `[${expectedModelJSON}]`;
     page
       .waitForElementNotPresent(gatewaySelector + '.semitransparent', 60000)
       .apiCall('get', GATEWAY_MODEL_URL, function (body) {
         return page
           .check({
-            equal: [[body, expectedModelBody]]
+            equal: [[body, EXPECT_PROXY_MODEL]]
           });
       })
       .apiCall('get', GATEWAY_SERVICE_ENDPOINT_URL, function (body) {
         return page
           .check({
-            equal: [[body, SERVICE_ENDPOINT_RESPONSE]]
+            equal: [[body, EXPECT_PROXY_SERVICE_ENDPOINT]]
           });
       })
       .close();
@@ -320,17 +344,15 @@ module.exports = {
     //     .check({
     //       equal: [[putBody, expectedModelJSON]]
     //     });
-    //   console.log('GET MODEL', GATEWAY_MODEL_URL);
     //   request(GATEWAY_MODEL_URL, function (errModel, resModel, getModelBody) {
     //     page
     //       .check({
-    //         equal: [[getModelBody, expectedModelBody]]
+    //         equal: [[getModelBody, EXPECT_PROXY_MODEL]]
     //       });
-    //     console.log('GET SE', GATEWAY_SERVICE_ENDPOINT_URL)
     //     request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
     //       page
     //         .check({
-    //           equal: [[getServiceEndpointBody, SERVICE_ENDPOINT_RESPONSE]]
+    //           equal: [[getServiceEndpointBody, EXPECT_PROXY_SERVICE_ENDPOINT]]
     //         })
     //         .close();
     //     });

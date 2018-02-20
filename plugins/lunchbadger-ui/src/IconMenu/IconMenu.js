@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import {IconButton as Icon} from '../';
+import getPlainText from '../utils/getPlainText';
 import './IconMenu.scss';
 
 const listStyle = {
@@ -21,6 +22,7 @@ export default class IconMenuComponent extends PureComponent {
     onClick: PropTypes.func,
     horizontal: PropTypes.string,
     vertical: PropTypes.string,
+    name: PropTypes.string,
   };
 
   static defaultProps = {
@@ -32,14 +34,27 @@ export default class IconMenuComponent extends PureComponent {
 
   handleClick = (_, value) => this.props.onClick(value);
 
+  renderIconMenuItem = (item) => (
+    <MenuItem
+      key={item}
+      value={item}
+      primaryText={<div className={getPlainText(`IconMenuItem__${this.props.name}__${item}`)}>{item}</div>}
+    />
+  );
+
   render() {
-    const {icon, options, secondaryOptions, horizontal, vertical} = this.props;
+    const {icon, options, secondaryOptions, horizontal, vertical, name} = this.props;
     const isSecondary = secondaryOptions.length > 0;
     const isDivider = isSecondary && options.length > 0;
     const origin = {horizontal, vertical};
+    const iconButtonElement = (
+      <IconButton className={getPlainText(`button__${name}`)}>
+        <Icon icon={icon} />
+      </IconButton>
+    );
     return (
       <IconMenu
-        iconButtonElement={<IconButton><Icon icon={icon} /></IconButton>}
+        iconButtonElement={iconButtonElement}
         anchorOrigin={origin}
         targetOrigin={origin}
         onChange={this.handleClick}
@@ -47,10 +62,11 @@ export default class IconMenuComponent extends PureComponent {
         desktop
         maxHeight={250}
         listStyle={listStyle}
+        desktop
       >
-        {options.map(item => <MenuItem key={item} value={item} primaryText={item} />)}
+        {options.map(item => this.renderIconMenuItem(item))}
         {isDivider && <Divider />}
-        {isSecondary && secondaryOptions.map(item => <MenuItem key={item} value={item} primaryText={item} />)}
+        {isSecondary && secondaryOptions.map(item => this.renderIconMenuItem(item))}
       </IconMenu>
     );
   }

@@ -75,8 +75,8 @@ module.exports = {
       .clickPresent('.DetailsPanel .checkbox__wsdl_optionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__wsdl_optionsrequestCert')
       .selectValueSlow('.DetailsPanel', 'securityscheme', 'ClientSSL')
-      .setValueSlow('.DetailsPanel .input__securitykeyPath input', 'testKeyPath')
-      .setValueSlow('.DetailsPanel .input__securitycertPath input', 'testCertPath')
+      .setValueSlow('.DetailsPanel .input__securitykeyPath input', 'k')
+      .setValueSlow('.DetailsPanel .input__securitycertPath input', 'c')
       .checkEntityDetails(expectClientSSL);
   },
   'Datasource: WS': function () {
@@ -210,8 +210,8 @@ const expectRemovedOptions = {
 };
 const expectClientSSL = {
   value: {
-    securitykeyPath: 'testKeyPath',
-    securitycertPath: 'testCertPath'
+    securitykeyPath: 'k',
+    securitycertPath: 'c'
   },
   notPresent: [
     '.input__securityusername',

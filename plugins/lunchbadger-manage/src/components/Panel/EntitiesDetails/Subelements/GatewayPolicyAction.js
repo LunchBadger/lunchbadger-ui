@@ -313,13 +313,14 @@ export default class GatewayPolicyAction extends PureComponent {
   };
 
   render() {
-    const {schemas} = this.props;
+    const {schemas, prefix} = this.props;
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
     const availableParameters = _.difference(Object.keys(schemas.properties), currParameters);
     const addButton = (
       <div className="GatewayPolicyAction__button add menu">
         <IconMenu
+          name={`add__${prefix}Parameter`}
           options={availableParameters}
           secondaryOptions={customPropertyTypes}
           onClick={this.handleAddParameter}
@@ -329,12 +330,16 @@ export default class GatewayPolicyAction extends PureComponent {
     return (
       <div className="GatewayPolicyAction">
         {addButton}
-        {parameters.map(item => (
+        {parameters.map((item, idx) => (
           <div key={item.id} className="GatewayPolicyAction__parameter">
             {this.renderProperty(item)}
             {!schemas.required.includes(item.name) && (
               <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
-                <IconButton icon="iconDelete" onClick={this.handleParameterRemove(item.id)} />
+                <IconButton
+                  icon="iconDelete"
+                  name={`remove__${prefix}Parameter${idx}`}
+                  onClick={this.handleParameterRemove(item.id)}
+                />
               </div>
             )}
           </div>

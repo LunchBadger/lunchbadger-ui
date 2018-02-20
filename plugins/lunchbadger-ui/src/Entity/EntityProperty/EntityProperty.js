@@ -359,6 +359,9 @@ class EntityProperty extends Component {
     if (chips) {
       textValue = hiddenInputs.map(item => item.value).join(', ');
     }
+    if (options && chips && autocomplete) {
+      textValue = value.join(', ');
+    }
     const textValueClassNames = cs('EntityProperty__field--textValue', {
       ['EntityProperty__field--textValue--clickable']: !!onViewModeClick,
     });

@@ -250,7 +250,11 @@ export default class GatewayPolicyCondition extends PureComponent {
               />
               {value.length !== 1 && (
                 <div className="GatewayPolicyCondition__button">
-                  <IconButton icon="iconDelete" onClick={this.handleRemoveCondition(idx)} />
+                  <IconButton
+                    icon="iconDelete"
+                    name={`remove__${prefix}condition${idx}`}
+                    onClick={this.handleRemoveCondition(idx)}
+                  />
                 </div>
               )}
             </div>
@@ -280,7 +284,11 @@ export default class GatewayPolicyCondition extends PureComponent {
             custom,
           }, propIdx)}
           <div className="GatewayPolicyCondition__button">
-            <IconButton icon="iconDelete" onClick={this.handleCustomParameterRemove(propIdx)} />
+            <IconButton
+              icon="iconDelete"
+              name={`remove__${this.tmpPrefix}CustomParameter${propIdx}`}
+              onClick={this.handleCustomParameterRemove(propIdx)}
+            />
           </div>
         </div>
       );
@@ -358,12 +366,19 @@ export default class GatewayPolicyCondition extends PureComponent {
     const {name, properties, custom} = this.state;
     let button = null;
     if (properties.find(i => i.name === 'conditions')) {
-      button = <IconButton icon="iconPlus" onClick={this.handleAddCondition} />;
+      button = (
+        <IconButton
+          icon="iconPlus"
+          name={`add__${prefix}Condition`}
+          onClick={this.handleAddCondition}
+        />
+      );
     }
     if (custom) {
       button = (
         <div className="GatewayPolicyCondition__add">
           <IconMenu
+            name={`add__${prefix}CustomParameter`}
             options={customPropertyTypes}
             onClick={this.handleAddCustomParameter}
             horizontal="left"

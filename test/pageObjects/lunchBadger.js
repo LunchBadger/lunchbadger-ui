@@ -578,7 +578,7 @@ var pageCommands = {
     });
   },
 
-  checkPipelines: function (gatewaySelector, expect, reload = true) {
+  checkPipelines: function (gatewaySelector, expect, save = true) {
     const data = {
       value: {},
       present: [],
@@ -595,10 +595,11 @@ var pageCommands = {
       });
     });
     this
-      .submitDetailsPanelWithoutWip()
-      .saveProject();
-    if (reload) {
-      this.reloadPage();
+      .submitDetailsPanelWithoutWip();
+    if (save) {
+      this
+        .saveProject()
+        .reloadPage();
     }
     return this
       .openPipelinesInDetailsPanel(gatewaySelector)

@@ -133,7 +133,7 @@ var pageCommands = {
   selectValueSlow: function (selector, select, value) {
     return this
       .clickPresent(selector + ` .select__${select}`)
-      .pause(2000)
+      .pause(3000)
       .clickPresent(`div[role=menu] .${select}__${value}`)
       .present(selector + ` .select__${select} .${select}__${value}`);
   },
@@ -578,7 +578,7 @@ var pageCommands = {
     });
   },
 
-  checkPipelines: function (gatewaySelector, expect) {
+  checkPipelines: function (gatewaySelector, expect, reload = true) {
     const data = {
       value: {},
       present: [],
@@ -594,10 +594,13 @@ var pageCommands = {
         });
       });
     });
-    return this
+    this
       .submitDetailsPanelWithoutWip()
-      .saveProject()
-      .reloadPage()
+      .saveProject();
+    if (reload) {
+      this.reloadPage();
+    }
+    return this
       .openPipelinesInDetailsPanel(gatewaySelector)
       .check(data);
   },

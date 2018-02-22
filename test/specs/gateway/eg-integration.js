@@ -102,9 +102,6 @@ module.exports = {
       .addActionParameterCustom(0, 0, 0, 'number')
       .setActionParameterCustomName(0, 0, 0, '', 'number', 'myNum')
       .setActionParameter(0, 0, 0, 'myNum', 456, 'number')
-      .addActionParameterCustom(0, 0, 0, 'array')
-      .setActionParameterCustomName(0, 0, 0, '', 'array', 'myArr')
-      .setActionParameterArray(0, 0, 0, 'myArr', ['a', 'b', 'c'])
       .addActionParameterCustom(0, 0, 0, 'object')
       .setActionParameterCustomName(0, 0, 0, '', 'object', 'myObj')
       .addActionObjectParameterProperty(0, 0, 0, 'myObj')
@@ -114,6 +111,13 @@ module.exports = {
       .setActionObjectParameterProperty(0, 0, 0, '', 'param2')
       .setActionParameter(0, 0, 0, 'myObjparam2', 'value2')
       .checkPipelines(gatewaySelector, expectActionCustom);
+  },
+  'EG integration: action schema parameter - array': function () {
+    page
+      .addActionParameterCustom(0, 0, 0, 'array')
+      .setActionParameterCustomName(0, 0, 0, '', 'array', 'myArr')
+      .setActionParameterArray(0, 0, 0, 'myArr', ['a', 'b', 'c'])
+      .checkPipelines(gatewaySelector, expectActionCustomArray);
   },
   'EG integration: action schema parameter - string': function () {
     page
@@ -648,7 +652,6 @@ const expectActionRequired = [
     ]
   }
 ];
-
 const expectActionCustom = [
   {
     name: 'FirstPipeline',
@@ -667,11 +670,40 @@ const expectActionCustom = [
               myBool: true,
               myInt: 345,
               myNum: 456,
-              myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
                 param2: 'value2'
               }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionCustomArray = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: '',
+              forwardHeaders: {},
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              },
+              myArr: ['a', 'b', 'c']
             }
           }
         ]

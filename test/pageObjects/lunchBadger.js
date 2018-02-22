@@ -560,6 +560,24 @@ var pageCommands = {
     });
   },
 
+  checkAction: function (dataRef, pipelineIdx, policyIdx, pairIdx, action, prefix = '') {
+    Object.keys(action).forEach((key) => {
+      let type = typeof action[key];
+      if (type === 'string') {
+        type = 'text';
+      }
+      if (Array.isArray(action[key])) {
+        dataRef.className[`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}${key} .Multiselect`] = `Multiselect ${action[key].join(' ')}`;
+      } else if (type === 'boolean') {
+        dataRef.present.push(`.DetailsPanel .checkbox__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}${key}__${action[key] ? '' : 'un'}checked`)
+      } else if (type === 'object') {
+        this.checkAction(dataRef, pipelineIdx, policyIdx, pairIdx, action[key], `${prefix}${key}`)
+      } else {
+        dataRef.value[`.DetailsPanel .input__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}${key} input[type=${type}]`] = action[key];
+      }
+    });
+  },
+
   checkPipelines: function (gatewaySelector, expect) {
     const data = {
       value: {},
@@ -570,8 +588,9 @@ var pageCommands = {
       data.value[`.DetailsPanel .pipelines${pipelineIdx}name input`] = name;
       policies.forEach(({policy, ca = []}, policyIdx) => {
         data.present.push(`.pipelines${pipelineIdx}policies${policyIdx}name__${policy}`);
-        ca.forEach(({condition = {}}, pairIdx) => {
+        ca.forEach(({condition = {}, action = {}}, pairIdx) => {
           this.checkCondition(data, pipelineIdx, policyIdx, pairIdx, condition);
+          this.checkAction(data, pipelineIdx, policyIdx, pairIdx, action);
         });
       });
     });
@@ -612,6 +631,114 @@ var pageCommands = {
       .present(`${gatewaySelector} .select__${selectSelector}`)
       .selectValueSlow(gatewaySelector, selectSelector, policyName)
       .pause(1500);
+  },
+
+  addPolicyByDetails: function (pipelineIdx, policyIdx, policyName) {
+    const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
+    return this
+      .clickPresent(`.DetailsPanel .button__add__pipelines${pipelineIdx}policy`)
+      .present(`.DetailsPanel .select__${selectSelector}`)
+      .setPolicyByDetails(pipelineIdx, policyIdx, policyName);
+  },
+
+  setPolicyByDetails: function (pipelineIdx, policyIdx, policyName) {
+    const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
+    return this
+      .selectValueSlow('.DetailsPanel', selectSelector, policyName)
+      .pause(1500);
+  },
+
+  removePolicy: function (gatewaySelector, pipelineIdx, policyIdx) {
+    return this
+      .clickPresent(`${gatewaySelector} .button__remove__pipelines${pipelineIdx}policy${policyIdx}`)
+      .pause(1500);
+  },
+
+  removePolicyByDetails: function (pipelineIdx, policyIdx) {
+    return this
+      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}`)
+      .pause(1500);
+  },
+
+  addActionParameterCustom: function (pipelineIdx, policyIdx, pairIdx, type) {
+    return this
+      .addActionObjectParameter(pipelineIdx, policyIdx, pairIdx, '', type);
+  },
+
+  addActionParameter: function (pipelineIdx, policyIdx, pairIdx, paramName) {
+    const present = [`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`];
+    return this
+      .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}actionParameter`, paramName)
+      .check({present});
+  },
+
+  setActionParameter: function (pipelineIdx, policyIdx, pairIdx, paramName, paramValue, type = 'text') {
+    return this
+      .setInput('.DetailsPanel', `input__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`, paramValue, type);
+  },
+
+  clickActionParameterBoolean: function (pipelineIdx, policyIdx, pairIdx, paramName, expected = 'checked') {
+    const selector = `.DetailsPanel .checkbox__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`;
+    const present = [`${selector}__${expected}`];
+    return this
+      .clickPresent(selector)
+      .check({present});
+  },
+
+  setActionParameterType: function (pipelineIdx, policyIdx, pairIdx, paramName, paramType) {
+    const self = this;
+    const path = `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action`;
+    const selector = `tmp${path}type${paramName}`;
+    this.api.getAttribute(`.DetailsPanel .${selector}`, 'class', function (result) {
+      const select = result.value.replace('EntityProperty__field', '').replace(selector, '').trim();
+      return self
+        .selectValueSlow('.DetailsPanel', select, paramType);
+    });
+    return this
+      .pause(1500);
+  },
+
+  setActionParameterArray: function (pipelineIdx, policyIdx, pairIdx, paramName, values) {
+    const {ENTER} = this.api.Keys;
+    const keys = [];
+    values.forEach((item) => {
+      item.split('').forEach(char => keys.push(char));
+      keys.push(ENTER);
+    });
+    return this
+      .setAutocomplete(`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName} input`, keys)
+      .checkAutocomplete(`pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`, values.join(' '))
+      .pause(1500);
+  },
+
+  addActionObjectParameter: function (pipelineIdx, policyIdx, pairIdx, paramName, type) {
+    const present = [`.DetailsPanel .tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}nametype${type}`];
+    return this
+      .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}Parameter`, type)
+      .check({present});
+  },
+
+  addActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, prefix = '') {
+    const present = [`.DetailsPanel .input__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}_`];
+    return this
+      .clickPresent(`.DetailsPanel .button__add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}${paramName}Parameter`)
+      .check({present});
+  },
+
+  setActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, value) {
+    const {TAB} = this.api.Keys;
+    const selector = `input__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}_`;
+    return this
+      .setInput('.DetailsPanel', selector, value)
+      .setAutocomplete(`.DetailsPanel .${selector} input`, [TAB]);
+  },
+
+  setActionParameterCustomName: function (pipelineIdx, policyIdx, pairIdx, paramName, type, value) {
+    const {TAB} = this.api.Keys;
+    const selector = `tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}nametype${type}`;
+    return this
+      .setInput('.DetailsPanel', selector, value)
+      .setAutocomplete(`.DetailsPanel .${selector} input`, [TAB]);
   },
 
   setConditionName: function (pipelineIdx, policyIdx, pairIdx, text, listItemIdx = 0, expect, field = '', postfix = '') {

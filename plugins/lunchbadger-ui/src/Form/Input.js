@@ -65,9 +65,14 @@ class Input extends Component {
   }
 
   _handleChange = (event) => {
-    this.props.setValue(event.target.value);
-    if (typeof this.props.handleChange === 'function') {
-      this.props.handleChange(event);
+    const {setValue, handleChange, type} = this.props;
+    let {value} = event.target;
+    if (type === 'number') {
+      value = +value || 0;
+    }
+    setValue(value);
+    if (typeof handleChange === 'function') {
+      handleChange(event);
     }
   }
 

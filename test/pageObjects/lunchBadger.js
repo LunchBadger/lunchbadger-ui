@@ -479,6 +479,8 @@ var pageCommands = {
     hasClass = {},
     className = {}
   }) {
+    this
+      .pause(500);
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
     });

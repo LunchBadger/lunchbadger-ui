@@ -113,12 +113,12 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj')
       .setActionObjectParameterProperty(0, 0, 0, '', 'param2')
       .setActionParameter(0, 0, 0, 'myObjparam2', 'value2')
-      .checkPipelines(gatewaySelector, expectActionCustom, false);
+      .checkPipelines(gatewaySelector, expectActionCustom);
   },
   'EG integration: action schema parameter - string': function () {
     page
       .setActionParameter(0, 0, 0, 'headersPrefix', 'prefix')
-      .checkPipelines(gatewaySelector, expectActionString, false);
+      .checkPipelines(gatewaySelector, expectActionString);
   },
   'EG integration: action schema parameter - object': function () {
     page
@@ -145,7 +145,7 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
       .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 'value2')
-      .checkPipelines(gatewaySelector, expectActionObject, false);
+      .checkPipelines(gatewaySelector, expectActionObject);
   },
   'EG integration: ca pairs clear after policy change': function () {
     page

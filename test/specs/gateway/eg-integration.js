@@ -88,20 +88,36 @@ module.exports = {
       .addPolicyCAPair(0, 0, 0)
       .checkPipelines(expectActionRequired);
   },
-  'EG integration: action schema parameter - custom': function () {
+  'EG integration: action schema parameter - custom string': function () {
     page
       .addActionParameterCustom(0, 0, 0, 'string')
       .setActionParameterCustomName(0, 0, 0, '', 'string', 'myString')
       .setActionParameter(0, 0, 0, 'myString', 'txt')
+      .checkPipelines(expectActionCustomString);
+  },
+  'EG integration: action schema parameter - custom boolean': function () {
+    page
       .addActionParameterCustom(0, 0, 0, 'boolean')
       .setActionParameterCustomName(0, 0, 0, '', 'boolean', 'myBool')
       .clickActionParameterBoolean(0, 0, 0, 'myBool')
+      .checkPipelines(expectActionCustomBoolean);
+  },
+  'EG integration: action schema parameter - custom integer': function () {
+    page
       .addActionParameterCustom(0, 0, 0, 'integer')
       .setActionParameterCustomName(0, 0, 0, '', 'integer', 'myInt')
       .setActionParameter(0, 0, 0, 'myInt', 345, 'number')
+      .checkPipelines(expectActionCustomInteger);
+  },
+  'EG integration: action schema parameter - custom number': function () {
+    page
       .addActionParameterCustom(0, 0, 0, 'number')
       .setActionParameterCustomName(0, 0, 0, '', 'number', 'myNum')
       .setActionParameter(0, 0, 0, 'myNum', 456, 'number')
+      .checkPipelines(expectActionCustomNumber);
+  },
+  'EG integration: action schema parameter - custom object': function () {
+    page
       .addActionParameterCustom(0, 0, 0, 'object')
       .setActionParameterCustomName(0, 0, 0, '', 'object', 'myObj')
       .addActionObjectParameterProperty(0, 0, 0, 'myObj')
@@ -110,7 +126,7 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj')
       .setActionObjectParameterProperty(0, 0, 0, '', 'param2')
       .setActionParameter(0, 0, 0, 'myObjparam2', 'value2')
-      .checkPipelines(expectActionCustom);
+      .checkPipelines(expectActionCustomObject);
   },
   'EG integration: action schema parameter - array': function () {
     page
@@ -124,23 +140,36 @@ module.exports = {
       .setActionParameter(0, 0, 0, 'headersPrefix', 'prefix')
       .checkPipelines(expectActionString);
   },
-  'EG integration: action schema parameter - object': function () {
+  'EG integration: action schema parameter - object string': function () {
     page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'string')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'string', 'myString')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyString', 'txt')
+      .checkPipelines(expectActionObjectString);
+  },
+  'EG integration: action schema parameter - object boolean': function () {
+    page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'boolean')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'boolean', 'myBool')
       .clickActionParameterBoolean(0, 0, 0, 'forwardHeadersmyBool')
+      .checkPipelines(expectActionObjectBoolean);
+  },
+  'EG integration: action schema parameter - object integer': function () {
+    page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'integer')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'integer', 'myInt')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyInt', 123, 'number')
+      .checkPipelines(expectActionObjectInteger);
+  },
+  'EG integration: action schema parameter - object number': function () {
+    page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'number')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'number', 'myNum')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyNum', 234, 'number')
-      .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'array')
-      .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'array', 'myArr')
-      .setActionParameterArray(0, 0, 0, 'forwardHeadersmyArr', ['one', 'two', 'three'])
+      .checkPipelines(expectActionObjectNumber);
+  },
+  'EG integration: action schema parameter - object object': function () {
+    page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'object')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'object', 'myObj')
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
@@ -149,7 +178,14 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
       .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 'value2')
-      .checkPipelines(expectActionObject);
+      .checkPipelines(expectActionObjectObject);
+  },
+  'EG integration: action schema parameter - object array': function () {
+    page
+      .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'array')
+      .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'array', 'myArr')
+      .setActionParameterArray(0, 0, 0, 'forwardHeadersmyArr', ['one', 'two', 'three'])
+      .checkPipelines(expectActionObjectArray);
   },
   'EG integration: ca pairs clear after policy change': function () {
     page
@@ -326,7 +362,7 @@ module.exports = {
   },
   'EG integration: method autocomplete change': function () {
     page
-      .setEnum(0, 1, 0, 'methods', [['p', 0], ['', 0], ['', 0]], 'g HEAD p GET POST')
+      .setEnum(0, 1, 0, 'methods', [['p', 0], ['', 0], ['', 0]], 'g HEAD PATCH DELETE OPTIONS')
       .checkPipelines(expectMethodEnumChanged)
   },
   'EG integration: into allOf': function () {
@@ -652,7 +688,101 @@ const expectActionRequired = [
     ]
   }
 ];
-const expectActionCustom = [
+const expectActionCustomString = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: '',
+              forwardHeaders: {},
+              myString: 'txt'
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionCustomBoolean = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: '',
+              forwardHeaders: {},
+              myString: 'txt',
+              myBool: true
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionCustomInteger = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: '',
+              forwardHeaders: {},
+              myString: 'txt',
+              myBool: true,
+              myInt: 345
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionCustomNumber = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: '',
+              forwardHeaders: {},
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionCustomObject = [
   {
     name: 'FirstPipeline',
     policies: [
@@ -741,7 +871,141 @@ const expectActionString = [
     ]
   }
 ];
-const expectActionObject = [
+const expectActionObjectString = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: 'prefix',
+              forwardHeaders: {
+                myString: 'txt'
+              },
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myArr: ['a', 'b', 'c'],
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionObjectBoolean = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: 'prefix',
+              forwardHeaders: {
+                myString: 'txt',
+                myBool: true
+              },
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myArr: ['a', 'b', 'c'],
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionObjectInteger = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: 'prefix',
+              forwardHeaders: {
+                myString: 'txt',
+                myBool: true,
+                myInt: 123
+              },
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myArr: ['a', 'b', 'c'],
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionObjectNumber = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: 'prefix',
+              forwardHeaders: {
+                myString: 'txt',
+                myBool: true,
+                myInt: 123,
+                myNum: 234
+              },
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myArr: ['a', 'b', 'c'],
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionObjectObject = [
   {
     name: 'FirstPipeline',
     policies: [
@@ -759,11 +1023,50 @@ const expectActionObject = [
                 myBool: true,
                 myInt: 123,
                 myNum: 234,
-                myArr: ['one', 'two', 'three'],
                 myObj: {
                   param1: 'value1',
                   param2: 'value2'
                 }
+              },
+              myString: 'txt',
+              myBool: true,
+              myInt: 345,
+              myNum: 456,
+              myArr: ['a', 'b', 'c'],
+              myObj: {
+                param1: 'value1',
+                param2: 'value2'
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+const expectActionObjectArray = [
+  {
+    name: 'FirstPipeline',
+    policies: [
+      {
+        policy: 'headers',
+        ca: [
+          {
+            condition: {
+              name: 'always'
+            },
+            action: {
+              headersPrefix: 'prefix',
+              forwardHeaders: {
+                myString: 'txt',
+                myBool: true,
+                myInt: 123,
+                myNum: 234,
+                myObj: {
+                  param1: 'value1',
+                  param2: 'value2'
+                },
+                myArr: ['one', 'two', 'three']
               },
               myString: 'txt',
               myBool: true,
@@ -1311,98 +1614,6 @@ const expectConditionsReordered = [
     ]
   }
 ];
-const expectConditionsChanged = [
-  {
-    name: 'FirstPipeline',
-    policies: [
-      {
-        policy: 'proxy'
-      },
-      {
-        policy: 'basic-auth',
-        ca: [
-          {
-            condition: {
-              name: 'hostMatch',
-              pattern: '/wasPathMatch*'
-            }
-          },
-          {
-            condition: {
-              name: 'ALL OF',
-              conditions: [
-                {
-                  name: 'never'
-                }
-              ]
-            }
-          },
-          {
-            condition: {
-              name: 'always'
-            },
-            action: {}
-          },
-          {
-            condition: {
-              name: 'pathExact',
-              path: '/somePath'
-            }
-          },
-          {
-            condition: {
-              name: 'method',
-              methods: []
-            }
-          },
-          {
-            condition: {
-              name: 'pathExact',
-              path: '/exact'
-            }
-          },
-          {
-            condition: {
-              name: 'expression',
-              expression: 'var a = 1;'
-            }
-          },
-          {
-            condition: {
-              name: 'authenticated'
-            }
-          },
-          {
-            condition: {
-              name: 'anonymous'
-            }
-          },
-          {
-            condition: {
-              name: 'NOT'
-            }
-          },
-          {
-            condition: {
-              name: 'pathExact',
-              path: '/wasAllOf'
-            }
-          },
-          {
-            condition: {
-              name: 'ALL OF',
-              conditions: [
-                {
-                  name: 'always'
-                }
-              ]
-            }
-          }
-        ]
-      }
-    ]
-  }
-];
 const expectConditionsRemoved = [
   {
     name: 'FirstPipeline',
@@ -1501,7 +1712,7 @@ const expectMethodEnumChanged = [
           {
             condition: {
               name: 'method',
-              methods: ['g HEAD p GET POST']
+              methods: ['g HEAD PATCH DELETE OPTIONS']
             }
           }
         ]
@@ -1525,7 +1736,7 @@ const expectIntoAllOf = [
               conditions: [
                 {
                   name: 'method',
-                  methods: ['g HEAD p GET POST']
+                  methods: ['g HEAD PATCH DELETE OPTIONS']
                 }
               ]
             }
@@ -1551,7 +1762,7 @@ const expectAddedAllOf = [
               conditions: [
                 {
                   name: 'method',
-                  methods: ['g HEAD p GET POST']
+                  methods: ['g HEAD PATCH DELETE OPTIONS']
                 },
                 {
                   name: 'ALL OF',
@@ -1596,7 +1807,7 @@ const expectChangedAllOf = [
                   conditions: [
                     {
                       name: 'method',
-                      methods: ['g HEAD p GET POST']
+                      methods: ['g HEAD PATCH DELETE OPTIONS']
                     }
                   ]
                 },
@@ -1652,7 +1863,7 @@ const expectRemovedAllOf = [
                   conditions: [
                     {
                       name: 'method',
-                      methods: ['g HEAD p GET POST']
+                      methods: ['g HEAD PATCH DELETE OPTIONS']
                     }
                   ]
                 },

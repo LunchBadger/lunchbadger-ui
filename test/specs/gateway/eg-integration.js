@@ -86,7 +86,7 @@ module.exports = {
     page
       .addPolicyByDetails(0, 0, 'headers')
       .addPolicyCAPair(0, 0, 0)
-      .checkPipelines(gatewaySelector, expectActionRequired);
+      .checkPipelines(expectActionRequired);
   },
   'EG integration: action schema parameter - custom': function () {
     page
@@ -110,19 +110,19 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj')
       .setActionObjectParameterProperty(0, 0, 0, '', 'param2')
       .setActionParameter(0, 0, 0, 'myObjparam2', 'value2')
-      .checkPipelines(gatewaySelector, expectActionCustom);
+      .checkPipelines(expectActionCustom);
   },
   'EG integration: action schema parameter - array': function () {
     page
       .addActionParameterCustom(0, 0, 0, 'array')
       .setActionParameterCustomName(0, 0, 0, '', 'array', 'myArr')
       .setActionParameterArray(0, 0, 0, 'myArr', ['a', 'b', 'c'])
-      .checkPipelines(gatewaySelector, expectActionCustomArray);
+      .checkPipelines(expectActionCustomArray);
   },
   'EG integration: action schema parameter - string': function () {
     page
       .setActionParameter(0, 0, 0, 'headersPrefix', 'prefix')
-      .checkPipelines(gatewaySelector, expectActionString);
+      .checkPipelines(expectActionString);
   },
   'EG integration: action schema parameter - object': function () {
     page
@@ -149,18 +149,18 @@ module.exports = {
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
       .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 'value2')
-      .checkPipelines(gatewaySelector, expectActionObject);
+      .checkPipelines(expectActionObject);
   },
   'EG integration: ca pairs clear after policy change': function () {
     page
       .setPolicyByDetails(0, 0, 'terminate')
       .addPolicyCAPair(0, 0, 0)
-      .checkPipelines(gatewaySelector, expectActionPolicyChange);
+      .checkPipelines(expectActionPolicyChange);
   },
   'EG integration: action schema parameter - number': function () {
     page
       .setActionParameter(0, 0, 0, 'statusCode', 402, 'number')
-      .checkPipelines(gatewaySelector, expectActionNumber);
+      .checkPipelines(expectActionNumber);
   },
   'EG integration: action schema parameter - integer': function () {
     page
@@ -168,45 +168,45 @@ module.exports = {
       .addPolicyCAPair(0, 0, 0)
       .addActionParameter(0, 0, 0, 'optionsSuccessStatus')
       .setActionParameter(0, 0, 0, 'optionsSuccessStatus', 403, 'number')
-      .checkPipelines(gatewaySelector, expectActionInteger);
+      .checkPipelines(expectActionInteger);
   },
   'EG integration: action schema parameter - boolean': function () {
     page
       .addActionParameter(0, 0, 0, 'credentials')
       .clickActionParameterBoolean(0, 0, 0, 'credentials')
-      .checkPipelines(gatewaySelector, expectActionBoolean);
+      .checkPipelines(expectActionBoolean);
   },
   'EG integration: action schema parameter - types / string': function () {
     page
       .addActionParameter(0, 0, 0, 'origin')
       .setActionParameterType(0, 0, 0, 'origin', 'string')
       .setActionParameter(0, 0, 0, 'origin', '*')
-      .checkPipelines(gatewaySelector, expectActionTypesString);
+      .checkPipelines(expectActionTypesString);
   },
   'EG integration: action schema parameter - types / boolean': function () {
     page
       .setActionParameterType(0, 0, 0, 'origin', 'boolean')
       .clickActionParameterBoolean(0, 0, 0, 'origin')
-      .checkPipelines(gatewaySelector, expectActionTypesBoolean);
+      .checkPipelines(expectActionTypesBoolean);
   },
   'EG integration: action schema parameter - types / array': function () {
     page
       .setActionParameterType(0, 0, 0, 'origin', 'array')
       .setActionParameterArray(0, 0, 0, 'origin', ['one', 'two', 'three'])
-      .checkPipelines(gatewaySelector, expectActionTypesArray);
+      .checkPipelines(expectActionTypesArray);
   },
   'EG integration: action schema parameter array': function () {
     page
       .addActionParameter(0, 0, 0, 'exposedHeaders')
       .setActionParameterArray(0, 0, 0, 'exposedHeaders', ['h1', 'h2', 'h3'])
-      .checkPipelines(gatewaySelector, expectActionArray);
+      .checkPipelines(expectActionArray);
   },
   'EG integration: change policies': function () {
     page
       .removePolicyByDetails(0, 0)
       .addPolicyByDetails(0, 0, 'proxy')
       .addPolicyByDetails(0, 1, 'basic-auth')
-      .checkPipelines(gatewaySelector, expectChangePolicies);
+      .checkPipelines(expectChangePolicies);
   },
   'EG integration: condition schema parameters': function () {
     page
@@ -260,23 +260,23 @@ module.exports = {
       .addConditionCustomParameter(0, 1, 12, 'array', 6)
       .setConditionCustomParameterName(0, 1, 12, 6, 'myArr')
       .setConditionCustomParameterEnum(0, 1, 12, 'myArr', ['one', 'two', 'three'])
-      .checkPipelines(gatewaySelector, expectConditionsPlain)
+      .checkPipelines(expectConditionsPlain)
   },
   'EG integration: remove custom params': function () {
     page
       .removeConditionCustomParameter(0, 1, 12, 1)
       .removeConditionCustomParameter(0, 1, 12, 2)
-      .checkPipelines(gatewaySelector, expectCustomConditionsRemoved)
+      .checkPipelines(expectCustomConditionsRemoved)
   },
   'EG integration: custom params into allOf': function () {
     page
       .setConditionName(0, 1, 12, 'a', 6, 'ALL OF', 'conditions0name')
-      .checkPipelines(gatewaySelector, expectCustomConditions)
+      .checkPipelines(expectCustomConditions)
   },
   'EG integration: remove C/A pair': function () {
     page
       .removeCondition(0, 1, 12)
-      .checkPipelines(gatewaySelector, expectCustomParamsRemoved)
+      .checkPipelines(expectCustomParamsRemoved)
   },
   'EG integration: C/A reordering': function () {
     page
@@ -292,7 +292,7 @@ module.exports = {
       .moveCAPairUp(0, 1, 11)
       .moveCAPairUp(0, 1, 10)
       .moveCAPairDown(0, 1, 10)
-      .checkPipelines(gatewaySelector, expectConditionsReordered)
+      .checkPipelines(expectConditionsReordered)
   },
   'EG integration: remove conditions': function () {
     page
@@ -307,32 +307,32 @@ module.exports = {
       .removeCondition(0, 1, 1)
       .removeCondition(0, 1, 2)
       .removeCondition(0, 1, 1)
-      .checkPipelines(gatewaySelector, expectConditionsRemoved)
+      .checkPipelines(expectConditionsRemoved)
   },
   'EG integration: method autocomplete add': function () {
     page
       .setEnum(0, 1, 0, 'methods', [['g', 0], ['g', 0], ['h', 2], ['', 0], ['del', 1], ['del', 0]], 'g GET HEAD OPTIONS del DELETE')
-      .checkPipelines(gatewaySelector, expectMethodEnumAdded)
+      .checkPipelines(expectMethodEnumAdded)
   },
   'EG integration: method autocomplete delete by icon': function () {
     page
       .deleteEnumByClick(0, 1, 0, 'methods', [2, 3, 4], 'g HEAD del')
-      .checkPipelines(gatewaySelector, expectMethodEnumDeletedByClick)
+      .checkPipelines(expectMethodEnumDeletedByClick)
   },
   'EG integration: method autocomplete delete by keyboard': function () {
     page
       .deleteEnumByKeyPress(0, 1, 0, 'methods', 1, 'g HEAD')
-      .checkPipelines(gatewaySelector, expectMethodEnumDeletedByKeyPress)
+      .checkPipelines(expectMethodEnumDeletedByKeyPress)
   },
   'EG integration: method autocomplete change': function () {
     page
       .setEnum(0, 1, 0, 'methods', [['p', 0], ['', 0], ['', 0]], 'g HEAD p GET POST')
-      .checkPipelines(gatewaySelector, expectMethodEnumChanged)
+      .checkPipelines(expectMethodEnumChanged)
   },
   'EG integration: into allOf': function () {
     page
       .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name')
-      .checkPipelines(gatewaySelector, expectIntoAllOf)
+      .checkPipelines(expectIntoAllOf)
   },
   'EG integration: add allOf conditions': function () {
     page
@@ -344,7 +344,7 @@ module.exports = {
       .addSubCondition(0, 1, 0)
       .setConditionName(0, 1, 0, '', 5, 'hostMatch', 'conditions3pattern', 'conditions3')
       .setConditionParameter(0, 1, 0, 'pattern', '/a*', 'conditions3')
-      .checkPipelines(gatewaySelector, expectAddedAllOf)
+      .checkPipelines(expectAddedAllOf)
   },
 
   'EG integration: edit allOf conditions': function () {
@@ -361,13 +361,13 @@ module.exports = {
       .setConditionParameter(0, 1, 0, 'path', '/afterAlways', 'conditions1conditions1')
       .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions1conditions2path', 'conditions1conditions2')
       .setConditionParameter(0, 1, 0, 'path', '/afterPathExact', 'conditions1conditions2')
-      .checkPipelines(gatewaySelector, expectChangedAllOf)
+      .checkPipelines(expectChangedAllOf)
   },
   'EG integration: remove allOf conditions': function () {
     page
       .removeSubCondition(0, 1, 0, 2)
       .removeSubCondition(0, 1, 0, 1, 'conditions1')
-      .checkPipelines(gatewaySelector, expectRemovedAllOf)
+      .checkPipelines(expectRemovedAllOf)
   },
   'EG integration: remove pipeline on canvas': function () {
     page

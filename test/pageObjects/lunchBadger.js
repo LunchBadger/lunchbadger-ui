@@ -580,7 +580,7 @@ var pageCommands = {
     });
   },
 
-  checkPipelines: function (gatewaySelector, expect) {
+  checkPipelines: function (expect) {
     const data = {
       value: {},
       present: [],
@@ -597,8 +597,6 @@ var pageCommands = {
       });
     });
     return this
-      .submitDetailsPanelWithoutWip()
-      .openPipelinesInDetailsPanel(gatewaySelector)
       .check(data);
   },
 

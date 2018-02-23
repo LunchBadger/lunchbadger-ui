@@ -45,7 +45,7 @@ export default class GatewayPolicyAction extends PureComponent {
   };
 
   getState = (props) => {
-    const {action, schemas: {properties, required}} = props;
+    const {action, schemas: {properties = {}, required = []}} = props;
     const parameters = {};
     required.forEach((name) => {
       const {description, type, types, default: def, enum: enum_, postfix} = properties[name];
@@ -70,7 +70,10 @@ export default class GatewayPolicyAction extends PureComponent {
         default: getDefaultValueByType(determineType(action[name])),
         enum: [],
       });
-      const value = action[name] || def || getDefaultValueByType(type);
+      let value = action[name];
+      if (typeof value === 'undefined') {
+        value = def || getDefaultValueByType(type);
+      }
       parameters[name] = {
         id: uuid.v4(),
         name,
@@ -92,18 +95,6 @@ export default class GatewayPolicyAction extends PureComponent {
   onPropsUpdate = (props = this.props) => this.setState(this.stateFromProps(props));
 
   changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState({}, cb));
-
-  handleAddCondition = () => {
-    const state = _.cloneDeep(this.state);
-    state.properties[0].value.push({id: uuid.v4(), name: 'always'});
-    this.changeState(state);
-  };
-
-  handleRemoveCondition = idx => () => {
-    const state = _.cloneDeep(this.state);
-    state.properties[0].value.splice(idx, 1);
-    this.changeState(state);
-  };
 
   handleAddParameter = (name) => {
     const state = _.cloneDeep(this.state);
@@ -200,6 +191,7 @@ export default class GatewayPolicyAction extends PureComponent {
               onBlur={this.handleCustomParameterNameChange(id)}
               width={150}
               placeholder=" "
+              classes={`${this.tmpPrefix}[name][type][${type}]`}
             />
           )}
           {!custom && (
@@ -211,6 +203,7 @@ export default class GatewayPolicyAction extends PureComponent {
               width={150}
               placeholder=" "
               options={types.map(label => ({label, value: label}))}
+              classes={`${this.tmpPrefix}[type][${name}]`}
             />
           )}
           {this.renderProperty({
@@ -316,7 +309,7 @@ export default class GatewayPolicyAction extends PureComponent {
     const {schemas, prefix} = this.props;
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
-    const availableParameters = _.difference(Object.keys(schemas.properties), currParameters);
+    const availableParameters = _.difference(Object.keys(schemas.properties || {}), currParameters);
     const addButton = (
       <div className="GatewayPolicyAction__button add menu">
         <IconMenu
@@ -333,7 +326,7 @@ export default class GatewayPolicyAction extends PureComponent {
         {parameters.map((item, idx) => (
           <div key={item.id} className="GatewayPolicyAction__parameter">
             {this.renderProperty(item)}
-            {!schemas.required.includes(item.name) && (
+            {!(schemas.required || []).includes(item.name) && (
               <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
                 <IconButton
                   icon="iconDelete"

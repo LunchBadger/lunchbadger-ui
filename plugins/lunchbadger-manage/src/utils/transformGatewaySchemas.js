@@ -52,7 +52,7 @@ export default schema => {
         if (prop.hasOwnProperty('default')) {
           prop.type = determineType(prop.default);
         } else {
-          prop.type = getDefaultValueByType(prop.types[0]);
+          prop.type = prop.types[0];
         }
       }
     });
@@ -69,7 +69,7 @@ export default schema => {
         if (prop.hasOwnProperty('default')) {
           prop.type = determineType(prop.default);
         } else {
-          prop.type = getDefaultValueByType(prop.types[0]);
+          prop.type = prop.types[0];
         }
       }
     });

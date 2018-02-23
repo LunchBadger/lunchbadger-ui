@@ -63,6 +63,7 @@ class EntityProperty extends Component {
     postfix: PropTypes.string,
     object: PropTypes.bool,
     tmpPrefix: PropTypes.string,
+    classes: PropTypes.string,
   };
 
   static defaultProps = {
@@ -86,6 +87,7 @@ class EntityProperty extends Component {
     alignRight: false,
     postfix: '',
     object: false,
+    classes: '',
   };
 
   constructor(props) {
@@ -192,7 +194,11 @@ class EntityProperty extends Component {
       const columns = [
         'Key',
         'Value',
-        <IconButton icon="iconPlus" onClick={this.handleObjectAddKey} />,
+        <IconButton
+          icon="iconPlus"
+          name={`add__${name}Parameter`}
+          onClick={this.handleObjectAddKey}
+        />,
       ];
       const data = Object.keys(value).map(key => [
         <Input
@@ -329,6 +335,7 @@ class EntityProperty extends Component {
       button,
       postfix,
       object,
+      classes,
     } = this.props;
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -390,7 +397,7 @@ class EntityProperty extends Component {
             {title}
           </EntityPropertyLabel>
         )}
-        <div className={cs('EntityProperty__field', plainName)}>
+        <div className={cs('EntityProperty__field', plainName, getPlainText(classes))}>
           <div className='EntityProperty__field--text' onClick={onClick}>
             <span className={textValueClassNames} onClick={onViewModeClick}>
               {textValue}

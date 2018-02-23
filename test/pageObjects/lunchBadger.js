@@ -120,6 +120,11 @@ var pageCommands = {
       });
   },
 
+  setField: function (selector, field, value, type = 'text') {
+    return this
+      .setInput(selector, `input__${field}`, value, type);
+  },
+
   setInput: function (selector, field, value, type = 'text') {
     const sel = `${selector} .${field} input[type=${type}]`;
     return this
@@ -346,22 +351,29 @@ var pageCommands = {
       });
   },
 
-  checkDetailsFields: function (names, prefix, postfix, kind = 'string') { // TODO: refactor
+  checkDetailsFields: function (names, prefix, postfix, kind = 'string') {
+    const check = {
+      text: {},
+      value: {},
+      present: [],
+      notPresent: []
+    }
     if (names === '') {
-      this.notPresent(`.DetailsPanel .input__${prefix}0${postfix}`);
+      check.notPresent.push(`.DetailsPanel .input__${prefix}0${postfix}`);
     } else {
       names.split(',').forEach((name, idx) => {
         if (kind === 'select') {
-          this.api.expect.element(`.DetailsPanel .select__${prefix}${idx}${postfix}`).text.to.equal(name);
+          check.text[`.DetailsPanel .select__${prefix}${idx}${postfix}`] = name;
         } else if (kind === 'checkbox') {
-          this.api.expect.element(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`).to.be.present;
+          check.present.push(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`);
         } else {
-          this.api.expect.element(`.DetailsPanel .input__${prefix}${idx}${postfix} input`).value.to.equal(name);
+          check.value[`.DetailsPanel .input__${prefix}${idx}${postfix} input`] = name;
         }
       });
-      this.notPresent(`.DetailsPanel .input__properties${names.split(',').length}name`);
+      check.notPresent.push(`.DetailsPanel .input__properties${names.split(',').length}name`);
     }
-    return this;
+    return this
+      .check(check);
   },
 
   getDataSourceSelector: function (nth) {
@@ -496,6 +508,7 @@ var pageCommands = {
   check: function ({
     text = {},
     value = {},
+    valueContain = {},
     present = [],
     notPresent = [],
     equal = [],
@@ -512,6 +525,9 @@ var pageCommands = {
     });
     Object.keys(value).forEach((key) => {
       this.api.expect.element(key).value.to.equal(value[key]).before(5000);
+    });
+    Object.keys(valueContain).forEach((key) => {
+      this.api.expect.element(key).value.to.contain(value[key]);
     });
     present.forEach((selector) => {
       this.api.expect.element(selector).to.be.present.before(5000);
@@ -895,6 +911,83 @@ var pageCommands = {
   removeConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, paramIdx, prefix = '') {
     return this
       .clickPresent(`.DetailsPanel .button__remove__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter${paramIdx}`);
+  },
+
+  addModelPropertyOnCanvas: function (selector, propertyIdx) {
+    const present = [`${selector} .input__properties${propertyIdx}name`]
+    return this
+      .clickPresent(`${selector} .button__add__Properties`)
+      .check({present});
+  },
+
+  setModelPropertyOnCanvas: function (selector, propertyIdx, value) {
+    return this
+      .setInput(selector, `input__properties${propertyIdx}name`, value);
+  },
+
+  setModelPropertyTypeOnCanvas: function (selector, propertyIdx, type) {
+    return this
+      .selectValueSlow(selector, `properties${propertyIdx}type`, type);
+  },
+
+  checkModelProperties: function (selector, names = '', types = '') {
+    const check = {
+      text: {},
+      notPresent: []
+    };
+    if (names === '') {
+      check.notPresent.push(`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(1)`)
+    } else {
+      names.split(',').forEach((name, idx) => {
+        check.text[`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.name .EntityProperty__field--text`] = name;
+      });
+      check.notPresent.push(`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${names.split(',').length + 1})`);
+    }
+    if (types !== '') {
+      types.split(',').forEach((name, idx) => {
+        check.text[`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.type .EntityProperty__field--text`] = name;
+      });
+    }
+    return this
+      .check(check);
+  },
+
+  checkModelDetailsProperties: function (names = '', types = '', defaults = '', descriptions = '', requireds = '', indexes = '') {
+    return this
+      .checkDetailsFields(names, 'properties', 'name')
+      .checkDetailsFields(types, 'properties', 'type', 'select')
+      .checkDetailsFields(defaults, 'properties', 'default_')
+      .checkDetailsFields(descriptions, 'properties', 'description')
+      .checkDetailsFields(requireds, 'properties', 'required', 'checkbox')
+      .checkDetailsFields(indexes, 'properties', 'index', 'checkbox');
+  },
+
+  checkModelDetailsRelations: function (names = '', types = '', models = '', foreignKeys = '') {
+    return this
+      .checkDetailsFields(names, 'relations', 'name')
+      .checkDetailsFields(types, 'relations', 'type', 'select')
+      .checkDetailsFields(models, 'relations', 'model', 'select')
+      .checkDetailsFields(foreignKeys, 'relations', 'foreignKey')
+  },
+
+  checkModelDetailsUDF: function (names = '', types = '', values = '') {
+    const check = {
+      value: {},
+      valueContain: {}
+    };
+    if (values !== '') {
+      values.split(',').forEach((name, idx) => {
+        if (types.split(',')[idx] === 'Object') {
+          // check.value[`.DetailsPanel .input__userFields${idx}value > div > div > textarea:nth-child(2)`] = '{"abc": 234}';
+        } else {
+          check.value[`.DetailsPanel .input__userFields${idx}value input`] = name;
+        }
+      })
+    }
+    return this
+      .checkDetailsFields(names, 'userFields', 'name')
+      .checkDetailsFields(types, 'userFields', 'type', 'select')
+      .check(check);
   }
 };
 

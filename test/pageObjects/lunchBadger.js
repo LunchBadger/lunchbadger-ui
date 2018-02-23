@@ -12,7 +12,7 @@ var pageCommands = {
   open: function () {
     return this
       .openWithoutLogin()
-      .setValueSlow('.input__login input', 'ko')
+      .setValueSlow('.input__login input', 'test')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()

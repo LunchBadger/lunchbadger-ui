@@ -12,7 +12,7 @@ var pageCommands = {
   open: function () {
     return this
       .openWithoutLogin()
-      .setValueSlow('.input__login input', 'test')
+      .setValueSlow('.input__login input', 'ko')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
@@ -501,7 +501,9 @@ var pageCommands = {
     equal = [],
     notEqual = [],
     hasClass = {},
-    className = {}
+    className = {},
+    connected = {},
+    notConnected = {}
   }) {
     this
       .pause(500);
@@ -525,10 +527,20 @@ var pageCommands = {
     });
     Object.keys(hasClass).forEach((key) => {
       this.api.expect.element(key).to.have.attribute('class').which.contains(hasClass[key]);
-    })
+    });
     Object.keys(className).forEach((key) => {
       this.api.assert.attributeEquals(key, 'class', className[key]);
-    })
+    });
+    Object.keys(connected).forEach((key) => {
+      connected[key].forEach((dir) => {
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(5000);
+      });
+    });
+    Object.keys(notConnected).forEach((key) => {
+      notConnected[key].forEach((dir) => {
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(5000);
+      });
+    });
     return this;
   },
 

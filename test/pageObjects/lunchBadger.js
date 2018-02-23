@@ -129,6 +129,11 @@ var pageCommands = {
       .setValueSlow(sel, value);
   },
 
+  setCanvasEntityName: function (selector, name) {
+    return this
+      .setInput(selector, 'EntityHeader', name);
+  },
+
   setValueWithEnter: function (selector, value) {
     return this
       .setValueSlow(selector, value)
@@ -196,6 +201,16 @@ var pageCommands = {
       .present(selector + ' .EntityValidationErrors')
       .check({present})
       .pause(3000);
+  },
+
+  expectUniqueNameError: function (selector, type) {
+    const text = {
+      [`${selector} .EntityHeader .EntityProperty__error`]: `${type} with that name already exists`
+    };
+    return this
+      .submitCanvasEntityWithExpectedValidationErrors(selector, ['name'])
+      .check({text})
+      .discardCanvasEntityChanges(selector);
   },
 
   submitDetailsPanel: function (selector) {
@@ -359,6 +374,10 @@ var pageCommands = {
 
   getModelSelector: function (nth) {
     return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Model:nth-child(' + nth + ')';
+  },
+
+  getFunctionSelector: function (nth) {
+    return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Function_:nth-child(' + nth + ')';
   },
 
   getGatewaySelector: function (nth) {

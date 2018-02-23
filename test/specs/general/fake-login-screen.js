@@ -2,7 +2,7 @@ var page;
 
 module.exports = {
   // '@disabled': true,
-  'Tools menu: fake login screen': function (browser) {
+  'General: fake login screen': function (browser) {
     page = browser.page.lunchBadger();
     const username = 'John Doe';
     const invalidLogin = {

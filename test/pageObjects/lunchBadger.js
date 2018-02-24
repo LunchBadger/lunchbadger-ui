@@ -2,11 +2,16 @@ const fs = require('fs');
 let notifiedCoverage = false;
 
 var pageCommands = {
-  open: function () {
+  openWithoutLogin: function () {
     this.api.page.lunchBadger().navigate();
     this.api.resizeWindow(1920, 1080);
     return this
-      .present('.FakeLogin')
+      .present('.FakeLogin');
+  },
+
+  open: function () {
+    return this
+      .openWithoutLogin()
       .setValueSlow('.input__login input', 'test')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')

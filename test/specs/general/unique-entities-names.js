@@ -45,6 +45,9 @@ module.exports = {
       .addElementFromTooltip('dataSource', 'memory')
       .submitCanvasEntity(dataSourceSelector1)
       .addElementFromTooltip('dataSource', 'memory')
+      .expectUniqueNameError(dataSourceSelector2, 'A data source')
+      .addElementFromTooltip('dataSource', 'mysql')
+      .setCanvasEntityName(dataSourceSelector2, 'Memory')
       .expectUniqueNameError(dataSourceSelector2, 'A data source');
   },
   'Unique entities names: models': function () {

@@ -60,8 +60,10 @@ module.exports = {
   'Unique entities names: functions': function () {
     page
       .addElement('function')
+      .setCanvasEntityName(functionSelector1, 'myfunction')
       .submitCanvasEntity(functionSelector1)
       .addElement('function')
+      .setCanvasEntityName(functionSelector2, 'myfunction')
       .expectUniqueNameError(functionSelector2, 'A function');
   },
   'Unique entities names: microservices': function () {

@@ -198,6 +198,7 @@ var pageCommands = {
     const present = validationErrors.map(key => `${selector} .EntityValidationErrors__fields__field.validationError__${key}`)
     return this
       .submitForm(selector + ' form')
+      .pause(5000)
       .present(selector + ' .EntityValidationErrors')
       .check({present})
       .pause(3000);

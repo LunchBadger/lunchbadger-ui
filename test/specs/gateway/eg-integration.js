@@ -499,6 +499,7 @@ module.exports = {
             equal: [[body, EXPECT_PROXY_SERVICE_ENDPOINT]]
           });
       })
+      .removeGateway(gatewaySelector)
       .close();
     // request.put({url, form}, (err, res, putBody) => {
     //   page

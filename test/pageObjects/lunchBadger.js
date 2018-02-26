@@ -12,7 +12,7 @@ var pageCommands = {
   open: function () {
     return this
       .openWithoutLogin()
-      .setValueSlow('.input__login input', 'test')
+      .setValueSlow('.input__login input', 'ko')
       .setValueSlow('.input__password input', 'CircleCI')
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
@@ -193,6 +193,7 @@ var pageCommands = {
 
   submitCanvasEntity: function (selector) {
     return this
+      .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
       .notPresent(selector + '.wip', 120000)
       .notPresent('.Aside.disabled')
@@ -266,22 +267,30 @@ var pageCommands = {
       .notPresent('.DetailsPanel.closing', 15000);
   },
 
-  removeEntity: function (selector) {
+  removeEntity: function (selector, timeout) {
     return this
       .clickVisible(selector)
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
-      .notPresent(selector);
+      .notPresent(selector, timeout);
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    const startConnected = fromSelector;
+    const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
     return this
       .present(startSelector)
       .present(endSelector)
-      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null]);
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
+      .check({
+        connected: {
+          [startConnected]: [fromDir],
+          [endConnected]: [toDir]
+        }
+      });
   },
 
   moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {
@@ -1010,6 +1019,33 @@ var pageCommands = {
       .clickPresent('.workspace-status > span')
       .present('.SystemDefcon1 .SystemDefcon1__box__content__details--box', 5000)
       .check({textContain});
+  },
+
+  checkFunctionTriggers: function (selector, triggers) {
+    const check = {
+      text: {},
+      notPresent: []
+    }
+    Object.keys(triggers).forEach((key, idx) => {
+      check.text[`${selector} .Function__triggers > div:nth-child(${idx + 1}) > span:first-child`] = key;
+      check.text[`${selector} .Function__triggers > div:nth-child(${idx + 1}) > span:last-child`] = triggers[key];
+    });
+    check.notPresent.push(`${selector} .Function__triggers > div:nth-child(${Object.keys(triggers).length + 1})`);
+    return this
+      .check(check);
+  },
+
+  addGatewayWithProxy: function (selector, gatewayName = this.getUniqueName('gateway')) {
+    return this
+      .addElement('gateway')
+      .setCanvasEntityName(selector, gatewayName)
+      .addPolicy(selector, 0, 0, 'proxy')
+      .submitGatewayDeploy(selector, gatewayName);
+  },
+
+  removeGateway: function (selector) {
+    return this
+      .removeEntity(selector, 300000);
   }
 };
 

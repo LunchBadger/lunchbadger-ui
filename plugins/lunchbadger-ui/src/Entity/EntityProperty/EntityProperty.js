@@ -64,6 +64,7 @@ class EntityProperty extends Component {
     object: PropTypes.bool,
     tmpPrefix: PropTypes.string,
     classes: PropTypes.string,
+    slugify: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -88,6 +89,7 @@ class EntityProperty extends Component {
     postfix: '',
     object: false,
     classes: '',
+    slugify: false,
   };
 
   constructor(props) {
@@ -189,6 +191,7 @@ class EntityProperty extends Component {
       object,
       tmpPrefix,
       invalidUnderlineColor,
+      slugify,
     } = this.props;
     if (object) {
       const columns = [
@@ -302,6 +305,7 @@ class EntityProperty extends Component {
         handleKeyDown={this.handleTab}
         alignRight={alignRight}
         invalidUnderlineColor={invalidUnderlineColor}
+        slugify={slugify}
       />
     );
   }

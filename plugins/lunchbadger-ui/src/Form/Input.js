@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import slug from 'slug';
 import cs from 'classnames';
 import TextField from 'material-ui/TextField';
 import HOC from '../utils/Formsy/HOC';
@@ -26,12 +27,14 @@ class Input extends Component {
     textarea: PropTypes.bool,
     alignRight: PropTypes.bool,
     invalidUnderlineColor: PropTypes.string,
+    slugify: PropTypes.bool,
   };
 
   static defaultProps = {
     textarea: false,
     alignRight: false,
     invalidUnderlineColor: '#f44336',
+    slugify: false,
   }
 
   _handleKeyPress = (event) => {
@@ -65,10 +68,13 @@ class Input extends Component {
   }
 
   _handleChange = (event) => {
-    const {setValue, handleChange, type} = this.props;
+    const {setValue, handleChange, type, slugify} = this.props;
     let {value} = event.target;
     if (type === 'number') {
       value = +value || 0;
+    }
+    if (slugify) {
+      value = slug(value, {lower: true});
     }
     setValue(value);
     if (typeof handleChange === 'function') {

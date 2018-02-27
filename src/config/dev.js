@@ -1,11 +1,11 @@
-const env = process.env.LB_ENV || 'staging'; // staging|triton|sra|localhost
+const env = process.env.LB_ENV || 'staging'; // staging|triton|gila|localhost
 
-const tritonLogo = ['triton', 'sra'].includes(env);
+const tritonLogo = ['triton', 'gila'].includes(env);
 const isPrefix = env !== 'localhost';
 const prefix = isPrefix ? `${env}-` : '';
 const subdomain = isPrefix ? `${env}.` : '';
 const logins = ({
-  sra: {
+  gila: {
     minseok: '29ffbd5102a98623a02489108492cc19'
   }
 })[env] || {};

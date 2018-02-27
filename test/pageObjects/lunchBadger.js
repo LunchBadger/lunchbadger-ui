@@ -120,6 +120,11 @@ var pageCommands = {
       });
   },
 
+  setField: function (selector, field, value, type = 'text') {
+    return this
+      .setInput(selector, `input__${field}`, value, type);
+  },
+
   setInput: function (selector, field, value, type = 'text') {
     const sel = `${selector} .${field} input[type=${type}]`;
     return this
@@ -188,6 +193,7 @@ var pageCommands = {
 
   submitCanvasEntity: function (selector) {
     return this
+      .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
       .notPresent(selector + '.wip', 120000)
       .notPresent('.Aside.disabled')
@@ -261,22 +267,30 @@ var pageCommands = {
       .notPresent('.DetailsPanel.closing', 15000);
   },
 
-  removeEntity: function (selector) {
+  removeEntity: function (selector, timeout) {
     return this
       .clickVisible(selector)
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
-      .notPresent(selector);
+      .notPresent(selector, timeout);
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    const startConnected = fromSelector;
+    const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
     return this
       .present(startSelector)
       .present(endSelector)
-      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null]);
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
+      .check({
+        connected: {
+          [startConnected]: [fromDir],
+          [endConnected]: [toDir]
+        }
+      });
   },
 
   moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {
@@ -347,22 +361,29 @@ var pageCommands = {
       });
   },
 
-  checkDetailsFields: function (names, prefix, postfix, kind = 'string') { // TODO: refactor
+  checkDetailsFields: function (names, prefix, postfix, kind = 'string') {
+    const check = {
+      text: {},
+      value: {},
+      present: [],
+      notPresent: []
+    }
     if (names === '') {
-      this.notPresent(`.DetailsPanel .input__${prefix}0${postfix}`);
+      check.notPresent.push(`.DetailsPanel .input__${prefix}0${postfix}`);
     } else {
       names.split(',').forEach((name, idx) => {
         if (kind === 'select') {
-          this.api.expect.element(`.DetailsPanel .select__${prefix}${idx}${postfix}`).text.to.equal(name);
+          check.text[`.DetailsPanel .select__${prefix}${idx}${postfix}`] = name;
         } else if (kind === 'checkbox') {
-          this.api.expect.element(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`).to.be.present;
+          check.present.push(`.DetailsPanel .checkbox__${prefix}${idx}${postfix}__${name}`);
         } else {
-          this.api.expect.element(`.DetailsPanel .input__${prefix}${idx}${postfix} input`).value.to.equal(name);
+          check.value[`.DetailsPanel .input__${prefix}${idx}${postfix} input`] = name;
         }
       });
-      this.notPresent(`.DetailsPanel .input__properties${names.split(',').length}name`);
+      check.notPresent.push(`.DetailsPanel .input__properties${names.split(',').length}name`);
     }
-    return this;
+    return this
+      .check(check);
   },
 
   getDataSourceSelector: function (nth) {
@@ -496,21 +517,31 @@ var pageCommands = {
 
   check: function ({
     text = {},
+    textContain = {},
     value = {},
+    valueContain = {},
     present = [],
     notPresent = [],
     equal = [],
     notEqual = [],
     hasClass = {},
-    className = {}
+    className = {},
+    connected = {},
+    notConnected = {}
   }) {
     this
       .pause(500);
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
     });
+    Object.keys(textContain).forEach((key) => {
+      this.api.expect.element(key).text.to.contain(textContain[key]);
+    });
     Object.keys(value).forEach((key) => {
       this.api.expect.element(key).value.to.equal(value[key]).before(5000);
+    });
+    Object.keys(valueContain).forEach((key) => {
+      this.api.expect.element(key).value.to.contain(value[key]);
     });
     present.forEach((selector) => {
       this.api.expect.element(selector).to.be.present.before(5000);
@@ -526,10 +557,20 @@ var pageCommands = {
     });
     Object.keys(hasClass).forEach((key) => {
       this.api.expect.element(key).to.have.attribute('class').which.contains(hasClass[key]);
-    })
+    });
     Object.keys(className).forEach((key) => {
       this.api.assert.attributeEquals(key, 'class', className[key]);
-    })
+    });
+    Object.keys(connected).forEach((key) => {
+      connected[key].forEach((dir) => {
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(5000);
+      });
+    });
+    Object.keys(notConnected).forEach((key) => {
+      notConnected[key].forEach((dir) => {
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(5000);
+      });
+    });
     return this;
   },
 
@@ -884,6 +925,127 @@ var pageCommands = {
   removeConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, paramIdx, prefix = '') {
     return this
       .clickPresent(`.DetailsPanel .button__remove__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter${paramIdx}`);
+  },
+
+  addModelPropertyOnCanvas: function (selector, propertyIdx) {
+    const present = [`${selector} .input__properties${propertyIdx}name`]
+    return this
+      .clickPresent(`${selector} .button__add__Properties`)
+      .check({present});
+  },
+
+  setModelPropertyOnCanvas: function (selector, propertyIdx, value) {
+    return this
+      .setInput(selector, `input__properties${propertyIdx}name`, value);
+  },
+
+  setModelPropertyTypeOnCanvas: function (selector, propertyIdx, type) {
+    return this
+      .selectValueSlow(selector, `properties${propertyIdx}type`, type);
+  },
+
+  checkModelProperties: function (selector, names = '', types = '') {
+    const check = {
+      text: {},
+      notPresent: []
+    };
+    if (names === '') {
+      check.notPresent.push(`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(1)`)
+    } else {
+      names.split(',').forEach((name, idx) => {
+        check.text[`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.name .EntityProperty__field--text`] = name;
+      });
+      check.notPresent.push(`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${names.split(',').length + 1})`);
+    }
+    if (types !== '') {
+      types.split(',').forEach((name, idx) => {
+        check.text[`${selector} .Model__properties .ModelPropertyCollapsed:nth-child(${idx + 1}) .ModelProperty__col.type .EntityProperty__field--text`] = name;
+      });
+    }
+    return this
+      .check(check);
+  },
+
+  checkModelDetailsProperties: function (names = '', types = '', defaults = '', descriptions = '', requireds = '', indexes = '') {
+    return this
+      .checkDetailsFields(names, 'properties', 'name')
+      .checkDetailsFields(types, 'properties', 'type', 'select')
+      .checkDetailsFields(defaults, 'properties', 'default_')
+      .checkDetailsFields(descriptions, 'properties', 'description')
+      .checkDetailsFields(requireds, 'properties', 'required', 'checkbox')
+      .checkDetailsFields(indexes, 'properties', 'index', 'checkbox');
+  },
+
+  checkModelDetailsRelations: function (names = '', types = '', models = '', foreignKeys = '') {
+    return this
+      .checkDetailsFields(names, 'relations', 'name')
+      .checkDetailsFields(types, 'relations', 'type', 'select')
+      .checkDetailsFields(models, 'relations', 'model', 'select')
+      .checkDetailsFields(foreignKeys, 'relations', 'foreignKey')
+  },
+
+  checkModelDetailsUDF: function (names = '', types = '', values = '') {
+    const check = {
+      value: {},
+      valueContain: {}
+    };
+    if (values !== '') {
+      values.split(',').forEach((name, idx) => {
+        if (types.split(',')[idx] === 'Object') {
+          // check.value[`.DetailsPanel .input__userFields${idx}value > div > div > textarea:nth-child(2)`] = '{"abc": 234}';
+        } else {
+          check.value[`.DetailsPanel .input__userFields${idx}value input`] = name;
+        }
+      })
+    }
+    return this
+      .checkDetailsFields(names, 'userFields', 'name')
+      .checkDetailsFields(types, 'userFields', 'type', 'select')
+      .check(check);
+  },
+
+  expectWorkspaceStatus: function (status) {
+    return this
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .present(`.workspace-status .workspace-status__${status}`, 300000);
+  },
+
+  expectWorkspaceFailure: function (error) {
+    const textContain = {
+      '.SystemDefcon1 .SystemDefcon1__box__content__details--box': error
+    };
+    return this
+      .expectWorkspaceStatus('failure')
+      .clickPresent('.workspace-status > span')
+      .present('.SystemDefcon1 .SystemDefcon1__box__content__details--box', 5000)
+      .check({textContain});
+  },
+
+  checkFunctionTriggers: function (selector, triggers) {
+    const check = {
+      text: {},
+      notPresent: []
+    }
+    Object.keys(triggers).forEach((key, idx) => {
+      check.text[`${selector} .Function__triggers > div:nth-child(${idx + 1}) > span:first-child`] = key;
+      check.text[`${selector} .Function__triggers > div:nth-child(${idx + 1}) > span:last-child`] = triggers[key];
+    });
+    check.notPresent.push(`${selector} .Function__triggers > div:nth-child(${Object.keys(triggers).length + 1})`);
+    return this
+      .check(check);
+  },
+
+  addGatewayWithProxy: function (selector, gatewayName = this.getUniqueName('gateway')) {
+    return this
+      .addElement('gateway')
+      .setCanvasEntityName(selector, gatewayName)
+      .addPolicy(selector, 0, 0, 'proxy')
+      .submitGatewayDeploy(selector, gatewayName);
+  },
+
+  removeGateway: function (selector) {
+    return this
+      .removeEntity(selector, 300000);
   }
 };
 

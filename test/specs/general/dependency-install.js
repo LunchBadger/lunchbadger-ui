@@ -1,62 +1,55 @@
 var page;
-
-function expectStatus(browser, status, error) {
-  browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
-  browser.waitForElementPresent(`.workspace-status .workspace-status__${status}`, 5 * 60 * 1000);
-  if (status === 'failure') {
-    browser.click('.workspace-status span');
-    browser.waitForElementPresent('.SystemDefcon1 .SystemDefcon1__box__content__details--box', 5000);
-    page.expect.element('.SystemDefcon1 .SystemDefcon1__box__content__details--box').text.to.contain(error).before(5 * 60 * 1000);
-  }
-}
+var dataSourceSelector1;
+var dataSourceSelector2;
+var dataSourceSelector3;
 
 module.exports = {
-  '@disabled': true, // FIXME by task 360
-  'Dependency installation': function(browser) {
+  // '@disabled': true,
+  'Dependency installation: status success': function(browser) {
     page = browser.page.lunchBadger();
-    page.open();
-
-    //Connector installation: data source add
-    page.addElementFromTooltip('dataSource', 'rest');
-    page.setValueSlow(page.getDataSourceSelector(1) + ' .input__operations0templateurl input', 'http://dumpUrl');
-    page.submitCanvasEntity(page.getDataSourceSelector(1));
-    expectStatus(browser, 'success');
-
-    // Connector installation: add more data source
-    page.addElementFromTooltip('dataSource', 'soap');
-    page.setValueSlow(page.getDataSourceSelector(2) + ' .input__url input', 'https://www.lunchbadger.com');
-    page.submitCanvasEntity(page.getDataSourceSelector(2));
-    expectStatus(browser, 'failure', 'WSDL');
-    browser.click('.SystemDefcon1 button');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    page.addElementFromTooltip('dataSource', 'mongodb');
-    page.setValueSlow(page.getDataSourceSelector(3) + ' .input__host input', 'dumpUrl');
-    page.setValueSlow(page.getDataSourceSelector(3) + ' .input__port input', '9999');
-    page.setValueSlow(page.getDataSourceSelector(3) + ' .input__database input', 'dumpDatabase');
-    page.setValueSlow(page.getDataSourceSelector(3) + ' .input__username input', 'dumpUsername');
-    page.setValueSlow(page.getDataSourceSelector(3) + ' .input__password input', 'dumpPassword');
-    page.submitCanvasEntity(page.getDataSourceSelector(3));
-    expectStatus(browser, 'failure', 'ENOTFOUND');
-
-    // Connector uninstallation: remove datasource
-    browser.click('.SystemDefcon1 button');
-    browser.waitForElementNotPresent('.SystemDefcon1', 5000);
-    browser.click(page.getDataSourceSelector(3));
-    browser.waitForElementVisible(page.getDataSourceSelector(3) + ' .Toolbox__button--delete', 50000);
-    browser.click(page.getDataSourceSelector(3) + ' .Toolbox__button--delete');
-    browser.waitForElementPresent('.ConfirmModal .confirm', 5000);
-    browser.click('.ConfirmModal .confirm');
-    expectStatus(browser, 'failure', 'WSDL');
-
-    // Connector uninstallation: trash workspace and reload page
-    browser.click('.SystemDefcon1 button');
-    page.clearProject();
-    browser.waitForElementPresent('.workspace-status .workspace-status__progress', 120000);
-    browser.waitForElementNotPresent('.spinner__overlay', 60000);
-    browser.waitForElementNotPresent('.workspace-status .workspace-status__progress', 120000);
-    page.refresh(function () {
-      browser.waitForElementPresent('.workspace-status .workspace-status__success', 120000);
-      page.close();
-    });
+    dataSourceSelector1 = page.getDataSourceSelector(1);
+    dataSourceSelector2 = page.getDataSourceSelector(2);
+    dataSourceSelector3 = page.getDataSourceSelector(3);
+    page
+      .open()
+      .addElementFromTooltip('dataSource', 'rest')
+      .setField(dataSourceSelector1, 'operations0templateurl', 'http://dumpUrl')
+      .submitCanvasEntity(dataSourceSelector1)
+      .expectWorkspaceStatus('success');
+  },
+  'Dependency installation: status failures': function() {
+    page
+      .addElementFromTooltip('dataSource', 'soap')
+      .setField(dataSourceSelector2, 'url', 'https://www.lunchbadger.com')
+      .submitCanvasEntity(dataSourceSelector2)
+      .expectWorkspaceFailure('WSDL')
+      .clickPresent('.SystemDefcon1 button')
+      .notPresent('.SystemDefcon1', 5000)
+      .addElementFromTooltip('dataSource', 'mongodb')
+      .setField(dataSourceSelector3, 'host', 'dumpUrl')
+      .setField(dataSourceSelector3, 'port', '9999')
+      .setField(dataSourceSelector3, 'database', 'dumpDatabase')
+      .setField(dataSourceSelector3, 'username', 'dumpUsername')
+      .setField(dataSourceSelector3, 'password', 'dumpPassword', 'password')
+      .submitCanvasEntity(dataSourceSelector3)
+      .expectWorkspaceFailure('ENOTFOUND')
+      .closeWhenSystemDefcon1()
+      .notPresent('.SystemDefcon1', 5000);
+  },
+  'Dependency installation: status failure': function() {
+    page
+      .removeEntity(dataSourceSelector3)
+      .expectWorkspaceFailure('WSDL')
+      .closeWhenSystemDefcon1();
+  },
+  'Dependency installation: status success after clear project': function() {
+    page
+      .clearProject()
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .notPresent('.spinner__overlay', 60000)
+      .notPresent('.workspace-status .workspace-status__progress', 120000)
+      .reloadPage()
+      .present('.workspace-status .workspace-status__success', 120000)
+      .close();
   }
 }

@@ -508,6 +508,7 @@ var pageCommands = {
 
   check: function ({
     text = {},
+    textContain = {},
     value = {},
     valueContain = {},
     present = [],
@@ -523,6 +524,9 @@ var pageCommands = {
       .pause(500);
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]);
+    });
+    Object.keys(textContain).forEach((key) => {
+      this.api.expect.element(key).text.to.contain(textContain[key]);
     });
     Object.keys(value).forEach((key) => {
       this.api.expect.element(key).value.to.equal(value[key]).before(5000);
@@ -989,6 +993,23 @@ var pageCommands = {
       .checkDetailsFields(names, 'userFields', 'name')
       .checkDetailsFields(types, 'userFields', 'type', 'select')
       .check(check);
+  },
+
+  expectWorkspaceStatus: function (status) {
+    return this
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .present(`.workspace-status .workspace-status__${status}`, 300000);
+  },
+
+  expectWorkspaceFailure: function (error) {
+    const textContain = {
+      '.SystemDefcon1 .SystemDefcon1__box__content__details--box': error
+    };
+    return this
+      .expectWorkspaceStatus('failure')
+      .clickPresent('.workspace-status > span')
+      .present('.SystemDefcon1 .SystemDefcon1__box__content__details--box', 5000)
+      .check({textContain});
   }
 };
 

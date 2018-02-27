@@ -18,7 +18,7 @@ import {
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
-import {Entity} from '../../../../lunchbadger-ui/src';
+import {Entity, EntityStatus} from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {
@@ -311,6 +311,7 @@ export default (ComposedComponent) => {
         isZoomDisabled,
         loaded,
         slugifyName,
+        status,
       } = entity;
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
@@ -371,7 +372,6 @@ export default (ComposedComponent) => {
               highlighted={highlighted}
               dragging={isDragging}
               wip={processing}
-              gray={deleting}
               fake={fake}
               semitransparent={semitransparent}
               invalid={!validations.isValid}
@@ -418,6 +418,7 @@ export default (ComposedComponent) => {
                 </TwoOptionModal>
               )}
             </Entity>
+            <EntityStatus status={status} />
             {this.state.showNotRunningModal && (
               <OneOptionModal
                 confirmText="OK"

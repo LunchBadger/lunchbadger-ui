@@ -14,7 +14,14 @@ class EntityHeader extends Component {
   handleNameBlur = event => this.props.onNameBlur('name', event.target.value, event);
 
   render() {
-    const {type, name, onNameChange, onToggleExpand, invalid} = this.props;
+    const {
+      type,
+      name,
+      onNameChange,
+      onToggleExpand,
+      invalid,
+      slugifyName,
+    } = this.props;
     const underlineStyle = {
       borderColor: '#8dbde2',
     }
@@ -33,6 +40,7 @@ class EntityHeader extends Component {
             underlineStyle={underlineStyle}
             invalid={invalid}
             invalidUnderlineColor="#FFF"
+            slugify={slugifyName}
           />
         </div>
       </div>

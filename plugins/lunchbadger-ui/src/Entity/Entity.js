@@ -65,6 +65,7 @@ class Entity extends PureComponent {
       connectDragSource,
       connectDropTarget,
       onNameBlur,
+      slugifyName,
     } = this.props;
     const opacity = dragging ? 0.2 : 1;
     const {expanded} = this.state;
@@ -97,6 +98,7 @@ class Entity extends PureComponent {
             onNameChange={onNameChange}
             onNameBlur={onNameBlur}
             invalid={validations.data.name}
+            slugifyName={slugifyName}
           />
           {!fake && (
             <div className="Entity__data">

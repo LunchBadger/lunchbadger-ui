@@ -304,7 +304,14 @@ export default (ComposedComponent) => {
           multiEnvIndex={multiEnvIndex}
         />
       );
-      const {ready, deleting, fake, isZoomDisabled, loaded} = entity;
+      const {
+        ready,
+        deleting,
+        fake,
+        isZoomDisabled,
+        loaded,
+        slugifyName,
+      } = entity;
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
@@ -381,6 +388,7 @@ export default (ComposedComponent) => {
               connectDragSource={connectDragSource}
               connectDropTarget={connectDropTarget}
               isDelta={isDelta}
+              slugifyName={slugifyName}
             >
               {!fake && (
                 <ComposedComponent

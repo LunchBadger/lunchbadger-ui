@@ -13,6 +13,7 @@ export default class BaseModel {
   top = 0;
   itemOrder = 0;
   loaded = true;
+  slugifyName = false;
 
   static deserializers = {};
 

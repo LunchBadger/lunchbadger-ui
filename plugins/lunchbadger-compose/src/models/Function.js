@@ -42,7 +42,7 @@ export default class Function_ extends BaseModel {
   _ports = [];
   _properties = [];
   _relations = [];
-  contextPath = 'function';
+  contextPath = 'myfunction';
   base = 'PersistedModel';
   plural = '';
   readonly = false;
@@ -51,6 +51,7 @@ export default class Function_ extends BaseModel {
   wasBundled = false;
   runtime = runtimeOptions[0];
   code = '';
+  slugifyName = true;
 
   static deserializers = {
     http: (obj, val) => {

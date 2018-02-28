@@ -6,6 +6,7 @@ import panelDetailsElements from './panelDetailsElements';
 import services from './services';
 import onAppLoad from './onAppLoad';
 import onProjectSave from './onProjectSave';
+import onProjectClear from './onProjectClear';
 import onSaveOrder from './onSaveOrder';
 import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
@@ -20,6 +21,7 @@ export default {
   services,
   onAppLoad,
   onProjectSave,
+  onProjectClear,
   onSaveOrder,
   onConnectionCreatedStrategy,
   onConnectionMovedStrategy,

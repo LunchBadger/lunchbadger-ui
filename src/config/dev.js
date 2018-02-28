@@ -21,6 +21,7 @@ export default {
   expressGatewayAdminApiUrl: `http://admin-{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
+  slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

@@ -63,10 +63,18 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(false));
 };
 
-export const clearServer = () => async (dispatch) => {
+export const clearServer = () => async (dispatch, getState) => {
+  const {onProjectClear} = getState().plugins;
   dispatch(actions.clearProject());
   try {
     await ProjectService.clearProject();
+    if (onProjectClear.length > 0) {
+      try {
+        await Promise.all(onProjectClear.map(action => dispatch(action())));
+      } catch (err) {
+        dispatch(addSystemDefcon1(err));
+      }
+    }
   } catch (err) {
     if (err.statusCode === 401) {
       LoginManager().refreshLogin();

@@ -1,20 +1,11 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import cs from 'classnames';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
 import slug from 'slug';
 import _ from 'lodash';
-import uuid from 'uuid';
 import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
-  Input,
-  Checkbox,
-  Select,
-  Table,
-  IconButton,
   CodeEditor,
 } from '../../../../../lunchbadger-ui/src';
 import runtimeOptions from '../../../utils/runtimeOptions';
@@ -24,11 +15,6 @@ import './FunctionDetails.scss';
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
 const {Connections} = LunchBadgerCore.stores;
 
-const baseModelTypes = [
-  {label: 'Model', value: 'Model'},
-  {label: 'PersistedModel', value: 'PersistedModel'},
-];
-
 const editorCodeLanguages = {
   node: 'javascript',
   python: 'python',
@@ -37,26 +23,6 @@ const editorCodeLanguages = {
 };
 
 const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
-
-// const userFieldsTypeOptions = [
-//   {label: 'String', value: 'string'},
-//   {label: 'Number', value: 'number'},
-//   {label: 'Object', value: 'object'},
-// ];
-//
-// const userFieldsTypeEmptyValues = {
-//   string: '',
-//   number: '0',
-//   object: {},
-// };
-
-// const subTypes = ['object', 'array'];
-//
-// const relationTypeOptions = [
-//   {label: 'hasMany', value: 'hasMany'},
-//   {label: 'belongsTo', value: 'belongsTo'},
-//   {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
-// ];
 
 class FunctionDetails extends PureComponent {
   static propTypes = {
@@ -70,15 +36,6 @@ class FunctionDetails extends PureComponent {
 
   constructor(props) {
     super(props);
-    // const stateFromStores = (newProps) => {
-    //   const data = {
-    //     properties: [],
-    //     relations: newProps.entity.relations.slice(),
-    //     userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
-    //   };
-    //   addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
-    //   return data;
-    // };
     this.state = this.initState(props);
     this.onPropsUpdate = (props = this.props, callback) => this.setState(this.initState(props), callback);
   }
@@ -98,12 +55,7 @@ class FunctionDetails extends PureComponent {
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
       editorCodeLanguage: getEditorCodeLanguage(runtime),
     };
-  }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   diff(this.props, nextProps, this.state, nextState);
-  //   return true;
-  // }
+  };
 
   processModel = model => {
     const {entity} = this.props;
@@ -136,151 +88,23 @@ class FunctionDetails extends PureComponent {
       delete model.dataSource;
     }
     return model;
-    // return entity.processModel(model, this.state.properties);
-  }
+  };
 
   discardChanges = callback => {
     this.codeEditorRef.discardChanges();
     this.onPropsUpdate(this.props, callback);
-  }
-
-  // handlePropertyToggleCollapse = id => () => {
-  //   const properties = [...this.state.properties];
-  //   const property = properties.find(item => item.id === id);
-  //   property.expanded = !property.expanded;
-  //   this.setState({properties});
-  // }
-  //
-  // onAddItem = (collection, item) => {
-  //   const newCollection = [...this.state[collection], item];
-  //   if (collection === 'properties' && item.parentId !== '') {
-  //     const property = newCollection.find(prop => prop.id === item.parentId);
-  //     if (property) {
-  //       property.expanded = true;
-  //     }
-  //   }
-  //   this.setState({
-  //     [collection]: newCollection,
-  //     changed: true,
-  //   }, () => this.props.parent.checkPristine());
-  // }
-  //
-  // onRemoveItem = (collection, item) => {
-  //   const items = [...this.state[collection]];
-  //   _.remove(items, (i) => {
-  //     if (item.id) return i.id === item.id;
-  //     return i.name === item.name;
-  //   });
-  //   this.setState({[collection]: items});
-  //   this.setState({
-  //     changed: !_.isEqual(items, this.props.entity[collection]),
-  //   }, () => this.props.parent.checkPristine());
-  // }
-
-  // onAddProperty = parentId => () => {
-  //   const property = ModelProperty.create({
-  //     parentId,
-  //     default_: '',
-  //     type: 'string',
-  //     description: '',
-  //     required: false,
-  //     index: false,
-  //   });
-  //   this.onAddItem('properties', property);
-  //   setTimeout(() => {
-  //     const input = document.getElementById(`properties[${property.idx}][name]`);
-  //     input && input.focus();
-  //   });
-  // }
-  //
-  // onRemoveProperty = property => () => this.onRemoveItem('properties', property);
-  //
-  // onAddRelation = () => {
-  //   this.onAddItem('relations', ModelRelation.create({}));
-  //   setTimeout(() => {
-  //     const input = document.getElementById(`relations[${this.state.relations.length - 1}][name]`);
-  //     input && input.focus();
-  //   });
-  // }
-  //
-  // onRemoveRelation = relation => () => this.onRemoveItem('relations', relation);
-
-  // onAddUserField = () => {
-  //   this.onAddItem('userFields', {id: uuid.v4(), name: '', type: 'string', value: ''});
-  //   setTimeout(() => {
-  //     const input = document.getElementById(`userFields[${this.state.userFields.length - 1}][name]`);
-  //     input && input.focus();
-  //   });
-  // }
-  //
-  // onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
-  //
-  // handleChangePropertyType = id => (type) => {
-  //   const properties = [...this.state.properties];
-  //   properties.find(prop => prop.id === id).type = type;
-  //   this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
-  // }
-  //
-  // handleChangeUserDefinedFieldType = idx => (type) => {
-  //   const userFields = [...this.state.userFields];
-  //   userFields[idx] = {...userFields[idx]};
-  //   userFields[idx].type = type;
-  //   userFields[idx].value = userFieldsTypeEmptyValues[type];
-  //   this.setState({userFields});
-  // }
-
-  // handleTab = (collection, idx) => (event) => {
-  //   if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
-  //   const collectionSize = this.state[collection].length;
-  //   const addFunc = {
-  //     userFields: 'onAddUserField',
-  //     relations: 'onAddRelation',
-  //   };
-  //   if (collectionSize - 1 === idx) {
-  //     this[addFunc[collection]]();
-  //   }
-  // }
-  //
-  // handleTabProperties = property => (event) => {
-  //   if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
-  //   const idx = +property.idx.split('/')[1];
-  //   const size = this.state.properties.filter(item => item.parentId === property.parentId).length - 1;
-  //   if (size === idx) {
-  //     this.onAddProperty(property.parentId)();
-  //   }
-  // }
+  };
 
   handleRuntimeChange = value => this.setState({editorCodeLanguage: getEditorCodeLanguage(value)});
 
   renderDetailsSection = () => {
-    const {entity, dataSources} = this.props;
-    // const dataSourceOptions = Object.keys(dataSources)
-    //   .map(key => dataSources[key])
-    //   .map(({name: label, id: value}) => ({label, value}));
-    // const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    const {entity} = this.props;
     const fields = [
       {
         title: 'Context Path',
         name: 'http[path]',
         value: entity.contextPath,
       },
-      // {
-      //   title: 'Plural',
-      //   name: 'plural',
-      //   value: entity.plural,
-      // },
-      // {
-      //   title: 'Base Model',
-      //   name: 'base',
-      //   value: entity.base,
-      //   options: baseModelTypes,
-      // },
-      // {
-      //   title: 'Data Source',
-      //   name: 'dataSource',
-      //   value: currentDsId,
-      //   options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
-      // },
       {
         title: 'Runtime',
         name: 'runtime',
@@ -289,257 +113,21 @@ class FunctionDetails extends PureComponent {
         onChange: this.handleRuntimeChange,
       },
     ];
-    // const checkboxes = [
-    //   {
-    //     name: 'readonly',
-    //     label: 'Read Only',
-    //     value: entity.readonly,
-    //   },
-    //   {
-    //     name: 'strict',
-    //     label: 'Strict Schema',
-    //     value: entity.strict,
-    //   },
-    //   {
-    //     name: 'public',
-    //     label: 'Exposed as REST',
-    //     value: entity.public,
-    //   },
-    // ];
     return (
       <div className="panel__details">
         {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
-        {/*checkboxes.map(item => (
-          <div key={item.name} className="panel__details__checkbox">
-            <Checkbox {...item} />
-          </div>
-        ))*/}
       </div>
     );
-  }
+  };
 
-  renderTriggersSection() {
-    return <FunctionTriggers id={this.props.entity.id} details />
-  }
-
-  // getProperties = (properties, parentId, level = 0) => {
-  //   let idx = 0;
-  //   this.state.properties.forEach((property) => {
-  //     if (property.parentId === parentId) {
-  //       property.idx = `${parentId}/${idx}`;
-  //       property.level = level;
-  //       idx += 1;
-  //       properties.push(property);
-  //       if (property.expanded) {
-  //         this.getProperties(properties, property.id, level + 1);
-  //       }
-  //     };
-  //   });
-  // };
-  //
-  // renderPropertiesSection = () => {
-  //   const columns = [
-  //     <div style={{marginLeft: 10}}>Name</div>,
-  //     'Type',
-  //     'Default Value',
-  //     'Notes',
-  //     'Required',
-  //     'Is Index',
-  //     <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
-  //   ];
-  //   const widths = [300, 120, 200, undefined, 100, 100, 70];
-  //   const paddings = [true, true, true, true, false, false, false];
-  //   const centers = [false, false, false, false, true, true, false];
-  //   const properties = [];
-  //   this.getProperties(properties, '');
-  //   const data = properties.map((property) => [
-  //     <div style={{marginLeft: property.level * 10}}>
-  //       <div className={cs('ModelDetails__arrow', {expanded: property.expanded})}>
-  //         {subTypes.includes(property.type) && (
-  //           <IconButton
-  //             onClick={this.handlePropertyToggleCollapse(property.id)}
-  //             icon="iconArrow"
-  //           />
-  //         )}
-  //       </div>
-  //       <div className="ModelDetails__field">
-  //         <Input
-  //           name={`properties[${property.idx}][id]`}
-  //           value={property.id}
-  //           type="hidden"
-  //         />
-  //         <Input
-  //           name={`properties[${property.idx}][name]`}
-  //           value={property.name}
-  //           underlineStyle={{bottom: 0}}
-  //           fullWidth
-  //           hideUnderline
-  //         />
-  //       </div>
-  //     </div>,
-  //     <Select
-  //       name={`properties[${property.idx}][type]`}
-  //       value={property.type || 'string'}
-  //       options={propertyTypes}
-  //       fullWidth
-  //       hideUnderline
-  //       handleChange={this.handleChangePropertyType(property.id)}
-  //     />,
-  //     subTypes.includes(property.type) ? null :
-  //       <Input
-  //         name={`properties[${property.idx}][default_]`}
-  //         value={property.default_}
-  //         underlineStyle={{bottom: 0}}
-  //         fullWidth
-  //         hideUnderline
-  //       />,
-  //     <Input
-  //       name={`properties[${property.idx}][description]`}
-  //       value={property.description}
-  //       underlineStyle={{bottom: 0}}
-  //       fullWidth
-  //       hideUnderline
-  //     />,
-  //     <Checkbox
-  //       name={`properties[${property.idx}][required]`}
-  //       value={property.required}
-  //     />,
-  //     <Checkbox
-  //       name={`properties[${property.idx}][index]`}
-  //       value={property.index}
-  //       handleKeyDown={this.handleTabProperties(property)}
-  //     />,
-  //     <div>
-  //       <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />
-  //       {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
-  //     </div>,
-  //   ]);
-  //   return <Table
-  //     columns={columns}
-  //     data={data}
-  //     widths={widths}
-  //     paddings={paddings}
-  //     centers={centers}
-  //   />;
-  //   // <ModelNestedProperties
-  //   //   title="Properties"
-  //   //   path=""
-  //   //   properties={this.state.properties}
-  //   //   onAddProperty={this.onAddProperty}
-  //   //   onRemoveProperty={this.onRemoveProperty}
-  //   //   onPropertyTypeChange={this.onPropertyTypeChange}
-  //   // />
-  // };
-  //
-  // renderRelationsSection = () => {
-  //   const {modelOptions} = this.props;
-  //   const columns = [
-  //     'Name',
-  //     'Type',
-  //     'Model',
-  //     'Foreign Key',
-  //     <IconButton name="add__relation" icon="iconPlus" onClick={this.onAddRelation} />,
-  //   ];
-  //   const widths = [300, 220, 300, undefined, 70];
-  //   const paddings = [true, true, true, true, false];
-  //   const data = this.state.relations.map((relation, idx) => [
-  //     <Input
-  //       name={`relations[${idx}][name]`}
-  //       value={relation.name}
-  //       underlineStyle={{bottom: 0}}
-  //       fullWidth
-  //       hideUnderline
-  //     />,
-  //     <Select
-  //       name={`relations[${idx}][type]`}
-  //       value={relation.type || 'hasMany'}
-  //       options={relationTypeOptions}
-  //       fullWidth
-  //       hideUnderline
-  //     />,
-  //     <Select
-  //       name={`relations[${idx}][model]`}
-  //       value={relation.model || modelOptions[0].value}
-  //       options={modelOptions}
-  //       fullWidth
-  //       hideUnderline
-  //     />,
-  //     <Input
-  //       name={`relations[${idx}][foreignKey]`}
-  //       value={relation.foreignKey}
-  //       underlineStyle={{bottom: 0}}
-  //       fullWidth
-  //       hideUnderline
-  //       handleKeyDown={this.handleTab('relations', idx)}
-  //     />,
-  //     <IconButton name={`remove__relation${idx}`} icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
-  //   ]);
-  //   return <Table
-  //     columns={columns}
-  //     data={data}
-  //     widths={widths}
-  //     paddings={paddings}
-  //   />;
-  // };
-
-  // renderUserDefinedFieldsSection = () => {
-  //   const columns = [
-  //     'Name',
-  //     'Type',
-  //     'Value',
-  //     <IconButton name="add__udf" icon="iconPlus" onClick={this.onAddUserField} />,
-  //   ];
-  //   const widths = [300, 120, undefined, 70];
-  //   const paddings = [true, true, true, false];
-  //   const data = this.state.userFields.map((field, idx) => [
-  //     <Input
-  //       name={`userFields[${idx}][name]`}
-  //       value={field.name}
-  //       underlineStyle={{bottom: 0}}
-  //       fullWidth
-  //       hideUnderline
-  //     />,
-  //     <Select
-  //       name={`userFields[${idx}][type]`}
-  //       value={field.type}
-  //       options={userFieldsTypeOptions}
-  //       fullWidth
-  //       hideUnderline
-  //       handleChange={this.handleChangeUserDefinedFieldType(idx)}
-  //     />,
-  //     field.type === 'object'
-  //     ? <Input
-  //         name={`userFields[${idx}][value]`}
-  //         value={JSON.stringify(field.value)}
-  //         underlineStyle={{bottom: 0}}
-  //         fullWidth
-  //         hideUnderline
-  //         textarea
-  //         handleKeyDown={this.handleTab('userFields', idx)}
-  //       />
-  //     : <Input
-  //         name={`userFields[${idx}][value]`}
-  //         value={field.value.toString()}
-  //         underlineStyle={{bottom: 0}}
-  //         fullWidth
-  //         hideUnderline
-  //         type={field.type === 'number' ? 'number' : 'text'}
-  //         handleKeyDown={this.handleTab('userFields', idx)}
-  //       />,
-  //     <IconButton name={`remove__udf${idx}`} icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
-  //   ]);
-  //   return <Table
-  //     columns={columns}
-  //     data={data}
-  //     widths={widths}
-  //     paddings={paddings}
-  //   />;
-  // }
+  renderTriggersSection = () => <FunctionTriggers id={this.props.entity.id} details />;
 
   handleFunctionCodeChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
 
   renderFunctionCodeSection = () => {
-    const {code} = this.props.entity;
+    const {service} = this.props.entity;
+    const {files} = service;
+    const code = files['handler.js'];
     const {editorCodeLanguage} = this.state;
     return (
       <CodeEditor
@@ -558,9 +146,6 @@ class FunctionDetails extends PureComponent {
       {title: 'Details'},
       {title: 'Triggers'},
       {title: 'Function Code', render: 'FunctionCode'},
-      // {title: 'User-defined fields', render: 'UserDefinedFields'},
-      // {title: 'Relations'},
-      // {title: 'Properties'},
     ];
     return (
       <div className="FunctionDetails">
@@ -578,20 +163,4 @@ class FunctionDetails extends PureComponent {
   }
 }
 
-const selector = createSelector(
-  state => state.entities.dataSources,
-  // state => state.entities.models,
-  // state => state.entities.modelsBundled,
-  (
-    dataSources,
-    // models,
-    // modelsBundled,
-  ) => ({
-    dataSources,
-    // modelOptions: Object.keys(models).map(key => models[key].name)
-    //   .concat(Object.keys(modelsBundled).map(key => modelsBundled[key].name))
-    //   .map(label => ({label, value: label})),
-  }),
-);
-
-export default connect(selector)(BaseDetails(FunctionDetails));
+export default BaseDetails(FunctionDetails);

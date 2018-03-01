@@ -8,7 +8,7 @@ class SLSService {
 
   create = name => this.api.post('/service', {body: {name}});
 
-  deploy = name => {}; // this.api.post(`/deploy/${name}`);
+  deploy = name => this.api.post('/deploy', {body: {name}});
 
   list = () => this.api.get('/service');
 

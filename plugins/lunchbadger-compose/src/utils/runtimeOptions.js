@@ -3,6 +3,4 @@ export default [
  'Node 8.6.0',
  'Python 3.6.3',
  'Python 2.7.14',
- 'Java 8.0',
- 'C# 7.0',
 ];

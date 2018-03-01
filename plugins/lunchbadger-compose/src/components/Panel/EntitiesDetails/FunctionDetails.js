@@ -6,7 +6,6 @@ import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
-  CodeEditor,
   FilesEditor,
 } from '../../../../../lunchbadger-ui/src';
 import runtimeOptions from '../../../utils/runtimeOptions';
@@ -14,7 +13,6 @@ import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers'
 import './FunctionDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {Connections} = LunchBadgerCore.stores;
 
 const editorCodeLanguages = {
   node: 'javascript',
@@ -58,44 +56,7 @@ class FunctionDetails extends PureComponent {
     };
   };
 
-  processModel = model => {
-    const {entity} = this.props;
-    if (model.hasOwnProperty('dataSource')) {
-      const dsId = model.dataSource === 'none' ? null : model.dataSource;
-      const {paper: paperRef} = this.context;
-      const paper = paperRef.getInstance();
-      const currDsConn = Connections.find({toId: entity.id});
-      const currDsId = currDsConn ? currDsConn.fromId : null;
-      if (dsId !== currDsId) {
-        if (!dsId) {
-          paper.detach(currDsConn.info.connection);
-        } else if (currDsId) {
-          paper.setSource(
-            currDsConn.info.connection,
-            document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-          );
-        } else {
-          paper.connect({
-            source: document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-            target: document.getElementById(`port_in_${entity.id}`).querySelector('.port__anchor'),
-            parameters: {
-              forceDropped: true,
-            }
-          }, {
-            fireEvent: true,
-          });
-        }
-      }
-      delete model.dataSource;
-    }
-    model.service = Object.assign({}, entity.service);
-    model.service.files = {};
-    Object.keys(model.files || {}).forEach((key) => {
-      model.service.files[key.replace(/\*/g, '.')] = model.files[key];
-    });
-    delete model.files;
-    return model;
-  };
+  processModel = model => this.props.entity.processModel(model);
 
   discardChanges = callback => {
     this.onPropsUpdate(this.props, callback);
@@ -117,6 +78,7 @@ class FunctionDetails extends PureComponent {
         value: entity.runtime,
         options: runtimeOptions.map(label => ({label, value: label})),
         onChange: this.handleRuntimeChange,
+        fake: entity.loaded,
       },
     ];
     return (

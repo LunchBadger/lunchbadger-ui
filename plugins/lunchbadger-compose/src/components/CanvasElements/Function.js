@@ -67,6 +67,8 @@ class Function_ extends Component {
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
+  processModel = model => this.props.entity.processModel(model);
+
   renderPorts = () => {
     return this.props.entity.ports.map((port) => (
       <Port
@@ -98,6 +100,7 @@ class Function_ extends Component {
         title: 'Runtime',
         value: entity.runtime,
         options: runtimeOptions.map(label => ({label, value: label})),
+        fake: entity.loaded,
       },
     ];
     mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;

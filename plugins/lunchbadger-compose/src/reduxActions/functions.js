@@ -16,6 +16,7 @@ export const add = () => (dispatch, getState) => {
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const {loaded} = entity;
+  const {name} = model;
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   const isAutoSave = false;
@@ -24,7 +25,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
-  const isDifferent = entity.loaded && model.name !== state.entities.functions[entity.id].name;
+  const isDifferent = entity.loaded && name !== state.entities.functions[entity.id].name;
   updatedEntity = Function_.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions.updateFunction(updatedEntity));
   try {
@@ -41,14 +42,15 @@ export const update = (entity, model) => async (dispatch, getState) => {
       });
     }
     if (!loaded) {
-      const slsCreate = await SLSService.create(model.name);
+      const [env, version] = model.runtime.toLowerCase().split(' ');
+      const slsCreate = await SLSService.create({name, env, version});
       body.service = slsCreate.body;
     } else {
       body.service = model.service;
-      const slsDeploy = await SLSService.update(model.name, body.service);
+      const slsDeploy = await SLSService.update(name, body.service);
       body.service = slsDeploy.body;
     }
-    await SLSService.deploy(model.name);
+    await SLSService.deploy(name);
     const list = await SLSService.list();
     dispatch(actions.updateSlsService(list.body));
     updatedEntity = Function_.create(body);

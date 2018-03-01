@@ -6,7 +6,7 @@ class SLSService {
 
   initialize = () => this.api = new ApiClient(Config.get('slsApiUrl'), getUser().id_token);
 
-  create = name => this.api.post('/service', {body: {name}});
+  create = body => this.api.post('/service', {body});
 
   deploy = name => this.api.post('/deploy', {body: {name}});
 

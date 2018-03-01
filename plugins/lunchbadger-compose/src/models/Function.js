@@ -177,4 +177,17 @@ export default class Function_ extends BaseModel {
     return async dispatch => await dispatch(remove(this));
   }
 
+  processModel(model) {
+    const data = _.cloneDeep(model);
+    data.service = Object.assign({}, this.service);
+    if (data.hasOwnProperty('files')) {
+      data.service.files = {};
+      Object.keys(data.files || {}).forEach((key) => {
+        data.service.files[key.replace(/\*/g, '.')] = data.files[key];
+      });
+      delete data.files;
+    }
+    return data;
+  }
+
 }

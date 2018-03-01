@@ -44,8 +44,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       const slsCreate = await SLSService.create(model.name);
       body.service = slsCreate.body;
     } else {
-      body.service = entity.service;
-      body.service.files['handler.js'] = model.code;
+      body.service = model.service;
       const slsDeploy = await SLSService.update(model.name, body.service);
       body.service = slsDeploy.body;
     }

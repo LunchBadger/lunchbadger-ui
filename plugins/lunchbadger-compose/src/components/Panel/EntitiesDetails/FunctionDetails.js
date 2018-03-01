@@ -7,6 +7,7 @@ import {
   EntityPropertyLabel,
   CollapsibleProperties,
   CodeEditor,
+  FilesEditor,
 } from '../../../../../lunchbadger-ui/src';
 import runtimeOptions from '../../../utils/runtimeOptions';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
@@ -87,11 +88,16 @@ class FunctionDetails extends PureComponent {
       }
       delete model.dataSource;
     }
+    model.service = Object.assign({}, entity.service);
+    model.service.files = {};
+    Object.keys(model.files || {}).forEach((key) => {
+      model.service.files[key.replace(/\*/g, '.')] = model.files[key];
+    });
+    delete model.files;
     return model;
   };
 
   discardChanges = callback => {
-    this.codeEditorRef.discardChanges();
     this.onPropsUpdate(this.props, callback);
   };
 
@@ -125,18 +131,13 @@ class FunctionDetails extends PureComponent {
   handleFunctionCodeChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
 
   renderFunctionCodeSection = () => {
-    const {service} = this.props.entity;
-    const {files} = service;
-    const code = files['handler.js'];
+    const {files} = this.props.entity.service;
     const {editorCodeLanguage} = this.state;
     return (
-      <CodeEditor
-        ref={r => this.codeEditorRef = r}
+      <FilesEditor
         lang={editorCodeLanguage}
-        value={code}
-        name="code"
         onChange={this.handleFunctionCodeChange}
-        mode="editor"
+        files={files}
       />
     );
   };

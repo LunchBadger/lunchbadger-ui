@@ -114,7 +114,7 @@ export default class Function_ extends BaseModel {
   toApiJSON() {
     return {
       friendlyName: this.name,
-      url: Config.get('customerUrl'),
+      url: Config.get('slsUrl').replace('{FN}', this.name),
     };
   }
 

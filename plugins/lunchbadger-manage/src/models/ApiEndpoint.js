@@ -13,6 +13,12 @@ export default class ApiEndpoint extends BaseModel {
   wasBundled = false;
   host = '*';
   paths = [];
+  detailsSize = {
+    general: {
+      width: 400,
+      height: 600,
+    },
+  };
 
   constructor(id, name) {
     super(id);

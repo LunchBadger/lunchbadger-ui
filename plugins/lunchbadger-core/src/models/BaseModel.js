@@ -14,6 +14,7 @@ export default class BaseModel {
   itemOrder = 0;
   loaded = true;
   slugifyName = false;
+  detailsSize = {};
 
   static deserializers = {};
 

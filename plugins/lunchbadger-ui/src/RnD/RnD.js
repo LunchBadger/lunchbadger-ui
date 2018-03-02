@@ -25,16 +25,22 @@ export default class RnD extends PureComponent {
   }
 
   componentDidMount() {
+    const {initialSize} = this.props;
     const {innerWidth, innerHeight} = window;
-    const x = 100;
-    const y = 20;
-    const width = innerWidth - 2 * x;
-    const height = innerHeight - 2 * y;
+    const size = {
+      x: 100,
+      y: 20,
+      width: innerWidth - 200,
+      height: innerHeight - 40,
+    };
+    if (initialSize) {
+      size.width = Math.min(size.width, initialSize.width);
+      size.height = Math.min(size.height, initialSize.height);
+      size.x = Math.floor((innerWidth - size.width) / 2);
+      size.y = Math.floor((innerHeight - size.height) / 2);
+    }
     const state = {
-      x,
-      y,
-      width,
-      height,
+      ...size,
       max: false,
       opacity: 1,
     };

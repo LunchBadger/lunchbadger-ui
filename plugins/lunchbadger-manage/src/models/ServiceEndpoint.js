@@ -11,6 +11,12 @@ export default class ServiceEndpoint extends BaseModel {
 
   _ports = [];
   urls = [];
+  detailsSize = {
+    general: {
+      width: 400,
+      height: 600,
+    },
+  };
 
   constructor(id, name) {
     super(id);

@@ -1,0 +1,15 @@
+.panel {
+  &__details {
+    &.mongodb,
+    &.redis,
+    &.mysql,
+    &.postgresql,
+    &.web3,
+    &.salesforce,
+    &.manta {
+      .CollapsibleProperties__collapsible {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

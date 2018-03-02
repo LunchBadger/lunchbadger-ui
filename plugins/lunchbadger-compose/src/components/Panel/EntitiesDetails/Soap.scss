@@ -3,7 +3,11 @@
     & > span {
       display: inline-block;
       vertical-align: middle;
-      width: 380px;
+      width: 340px;
     }
   }
+}
+
+.panel__details.soap .EntityProperty {
+  margin-right: 20px;
 }

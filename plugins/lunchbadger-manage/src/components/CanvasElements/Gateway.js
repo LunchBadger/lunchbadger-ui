@@ -143,11 +143,14 @@ class Gateway extends Component {
     this.changeState({pipelines});
   };
 
-  handlePolicyChange = (pipelineIdx, policyIdx) => (policyName) => {
+  handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].name = policyName;
-    pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-    this.changeState({pipelines});
+    const {name} = pipelines[pipelineIdx].policies[policyIdx];
+    if (name !== value) {
+      pipelines[pipelineIdx].policies[policyIdx].name = value;
+      pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+      this.changeState({pipelines});
+    }
   };
 
   getPolicyInputOptions = () => Object.keys(this.context.store.getState().entities.gatewaySchemas.policy)
@@ -164,7 +167,8 @@ class Gateway extends Component {
               value={policy.name || options[0].value}
               options={options}
               onDelete={this.deletePipelinePolicy(pipelineIdx, policyIdx)}
-              onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
+              onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
+              autocomplete
             />
             <div className="Gateway__CA">
               {policy.conditionAction.map((pair, pairIdx) => (

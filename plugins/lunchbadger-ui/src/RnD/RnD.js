@@ -25,22 +25,8 @@ export default class RnD extends PureComponent {
   }
 
   componentDidMount() {
-    const {initialSize} = this.props;
-    const {innerWidth, innerHeight} = window;
-    const size = {
-      x: 100,
-      y: 20,
-      width: innerWidth - 200,
-      height: innerHeight - 40,
-    };
-    if (initialSize) {
-      size.width = Math.min(size.width, initialSize.width);
-      size.height = Math.min(size.height, initialSize.height);
-      size.x = Math.floor((innerWidth - size.width) / 2);
-      size.y = Math.floor((innerHeight - size.height) / 2);
-    }
     const state = {
-      ...size,
+      ...this.getRect(this.props.size),
       max: false,
       opacity: 1,
     };
@@ -48,10 +34,32 @@ export default class RnD extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.rect.close) {
-      this.transitions({...nextProps.rect, opacity: 0}, this.props.onClose);
+    const {width, height} = this.props.size;
+    const {size, rect} = nextProps;
+    if (width !== size.width && height !== size.height) {
+      this.transitions(this.getRect(size));
+    }
+    if (rect.close) {
+      this.transitions({...rect, opacity: 0}, this.props.onClose);
     }
   }
+
+  getRect = (size) => {
+    const {innerWidth, innerHeight} = window;
+    const rect = {
+      x: 100,
+      y: 20,
+      width: innerWidth - 200,
+      height: innerHeight - 40,
+    };
+    if (size) {
+      rect.width = Math.min(rect.width, size.width);
+      rect.height = Math.min(rect.height, size.height);
+      rect.x = Math.floor((innerWidth - rect.width) / 2);
+      rect.y = Math.floor((innerHeight - rect.height) / 2);
+    }
+    return rect;
+  };
 
   // TODO: consider getting rid of this (maybe by using css animations?)
   transitions = (state, cb) => {

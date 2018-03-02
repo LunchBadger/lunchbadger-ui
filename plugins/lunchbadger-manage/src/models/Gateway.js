@@ -23,6 +23,20 @@ export default class Gateway extends BaseModel {
   running = true;
   deleting = null;
   fake = null;
+  detailsSize = {
+    general: {
+      width: 865,
+      height: 625,
+    },
+    pipelines: {
+      width: 1400,
+      height: 1000,
+    },
+    customerMngmt: {
+      width: 300,
+      height: 300,
+    },
+  };
 
   constructor(id, name) {
     super(id);

@@ -42,7 +42,7 @@ class Select extends Component {
   }
 
   _handleBlur = (event) => {
-    if (this.state.focused) return;
+    if (event.target.value === '') return;
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
     }
@@ -146,7 +146,7 @@ class Select extends Component {
           onFocus={this.handleAutoCompleteFocus}
           fullWidth
           style={style}
-          inputStyle={labelStyle}
+          textFieldStyle={labelStyle}
           listStyle={{...style, fontWeight: 400}}
           underlineStyle={underlineStyle}
           menuProps={{desktop: true, maxHeight: 250}}

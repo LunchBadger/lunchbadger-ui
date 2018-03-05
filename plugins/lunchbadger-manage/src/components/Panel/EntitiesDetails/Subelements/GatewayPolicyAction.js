@@ -45,7 +45,8 @@ export default class GatewayPolicyAction extends PureComponent {
   };
 
   getState = (props) => {
-    const {action, schemas: {properties = {}, required = []}} = props;
+    const {action, schemas = {properties: {}, required: []}} = props;
+    const {properties = {}, required = []} = schemas;
     const parameters = {};
     required.forEach((name) => {
       const {description, type, types, default: def, enum: enum_, postfix} = properties[name];
@@ -306,7 +307,7 @@ export default class GatewayPolicyAction extends PureComponent {
   };
 
   render() {
-    const {schemas, prefix} = this.props;
+    const {schemas = {}, prefix} = this.props;
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
     const availableParameters = _.difference(Object.keys(schemas.properties || {}), currParameters);

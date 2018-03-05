@@ -159,11 +159,14 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
-  handlePolicyChange = (pipelineIdx, policyIdx) => (policyName) => {
+  handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].name = policyName;
-    pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-    this.changeState({pipelines});
+    const {name} = pipelines[pipelineIdx].policies[policyIdx];
+    if (name !== value) {
+      pipelines[pipelineIdx].policies[policyIdx].name = value;
+      pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+      this.changeState({pipelines});
+    }
   };
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
@@ -341,7 +344,8 @@ class GatewayDetails extends PureComponent {
         value={policy.name || options[0].value}
         options={options}
         hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
-        onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
+        onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
+        autocomplete
       />
     );
   };

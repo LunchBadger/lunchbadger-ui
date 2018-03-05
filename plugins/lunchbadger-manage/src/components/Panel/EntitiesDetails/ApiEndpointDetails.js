@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -42,8 +41,9 @@ class ApiEndpointDetails extends Component {
     return entity.processModel(model);
   };
 
-  changeState = obj => this.setState({...obj, changed: true}, () => {
+  changeState = (obj, cb) => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();
+    cb && cb();
   });
 
   handlePathTab = idx => (event) => {
@@ -57,19 +57,26 @@ class ApiEndpointDetails extends Component {
   addPath = () => {
     const paths = this.state.paths.slice();
     paths.push('');
-    this.changeState({paths});
-    setTimeout(() => {
-      const idx = paths.length - 1;
+    const {length} = paths;
+    this.changeState({paths}, this.rndResize(length, () => {
+      const idx = length - 1;
       const input = document.getElementById(`paths[${idx}]`);
       input && input.focus();
-    });
-  }
+    }));
+  };
 
   removePath = idx => () => {
     const paths = this.state.paths.slice();
     paths.splice(idx, 1);
-    this.changeState({paths});
-  }
+    this.changeState({paths}, this.rndResize(paths.length));
+  };
+
+  rndResize = (pathsAmount, cb) => () => window.dispatchEvent(new CustomEvent('rndresize', {
+    detail: {
+      size: this.props.entity.recalculateDetailsSize(pathsAmount),
+      cb,
+    },
+  }));
 
   renderPropertiesSection = () => {
     const {paths} = this.state;

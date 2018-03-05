@@ -75,6 +75,25 @@ export default class ApiEndpoint extends BaseModel {
     this._ports = ports;
   }
 
+  get detailsSize() {
+    return {
+      general: this.recalculateDetailsSize(),
+    };
+  }
+
+  set detailsSize(size) {}
+
+  recalculateDetailsSize(pathsAmount = this.paths.length) {
+    let height = 423;
+    if (pathsAmount > 0) {
+      height += 2 + pathsAmount * 48;
+    }
+    return {
+      width: 400,
+      height,
+    };
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

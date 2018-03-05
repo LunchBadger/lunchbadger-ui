@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import Rest from '../../CanvasElements/Subelements/Rest';
 import Soap from '../../CanvasElements/Subelements/Soap';
 import {
@@ -7,6 +8,7 @@ import {
   EntityPropertyLabel,
   CollapsibleProperties,
 } from '../../../../../lunchbadger-ui/src';
+import './DataSourceDetails.scss';
 import './Rest.scss';
 import './Soap.scss';
 
@@ -149,9 +151,10 @@ class DataSourceDetails extends Component {
   }
 
   render() {
-    if (this.props.entity.isMemory) return null;
+    const {isMemory, connector} = this.props.entity;
+    if (isMemory) return null;
     return (
-      <div className="panel__details">
+      <div className={cs('panel__details', connector)}>
         {this.renderContent()}
       </div>
     );

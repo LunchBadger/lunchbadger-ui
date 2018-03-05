@@ -88,6 +88,7 @@ class DetailsPanel extends Component {
         type={type}
         onClose={this.handleClosePopup}
         toolbox={toolboxConfig}
+        size={currentElement.detailsSize[tab]}
       >
         {this.renderDetails()}
       </RnD>

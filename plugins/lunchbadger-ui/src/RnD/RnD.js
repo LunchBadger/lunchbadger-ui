@@ -25,27 +25,47 @@ export default class RnD extends PureComponent {
   }
 
   componentDidMount() {
-    const {innerWidth, innerHeight} = window;
-    const x = 100;
-    const y = 20;
-    const width = innerWidth - 2 * x;
-    const height = innerHeight - 2 * y;
     const state = {
-      x,
-      y,
-      width,
-      height,
+      ...this.getRect(this.props.size),
       max: false,
       opacity: 1,
     };
     this.transitions(state);
+    window.addEventListener('rndresize', this.resize);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.rect.close) {
-      this.transitions({...nextProps.rect, opacity: 0}, this.props.onClose);
+    const {size, rect} = nextProps;
+    if (rect.close) {
+      this.transitions({...rect, opacity: 0}, this.props.onClose);
+    } else if (size && this.props.size) {
+      const {width, height} = this.props.size;
+      if (width !== size.width && height !== size.height) {
+        this.transitions(this.getRect(size));
+      }
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('rndresize', this.resize);
+  }
+
+  getRect = (size) => {
+    const {innerWidth, innerHeight} = window;
+    const rect = {
+      x: 100,
+      y: 20,
+      width: innerWidth - 200,
+      height: innerHeight - 40,
+    };
+    if (size) {
+      rect.width = Math.min(rect.width, size.width);
+      rect.height = Math.min(rect.height, size.height);
+      rect.x = Math.floor((innerWidth - rect.width) / 2);
+      rect.y = Math.floor((innerHeight - rect.height) / 2);
+    }
+    return rect;
+  };
 
   // TODO: consider getting rid of this (maybe by using css animations?)
   transitions = (state, cb) => {
@@ -90,6 +110,8 @@ export default class RnD extends PureComponent {
     window.dispatchEvent(new Event('rndresized'));
   };
 
+  resize = ({detail: {size, cb}}) => this.transitions(this.getRect(size), cb);
+
   render() {
     const {
       children,
@@ -129,7 +151,9 @@ export default class RnD extends PureComponent {
           </div>
         </div>
         <Toolbox config={toolbox} zoom />
-        {!transitioning && (
+        <div
+          style={{display: transitioning ? 'none' : 'block'}}
+        >
           <div
             className="RnD__wrapper"
             style={contentSize}
@@ -141,7 +165,7 @@ export default class RnD extends PureComponent {
               </div>
             </div>
           </div>
-        )}
+        </div>
       </Rnd>
     );
   }

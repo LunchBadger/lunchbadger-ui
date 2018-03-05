@@ -11,9 +11,18 @@
   & .pipelines {
     display: none;
   }
+  .general {
+    .panel__details__enableable .panel__details__checkbox.hideable {
+      width: auto;
+    }
+  }
 }
 
 .BaseDetails.general .GatewayDetails .general,
 .BaseDetails.pipelines .GatewayDetails .pipelines {
   display: block;
+}
+
+.panel .GatewayDetails .general .CollapsibleProperties__collapsible {
+  margin-bottom: 0;
 }

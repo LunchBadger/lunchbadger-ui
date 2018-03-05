@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
   google-chrome-stable \
   default-jre
 
-ADD containers/test/entrypoint.sh /opt
+ADD ./containers/test/entrypoint.sh /opt
 
 WORKDIR /opt/lunchbadger
 ENTRYPOINT [ "/opt/entrypoint.sh"]

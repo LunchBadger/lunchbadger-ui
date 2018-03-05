@@ -140,6 +140,7 @@ export const bundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateMicroservice(updatedMicroservice));
     dispatch(actions.updateModelBundled(updatedModel));
     dispatch(actions.removeModel(updatedModel));
+    await dispatch(coreActions.saveToServer());
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }
@@ -158,6 +159,7 @@ export const unbundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateMicroservice(updatedMicroservice));
     dispatch(actions.updateModel(updatedModel));
     dispatch(actions.removeModelBundled(updatedModel));
+    await dispatch(coreActions.saveToServer());
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }
@@ -169,4 +171,5 @@ export const rebundle = (fromMicroservice, toMicroservice, model) => async (disp
   const updatedMicroserviceTo = toMicroservice.recreate();
   updatedMicroserviceTo.addModel(model);
   dispatch(actions.updateMicroservices([updatedMicroserviceFrom, updatedMicroserviceTo]));
+  await dispatch(coreActions.saveToServer());
 }

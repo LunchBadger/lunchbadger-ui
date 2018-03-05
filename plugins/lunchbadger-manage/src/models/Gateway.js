@@ -26,7 +26,7 @@ export default class Gateway extends BaseModel {
   detailsSize = {
     general: {
       width: 865,
-      height: 625,
+      height: 530,
     },
     pipelines: {
       width: 1400,

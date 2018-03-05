@@ -31,17 +31,23 @@ export default class RnD extends PureComponent {
       opacity: 1,
     };
     this.transitions(state);
+    window.addEventListener('rndresize', this.resize);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {width, height} = this.props.size;
     const {size, rect} = nextProps;
-    if (width !== size.width && height !== size.height) {
-      this.transitions(this.getRect(size));
-    }
     if (rect.close) {
       this.transitions({...rect, opacity: 0}, this.props.onClose);
+    } else if (size && this.props.size) {
+      const {width, height} = this.props.size;
+      if (width !== size.width && height !== size.height) {
+        this.transitions(this.getRect(size));
+      }
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('rndresize', this.resize);
   }
 
   getRect = (size) => {
@@ -104,6 +110,8 @@ export default class RnD extends PureComponent {
     window.dispatchEvent(new Event('rndresized'));
   };
 
+  resize = ({detail: {size, cb}}) => this.transitions(this.getRect(size), cb);
+
   render() {
     const {
       children,
@@ -143,7 +151,9 @@ export default class RnD extends PureComponent {
           </div>
         </div>
         <Toolbox config={toolbox} zoom />
-        {!transitioning && (
+        <div
+          style={{display: transitioning ? 'none' : 'block'}}
+        >
           <div
             className="RnD__wrapper"
             style={contentSize}
@@ -155,7 +165,7 @@ export default class RnD extends PureComponent {
               </div>
             </div>
           </div>
-        )}
+        </div>
       </Rnd>
     );
   }

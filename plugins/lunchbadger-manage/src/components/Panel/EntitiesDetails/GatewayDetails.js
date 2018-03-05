@@ -501,7 +501,7 @@ class GatewayDetails extends PureComponent {
               handleChange={this.onHttpToggle}
             />
           </div>
-          <div className="panel__details__checkbox narrow">
+          <div className="panel__details__checkbox hideable narrow">
             {http.enabled && (
               <EntityProperty
                 title="Port"
@@ -521,7 +521,7 @@ class GatewayDetails extends PureComponent {
               handleChange={this.onHttpsToggle}
             />
           </div>
-          <div className="panel__details__checkbox narrow">
+          <div className="panel__details__checkbox hideable narrow">
             {https.enabled && (
               <EntityProperty
                 title="Port"
@@ -566,7 +566,7 @@ class GatewayDetails extends PureComponent {
               handleChange={this.onAdminToggle}
             />
           </div>
-          <div className="panel__details__checkbox">
+          <div className="panel__details__checkbox hideable">
             {admin.enabled && (
               <EntityProperty
                 title="Hostname"
@@ -576,7 +576,7 @@ class GatewayDetails extends PureComponent {
               />
             )}
           </div>
-          <div className="panel__details__checkbox narrow">
+          <div className="panel__details__checkbox hideable narrow">
             {admin.enabled && (
               <EntityProperty
                 title="Port"

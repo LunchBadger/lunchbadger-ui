@@ -13,12 +13,6 @@ export default class ApiEndpoint extends BaseModel {
   wasBundled = false;
   host = '*';
   paths = [];
-  detailsSize = {
-    general: {
-      width: 400,
-      height: 600,
-    },
-  };
 
   constructor(id, name) {
     super(id);
@@ -79,6 +73,25 @@ export default class ApiEndpoint extends BaseModel {
 
   set ports(ports) {
     this._ports = ports;
+  }
+
+  get detailsSize() {
+    return {
+      general: this.recalculateDetailsSize(),
+    };
+  }
+
+  set detailsSize(size) {}
+
+  recalculateDetailsSize(pathsAmount = this.paths.length) {
+    let height = 423;
+    if (pathsAmount > 0) {
+      height += 2 + pathsAmount * 48;
+    }
+    return {
+      width: 400,
+      height,
+    };
   }
 
   validate(model) {

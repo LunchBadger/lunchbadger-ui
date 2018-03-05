@@ -23,6 +23,7 @@ import iconDelete from './icon-delete.svg';
 import iconDetails from './icon-details.svg';
 import iconEdit from './icon-edit.svg';
 import iconEndpoint from './icon-endpoint.svg';
+import iconError from './icon-error.svg';
 import iconForklift from './icon-forklift.svg';
 import iconFunction from './icon-function.svg';
 import iconGateway from './icon-gateway.svg';
@@ -38,6 +39,7 @@ import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
 import iconRevert from './icon-revert.svg';
+import iconRocket from './icon-rocket.svg';
 import iconTextField from './icon-text-field.svg';
 import iconTrash from './icon-trash.svg';
 import iconUser from './icon-user.svg';
@@ -69,6 +71,7 @@ export {
   iconDetails,
   iconEdit,
   iconEndpoint,
+  iconError,
   iconForklift,
   iconFunction,
   iconGateway,
@@ -84,6 +87,7 @@ export {
   iconPlane,
   iconPortal,
   iconRevert,
+  iconRocket,
   iconTextField,
   iconTrash,
   iconUser,

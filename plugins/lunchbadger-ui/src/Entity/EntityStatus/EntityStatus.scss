@@ -1,0 +1,55 @@
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.EntityStatus {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  right: 13px;
+  z-index: 16;
+  &:before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-width: 2px;
+    border-color: transparent #d24a27 #d24a27;
+    border-style: solid;
+    border-radius: 50%;
+    animation: rotating 1s linear infinite;
+  }
+  &.deploying,
+  &.deleting {
+    &:before {
+      display: block;
+    }
+  }
+  svg {
+    width: 23px;
+    height: auto;
+    fill: #d24a27;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &.deleting svg {
+    width: 38px;
+    stroke: #d24a27;
+    stroke-width: 2px;
+  }
+  &.crashed svg {
+    width: 32px;
+  }
+}

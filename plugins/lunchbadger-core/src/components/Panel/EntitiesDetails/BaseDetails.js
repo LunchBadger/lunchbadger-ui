@@ -94,9 +94,9 @@ export default (ComposedComponent) => {
       });
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
+      this.closePopup();
       const updatedEntity = await dispatch(entity.update(model));
       dispatch(setCurrentElement(updatedEntity));
-      this.closePopup();
       setTimeout(this.setFlatModel);
     }
 

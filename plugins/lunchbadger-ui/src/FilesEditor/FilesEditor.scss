@@ -1,0 +1,36 @@
+.FilesEditor {
+  position: relative;
+  &__codeEditor {
+    position: relative;
+    padding-left: 200px;
+    &:before {
+      display: block;
+      content: '';
+      background-color: #2a2b21;
+      position: absolute;
+      width: 200px;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+  }
+  &__tree {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+  }
+}
+
+.node {
+  display: inline-block;
+  width: 100%;
+  padding: 4px 5px 4px 15px;
+  color: #b4b5b0;
+  font-family: Monaco;
+  font-size: 12px;
+  cursor: pointer;
+  &.active {
+    background-color: #494a45;
+  }
+}

@@ -14,6 +14,7 @@ import SystemNotifications from './SystemNotifications/SystemNotifications';
 import TopBar from './Header/TopBar/TopBar';
 import PanelBar from './Header/PanelBar/PanelBar';
 import RnD from './RnD/RnD';
+import FilesEditor from './FilesEditor/FilesEditor';
 
 import Entity from './Entity/Entity';
 import EntityActionButtons from './Entity/EntityActionButtons/EntityActionButtons';
@@ -96,6 +97,7 @@ export {
   EntityStatus,
   EntitySubElements,
   EntityValidationErrors,
+  FilesEditor,
   Form,
   IconButton,
   IconMenu,

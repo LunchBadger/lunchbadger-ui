@@ -3654,6 +3654,11 @@
       "from": "js-tokens@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-2.0.0.tgz"
     },
+    "js-tree": {
+      "version": "2.0.1",
+      "from": "js-tree@>=2.0.1 <3.0.0",
+      "resolved": "https://registry.npmjs.org/js-tree/-/js-tree-2.0.1.tgz"
+    },
     "js-yaml": {
       "version": "3.7.0",
       "from": "js-yaml@>=3.7.0 <3.8.0",
@@ -5774,6 +5779,11 @@
           "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.3.1.tgz"
         }
       }
+    },
+    "react-ui-tree": {
+      "version": "3.1.0",
+      "from": "react-ui-tree@latest",
+      "resolved": "https://registry.npmjs.org/react-ui-tree/-/react-ui-tree-3.1.0.tgz"
     },
     "reactcss": {
       "version": "1.2.2",

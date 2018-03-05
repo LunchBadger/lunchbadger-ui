@@ -9,6 +9,7 @@ const arraysToRegister = [
   'services',
   'onAppLoad',
   'onProjectSave',
+  'onProjectClear',
   'onBeforeProjectSave',
   'panels',
   'onSaveOrder',

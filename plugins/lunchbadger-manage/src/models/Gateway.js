@@ -105,6 +105,13 @@ export default class Gateway extends BaseModel {
     ];
   }
 
+  get status() {
+    if (this.deleting) return 'deleting';
+    if (this.loaded && this.running === null) return 'deploying';
+    if (!this.running) return 'crashed';
+    return '';
+  }
+
   async onSave(state) {
     if (this.loaded && this.running) {
       const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([

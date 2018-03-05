@@ -20,6 +20,7 @@ import EntityActionButtons from './Entity/EntityActionButtons/EntityActionButton
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
 import EntityProperty from './Entity/EntityProperty/EntityProperty';
 import EntityPropertyLabel from './Entity/EntityPropertyLabel/EntityPropertyLabel';
+import EntityStatus from './Entity/EntityStatus/EntityStatus';
 import EntitySubElements from './Entity/EntitySubElements/EntitySubElements';
 import EntityValidationErrors from './Entity/EntityValidationErrors/EntityValidationErrors';
 
@@ -92,6 +93,7 @@ export {
   EntityProperties,
   EntityProperty,
   EntityPropertyLabel,
+  EntityStatus,
   EntitySubElements,
   EntityValidationErrors,
   Form,

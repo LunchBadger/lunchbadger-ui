@@ -181,20 +181,24 @@ var pageCommands = {
   },
 
   submitGatewayDeploy: function (selector, gatewayName) {
+    const check = {
+      present: [`${selector} .EntityStatus.deploying`]
+    };
     const text = {
       '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': gatewayName + ' successfully deployed'
     };
     return this
-      .submitCanvasEntity(selector)
+      .submitCanvasEntity(selector, check)
       .visible('.SystemInformationMessages', 180000)
       .check({text})
       .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
   },
 
-  submitCanvasEntity: function (selector) {
+  submitCanvasEntity: function (selector, check = {}) {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
+      .check(check)
       .notPresent(selector + '.wip', 120000)
       .notPresent('.Aside.disabled')
       .notPresent('.SystemDefcon1', 60000);
@@ -267,11 +271,12 @@ var pageCommands = {
       .notPresent('.DetailsPanel.closing', 15000);
   },
 
-  removeEntity: function (selector, timeout) {
+  removeEntity: function (selector, timeout, check = {}) {
     return this
       .clickVisible(selector)
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
+      .check(check)
       .notPresent(selector, timeout);
   },
 
@@ -1044,8 +1049,11 @@ var pageCommands = {
   },
 
   removeGateway: function (selector) {
+    const check = {
+      present: [`${selector} .EntityStatus.deleting`]
+    };
     return this
-      .removeEntity(selector, 300000);
+      .removeEntity(selector, 300000, check);
   }
 };
 

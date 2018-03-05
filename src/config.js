@@ -12,7 +12,8 @@ const serviceUrls = [
   'expressGatewayAdminApiUrl',
   'customerUrl',
   'kubeWatcherApiUrl',
-  'slsApiUrl'
+  'slsApiUrl',
+  'slsUrl'
 ];
 
 class Cfg {

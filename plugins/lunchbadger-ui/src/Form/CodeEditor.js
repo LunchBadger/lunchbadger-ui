@@ -76,11 +76,12 @@ export default class CodeEditor extends PureComponent {
   discardChanges = () => this.setState({code: this.props.value, mode: this.props.mode});
 
   changeCode = code => {
+    const {mode, onChange} = this.props;
     const state = {code};
-    if (this.props.mode === 'both') {
+    if (mode === 'both') {
       state.mode = isMultiline(code) ? 'editor' : 'both';
     }
-    this.setState(state, () => this.props.onChange(code));
+    this.setState(state, () => onChange && onChange(code));
   }
 
   handleModeSwitch = () => this.setState({editorMode: !this.state.editorMode});

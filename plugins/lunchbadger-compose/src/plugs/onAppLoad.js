@@ -7,7 +7,6 @@ import {
 import {actions} from '../reduxActions/actions';
 import {addModelConfigsToConnections} from '../reduxActions/connections';
 import {removeNonExistentSubModels} from '../reduxActions/microservices';
-import {loadFunctionServices} from '../reduxActions/functions';
 
 export default [
   {
@@ -15,13 +14,12 @@ export default [
       DataSourceService.load(),
       ModelService.load(),
       ModelConfigsService.load(),
-      SLSService.list(),
+      SLSService.load(),
     ]),
     callback: actions.onLoadCompose,
     actions: [
       addModelConfigsToConnections,
       removeNonExistentSubModels,
-      loadFunctionServices,
     ],
   }
 ];

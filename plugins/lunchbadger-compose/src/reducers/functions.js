@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import Function_ from '../models/Function';
 import {actionTypes} from '../reduxActions/actions';
 
@@ -8,13 +7,10 @@ export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
     case actionTypes.onLoadCompose:
-      return action.payload[1].body.reduce((map, item) => {
-        if (item.kind !== 'function') return map;
-        if (item.wasBundled) return map;
-        if (!item.lunchbadgerId) {
-          item.lunchbadgerId = uuid.v4();
-        }
-        map[item.lunchbadgerId] = Function_.create(item);
+      return action.payload[3].body.reduce((map, service) => {
+        if (!service.serverless) return map;
+        const {service: name, lunchbadger: {id, itemOrder}} = service.serverless;
+        map[id] = Function_.create({id, name, itemOrder, service});
         return map;
       }, {});
     case actionTypes.updateFunction:

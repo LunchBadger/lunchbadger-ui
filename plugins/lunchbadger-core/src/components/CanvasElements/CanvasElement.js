@@ -190,8 +190,8 @@ export default (ComposedComponent) => {
     }
 
     handleEdit = (event) => {
-      const {dispatch, multiEnvIndex, multiEnvDelta} = this.props;
-      if (multiEnvDelta && multiEnvIndex > 0) {
+      const {dispatch, multiEnvIndex, multiEnvDelta, entity: {isCanvasEditDisabled}} = this.props;
+      if (isCanvasEditDisabled || (multiEnvDelta && multiEnvIndex > 0)) {
         event.stopPropagation();
         return;
       }
@@ -312,6 +312,7 @@ export default (ComposedComponent) => {
         loaded,
         slugifyName,
         status,
+        isCanvasEditDisabled,
       } = entity;
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
@@ -353,12 +354,14 @@ export default (ComposedComponent) => {
             });
           });
         }
-        toolboxConfig.push({
-          action: 'edit',
-          icon: 'iconEdit',
-          onClick: this.handleEdit,
-          label: 'Quick Edit',
-        });
+        if (!isCanvasEditDisabled) {
+          toolboxConfig.push({
+            action: 'edit',
+            icon: 'iconEdit',
+            onClick: this.handleEdit,
+            label: 'Quick Edit',
+          });
+        }
       }
       const {type} = this.props.entity.constructor;
       const editable = editable_ || !loaded;

@@ -8,77 +8,28 @@ import {
   CollapsibleProperties,
   FilesEditor,
 } from '../../../../../lunchbadger-ui/src';
-import runtimeOptions from '../../../utils/runtimeOptions';
+import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
 import './FunctionDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-
-const editorCodeLanguages = {
-  node: 'javascript',
-  python: 'python',
-  java: 'java',
-  'c#': 'csharp',
-};
-
-const getEditorCodeLanguage = str => editorCodeLanguages[str.split(' ')[0].toLowerCase()];
 
 class FunctionDetails extends PureComponent {
   static propTypes = {
     entity: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-    paper: PropTypes.object,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = this.initState(props);
-    this.onPropsUpdate = (props = this.props, callback) => this.setState(this.initState(props), callback);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {id} = this.props.entity;
-    if (nextProps.entity.id !== id) {
-      this.onPropsUpdate(nextProps);
-    }
-  }
-
-  initState = (props = this.props) => {
-    const {contextPath, name, runtime} = props.entity;
-    return {
-      changed: false,
-      contextPath,
-      contextPathDirty: slug(name, {lower: true}) !== contextPath,
-      editorCodeLanguage: getEditorCodeLanguage(runtime),
-    };
-  };
-
   processModel = model => this.props.entity.processModel(model);
 
-  discardChanges = callback => {
-    this.onPropsUpdate(this.props, callback);
-  };
-
-  handleRuntimeChange = value => this.setState({editorCodeLanguage: getEditorCodeLanguage(value)});
-
   renderDetailsSection = () => {
-    const {entity} = this.props;
+    const {loaded: fake, service} = this.props.entity;
+    const {serverless: {provider: {runtime}}} = service;
     const fields = [
-      {
-        title: 'Context Path',
-        name: 'http[path]',
-        value: entity.contextPath,
-      },
       {
         title: 'Runtime',
         name: 'runtime',
-        value: entity.runtime,
-        options: runtimeOptions.map(label => ({label, value: label})),
-        onChange: this.handleRuntimeChange,
-        fake: entity.loaded,
+        value: runtimeMapping(runtime).lb,
+        fake,
       },
     ];
     return (
@@ -90,15 +41,12 @@ class FunctionDetails extends PureComponent {
 
   renderTriggersSection = () => <FunctionTriggers id={this.props.entity.id} details />;
 
-  handleFunctionCodeChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
-
   renderFunctionCodeSection = () => {
-    const {files} = this.props.entity.service;
-    const {editorCodeLanguage} = this.state;
+    const {files, serverless: {provider: {runtime}}} = this.props.entity.service;
+    const {editorCodeLanguage} = runtimeMapping(runtime);
     return (
       <FilesEditor
         lang={editorCodeLanguage}
-        onChange={this.handleFunctionCodeChange}
         files={files}
       />
     );

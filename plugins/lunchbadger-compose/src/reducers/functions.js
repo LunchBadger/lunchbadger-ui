@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import Function_ from '../models/Function';
 import {actionTypes} from '../reduxActions/actions';
 
@@ -9,7 +10,10 @@ export default (state = {}, action) => {
     case actionTypes.onLoadCompose:
       return action.payload[3].body.reduce((map, service) => {
         if (!service.serverless) return map;
-        const {service: name, lunchbadger: {id, itemOrder}} = service.serverless;
+        const {
+          service: name,
+          lunchbadger: {id, itemOrder} = {id: uuid.v4(), itemOrder: 0},
+        } = service.serverless;
         map[id] = Function_.create({id, name, itemOrder, service});
         return map;
       }, {});

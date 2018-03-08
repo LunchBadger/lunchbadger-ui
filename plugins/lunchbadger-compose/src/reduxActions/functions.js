@@ -20,7 +20,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const {name, runtime} = model;
   const index = state.multiEnvironments.selected;
   let updatedEntity;
-  const isAutoSave = false;
   if (index > 0) {
     updatedEntity = Function_.create({...entity.toJSON(), ...model});
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
@@ -52,9 +51,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.service = slsDeploy.body;
     await SLSService.deploy(name);
     dispatch(actions.updateFunction(updatedEntity));
-    if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
-    }
+    await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
@@ -62,15 +59,20 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   const updatedEntity = entity.recreate();
   updatedEntity.ready = false;
   updatedEntity.deleting = true;
   dispatch(actions.updateFunction(updatedEntity));
   try {
-    if (entity.loaded) {
+    if (isAutoSave) {
       await SLSService.remove(entity.name);
+
     }
     dispatch(actions.removeFunction(entity));
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

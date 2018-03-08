@@ -4,7 +4,7 @@ import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
-import runtimeOptions from '../../utils/runtimeOptions';
+import {runtimeMapping, runtimeOptions} from '../../utils';
 import FunctionTriggers from './Subelements/FunctionTriggers';
 import './Function.scss';
 
@@ -19,53 +19,6 @@ class Function_ extends Component {
   static contextTypes = {
     store: PropTypes.object,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = this.initState(props);
-    this.onPropsUpdate = (props = this.props, callback) => this.setState(this.initState(props), callback);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.entity !== this.props.entity) {
-      this.onPropsUpdate(nextProps);
-    }
-  }
-
-  initState = (props = this.props) => {
-    const {contextPath, name} = props.entity;
-    return {
-      contextPath,
-      contextPathDirty: slug(name, {lower: true}) !== contextPath,
-    };
-  }
-
-  discardChanges = callback => this.onPropsUpdate(this.props, callback);
-
-  getEntityDiffProps = (model) => {
-    if (!model) return null;
-    const {name, contextPath} = this.props.entity.data;
-    if (name === model.name && contextPath === model.contextPath) return null;
-    return {
-      ...model,
-      name,
-      contextPath,
-    };
-  }
-
-  handleFieldChange = field => (evt) => {
-    if (typeof this.props.onFieldUpdate === 'function') {
-      this.props.onFieldUpdate(field, evt.target.value);
-    }
-  }
-
-  updateName = event => {
-    if (!this.state.contextPathDirty) {
-      this.setState({contextPath: slug(event.target.value, {lower: true})});
-    }
-  }
-
-  updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
   processModel = model => this.props.entity.processModel(model);
 
@@ -82,45 +35,40 @@ class Function_ extends Component {
   }
 
   renderMainProperties = () => {
-    const {validations, validationsForced, entity, entityDevelopment, onResetField, nested, index} = this.props;
-    const {contextPath} = this.state;
-    const {data} = validationsForced || validations;
+    const {entity, onResetField} = this.props;
+    let runtime = runtimeOptions[0];
+    const {service} = entity;
+    if (service && service.serverless) {
+      runtime = runtimeMapping(service.serverless.provider.runtime).lb;
+    }
     const mainProperties = [
-      {
-        name: 'http[path]',
-        modelName: 'contextPath',
-        title: 'context path',
-        value: contextPath,
-        invalid: data.contextPath,
-        onChange: this.updateContextPath,
-        onBlur: this.handleFieldChange('contextPath'),
-      },
       {
         name: 'runtime',
         title: 'Runtime',
-        value: entity.runtime,
+        value: runtime,
         options: runtimeOptions.map(label => ({label, value: label})),
         fake: entity.loaded,
       },
     ];
-    mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   }
 
   render() {
-    const {multiEnvIndex, nested, entity: {id}} = this.props;
+    const {multiEnvIndex, nested, entity: {id, loaded}} = this.props;
     return (
       <div className={cs('Function', {nested, 'multi': multiEnvIndex > 0})}>
         {!nested && this.renderPorts()}
         {this.renderMainProperties()}
-        <EntitySubElements
-          title="Triggers"
-          onAdd={this.onAddRootProperty}
-          main
-        >
-          <FunctionTriggers id={id} />
-        </EntitySubElements>
+        {loaded && (
+          <EntitySubElements
+            title="Triggers"
+            onAdd={this.onAddRootProperty}
+            main
+          >
+            <FunctionTriggers id={id} />
+          </EntitySubElements>
+        )}
       </div>
     );
   }

@@ -10,13 +10,15 @@ class SLSService {
 
   deploy = name => this.api.post('/deploy', {body: {name}});
 
-  list = () => this.api.get('/service');
+  load = () => this.api.get('/service');
 
   get = name => this.api.get(`/service/${name}`);
 
   update = (name, body) => this.api.put(`/service/${name}`, {body});
 
   remove = name => this.api.delete(`/service/${name}`);
+
+  clear = () => {}; // this.api.delete('/service');
 
 }
 

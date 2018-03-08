@@ -169,7 +169,7 @@ export default (ComposedComponent) => {
                 zoom
                 onCancel={this.closePopup}
                 onOk={this.update}
-                okDisabled={this.state.isPristine || !this.state.formValid}
+                okDisabled={false} //this.state.isPristine || !this.state.formValid}
               />
             </div>
           </Form>

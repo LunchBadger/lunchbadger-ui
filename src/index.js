@@ -38,17 +38,9 @@ loginManager.checkAuth().then(loggedIn => {
     return;
   }
 
-  const {id_token, profile: {email, preferred_username: name}} = loginManager.user;
+  const {id_token} = loginManager.user;
 
   global.ID_TOKEN = id_token; // FIXME: quick and dirty fix for urgent demo
-
-  // userengage.io integration
-  window.civchat = {
-    apiKey: 'AlZAHWKR9vzs2AFoZrg3WhtRYFNIGYPmJrxRjOaUYI1gIgvl5mf4erFfe7wBcHLZ',
-    name,
-    email,
-    state: 'simple'
-  };
 
   let middleware = compose(applyMiddleware(thunk));
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {

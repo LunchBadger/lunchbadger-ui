@@ -20,7 +20,7 @@ export default {
   workspaceUrl: isPrefix ? `http://{USER}-{ENV}.${subdomain}lunchbadger.io` : 'http://localhost:3000',
   expressGatewayAdminApiUrl: `http://admin-{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
-  slsUrl: 'http://{USER}-{ENV}-fn-{FN}:8080',
+  slsUrl: 'http://fn-{USER}-{ENV}-{FN}:8080',
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
   slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   user: {

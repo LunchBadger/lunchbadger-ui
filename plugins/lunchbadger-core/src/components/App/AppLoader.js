@@ -94,7 +94,7 @@ class AppLoader extends Component {
       return ProjectService
         .ping()
         .catch(err => {
-          if (![allowedPingStatuses].includes(err.statusCode)) {
+          if (!allowedPingStatuses.includes(err.statusCode)) {
             throw err;
           }
           if (retries > 1) {

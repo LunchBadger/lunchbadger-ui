@@ -102,14 +102,21 @@ export const removePipeline = (gatewayId, pipeline) => (dispatch, getState) => {
   dispatch(actions.updateGateway(entity));
 };
 
-export const addServiceEndpointIntoProxy = (serviceEndpoint, pipelineId) => (dispatch, getState) => {
+export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, getState) => {
   const state = getState();
   const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
   const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  const action = {
+    serviceEndpoint: endpoint.id,
+    changeOrigin: true,
+  };
+  if (endpoint.constructor.type === 'Function_') {
+    Object.assign(action, {ignorePath: true});
+  }
   pipeline.policies
     .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
     .forEach((policy) => {
-      policy.addConditionAction(ConditionAction.create({action: {serviceEndpoint, changeOrigin: true}}));
+      policy.addConditionAction(ConditionAction.create({action}));
     });
   dispatch(actions.updateGateway(gateway));
 };

@@ -10,7 +10,7 @@ export const attach = info => async (dispatch, getState) => {
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
   if (endpoint) {
     const pipelineId = storeUtils.formatId(targetId);
-    dispatch(addServiceEndpointIntoProxy(endpoint.id, pipelineId));
+    dispatch(addServiceEndpointIntoProxy(endpoint, pipelineId));
     if (!Connections.findHistory({fromId: endpoint.id, toId: pipelineId})) {
       const outPort = document.getElementById(`port_out_${pipelineId}`).querySelector('.port__anchor');
       dispatch(addAndConnect(endpoint, pipelineId, outPort));
@@ -41,7 +41,7 @@ export const reattach = info => async (dispatch, getState) => {
     const oldPipelineId = storeUtils.formatId(originalTargetId);
     const newPipelineId = storeUtils.formatId(newTargetId);
     dispatch(removeServiceEndpointFromProxy(oldEndpoint.id, oldPipelineId));
-    dispatch(addServiceEndpointIntoProxy(newEndpoint.id, newPipelineId));
+    dispatch(addServiceEndpointIntoProxy(newEndpoint, newPipelineId));
     if (!Connections.findHistory({fromId: newEndpoint.id, toId: newPipelineId})) {
       const outPort = document.getElementById(`port_out_${newPipelineId}`).querySelector('.port__anchor');
       dispatch(addAndConnect(newEndpoint, newPipelineId, outPort));

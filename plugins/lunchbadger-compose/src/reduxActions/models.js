@@ -81,7 +81,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       }
     }
     dispatch(actions[updateAction](updatedEntity));
-    // await dispatch(coreActions.saveToServer());
+    await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
@@ -89,8 +89,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = (entity, action = 'removeModel') => async (dispatch) => {
+  const isAutoSave = entity.loaded;
   try {
-    if (entity.loaded) {
+    if (isAutoSave) {
       let updateAction = 'updateModel';
       if (entity.wasBundled) {
         updateAction += 'Bundled';
@@ -102,6 +103,9 @@ export const remove = (entity, action = 'removeModel') => async (dispatch) => {
       await ModelService.deleteModelConfig(entity.workspaceId);
     }
     dispatch(actions[action](entity));
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

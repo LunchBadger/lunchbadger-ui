@@ -23,7 +23,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   updatedEntity = ServiceEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateServiceEndpoint(updatedEntity));
-  // await dispatch(coreActions.saveToServer());
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
@@ -31,7 +31,7 @@ export const remove = entity => async (dispatch) => {
   const isAutoSave = entity.loaded;
   dispatch(actions.removeServiceEndpoint(entity));
   if (isAutoSave) {
-    // await dispatch(coreActions.saveToServer());
+    await dispatch(coreActions.saveToServer());
   }
 };
 

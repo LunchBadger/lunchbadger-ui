@@ -18,7 +18,7 @@ class SLSService {
 
   remove = name => this.api.delete(`/service/${name}`);
 
-  clear = () => {}; // this.api.delete('/service');
+  clear = () => this.api.delete('/service');
 
 }
 

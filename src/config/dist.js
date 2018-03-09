@@ -7,7 +7,7 @@ export default {
   workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io',
   expressGatewayAdminApiUrl: 'https://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
-  slsUrl: 'http://{USER}-{ENV}-fn-{FN}:8080',
+  slsUrl: 'http://fn-{USER}-{ENV}-{FN}:8080',
   kubeWatcherApiUrl: 'https://kube-watcher.lunchbadger.com',
   slsApiUrl: 'https://sls-{USER}-{ENV}.lunchbadger.io',
   oauth: {

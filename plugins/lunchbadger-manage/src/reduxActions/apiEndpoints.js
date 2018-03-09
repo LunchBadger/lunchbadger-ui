@@ -48,7 +48,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateApiEndpoint(updatedEntity));
-  // await dispatch(coreActions.saveToServer());
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
@@ -56,7 +56,7 @@ export const remove = entity => async (dispatch) => {
   const isAutoSave = entity.loaded;
   dispatch(actions.removeApiEndpoint(entity));
   if (isAutoSave) {
-    // await dispatch(coreActions.saveToServer());
+    await dispatch(coreActions.saveToServer());
   }
 };
 

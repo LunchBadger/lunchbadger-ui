@@ -17,7 +17,7 @@ export const attach = info => async (dispatch, getState) => {
     }
   }
   Connections.addConnectionByInfo(info);
-  // await dispatch(coreActions.saveToServer());
+  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
 };
 
@@ -29,7 +29,7 @@ export const detach = info => async (dispatch, getState) => {
     dispatch(removeServiceEndpointFromProxy(endpoint.id, pipelineId));
   }
   Connections.removeConnection(sourceId, targetId);
-  // await dispatch(coreActions.saveToServer());
+  await dispatch(coreActions.saveToServer());
 };
 
 export const reattach = info => async (dispatch, getState) => {
@@ -48,6 +48,6 @@ export const reattach = info => async (dispatch, getState) => {
     }
   }
   Connections.moveConnection(info);
-  // await dispatch(coreActions.saveToServer());
+  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
 }

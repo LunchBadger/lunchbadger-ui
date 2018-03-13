@@ -16,6 +16,14 @@ import './AppLoader.scss';
 const envId = Config.get('envId');
 const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
 
+const allowedPingStatuses = [
+  0,
+  404,
+  502,
+  503,
+  504,
+];
+
 class AppLoader extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +94,7 @@ class AppLoader extends Component {
       return ProjectService
         .ping()
         .catch(err => {
-          if (![0, 404, 502, 504].includes(err.statusCode)) {
+          if (!allowedPingStatuses.includes(err.statusCode)) {
             throw err;
           }
           if (retries > 1) {

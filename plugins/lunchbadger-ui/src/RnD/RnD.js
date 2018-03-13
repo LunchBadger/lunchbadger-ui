@@ -5,8 +5,6 @@ import Rnd from 'react-rnd';
 import {IconSVG, entityIcons, Toolbox} from '../';
 import './RnD.scss';
 
-const headerHeight = 48;
-
 export default class RnD extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -21,96 +19,81 @@ export default class RnD extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {...props.rect, transitioning: true, opacity: 0};
+    this.deltaX = 0;
+    this.deltaY = 0;
+    this.state = {
+      left: 0,
+      top: 0,
+      width: 'auto',
+      height: 'auto',
+    };
   }
 
   componentDidMount() {
-    const state = {
-      ...this.getRect(this.props.size),
-      max: false,
-      opacity: 1,
-    };
-    this.transitions(state);
-    window.addEventListener('rndresize', this.resize);
+    const {x, y} = this.props.rect;
+    setTimeout(() => this.setState({
+      opened: true,
+      x: 0,
+      y: 0,
+      left: `calc(50% - ${x}px)`,
+      top: `calc(50% - ${y}px)`,
+    }));
+    setTimeout(this.dispatchResizeEvent, 1000);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {size, rect} = nextProps;
-    if (rect.close) {
-      this.transitions({...rect, opacity: 0}, this.props.onClose);
-    } else if (size && this.props.size) {
-      const {width, height} = this.props.size;
-      if (width !== size.width && height !== size.height) {
-        this.transitions(this.getRect(size));
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('rndresize', this.resize);
-  }
-
-  getRect = (size) => {
-    const {innerWidth, innerHeight} = window;
-    const rect = {
-      x: 100,
-      y: 20,
-      width: innerWidth - 200,
-      height: innerHeight - 40,
-    };
-    if (size) {
-      rect.width = Math.min(rect.width, size.width);
-      rect.height = Math.min(rect.height, size.height);
-      rect.x = Math.floor((innerWidth - rect.width) / 2);
-      rect.y = Math.floor((innerHeight - rect.height) / 2);
-    }
-    return rect;
-  };
-
-  // TODO: consider getting rid of this (maybe by using css animations?)
-  transitions = (state, cb) => {
-    setTimeout(() => {
-      this.setState({transitioning: true}, () => {
-        setTimeout(() => {
-          this.setState(state, () => {
-            setTimeout(() => this.setState({transitioning: false}, cb), 450);
-          });
-        });
+    const {rect: {x, y, close}, onClose} = nextProps;
+    if (close) {
+      this.setState({
+        opened: false,
+        x,
+        y,
+        left: -this.deltaX,
+        top: -this.deltaY,
+        custom: false,
       });
+      setTimeout(onClose, 1000);
+    }
+  }
+
+  handleResizeStart = (event, dir, ref) => {
+    if (this.state.dirtyResize) return;
+    const {x, y} = ref.getBoundingClientRect();
+    const {rect} = this.props;
+    this.setState({
+      opened: false,
+      custom: true,
+      left: x - rect.x - this.deltaX,
+      top: y - rect.y - this.deltaY,
+      dirtyResize: true,
     });
   };
 
-  handleDoubleClick = () => {
-    if (this.state.max) {
-      this.setState(this.prevState);
-    } else {
-      this.prevState = {...this.state};
-      const {innerWidth, innerHeight} = window;
-      this.setState({
-        x: 0,
-        y: 20,
-        width: innerWidth,
-        height: innerHeight - 20,
-        max: true,
-      });
+  handleResize = () => this.dispatchResizeEvent();
+
+  handleResizeStop = (event, dir, refToElement, delta) => {
+    const {width, height} = delta;
+    if (['topLeft', 'left', 'bottomLeft'].includes(dir)) {
+      this.deltaX -= width;
+    }
+    if (['topLeft', 'top', 'topRight'].includes(dir)) {
+      this.deltaY -= height;
     }
   };
 
-  handleDragStop = (event, {x, y}) => this.setState({x, y});
-
-  handleResize = (event, direction, {offsetWidth: width, offsetHeight: height}, delta, position) => {
-    const state = {width, ...position};
-    if (direction !== 'left' && direction !== 'right') {
-      Object.assign(state, {height});
-    }
-    this.setState(state, this.dispatchResizeEvent);
+  handleDragStart = (event, data) => {
+    const {x, y} = data;
+    this.deltaXStart = x;
+    this.deltaYStart = y;
   };
 
-  dispatchResizeEvent = () => {
-    window.dispatchEvent(new Event('rndresized'));
+  handleDragStop = (event, data) => {
+    const {x, y} = data;
+    this.deltaX += x - this.deltaXStart;
+    this.deltaY += y - this.deltaYStart;
   };
 
-  resize = ({detail: {size, cb}}) => this.transitions(this.getRect(size), cb);
+  dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
 
   render() {
     const {
@@ -118,55 +101,51 @@ export default class RnD extends PureComponent {
       name,
       type,
       toolbox,
+      rect,
     } = this.props;
-    const {x, y, width, height, transitioning, opacity, close} = this.state;
-    const position = {x, y};
-    const size = {width, height};
-    const contentSize = {width, height: height - headerHeight};
-    const contentStyle = {transform: `translate(-${x}px, -${y + headerHeight}px)`};
-    const contentInnerStyle = {left: x, top: y + headerHeight};
+    const {x, y, width: maxWidth, height: maxHeight} = rect;
+    const {opened, custom, left, top} = this.state;
     return (
-      <Rnd
-        ref={r => this.rndRef = r}
-        className={cs('RnD', {transitioning, close})}
-        minWidth={250}
-        minHeight={145}
-        maxWidth="100%"
-        maxHeight="100%"
-        z={1005}
-        bounds=".canvas__zoom-area"
-        dragHandleClassName=".RnD__header"
-        size={size}
-        position={position}
-        onDragStop={this.handleDragStop}
-        onResize={this.handleResize}
-        style={{opacity}}
+      <div
+        ref={r => this.refWrap = r}
+        className={cs('wrap', {opened, custom})}
+        style={{left, top}}
       >
-        <div className="RnD__header" onDoubleClick={this.handleDoubleClick}>
-          <div className="RnD__header__icon">
-            <IconSVG svg={entityIcons[type]} />
-          </div>
-          <div className="RnD__header__name">
-            {name}
-          </div>
-        </div>
-        <Toolbox config={toolbox} zoom />
-        <div
-          style={{display: transitioning ? 'none' : 'block'}}
+      <div>
+        <Rnd
+          ref={r => this.rndRef = r}
+          className={cs('RnD', {opened, custom})}
+          minWidth={rect.width}
+          minHeight={rect.height}
+          z={1005}
+          bounds=".canvas__zoom-area"
+          dragHandleClassName=".RnD__header"
+          default={{x, y}}
+          onResizeStart={this.handleResizeStart}
+          onResize={this.handleResize}
+          onResizeStop={this.handleResizeStop}
+          onDragStart={this.handleDragStart}
+          onDragStop={this.handleDragStop}
         >
-          <div
-            className="RnD__wrapper"
-            style={contentSize}
-          >
-
-            <div className="RnD__content" style={contentStyle}>
-              <div className="RnD__content__inner" style={contentInnerStyle}>
-                {children}
+          <div className="RnD__box" style={{maxWidth, maxHeight}}>
+            <div className="RnD__header">
+              <div className="RnD__header__icon">
+                <IconSVG svg={entityIcons[type]} />
+              </div>
+              <div className="RnD__header__name">
+                {name}
               </div>
             </div>
+            <div className="RnD__toolbox">
+              <Toolbox config={toolbox} zoom />
+            </div>
+            <div className="RnD__content">
+              {children}
+            </div>
           </div>
-        </div>
-      </Rnd>
+        </Rnd>
+      </div>
+      </div>
     );
   }
 }

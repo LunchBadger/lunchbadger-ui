@@ -1,30 +1,70 @@
+.wrap {
+  position: absolute;
+  transform: translate(0%, 0%);
+  transition: all 500ms ease 100ms;
+  &.opened {
+    transform: translate(-50%, -50%);
+    transition: all 500ms ease 300ms;
+  }
+  &.custom {
+    transition: none;
+  }
+}
 .RnD {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  position: relative !important;
   border-radius: 3px;
+  transition: opacity 300ms ease 600ms;
   opacity: 0;
-  &.transitioning {
-    background-color: #FFF;
-    transition: width 300ms ease-in-out 100ms, height 300ms ease-in-out 100ms, transform 300ms ease-in-out 100ms, opacity 100ms;
-    // border-top: 48px solid #4190CE;
-    .RnD__content {
-      opacity: 0;
+  &.opened,
+  &.custom {
+    opacity: 1;
+    .RnD__box {
+      max-width: 100vw !important;
+      max-height: calc(100vh - 15px) !important;
+      transition: all 500ms ease 300ms;
+    }
+    .panel,
+    .RnD__toolbox {
+      opacity: 1;
+      transition: opacity 300ms ease 800ms;
     }
   }
-  &.transitioning.close {
-    transition: width 300ms ease-in-out, height 300ms ease-in-out, transform 300ms ease-in-out, opacity 100ms linear 300ms;
+  &.opened {
+    transition: opacity 300ms ease;
+  }
+  &__toolbox {
+    opacity: 0;
+    transition: all 300ms ease;
+  }
+  &__box {
+    overflow: hidden;
+    transition: all 500ms ease;
+    height: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  }
+  &__content {
+    background-color: #FFF;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    height: calc(100% - 48px);
+  }
+  .panel {
+    opacity: 0;
+    height: 100%;
+    transition: all 300ms ease;
   }
   &__wrapper {
     background-color: #FFF;
     border-radius: 5px;
   }
   &__header {
-    position: relative;
-    z-index: 1006;
+    width: 100%;
     height: 48px;
     background-color: #4190CE;
     cursor: move;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+    position: relative;
     &__icon {
       svg {
         width: 34px;
@@ -44,19 +84,6 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-    }
-  }
-  &__content {
-    position: absolute;
-    width: 100%;
-    height: calc(100% - 48px);
-    opacity: 1;
-    transition: opacity 600ms;
-    border-radius: 3px;
-    &__inner {
-      position: relative;
-      height: 100%;
-      background-color: #FFF;
     }
   }
 }

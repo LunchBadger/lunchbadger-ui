@@ -98,9 +98,8 @@ class DetailsPanel extends Component {
   render() {
     const {zoom, currentElement} = this.props;
     const visible = !!currentElement && !!zoom && !zoom.close;
-    const closing = !!currentElement && !!zoom && zoom.close;
     return (
-      <div className={cs('DetailsPanel', {visible, closing})}>
+      <div className={cs('DetailsPanel', {visible})}>
         {this.renderDnD()}
         {this.state.showRemovingModal && (
           <TwoOptionModal

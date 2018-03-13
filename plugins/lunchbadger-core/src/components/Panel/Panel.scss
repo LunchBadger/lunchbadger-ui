@@ -1,7 +1,6 @@
 @import '../../config';
 
 .panel {
-  width: 100%;
   .CollapsibleProperties {
     padding-right: 0;
     &:first-child .CollapsibleProperties__bar:before {
@@ -85,8 +84,6 @@
 }
 
 .panel__body {
-  position: relative;
-  height: 100%;
 }
 
 .panel__handle {

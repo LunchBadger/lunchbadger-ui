@@ -1,11 +1,12 @@
 .GatewayPolicyCAPair {
-  .EntityPropertyLabel {
-    color: #4190CE;
-  }
   border: 1px solid #e0e0e0;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   margin: 10px 15px 15px 0;
   position: relative;
+  min-width: 400px;
+  .EntityPropertyLabel {
+    color: #4190CE;
+  }
   &__section {
     border-top: 1px solid #e0e0e0;
     padding: 20px 15px 20px 33px;
@@ -20,20 +21,15 @@
     }
   }
   &.horizontal {
-    &:before {
-      display: block;
-      content: '';
-      width: 1px;
-      top: 65px;
-      bottom: 0;
-      position: absolute;
-      left: 50%;
-      background-color: #e0e0e0;
-    }
-    .GatewayPolicyCAPair__wrapper {
-      width: 50%;
-      display: inline-block;
-      vertical-align: top;
+    min-width: 600px;
+    .GatewayPolicyCAPair__box {
+      display: flex;
+      .GatewayPolicyCAPair__wrapper:first-child {
+        border-right: 1px solid #e0e0e0;
+      }
+      .GatewayPolicyCAPair__wrapper:last-child {
+        flex: 2 0px;
+      }
     }
   }
 }

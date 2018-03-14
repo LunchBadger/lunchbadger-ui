@@ -32,6 +32,7 @@ class GatewayProxyServiceEndpoint extends PureComponent {
         options={options}
         description={description}
         onChange={this.handleChange}
+        width="calc(100% - 50px)"
       />
     );
   }

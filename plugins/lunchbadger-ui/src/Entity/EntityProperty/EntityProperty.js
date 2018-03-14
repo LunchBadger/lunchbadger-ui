@@ -65,6 +65,8 @@ class EntityProperty extends Component {
     tmpPrefix: PropTypes.string,
     classes: PropTypes.string,
     slugify: PropTypes.bool,
+    type: PropTypes.string,
+    noMarginRight: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -340,10 +342,13 @@ class EntityProperty extends Component {
       postfix,
       object,
       classes,
+      type,
+      noMarginRight,
     } = this.props;
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
-    const classNames = cs('EntityProperty', {
+    const classNames = cs('EntityProperty', type,
+    {
       ['EntityProperty__fake']: fake,
       ['EntityProperty__editableOnly']: editableOnly,
       ['EntityProperty__noTitle']: title === '',
@@ -352,6 +357,7 @@ class EntityProperty extends Component {
       ['EntityProperty__delta']: isDelta,
       ['EntityProperty__selected']: selected,
       ['EntityProperty__codeEditor']: codeEditor,
+      noMarginRight,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;

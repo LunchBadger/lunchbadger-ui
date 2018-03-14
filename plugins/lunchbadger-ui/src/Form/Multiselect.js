@@ -16,15 +16,23 @@ class Multiselect extends Component {
 
   repositionMenu = () => {
     if (!this.selectRef) return;
-    const selectDOM = this.selectRef.select.wrapper;
-    const {bottom, left, width} = selectDOM.getBoundingClientRect();
     setTimeout(() => {
+      const selectDOM = this.selectRef.select.wrapper;
+      const {bottom, left, width} = selectDOM.getBoundingClientRect();
       const menuDOM = selectDOM.getElementsByClassName('Select-menu-outer')[0];
       if (!menuDOM) return;
+      let offsetLeft = 0;
+      let offsetTop = 0;
+      const RnDDOM = document.getElementsByClassName('RnD');
+      if (RnDDOM.length === 1) {
+        const {x, y} = RnDDOM[0].getBoundingClientRect();
+        offsetLeft = x;
+        offsetTop = y;
+      }
       Object.assign(menuDOM.style, {
         position: 'fixed',
-        top: `${bottom}px`,
-        left: `${left}px`,
+        top: `${bottom - offsetTop}px`,
+        left: `${left - offsetLeft}px`,
         width: `${width}px`,
       });
     });

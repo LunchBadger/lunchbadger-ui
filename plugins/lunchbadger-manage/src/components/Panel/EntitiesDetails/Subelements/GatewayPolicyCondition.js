@@ -272,6 +272,7 @@ export default class GatewayPolicyCondition extends PureComponent {
             onBlur={this.handleCustomParameterNameChange(propIdx)}
             width={150}
             placeholder=" "
+            noMarginRight
           />
           {this.renderProperty({
             id,
@@ -301,7 +302,8 @@ export default class GatewayPolicyCondition extends PureComponent {
         value,
         width: width || 'calc(100% - 170px)',
         description,
-        placeholder: ' '
+        placeholder: ' ',
+        type,
       }
       if (type === 'boolean') {
         Object.assign(props, {
@@ -398,6 +400,7 @@ export default class GatewayPolicyCondition extends PureComponent {
           width={140}
           autocomplete
           button={button}
+          noMarginRight
         />
         {properties.map((item, idx) => {
           if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;

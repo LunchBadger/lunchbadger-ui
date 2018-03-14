@@ -113,7 +113,11 @@ class Select extends Component {
     };
     const labelStyle = {
       ...style,
-      padding: '0 8px',
+    };
+    if (!autocomplete) {
+      Object.assign(labelStyle, {
+        padding: '0 8px',
+      });
     }
     if (icon) {
       Object.assign(labelStyle, {

@@ -339,14 +339,16 @@ class GatewayDetails extends PureComponent {
   renderPolicyInput = (pipelineIdx, policyIdx, policy) => {
     const options = this.getPolicyInputOptions();
     return (
-      <EntityProperty
-        name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
-        value={policy.name || options[0].value}
-        options={options}
-        hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
-        onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
-        autocomplete
-      />
+      <div className="GatewayDetails__bar">
+        <EntityProperty
+          name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
+          value={policy.name || options[0].value}
+          options={options}
+          hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
+          onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
+          autocomplete
+        />
+      </div>
     );
   };
 
@@ -400,12 +402,14 @@ class GatewayDetails extends PureComponent {
   };
 
   renderPipelineInput = (idx, pipeline) => (
-    <EntityProperty
-      name={`pipelines[${idx}][name]`}
-      value={pipeline.name}
-      placeholder="Enter pipeline name here"
-      hiddenInputs={[{name: `pipelines[${idx}][id]`, value: pipeline.id}]}
-    />
+    <div className="GatewayDetails__bar">
+      <EntityProperty
+        name={`pipelines[${idx}][name]`}
+        value={pipeline.name}
+        placeholder="Enter pipeline name here"
+        hiddenInputs={[{name: `pipelines[${idx}][id]`, value: pipeline.id}]}
+      />
+    </div>
   );
 
   onHttpToggle = (event) => {

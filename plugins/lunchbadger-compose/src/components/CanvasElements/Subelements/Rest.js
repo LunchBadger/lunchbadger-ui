@@ -488,7 +488,14 @@ export default class Rest extends PureComponent {
   }
 
   renderOperation = (operation, idx) => {
+    const {plain} = this.props;
     const methodOptions = requestMethods.map(label => ({label, value: label}));
+    let widthMethod;
+    let widthTemplate;
+    if (!plain) {
+      widthMethod = 145;
+      widthTemplate = 300;
+    }
     return (
       <div className="Rest__operations__collapsible__operation">
         <span className="Rest__method">
@@ -497,6 +504,7 @@ export default class Rest extends PureComponent {
             title="Method"
             value={operation.template.method}
             options={methodOptions}
+            width={widthMethod}
           />
         </span>
         <span className="Rest__url">
@@ -504,6 +512,7 @@ export default class Rest extends PureComponent {
             name={`operations[${idx}][template][url]`}
             title="URL"
             value={operation.template.url}
+            width={widthTemplate}
           />
         </span>
         <span className="Rest__plain">
@@ -511,6 +520,7 @@ export default class Rest extends PureComponent {
             name={`operations[${idx}][template][responsePath]`}
             title="Response Path"
             value={operation.template.responsePath}
+            width={widthTemplate}
           />
           <CollapsibleProperties
             bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}
@@ -567,6 +577,10 @@ export default class Rest extends PureComponent {
         ))}
       </div>
     );
+    let widthPredefined;
+    if (!plain) {
+      widthPredefined = 300;
+    }
     return (
       <div className={cs('Rest', {plain, notPlain: !plain})}>
         <div className="Rest__predefined">
@@ -576,6 +590,7 @@ export default class Rest extends PureComponent {
             value={predefined}
             options={predefinedOptions}
             onChange={this.handlePredefinedChanged}
+            width={widthPredefined}
           />
         </div>
         <div className="Rest__plain">

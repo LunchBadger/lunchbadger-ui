@@ -1,7 +1,12 @@
 .EntityActionButtons {
-  padding: 25px 16px 0;
+  padding-top: 25px;
   border-top: 1px solid rgb(248, 248, 248);
-  margin: 10px -20px 0 0;
+  margin-top: 10px;
+  &__inner {
+    .Button.cancel {
+      margin-left: 20px;
+    }
+  }
   &.zoom {
     margin: 0;
     padding-left: calc(100% - 270px);

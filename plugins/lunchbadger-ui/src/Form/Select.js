@@ -116,7 +116,7 @@ class Select extends Component {
     };
     if (!autocomplete) {
       Object.assign(labelStyle, {
-        padding: '0 8px',
+        padding: '0 48px 0 8px',
       });
     }
     if (icon) {
@@ -169,6 +169,10 @@ class Select extends Component {
         placeholder={placeholder}
       />
     );
+    const iconStyle = {
+      backgroundColor: '#FFF',
+      height: 39,
+    };
     return (
       <SelectField
         value={getValue()}
@@ -176,11 +180,13 @@ class Select extends Component {
         onKeyDown={this._handleKeyDown}
         onBlur={this._handleBlur}
         onChange={this._handleChange}
+        autoWidth
         fullWidth
         style={style}
         labelStyle={labelStyle}
         listStyle={{...style, fontWeight: 400}}
         underlineStyle={underlineStyle}
+        iconStyle={iconStyle}
       >
       {options.map(({value, label}, idx) => (
         <MenuItem

@@ -16,6 +16,9 @@
       width: auto;
     }
   }
+  &__bar {
+    min-width: 300px;
+  }
 }
 
 .BaseDetails.general .GatewayDetails .general,

@@ -330,6 +330,7 @@ class ModelDetails extends PureComponent {
         name: 'base',
         value: entity.base,
         options: baseModelTypes,
+        width: 190,
       },
       {
         title: 'Data Source',

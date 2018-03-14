@@ -310,7 +310,7 @@ class EntityProperty extends Component {
         slugify={slugify}
       />
     );
-  }
+  };
 
   render() {
     const {

@@ -1,13 +1,5 @@
 .Soap {
-  &__options {
-    & > span {
-      display: inline-block;
-      vertical-align: middle;
-      width: 340px;
-    }
+  &.notPlain {
+    min-width: 920px;
   }
-}
-
-.panel__details.soap .EntityProperty {
-  margin-right: 20px;
 }

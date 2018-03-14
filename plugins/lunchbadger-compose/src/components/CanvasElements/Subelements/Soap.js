@@ -168,6 +168,10 @@ export default class Soap extends PureComponent {
   renderProperties = () => {
     const {entity, plain} = this.props;
     const {url, wsdl, remotingEnabled} = entity;
+    let widthUrl;
+    if (!plain) {
+      widthUrl = 420;
+    }
     return (
       <div className="Soap__options">
         {!plain && (
@@ -176,6 +180,7 @@ export default class Soap extends PureComponent {
               title="URL"
               name="url"
               value={url}
+              width={widthUrl}
             />
           </span>
         )}
@@ -184,6 +189,7 @@ export default class Soap extends PureComponent {
             title="WSDL"
             name="wsdl"
             value={wsdl}
+            width={widthUrl}
           />
         </span>
         <span>
@@ -263,14 +269,14 @@ export default class Soap extends PureComponent {
       name: 'scheme',
       options: optionsScheme,
       onChange: this.handleSecuritySchemeChange,
-      width: 130,
+      width: 150,
     }];
     if (scheme === 'WS' || scheme === 'BasicAuth') {
       properties.push({name: 'username', width: 200});
       properties.push({name: 'password', width: 200, password: true});
     }
     if (scheme === 'WS') {
-      properties.push({name: 'passwordType', options: optionsPasswordType, width: 180});
+      properties.push({name: 'passwordType', options: optionsPasswordType, width: 200});
     }
     if (scheme === 'ClientSSL') {
       properties.push({name: 'keyPath'});

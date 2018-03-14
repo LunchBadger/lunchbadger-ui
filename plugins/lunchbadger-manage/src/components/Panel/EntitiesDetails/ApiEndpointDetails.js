@@ -105,6 +105,7 @@ class ApiEndpointDetails extends Component {
           placeholder=" "
           name="host"
           value={host}
+          width="100%"
         />
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Paths</EntityPropertyLabel>}

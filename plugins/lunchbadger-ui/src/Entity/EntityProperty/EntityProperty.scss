@@ -200,7 +200,8 @@
   &.integer,
   &.number,
   &.string,
-  &.array {
+  &.array,
+  &.select {
     min-width: 250px;
   }
   &.object {

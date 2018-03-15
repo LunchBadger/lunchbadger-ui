@@ -34,6 +34,7 @@ export const attach = info => async (dispatch, getState) => {
     dispatch(coreActions.addSystemDefcon1(err));
   }
   info.connection.removeType('wip');
+  await dispatch(coreActions.saveToServer());
 };
 
 export const detach = info => async (dispatch, getState) => {
@@ -50,6 +51,7 @@ export const detach = info => async (dispatch, getState) => {
   };
   try {
     await ModelService.upsertModelConfig(modelConfig);
+    await dispatch(coreActions.saveToServer());
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }
@@ -85,6 +87,7 @@ export const reattach = info => async (dispatch, getState) => {
       });
     }
     info.connection.removeType('wip');
+    await dispatch(coreActions.saveToServer());
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

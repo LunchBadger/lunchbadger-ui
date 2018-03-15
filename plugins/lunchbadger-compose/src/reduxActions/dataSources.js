@@ -51,6 +51,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     updatedEntity = DataSource.create(body);
     dispatch(actions.updateDataSource(updatedEntity));
+    await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
@@ -58,8 +59,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch, getState) => {
+  const isAutoSave = entity.loaded;
   try {
-    if (entity.loaded) {
+    if (isAutoSave) {
       const state = getState();
       const updatedEntity = entity.recreate();
       updatedEntity.ready = false;
@@ -79,6 +81,9 @@ export const remove = entity => async (dispatch, getState) => {
       await DataSourceService.delete(entity.workspaceId);
     }
     dispatch(actions.removeDataSource(entity));
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
   } catch (err) {
     dispatch(coreActions.addSystemDefcon1(err));
   }

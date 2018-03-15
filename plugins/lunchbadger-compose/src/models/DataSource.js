@@ -273,48 +273,6 @@ export default class DataSource extends BaseModel {
     return this._connector === 'manta';
   }
 
-  get detailsSize() {
-    const width = 400;
-    const fields1 = {
-      width,
-      height: 310,
-    };
-    const fields2 = {
-      width,
-      height: 390,
-    };
-    const fields4 = {
-      width,
-      height: 550,
-    };
-    const fields5 = {
-      width,
-      height: 630,
-    };
-    const sizes = {
-      mysql: fields5,
-      mongodb: fields5,
-      redis: fields5,
-      postgresql: fields5,
-      web3: fields1,
-      salesforce: fields2,
-      manta: fields4,
-      rest: {
-        width: 905,
-        height: 1000,
-      },
-      soap: {
-        width: 1085,
-        height: 1000,
-      },
-    };
-    return {
-      general: sizes[this._connector],
-    };
-  }
-
-  set detailsSize(size) {}
-
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

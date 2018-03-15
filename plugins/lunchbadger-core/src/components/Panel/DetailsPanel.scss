@@ -7,12 +7,10 @@
   z-index: 1000;
   background-color: rgba(100, 100, 100, 0);
   pointer-events: none;
-  transition: background-color 200ms ease;
+  transition: background-color 300ms ease 600ms;
   &.visible {
     background-color: rgba(100, 100, 100, 0.75);
     pointer-events: auto;
-  }
-  &.closing {
-    transition: background-color 200ms ease 200ms;
+    transition: background-color 300ms ease;
   }
 }

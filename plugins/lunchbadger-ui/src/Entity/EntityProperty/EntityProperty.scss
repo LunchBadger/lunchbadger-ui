@@ -1,6 +1,7 @@
 .EntityProperty {
   padding-bottom: 16px;
   position: relative;
+  margin-right: 20px;
   &.EntityProperty__fake {
     .EntityProperty__field {
       border-color: transparent;
@@ -191,5 +192,26 @@
     color: #999;
     font-size: 12px;
     font-weight: 300;
+  }
+  &.boolean,
+  &.types {
+    min-width: 120px;
+  }
+  &.integer,
+  &.number,
+  &.string,
+  &.array,
+  &.select {
+    min-width: 250px;
+  }
+  &.object {
+    min-width: 290px;
+    margin-right: 0;
+  }
+  &__codeEditor {
+    margin-right: 50px;
+  }
+  &.noMarginRight {
+    margin-right: 0;
   }
 }

@@ -201,10 +201,10 @@ export default class GatewayPolicyAction extends PureComponent {
               name={`${this.tmpPrefix}[${id}][type]`}
               value={type}
               onChange={this.handleTypeChange(id)}
-              width={150}
               placeholder=" "
               options={types.map(label => ({label, value: label}))}
               classes={`${this.tmpPrefix}[type][${name}]`}
+              type="types"
             />
           )}
           {this.renderProperty({
@@ -230,6 +230,7 @@ export default class GatewayPolicyAction extends PureComponent {
         width: width || 'calc(100% - 50px)',
         description,
         placeholder: ' ',
+        type,
       };
       if (type === 'boolean') {
         Object.assign(props, {
@@ -240,7 +241,6 @@ export default class GatewayPolicyAction extends PureComponent {
       }
       if (type === 'integer' || type === 'number') {
         Object.assign(props, {
-          width: 150,
           number: true,
           alignRight: true,
           postfix,

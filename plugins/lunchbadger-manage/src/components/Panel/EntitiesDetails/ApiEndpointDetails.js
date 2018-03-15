@@ -58,25 +58,19 @@ class ApiEndpointDetails extends Component {
     const paths = this.state.paths.slice();
     paths.push('');
     const {length} = paths;
-    this.changeState({paths}, this.rndResize(length, () => {
+    this.changeState({paths});
+    setTimeout(() => {
       const idx = length - 1;
       const input = document.getElementById(`paths[${idx}]`);
       input && input.focus();
-    }));
+    });
   };
 
   removePath = idx => () => {
     const paths = this.state.paths.slice();
     paths.splice(idx, 1);
-    this.changeState({paths}, this.rndResize(paths.length));
+    this.changeState({paths});
   };
-
-  rndResize = (pathsAmount, cb) => () => window.dispatchEvent(new CustomEvent('rndresize', {
-    detail: {
-      size: this.props.entity.recalculateDetailsSize(pathsAmount),
-      cb,
-    },
-  }));
 
   renderPropertiesSection = () => {
     const {paths} = this.state;
@@ -111,6 +105,7 @@ class ApiEndpointDetails extends Component {
           placeholder=" "
           name="host"
           value={host}
+          width="100%"
         />
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Paths</EntityPropertyLabel>}

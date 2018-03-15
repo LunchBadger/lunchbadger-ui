@@ -1,5 +1,6 @@
 .GatewayPolicyCondition {
   position: relative;
+  min-width: 200px;
   &.nested {
     &:after {
       display: block;
@@ -34,7 +35,6 @@
     }
   }
   .EntityProperty {
-    margin-right: 0;
     padding-bottom: 5px;
     &Label {
       text-transform: capitalize !important;

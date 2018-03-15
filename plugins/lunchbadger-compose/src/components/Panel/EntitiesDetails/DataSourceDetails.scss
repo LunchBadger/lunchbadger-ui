@@ -7,8 +7,12 @@
     &.web3,
     &.salesforce,
     &.manta {
+      min-width: 500px;
       .CollapsibleProperties__collapsible {
         margin-bottom: 0;
+      }
+      .EntityProperty {
+        display: block;
       }
     }
   }

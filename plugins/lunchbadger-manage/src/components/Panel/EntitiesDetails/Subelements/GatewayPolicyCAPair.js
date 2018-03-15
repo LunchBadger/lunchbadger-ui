@@ -28,7 +28,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     const {renderCondition, renderAction} = this.props;
     const {horizontal} = this.state;
     return (
-      <div>
+      <div className="GatewayPolicyCAPair__box">
         <div className="GatewayPolicyCAPair__wrapper">
           <div className="GatewayPolicyCAPair__section">
             <EntityPropertyLabel noMargin>Condition</EntityPropertyLabel>

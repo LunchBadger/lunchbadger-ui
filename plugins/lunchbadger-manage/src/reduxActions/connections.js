@@ -17,8 +17,8 @@ export const attach = info => async (dispatch, getState) => {
     }
   }
   Connections.addConnectionByInfo(info);
-  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
+  await dispatch(coreActions.saveToServer());
 };
 
 export const detach = info => async (dispatch, getState) => {
@@ -48,6 +48,6 @@ export const reattach = info => async (dispatch, getState) => {
     }
   }
   Connections.moveConnection(info);
-  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
+  await dispatch(coreActions.saveToServer());
 }

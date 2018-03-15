@@ -1,4 +1,5 @@
 .Rest.notPlain {
+  min-width: 850px;
   .Rest {
     &__options {
       & > span {
@@ -6,9 +7,6 @@
         vertical-align: middle;
         width: 170px;
       }
-    }
-    &__method .EntityProperty{
-      width: 135px !important;
     }
   }
 }

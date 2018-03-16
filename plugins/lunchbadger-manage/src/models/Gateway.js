@@ -4,7 +4,6 @@ import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
 import HttpsTlsDomain from './HttpsTlsDomain';
 import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
-import {gatewayPolicies} from '../utils/gatewayPolicies';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 
@@ -18,7 +17,7 @@ export default class Gateway extends BaseModel {
    */
   _pipelines = [];
 
-  _policies = gatewayPolicies;
+  _policies = [];
 
   running = true;
   deleting = null;

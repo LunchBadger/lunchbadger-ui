@@ -7,7 +7,6 @@ import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
 import HttpsTlsDomain from '../../../models/HttpsTlsDomain';
 import ConditionAction from '../../../models/ConditionAction';
 import Parameter from '../../../models/Parameter';
-import GATEWAY_POLICIES from '../../../utils/gatewayPolicies';
 import GatewayPolicyCAPair from './Subelements/GatewayPolicyCAPair';
 import GatewayPolicyCondition from './Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from './Subelements/GatewayPolicyAction';
@@ -74,13 +73,13 @@ class GatewayDetails extends PureComponent {
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
       // remove connections for pipelines having no proxy policy
-      if (!(policies || []).find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
+      if (!(policies || []).find(({name}) => name === 'proxy')) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
         [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
       }
       (policies || []).forEach((policy) => {
-        if (policy.name === GATEWAY_POLICIES.PROXY) {
+        if (policy.name === 'proxy') {
           // removing old serviceEndpoints connections
           Connections.search({toId: id}).forEach((conn) => {
             paper.detach(conn.info.connection);
@@ -300,7 +299,7 @@ class GatewayDetails extends PureComponent {
       name={`add__pipeline${pipelineIdx}policy${policyIdx}CAPair`}
       onClick={this.addCAPair(pipelineIdx, policyIdx, policy.name)}
     />;
-    if (policy.name === GATEWAY_POLICIES.PROXY) {
+    if (policy.name === 'proxy') {
       const state = this.context.store.getState();
       const {serviceEndpointEntities} = state.plugins.quadrants[1];
       const {entities} = state;

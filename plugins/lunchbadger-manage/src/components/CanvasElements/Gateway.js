@@ -6,7 +6,6 @@ import _ from 'lodash';
 import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
-import GATEWAY_POLICIES from '../../utils/gatewayPolicies';
 import PipelineComponent from './Subelements/Pipeline';
 import GatewayPolicyCondition from '../Panel/EntitiesDetails/Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from '../Panel/EntitiesDetails/Subelements/GatewayPolicyAction';
@@ -84,7 +83,7 @@ class Gateway extends Component {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
-      if (!(policies || []).find(({name}) => name === GATEWAY_POLICIES.PROXY)) {
+      if (!(policies || []).find(({name}) => name === 'proxy')) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
         [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
@@ -217,7 +216,7 @@ class Gateway extends Component {
   renderPipelinePorts = pipeline => {
     const {entity: {deleting}} = this.props;
     const {ports, policies} = pipeline;
-    const hasProxyPolicy = !!policies.find(item => item.name === GATEWAY_POLICIES.PROXY);
+    const hasProxyPolicy = !!policies.find(item => item.name === 'proxy');
     return ports.map(port => (
       <Port
         key={`port-${port.portType}-${port.id}`}

@@ -5,7 +5,6 @@ import slug from 'slug';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 import initialPipelinePolicies from '../utils/initialPipelinePolicies';
-import GATEWAY_POLICIES from '../utils/gatewayPolicies';
 import ConditionAction from '../models/ConditionAction';
 
 const {Connections} = LunchBadgerCore.stores;
@@ -16,7 +15,13 @@ export const add = () => (dispatch, getState) => {
   const types = quadrants[2].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
   const pipelines = {Pipeline: {policies: initialPipelinePolicies}};
-  const entity = Gateway.create({name: 'Gateway', itemOrder, loaded: false, pipelines});
+  const entity = Gateway.create({
+    name: 'Gateway',
+    itemOrder,
+    loaded: false,
+    pipelines,
+    policies: Object.keys(entities.gatewaySchemas.policy),
+  });
   dispatch(actions.updateGateway(entity));
   return entity;
 }
@@ -114,7 +119,7 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
     Object.assign(action, {ignorePath: true});
   }
   pipeline.policies
-    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .filter(({name}) => name === 'proxy')
     .forEach((policy) => {
       policy.addConditionAction(ConditionAction.create({action}));
     });
@@ -128,7 +133,7 @@ export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (
   gateway = gateway.recreate();
   const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
   pipeline.policies
-    .filter(({name}) => name === GATEWAY_POLICIES.PROXY)
+    .filter(({name}) => name === 'proxy')
     .forEach((policy) => {
       policy.removeConditionActionByServiceEndpoint(serviceEndpoint);
     });

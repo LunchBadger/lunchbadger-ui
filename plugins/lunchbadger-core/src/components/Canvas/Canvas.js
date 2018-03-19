@@ -19,7 +19,6 @@ class Canvas extends Component {
     super(props);
     this.state = {
       lastUpdate: new Date(),
-      canvasHeight: null,
       scrollLeft: 0,
     };
     this.dropped = false;
@@ -240,26 +239,26 @@ class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {isPanelClosed, zoom} = this.props;
+    const {height} = this.props;
     const {scrollLeft} = this.state;
-    const canvasHeight = isPanelClosed ? null : this.state.canvasHeight;
+    const style = {height};
     return (
       <div>
         <section
+          style={style}
           className="canvas"
           onClick={this.handleClick}
         >
           <div
-            style={{height: canvasHeight}}
+            style={style}
             className="canvas__wrapper"
             ref={(r) => {this.canvasWrapperDOM = r;}}
           >
-            <div style={{height: canvasHeight}} className="canvas__legend">
+            <div style={style} className="canvas__legend">
               <div className="canvas__label canvas__label--left">Producers</div>
               <div className="canvas__label canvas__label--right">Consumers</div>
             </div>
             <QuadrantContainer
-              canvasHeight={canvasHeight}
               className="canvas__container"
               id="canvas"
               scrollLeft={scrollLeft}
@@ -273,17 +272,14 @@ class Canvas extends Component {
 }
 
 const selector = createSelector(
-  state => !state.states.currentlyOpenedPanel,
   state => state.loadingProject,
-  state => state.states.zoom,
+  state => state.canvasHeight,
   (
-    isPanelClosed,
     loadingProject,
-    zoom,
+    canvasHeight,
   ) => ({
-    isPanelClosed,
     loadingProject,
-    zoom,
+    height: canvasHeight || 'calc(100vh - 52px)',
   }),
 );
 

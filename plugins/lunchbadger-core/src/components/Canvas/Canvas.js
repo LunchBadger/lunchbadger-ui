@@ -265,6 +265,7 @@ class Canvas extends Component {
               className="canvas__container"
               id="canvas"
               scrollLeft={scrollLeft}
+              style={{minHeight: height}}
             />
           </div>
         </section>

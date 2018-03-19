@@ -20,6 +20,12 @@
   &__editor {
     display: none;
   }
+  &__indicator {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
 }
 
 .react-resizable {

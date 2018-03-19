@@ -73,15 +73,19 @@ class GatewayDetails extends PureComponent {
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
       // remove connections for pipelines having no proxy policy
-      if (!(policies || []).find(({name}) => name === 'proxy')) {
+      if (!((policies || []).find(({name}) => name === 'proxy'))) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
-        [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
+        [...connectionsTo, ...connectionsFrom].forEach((conn) => {
+          conn.info.connection.setParameter('discardAutoSave', true);
+          paper.detach(conn.info.connection);
+        });
       }
       (policies || []).forEach((policy) => {
         if (policy.name === 'proxy') {
           // removing old serviceEndpoints connections
           Connections.search({toId: id}).forEach((conn) => {
+            conn.info.connection.setParameter('discardAutoSave', true);
             paper.detach(conn.info.connection);
           });
           // restoring current serviceEndpoints connections
@@ -91,6 +95,7 @@ class GatewayDetails extends PureComponent {
               target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
               parameters: {
                 forceDropped: true,
+                discardAutoSave: true,
               }
             }, {
               fireEvent: true,

@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
-import CanvasOverlay from './CanvasOverlay';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import './Canvas.scss';
+
+const defaultCanvasHeight = 'calc(100vh - 52px)';
 
 class Canvas extends Component {
   static contextTypes = {
@@ -242,11 +244,12 @@ class Canvas extends Component {
     const {height} = this.props;
     const {scrollLeft} = this.state;
     const style = {height};
+    const disabled = height !== defaultCanvasHeight; // may be optional for metrics/optimise panels
     return (
       <div>
         <section
           style={style}
-          className="canvas"
+          className={cs('canvas', {disabled})}
           onClick={this.handleClick}
         >
           <div
@@ -279,7 +282,7 @@ const selector = createSelector(
     canvasHeight,
   ) => ({
     loadingProject,
-    height: canvasHeight || 'calc(100vh - 52px)',
+    height: canvasHeight || defaultCanvasHeight,
   }),
 );
 

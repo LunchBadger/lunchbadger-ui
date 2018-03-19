@@ -227,19 +227,21 @@ var pageCommands = {
   submitDetailsPanel: function (selector) {
     return this
       .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
+      .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present(selector + '.wip')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000)
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000);
   },
 
   submitDetailsPanelWithoutWip: function () {
     return this
+      .present('.DetailsPanel.visible .wrap.opened')
       .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
       .submitForm('.DetailsPanel .BaseDetails form')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000);
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000);
   },
 
   submitDetailsPanelWithExpectedValidationErrors: function (validationErrors = []) {
@@ -266,9 +268,16 @@ var pageCommands = {
 
   closeDetailsPanel: function () {
     return this
+      .present('.DetailsPanel.visible .wrap.opened')
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000);
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000);
+  },
+
+  autoSave: function () {
+    return this
+      .present('.spinner__overlay', 60000)
+      .notPresent('.spinner__overlay', 60000);
   },
 
   removeEntity: function (selector, timeout, check = {}) {
@@ -277,7 +286,8 @@ var pageCommands = {
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
       .check(check)
-      .notPresent(selector, timeout);
+      .notPresent(selector, timeout)
+      .autoSave();
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
@@ -453,7 +463,7 @@ var pageCommands = {
   },
 
   closeSystemInformationMessage: function (message) {
-    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
+    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message}:first-child .SystemInformationMessages__item__delete`;
     return this
       .clickVisible(selector, 180000)
       .notPresent(selector, 15000);
@@ -660,7 +670,7 @@ var pageCommands = {
     expect.forEach(({name, policies}, pipelineIdx) => {
       data.value[`.DetailsPanel .pipelines${pipelineIdx}name input`] = name;
       policies.forEach(({policy, ca = []}, policyIdx) => {
-        data.present.push(`.pipelines${pipelineIdx}policies${policyIdx}name__${policy}`);
+        data.value[`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}name input`] = policy;
         ca.forEach(({condition = {}, action = {}}, pairIdx) => {
           this.checkCondition(data, pipelineIdx, policyIdx, pairIdx, condition);
           this.checkAction(data, pipelineIdx, policyIdx, pairIdx, action);
@@ -693,12 +703,18 @@ var pageCommands = {
       .notPresent(selector);
   },
 
+  setAutocompleteValue: function (selector, value) {
+    const {ENTER} = this.api.Keys;
+    const keys = [...value.split(''), ENTER];
+    return this
+      .setAutocomplete(selector, keys);
+  },
+
   addPolicy: function (gatewaySelector, pipelineIdx, policyIdx, policyName) {
-    const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
+    const selectSelector = `${gatewaySelector} .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
     return this
       .clickPresent(`${gatewaySelector} .button__add__pipelines${pipelineIdx}policy`)
-      .present(`${gatewaySelector} .select__${selectSelector}`)
-      .selectValueSlow(gatewaySelector, selectSelector, policyName)
+      .setAutocompleteValue(selectSelector, policyName)
       .pause(1500);
   },
 
@@ -713,7 +729,7 @@ var pageCommands = {
   setPolicyByDetails: function (pipelineIdx, policyIdx, policyName) {
     const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
     return this
-      .selectValueSlow('.DetailsPanel', selectSelector, policyName)
+      .setAutocompleteValue(`.DetailsPanel .${selectSelector} input`, policyName)
       .pause(1500);
   },
 

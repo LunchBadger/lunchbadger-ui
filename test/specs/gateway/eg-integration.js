@@ -84,7 +84,7 @@ module.exports = {
   },
   'EG integration: action schema parameter - required': function () {
     page
-      .addPolicyByDetails(0, 0, 'headers')
+      .setPolicyByDetails(0, 0, 'headers')
       .addPolicyCAPair(0, 0, 0)
       .checkPipelines(expectActionRequired);
   },

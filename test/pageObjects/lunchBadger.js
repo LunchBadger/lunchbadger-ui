@@ -198,10 +198,11 @@ var pageCommands = {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
-      .check(check)
       .notPresent(selector + '.wip', 120000)
+      .autoSave()
       .notPresent('.Aside.disabled')
-      .notPresent('.SystemDefcon1', 60000);
+      .notPresent('.SystemDefcon1', 60000)
+      .check(check);
   },
 
   submitCanvasEntityWithExpectedValidationErrors: function (selector, validationErrors = []) {
@@ -232,7 +233,8 @@ var pageCommands = {
       .present(selector + '.wip')
       .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
       .notPresent('.DetailsPanel.visible', 15000)
-      .notPresent(selector + '.wip', 60000);
+      .notPresent(selector + '.wip', 60000)
+      .autoSave();
   },
 
   submitDetailsPanelWithoutWip: function () {

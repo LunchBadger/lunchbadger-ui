@@ -198,11 +198,21 @@ var pageCommands = {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
+      .check(check)
       .notPresent(selector + '.wip', 120000)
       .autoSave()
       .notPresent('.Aside.disabled')
-      .notPresent('.SystemDefcon1', 60000)
-      .check(check);
+      .notPresent('.SystemDefcon1', 60000);
+  },
+
+  submitCanvasEntityWithoutAutoSave: function (selector, check = {}) {
+    return this
+      .present(selector + ' form', 10000)
+      .submitForm(selector + ' form')
+      .check(check)
+      .notPresent(selector + '.wip', 120000)
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000);
   },
 
   submitCanvasEntityWithExpectedValidationErrors: function (selector, validationErrors = []) {
@@ -273,7 +283,8 @@ var pageCommands = {
       .present('.DetailsPanel.visible .wrap.opened')
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
       .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
-      .notPresent('.DetailsPanel.visible', 15000);
+      .notPresent('.DetailsPanel.visible', 15000)
+      .pause(3000);
   },
 
   autoSave: function () {
@@ -288,8 +299,8 @@ var pageCommands = {
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
       .check(check)
-      .notPresent(selector, timeout)
-      .autoSave();
+      .autoSave()
+      .notPresent(selector, timeout);
   },
 
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
@@ -302,6 +313,7 @@ var pageCommands = {
       .present(startSelector)
       .present(endSelector)
       .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
+      .autoSave()
       .check({
         connected: {
           [startConnected]: [fromDir],
@@ -461,7 +473,13 @@ var pageCommands = {
       .clearProject()
       .closeSystemInformationMessage('All-data-removed-from-server')
       .notPresent('.spinner__overlay', 120000)
+      .waitForGatewaysRemoved()
       .saveProject();
+  },
+
+  waitForGatewaysRemoved: function () {
+    return this
+      .notPresent(this.getGatewaySelector(1), 600000); // wait max 10 min for any gateway to be removed
   },
 
   closeSystemInformationMessage: function (message) {
@@ -1071,7 +1089,8 @@ var pageCommands = {
       present: [`${selector} .EntityStatus.deleting`]
     };
     return this
-      .removeEntity(selector, 300000, check);
+      .removeEntity(selector, 300000, check)
+      .waitForGatewaysRemoved();
   }
 };
 

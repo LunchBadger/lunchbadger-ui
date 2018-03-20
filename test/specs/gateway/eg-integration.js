@@ -410,7 +410,7 @@ module.exports = {
       .closeDetailsPanel()
       .editEntity(gatewaySelector)
       .removePipeline(gatewaySelector, 0)
-      .submitCanvasEntity(gatewaySelector)
+      .submitCanvasEntityWithoutAutoSave(gatewaySelector)
   },
   'EG integration: add proxy pipelines': function () {
     page
@@ -419,7 +419,7 @@ module.exports = {
       .addPipeline(gatewaySelector, 1, 'ServiceEndpointProxy')
       .addPolicy(gatewaySelector, 0, 0, 'proxy')
       .addPolicy(gatewaySelector, 1, 0, 'proxy')
-      .submitCanvasEntity(gatewaySelector);
+      .submitCanvasEntityWithoutAutoSave(gatewaySelector);
   },
   'EG integration: add datasource': function () {
     page

@@ -588,19 +588,19 @@ var pageCommands = {
     this
       .pause(500);
     Object.keys(text).forEach((key) => {
-      this.api.expect.element(key).text.to.equal(text[key]);
+      this.api.expect.element(key).text.to.equal(text[key]).before(45000);
     });
     Object.keys(textContain).forEach((key) => {
       this.api.expect.element(key).text.to.contain(textContain[key]);
     });
     Object.keys(value).forEach((key) => {
-      this.api.expect.element(key).value.to.equal(value[key]).before(5000);
+      this.api.expect.element(key).value.to.equal(value[key]).before(45000);
     });
     Object.keys(valueContain).forEach((key) => {
       this.api.expect.element(key).value.to.contain(value[key]);
     });
     present.forEach((selector) => {
-      this.api.expect.element(selector).to.be.present.before(5000);
+      this.api.expect.element(selector).to.be.present.before(45000);
     });
     notPresent.forEach((selector) => {
       this.api.expect.element(selector).to.not.be.present;

@@ -188,7 +188,13 @@ var pageCommands = {
       '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': gatewayName + ' successfully deployed'
     };
     return this
-      .submitCanvasEntity(selector, check)
+      .present(selector + ' form', 10000)
+      .submitForm(selector + ' form')
+      .check(check)
+      .autoSave()
+      .notPresent(selector + '.wip', 120000)
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000)
       .visible('.SystemInformationMessages', 180000)
       .check({text})
       .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
@@ -289,7 +295,8 @@ var pageCommands = {
   autoSave: function () {
     return this
       .present('.spinner__overlay', 60000)
-      .notPresent('.spinner__overlay', 60000);
+      .notPresent('.spinner__overlay', 60000)
+      .waitUntilDataSaved();
   },
 
   removeEntity: function (selector, timeout, check = {}) {
@@ -476,10 +483,15 @@ var pageCommands = {
     return prefix + '' + Math.random().toString(36).substr(2, 5);
   },
 
+  waitUntilDataSaved: function () {
+    return this
+      .closeSystemInformationMessage('All-data-has-been-synced-with-API');
+  },
+
   saveProject: function () {
     return this
       .clickVisible('.header__menu .fa-floppy-o')
-      .closeSystemInformationMessage('All-data-has-been-synced-with-API');
+      .waitUntilDataSaved();
   },
 
   clearProject: function () {

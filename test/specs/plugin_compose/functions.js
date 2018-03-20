@@ -1,5 +1,6 @@
 var page;
 var functionSelector;
+var functionSelector2;
 var dataSourceSelector;
 var modelSelector;
 var gatewaySelector;
@@ -7,10 +8,11 @@ var apiEndpointFunctionSelector;
 var GATEWAY_NAME;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Functions: create function': function (browser) {
     page = browser.page.lunchBadger();
     functionSelector = page.getFunctionSelector(1);
+    functionSelector2 = page.getFunctionSelector(2);
     dataSourceSelector = page.getDataSourceSelector(1);
     modelSelector = page.getModelSelector(2);
     gatewaySelector = page.getGatewaySelector(1);
@@ -19,9 +21,13 @@ module.exports = {
     page
       .open()
       .addElement('function')
-      .setCanvasEntityName(functionSelector, 'myfunction')
       .submitCanvasEntity(functionSelector)
       .checkFunctionTriggers(functionSelector, {});
+  },
+  'Functions: unique name': function () {
+    page
+      .addElement('function')
+      .expectUniqueNameError(functionSelector2, 'A function');
   },
   'Functions: api gateway trigger': function () {
     page

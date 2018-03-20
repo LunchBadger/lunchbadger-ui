@@ -3,8 +3,6 @@ var dataSourceSelector1;
 var dataSourceSelector2;
 var modelSelector1;
 var modelSelector2;
-var functionSelector1;
-var functionSelector2;
 var microserviceSelector1;
 var microserviceSelector2;
 var seSelector1;
@@ -22,12 +20,10 @@ module.exports = {
     dataSourceSelector2 = page.getDataSourceSelector(2);
     modelSelector1 = page.getModelSelector(1);
     modelSelector2 = page.getModelSelector(2);
-    functionSelector1 = page.getFunctionSelector(2);
-    functionSelector2 = page.getFunctionSelector(3);
-    microserviceSelector1 = page.getMicroserviceSelector(3);
-    microserviceSelector2 = page.getMicroserviceSelector(4);
-    seSelector1 = page.getServiceEndpointSelector(4);
-    seSelector2 = page.getServiceEndpointSelector(5);
+    microserviceSelector1 = page.getMicroserviceSelector(2);
+    microserviceSelector2 = page.getMicroserviceSelector(3);
+    seSelector1 = page.getServiceEndpointSelector(3);
+    seSelector2 = page.getServiceEndpointSelector(4);
     gatewaySelector1 = page.getGatewaySelector(1);
     gatewaySelector2 = page.getGatewaySelector(2);
     aeSelector1 = page.getApiEndpointSelector(1);
@@ -57,13 +53,6 @@ module.exports = {
       .addElement('model')
       .expectUniqueNameError(modelSelector2, 'A model');
   },
-  'Unique entities names: functions': function () {
-    page
-      .addElement('function')
-      .submitCanvasEntity(functionSelector1)
-      .addElement('function')
-      .expectUniqueNameError(functionSelector2, 'A function');
-  },
   'Unique entities names: microservices': function () {
     page
       .addElement('microservice')
@@ -74,7 +63,8 @@ module.exports = {
   'Unique entities names: service endpoints': function () {
     page
       .addElementFromTooltip('endpoint', 'serviceendpoint')
-      .submitCanvasEntity(seSelector1)
+      .submitCanvasEntityWithoutAutoSave(seSelector1)
+      .notPresent('.spinner__overlay', 60000)
       .addElementFromTooltip('endpoint', 'serviceendpoint')
       .expectUniqueNameError(seSelector2, 'A service endpoint');
   },

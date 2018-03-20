@@ -1,7 +1,7 @@
 var page;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Tools menu: microservice selected': function (browser) {
     page = browser.page.lunchBadger();
     page

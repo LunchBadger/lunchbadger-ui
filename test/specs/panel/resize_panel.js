@@ -2,7 +2,7 @@ var page;
 var panelHeight = 0;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Panel: resize': function (browser) {
     page = browser.page.lunchBadger();
     page

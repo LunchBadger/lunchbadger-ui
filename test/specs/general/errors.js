@@ -1,7 +1,7 @@
 var page;
 var dataSourceSelector;
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Errors: reset workspace status': function (browser) {
     page = browser.page.lunchBadger();
     dataSourceSelector = page.getDataSourceSelector(1);

@@ -2,7 +2,7 @@ var page;
 var entitySelector;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Api Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getApiEndpointSelector(1);

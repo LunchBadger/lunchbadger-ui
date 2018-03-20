@@ -2,7 +2,7 @@ var page;
 var entitySelector;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Datasource: tritonobjectstorage': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);

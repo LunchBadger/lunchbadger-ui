@@ -60,16 +60,14 @@ module.exports = {
   'Unique entities names: functions': function () {
     page
       .addElement('function')
-      .setCanvasEntityName(functionSelector1, 'myfunction')
       .submitCanvasEntity(functionSelector1)
       .addElement('function')
-      .setCanvasEntityName(functionSelector2, 'myfunction')
       .expectUniqueNameError(functionSelector2, 'A function');
   },
   'Unique entities names: microservices': function () {
     page
       .addElement('microservice')
-      .submitCanvasEntity(microserviceSelector1)
+      .submitCanvasEntityWithoutAutoSave(microserviceSelector1)
       .addElement('microservice')
       .expectUniqueNameError(microserviceSelector2, 'A microservice');
   },
@@ -86,6 +84,7 @@ module.exports = {
       .submitCanvasEntity(aeSelector1)
       .addElementFromTooltip('endpoint', 'apiendpoint')
       .expectUniqueNameError(aeSelector2, 'An api endpoint')
+      .autoSave()
       .close();
   }
 };

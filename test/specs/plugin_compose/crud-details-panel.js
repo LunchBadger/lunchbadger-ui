@@ -5,7 +5,7 @@ var modelSelector1;
 var modelSelector2;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'CRUD on details panel: create datasources': function (browser) {
     page = browser.page.lunchBadger();
     dataSourceSelector1 = page.getDataSourceSelector(1);

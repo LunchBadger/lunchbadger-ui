@@ -2,7 +2,7 @@ var page;
 var entitySelector;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Model: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getModelSelector(1);

@@ -36,7 +36,7 @@ module.exports = {
     page
       .addElementFromTooltip('dataSource', 'memory')
       .submitCanvasEntity(dataSourceSelector)
-      .connectPorts(dataSourceSelector, 'out', functionSelector, 'in')
+      .connectPortsWithoutAutoSave(dataSourceSelector, 'out', functionSelector, 'in')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,
         Datasource: 'Memory'
@@ -46,7 +46,7 @@ module.exports = {
     page
       .addElement('model')
       .submitCanvasEntity(modelSelector)
-      .connectPorts(modelSelector, 'out', functionSelector, 'out')
+      .connectPortsWithoutAutoSave(modelSelector, 'out', functionSelector, 'out')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,
         Datasource: 'Memory',

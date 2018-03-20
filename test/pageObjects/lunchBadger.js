@@ -303,23 +303,45 @@ var pageCommands = {
       .notPresent(selector, timeout);
   },
 
-  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
+  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1, isReattach = false) {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
     const startConnected = fromSelector;
     const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
+    const check = {
+      connected: {
+        [endConnected]: [toDir]
+      },
+      notConnected: {}
+    };
+    check[(fromDir === toDir && isReattach) ? 'notConnected' : 'connected'][startConnected] = [fromDir];
     return this
       .present(startSelector)
       .present(endSelector)
       .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
       .autoSave()
-      .check({
-        connected: {
-          [startConnected]: [fromDir],
-          [endConnected]: [toDir]
-        }
-      });
+      .check(check);
+  },
+
+  connectPortsWithoutAutoSave: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1, isReattach = false) {
+    const bothOutDir = fromDir === 'out' && toDir === 'out';
+    const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
+    const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    const startConnected = fromSelector;
+    const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
+    const check = {
+      connected: {
+        [endConnected]: [toDir]
+      },
+      notConnected: {}
+    };
+    check[(fromDir === toDir && isReattach) ? 'notConnected' : 'connected'][startConnected] = [fromDir];
+    return this
+      .present(startSelector)
+      .present(endSelector)
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
+      .check(check);
   },
 
   moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {

@@ -99,7 +99,7 @@ module.exports = {
   },
   'CRUD on canvas: reattach connection between datasources': function () {
     page
-      .connectPorts(dataSourceSelector1, 'out', dataSourceSelector2, 'out')
+      .connectPorts(dataSourceSelector1, 'out', dataSourceSelector2, 'out', -1, true)
       .check({
         connected: {
           [dataSourceSelector2]: ['out'],
@@ -125,7 +125,7 @@ module.exports = {
   },
   'CRUD on canvas: reattach connection between models': function () {
     page
-      .connectPorts(modelSelector1, 'in', modelSelector2, 'in')
+      .connectPorts(modelSelector1, 'in', modelSelector2, 'in', -1, true)
       .check({
         connected: {
           [dataSourceSelector2]: ['out'],

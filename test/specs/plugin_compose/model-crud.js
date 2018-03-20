@@ -3,7 +3,7 @@ var modelSelector1;
 var modelSelector2;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Model CRUD: create models': function (browser) {
     page = browser.page.lunchBadger();
     modelSelector1 = page.getModelSelector(1);

@@ -7,7 +7,7 @@ var apiEndpointFunctionSelector;
 var GATEWAY_NAME;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Functions: create function': function (browser) {
     page = browser.page.lunchBadger();
     functionSelector = page.getFunctionSelector(1);

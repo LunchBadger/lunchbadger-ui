@@ -1,11 +1,13 @@
 var page;
 var entitySelector;
+var entitySelector2;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: mysql': function (browser) {
+  'Mysql': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
+    entitySelector2 = page.getDataSourceSelector(2);
     page
       .open()
       .testDatasource('mysql', [
@@ -20,7 +22,13 @@ module.exports = {
         'database',
         'username'
       ])
-      .closeWhenSystemDefcon1()
+      .closeWhenSystemDefcon1();
+  },
+  'Mysql: unique name check': function () {
+    page
+      .addElementFromTooltip('dataSource', 'memory')
+      .setCanvasEntityName(entitySelector2, 'mysql')
+      .expectUniqueNameError(entitySelector2, 'A data source')
       .removeEntity(entitySelector)
       .waitForDependencyFinish()
       .close();

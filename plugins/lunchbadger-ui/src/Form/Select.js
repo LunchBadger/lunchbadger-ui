@@ -42,7 +42,7 @@ class Select extends Component {
   }
 
   _handleBlur = (event) => {
-    if (event.target.value === '') return;
+    if (this.state.focused) return; // if (event.target.value === '') return;
     if (typeof this.props.handleBlur === 'function') {
       this.props.handleBlur(event);
     }

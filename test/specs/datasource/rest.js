@@ -128,8 +128,7 @@ module.exports = {
   'Rest: remove': function () {
     page
       .reloadPage()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

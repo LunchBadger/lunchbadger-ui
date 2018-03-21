@@ -327,6 +327,19 @@ var pageCommands = {
       .notPresent(selector, timeout);
   },
 
+  removeEntityWithDependencyUninstall: function (selector, timeout, check = {}) {
+    return this
+      .clickVisible(selector)
+      .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .check(check)
+      .autoSave()
+      .notPresent('.workspace-status .workspace-status__progress', 120000)
+      .present('.workspace-status .workspace-status__success', 120000)
+      .notPresent(selector, timeout);
+  },
+
   connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1, isReattach = false) {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;

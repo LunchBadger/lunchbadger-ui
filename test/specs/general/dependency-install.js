@@ -25,7 +25,7 @@ module.exports = {
       .expectWorkspaceFailure('WSDL')
       .clickPresent('.SystemDefcon1 button')
       .notPresent('.SystemDefcon1', 5000)
-      .addElementFromTooltip('dataSource', 'mongodb')
+      .addElementFromTooltip('dataSource', 'mysql')
       .setField(dataSourceSelector3, 'host', 'dumpUrl')
       .setField(dataSourceSelector3, 'port', '9999')
       .setField(dataSourceSelector3, 'database', 'dumpDatabase')

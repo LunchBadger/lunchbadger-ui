@@ -275,7 +275,8 @@ var pageCommands = {
     return this
       .clickPresent(selector + ' .EntityHeader__name')
       .clickPresent(selector + '.highlighted .Toolbox__button--' + tab)
-      .visible('.DetailsPanel.visible .panel .BaseDetails.' + panel, 15000);
+      .visible('.DetailsPanel.visible .panel .BaseDetails.' + panel, 15000)
+      .pause(7000);
   },
 
   openPipelinesInDetailsPanel: function (selector) {

@@ -1,14 +1,23 @@
 var page;
+var microserviceSelector;
+var microserviceSelector2;
 
 module.exports = {
   // '@disabled': true,
-  'Tools menu: microservice selected': function (browser) {
+  'Microservice: aside tools menu selected': function (browser) {
     page = browser.page.lunchBadger();
+    microserviceSelector = page.getMicroserviceSelector(1);
+    microserviceSelector2 = page.getMicroserviceSelector(2);
     page
       .open()
       .addElement('microservice')
       .waitForElementPresent('.microservice.Tool.selected', 8000)
-      .discardCanvasEntityChanges(page.getMicroserviceSelector(1))
+      .submitCanvasEntityWithoutAutoSave(microserviceSelector);
+  },
+  'Microservice: unique name check': function () {
+    page
+      .addElement('microservice')
+      .expectUniqueNameError(microserviceSelector2, 'A microservice')
       .waitForElementNotPresent('.Aside.disabled', 8000)
       .close();
   }

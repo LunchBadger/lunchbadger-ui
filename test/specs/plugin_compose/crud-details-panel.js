@@ -127,6 +127,7 @@ module.exports = {
       .openEntityInDetailsPanel(modelSelector1)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'None')
       .submitDetailsPanel(modelSelector1)
+      .reloadPage()
       .openEntityInDetailsPanel(modelSelector2)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'Memory2')
       .submitDetailsPanel(modelSelector2)

@@ -389,7 +389,7 @@ var pageCommands = {
 
   confirmDetailsPanelChanges: function (selector) {
     return this
-      .submitDetailsPanel(selector)
+      .submitDetailsPanelWithCloseBeforeWip(selector)
       .openEntityInDetailsPanel(selector);
   },
 

@@ -26,8 +26,7 @@ module.exports = {
   'Api Endpoint: unique name check': function () {
     page
       .addElementFromTooltip('endpoint', 'apiendpoint')
-      .expectUniqueNameError(entitySelector2, 'An api endpoint')
-      .autoSave();
+      .expectUniqueNameError(entitySelector2, 'An api endpoint');
   },
   'Api Endpoint: add paths': function () {
     page

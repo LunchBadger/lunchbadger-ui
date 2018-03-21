@@ -242,14 +242,31 @@ var pageCommands = {
 
   submitDetailsPanel: function (selector) {
     return this
+      .submitDetailsPanelWithoutAutoSave(selector)
+      .autoSave();
+  },
+
+  submitDetailsPanelWithoutAutoSave: function (selector) {
+    return this
       .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
       .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present(selector + '.wip')
       .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
       .notPresent('.DetailsPanel.visible', 15000)
+      .notPresent(selector + '.wip', 60000);
+  },
+
+  submitDetailsPanelWithCloseBeforeWip: function (selector) {
+    return this
+      .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
+      .present('.DetailsPanel.visible .wrap.opened')
+      .submitForm('.DetailsPanel .BaseDetails form')
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .present(selector + '.wip')
+      .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000)
-      .autoSave();
+      .waitUntilDataSaved();
   },
 
   submitDetailsPanelWithoutWip: function () {
@@ -632,12 +649,12 @@ var pageCommands = {
     });
     Object.keys(connected).forEach((key) => {
       connected[key].forEach((dir) => {
-        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(5000);
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(15000);
       });
     });
     Object.keys(notConnected).forEach((key) => {
       notConnected[key].forEach((dir) => {
-        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(5000);
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(15000);
       });
     });
     return this;

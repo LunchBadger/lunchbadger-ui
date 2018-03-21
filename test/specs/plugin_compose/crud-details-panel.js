@@ -39,7 +39,7 @@ module.exports = {
     page
       .openEntityInDetailsPanel(modelSelector1)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'Memory1')
-      .submitDetailsPanel(modelSelector1)
+      .submitDetailsPanelWithCloseBeforeWip(modelSelector1)
       .check({
         connected: {
           [dataSourceSelector1]: ['out'],
@@ -98,7 +98,7 @@ module.exports = {
     page
       .openEntityInDetailsPanel(modelSelector1)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'Memory2')
-      .submitDetailsPanel(modelSelector1)
+      .submitDetailsPanelWithCloseBeforeWip(modelSelector1)
       .check({
         connected: {
           [dataSourceSelector2]: ['out'],
@@ -126,11 +126,18 @@ module.exports = {
     page
       .openEntityInDetailsPanel(modelSelector1)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'None')
-      .submitDetailsPanel(modelSelector1)
-      .reloadPage()
+      .submitDetailsPanelWithCloseBeforeWip(modelSelector1)
+      .check({
+        notConnected: {
+          [dataSourceSelector1]: ['out'],
+          [dataSourceSelector2]: ['out'],
+          [modelSelector1]: ['in'],
+          [modelSelector2]: ['in']
+        }
+      })
       .openEntityInDetailsPanel(modelSelector2)
       .selectValueSlow('.DetailsPanel', 'dataSource', 'Memory2')
-      .submitDetailsPanel(modelSelector2)
+      .submitDetailsPanelWithCloseBeforeWip(modelSelector2)
       .check({
         connected: {
           [dataSourceSelector2]: ['out'],

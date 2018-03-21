@@ -1111,7 +1111,6 @@ var pageCommands = {
 
   expectWorkspaceStatus: function (status) {
     return this
-      .present('.workspace-status .workspace-status__progress', 120000)
       .present(`.workspace-status .workspace-status__${status}`, 300000);
   },
 

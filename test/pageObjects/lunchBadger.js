@@ -263,7 +263,6 @@ var pageCommands = {
       .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
-      .present(selector + '.wip')
       .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000)
       .waitUntilDataSaved();

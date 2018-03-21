@@ -547,7 +547,7 @@ var pageCommands = {
   },
 
   closeSystemInformationMessage: function (message) {
-    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message}:first-child .SystemInformationMessages__item__delete`;
+    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
     return this
       .clickVisible(selector, 180000)
       .notPresent(selector, 15000);

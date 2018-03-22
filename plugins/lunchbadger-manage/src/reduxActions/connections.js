@@ -1,5 +1,5 @@
 import {addAndConnect} from './apiEndpoints';
-import {addServiceEndpointIntoProxy, removeServiceEndpointFromProxy, replaceConditionActionServiceEndpoint} from './gateways';
+import {addServiceEndpointIntoProxy, removeServiceEndpointFromProxy} from './gateways';
 
 const {coreActions, storeUtils} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
@@ -7,6 +7,7 @@ const {Connections} = LunchBadgerCore.stores;
 export const attach = info => async (dispatch, getState) => {
   info.connection.setType('wip');
   const {sourceId, targetId} = info;
+  const {discardAutoSave} = info.connection.getParameters();
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
   if (endpoint) {
     const pipelineId = storeUtils.formatId(targetId);
@@ -17,19 +18,29 @@ export const attach = info => async (dispatch, getState) => {
     }
   }
   Connections.addConnectionByInfo(info);
-  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
+  if (discardAutoSave) {
+    info.connection.setParameter('discardAutoSave', false);
+  } else {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const detach = info => async (dispatch, getState) => {
   const {sourceId, targetId} = info;
+  const {discardAutoSave} = info.connection.getParameters();
+  if (discardAutoSave) {
+    info.connection.setParameter('discardAutoSave', false);
+  }
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
   if (endpoint) {
     const pipelineId = storeUtils.formatId(targetId);
     dispatch(removeServiceEndpointFromProxy(endpoint.id, pipelineId));
   }
   Connections.removeConnection(sourceId, targetId);
-  await dispatch(coreActions.saveToServer());
+  if (!discardAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const reattach = info => async (dispatch, getState) => {
@@ -48,6 +59,6 @@ export const reattach = info => async (dispatch, getState) => {
     }
   }
   Connections.moveConnection(info);
-  await dispatch(coreActions.saveToServer());
   info.connection.removeType('wip');
+  await dispatch(coreActions.saveToServer());
 }

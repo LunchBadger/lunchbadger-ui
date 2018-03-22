@@ -1,11 +1,14 @@
 var page;
 var entitySelector;
+var entitySelector2;
+var MODEL_NAME = '_ThisIsA_Valid_Value';
 
 module.exports = {
   // '@disabled': true,
   'Model: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getModelSelector(1);
+    entitySelector2 = page.getModelSelector(2);
     page
       .open()
       .addElement('model')
@@ -22,7 +25,7 @@ module.exports = {
   },
   'Model: pristine state of context path': function () {
     page
-      .setValueSlow(entitySelector + ' .EntityHeader .EntityProperty__field--input input', 'Model test')
+      .setCanvasEntityName(entitySelector, 'Model test')
       .check({
         value: {
           [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'model-test'
@@ -32,7 +35,7 @@ module.exports = {
   'Model: dirty state of context path': function () {
     page
       .setValueSlow(entitySelector + ' .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input', 'dirty')
-      .setValueSlow(entitySelector + ' .EntityHeader .EntityProperty__field--input input', 'Model test again')
+      .setCanvasEntityName(entitySelector, 'Model test again')
       .check({
         value: {
           [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'dirty'
@@ -41,7 +44,7 @@ module.exports = {
   },
   'Model: invalid value': function () {
     page
-      .setValueSlow(entitySelector + ' .EntityHeader .EntityProperty__field--input input', '-Invalid !! Value ++**')
+      .setCanvasEntityName(entitySelector, '-Invalid !! Value ++**')
       .submitForm(entitySelector + ' form')
       .check({
         hasClass: {
@@ -51,8 +54,14 @@ module.exports = {
   },
   'Model: save': function () {
     page
-      .setValueSlow(entitySelector + ' .EntityHeader .EntityProperty__field--input input', '_ThisIsA_Valid_Value')
+      .setCanvasEntityName(entitySelector, MODEL_NAME)
       .submitCanvasEntity(entitySelector);
+  },
+  'Model: unique name check': function () {
+    page
+      .addElement('model')
+      .setCanvasEntityName(entitySelector2, MODEL_NAME)
+      .expectUniqueNameError(entitySelector2, 'A model');
   },
   'Model: remove': function () {
     page

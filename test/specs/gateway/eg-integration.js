@@ -5,6 +5,7 @@ var memorySelector;
 var modelSelector;
 var serviceEndpointSelector;
 var gatewaySelector;
+var gatewaySelector2;
 var apiEndpointModelSelector;
 var apiEndpointServiceEndpointSelector;
 var SERVICE_ENDPOINT_URL = 'https://httpbin.org';
@@ -32,6 +33,7 @@ module.exports = {
     modelSelector = page.getModelSelector(1);
     serviceEndpointSelector = page.getServiceEndpointSelector(2);
     gatewaySelector = page.getGatewaySelector(1);
+    gatewaySelector2 = page.getGatewaySelector(2);
     apiEndpointModelSelector = page.getApiEndpointSelector(1);
     apiEndpointServiceEndpointSelector = page.getApiEndpointSelector(2);
     MEMORY_NAME = page.getUniqueName('memory');
@@ -75,16 +77,22 @@ module.exports = {
     page
       .open()
       .addElement('gateway')
-      .setValueSlow(gatewaySelector + ' .input__name input', GATEWAY_NAME)
+      .setCanvasEntityName(gatewaySelector, GATEWAY_NAME)
       .removePipeline(gatewaySelector, 0)
       .addPipeline(gatewaySelector, 0, 'FirstPipeline')
       .addPolicy(gatewaySelector, 0, 0, 'proxy')
-      .submitGatewayDeploy(gatewaySelector, GATEWAY_NAME)
+      .submitGatewayDeploy(gatewaySelector, GATEWAY_NAME);
+  },
+  'EG integration: unique name check': function () {
+    page
+      .addElement('gateway')
+      .setCanvasEntityName(gatewaySelector2, GATEWAY_NAME)
+      .expectUniqueNameError(gatewaySelector2, 'A gateway')
       .openPipelinesInDetailsPanel(gatewaySelector);
   },
   'EG integration: action schema parameter - required': function () {
     page
-      .addPolicyByDetails(0, 0, 'headers')
+      .setPolicyByDetails(0, 0, 'headers')
       .addPolicyCAPair(0, 0, 0)
       .checkPipelines(expectActionRequired);
   },

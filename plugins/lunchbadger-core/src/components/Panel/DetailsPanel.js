@@ -123,15 +123,23 @@ const selector = createSelector(
   state => state.states.currentElement,
   state => state.plugins.panelDetailsElements,
   state => state.states.zoom,
+  state => state.entities,
   (
-    currentElement,
+    currElement,
     panels,
     zoom,
-  ) => ({
-    currentElement,
-    panels,
-    zoom,
-  }),
+    entities,
+  ) => {
+    let currentElement = null;
+    if (currElement) {
+      currentElement = entities[currElement.type][currElement.id] || null;
+    }
+    return {
+      currentElement,
+      panels,
+      zoom,
+    };
+  },
 );
 
 export default connect(selector)(DetailsPanel);

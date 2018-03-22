@@ -123,7 +123,6 @@ const selector = createSelector(
   state => state.multiEnvironments.environments[state.multiEnvironments.selected].delta,
   state => state.multiEnvironments.environments.length,
   state => state.states.currentlyOpenedPanel,
-  state => state.states.currentElement,
   state => !!state.states.currentEditElement,
   (
     systemDefcon1Visible,
@@ -132,7 +131,6 @@ const selector = createSelector(
     multiEnvDelta,
     multiEnvAmount,
     currentlyOpenedPanel,
-    currentElement,
     isEntityEditable,
   ) => ({
     systemDefcon1Visible,
@@ -141,7 +139,6 @@ const selector = createSelector(
     multiEnvDelta,
     multiEnvAmount,
     currentlyOpenedPanel,
-    currentElement,
     isEntityEditable,
   }),
 );

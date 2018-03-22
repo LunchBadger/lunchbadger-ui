@@ -70,6 +70,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity.ready = true;
   updatedEntity.loaded = true;
   dispatch(actions.updateGateway(updatedEntity));
+  if (!isAutoSave) {
+    await dispatch(coreActions.saveToServer());
+  }
   return updatedEntity;
 };
 

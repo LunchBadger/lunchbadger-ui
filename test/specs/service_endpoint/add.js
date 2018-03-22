@@ -1,11 +1,13 @@
 var page;
 var entitySelector;
+var entitySelector2;
 
 module.exports = {
   // '@disabled': true,
   'Service Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getServiceEndpointSelector(1);
+    entitySelector2 = page.getServiceEndpointSelector(2);
     page
       .open()
       .addElementFromTooltip('endpoint', 'serviceendpoint')
@@ -22,6 +24,11 @@ module.exports = {
           `${entitySelector} .urls1`
         ]
       });
+  },
+  'Service Endpoint: unique name check': function () {
+    page
+      .addElementFromTooltip('endpoint', 'serviceendpoint')
+      .expectUniqueNameError(entitySelector2, 'A service endpoint');
   },
   'Service Endpoint: add urls': function () {
     page

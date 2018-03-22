@@ -3,7 +3,7 @@ var entitySelector;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: redis': function (browser) {
+  'Redis': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page
@@ -21,8 +21,7 @@ module.exports = {
         'username'
       ])
       .closeWhenSystemDefcon1()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

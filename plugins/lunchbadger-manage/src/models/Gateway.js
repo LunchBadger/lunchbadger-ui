@@ -6,6 +6,7 @@ import HttpsTlsDomain from './HttpsTlsDomain';
 import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
@@ -278,6 +279,17 @@ export default class Gateway extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    (this.pipelines || []).forEach(({id}) => {
+      const connectionsTo = Connections.search({toId: id});
+      const connectionsFrom = Connections.search({fromId: id});
+      [...connectionsTo, ...connectionsFrom].map((conn) => {
+        conn.info.connection.setParameter('discardAutoSave', true);
+        paper.detach(conn.info.connection);
+      });
+    });
   }
 
   processModel(model) {

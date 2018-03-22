@@ -76,7 +76,9 @@ export default (ComposedComponent) => {
         isPristine: true,
         validations: {isValid: true, data: {}},
       });
-    }
+    };
+
+    getElementRef = () => this.element.wrappedInstance || this.element;
 
     update = async (props = this.refs.form.getModel()) => {
       const {store: {dispatch}} = this.context;

@@ -333,7 +333,7 @@ var pageCommands = {
       .clickVisible('.SystemDefcon1 .confirm')
       .present('.workspace-status .workspace-status__progress', 120000)
       .check(check)
-      .autoSave()
+      .notPresent('.spinner__overlay', 60000)
       .notPresent('.workspace-status .workspace-status__progress', 120000)
       .present('.workspace-status .workspace-status__success', 120000)
       .notPresent(selector, timeout);

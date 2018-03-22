@@ -26,12 +26,23 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
       itemOrder,
       loaded: false,
     });
-    Connections.addConnection(fromId, entity.id, {source: outPort});
+    const toId = entity.id;
+    Connections.addConnection(fromId, toId, {source: outPort});
+    setTimeout(() => {
+      const {info: {connection}} = Connections.find({fromId, toId});
+      connection && connection.setType('wip');
+    });
     dispatch(actions.updateApiEndpoint(entity));
     setTimeout(() => {
+      const value = {
+        id: entity.id,
+        type: entity.constructor.entities,
+      };
       dispatch(actionsCore.setStates([
-        {key: 'currentElement', value: entity},
+        {key: 'currentElement', value},
         {key: 'currentEditElement', value: entity},
+        {key: 'currentlySelectedParent', value: null},
+        {key: 'currentlySelectedSubelements', value: []},
       ]));
     });
   }
@@ -48,13 +59,16 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   updatedEntity = ApiEndpoint.create({...entity.toJSON(), ...model});
   dispatch(actions.updateApiEndpoint(updatedEntity));
+  Connections.getConnectionsForTarget(entity.id).map(({info: {connection}}) => connection.removeType('wip'));
   await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
 export const remove = entity => async (dispatch) => {
   dispatch(actions.removeApiEndpoint(entity));
-  await dispatch(coreActions.saveToServer());
+  if (entity.loaded) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

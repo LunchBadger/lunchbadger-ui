@@ -3,7 +3,7 @@ var entitySelector;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: tritonobjectstorage': function (browser) {
+  'Tritonobjectstorage': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page
@@ -18,8 +18,7 @@ module.exports = {
         'user',
         'keyId'
       ])
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

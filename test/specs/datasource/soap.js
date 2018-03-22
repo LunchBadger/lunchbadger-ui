@@ -4,7 +4,7 @@ const TEST_WSDL = 'http://www.webservicex.com/globalweather.asmx';
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: plain soap': function (browser) {
+  'Soap: plain soap': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page
@@ -17,7 +17,7 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainSoap);
   },
-  'Datasource: advanced edit': function () {
+  'Soap: advanced edit': function () {
     page
       .setValueSlow('.DetailsPanel .input__wsdl input', TEST_WSDL + '?wsdl')
       .clickPresent('.DetailsPanel .checkbox__remotingEnabled')
@@ -52,12 +52,12 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectAdvancedEdit);
   },
-  'Datasource: basic auth': function () {
+  'Soap: basic auth': function () {
     page
       .selectValueSlow('.DetailsPanel', 'securityscheme', 'BasicAuth')
       .checkEntityDetails(expectBasicAuth);
   },
-  'Datasource: removed options': function () {
+  'Soap: removed options': function () {
     page
       .setValueSlow('.DetailsPanel .input__securityusername input', 'bauser')
       .setValueSlow('.DetailsPanel .input__securitypassword input', 'bapasswd')
@@ -68,7 +68,7 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectRemovedOptions);
   },
-  'Datasource: client SSL': function () {
+  'Soap: client SSL': function () {
     page
       .clickPresent('.DetailsPanel .checkbox__remotingEnabled')
       .clickPresent('.DetailsPanel .checkbox__wsdl_optionsrejectUnauthorized')
@@ -79,7 +79,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__securitycertPath input', 'c')
       .checkEntityDetails(expectClientSSL);
   },
-  'Datasource: WS': function () {
+  'Soap: WS': function () {
     page
       .selectValueSlow('.DetailsPanel', 'securityscheme', 'WS')
       .checkEntityDetails(expectPlainWS)
@@ -100,11 +100,10 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectWS);
   },
-  'Datasource: remove soap': function () {
+  'Soap: remove soap': function () {
     page
       .closeDetailsPanel()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

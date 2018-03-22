@@ -3,7 +3,7 @@ var entitySelector;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource rest: add predefined Google Maps Location': function (browser) {
+  'Rest: add predefined Google Maps Location': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page
@@ -28,14 +28,14 @@ module.exports = {
         }
       })
   },
-  'Datasource rest: change to predefined Google Maps GeoCode': function () {
+  'Rest: change to predefined Google Maps GeoCode': function () {
     page
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsLocation)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       .submitDetailsPanel(entitySelector);
   },
-  'Datasource rest: options': function () {
+  'Rest: options': function () {
     page
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsGeoCode)
@@ -63,7 +63,7 @@ module.exports = {
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       .checkEntityDetails(expectPlainGoogleMapsGeoCode);
   },
-  'Datasource rest: operations options': function () {
+  'Rest: operations options': function () {
     page
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsstrictSSL')
@@ -72,64 +72,63 @@ module.exports = {
       .clickPresent('.DetailsPanel .checkbox__operations0templateoptionsenabled')
       .checkEntityDetails(expectPlainGoogleMapsGeoCode);
   },
-  'Datasource rest: operations headers remove': function () {
+  'Rest: operations headers remove': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
       .checkEntityDetails(expectOperations0HeadersParameterRemoved);
   },
-  'Datasource rest: operations headers add': function () {
+  'Rest: operations headers add': function () {
     page
       .clickPresent('.DetailsPanel .button__add__operation0headersParameter')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders1key input', 'content-language')
       .setValueSlow('.DetailsPanel .input__operations0templateheaders1value input', 'en-US')
       .checkEntityDetails(expectOperations0HeadersParameterAdded);
   },
-  'Datasource rest: operations headers remove all': function () {
+  'Rest: operations headers remove all': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
       .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
       .checkEntityDetails(expectOperations0HeadersAllParametersRemoved);
   },
-  'Datasource rest: operations query remove': function () {
+  'Rest: operations query remove': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
       .checkEntityDetails(expectOperations0QueryParameterRemoved);
   },
-  'Datasource rest: operations query add': function () {
+  'Rest: operations query add': function () {
     page
       .clickPresent('.DetailsPanel .button__add__operation0queryParameter')
       .setValueSlow('.DetailsPanel .input__operations0templatequery2key input', 'myparam')
       .setValueSlow('.DetailsPanel .input__operations0templatequery2value input', '{myparam=7}')
       .checkEntityDetails(expectOperations0QueryParameterAdded);
   },
-  'Datasource rest: operations functions add': function () {
+  'Rest: operations functions add': function () {
     page
       .clickPresent('.DetailsPanel .button__add__operation0function')
       .setValueSlow('.DetailsPanel .input__operations0functions1key input', 'myfunc')
       .setValueSlow('.DetailsPanel .input__operations0functions1value input', 'myparam')
       .checkEntityDetails(expectOperations0FunctionsParameterAdded);
   },
-  'Datasource rest: operations functions remove': function () {
+  'Rest: operations functions remove': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .checkEntityDetails(expectOperations0FunctionsParameterRemoved);
   },
-  'Datasource rest: operations functions remove all': function () {
+  'Rest: operations functions remove all': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0function0')
       .checkEntityDetails(expectOperations0FunctionsAllParametersRemoved);
   },
-  'Datasource rest: operations query remove all': function () {
+  'Rest: operations query remove all': function () {
     page
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter1')
       .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
       .checkEntityDetails(expectOperations0QueryAllParameterRemoved);
   },
-  'Datasource rest: remove': function () {
+  'Rest: remove': function () {
     page
       .reloadPage()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

@@ -2,16 +2,8 @@ import _ from 'lodash';
 import {actions} from './actions';
 
 export const createModelsFromJSON = response => (dispatch, getState) => {
-  const {entities, plugins: {models}} = getState();
-  const currentElement = response.body.states.find(({key}) => key === 'currentElement');
+  const {plugins: {models}} = getState();
   let json;
-  if (currentElement) {
-    json = currentElement.value;
-    const {id, type} = json;
-    delete json.type;
-    const entity = entities[type][id];
-    dispatch(actions.setState({key: 'currentElement', value: entity}));
-  }
   if (document.location.search === '?multi') {
     const multiEnvironments = response.body.states.find(({key}) => key === 'multiEnvironments');
     if (multiEnvironments) {
@@ -27,9 +19,15 @@ export const createModelsFromJSON = response => (dispatch, getState) => {
   }
 }
 
-export const setCurrentElement = value => (dispatch, getState) => {
+export const setCurrentElement = entity => (dispatch, getState) => {
   const {currentElement} = getState().states;
-  if (currentElement && currentElement === value) return;
+  if (currentElement === null && entity === null) return;
+  if (currentElement && entity && currentElement.id === entity.id) return;
+  let value = null;
+  if (entity) {
+    const {id, constructor: {entities: type}} = entity;
+    value = {id, type};
+  }
   dispatch(actions.setStates([
     {key: 'currentElement', value},
     {key: 'currentlySelectedParent', value: null},

@@ -1,11 +1,13 @@
 var page;
 var entitySelector;
+var entitySelector2;
 
 module.exports = {
   // '@disabled': true,
   'Api Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getApiEndpointSelector(1);
+    entitySelector2 = page.getApiEndpointSelector(2);
     page
       .open()
       .addElementFromTooltip('endpoint', 'apiendpoint')
@@ -20,6 +22,11 @@ module.exports = {
         }
       })
       .waitForElementNotPresent(entitySelector + ' .paths0', 5000);
+  },
+  'Api Endpoint: unique name check': function () {
+    page
+      .addElementFromTooltip('endpoint', 'apiendpoint')
+      .expectUniqueNameError(entitySelector2, 'An api endpoint');
   },
   'Api Endpoint: add paths': function () {
     page

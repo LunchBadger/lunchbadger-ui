@@ -7,9 +7,6 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
-// import ModelRelationDetails from './ModelRelationDetails';
-// import ModelUserFieldsDetails from './ModelUserFieldsDetails';
-// import ModelNestedProperties from './ModelNestedProperties';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
@@ -26,7 +23,6 @@ import {
 import './ModelDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-// const CheckboxField = LunchBadgerCore.components.CheckboxField;
 const {Connections} = LunchBadgerCore.stores;
 const {propertyTypes} = LunchBadgerCore.utils;
 
@@ -105,11 +101,6 @@ class ModelDetails extends PureComponent {
     };
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   diff(this.props, nextProps, this.state, nextState);
-  //   return true;
-  // }
-
   processModel = model => {
     const {entity} = this.props;
     if (model.hasOwnProperty('dataSource')) {
@@ -144,57 +135,6 @@ class ModelDetails extends PureComponent {
   }
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
-
-  // update = async (model) => {
-  //   const {entity} = this.props;
-  //   const {store: {dispatch}} = this.context;
-  //   const updatedEntity = await dispatch(entity.update(model));
-  //   dispatch(coreActions.setCurrentElement(updatedEntity));
-  //   // const data = {
-  //   //   properties: [],
-  //   //   relations: [],
-  //   // };
-  //   // addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-  //   // model.relations && model.relations.forEach((relation) => {
-  //   //   let rel = ModelRelation.create(relation);
-  //   //   rel.attach(this.props.entity);
-  //   //   data.relations.push(rel);
-  //   // });
-  //   // model.userFields && model.userFields.forEach(field => {
-  //   //   const value = field.value;
-  //   //   let output = value;
-  //   //   if (field.type === 'object') {
-  //   //     output = JSON.parse(value);
-  //   //   } else if (field.type === 'number') {
-  //   //     output = Number(value);
-  //   //   }
-  //   //   data[field.name] = output;
-  //   // });
-  //   // const currDsConn = this._getBackendConnection();
-  //   // const currDsId = currDsConn ? currDsConn.fromId : null;
-  //   // const dsId = model.dataSource === 'none' ? null : model.dataSource;
-  //   // if (dsId !== currDsId) {
-  //   //   if (!dsId) {
-  //   //     LunchBadgerCore.utils.paper.detach(currDsConn.info.connection);
-  //   //   } else if (currDsConn) {
-  //   //     LunchBadgerCore.utils.paper.setSource(
-  //   //       currDsConn.info.connection,
-  //   //       document.getElementById(`port_out_${dsId}`).querySelector('.port__anchor'),
-  //   //     );
-  //   //   }
-  //   // }
-  //   // const updateData = Object.assign({}, model, data);
-  //   // if (!updateData.userFields) {
-  //   //   updateData.userFields = [];
-  //   // }
-  //   // const propsToRemove = _.difference(
-  //   //   Object.keys(this.props.entity.userFields),
-  //   //   updateData.userFields.map(field => field.name)
-  //   // );
-  //   // delete updateData.dataSource;
-  //   // delete updateData.userFields;
-  //   // updateModel(this.props.entity.id, updateData, propsToRemove);
-  // }
 
   handlePropertyToggleCollapse = id => () => {
     const properties = [...this.state.properties];
@@ -266,12 +206,6 @@ class ModelDetails extends PureComponent {
   }
 
   onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
-
-  // onPropertyTypeChange = (id, type) => {
-  //   const properties = [...this.state.properties];
-  //   properties.find(prop => prop.id === id).type = type;
-  //   this.setState({properties});
-  // }
 
   handleChangePropertyType = id => (type) => {
     const properties = [...this.state.properties];
@@ -467,14 +401,6 @@ class ModelDetails extends PureComponent {
       paddings={paddings}
       centers={centers}
     />;
-    // <ModelNestedProperties
-    //   title="Properties"
-    //   path=""
-    //   properties={this.state.properties}
-    //   onAddProperty={this.onAddProperty}
-    //   onRemoveProperty={this.onRemoveProperty}
-    //   onPropertyTypeChange={this.onPropertyTypeChange}
-    // />
   };
 
   renderRelationsSection = () => {
@@ -526,40 +452,7 @@ class ModelDetails extends PureComponent {
       widths={widths}
       paddings={paddings}
     />;
-    // <table className="details-panel__table">
-    //   <thead>
-    //   <tr>
-    //     <th>Name</th>
-    //     <th>Model</th>
-    //     <th>Type</th>
-    //     <th>
-    //       Foreign Key
-    //       <a onClick={this.onAddRelation} className="details-panel__add">
-    //         <i className="fa fa-plus"/>
-    //         Add relation
-    //       </a>
-    //     </th>
-    //     <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-    //   </tr>
-    //   </thead>
-    //   <tbody>
-    //     {this.renderRelations()}
-    //   </tbody>
-    // </table>
   };
-
-  // renderRelations() {
-  //   return this.state.relations.map((relation, index) => {
-  //     return (
-  //       <ModelRelationDetails
-  //         index={index}
-  //         key={`relation-${relation.id}`}
-  //         onRemove={this.onRemoveRelation}
-  //         relation={relation}
-  //       />
-  //     );
-  //   });
-  // }
 
   renderUserDefinedFieldsSection = () => {
     const columns = [
@@ -614,41 +507,6 @@ class ModelDetails extends PureComponent {
       paddings={paddings}
     />;
   }
-  //   <table className="details-panel__table" ref="user-fields">
-  //     <thead>
-  //     <tr>
-  //       <th>Name</th>
-  //       <th>Data type</th>
-  //       <th>
-  //         Value
-  //         <a onClick={this.onAddUserField} className="details-panel__add">
-  //           <i className="fa fa-plus"/>
-  //           Add field
-  //         </a>
-  //       </th>
-  //       <th className="details-panel__table__cell details-panel__table__cell--empty"/>
-  //     </tr>
-  //     </thead>
-  //     <tbody>
-  //       {this.renderUserFields()}
-  //     </tbody>
-  //   </table>
-  // );
-
-  // renderUserFields() {
-  //   return this.state.userFields.map((field, index) => {
-  //     return (
-  //       <ModelUserFieldsDetails
-  //         index={index}
-  //         addAction={this.onAddUserField}
-  //         fieldsCount={this.state.userFields.length}
-  //         key={field.id}
-  //         onRemove={this.onRemoveUserField}
-  //         field={field}
-  //       />
-  //     );
-  //   });
-  // }
 
   render() {
     const sections = [

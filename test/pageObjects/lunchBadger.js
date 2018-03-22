@@ -188,13 +188,30 @@ var pageCommands = {
       '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': gatewayName + ' successfully deployed'
     };
     return this
-      .submitCanvasEntity(selector, check)
+      .present(selector + ' form', 10000)
+      .submitForm(selector + ' form')
+      .check(check)
+      .autoSave()
+      .notPresent(selector + '.wip', 120000)
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000)
       .visible('.SystemInformationMessages', 180000)
       .check({text})
       .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
   },
 
   submitCanvasEntity: function (selector, check = {}) {
+    return this
+      .present(selector + ' form', 10000)
+      .submitForm(selector + ' form')
+      .check(check)
+      .notPresent(selector + '.wip', 120000)
+      .autoSave()
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000);
+  },
+
+  submitCanvasEntityWithoutAutoSave: function (selector, check = {}) {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
@@ -208,8 +225,7 @@ var pageCommands = {
     const present = validationErrors.map(key => `${selector} .EntityValidationErrors__fields__field.validationError__${key}`)
     return this
       .submitForm(selector + ' form')
-      .pause(5000)
-      .present(selector + ' .EntityValidationErrors')
+      .present(selector + ' .EntityValidationErrors', 60000)
       .check({present})
       .pause(3000);
   },
@@ -226,20 +242,39 @@ var pageCommands = {
 
   submitDetailsPanel: function (selector) {
     return this
+      .submitDetailsPanelWithoutAutoSave(selector)
+      .autoSave();
+  },
+
+  submitDetailsPanelWithoutAutoSave: function (selector) {
+    return this
       .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
+      .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present(selector + '.wip')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000)
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000);
+  },
+
+  submitDetailsPanelWithCloseBeforeWip: function (selector) {
+    return this
+      .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
+      .present('.DetailsPanel.visible .wrap.opened')
+      .submitForm('.DetailsPanel .BaseDetails form')
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000)
+      .notPresent(selector + '.wip', 60000)
+      .waitUntilDataSaved();
   },
 
   submitDetailsPanelWithoutWip: function () {
     return this
+      .present('.DetailsPanel.visible .wrap.opened')
       .notPresent('.DetailsPanel .BaseDetails__buttons .submit.disabled')
       .submitForm('.DetailsPanel .BaseDetails form')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000);
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000);
   },
 
   submitDetailsPanelWithExpectedValidationErrors: function (validationErrors = []) {
@@ -256,7 +291,8 @@ var pageCommands = {
     return this
       .clickPresent(selector + ' .EntityHeader__name')
       .clickPresent(selector + '.highlighted .Toolbox__button--' + tab)
-      .visible('.DetailsPanel.visible .panel .BaseDetails.' + panel, 15000);
+      .visible('.DetailsPanel.visible .panel .BaseDetails.' + panel, 15000)
+      .pause(7000);
   },
 
   openPipelinesInDetailsPanel: function (selector) {
@@ -266,9 +302,17 @@ var pageCommands = {
 
   closeDetailsPanel: function () {
     return this
+      .present('.DetailsPanel.visible .wrap.opened')
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
-      .present('.DetailsPanel.closing')
-      .notPresent('.DetailsPanel.closing', 15000);
+      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .notPresent('.DetailsPanel.visible', 15000)
+      .pause(3000);
+  },
+
+  autoSave: function () {
+    return this
+      .notPresent('.spinner__overlay', 60000)
+      .waitUntilDataSaved();
   },
 
   removeEntity: function (selector, timeout, check = {}) {
@@ -277,25 +321,62 @@ var pageCommands = {
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
       .check(check)
+      .autoSave()
       .notPresent(selector, timeout);
   },
 
-  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1) {
+  removeEntityWithDependencyUninstall: function (selector, timeout, check = {}) {
+    return this
+      .clickVisible(selector)
+      .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .check(check)
+      .notPresent('.spinner__overlay', 60000)
+      .notPresent('.workspace-status .workspace-status__progress', 120000)
+      .present('.workspace-status .workspace-status__success', 120000)
+      .notPresent(selector, timeout);
+  },
+
+  connectPorts: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1, isReattach = false) {
     const bothOutDir = fromDir === 'out' && toDir === 'out';
     const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
     const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
     const startConnected = fromSelector;
     const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
+    const check = {
+      connected: {
+        [endConnected]: [toDir]
+      },
+      notConnected: {}
+    };
+    check[(fromDir === toDir && isReattach) ? 'notConnected' : 'connected'][startConnected] = [fromDir];
     return this
       .present(startSelector)
       .present(endSelector)
       .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
-      .check({
-        connected: {
-          [startConnected]: [fromDir],
-          [endConnected]: [toDir]
-        }
-      });
+      .autoSave()
+      .check(check);
+  },
+
+  connectPortsWithoutAutoSave: function (fromSelector, fromDir, toSelector, toDir, pipelineIdx = -1, isReattach = false) {
+    const bothOutDir = fromDir === 'out' && toDir === 'out';
+    const startSelector = fromSelector + ` .port-${fromDir} > .port__anchor${bothOutDir ? '' : ' > .port__inside'}`;
+    const endSelector = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`) + ` .port-${toDir} > .port__anchor > .port__inside`;
+    const startConnected = fromSelector;
+    const endConnected = toSelector + (pipelineIdx === -1 ? '' : ` .Gateway__pipeline${pipelineIdx}`);
+    const check = {
+      connected: {
+        [endConnected]: [toDir]
+      },
+      notConnected: {}
+    };
+    check[(fromDir === toDir && isReattach) ? 'notConnected' : 'connected'][startConnected] = [fromDir];
+    return this
+      .present(startSelector)
+      .present(endSelector)
+      .moveElement(startSelector, endSelector, [bothOutDir ? 7 : null, bothOutDir ? 9 : null], [null, null])
+      .check(check);
   },
 
   moveElement: function (fromSelector, toSelector, offsetFrom = [0, 0], offsetTo = [0, 150]) {
@@ -319,7 +400,7 @@ var pageCommands = {
 
   confirmDetailsPanelChanges: function (selector) {
     return this
-      .submitDetailsPanel(selector)
+      .submitDetailsPanelWithCloseBeforeWip(selector)
       .openEntityInDetailsPanel(selector);
   },
 
@@ -431,10 +512,15 @@ var pageCommands = {
     return prefix + '' + Math.random().toString(36).substr(2, 5);
   },
 
+  waitUntilDataSaved: function () {
+    return this
+      .closeSystemInformationMessage('All-data-has-been-synced-with-API');
+  },
+
   saveProject: function () {
     return this
       .clickVisible('.header__menu .fa-floppy-o')
-      .closeSystemInformationMessage('All-data-has-been-synced-with-API');
+      .waitUntilDataSaved();
   },
 
   clearProject: function () {
@@ -449,7 +535,13 @@ var pageCommands = {
       .clearProject()
       .closeSystemInformationMessage('All-data-removed-from-server')
       .notPresent('.spinner__overlay', 120000)
+      .waitForGatewaysRemoved()
       .saveProject();
+  },
+
+  waitForGatewaysRemoved: function () {
+    return this
+      .notPresent(this.getGatewaySelector(1), 600000); // wait max 10 min for any gateway to be removed
   },
 
   closeSystemInformationMessage: function (message) {
@@ -537,19 +629,19 @@ var pageCommands = {
     this
       .pause(500);
     Object.keys(text).forEach((key) => {
-      this.api.expect.element(key).text.to.equal(text[key]);
+      this.api.expect.element(key).text.to.equal(text[key]).before(45000);
     });
     Object.keys(textContain).forEach((key) => {
       this.api.expect.element(key).text.to.contain(textContain[key]);
     });
     Object.keys(value).forEach((key) => {
-      this.api.expect.element(key).value.to.equal(value[key]).before(5000);
+      this.api.expect.element(key).value.to.equal(value[key]).before(45000);
     });
     Object.keys(valueContain).forEach((key) => {
       this.api.expect.element(key).value.to.contain(value[key]);
     });
     present.forEach((selector) => {
-      this.api.expect.element(selector).to.be.present.before(5000);
+      this.api.expect.element(selector).to.be.present.before(45000);
     });
     notPresent.forEach((selector) => {
       this.api.expect.element(selector).to.not.be.present;
@@ -568,12 +660,12 @@ var pageCommands = {
     });
     Object.keys(connected).forEach((key) => {
       connected[key].forEach((dir) => {
-        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(5000);
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.be.present.before(15000);
       });
     });
     Object.keys(notConnected).forEach((key) => {
       notConnected[key].forEach((dir) => {
-        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(5000);
+        this.api.expect.element(`${key} .port-${dir} > .port__anchor--connected`).to.not.be.present.before(15000);
       });
     });
     return this;
@@ -660,7 +752,7 @@ var pageCommands = {
     expect.forEach(({name, policies}, pipelineIdx) => {
       data.value[`.DetailsPanel .pipelines${pipelineIdx}name input`] = name;
       policies.forEach(({policy, ca = []}, policyIdx) => {
-        data.present.push(`.pipelines${pipelineIdx}policies${policyIdx}name__${policy}`);
+        data.value[`.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}name input`] = policy;
         ca.forEach(({condition = {}, action = {}}, pairIdx) => {
           this.checkCondition(data, pipelineIdx, policyIdx, pairIdx, condition);
           this.checkAction(data, pipelineIdx, policyIdx, pairIdx, action);
@@ -693,12 +785,18 @@ var pageCommands = {
       .notPresent(selector);
   },
 
+  setAutocompleteValue: function (selector, value) {
+    const {ENTER} = this.api.Keys;
+    const keys = [...value.split(''), ENTER];
+    return this
+      .setAutocomplete(selector, keys);
+  },
+
   addPolicy: function (gatewaySelector, pipelineIdx, policyIdx, policyName) {
-    const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
+    const selectSelector = `${gatewaySelector} .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
     return this
       .clickPresent(`${gatewaySelector} .button__add__pipelines${pipelineIdx}policy`)
-      .present(`${gatewaySelector} .select__${selectSelector}`)
-      .selectValueSlow(gatewaySelector, selectSelector, policyName)
+      .setAutocompleteValue(selectSelector, policyName)
       .pause(1500);
   },
 
@@ -713,7 +811,7 @@ var pageCommands = {
   setPolicyByDetails: function (pipelineIdx, policyIdx, policyName) {
     const selectSelector = `pipelines${pipelineIdx}policies${policyIdx}name`;
     return this
-      .selectValueSlow('.DetailsPanel', selectSelector, policyName)
+      .setAutocompleteValue(`.DetailsPanel .${selectSelector} input`, policyName)
       .pause(1500);
   },
 
@@ -1011,7 +1109,6 @@ var pageCommands = {
 
   expectWorkspaceStatus: function (status) {
     return this
-      .present('.workspace-status .workspace-status__progress', 120000)
       .present(`.workspace-status .workspace-status__${status}`, 300000);
   },
 
@@ -1053,7 +1150,8 @@ var pageCommands = {
       present: [`${selector} .EntityStatus.deleting`]
     };
     return this
-      .removeEntity(selector, 300000, check);
+      .removeEntity(selector, 300000, check)
+      .waitForGatewaysRemoved();
   }
 };
 

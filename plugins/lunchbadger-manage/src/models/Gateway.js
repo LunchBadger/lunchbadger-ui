@@ -16,8 +16,8 @@ export default class Gateway extends BaseModel {
    * @private
    */
   _pipelines = [];
-
   _policies = [];
+  system = {};
 
   running = true;
   deleting = null;
@@ -58,6 +58,7 @@ export default class Gateway extends BaseModel {
       policies: this.policies,
       pipelines: this.pipelines.map(item => item.toJSON()),
       itemOrder: this.itemOrder,
+      system: this.system,
     };
     if (!options.isForServer) {
       Object.assign(json, {

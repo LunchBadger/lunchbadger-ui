@@ -30,6 +30,13 @@ class DetailsPanel extends Component {
   handleRemove = () => {
     const {currentElement, dispatch} = this.props;
     dispatch(setCurrentZoom(undefined));
+    const baseDetails = this.element.decoratedComponentInstance || this.element;
+    if (baseDetails) {
+      const element = baseDetails.getElementRef();
+      if (element && typeof element.onRemove === 'function') {
+        element.onRemove();
+      }
+    }
     dispatch(currentElement.remove());
     dispatch(actions.removeEntity(currentElement));
     dispatch(clearCurrentElement());
@@ -44,6 +51,7 @@ class DetailsPanel extends Component {
         return (
           <div className="panel panel__body details highlighted editable">
             <DetailsPanelComponent
+              ref={(ref) => this.element = ref}
               entity={currentElement}
               sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
               targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}

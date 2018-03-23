@@ -51,8 +51,8 @@ var pageCommands = {
   projectLoaded: function () {
     return this
       .present('.app', 120000)
-      .notPresent('.app__loading-error')
       .present('.app__loading-message', 60000)
+      .notPresent('.app__loading-error')
       .notPresent('.app__loading-message', 60000)
       .notPresent('.spinner__overlay', 60000);
   },
@@ -311,7 +311,6 @@ var pageCommands = {
 
   autoSave: function () {
     return this
-      .present('.spinner__overlay', 60000)
       .notPresent('.spinner__overlay', 60000)
       .waitUntilDataSaved();
   },
@@ -1146,10 +1145,10 @@ var pageCommands = {
       .submitGatewayDeploy(selector, gatewayName);
   },
 
-  removeGateway: function (selector) {
-    const check = {
+  removeGateway: function (selector, check = {}) {
+    Object.assign(check, {
       present: [`${selector} .EntityStatus.deleting`]
-    };
+    });
     return this
       .removeEntity(selector, 300000, check)
       .waitForGatewaysRemoved();

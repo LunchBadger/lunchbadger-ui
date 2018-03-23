@@ -31,6 +31,8 @@ export default class CodeEditor extends PureComponent {
     initialHeight: PropTypes.number,
     name: PropTypes.string,
     mode: PropTypes.string,
+    onResize: PropTypes.func,
+    size: PropTypes.object,
   };
 
   static defaultProps = {
@@ -59,13 +61,24 @@ export default class CodeEditor extends PureComponent {
     window.addEventListener('rndresized', this.recalculateWidth);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {size} = nextProps;
+    if (size) {
+      const {width, height} = size;
+      if (this.state.width !== width || this.state.height !== height) {
+        this.setState({width, height});
+      };
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('rndresized', this.recalculateWidth);
   }
 
   recalculateWidth = () => {
     const {width, maxWidth} = this.state;
-    const max = this.boxRef.getBoundingClientRect().width - 5;
+    const rect = this.boxRef.getBoundingClientRect();
+    const max = Math.max(0, rect.width - 5);
     const state = {maxWidth: max};
     if (width > max || width === maxWidth) {
       state.width = max;
@@ -86,7 +99,18 @@ export default class CodeEditor extends PureComponent {
 
   handleModeSwitch = () => this.setState({editorMode: !this.state.editorMode});
 
-  handleFunctionCodeResize = (_, {size: {width, height}}) => this.setState({width, height});
+  handleFunctionCodeResize = (_, {size}) => {
+    this.inpRef.focus();
+    this.inpRef.blur();
+    const width = Math.floor(size.width);
+    const height = Math.floor(size.height);
+    this.setState({width, height});
+  };
+
+  handleResizeStop = (_, {size}) => {
+    const {onResize} = this.props;
+    onResize && onResize(size);
+  };
 
   handleInputChange = ({target: {value}}) => this.changeCode(value);
 
@@ -116,8 +140,9 @@ export default class CodeEditor extends PureComponent {
             width={width}
             height={height}
             minConstraints={[200, 100]}
-            maxConstraints={[maxWidth, 2000]}
+            maxConstraints={[maxWidth, 3000]}
             onResize={this.handleFunctionCodeResize}
+            onResizeStop={this.handleResizeStop}
             axis={fullWidth ? 'y' : 'both'}
           >
             <AceEditor
@@ -136,6 +161,10 @@ export default class CodeEditor extends PureComponent {
             <IconButton icon={icon} onClick={this.handleModeSwitch} />
           </div>
         )}
+        <input
+          className="CodeEditor__indicator"
+          ref={r => this.inpRef = r}
+        />
       </div>
     );
   }

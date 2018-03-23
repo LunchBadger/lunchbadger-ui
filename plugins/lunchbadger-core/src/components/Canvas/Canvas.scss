@@ -2,10 +2,10 @@
 
 .canvas {
   width: 100%;
-  min-height: calc(100vh - #{$header-height});
   background: url('canvas-texture.png') rgb(222, 222, 222);
   position: relative;
   overflow: hidden;
+  transition: height 500ms;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -13,6 +13,24 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  &:after {
+    display: block;
+    content: '';
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    z-index: 100;
+    pointer-events: none;
+    transition: opacity 500ms;
+  }
+  &.disabled:after {
+    opacity: 0.34;
+    pointer-events: auto;
+  }
   &__zoom-area {
     position: fixed;
     top: 17px;
@@ -71,12 +89,9 @@
   }
 }
 
-.canvas--disabled {
-}
-
 .canvas__wrapper {
   overflow: auto;
-  height: calc(100vh - #{$header-height});
+  transition: height 500ms;
   .multiEnv & {
     height: calc(100vh - 75px);
   }
@@ -84,10 +99,10 @@
 
 .canvas__container {
   min-width: 100%;
-  min-height: calc(100vh - #{$header-height});
   position: relative;
   display: flex;
   flex-wrap: nowrap;
+  transition: height 300ms;
   .multiEnv & {
     min-height: calc(100vh - 75px);
   }
@@ -101,8 +116,7 @@
   height: 100%;
   pointer-events: none;
   z-index: $z-index-low;
-  min-height: 520px;
-  transition: all .5s ease;
+  transition: height 500ms;
 }
 
 .canvas__label {

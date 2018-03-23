@@ -4,6 +4,7 @@ import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
 import HttpsTlsDomain from './HttpsTlsDomain';
 import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
+import {clearEmptyObjectPlaceholders} from '../utils';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const {Connections} = LunchBadgerCore.stores;
@@ -316,7 +317,7 @@ export default class Gateway extends BaseModel {
           [name]: [],
         };
         (pairs || []).forEach((pair) => {
-          policy[name].push(pair);
+          policy[name].push(clearEmptyObjectPlaceholders(pair));
         });
         pipeline.policies.push(policy);
       });

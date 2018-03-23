@@ -1145,10 +1145,10 @@ var pageCommands = {
       .submitGatewayDeploy(selector, gatewayName);
   },
 
-  removeGateway: function (selector) {
-    const check = {
+  removeGateway: function (selector, check = {}) {
+    Object.assign(check, {
       present: [`${selector} .EntityStatus.deleting`]
-    };
+    });
     return this
       .removeEntity(selector, 300000, check)
       .waitForGatewaysRemoved();

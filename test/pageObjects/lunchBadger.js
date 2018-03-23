@@ -51,8 +51,8 @@ var pageCommands = {
   projectLoaded: function () {
     return this
       .present('.app', 120000)
-      .notPresent('.app__loading-error')
       .present('.app__loading-message', 60000)
+      .notPresent('.app__loading-error')
       .notPresent('.app__loading-message', 60000)
       .notPresent('.spinner__overlay', 60000);
   },

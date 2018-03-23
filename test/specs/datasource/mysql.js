@@ -22,13 +22,7 @@ module.exports = {
         'database',
         'username'
       ])
-      .closeWhenSystemDefcon1();
-  },
-  'Mysql: unique name check': function () {
-    page
-      .addElementFromTooltip('dataSource', 'memory')
-      .setCanvasEntityName(entitySelector2, 'mysql')
-      .expectUniqueNameError(entitySelector2, 'A data source')
+      .closeWhenSystemDefcon1()
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

@@ -311,7 +311,6 @@ var pageCommands = {
 
   autoSave: function () {
     return this
-      .present('.spinner__overlay', 60000)
       .notPresent('.spinner__overlay', 60000)
       .waitUntilDataSaved();
   },

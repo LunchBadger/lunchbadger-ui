@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import QuadrantContainer from '../Quadrant/QuadrantContainer';
-import CanvasOverlay from './CanvasOverlay';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import './Canvas.scss';
+
+const defaultCanvasHeight = 'calc(100vh - 52px)';
 
 class Canvas extends Component {
   static contextTypes = {
@@ -19,7 +21,6 @@ class Canvas extends Component {
     super(props);
     this.state = {
       lastUpdate: new Date(),
-      canvasHeight: null,
       scrollLeft: 0,
     };
     this.dropped = false;
@@ -240,29 +241,31 @@ class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {isPanelClosed, zoom} = this.props;
+    const {height} = this.props;
     const {scrollLeft} = this.state;
-    const canvasHeight = isPanelClosed ? null : this.state.canvasHeight;
+    const style = {height};
+    const disabled = height !== defaultCanvasHeight; // may be optional for metrics/optimise panels
     return (
       <div>
         <section
-          className="canvas"
+          style={style}
+          className={cs('canvas', {disabled})}
           onClick={this.handleClick}
         >
           <div
-            style={{height: canvasHeight}}
+            style={style}
             className="canvas__wrapper"
             ref={(r) => {this.canvasWrapperDOM = r;}}
           >
-            <div style={{height: canvasHeight}} className="canvas__legend">
+            <div style={style} className="canvas__legend">
               <div className="canvas__label canvas__label--left">Producers</div>
               <div className="canvas__label canvas__label--right">Consumers</div>
             </div>
             <QuadrantContainer
-              canvasHeight={canvasHeight}
               className="canvas__container"
               id="canvas"
               scrollLeft={scrollLeft}
+              style={{minHeight: height}}
             />
           </div>
         </section>
@@ -273,17 +276,14 @@ class Canvas extends Component {
 }
 
 const selector = createSelector(
-  state => !state.states.currentlyOpenedPanel,
   state => state.loadingProject,
-  state => state.states.zoom,
+  state => state.canvasHeight,
   (
-    isPanelClosed,
     loadingProject,
-    zoom,
+    canvasHeight,
   ) => ({
-    isPanelClosed,
     loadingProject,
-    zoom,
+    height: canvasHeight || defaultCanvasHeight,
   }),
 );
 

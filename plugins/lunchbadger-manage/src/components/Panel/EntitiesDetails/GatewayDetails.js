@@ -107,6 +107,8 @@ class GatewayDetails extends PureComponent {
     return entity.processModel(model);
   };
 
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
+
   changeState = (obj, cb) => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();
     cb && cb();

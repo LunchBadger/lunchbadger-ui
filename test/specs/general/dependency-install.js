@@ -21,7 +21,7 @@ module.exports = {
     page
       .addElementFromTooltip('dataSource', 'soap')
       .setField(dataSourceSelector2, 'url', 'https://www.lunchbadger.com')
-      .submitCanvasEntity(dataSourceSelector2)
+      .submitCanvasEntityWithoutAutoSave(dataSourceSelector2)
       .expectWorkspaceFailure('WSDL')
       .clickPresent('.SystemDefcon1 button')
       .notPresent('.SystemDefcon1', 5000)
@@ -31,7 +31,7 @@ module.exports = {
       .setField(dataSourceSelector3, 'database', 'dumpDatabase')
       .setField(dataSourceSelector3, 'username', 'dumpUsername')
       .setField(dataSourceSelector3, 'password', 'dumpPassword', 'password')
-      .submitCanvasEntity(dataSourceSelector3)
+      .submitCanvasEntityWithoutAutoSave(dataSourceSelector3)
       .expectWorkspaceFailure('ENOTFOUND')
       .closeWhenSystemDefcon1()
       .notPresent('.SystemDefcon1', 5000);

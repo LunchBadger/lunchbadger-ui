@@ -1,5 +1,6 @@
 var page;
 var functionSelector;
+var functionSelector2;
 var dataSourceSelector;
 var modelSelector;
 var gatewaySelector;
@@ -11,6 +12,7 @@ module.exports = {
   'Functions: create function': function (browser) {
     page = browser.page.lunchBadger();
     functionSelector = page.getFunctionSelector(1);
+    functionSelector2 = page.getFunctionSelector(2);
     dataSourceSelector = page.getDataSourceSelector(1);
     modelSelector = page.getModelSelector(2);
     gatewaySelector = page.getGatewaySelector(1);
@@ -19,9 +21,13 @@ module.exports = {
     page
       .open()
       .addElement('function')
-      .setCanvasEntityName(functionSelector, 'myfunction')
       .submitCanvasEntity(functionSelector)
       .checkFunctionTriggers(functionSelector, {});
+  },
+  'Functions: unique name': function () {
+    page
+      .addElement('function')
+      .expectUniqueNameError(functionSelector2, 'A function');
   },
   'Functions: api gateway trigger': function () {
     page
@@ -36,7 +42,7 @@ module.exports = {
     page
       .addElementFromTooltip('dataSource', 'memory')
       .submitCanvasEntity(dataSourceSelector)
-      .connectPorts(dataSourceSelector, 'out', functionSelector, 'in')
+      .connectPortsWithoutAutoSave(dataSourceSelector, 'out', functionSelector, 'in')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,
         Datasource: 'Memory'
@@ -46,7 +52,7 @@ module.exports = {
     page
       .addElement('model')
       .submitCanvasEntity(modelSelector)
-      .connectPorts(modelSelector, 'out', functionSelector, 'out')
+      .connectPortsWithoutAutoSave(modelSelector, 'out', functionSelector, 'out')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,
         Datasource: 'Memory',

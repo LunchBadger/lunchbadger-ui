@@ -3,7 +3,7 @@ var entitySelector;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: ethereum': function (browser) {
+  'Ethereum': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page

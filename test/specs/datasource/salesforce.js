@@ -3,7 +3,7 @@ var entitySelector;
 
 module.exports = {
   // '@disabled': true,
-  'Datasource: salesforce': function (browser) {
+  'Salesforce': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
     page

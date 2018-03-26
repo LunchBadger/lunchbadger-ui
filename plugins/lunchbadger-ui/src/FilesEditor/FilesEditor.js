@@ -63,6 +63,7 @@ export default class FilesEditor extends PureComponent {
                 onChange={onChange}
                 mode="editor"
                 onResize={this.handleResize}
+                initialHeight={200}
               />
             </div>
           ))}

@@ -392,6 +392,20 @@ var pageCommands = {
     return this;
   },
 
+  resizeFilesEditor: function ([xOffset, yOffset], amount) {
+    const handlerSelector = '.DetailsPanel .FilesEditor .react-resizable-handle';
+    let i = amount;
+    this.present(handlerSelector);
+    while (i--) {
+      this.api
+        .moveToElement(handlerSelector, 15, 15)
+        .mouseButtonDown(0)
+        .moveTo(null, xOffset, yOffset)
+        .mouseButtonUp(0);
+    }
+    return this;
+  },
+
   discardDetailsPanelChanges: function (selector) {
     return this
       .closeDetailsPanel()

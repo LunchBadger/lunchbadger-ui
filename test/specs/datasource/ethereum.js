@@ -14,8 +14,7 @@ module.exports = {
         'url'
       ])
       .closeWhenSystemDefcon1()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

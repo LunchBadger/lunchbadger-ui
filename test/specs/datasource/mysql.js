@@ -29,8 +29,7 @@ module.exports = {
       .addElementFromTooltip('dataSource', 'memory')
       .setCanvasEntityName(entitySelector2, 'mysql')
       .expectUniqueNameError(entitySelector2, 'A data source')
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

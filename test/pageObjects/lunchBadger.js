@@ -263,7 +263,6 @@ var pageCommands = {
       .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
-      .present(selector + '.wip')
       .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000)
       .waitUntilDataSaved();
@@ -324,6 +323,19 @@ var pageCommands = {
       .clickVisible('.SystemDefcon1 .confirm')
       .check(check)
       .autoSave()
+      .notPresent(selector, timeout);
+  },
+
+  removeEntityWithDependencyUninstall: function (selector, timeout, check = {}) {
+    return this
+      .clickVisible(selector)
+      .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .present('.workspace-status .workspace-status__progress', 120000)
+      .check(check)
+      .notPresent('.spinner__overlay', 60000)
+      .notPresent('.workspace-status .workspace-status__progress', 120000)
+      .present('.workspace-status .workspace-status__success', 120000)
       .notPresent(selector, timeout);
   },
 
@@ -534,7 +546,7 @@ var pageCommands = {
   },
 
   closeSystemInformationMessage: function (message) {
-    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message}:first-child .SystemInformationMessages__item__delete`;
+    const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
     return this
       .clickVisible(selector, 180000)
       .notPresent(selector, 15000);
@@ -1098,7 +1110,6 @@ var pageCommands = {
 
   expectWorkspaceStatus: function (status) {
     return this
-      .present('.workspace-status .workspace-status__progress', 120000)
       .present(`.workspace-status .workspace-status__${status}`, 300000);
   },
 

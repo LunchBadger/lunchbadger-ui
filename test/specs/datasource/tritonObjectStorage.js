@@ -18,8 +18,7 @@ module.exports = {
         'user',
         'keyId'
       ])
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

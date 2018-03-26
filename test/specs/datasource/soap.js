@@ -103,8 +103,7 @@ module.exports = {
   'Soap: remove soap': function () {
     page
       .closeDetailsPanel()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

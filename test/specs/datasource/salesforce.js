@@ -15,8 +15,7 @@ module.exports = {
         'username'
       ])
       .closeWhenSystemDefcon1()
-      .removeEntity(entitySelector)
-      .waitForDependencyFinish()
+      .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }
 };

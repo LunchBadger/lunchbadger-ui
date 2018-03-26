@@ -50,16 +50,6 @@ class Gateway extends Component {
     if (this.props.entity !== nextProps.entity) {
       this.onPropsUpdate(nextProps);
     }
-    if (!this.props.entity.deleting && nextProps.entity.deleting) {
-      const {paper: paperRef, store: {getState}} = this.context;
-      if (getState().loadingProject) return;
-      const paper = paperRef.getInstance();
-      (this.props.entity.pipelines || []).forEach(({id}) => {
-        const connectionsTo = Connections.search({toId: id});
-        const connectionsFrom = Connections.search({fromId: id});
-        [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
-      });
-    }
   }
 
   stateFromStores = props => {
@@ -86,17 +76,22 @@ class Gateway extends Component {
       if (!(policies || []).find(({name}) => name === 'proxy')) {
         const connectionsTo = Connections.search({toId: id});
         const connectionsFrom = Connections.search({fromId: id});
-        [...connectionsTo, ...connectionsFrom].map(conn => paper.detach(conn.info.connection));
+        [...connectionsTo, ...connectionsFrom].map((conn) => {
+          conn.info.connection.setParameter('discardAutoSave', true);
+          paper.detach(conn.info.connection);
+        });
       }
     });
     return entity.processModel(model);
   };
 
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
+
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
     }
-  }
+  };
 
   // onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 

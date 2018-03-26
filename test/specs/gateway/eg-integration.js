@@ -468,7 +468,6 @@ module.exports = {
       .clickPresent(apiEndpointModelSelector + ' .button__add__PATHS')
       .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/api/${MODEL_NAME}*`)
       .submitCanvasEntity(apiEndpointModelSelector)
-      .saveProject()
       .pause(10000)
       .apiCall('put', {url, form}, function (body) {
         return page
@@ -489,7 +488,6 @@ module.exports = {
       .clickPresent(apiEndpointServiceEndpointSelector + ' .button__add__PATHS')
       .setValueSlow(apiEndpointServiceEndpointSelector + ' .input__paths0 input', '/robots*')
       .submitCanvasEntity(apiEndpointServiceEndpointSelector)
-      .saveProject()
       .pause(30000);
   },
   'EG integration: api calls': function () {
@@ -507,7 +505,22 @@ module.exports = {
             equal: [[body, EXPECT_PROXY_SERVICE_ENDPOINT]]
           });
       })
-      .removeGateway(gatewaySelector)
+      .check({
+        connected: {
+          [modelSelector]: ['out'],
+          [serviceEndpointSelector]: ['out'],
+          [apiEndpointModelSelector]: ['in'],
+          [apiEndpointServiceEndpointSelector]: ['in']
+        }
+      })
+      .removeGateway(gatewaySelector, {
+        notConnected: {
+          [modelSelector]: ['out'],
+          [serviceEndpointSelector]: ['out'],
+          [apiEndpointModelSelector]: ['in'],
+          [apiEndpointServiceEndpointSelector]: ['in']
+        }
+      })
       .close();
     // request.put({url, form}, (err, res, putBody) => {
     //   page

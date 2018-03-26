@@ -9,6 +9,7 @@ class QuadrantContainer extends PureComponent {
   static propTypes = {
     className: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
+    style: PropTypes.object,
   };
 
   constructor(props) {
@@ -82,7 +83,14 @@ class QuadrantContainer extends PureComponent {
   }
 
   render() {
-    const {editing, className, id, scrollLeft, quadrants} = this.props;
+    const {
+      editing,
+      className,
+      id,
+      scrollLeft,
+      quadrants,
+      style,
+    } = this.props;
     const containerClass = classNames({
       'canvas__container--editing': editing,
     });
@@ -90,6 +98,7 @@ class QuadrantContainer extends PureComponent {
     return (
       <div
         className={`${className} ${containerClass}`}
+        style={style}
         id={id}
       >
         {quadrants.map(({name, entities}, idx) => (

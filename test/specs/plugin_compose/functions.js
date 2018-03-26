@@ -63,7 +63,6 @@ module.exports = {
     page
       .removeGateway(gatewaySelector)
       .checkFunctionTriggers(functionSelector, {
-        'API Gateway': GATEWAY_NAME,
         Datasource: 'Memory',
         Model: 'NewModel'
       })

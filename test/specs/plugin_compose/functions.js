@@ -6,6 +6,8 @@ var modelSelector;
 var gatewaySelector;
 var apiEndpointFunctionSelector;
 var GATEWAY_NAME;
+var filesEditorHeight = 0;
+var filesEditorSelector = '.DetailsPanel .FilesEditor';
 
 module.exports = {
   // '@disabled': true,
@@ -23,6 +25,34 @@ module.exports = {
       .addElement('function')
       .submitCanvasEntity(functionSelector)
       .checkFunctionTriggers(functionSelector, {});
+  },
+  'Functions: code editor resize': function () {
+    page
+      .openEntityInDetailsPanel(functionSelector)
+      .getElementSize(filesEditorSelector, function (result) {
+        filesEditorHeight = result.value.height;
+        page.check({
+          equal: [[filesEditorHeight, 200]]
+        });
+        return page;
+      })
+      .resizeFilesEditor([0, 100], 40)
+      .getElementSize(filesEditorSelector, function (result) {
+        filesEditorHeight = result.value.height;
+        page.check({
+          equal: [[filesEditorHeight, 3000]]
+        });
+        return page;
+      })
+      .resizeFilesEditor([0, -100], 40)
+      .getElementSize(filesEditorSelector, function (result) {
+        filesEditorHeight = result.value.height;
+        page.check({
+          equal: [[filesEditorHeight, 100]]
+        });
+        return page;
+      })
+      .closeDetailsPanel();
   },
   'Functions: unique name': function () {
     page

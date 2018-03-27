@@ -389,7 +389,7 @@ class CustomerManagement extends PureComponent {
       <div className="CustomerManagement__scopes">
         <Select
           name="consumerManagement[scopes]"
-          value={scopes}
+          value={scopes || []}
           placeholder="null"
           options={[]}
           autocomplete

@@ -20,6 +20,7 @@ import './CustomerManagement.scss';
 const tabs = [
   'Users',
   'Apps',
+  'Scopes',
 ];
 
 const credentialsTypes = [
@@ -49,6 +50,7 @@ class CustomerManagement extends PureComponent {
       entryToRemoveType: null,
       loading: true,
       credentials: {},
+      scopes: [],
     };
   }
 
@@ -60,6 +62,7 @@ class CustomerManagement extends PureComponent {
   componentDidMount() {
     this.loadUsers();
     this.loadApps();
+    this.loadScopes();
   }
 
   loadUsers = async () => {
@@ -81,7 +84,13 @@ class CustomerManagement extends PureComponent {
     const credentials = _.cloneDeep(this.state.credentials);
     credentials[consumerId] = body.credentials;
     this.setState({credentials});
-  }
+  };
+
+  loadScopes = async () => {
+    const {api} = this.props;
+    const {body: {scopes}} = await api.getScopes();
+    this.setState({scopes});
+  };
 
   handleTabClick = activeTab => () => this.setState({activeTab});
 
@@ -182,6 +191,19 @@ class CustomerManagement extends PureComponent {
     const {api} = this.props;
     await api.setCredentialsScopes(type, id, scopes);
     await this.loadCredentials(consumerId);
+  };
+
+  handleScopesChange = async (scopes) => {
+    const {api} = this.props;
+    const newScopes = _.difference(scopes, this.state.scopes);
+    const removedScopes = _.difference(this.state.scopes, scopes);
+    if (newScopes.length > 0) {
+      await api.createScopes(newScopes);
+    }
+    for (let scope of removedScopes) {
+      await api.removeScope(scope);
+    }
+    await this.loadScopes();
   };
 
   renderUsersList = () => {
@@ -361,6 +383,23 @@ class CustomerManagement extends PureComponent {
     );
   };
 
+  renderScopesList = () => {
+    const {scopes} = this.state;
+    return (
+      <div className="CustomerManagement__scopes">
+        <Select
+          name="consumerManagement[scopes]"
+          value={scopes}
+          placeholder="null"
+          options={[]}
+          autocomplete
+          multiple
+          handleChange={this.handleScopesChange}
+        />
+      </div>
+    );
+  };
+
   renderCredentialsList = (consumerId) => {
     credentialsTypes
     return (
@@ -412,6 +451,7 @@ class CustomerManagement extends PureComponent {
     if (type === 'key-auth') {
       columns.push('KeyId');
       columns.push('KeySecret');
+      const scopesOptions = (this.state.scopes || []).map(label => ({label, value: label}));
       credentials
         .filter(item => item.type === type)
         .forEach(({keyId, keySecret, isActive, scopes}) => data.push([
@@ -423,7 +463,7 @@ class CustomerManagement extends PureComponent {
             value={eval(scopes) || []}
             multiple
             autocomplete
-            options={[{label: 'admin', value: 'admin'}]}
+            options={scopesOptions}
             handleChange={this.handleCredentialsScopesChange('key-auth', consumerId, keyId)}
           />,
           <Checkbox

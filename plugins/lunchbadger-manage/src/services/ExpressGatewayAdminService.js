@@ -54,6 +54,14 @@ class ExpressGatewayAdminService {
   setCredentialsScopes = (type, credentialId, scopes) =>
     this.api.put(`/credentials/${type}/${credentialId}/scopes`, {body: {scopes}});
 
+  getScopes = () => this.api.get('/scopes');
+
+  createScopes = scopes => this.api.post('/scopes', {body: {scopes}});
+
+  createScope = scope => this.api.post(`/scopes/${scope}`);
+
+  removeScope = scope => this.api.delete(`/scopes/${scope}`);
+
 }
 
 export default ExpressGatewayAdminService;

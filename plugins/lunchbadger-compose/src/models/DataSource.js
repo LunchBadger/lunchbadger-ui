@@ -18,6 +18,7 @@ export default class DataSource extends BaseModel {
   _username = '';
   _subuser = '';
   _keyId = '';
+  _privateKeyPath = '/root/.triton_ssh/id_rsa';
   _password = '';
   _type = '';
   predefined = 'custom';
@@ -114,6 +115,7 @@ export default class DataSource extends BaseModel {
       json.user = this.username;
       json.subuser = this.subuser;
       json.keyId = this.keyId;
+      json.privateKeyPath = this.privateKeyPath;
     }
     if (this.isSoap) {
       const {
@@ -214,6 +216,14 @@ export default class DataSource extends BaseModel {
 
   set keyId(keyId) {
     this._keyId = keyId;
+  }
+
+  get privateKeyPath() {
+    return this._privateKeyPath;
+  }
+
+  set privateKeyPath(privateKeyPath) {
+    this._privateKeyPath = privateKeyPath;
   }
 
   get password() {

@@ -48,6 +48,7 @@ class DataSourceDetails extends Component {
       user,
       subuser,
       keyId,
+      privateKeyPath,
       password,
       isWithPort,
       isSoap,
@@ -122,6 +123,11 @@ class DataSourceDetails extends Component {
         title: 'Key Id',
         name: 'keyId',
         value: keyId,
+      });
+      fields.push({
+        title: 'Private Key Path',
+        name: 'privateKeyPath',
+        value: privateKeyPath
       });
     }
     return (

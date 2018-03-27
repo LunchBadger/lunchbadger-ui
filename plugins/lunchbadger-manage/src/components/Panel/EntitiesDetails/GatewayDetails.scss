@@ -8,7 +8,8 @@
     }
   }
   & .general,
-  & .pipelines {
+  & .pipelines,
+  & .customerManagement {
     display: none;
   }
   .general {
@@ -22,7 +23,8 @@
 }
 
 .BaseDetails.general .GatewayDetails .general,
-.BaseDetails.pipelines .GatewayDetails .pipelines {
+.BaseDetails.pipelines .GatewayDetails .pipelines,
+.BaseDetails.customerManagement .GatewayDetails .customerManagement {
   display: block;
 }
 

@@ -100,7 +100,7 @@ export default class Gateway extends BaseModel {
         icon: 'iconPipelines',
       },
       {
-        name: 'customerMngmt',
+        name: 'customerManagement',
         label: 'Customer Management',
         icon: 'iconCustomerManagement',
       },

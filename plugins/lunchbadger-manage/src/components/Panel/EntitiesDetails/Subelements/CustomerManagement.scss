@@ -1,0 +1,142 @@
+.CustomerManagement {
+  margin: -15px;
+  &__header {
+    border-bottom: 1px solid #f8f8f8;
+    padding: 20px 15px 20px 70px;
+    font-size: 18px;
+    font-weight: normal;
+    min-width: 500px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+    background-color: #FFF;
+    .status {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+  }
+  &__list {
+    margin: 15px;
+    min-width: 914px;
+  }
+  &__form {
+    margin-right: 20px;
+  }
+  &__entry {
+    margin-top: 65px;
+  }
+  &__details .CollapsibleProperties__bar__right--button {
+    right: 5px;
+  }
+  &__check {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  &__table {
+    position: relative;
+    td {
+      user-select: text;
+    }
+    &:before {
+      display: none;
+      content: '';
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border-width: 8px;
+      border-style: solid;
+      border-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) #000;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      animation: loader-animation 1.1s infinite linear;
+      z-index: 1;
+    }
+    &:after {
+      display: none;
+      content: '';
+      background-color: rgba(255, 255, 255, 0.75);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    &.loading {
+      &:before,
+      &:after {
+        display: block;
+      }
+    }
+  }
+  .tabs {
+    .tab {
+      display: inline-block;
+      vertical-align: top;
+      width: 140px;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      &.active {
+        border-bottom: 2px solid #4190CE;
+        color: #4190CE;
+      }
+    }
+  }
+  .back {
+    position: absolute;
+    top: 23px;
+    left: 25px;
+    .IconButton {
+      float: none;
+      margin-left: 0;
+    }
+  }
+  .Button {
+    position: absolute;
+    width: 107px;
+    height: 40px;
+    bottom: 24px;
+    right: -1px;
+    border-color: #4190cd;
+    background-color: #4190cd;
+    color: #FFF;
+  }
+  .GatewayPolicyAction {
+    width: 910px;
+    & > .GatewayPolicyAction__parameter {
+      display: inline-block;
+      width: calc(50% - 20px);
+      margin-right: 20px;
+    }
+  }
+  .CollapsibleProperties__collapsible > .CustomerManagement__table {
+    margin-right: 20px;
+  }
+  .Multiselect {
+    margin-top: 0;
+    .Select-value-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      line-height: 16px;
+    }
+    .Select-value-label {
+      padding-bottom: 4px;
+    }
+  }
+}
+
+@keyframes loader-animation {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

@@ -24,6 +24,36 @@ class ExpressGatewayAdminService {
 
   putPipeline = (name, body) => this.api.put(`/pipelines/${name}`, {body});
 
+  getUsers = () => this.api.get('/users');
+
+  createUser = body => this.api.post('/users', {body});
+
+  updateUser = (username, body) => this.api.put(`/users/${username}`, {body});
+
+  removeUser = username => this.api.delete(`/users/${username}`);
+
+  setUserStatus = (username, status) => this.api.put(`/users/${username}/status`, {body: {status}});
+
+  getApps = () => this.api.get('/apps');
+
+  createApp = body => this.api.post('/apps', {body});
+
+  updateApp = (id, body) => this.api.put(`/apps/${id}`, {body});
+
+  removeApp = id => this.api.delete(`/apps/${id}`);
+
+  setAppStatus = (id, status) => this.api.put(`/apps/${id}/status`, {body: {status}});
+
+  getCredentials = consumerId => this.api.get(`/credentials/${consumerId}`);
+
+  createCredentials = body => this.api.post('/credentials', {body});
+
+  setCredentialsStatus = (type, credentialId, status) =>
+    this.api.put(`/credentials/${type}/${credentialId}/status`, {body: {status}});
+
+  setCredentialsScopes = (type, credentialId, scopes) =>
+    this.api.put(`/credentials/${type}/${credentialId}/scopes`, {body: {scopes}});
+
 }
 
 export default ExpressGatewayAdminService;

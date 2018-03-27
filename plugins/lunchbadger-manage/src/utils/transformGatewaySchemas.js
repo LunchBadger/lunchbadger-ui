@@ -74,5 +74,14 @@ export default schema => {
       }
     });
   });
+  Object.assign(data.model.users.properties, {
+    id: {type: 'fake'},
+    createdAt: {type: 'fake'},
+    updatedAt: {type: 'fake'},
+  });
+  Object.assign(data.model.applications.properties, {
+    createdAt: {type: 'fake'},
+    updatedAt: {type: 'fake'},
+  });
   return data;
 };

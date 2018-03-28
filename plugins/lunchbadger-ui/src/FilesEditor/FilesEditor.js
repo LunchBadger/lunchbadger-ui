@@ -3,6 +3,7 @@ import {PropTypes} from 'prop-types';
 import Tree from 'react-ui-tree';
 import slug from 'slug';
 import cx from 'classnames';
+import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
 import {
   CodeEditor,
@@ -16,17 +17,12 @@ export default class FilesEditor extends PureComponent {
     lang: PropTypes.string,
     onChange: PropTypes.func,
     files: PropTypes.object,
-    onNewFile: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onNewFile: () => {},
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      files: props.files,
+      files: _.cloneDeep(props.files),
       active: Object.keys(props.files)[0] || null,
       newFile: false,
     };
@@ -36,12 +32,20 @@ export default class FilesEditor extends PureComponent {
   renderNode = (node) => {
     const file = node.module || '';
     const active = file === this.state.active;
+    const filesAmount = Object.keys(this.state.files || {})
+      .filter(file => this.state.files[file] !== null)
+      .length;
     return (
       <span
         className={cx('node', slug(file, {lower: true}), {active})}
         onClick={this.onClickNode(file)}
       >
         {file}
+        {filesAmount > 1 && file !== '' && (
+          <div className="FilesEditor__removeFile">
+            <IconButton icon="iconDelete" onClick={event => this.handleRemoveNode(event, file)} />
+          </div>
+        )}
       </span>
     );
   };
@@ -54,6 +58,29 @@ export default class FilesEditor extends PureComponent {
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
 
   handleResize = size => this.setState({size});
+
+  handleRemoveNode = (event, filename) => {
+    const files = {};
+    Object.keys(this.state.files).forEach((file) => {
+      files[file] = file === filename ? null : this.state.files[file];
+    });
+    if (!this.props.files.hasOwnProperty(filename)) {
+      delete files[filename];
+    }
+    let active = this.state.active;
+    if (filename === active) {
+      active = Object.keys(files).filter(file => files[file] !== null)[0] || null;
+    }
+    this.setState({
+      files,
+      active,
+    }, () => {
+      this.dispatchResizeEvent();
+      this.forceUpdate();
+    });
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   handleAddFile = () => {
     this.setState({newFile: true}, () => {
@@ -69,7 +96,7 @@ export default class FilesEditor extends PureComponent {
         const files = {};
         const data = {
           ...this.state.files,
-          [filename]: '',
+          [filename]: ' ',
         };
         Object.keys(data).sort().forEach(key => files[key] = data[key]);
         this.setState({
@@ -91,16 +118,27 @@ export default class FilesEditor extends PureComponent {
 
   render () {
     const {lang, onChange} = this.props;
-    const {files} = this.state;
+    const {files, active, size, newFile} = this.state;
     const tree = {
-      children: Object.keys(files).map(file => ({
-        module: file,
-        leaf: true,
-      }))
+      children: Object.keys(files)
+        .filter(file => files[file] !== null)
+        .map(file => ({
+          module: file,
+          leaf: true,
+        })),
     };
-    const {active, size, newFile} = this.state;
+    const filesToRemove = Object.keys(files).filter(file => files[file] === null);
     return (
       <div className="FilesEditor">
+        <div className="FilesEditor__hidden">
+          {filesToRemove.map(key => (
+            <Input
+              key={key}
+              name={`filesToRemove[${key.replace(/\./g, '*')}]`}
+              value=""
+            />
+          ))}
+        </div>
         <div className="FilesEditor__codeEditor">
           {Object.keys(files).map(key => (
             <div key={key} style={{display: key === active ? 'block' : 'none'}}>

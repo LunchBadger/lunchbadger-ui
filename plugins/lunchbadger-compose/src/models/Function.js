@@ -107,6 +107,12 @@ export default class Function_ extends BaseModel {
       });
       delete data.files;
     }
+    if (data.hasOwnProperty('filesToRemove')) {
+      Object.keys(data.filesToRemove || {}).forEach((key) => {
+        data.service.files[key.replace(/\*/g, '.')] = null;
+      });
+      delete data.filesToRemove;
+    }
     return data;
   }
 

@@ -25,6 +25,8 @@
   &__addFile {
     margin-top: 10px;
     margin-bottom: -10px;
+    position: relative;
+    z-index: 10;
     .IconButton {
       float: none;
       width: 14px;
@@ -39,6 +41,24 @@
       }
     }
   }
+  &__removeFile {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    padding-top: 4px;
+    padding-right: 16px;
+    .IconButton {
+      display: none;
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
+      svg {
+        stroke: #FFF;
+      }
+    }
+  }
   &__newFile {
     color: #FFF;
     margin: -6px 8px -20px 8px;
@@ -46,6 +66,9 @@
       font-family: Monaco !important;
       font-size: 12px !important;
     }
+  }
+  &__hidden {
+    display: none;
   }
 }
 
@@ -57,7 +80,11 @@
   font-family: Monaco;
   font-size: 12px;
   cursor: pointer;
+  position: relative;
   &.active {
     background-color: #494a45;
+  }
+  .FilesEditor__removeFile:hover .IconButton {
+    display: block;
   }
 }

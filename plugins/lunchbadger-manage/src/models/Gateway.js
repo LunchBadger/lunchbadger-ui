@@ -5,9 +5,11 @@ import Pipeline from './Pipeline';
 import HttpsTlsDomain from './HttpsTlsDomain';
 import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
 import {clearEmptyObjectPlaceholders} from '../utils';
+import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const {Connections} = LunchBadgerCore.stores;
+const {consumerManagement} = Config.get('features');
 
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
@@ -93,18 +95,21 @@ export default class Gateway extends BaseModel {
   }
 
   get tabs() {
-    return [
+    const tabs = [
       {
         name: 'pipelines',
         label: 'Pipelines',
         icon: 'iconPipelines',
       },
-      {
+    ];
+    if (consumerManagement) {
+      tabs.push({
         name: 'customerManagement',
         label: 'Customer Management',
         icon: 'iconCustomerManagement',
-      },
-    ];
+      });
+    }
+    return tabs;
   }
 
   get status() {

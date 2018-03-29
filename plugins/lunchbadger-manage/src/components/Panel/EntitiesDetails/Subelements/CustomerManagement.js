@@ -299,7 +299,7 @@ class CustomerManagement extends PureComponent {
       'Redirect URI',
       'Active',
       '',
-      <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps')} />,
+      users.length ? <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps')} /> : '',
     ];
     let filteredApps = apps;
     if (userId !== null) {

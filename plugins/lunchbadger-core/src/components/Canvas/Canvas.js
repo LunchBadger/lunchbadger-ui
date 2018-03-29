@@ -241,10 +241,10 @@ class Canvas extends Component {
   handleClick = () => this.context.store.dispatch(clearCurrentElement());
 
   render() {
-    const {height} = this.props;
+    const {height, currentlyOpenedPanel} = this.props;
     const {scrollLeft} = this.state;
     const style = {height};
-    const disabled = height !== defaultCanvasHeight; // may be optional for metrics/optimise panels
+    const disabled = height !== defaultCanvasHeight && currentlyOpenedPanel === 'SETTINGS_PANEL';
     return (
       <div>
         <section
@@ -278,12 +278,15 @@ class Canvas extends Component {
 const selector = createSelector(
   state => state.loadingProject,
   state => state.canvasHeight,
+  state => state.states.currentlyOpenedPanel,
   (
     loadingProject,
     canvasHeight,
+    currentlyOpenedPanel,
   ) => ({
     loadingProject,
     height: canvasHeight || defaultCanvasHeight,
+    currentlyOpenedPanel,
   }),
 );
 

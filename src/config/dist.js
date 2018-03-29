@@ -36,8 +36,8 @@ export default {
     tritonLogo: false,
     tritonObjectStorage: true,
     microservices: true,
-    apis: true,
-    portals: true,
+    apis: false,
+    portals: false,
     metrics: false,
     forecasts: false,
     kubeWatcher: true

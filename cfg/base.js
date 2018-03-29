@@ -3,11 +3,6 @@ let path = require('path');
 let defaultSettings = require('./defaults');
 let additionalPaths = [];
 
-const infoFile = require('./load');
-
-let pluginDirs = infoFile.plugins.map(plugin => path.resolve(`./plugins/lunchbadger-${plugin}/src`));
-let coreDir = path.resolve('./plugins/lunchbadger-core/src');
-
 module.exports = {
   additionalPaths: additionalPaths,
   port: defaultSettings.port,
@@ -20,8 +15,7 @@ module.exports = {
       'lodash'
     ],
     start: ['./src/index'],
-    core: './plugins/lunchbadger-core/src/index',
-    plugins: pluginDirs
+    core: './plugins/lunchbadger-core/src/index'
   },
   output: {
     path: path.join(__dirname, '/../dist'),

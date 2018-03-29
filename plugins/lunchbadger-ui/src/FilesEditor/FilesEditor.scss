@@ -19,6 +19,33 @@
     top: 0;
     left: 0;
     width: 200px;
+    height: 100%;
+    overflow: auto;
+  }
+  &__addFile {
+    margin-top: 10px;
+    margin-bottom: -10px;
+    .IconButton {
+      float: none;
+      width: 14px;
+      height: 14px;
+      margin-left: 14px;
+      margin-top: 3px;
+      &:hover svg {
+        stroke: #b4b5b0;
+      }
+      svg {
+        stroke: #FFF;
+      }
+    }
+  }
+  &__newFile {
+    color: #FFF;
+    margin: -6px 8px -20px 8px;
+    & > div > div {
+      font-family: Monaco !important;
+      font-size: 12px !important;
+    }
   }
 }
 

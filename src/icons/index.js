@@ -1,8 +1,11 @@
 import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
+import iconArrowBack from './icon-arrow-back.svg';
 import iconArrowDown from './icon-arrow-down.svg';
+import iconArrowRight from './icon-arrow-right.svg';
 import iconArrowUp from './icon-arrow-up.svg';
 import iconBasics from './icon-basics.svg';
+import iconCheck from './icon-check.svg';
 import iconCodeEditor from './icon-code-editor.svg';
 import iconCustomerManagement from './icon-customer-management.svg';
 import iconConditionAllOf from './icon-condition-all-of.svg';
@@ -48,9 +51,12 @@ import iconWand from './icon-wand.svg';
 export {
   iconApi,
   iconArrow,
+  iconArrowBack,
   iconArrowDown,
+  iconArrowRight,
   iconArrowUp,
   iconBasics,
+  iconCheck,
   iconCodeEditor,
   iconCustomerManagement,
   iconConditionAllOf,

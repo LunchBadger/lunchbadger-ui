@@ -2,6 +2,7 @@ const env = process.env.LB_ENV || 'staging'; // staging|triton|gila|localhost
 
 const tritonLogo = ['triton', 'gila'].includes(env);
 const isPrefix = env !== 'localhost';
+const isStaging = ['staging', 'localhost'].includes(env);
 const prefix = isPrefix ? `${env}-` : '';
 const subdomain = isPrefix ? `${env}.` : '';
 const logins = ({
@@ -37,7 +38,8 @@ export default {
     portals: true,
     metrics: true,
     forecasts: true,
-    kubeWatcher: true
+    kubeWatcher: true,
+    consumerManagement: isStaging
   },
   logins
 };

@@ -40,6 +40,7 @@ export default {
     portals: false,
     metrics: false,
     forecasts: false,
-    kubeWatcher: true
+    kubeWatcher: true,
+    consumerManagement: false
   }
 };

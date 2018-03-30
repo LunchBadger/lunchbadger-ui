@@ -40,6 +40,7 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       this.setFlatModel();
+      window.addEventListener('formSubmited', this.onFormSubmited);
     }
 
     componentWillUpdate(_nextProps, nextState) {
@@ -55,6 +56,12 @@ export default (ComposedComponent) => {
         setTimeout(this.setFlatModel);
       }
     }
+
+    componentWillUnmount() {
+      window.removeEventListener('formSubmited', this.onFormSubmited);
+    }
+
+    onFormSubmited = (event) => event.detail(this.refs.form.getModel());
 
     setFlatModel = () => {
       if (this.refs && this.refs.form) {

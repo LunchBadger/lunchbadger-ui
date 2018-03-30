@@ -10,6 +10,7 @@ import Parameter from '../../../models/Parameter';
 import GatewayPolicyCAPair from './Subelements/GatewayPolicyCAPair';
 import GatewayPolicyCondition from './Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from './Subelements/GatewayPolicyAction';
+import CustomerManagement from './Subelements/CustomerManagement';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -667,11 +668,23 @@ class GatewayDetails extends PureComponent {
     );
   };
 
+  renderCustomerManagementSection = () => {
+    const {adminApi} = this.props.entity;
+    return (
+      <div className="customerManagement" key="customerManagement">
+        <CustomerManagement
+          api={adminApi}
+        />
+      </div>
+    );
+  };
+
   render() {
     const sections = [
       {title: 'Protocol'},
       {title: 'Admin'},
       {title: 'Pipelines'},
+      {title: 'CustomerManagement'}
     ];
     return (
       <div className="panel__details GatewayDetails">

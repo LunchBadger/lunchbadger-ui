@@ -37,7 +37,8 @@ export default {
     portals: isStaging,
     metrics: isStaging,
     forecasts: isStaging,
-    kubeWatcher: true
+    kubeWatcher: true,
+    consumerManagement: isStaging
   },
   logins
 };

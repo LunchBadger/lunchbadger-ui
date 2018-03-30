@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {EntityProperty, IconButton, IconMenu, EntityPropertyLabel} from '../../../../../../lunchbadger-ui/src';
+import {
+  EntityProperty,
+  IconButton,
+  IconMenu,
+  EntityPropertyLabel,
+  CollapsibleProperties,
+} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
@@ -17,7 +23,7 @@ const customPropertyTypes = [
   'object',
 ];
 
-const handledPropertyTypes = customPropertyTypes.concat(['jscode']);
+const handledPropertyTypes = customPropertyTypes.concat(['jscode', 'fake']);
 
 export default class GatewayPolicyAction extends PureComponent {
   static propTypes = {
@@ -26,17 +32,26 @@ export default class GatewayPolicyAction extends PureComponent {
     prefix: PropTypes.string,
     onChangeState: PropTypes.func,
     horizontal: PropTypes.bool,
+    collapsibleTitle: PropTypes.string,
   };
 
   static defaultProps = {
     onChangeState: () => {},
     horizontal: true,
+    collapsibleTitle: '',
   };
 
   constructor(props) {
     super(props);
     this.state = this.stateFromProps(props);
     this.tmpPrefix = props.prefix.replace('pipelines', 'tmp[pipelines]');
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {entry} = this.props;
+    if (entry && entry !== nextProps.entry) {
+      this.onPropsUpdate(nextProps);
+    }
   }
 
   discardChanges = () => {
@@ -87,6 +102,9 @@ export default class GatewayPolicyAction extends PureComponent {
         postfix,
         schemas: properties[name],
       };
+      if (type === 'fake') {
+        parameters[name].type = type;
+      }
     });
     return {parameters: Object.values(parameters)};
   };
@@ -232,6 +250,12 @@ export default class GatewayPolicyAction extends PureComponent {
         placeholder: ' ',
         type,
       };
+      if (type === 'fake') {
+        Object.assign(props, {
+          type: 'string',
+          fake: true,
+        });
+      }
       if (type === 'boolean') {
         Object.assign(props, {
           onBlur: undefined,
@@ -306,11 +330,32 @@ export default class GatewayPolicyAction extends PureComponent {
     return null;
   };
 
+  isDeletePropertyButton = (item) => {
+    const {schemas = {}} = this.props;
+    const required = schemas.required || [];
+    return !required.includes(item.name) && item.type !== 'fake';
+  };
+
+  reorderParameters = (parameters) => {
+    const params = {
+      fake: [],
+      notFake: [],
+    };
+    parameters.forEach((item) => {
+      params[item.type === 'fake' ? 'fake' : 'notFake'].push(item);
+    })
+    return params.notFake.concat(params.fake);
+  }
+
   render() {
-    const {schemas = {}, prefix} = this.props;
+    const {schemas = {}, prefix, collapsibleTitle} = this.props;
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
-    const availableParameters = _.difference(Object.keys(schemas.properties || {}), currParameters);
+    const properties = schemas.properties || {};
+    const availableParameters = _.difference(
+      Object.keys(properties).filter(key => properties[key].type !== 'fake'),
+      currParameters,
+    );
     const addButton = (
       <div className="GatewayPolicyAction__button add menu">
         <IconMenu
@@ -321,13 +366,51 @@ export default class GatewayPolicyAction extends PureComponent {
         />
       </div>
     );
+    const reorderedParameters = this.reorderParameters(parameters);
+    if (collapsibleTitle !== '') {
+      const collapsible = (
+        <div className="GatewayPolicyAction">
+          {reorderedParameters.map((item, idx) => (
+            <div key={item.id} className="GatewayPolicyAction__parameter">
+              {this.renderProperty(item)}
+              {this.isDeletePropertyButton(item) && (
+                <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
+                  <IconButton
+                    icon="iconDelete"
+                    name={`remove__${prefix}Parameter${idx}`}
+                    onClick={this.handleParameterRemove(item.id)}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+      const button = (
+        <IconMenu
+          name={`add__${prefix}Parameter`}
+          options={availableParameters}
+          secondaryOptions={customPropertyTypes}
+          onClick={this.handleAddParameter}
+        />
+      );
+      return (
+        <CollapsibleProperties
+          bar={<EntityPropertyLabel>{collapsibleTitle}</EntityPropertyLabel>}
+          collapsible={collapsible}
+          barToggable
+          defaultOpened
+          button={button}
+        />
+      );
+    }
     return (
       <div className="GatewayPolicyAction">
         {addButton}
-        {parameters.map((item, idx) => (
+        {reorderedParameters.map((item, idx) => (
           <div key={item.id} className="GatewayPolicyAction__parameter">
             {this.renderProperty(item)}
-            {!(schemas.required || []).includes(item.name) && (
+            {this.isDeletePropertyButton(item) && (
               <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
                 <IconButton
                   icon="iconDelete"

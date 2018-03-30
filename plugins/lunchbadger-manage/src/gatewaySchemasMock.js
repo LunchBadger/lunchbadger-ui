@@ -575,7 +575,7 @@ export default [
   {
     "type": "policy",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/policies/keyauth.json",
+      "$id": "http://express-gateway.io/schemas/policies/key-auth.json",
       "type": "object",
       "properties": {
         "apiKeyHeader": {

@@ -129,6 +129,7 @@ class Quadrant extends PureComponent {
         <div className="quadrant__body">
           {orderedIds.map(({id, type}, idx) => {
             const entity = this.props[type][id];
+            if (!entity || !entity.constructor || !entity.constructor.type) return null;
             const Component = components[entity.constructor.type];
             return (
               <Component

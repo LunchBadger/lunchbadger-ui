@@ -11,7 +11,6 @@ const logins = ({
   }
 })[env] || {};
 
-
 export default {
   configStoreApiUrl: isPrefix ? `http://${prefix}api.lunchbadger.com/api` : 'http://localhost:3002/api',
   gitBaseUrl: isPrefix ? `http://${prefix}api.lunchbadger.com/git` : 'http://localhost:3002/git',
@@ -34,10 +33,10 @@ export default {
     tritonLogo,
     tritonObjectStorage: true,
     microservices: true,
-    apis: true,
-    portals: true,
-    metrics: true,
-    forecasts: true,
+    apis: isStaging,
+    portals: isStaging,
+    metrics: isStaging,
+    forecasts: isStaging,
     kubeWatcher: true,
     consumerManagement: isStaging
   },

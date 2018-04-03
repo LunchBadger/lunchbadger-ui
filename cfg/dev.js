@@ -5,6 +5,14 @@ let path = require('path');
 let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
+let plugins = [
+  'manage',
+  'compose',
+  'monitor',
+  'monetize',
+  'optimize'
+];
+let pluginDirs = plugins.map(plugin => path.resolve(`./plugins/lunchbadger-${plugin}/src`));
 
 let config = _.merge({}, baseConfig, {
   cache: true,
@@ -25,6 +33,9 @@ let config = _.merge({}, baseConfig, {
     alias: {
       config: `${defaultSettings.srcPath}/config/dev`
     }
+  },
+  entry: {
+    plugins: pluginDirs
   }
 });
 

@@ -102,18 +102,38 @@ export default class Function_ extends BaseModel {
     data.service = Object.assign({}, this.service);
     if (data.hasOwnProperty('files')) {
       data.service.files = {};
-      Object.keys(data.files || {}).forEach((key) => {
-        data.service.files[key.replace(/\*/g, '.')] = data.files[key];
-      });
+      this.processTree(data.files, data.service.files);
       delete data.files;
     }
-    if (data.hasOwnProperty('filesToRemove')) {
-      Object.keys(data.filesToRemove || {}).forEach((key) => {
-        data.service.files[key.replace(/\*/g, '.')] = null;
-      });
-      delete data.filesToRemove;
-    }
+    this.markFilesToDelete(data.service.files, this.service.files);
     return data;
+  }
+
+  processTree(tree, data) {
+    Object.keys(tree).forEach((key) => {
+      const f = key.replace(/\*/g, '.');
+      data[f] = tree[key];
+      if (f !== key) {
+        delete data[key];
+      }
+      if (typeof data[f] === 'object') {
+        this.processTree(tree[key], data[f]);
+      } else if (data[f] === true) {
+        data[f] = {};
+      }
+    });
+  }
+
+  markFilesToDelete(nextFiles, prevFiles) {
+    Object.keys(prevFiles).forEach((name) => {
+      if (!nextFiles.hasOwnProperty(name)) {
+        nextFiles[name] = null;
+      } else {
+        if (typeof prevFiles[name] === 'object') {
+          this.markFilesToDelete(nextFiles[name], prevFiles[name]);
+        }
+      }
+    });
   }
 
 }

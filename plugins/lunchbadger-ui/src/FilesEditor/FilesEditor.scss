@@ -3,6 +3,13 @@
   &__codeEditor {
     position: relative;
     padding-left: 200px;
+    min-height: 100px;
+    &.blank {
+      margin-top: 10px;
+      .FilesEditor__fake {
+        background: #30322a;
+      }
+    }
     &:before {
       display: block;
       content: '';
@@ -41,21 +48,32 @@
       }
     }
   }
-  &__removeFile {
+  &__iconMenu {
     position: absolute;
-    top: 0;
+    top: 1px;
     bottom: 0;
     right: 0;
     width: 50px;
-    padding-top: 4px;
     padding-right: 16px;
-    .IconButton {
-      display: none;
-      width: 16px;
-      height: 16px;
-      opacity: 0.6;
-      svg {
-        stroke: #FFF;
+    & > div {
+      display: none !important;
+      button {
+        display: block !important;
+        border: 0 !important;
+        padding: 0 !important;
+        width: 20px !important;
+        height: 20px !important;
+        margin-left: 15px !important;
+        .IconButton {
+          display: block;
+          margin-left: 0;
+          float: none;
+          svg {
+            stroke: none;
+            fill: #FFF;
+            transform: rotate(90deg) scale(1.4, 1.4);
+          }
+        }
       }
     }
   }
@@ -70,21 +88,75 @@
   &__hidden {
     display: none;
   }
+  &__editing {
+    border: 2px solid #4190CE;
+    display: inline-block;
+    width: calc(100% - 6px);
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    font-weight: inherit;
+    margin: -5px;
+    padding: 3px;
+    background-color: #000;
+    outline: none;
+  }
+  .m-tree {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    color: #b4b5b0;
+    font-family: Monaco;
+    font-size: 12px;
+    margin-left: -11px;
+    padding-bottom: 5px;
+  }
+  .m-draggable {
+    position: absolute;
+    opacity: 0.8;
+    user-select: none;
+  }
+  .m-node {
+    &.placeholder > * {
+      visibility: hidden;
+    }
+    &.placeholder {
+      border: 1px dashed #ccc;
+    }
+    .inner {
+      position: relative;
+      cursor: pointer;
+    }
+    .collapse {
+      position: absolute;
+      left: -3px;
+      top: 2px;
+      cursor: pointer;
+    }
+    .caret-right:before {
+      content: '\25B8';
+    }
+    .caret-down:before {
+      content: '\25BE';
+    }
+  }
 }
 
 .node {
-  display: inline-block;
-  width: 100%;
-  padding: 4px 5px 4px 15px;
-  color: #b4b5b0;
-  font-family: Monaco;
-  font-size: 12px;
-  cursor: pointer;
-  position: relative;
+  padding: 3px 6px;
+  &.folder:before {
+    content: '📂';
+  }
+  &.leaf:before {
+    content: '📝';
+  }
+  &.noIcon:before {
+    display: none;
+  }
   &.active {
     background-color: #494a45;
   }
-  .FilesEditor__removeFile:hover .IconButton {
-    display: block;
+  .FilesEditor__iconMenu:hover > div {
+    display: block !important;
   }
 }

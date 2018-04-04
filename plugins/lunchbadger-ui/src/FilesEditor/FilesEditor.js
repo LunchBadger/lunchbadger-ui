@@ -1,18 +1,26 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import Tree from 'react-ui-tree';
-import slug from 'slug';
-import cx from 'classnames';
+import cs from 'classnames';
 import _ from 'lodash';
+import uuid from 'uuid';
 import {findDOMNode} from 'react-dom';
 import {
   CodeEditor,
-  IconButton,
+  IconMenu,
   Input,
 } from '../';
 import './FilesEditor.scss';
 
-export default class FilesEditor extends PureComponent {
+const OPERATIONS = {
+  NEW_FILE: 'New file',
+  NEW_FOLDER: 'New folder',
+  RENAME: 'Rename',
+  DELETE: 'Delete',
+  CANCEL_EDITING: 'CANCEL_EDITING',
+};
+
+export default class FilesEditor extends Component {
   static propTypes = {
     lang: PropTypes.string,
     onChange: PropTypes.func,
@@ -21,163 +29,286 @@ export default class FilesEditor extends PureComponent {
 
   constructor(props) {
     super(props);
+    const id = uuid.v4();
+    const tree = {
+      id,
+      module: '.',
+      children: [],
+      root: true,
+      collapsed: false,
+    };
+    const map = {
+      [id]: tree,
+    };
+    this.transformFilesIntoTree(tree, props.files, map);
     this.state = {
-      files: _.cloneDeep(props.files),
-      active: Object.keys(props.files)[0] || null,
+      tree,
+      map,
+      active: null,
       newFile: false,
     };
     this.codeEditorRefs = {};
   }
 
+  transformFilesIntoTree = (obj, data, map) => {
+    Object.keys(data)
+      .forEach((key) => {
+        const id = uuid.v4();
+        const item = {
+          id,
+          module: key,
+          parent: obj.id,
+        };
+        map[id] = item;
+        if (typeof data[key] === 'string') {
+          item.leaf = true;
+          item.content = data[key];
+        } else {
+          item.children = [];
+          item.collapsed = false;
+          this.transformFilesIntoTree(item, data[key], map);
+        }
+        obj.children.push(item);
+      });
+  };
+
+  handleOperation = (node, operation, event) => {
+    const {tree, map} = this.state;
+    let active = this.state.active;
+    let isStateUpdate = true;
+    const callbacks = [];
+    if (operation === OPERATIONS.NEW_FILE) {
+      const selectedNode = this.getTreeNodeById(node.leaf ? node.parent : node.id);
+      const id = uuid.v4();
+      const item = {
+        id,
+        module: '',
+        leaf: true,
+        content: '',
+        editing: true,
+        pending: true,
+        parent: selectedNode.id,
+      }
+      map[id] = item;
+      selectedNode.children.unshift(item);
+      selectedNode.collapsed = false;
+      active = id;
+      callbacks.push(() => {
+        this.dispatchResizeEvent();
+        const input = findDOMNode(this.filesRef).querySelector(`.node.id${id} input`);
+        input && input.focus();
+      });
+    }
+    if (operation === OPERATIONS.NEW_FOLDER) {
+      const selectedNode = this.getTreeNodeById(node.leaf ? node.parent : node.id);
+      const id = uuid.v4();
+      const item = {
+        id,
+        module: '',
+        children: [],
+        editing: true,
+        pending: true,
+        collapsed: false,
+        parent: selectedNode.id,
+      }
+      map[id] = item;
+      selectedNode.children.unshift(item);
+      selectedNode.collapsed = false;
+      active = null;
+      callbacks.push(() => {
+        this.dispatchResizeEvent();
+        const input = findDOMNode(this.filesRef).querySelector(`.node.id${id} input`);
+        input && input.focus();
+      });
+    }
+    if (operation === OPERATIONS.RENAME) {
+      const {id} = node;
+      const selectedNode = this.getTreeNodeById(id);
+      selectedNode.editing = true;
+      callbacks.push(() => {
+        this.dispatchResizeEvent();
+        const input = findDOMNode(this.filesRef).querySelector(`.node.id${id} input`);
+        input && input.focus();
+      });
+    }
+    if (operation === OPERATIONS.DELETE) {
+      if (node.id === this.state.active) {
+        active = null;
+      }
+      const parentNode = this.getTreeNodeById(node.parent);
+      parentNode.children = parentNode.children.filter(item => item.id !== node.id);
+      delete map[node.id];
+    }
+    if (operation === OPERATIONS.CANCEL_EDITING) {
+      isStateUpdate = false;
+      if (event.keyCode === 13 || event.which === 13) {
+        const editedNode = this.getTreeNodeById(node.id);
+        editedNode.module = event.target.value;
+        editedNode.editing = false;
+        editedNode.pending = false;
+        const parentNode = this.getTreeNodeById(node.parent);
+        parentNode.children.sort((a, b) => a.module > b.module);
+        isStateUpdate = true;
+        event.preventDefault();
+        callbacks.push(() => {
+          const input = findDOMNode(this.filesRef).querySelector(`.node.id${node.id}`);
+          input && input.scrollIntoViewIfNeeded();
+        });
+      }
+      if (event.keyCode === 27 || event.which === 27) {
+        if (node.pending) {
+          const selectedNode = this.getTreeNodeById(node.parent);
+          selectedNode.children = selectedNode.children.filter(item => item.id !== node.id);
+          active = null;
+        } else {
+          const editedNode = this.getTreeNodeById(node.id);
+          editedNode.editing = false;
+        }
+        isStateUpdate = true;
+      }
+    }
+    if (isStateUpdate) {
+      this.setState({tree, map}, () => {
+        callbacks.forEach(cb => setTimeout(cb));
+        if (active !== this.state.active) {
+          this.setState({active});
+        }
+      });
+    }
+  };
+
+  handleTreeChange = tree => {
+    // TODO: reorder after moving items
+    this.setState({tree});
+  };
+
+  getTreeNodeById = id => this.state.map[id];
+
   renderNode = (node) => {
-    const file = node.module || '';
-    const active = file === this.state.active;
-    const filesAmount = Object.keys(this.state.files || {})
-      .filter(file => this.state.files[file] !== null)
-      .length;
+    const active = node.id === this.state.active;
+    const options = [];
+    const secondaryOptions = [];
+    options.push(OPERATIONS.NEW_FILE);
+    options.push(OPERATIONS.NEW_FOLDER);
+    if (!node.root) {
+      secondaryOptions.push(OPERATIONS.RENAME);
+      secondaryOptions.push(OPERATIONS.DELETE);
+    }
+    const {editing, module: name, id, leaf, root} = node;
+    const folder = !leaf;
+    const noIcon = root;
     return (
-      <span
-        className={cx('node', slug(file, {lower: true}), {active})}
-        onClick={this.onClickNode(file)}
+      <div
+        className={cs('node', `id${id}`, {active, leaf, folder, noIcon})}
+        onClick={this.onClickNode(node)}
       >
-        {file}
-        {filesAmount > 1 && file !== '' && (
-          <div className="FilesEditor__removeFile">
-            <IconButton icon="iconDelete" onClick={event => this.handleRemoveNode(event, file)} />
+        {!editing && name}
+        {!editing && (
+          <div className="FilesEditor__iconMenu">
+            <IconMenu
+              icon="iconBasics"
+              name={'tmp'}
+              options={options}
+              secondaryOptions={secondaryOptions}
+              onClick={operation => this.handleOperation(node, operation)}
+            />
           </div>
         )}
-      </span>
+        {editing && (
+          <input
+            className="FilesEditor__editing"
+            defaultValue={name}
+            onKeyDown={event => this.handleOperation(node, OPERATIONS.CANCEL_EDITING, event)}
+            onBlur={() => this.handleOperation(node, OPERATIONS.CANCEL_EDITING, {keyCode: 27})}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+          />
+        )}
+      </div>
     );
   };
 
-  onClickNode = active => () => {
-    if (!active) return;
-    this.setState({active}, this.dispatchResizeEvent);
+  onClickNode = node => () => {
+    if (node.leaf) {
+      this.setState({active: node.id}, this.dispatchResizeEvent);
+    } else if (!node.root) {
+      const {tree} = this.state;
+      const selectedNode = this.getTreeNodeById(node.id);
+      selectedNode.collapsed = !selectedNode.collapsed;
+      this.setState({tree});
+    }
   };
 
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
 
   handleResize = size => this.setState({size});
 
-  handleRemoveNode = (event, filename) => {
-    const files = {};
-    Object.keys(this.state.files).forEach((file) => {
-      files[file] = file === filename ? null : this.state.files[file];
-    });
-    if (!this.props.files.hasOwnProperty(filename)) {
-      delete files[filename];
-    }
-    let active = this.state.active;
-    if (filename === active) {
-      active = Object.keys(files).filter(file => files[file] !== null)[0] || null;
-    }
-    this.setState({
-      files,
-      active,
-    }, () => {
-      this.dispatchResizeEvent();
-      this.forceUpdate();
-    });
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  handleAddFile = () => {
-    this.setState({newFile: true}, () => {
-      const input = findDOMNode(this.newFileRef).querySelector('input');
-      input && input.focus();
-    });
-  };
-
-  handleNewFileKeyPress = (event) => {
-    if (event.keyCode === 13 || event.which === 13) {
-      const filename = event.target.value.trim();
-      if (filename.length > 0) {
-        const files = {};
-        const data = {
-          ...this.state.files,
-          [filename]: ' ',
-        };
-        Object.keys(data).sort().forEach(key => files[key] = data[key]);
-        this.setState({
-          files,
-          newFile: false,
-        });
-        setTimeout(() => {
-          this.setState({active: filename}, () => {
-            this.dispatchResizeEvent();
-            const input = findDOMNode(this.filesRef).querySelector(`.${slug(filename, {lower: true})}`);
-            input && input.scrollIntoViewIfNeeded();
-          });
-        });
-      }
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  renderCodeEditors = (prefix, tree) => {
+    const {lang, onChange} = this.props;
+    const {active, size} = this.state;
+    const {children} = tree;
+    const isEmptyFolder = children.length === 0;
+    return (
+      <div>
+        {isEmptyFolder && (
+          <Input
+            name={prefix}
+            value={true}
+            className="FilesEditor__hidden"
+          />
+        )}
+        {children.map(node => {
+          const slug = node.module.replace(/\./g, '*');
+          return (
+            <div key={node.id}>
+              {node.leaf && (
+                <div style={{display: node.id === active ? 'block' : 'none'}}>
+                  <CodeEditor
+                    size={size}
+                    lang={lang}
+                    value={node.content}
+                    name={`${prefix}[${slug}]`}
+                    onChange={onChange}
+                    mode="editor"
+                    onResize={this.handleResize}
+                    initialHeight={200}
+                  />
+                </div>
+              )}
+              {node.children && this.renderCodeEditors(`${prefix}[${slug}]`, node)}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   render () {
-    const {lang, onChange} = this.props;
-    const {files, active, size, newFile} = this.state;
-    const tree = {
-      children: Object.keys(files)
-        .filter(file => files[file] !== null)
-        .map(file => ({
-          module: file,
-          leaf: true,
-        })),
+    const {tree, active} = this.state;
+    const blank = active === null;
+    const size = this.state.size || {
+      width: 'calc(100% - 5px)',
+      height: 200,
     };
-    const filesToRemove = Object.keys(files).filter(file => files[file] === null);
+    const codeEditorStyle = {};
+    if (blank) {
+      Object.assign(codeEditorStyle, size);
+    }
     return (
       <div className="FilesEditor">
-        <div className="FilesEditor__hidden">
-          {filesToRemove.map(key => (
-            <Input
-              key={key}
-              name={`filesToRemove[${key.replace(/\./g, '*')}]`}
-              value=""
-            />
-          ))}
-        </div>
-        <div className="FilesEditor__codeEditor">
-          {Object.keys(files).map(key => (
-            <div key={key} style={{display: key === active ? 'block' : 'none'}}>
-              <CodeEditor
-                size={size}
-                lang={lang}
-                value={files[key]}
-                name={`files[${key.replace(/\./g, '*')}]`}
-                onChange={onChange}
-                mode="editor"
-                onResize={this.handleResize}
-                initialHeight={200}
-              />
-            </div>
-          ))}
+        <div className={cs('FilesEditor__codeEditor', {blank})}>
+          {this.renderCodeEditors('files', tree)}
+          <div className="FilesEditor__fake" style={codeEditorStyle} />
         </div>
         <div className="FilesEditor__tree">
-          {!newFile && (
-            <div className="FilesEditor__addFile">
-              <IconButton icon="iconPlus" onClick={this.handleAddFile} />
-            </div>
-          )}
-          {newFile && (
-            <div className="FilesEditor__newFile">
-              <Input
-                ref={r => this.newFileRef = r}
-                name="tmp[newFile]"
-                fullWidth
-                value=""
-                handleBlur={() => this.setState({newFile: false})}
-                handleKeyPress={this.handleNewFileKeyPress}
-              />
-            </div>
-          )}
           <Tree
             ref={r => this.filesRef = r}
             tree={tree}
             renderNode={this.renderNode}
-            paddingLeft={0}
+            paddingLeft={15}
+            onChange={this.handleTreeChange}
           />
         </div>
       </div>

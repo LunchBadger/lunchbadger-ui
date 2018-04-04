@@ -105,7 +105,9 @@ export default class Function_ extends BaseModel {
       this.processTree(data.files, data.service.files);
       delete data.files;
     }
-    this.markFilesToDelete(data.service.files, this.service.files);
+    if (this.service && this.service.files) {
+      this.markFilesToDelete(data.service.files, this.service.files);
+    }
     return data;
   }
 

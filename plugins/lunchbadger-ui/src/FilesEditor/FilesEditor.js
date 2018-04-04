@@ -184,13 +184,25 @@ export default class FilesEditor extends Component {
 
   getTreeNodeById = id => this.state.map[id];
 
+  isRequired = (node) => {
+    const {lang} = this.props;
+    const extension = {
+      javascript: 'js',
+      python: 'py',
+    }[lang];
+    const requiredFiles = [`handler.${extension}`];
+    if (!requiredFiles.includes(node.module)) return false;
+    if (!this.state.map[node.parent].root) return false;
+    return true;
+  };
+
   renderNode = (node) => {
     const active = node.id === this.state.active;
     const options = [];
     const secondaryOptions = [];
     options.push(OPERATIONS.NEW_FILE);
     options.push(OPERATIONS.NEW_FOLDER);
-    if (!node.root) {
+    if (!node.root && !this.isRequired(node)) {
       secondaryOptions.push(OPERATIONS.RENAME);
       secondaryOptions.push(OPERATIONS.DELETE);
     }

@@ -9,7 +9,9 @@ import {
   CodeEditor,
   IconMenu,
   Input,
+  IconSVG,
 } from '../';
+import {iconFile, iconFolder} from '../../../../src/icons';
 import './FilesEditor.scss';
 
 const OPERATIONS = {
@@ -219,13 +221,13 @@ export default class FilesEditor extends Component {
       secondaryOptions.push(OPERATIONS.DELETE);
     }
     const {editing, module: name, id, leaf, root} = node;
-    const folder = !leaf;
     const noIcon = root;
     return (
       <div
-        className={cs('node', `id${id}`, {active, leaf, folder, noIcon})}
+        className={cs('node', `id${id}`, {active, noIcon})}
         onClick={this.onClickNode(node)}
       >
+        {!noIcon && <IconSVG svg={leaf ? iconFile : iconFolder} className="icon" />}
         {!editing && name}
         {!editing && (
           <div className="FilesEditor__iconMenu">

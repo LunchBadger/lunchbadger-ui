@@ -91,7 +91,7 @@
   &__editing {
     border: 2px solid #4190CE;
     display: inline-block;
-    width: calc(100% - 6px);
+    width: calc(100% - 9px);
     font-size: inherit;
     font-family: inherit;
     color: inherit;
@@ -144,14 +144,12 @@
 
 .node {
   padding: 3px 6px;
-  &.folder:before {
-    content: '📂';
-  }
-  &.leaf:before {
-    content: '📝';
-  }
-  &.noIcon:before {
-    display: none;
+  .icon {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    vertical-align: top;
+    margin: 0 2px;
   }
   &.active {
     background-color: #494a45;

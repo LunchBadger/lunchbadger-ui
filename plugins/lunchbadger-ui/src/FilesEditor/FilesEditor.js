@@ -143,17 +143,29 @@ export default class FilesEditor extends Component {
       isStateUpdate = false;
       if (event.keyCode === 13 || event.which === 13) {
         const editedNode = this.getTreeNodeById(node.id);
-        editedNode.module = event.target.value;
-        editedNode.editing = false;
-        editedNode.pending = false;
         const parentNode = this.getTreeNodeById(node.parent);
-        parentNode.children.sort((a, b) => a.module > b.module);
+        const value = event.target.value.trim();
+        if (parentNode.children.find(item => item.module.toLowerCase() === value.toLowerCase())) {
+          if (editedNode.pending) {
+            parentNode.children = parentNode.children.filter(item => item.id !== node.id);
+            delete map[node.id];
+            active = null;
+          } else {
+            editedNode.editing = false;
+            editedNode.pending = false;
+          }
+        } else {
+          editedNode.module = value;
+          editedNode.editing = false;
+          editedNode.pending = false;
+          parentNode.children.sort((a, b) => a.module > b.module);
+          callbacks.push(() => {
+            const input = findDOMNode(this.filesRef).querySelector(`.node.id${node.id}`);
+            input && input.scrollIntoViewIfNeeded();
+          });
+        }
         isStateUpdate = true;
         event.preventDefault();
-        callbacks.push(() => {
-          const input = findDOMNode(this.filesRef).querySelector(`.node.id${node.id}`);
-          input && input.scrollIntoViewIfNeeded();
-        });
       }
       if (event.keyCode === 27 || event.which === 27) {
         if (node.pending) {

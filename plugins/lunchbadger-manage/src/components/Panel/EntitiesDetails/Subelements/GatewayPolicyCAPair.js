@@ -103,7 +103,8 @@ export default class GatewayPolicyCAPair extends PureComponent {
           )}
           barToggable
           defaultOpened
-          space="10px 0"
+          space="20px 0"
+          buttonOnHover
         />
       </div>
     )

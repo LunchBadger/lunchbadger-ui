@@ -388,6 +388,7 @@ class GatewayDetails extends PureComponent {
         )}
         defaultOpened
         space="0"
+        buttonOnHover
       />
     ));
     return (
@@ -647,6 +648,7 @@ class GatewayDetails extends PureComponent {
         defaultOpened
         space="0"
         noDividers
+        buttonOnHover
       />
     ));
     return (

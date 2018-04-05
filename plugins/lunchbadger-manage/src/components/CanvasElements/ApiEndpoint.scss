@@ -9,15 +9,7 @@
       margin-right: 15px;
     }
     .EntityProperty {
-      width: calc(100% - 25px);
       margin-left: 3px;
-      &__delete {
-        display: block;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 800ms ease;
-        top: 8px;
-      }
     }
   }
   &.nested {
@@ -25,15 +17,6 @@
     .EntitySubElements {
       border-top: none;
       margin-top: -20px;
-    }
-  }
-}
-
-.editable .ApiEndpoint {
-  .EntityProperty {
-    &__delete {
-      opacity: 1;
-      pointer-events: all;
     }
   }
 }

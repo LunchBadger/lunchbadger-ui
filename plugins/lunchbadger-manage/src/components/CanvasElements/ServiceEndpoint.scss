@@ -2,15 +2,7 @@
   .EntitySubElements {
     margin: 0 -10px;
     .EntityProperty {
-      width: calc(100% - 25px);
       margin-left: 3px;
-      &__delete {
-        display: block;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 800ms ease;
-        top: 8px;
-      }
     }
   }
   .EntitySubElements__elements {
@@ -18,16 +10,10 @@
   }
 }
 
-.editable .ServiceEndpoint {
-  .EntityProperty {
-    &__delete {
-      opacity: 1;
-      pointer-events: all;
-    }
-    &:first-child {
-      .EntityProperty__delete {
-        display: none;
-      }
+.ServiceEndpoint {
+  .EntityProperty:first-child {
+    .EntityProperty__delete {
+      display: none;
     }
   }
 }

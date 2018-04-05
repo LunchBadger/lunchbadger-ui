@@ -1,6 +1,5 @@
 .editable .Gateway.multi {
-  .EntitySubElements__title__add,
-  .EntityProperty__delete {
+  .EntitySubElements__title__add {
     display: none;
   }
   .Gateway__pipelines {
@@ -28,21 +27,12 @@
   }
   .CollapsibleProperties.untoggable {
     padding-right: 0;
-    .EntityProperty {
-      width: calc(100% - 22px);
-    }
-
   }
-  .EntityProperty__delete,
   .IconButton {
     display: block;
     pointer-events: none;
     opacity: 0;
     transition: opacity 800ms ease;
-  }
-  .EntityProperty__delete {
-    top: 50%;
-    transform: translateY(-50%);
   }
   &__CA {
     display: none;
@@ -50,8 +40,7 @@
 }
 
 .editable .Gateway {
-  .IconButton,
-  .EntityProperty__delete {
+  .IconButton {
     opacity: 1;
     pointer-events: all;
   }

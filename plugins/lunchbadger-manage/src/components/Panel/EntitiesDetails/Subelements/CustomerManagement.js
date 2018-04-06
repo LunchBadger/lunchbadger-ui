@@ -9,6 +9,7 @@ import {
   Button,
   Checkbox,
   CollapsibleProperties,
+  EntityProperty,
   EntityPropertyLabel,
   IconSVG,
   Select,
@@ -51,6 +52,8 @@ class CustomerManagement extends PureComponent {
       loading: true,
       credentials: {},
       scopes: [],
+      filterUsers: '',
+      filterApps: '',
     };
   }
 
@@ -206,12 +209,45 @@ class CustomerManagement extends PureComponent {
     await this.loadScopes();
   };
 
+  preventSubmit = event => {
+    if (event.keyCode === 13 || event.which === 13) {
+      event.preventDefault();
+    }
+  };
+
+  handleFilterChange = ({target: {value}}) => {
+    const {activeTab} = this.state;
+    this.setState({[`filter${activeTab}`]: value});
+  };
+
+  filterUsers = item => {
+    const check = new RegExp(this.state.filterUsers, 'i');
+    return check.test(item.username) || check.test(item.firstname) || check.test(item.lastname);
+  };
+
+  renderFinder = () => {
+    const {activeTab} = this.state;
+    const filter = this.state[`filter${activeTab}`];
+    return (
+      <div className="CustomerManagement__finder">
+        <EntityProperty
+          name="tmp[finder]"
+          value={filter}
+          placeholder=" "
+          onChange={this.handleFilterChange}
+          onDelete={filter ? () => this.handleFilterChange({target: {value: ''}}) : undefined}
+          onKeyDown={this.preventSubmit}
+        />
+      </div>
+    );
+  };
+
   renderUsersList = () => {
     const {users, loading} = this.state;
     const columns = [
+      'Username',
       'First Name',
       'Last Name',
-      'Username',
       'Redirect URI',
       'Active',
       '',
@@ -220,24 +256,29 @@ class CustomerManagement extends PureComponent {
     const widths = [200, 200, 200, undefined, 60, 30, 30];
     const paddings = [true, true, true, true, false, false, false];
     const centers = [false, false, false, false, true, false, false];
-    const data = users.map(({id, username, firstname, lastname, redirectUri, isActive}) => [
-      username,
-      firstname,
-      lastname,
-      redirectUri,
-      isActive ? check : '',
-      <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Users')} />,
-      <IconButton icon="iconDelete" onClick={this.handleToRemove(id, 'Users')} />,
-    ]);
+    const data = users
+      .filter(this.filterUsers)
+      .map(({id, username, firstname, lastname, redirectUri, isActive}) => [
+        username,
+        firstname,
+        lastname,
+        redirectUri,
+        isActive ? check : '',
+        <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Users')} />,
+        <IconButton icon="iconDelete" onClick={this.handleToRemove(id, 'Users')} />,
+      ]);
     return (
-      <div className={cs('CustomerManagement__table', {loading})}>
-        <Table
-          columns={columns}
-          widths={widths}
-          paddings={paddings}
-          data={data}
-          centers={centers}
-        />
+      <div>
+        {this.renderFinder()}
+        <div className={cs('CustomerManagement__table', {loading})}>
+          <Table
+            columns={columns}
+            widths={widths}
+            paddings={paddings}
+            data={data}
+            centers={centers}
+          />
+        </div>
       </div>
     );
   };
@@ -543,6 +584,7 @@ class CustomerManagement extends PureComponent {
       <div className="CustomerManagement">
         {entry === null && (
           <div className="CustomerManagement__list">
+            {this[`render${activeTab}List`]()}
             <div className="tabs">
               {tabs.map(tab => (
                 <div
@@ -554,7 +596,6 @@ class CustomerManagement extends PureComponent {
                 </div>
               ))}
             </div>
-            {this[`render${activeTab}List`]()}
           </div>
         )}
         {entry !== null && (

@@ -20,6 +20,7 @@
   &__list {
     margin: 15px;
     min-width: 914px;
+    padding-top: 41px;
   }
   &__form {
     margin-right: 20px;
@@ -79,6 +80,12 @@
     }
   }
   .tabs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFF;
+    padding: 15px 15px 0;
     .tab {
       display: inline-block;
       vertical-align: top;
@@ -92,6 +99,12 @@
         color: #4190CE;
       }
     }
+  }
+  &__finder {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    z-index: 1;
   }
   .back {
     position: absolute;

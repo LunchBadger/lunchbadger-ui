@@ -42,6 +42,7 @@ class EntityProperty extends Component {
     onChange: PropTypes.func,
     onDelete: PropTypes.func,
     onBlur: PropTypes.func,
+    onKeyDown: PropTypes.func,
     underlineStyle: PropTypes.object,
     onViewModeClick: PropTypes.func,
     onClick: PropTypes.func,
@@ -81,6 +82,7 @@ class EntityProperty extends Component {
     onChange: () => {},
     onBlur: () => {},
     onResetField: () => {},
+    onKeyDown: () => {},
     width: 0,
     bool: false,
     autocomplete: false,
@@ -120,7 +122,7 @@ class EntityProperty extends Component {
 
   handleTab = (event) => {
     const {which, keyCode, shiftKey, target: {value}} = event;
-    const {onTab, onBlur, chips} = this.props;
+    const {onTab, onBlur, chips, onKeyDown} = this.props;
     if (value.trim() !== '' && chips && typeof onBlur === 'function' && (which === 13 || keyCode === 13)) {
       onBlur(value);
     }
@@ -128,6 +130,7 @@ class EntityProperty extends Component {
       if (!((which === 9 || keyCode === 9) && !shiftKey)) return;
       onTab(event);
     }
+    onKeyDown(event);
   }
 
   handleMouseEnter = () => this.setState({tooltipVisible: true});

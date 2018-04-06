@@ -242,6 +242,7 @@ class CustomerManagement extends PureComponent {
           onChange={this.handleFilterChange}
           onDelete={filter ? () => this.handleFilterChange({target: {value: ''}}) : undefined}
           onKeyDown={this.preventSubmit}
+          icon="iconMagnifier"
         />
       </div>
     );

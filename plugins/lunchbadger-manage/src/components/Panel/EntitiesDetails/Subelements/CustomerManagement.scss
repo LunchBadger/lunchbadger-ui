@@ -1,5 +1,4 @@
 .CustomerManagement {
-  margin: -15px;
   &__header {
     border-bottom: 1px solid #f8f8f8;
     padding: 20px 15px 20px 70px;
@@ -8,6 +7,7 @@
     min-width: 500px;
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     z-index: 9;
     background-color: #FFF;
@@ -18,7 +18,6 @@
     }
   }
   &__list {
-    margin: 15px;
     min-width: 914px;
     padding-top: 41px;
   }

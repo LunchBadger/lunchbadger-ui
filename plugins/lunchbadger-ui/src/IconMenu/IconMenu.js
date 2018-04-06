@@ -32,7 +32,9 @@ export default class IconMenuComponent extends PureComponent {
     vertical: 'top',
   };
 
-  handleClick = (_, value) => this.props.onClick(value);
+  handleClick = event => event.stopPropagation();
+
+  handleChange = (event, value) => this.props.onClick(value, event);
 
   renderIconMenuItem = (item) => (
     <MenuItem
@@ -53,21 +55,23 @@ export default class IconMenuComponent extends PureComponent {
       </IconButton>
     );
     return (
-      <IconMenu
-        iconButtonElement={iconButtonElement}
-        anchorOrigin={origin}
-        targetOrigin={origin}
-        onChange={this.handleClick}
-        touchTapCloseDelay={1}
-        desktop
-        maxHeight={250}
-        listStyle={listStyle}
-        desktop
-      >
-        {options.map(item => this.renderIconMenuItem(item))}
-        {isDivider && <Divider />}
-        {isSecondary && secondaryOptions.map(item => this.renderIconMenuItem(item))}
-      </IconMenu>
+      <div onClick={this.handleClick}>
+        <IconMenu
+          iconButtonElement={iconButtonElement}
+          anchorOrigin={origin}
+          targetOrigin={origin}
+          onChange={this.handleChange}
+          touchTapCloseDelay={1}
+          desktop
+          maxHeight={250}
+          listStyle={listStyle}
+          desktop
+        >
+          {options.map(item => this.renderIconMenuItem(item))}
+          {isDivider && <Divider />}
+          {isSecondary && secondaryOptions.map(item => this.renderIconMenuItem(item))}
+        </IconMenu>
+      </div>
     );
   }
 }

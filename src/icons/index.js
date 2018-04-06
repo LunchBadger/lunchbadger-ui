@@ -27,6 +27,8 @@ import iconDetails from './icon-details.svg';
 import iconEdit from './icon-edit.svg';
 import iconEndpoint from './icon-endpoint.svg';
 import iconError from './icon-error.svg';
+import iconFile from './icon-file.svg';
+import iconFolder from './icon-folder.svg';
 import iconForklift from './icon-forklift.svg';
 import iconFunction from './icon-function.svg';
 import iconGateway from './icon-gateway.svg';
@@ -78,6 +80,8 @@ export {
   iconEdit,
   iconEndpoint,
   iconError,
+  iconFile,
+  iconFolder,
   iconForklift,
   iconFunction,
   iconGateway,

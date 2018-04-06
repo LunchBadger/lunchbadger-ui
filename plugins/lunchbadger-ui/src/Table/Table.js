@@ -66,7 +66,7 @@ export default class TableComponent extends PureComponent {
               displayRowCheckbox={false}
             >
               {data.map((row, idxRow) => (
-                <TableRow key={idxRow} displayBorder>
+                <TableRow key={idxRow} className="TableRow" displayBorder>
                   {row.map((column, idxColumn) => (
                     <TableRowColumn
                       key={idxColumn}

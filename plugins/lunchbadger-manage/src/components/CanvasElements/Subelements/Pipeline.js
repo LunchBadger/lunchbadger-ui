@@ -82,6 +82,7 @@ class Pipeline extends PureComponent {
           defaultOpened
           space="0"
           noDividers
+          buttonOnHover
         />
       </div>
     );

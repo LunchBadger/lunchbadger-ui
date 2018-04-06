@@ -107,18 +107,20 @@
   &__delete {
     display: none;
     position: absolute;
-    top: -1px;
-    left: calc(100% + 2px);
+    top: 8px;
+    right: 0;
     width: 20px;
     height: 30px;
     cursor: pointer;
-    .editable .CollapsibleProperties:hover & {
-      display: block;
-    }
     svg {
       stroke: #3F8FCD;
       display: block;
       margin-top: 5px;
+    }
+  }
+  .editable &:hover {
+    .EntityProperty__delete {
+      display: block;
     }
   }
   &__context {

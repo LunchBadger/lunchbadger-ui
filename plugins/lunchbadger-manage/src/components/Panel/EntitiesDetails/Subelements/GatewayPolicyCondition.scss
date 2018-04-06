@@ -43,6 +43,12 @@
   &__C {
     margin-left: 25px;
     position: relative;
+    & > .GatewayPolicyCondition__button {
+      display: none;
+    }
+    &:hover > .GatewayPolicyCondition__button {
+      display: block;
+    }
   }
   &__button {
     position: absolute;
@@ -67,6 +73,12 @@
       stroke: #999;
       fill: #999;
     }
+  }
+  & > .GatewayPolicyCondition__button {
+    display: none;
+  }
+  &:hover > .GatewayPolicyCondition__button {
+    display: block;
   }
 }
 

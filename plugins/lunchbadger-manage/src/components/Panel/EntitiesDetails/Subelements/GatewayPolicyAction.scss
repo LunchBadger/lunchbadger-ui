@@ -25,6 +25,12 @@
   &__parameter {
     position: relative;
     margin-top: 10px;
+    & > .GatewayPolicyAction__button {
+      display: none;
+    }
+    &:hover > .GatewayPolicyAction__button {
+      display: block;
+    }
   }
   &__object {
     padding-top: 3px;

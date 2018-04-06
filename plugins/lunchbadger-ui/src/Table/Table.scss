@@ -11,5 +11,11 @@
         padding-left: 8px;
       }
     }
+    .IconButton {
+      display: none;
+    }
+    &:hover .IconButton {
+      display: block;
+    }
   }
 }

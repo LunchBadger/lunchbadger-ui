@@ -572,6 +572,7 @@ export default class Rest extends PureComponent {
               }
               defaultOpened
               barToggable
+              buttonOnHover
             />
           </div>
         ))}

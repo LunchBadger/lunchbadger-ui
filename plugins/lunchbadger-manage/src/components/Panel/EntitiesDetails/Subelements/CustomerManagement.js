@@ -225,6 +225,11 @@ class CustomerManagement extends PureComponent {
     return check.test(item.username) || check.test(item.firstname) || check.test(item.lastname);
   };
 
+  filterApps = item => {
+    const check = new RegExp(this.state.filterApps, 'i');
+    return check.test(item.name);
+  };
+
   renderFinder = () => {
     const {activeTab} = this.state;
     const filter = this.state[`filter${activeTab}`];
@@ -349,7 +354,9 @@ class CustomerManagement extends PureComponent {
     const widths = [200, 200, undefined, 60, 30, 30];
     const paddings = [true, true, true, false, false, false];
     const centers = [false, false, false, true, false, false];
-    const data = filteredApps.map(({id, userId, name, redirectUri, isActive}) => [
+    const data = filteredApps
+      .filter(userId !== null ? () => true : this.filterApps)
+      .map(({id, userId, name, redirectUri, isActive}) => [
       (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
       name,
       redirectUri,
@@ -364,14 +371,17 @@ class CustomerManagement extends PureComponent {
       data.map(row => row.shift());
     }
     return (
-      <div className={cs('CustomerManagement__table', {loading})}>
-        <Table
-          columns={columns}
-          widths={widths}
-          paddings={paddings}
-          data={data}
-          centers={centers}
-        />
+      <div>
+        {this.renderFinder()}
+        <div className={cs('CustomerManagement__table', {loading})}>
+          <Table
+            columns={columns}
+            widths={widths}
+            paddings={paddings}
+            data={data}
+            centers={centers}
+          />
+        </div>
       </div>
     );
   };

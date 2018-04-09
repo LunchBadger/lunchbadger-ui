@@ -23,7 +23,7 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
-  const {files} = model;
+  let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;
   let updatedEntity;
@@ -56,11 +56,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
         dataSource: dataSource ? dataSource.name : null,
         public: updatedEntity.public,
       });
-      // if (files === undefined) { // TODO: handle mode rename
-      //   const prevModelJsName = `${prevName.toLowerCase()}.js`;
-      //   const prevContent = state.entities.workspaceFiles.files.server.models[prevModelJsName];
-      //   files = prevContent;
-      // }
+      if (files === undefined) {
+        const prevModelJsName = `${prevName.toLowerCase()}.js`;
+        const prevContent = state.entities.workspaceFiles.files.server.models[prevModelJsName];
+        files = prevContent;
+      }
     }
     const {body} = await ModelService.upsert(updatedEntity.toJSON());
     updatedEntity = Model.create(body);

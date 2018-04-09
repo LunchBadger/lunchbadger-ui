@@ -49,7 +49,8 @@ class CustomerManagement extends PureComponent {
       showRemovingModal: false,
       entryToRemove: null,
       entryToRemoveType: null,
-      loading: true,
+      loadingUsers: true,
+      loadingApps: true,
       credentials: {},
       scopes: [],
       filterUsers: '',
@@ -68,16 +69,32 @@ class CustomerManagement extends PureComponent {
     this.loadScopes();
   }
 
-  loadUsers = async () => {
+  loadUsers = async (start = 0) => {
     const {api} = this.props;
-    const {body: {users}} = await api.getUsers();
-    this.setState({users, loading: false});
+    const {body: {users, nextKey}} = await api.getUsers(start);
+    const state = {
+      users: (start === 0 ? [] : this.state.users).concat(users),
+    };
+    if (nextKey === '0') {
+      state.loadingUsers = false;
+    } else {
+      this.loadUsers(nextKey);
+    }
+    this.setState(state);
   };
 
-  loadApps = async () => {
+  loadApps = async (start = 0) => {
     const {api} = this.props;
-    const {body: {apps}} = await api.getApps();
-    this.setState({apps, loading: false});
+    const {body: {apps, nextKey}} = await api.getApps(start);
+    const state = {
+      apps: (start === 0 ? [] : this.state.apps).concat(apps),
+    };
+    if (nextKey === '0') {
+      state.loadingApps = false;
+    } else {
+      this.loadApps(nextKey);
+    }
+    this.setState(state);
   };
 
   loadCredentials = async (consumerId) => {
@@ -117,7 +134,7 @@ class CustomerManagement extends PureComponent {
       showRemovingModal: false,
       entryToRemove: null,
       entryToRemoveType: null,
-      loading: true,
+      [`loading${entryToRemoveType}`]: true,
     });
     if (entryToRemoveType === 'Users') {
       await api.removeUser(entryToRemove);
@@ -139,7 +156,8 @@ class CustomerManagement extends PureComponent {
     const {users, apps} = consumerManagement;
     const {api} = this.props;
     const {entry} = this.state;
-    this.setState({entry: null, loading: true});
+    const loading = `loading${users ? 'Users' : 'Apps'}`;
+    this.setState({entry: null, [loading]: true});
     try {
       if (users) {
         if (entry === 0) {
@@ -230,6 +248,18 @@ class CustomerManagement extends PureComponent {
     return check.test(item.name);
   };
 
+  sortByKey = key => (a, b) => {
+    let x = a[key];
+    let y = b[key];
+    if (typeof x == 'string') {
+      x = (''+x).toLowerCase();
+    }
+    if (typeof y == 'string') {
+      y = (''+y).toLowerCase();
+    }
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+  };
+
   renderFinder = () => {
     const {activeTab} = this.state;
     const filter = this.state[`filter${activeTab}`];
@@ -249,7 +279,7 @@ class CustomerManagement extends PureComponent {
   };
 
   renderUsersList = () => {
-    const {users, loading} = this.state;
+    const {users, loadingUsers} = this.state;
     const columns = [
       'Username',
       'First Name',
@@ -264,6 +294,7 @@ class CustomerManagement extends PureComponent {
     const centers = [false, false, false, false, true, false, false];
     const data = users
       .filter(this.filterUsers)
+      .sort(this.sortByKey('username'))
       .map(({id, username, firstname, lastname, redirectUri, isActive}) => [
         username,
         firstname,
@@ -276,7 +307,7 @@ class CustomerManagement extends PureComponent {
     return (
       <div>
         {this.renderFinder()}
-        <div className={cs('CustomerManagement__table', {loading})}>
+        <div className={cs('CustomerManagement__table', {loading: loadingUsers})}>
           <Table
             columns={columns}
             widths={widths}
@@ -339,10 +370,10 @@ class CustomerManagement extends PureComponent {
   };
 
   renderAppsList = (userId = null) => {
-    const {users, apps, loading} = this.state;
+    const {users, apps, loadingApps} = this.state;
     const columns = [
-      'Username',
       'Name',
+      'Username',
       'Redirect URI',
       'Active',
       '',
@@ -357,9 +388,10 @@ class CustomerManagement extends PureComponent {
     const centers = [false, false, false, true, false, false];
     const data = filteredApps
       .filter(userId !== null ? () => true : this.filterApps)
+      .sort(this.sortByKey('name'))
       .map(({id, userId, name, redirectUri, isActive}) => [
-      (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
       name,
+      (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
       redirectUri,
       isActive ? check : '',
       <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Apps')} />,
@@ -374,7 +406,7 @@ class CustomerManagement extends PureComponent {
     return (
       <div>
         {this.renderFinder()}
-        <div className={cs('CustomerManagement__table', {loading})}>
+        <div className={cs('CustomerManagement__table', {loading: loadingApps})}>
           <Table
             columns={columns}
             widths={widths}
@@ -470,7 +502,8 @@ class CustomerManagement extends PureComponent {
   };
 
   renderCredentialsListByType = (consumerId, type) => {
-    const {loading} = this.state;
+    const {loadingUsers, loadingApps} = this.state;
+    const loading = loadingUsers || loadingApps;
     const credentials = this.state.credentials[consumerId] || [];
     const columns = [];
     const widths = [

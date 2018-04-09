@@ -56,7 +56,7 @@
       border-style: solid;
       border-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.2) #000;
       position: absolute;
-      top: 50%;
+      top: 60px;
       left: 50%;
       animation: loader-animation 1.1s infinite linear;
       z-index: 1;
@@ -151,9 +151,9 @@
 
 @keyframes loader-animation {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: translateX(-50%) rotate(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: translateX(-50%) rotate(360deg);
   }
 }

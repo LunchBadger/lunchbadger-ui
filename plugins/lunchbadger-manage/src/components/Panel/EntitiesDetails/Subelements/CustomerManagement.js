@@ -9,6 +9,7 @@ import {
   Button,
   Checkbox,
   CollapsibleProperties,
+  EntityProperty,
   EntityPropertyLabel,
   IconSVG,
   Select,
@@ -48,9 +49,13 @@ class CustomerManagement extends PureComponent {
       showRemovingModal: false,
       entryToRemove: null,
       entryToRemoveType: null,
-      loading: true,
+      loadingUsers: true,
+      loadingApps: true,
       credentials: {},
       scopes: [],
+      filterUsers: '',
+      filterApps: '',
+      userId: null,
     };
   }
 
@@ -65,16 +70,32 @@ class CustomerManagement extends PureComponent {
     this.loadScopes();
   }
 
-  loadUsers = async () => {
+  loadUsers = async (start = 0) => {
     const {api} = this.props;
-    const {body: {users}} = await api.getUsers();
-    this.setState({users, loading: false});
+    const {body: {users, nextKey}} = await api.getUsers(start);
+    const state = {
+      users: (start === 0 ? [] : this.state.users).concat(users),
+    };
+    if (nextKey === '0') {
+      state.loadingUsers = false;
+    } else {
+      this.loadUsers(nextKey);
+    }
+    this.setState(state);
   };
 
-  loadApps = async () => {
+  loadApps = async (start = 0) => {
     const {api} = this.props;
-    const {body: {apps}} = await api.getApps();
-    this.setState({apps, loading: false});
+    const {body: {apps, nextKey}} = await api.getApps(start);
+    const state = {
+      apps: (start === 0 ? [] : this.state.apps).concat(apps),
+    };
+    if (nextKey === '0') {
+      state.loadingApps = false;
+    } else {
+      this.loadApps(nextKey);
+    }
+    this.setState(state);
   };
 
   loadCredentials = async (consumerId) => {
@@ -94,11 +115,11 @@ class CustomerManagement extends PureComponent {
 
   handleTabClick = activeTab => () => this.setState({activeTab});
 
-  handleEntry = (entry, activeTab = this.state.activeTab) => () => {
+  handleEntry = (entry, activeTab = this.state.activeTab, userId = null) => () => {
     if (['Users', 'Apps'].includes(activeTab)) {
       this.loadCredentials(entry);
     }
-    this.setState({entry, activeTab});
+    this.setState({entry, activeTab, userId});
   };
 
   handleToRemove = (entryToRemove, entryToRemoveType) => () => this.setState({
@@ -114,7 +135,7 @@ class CustomerManagement extends PureComponent {
       showRemovingModal: false,
       entryToRemove: null,
       entryToRemoveType: null,
-      loading: true,
+      [`loading${entryToRemoveType}`]: true,
     });
     if (entryToRemoveType === 'Users') {
       await api.removeUser(entryToRemove);
@@ -136,7 +157,8 @@ class CustomerManagement extends PureComponent {
     const {users, apps} = consumerManagement;
     const {api} = this.props;
     const {entry} = this.state;
-    this.setState({entry: null, loading: true});
+    const loading = `loading${users ? 'Users' : 'Apps'}`;
+    this.setState({entry: null, [loading]: true});
     try {
       if (users) {
         if (entry === 0) {
@@ -206,12 +228,63 @@ class CustomerManagement extends PureComponent {
     await this.loadScopes();
   };
 
+  preventSubmit = event => {
+    if (event.keyCode === 13 || event.which === 13) {
+      event.preventDefault();
+    }
+  };
+
+  handleFilterChange = ({target: {value}}) => {
+    const {activeTab} = this.state;
+    this.setState({[`filter${activeTab}`]: value});
+  };
+
+  filterUsers = item => {
+    const check = new RegExp(this.state.filterUsers, 'i');
+    return check.test(item.username) || check.test(item.firstname) || check.test(item.lastname);
+  };
+
+  filterApps = item => {
+    const check = new RegExp(this.state.filterApps, 'i');
+    return check.test(item.name);
+  };
+
+  sortByKey = key => (a, b) => {
+    let x = a[key];
+    let y = b[key];
+    if (typeof x == 'string') {
+      x = (''+x).toLowerCase();
+    }
+    if (typeof y == 'string') {
+      y = (''+y).toLowerCase();
+    }
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+  };
+
+  renderFinder = () => {
+    const {activeTab} = this.state;
+    const filter = this.state[`filter${activeTab}`];
+    return (
+      <div className="CustomerManagement__finder">
+        <EntityProperty
+          name="tmp[finder]"
+          value={filter}
+          placeholder=" "
+          onChange={this.handleFilterChange}
+          onDelete={filter ? () => this.handleFilterChange({target: {value: ''}}) : undefined}
+          onKeyDown={this.preventSubmit}
+          icon="iconMagnifier"
+        />
+      </div>
+    );
+  };
+
   renderUsersList = () => {
-    const {users, loading} = this.state;
+    const {users, loadingUsers} = this.state;
     const columns = [
+      'Username',
       'First Name',
       'Last Name',
-      'Username',
       'Redirect URI',
       'Active',
       '',
@@ -220,24 +293,30 @@ class CustomerManagement extends PureComponent {
     const widths = [200, 200, 200, undefined, 60, 30, 30];
     const paddings = [true, true, true, true, false, false, false];
     const centers = [false, false, false, false, true, false, false];
-    const data = users.map(({id, username, firstname, lastname, redirectUri, isActive}) => [
-      username,
-      firstname,
-      lastname,
-      redirectUri,
-      isActive ? check : '',
-      <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Users')} />,
-      <IconButton icon="iconDelete" onClick={this.handleToRemove(id, 'Users')} />,
-    ]);
+    const data = users
+      .filter(this.filterUsers)
+      .sort(this.sortByKey('username'))
+      .map(({id, username, firstname, lastname, redirectUri, isActive}) => [
+        username,
+        firstname,
+        lastname,
+        redirectUri,
+        isActive ? check : '',
+        <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Users')} />,
+        <IconButton icon="iconDelete" onClick={this.handleToRemove(id, 'Users')} />,
+      ]);
     return (
-      <div className={cs('CustomerManagement__table', {loading})}>
-        <Table
-          columns={columns}
-          widths={widths}
-          paddings={paddings}
-          data={data}
-          centers={centers}
-        />
+      <div>
+        {this.renderFinder()}
+        <div className={cs('CustomerManagement__table', {loading: loadingUsers})}>
+          <Table
+            columns={columns}
+            widths={widths}
+            paddings={paddings}
+            data={data}
+            centers={centers}
+          />
+        </div>
       </div>
     );
   };
@@ -292,14 +371,14 @@ class CustomerManagement extends PureComponent {
   };
 
   renderAppsList = (userId = null) => {
-    const {users, apps, loading} = this.state;
+    const {users, apps, loadingApps} = this.state;
     const columns = [
-      'Username',
       'Name',
+      'Username',
       'Redirect URI',
       'Active',
       '',
-      users.length ? <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps')} /> : '',
+      users.length ? <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps', userId)} /> : '',
     ];
     let filteredApps = apps;
     if (userId !== null) {
@@ -308,9 +387,12 @@ class CustomerManagement extends PureComponent {
     const widths = [200, 200, undefined, 60, 30, 30];
     const paddings = [true, true, true, false, false, false];
     const centers = [false, false, false, true, false, false];
-    const data = filteredApps.map(({id, userId, name, redirectUri, isActive}) => [
-      (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
+    const data = filteredApps
+      .filter(userId !== null ? () => true : this.filterApps)
+      .sort(this.sortByKey('name'))
+      .map(({id, userId, name, redirectUri, isActive}) => [
       name,
+      (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
       redirectUri,
       isActive ? check : '',
       <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Apps')} />,
@@ -320,23 +402,26 @@ class CustomerManagement extends PureComponent {
       columns.shift();
       widths.shift();
       paddings.shift();
-      data.map(row => row.shift());
+      data.map(row => row.splice(1, 1));
     }
     return (
-      <div className={cs('CustomerManagement__table', {loading})}>
-        <Table
-          columns={columns}
-          widths={widths}
-          paddings={paddings}
-          data={data}
-          centers={centers}
-        />
+      <div>
+        {this.renderFinder()}
+        <div className={cs('CustomerManagement__table', {loading: loadingApps})}>
+          <Table
+            columns={columns}
+            widths={widths}
+            paddings={paddings}
+            data={data}
+            centers={centers}
+          />
+        </div>
       </div>
     );
   };
 
   renderAppsEntry = () => {
-    const {entry, users, apps} = this.state;
+    const {entry, users, apps, userId} = this.state;
     const app = {};
     if (entry) {
       Object.assign(app, apps.find(({id}) => id === entry));
@@ -349,9 +434,12 @@ class CustomerManagement extends PureComponent {
     } else {
       schemas.properties.userId = {
         type: 'string',
-        enum: users.map(({username}) => username),
+        enum: users.map(({username}) => username).sort(),
       };
       schemas.required.push('userId');
+      if (userId) {
+        app.userId = users.find(({id}) => id === userId).username;
+      }
     }
     return (
       <div className="CustomerManagement__entry">
@@ -418,7 +506,8 @@ class CustomerManagement extends PureComponent {
   };
 
   renderCredentialsListByType = (consumerId, type) => {
-    const {loading} = this.state;
+    const {loadingUsers, loadingApps} = this.state;
+    const loading = loadingUsers || loadingApps;
     const credentials = this.state.credentials[consumerId] || [];
     const columns = [];
     const widths = [
@@ -543,6 +632,7 @@ class CustomerManagement extends PureComponent {
       <div className="CustomerManagement">
         {entry === null && (
           <div className="CustomerManagement__list">
+            {this[`render${activeTab}List`]()}
             <div className="tabs">
               {tabs.map(tab => (
                 <div
@@ -554,7 +644,6 @@ class CustomerManagement extends PureComponent {
                 </div>
               ))}
             </div>
-            {this[`render${activeTab}List`]()}
           </div>
         )}
         {entry !== null && (

@@ -15,9 +15,10 @@ import {
   Table,
 } from '../../';
 import getPlainText from '../../utils/getPlainText';
-import {iconDelete, iconRevert} from '../../../../../src/icons';
+import * as icons from '../../../../../src/icons';
 import './EntityProperty.scss';
 
+const {iconDelete, iconRevert} = icons;
 const widths = [120, undefined, 50];
 const paddings = [true, true, false];
 const centers = [false, false, false];
@@ -42,6 +43,7 @@ class EntityProperty extends Component {
     onChange: PropTypes.func,
     onDelete: PropTypes.func,
     onBlur: PropTypes.func,
+    onKeyDown: PropTypes.func,
     underlineStyle: PropTypes.object,
     onViewModeClick: PropTypes.func,
     onClick: PropTypes.func,
@@ -67,6 +69,7 @@ class EntityProperty extends Component {
     slugify: PropTypes.bool,
     type: PropTypes.string,
     noMarginRight: PropTypes.bool,
+    icon: PropTypes.string,
   };
 
   static defaultProps = {
@@ -81,6 +84,7 @@ class EntityProperty extends Component {
     onChange: () => {},
     onBlur: () => {},
     onResetField: () => {},
+    onKeyDown: () => {},
     width: 0,
     bool: false,
     autocomplete: false,
@@ -92,6 +96,7 @@ class EntityProperty extends Component {
     object: false,
     classes: '',
     slugify: false,
+    icon: '',
   };
 
   constructor(props) {
@@ -120,7 +125,7 @@ class EntityProperty extends Component {
 
   handleTab = (event) => {
     const {which, keyCode, shiftKey, target: {value}} = event;
-    const {onTab, onBlur, chips} = this.props;
+    const {onTab, onBlur, chips, onKeyDown} = this.props;
     if (value.trim() !== '' && chips && typeof onBlur === 'function' && (which === 13 || keyCode === 13)) {
       onBlur(value);
     }
@@ -128,6 +133,7 @@ class EntityProperty extends Component {
       if (!((which === 9 || keyCode === 9) && !shiftKey)) return;
       onTab(event);
     }
+    onKeyDown(event);
   }
 
   handleMouseEnter = () => this.setState({tooltipVisible: true});
@@ -344,6 +350,7 @@ class EntityProperty extends Component {
       classes,
       type,
       noMarginRight,
+      icon,
     } = this.props;
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -357,6 +364,7 @@ class EntityProperty extends Component {
       ['EntityProperty__delta']: isDelta,
       ['EntityProperty__selected']: selected,
       ['EntityProperty__codeEditor']: codeEditor,
+      ['EntityProperty__withIcon']: icon !== '',
       noMarginRight,
     });
     const filler = placeholder || `Enter ${title} here`;
@@ -433,6 +441,9 @@ class EntityProperty extends Component {
         </SmoothCollapse>
         {button && (
           <div className="EntityProperty__button">{button}</div>
+        )}
+        {icon !== '' && (
+          <IconSVG svg={icons[icon]} className="EntityProperty__icon" />
         )}
       </div>
     );

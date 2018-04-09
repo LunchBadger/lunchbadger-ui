@@ -24,7 +24,7 @@ class ExpressGatewayAdminService {
 
   putPipeline = (name, body) => this.api.put(`/pipelines/${name}`, {body});
 
-  getUsers = () => this.api.get('/users');
+  getUsers = start => this.api.get(`/users?start=${start}`);
 
   createUser = body => this.api.post('/users', {body});
 
@@ -34,7 +34,7 @@ class ExpressGatewayAdminService {
 
   setUserStatus = (username, status) => this.api.put(`/users/${username}/status`, {body: {status}});
 
-  getApps = () => this.api.get('/apps');
+  getApps = start => this.api.get(`/apps?start=${start}`);
 
   createApp = body => this.api.post('/apps', {body});
 

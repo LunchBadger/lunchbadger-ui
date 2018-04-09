@@ -1,0 +1,10 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  viewBox="0 0 100 100" xml:space="preserve">
+  <style type="text/css">
+    .icon-magnifier-0{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:15;}
+  </style>
+  <g>
+    <line class="icon-magnifier-0" x1="70" y1="70" x2="90" y2="90"/>
+    <circle class="icon-magnifier-0" cx="42" cy="42" r="30"/>
+  </g>
+</svg>

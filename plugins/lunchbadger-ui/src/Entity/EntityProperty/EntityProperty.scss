@@ -216,4 +216,17 @@
   &.noMarginRight {
     margin-right: 0;
   }
+  &__icon {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    stroke: #ccc;
+  }
+  &__withIcon {
+    & > .EntityProperty__field > .EntityProperty__field--input > div > input {
+      text-indent: 20px;
+    }
+  }
 }

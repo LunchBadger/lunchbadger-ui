@@ -34,6 +34,7 @@ import iconFunction from './icon-function.svg';
 import iconGateway from './icon-gateway.svg';
 import iconLeaf from './icon-leaf.svg';
 import iconLogout from './icon-logout.svg';
+import iconMagnifier from './icon-magnifier.svg';
 import iconMicroservice from './icon-microservice.svg';
 import iconModeHorizontal from './icon-mode-horizontal.svg';
 import iconModeVertical from './icon-mode-vertical.svg';
@@ -87,6 +88,7 @@ export {
   iconGateway,
   iconLeaf,
   iconLogout,
+  iconMagnifier,
   iconMicroservice,
   iconModeHorizontal,
   iconModeVertical,

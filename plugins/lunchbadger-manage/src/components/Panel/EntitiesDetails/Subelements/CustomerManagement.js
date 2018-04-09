@@ -55,6 +55,7 @@ class CustomerManagement extends PureComponent {
       scopes: [],
       filterUsers: '',
       filterApps: '',
+      userId: null,
     };
   }
 
@@ -114,11 +115,11 @@ class CustomerManagement extends PureComponent {
 
   handleTabClick = activeTab => () => this.setState({activeTab});
 
-  handleEntry = (entry, activeTab = this.state.activeTab) => () => {
+  handleEntry = (entry, activeTab = this.state.activeTab, userId = null) => () => {
     if (['Users', 'Apps'].includes(activeTab)) {
       this.loadCredentials(entry);
     }
-    this.setState({entry, activeTab});
+    this.setState({entry, activeTab, userId});
   };
 
   handleToRemove = (entryToRemove, entryToRemoveType) => () => this.setState({
@@ -377,7 +378,7 @@ class CustomerManagement extends PureComponent {
       'Redirect URI',
       'Active',
       '',
-      users.length ? <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps')} /> : '',
+      users.length ? <IconButton icon="iconPlus" onClick={this.handleEntry(0, 'Apps', userId)} /> : '',
     ];
     let filteredApps = apps;
     if (userId !== null) {
@@ -401,7 +402,7 @@ class CustomerManagement extends PureComponent {
       columns.shift();
       widths.shift();
       paddings.shift();
-      data.map(row => row.shift());
+      data.map(row => row.splice(1, 1));
     }
     return (
       <div>
@@ -420,7 +421,7 @@ class CustomerManagement extends PureComponent {
   };
 
   renderAppsEntry = () => {
-    const {entry, users, apps} = this.state;
+    const {entry, users, apps, userId} = this.state;
     const app = {};
     if (entry) {
       Object.assign(app, apps.find(({id}) => id === entry));
@@ -433,9 +434,12 @@ class CustomerManagement extends PureComponent {
     } else {
       schemas.properties.userId = {
         type: 'string',
-        enum: users.map(({username}) => username),
+        enum: users.map(({username}) => username).sort(),
       };
       schemas.required.push('userId');
+      if (userId) {
+        app.userId = users.find(({id}) => id === userId).username;
+      }
     }
     return (
       <div className="CustomerManagement__entry">

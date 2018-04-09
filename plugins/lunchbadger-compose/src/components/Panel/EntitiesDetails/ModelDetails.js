@@ -19,6 +19,7 @@ import {
   Select,
   Table,
   IconButton,
+  CodeEditor,
 } from '../../../../../lunchbadger-ui/src';
 import './ModelDetails.scss';
 
@@ -506,7 +507,24 @@ class ModelDetails extends PureComponent {
       widths={widths}
       paddings={paddings}
     />;
-  }
+  };
+
+  renderModelCodeSection = () => {
+    const {entity, workspaceFiles} = this.props;
+    const name = entity.name.toLowerCase();
+    const file = workspaceFiles.files.server.models[`${name}.js`];
+    return (
+      <div>
+        <CodeEditor
+          name="files"
+          value={file}
+          fullWidth={true}
+          initialHeight={200}
+          mode="editor"
+        />
+      </div>
+    );
+  };
 
   render() {
     const sections = [
@@ -514,6 +532,7 @@ class ModelDetails extends PureComponent {
       {title: 'User-defined fields', render: 'UserDefinedFields'},
       {title: 'Relations'},
       {title: 'Properties'},
+      {title: 'Model.js', render: 'ModelCode'},
     ];
     return (
       <div>
@@ -535,11 +554,18 @@ const selector = createSelector(
   state => state.entities.dataSources,
   state => state.entities.models,
   state => state.entities.modelsBundled,
-  (dataSources, models, modelsBundled) => ({
+  state => state.entities.workspaceFiles,
+  (
+    dataSources,
+    models,
+    modelsBundled,
+    workspaceFiles,
+  ) => ({
     dataSources,
     modelOptions: Object.keys(models).map(key => models[key].name)
       .concat(Object.keys(modelsBundled).map(key => modelsBundled[key].name))
       .map(label => ({label, value: label})),
+    workspaceFiles,
   }),
 );
 

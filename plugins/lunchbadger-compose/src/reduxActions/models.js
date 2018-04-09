@@ -4,6 +4,10 @@ import Model from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
 import ModelRelation from '../models/ModelRelation';
 import DataSource from '../models/DataSource';
+import {
+  reload as workspaceFilesReload,
+  update as workspaceFilesUpdate,
+} from './workspaceFiles';
 
 const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
@@ -19,6 +23,8 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
+  let {files} = model;
+  delete model.files;
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
@@ -32,7 +38,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
     type += 'Bundled';
     updateAction += 'Bundled';
   }
-  const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
+  const prevName = state.entities[type][entity.id].name;
+  const isDifferent = entity.loaded && model.name !== prevName;
   updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
   dispatch(actions[updateAction](updatedEntity));
   try {
@@ -49,6 +56,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
         dataSource: dataSource ? dataSource.name : null,
         public: updatedEntity.public,
       });
+      if (files === undefined) {
+        const prevModelJsName = `${prevName.toLowerCase()}.js`;
+        const prevContent = state.entities.workspaceFiles.files.server.models[prevModelJsName];
+        files = prevContent;
+      }
     }
     const {body} = await ModelService.upsert(updatedEntity.toJSON());
     updatedEntity = Model.create(body);
@@ -79,6 +91,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
           return relation;
         });
       }
+    }
+    if (files) {
+      await dispatch(workspaceFilesUpdate(`${updatedEntity.name.toLowerCase()}.js`, files));
+    } else {
+      await dispatch(workspaceFilesReload());
     }
     dispatch(actions[updateAction](updatedEntity));
     await dispatch(coreActions.saveToServer());

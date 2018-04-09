@@ -24,6 +24,8 @@ const {actions, actionTypes} = LunchBadgerCore.utils.actionsCreator(
     'removeFunction',
 
     'updateSlsService',
+
+    'updateWorkspaceFiles',
   ],
 );
 

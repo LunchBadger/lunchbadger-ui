@@ -5,6 +5,12 @@
     top: 15px;
     right: -25px;
   }
+  & > .CodeEditor__button {
+    display: none;
+  }
+  &:hover > .CodeEditor__button {
+    display: block;
+  }
   &.editorMode {
     .CodeEditor__input {
       display: none;

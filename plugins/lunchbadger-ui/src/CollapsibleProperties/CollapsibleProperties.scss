@@ -105,4 +105,10 @@
       display: none;
     }
   }
+  &.buttonOnHover > .CollapsibleProperties__bar > .CollapsibleProperties__bar__right > .CollapsibleProperties__bar__right--button {
+    display: none;
+  }
+  &.buttonOnHover > .CollapsibleProperties__bar > .CollapsibleProperties__bar__right:hover > .CollapsibleProperties__bar__right--button {
+    display: block;
+  }
 }

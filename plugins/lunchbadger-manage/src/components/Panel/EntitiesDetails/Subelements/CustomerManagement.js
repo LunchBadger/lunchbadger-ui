@@ -147,11 +147,7 @@ class CustomerManagement extends PureComponent {
     }
   };
 
-  handleOK = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    window.dispatchEvent(new CustomEvent('formSubmited', {detail: this.processModel}));
-  };
+  isForm = () => this.state.entry !== null;
 
   processModel = async ({consumerManagement}) => {
     const {users, apps} = consumerManagement;
@@ -359,13 +355,6 @@ class CustomerManagement extends PureComponent {
             defaultOpened
           />
         )}
-        <Button
-          onClick={this.handleOK}
-          className="submit"
-          name="submit"
-        >
-          OK
-        </Button>
       </div>
     );
   };
@@ -460,13 +449,6 @@ class CustomerManagement extends PureComponent {
             defaultOpened
           />
         )}
-        <Button
-          onClick={this.handleOK}
-          className="submit"
-          name="submit"
-        >
-          OK
-        </Button>
       </div>
     );
   };

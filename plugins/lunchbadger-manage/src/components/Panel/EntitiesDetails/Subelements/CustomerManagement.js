@@ -76,7 +76,7 @@ class CustomerManagement extends PureComponent {
     const state = {
       users: (start === 0 ? [] : this.state.users).concat(users),
     };
-    if (nextKey === '0') {
+    if (+nextKey === 0) {
       state.loadingUsers = false;
     } else {
       this.loadUsers(nextKey);
@@ -90,7 +90,7 @@ class CustomerManagement extends PureComponent {
     const state = {
       apps: (start === 0 ? [] : this.state.apps).concat(apps),
     };
-    if (nextKey === '0') {
+    if (+nextKey === 0) {
       state.loadingApps = false;
     } else {
       this.loadApps(nextKey);

@@ -4,8 +4,42 @@
     height: 100%;
     position: relative;
   }
+  &.isCanvasEditDisabled {
+    .BaseDetails__name {
+      display: none;
+    }
+  }
   &__name {
-    display: none;
+    position: absolute;
+    top: -48px;
+    left: 61px;
+    right: 66px;
+    background-color: #4190CE;
+    max-width: 200px;
+    .EntityProperty {
+      margin-right: 0;
+    }
+    .EntityProperty__field {
+      color: #FFF;
+      input {
+        &::-webkit-input-placeholder {
+          color: inherit;
+          opacity: 0.5;
+        }
+        &:-ms-input-placeholder {
+          color: inherit;
+          opacity: 0.5;
+        }
+        &::-moz-placeholder {
+          color: inherit;
+          opacity: 0.5;
+        }
+        &:-moz-placeholder {
+          color: inherit;
+          opacity: 0.5;
+        }
+      }
+    }
   }
   &__content {
     height: calc(100% - 90px);

@@ -138,8 +138,12 @@ export default (ComposedComponent) => {
 
     render() {
       const {validations} = this.state;
+      const {isCanvasEditDisabled} = this.props.entity;
+      const underlineStyle = {
+        borderColor: '#8dbde2',
+      }
       return (
-        <div className={cs('BaseDetails', 'details-panel__element', this.props.rect.tab)}>
+        <div className={cs('BaseDetails', 'details-panel__element', this.props.rect.tab, {isCanvasEditDisabled})}>
           <Form
             name="panelForm"
             ref="form"
@@ -153,6 +157,8 @@ export default (ComposedComponent) => {
               <EntityProperty
                 name="name"
                 value={this.props.entity.name}
+                underlineStyle={underlineStyle}
+                invalidUnderlineColor="#FFF"
               />
             </div>
             <div className="BaseDetails__content">

@@ -26,7 +26,7 @@ class Entity extends PureComponent {
 
   getFormRef = () => this.refs.form;
 
-  handleToggleExpand = () => {
+  handleToggleExpand = (event) => {
     const expanded = !this.state.expanded;
     this.refs.data.querySelectorAll('.port__middle').forEach((portRef) => {
       if (!expanded) {
@@ -38,6 +38,7 @@ class Entity extends PureComponent {
       }
     });
     this.setState({expanded});
+    event.stopPropagation();
   }
 
   render() {

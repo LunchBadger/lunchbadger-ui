@@ -68,6 +68,17 @@ class GatewayDetails extends PureComponent {
     this.onPropsUpdate(this.props, callback);
   };
 
+  tabProcessed = model => {
+    if (this.props.rect.tab === 'customerManagement') {
+      const {isForm, processModel} = this.customerManagementRef;
+      if (isForm()) {
+        processModel(model);
+        return true;
+      }
+    }
+    return false;
+  };
+
   processModel = model => {
     const {entity} = this.props;
     const {paper: paperRef} = this.context;
@@ -675,6 +686,7 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="customerManagement" key="customerManagement">
         <CustomerManagement
+          ref={r => this.customerManagementRef = r}
           api={adminApi}
         />
       </div>

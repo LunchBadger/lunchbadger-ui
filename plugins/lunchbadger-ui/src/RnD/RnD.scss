@@ -84,6 +84,12 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      &__text {
+        width: calc(100% - 67px);
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }

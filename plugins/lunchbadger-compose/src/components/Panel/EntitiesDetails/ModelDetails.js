@@ -511,8 +511,7 @@ class ModelDetails extends PureComponent {
 
   renderModelCodeSection = () => {
     const {entity, workspaceFiles} = this.props;
-    const name = entity.name.toLowerCase();
-    const file = workspaceFiles.files.server.models[`${name}.js`];
+    const file = workspaceFiles.files.server.models[entity.modelJsName];
     return (
       <div>
         <CodeEditor

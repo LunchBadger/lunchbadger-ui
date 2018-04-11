@@ -233,6 +233,10 @@ export default class Model extends BaseModel {
     return 'string';
   }
 
+  get modelJsName() {
+    return this.configFile.split('/').pop().replace(/\.json$/,'') + '.js';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

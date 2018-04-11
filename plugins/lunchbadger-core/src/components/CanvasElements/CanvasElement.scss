@@ -2,6 +2,7 @@
 
 .CanvasElement {
   position: relative;
+  &.deploying:hover,
   &.crashed:hover {
     .Toolbox {
       opacity: 1;

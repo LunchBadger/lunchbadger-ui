@@ -337,7 +337,7 @@ export default (ComposedComponent) => {
           });
         }
       } else {
-        if (multiEnvIndex === 0 && !deleting && !deploying) {
+        if (multiEnvIndex === 0 && !deleting) {
           toolboxConfig.push({
             action: 'delete',
             icon: 'iconTrash',

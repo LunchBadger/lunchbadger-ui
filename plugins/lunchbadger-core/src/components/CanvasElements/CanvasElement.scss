@@ -2,74 +2,15 @@
 
 .CanvasElement {
   position: relative;
+  &.crashed:hover {
+    .Toolbox {
+      opacity: 1;
+      z-index: 17;
+      pointer-events: auto;
+      visibility: visible;
+    }
+  }
 }
-
-// .canvas-element {
-//   max-width: 100%;
-//   min-width: 200px;
-//   color: rgb(41, 134, 156);
-//   position: relative;
-//   display: block;
-//   background: $ui-light;
-//   border-radius: 3px;
-//   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-//   padding: 0;
-//   margin: 20px 0;
-//   transform: translateZ(0);
-//   font-weight: normal;
-//   &.mouse-over {
-//     z-index: 1;
-//   }
-//   &.editable {
-//     z-index: 15;
-//     .model-property:hover {
-//       .model-property__remove.fa {
-//         display: block;
-//       }
-//     }
-//     .hide-while-edit {
-//       display: none;
-//     }
-//     .editable-only {
-//       display: block;
-//     }
-//     .canvas-element__properties__property-value {
-//       border-color: rgb(222, 222, 221);
-//     }
-//     .canvas-element__actions {
-//       height: 65px;
-//       .canvas-element__actions__box {
-//         margin-top: 24px;
-//       }
-//     }
-//   }
-//   .canvas-element__properties__property-value {
-//     &.canvas-element__properties__property-fake {
-//       border: none;
-//       padding: 6px 0 0 7px;
-//     }
-//   }
-//   &.expanded {
-//     padding-bottom: 0;
-//     .expanded-only {
-//       display: block;
-//     }
-//     .canvas-element__extra {
-//       overflow: hidden;
-//     }
-//   }
-//   &.wip {
-//     opacity: .4 !important;
-//     pointer-events: none !important;
-//     z-index: 15;
-//     .canvas-element__extra {
-//       visibility: hidden;
-//     }
-//   }
-//   &.highlighted {
-//     color: rgb(65, 144, 206);
-//   }
-// }
 
 .canvas-element__port {
   position: absolute;

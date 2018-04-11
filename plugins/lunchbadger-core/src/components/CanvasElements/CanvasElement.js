@@ -274,7 +274,9 @@ export default (ComposedComponent) => {
     }
 
     handleClick = (event) => {
-      const {entity, dispatch} = this.props;
+      const {entity, dispatch, running} = this.props;
+      const {ready} = entity;
+      if (!ready || !running) return;
       dispatch(setCurrentElement(entity));
       event.stopPropagation();
     }
@@ -318,6 +320,7 @@ export default (ComposedComponent) => {
         status,
         isCanvasEditDisabled,
       } = entity;
+      const deploying = status === 'deploying';
       const processing = !ready || !running || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
@@ -334,7 +337,7 @@ export default (ComposedComponent) => {
           });
         }
       } else {
-        if (multiEnvIndex === 0) {
+        if (multiEnvIndex === 0 && !deleting && !deploying) {
           toolboxConfig.push({
             action: 'delete',
             icon: 'iconTrash',
@@ -342,7 +345,7 @@ export default (ComposedComponent) => {
             label: 'Remove',
           });
         }
-        if (!isZoomDisabled) {
+        if (!isZoomDisabled && running) {
           toolboxConfig.push({
             action: 'zoom',
             icon: 'iconBasics',
@@ -358,7 +361,7 @@ export default (ComposedComponent) => {
             });
           });
         }
-        if (!isCanvasEditDisabled) {
+        if (!isCanvasEditDisabled && running) {
           toolboxConfig.push({
             action: 'edit',
             icon: 'iconEdit',
@@ -370,7 +373,7 @@ export default (ComposedComponent) => {
       const {type} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
       return (
-        <div className={cs('CanvasElement', type, {highlighted, editable, wip: processing, semitransparent})}>
+        <div className={cs('CanvasElement', type, status, {highlighted, editable, wip: processing, semitransparent})}>
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}
@@ -410,21 +413,21 @@ export default (ComposedComponent) => {
                   multiEnvIndex={multiEnvIndex}
                 />
               )}
-              {this.state.showRemovingModal && (
-                <TwoOptionModal
-                  onClose={() => this.setState({showRemovingModal: false})}
-                  onSave={this.handleRemove}
-                  onCancel={() => this.setState({showRemovingModal: false})}
-                  title="Remove entity"
-                  confirmText="Remove"
-                  discardText="Cancel"
-                >
-                  <span>
-                    Do you really want to remove that entity?
-                  </span>
-                </TwoOptionModal>
-              )}
             </Entity>
+            {this.state.showRemovingModal && (
+              <TwoOptionModal
+                onClose={() => this.setState({showRemovingModal: false})}
+                onSave={this.handleRemove}
+                onCancel={() => this.setState({showRemovingModal: false})}
+                title="Remove entity"
+                confirmText="Remove"
+                discardText="Cancel"
+              >
+                <span>
+                  Do you really want to remove that entity?
+                </span>
+              </TwoOptionModal>
+            )}
             <EntityStatus status={status} />
             {this.state.showNotRunningModal && (
               <OneOptionModal

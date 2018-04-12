@@ -33,6 +33,7 @@ import CodeEditor from './Form/CodeEditor';
 import Table from './Table/Table';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import Transitioning from './Transitioning/Transitioning';
 import {Form} from './utils/Formsy/main';
 
 import {
@@ -114,6 +115,7 @@ export {
   Tool,
   Toolbox,
   TopBar,
+  Transitioning,
   entityIcons,
   dataSourceIcons,
 };

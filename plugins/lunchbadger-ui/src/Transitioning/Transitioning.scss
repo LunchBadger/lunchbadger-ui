@@ -1,0 +1,31 @@
+.Transitioning-enter {
+  opacity: 0.01;
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  transform: scale(0, 0);
+}
+
+.Transitioning-enter.Transitioning-enter-active {
+  opacity: 1;
+  max-width: 800px;
+  max-height: 800px;
+  transform: scale(1, 1);
+  transition: all 500ms;
+}
+
+.Transitioning-leave {
+  opacity: 1;
+  max-width: 1200px;
+  max-height: 1200px;
+  overflow: hidden;
+  transform: scale(1, 1);
+}
+
+.Transitioning-leave.Transitioning-leave-active {
+  opacity: 0.01;
+  max-width: 0;
+  max-height: 0;
+  transform: scale(0, 0);
+  transition: all 500ms;
+}

@@ -10,6 +10,7 @@ export default {
   slsUrl: 'http://fn-{USER}-{ENV}-{FN}:8080',
   kubeWatcherApiUrl: 'https://kube-watcher.lunchbadger.com',
   slsApiUrl: 'https://sls-{USER}-{ENV}.lunchbadger.io',
+  sshManagerUrl: 'https://api.lunchbadger.com/users/customer/{USER}',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

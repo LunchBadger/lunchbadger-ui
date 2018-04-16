@@ -9,6 +9,7 @@ import ConfigStoreService from '../../services/ConfigStoreService';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import {getUser} from '../../utils/auth';
+import SshManager from './EntitiesDetails/SshManager';
 import './SettingsPanel.scss';
 
 class SettingsPanel extends Component {
@@ -145,6 +146,7 @@ class SettingsPanel extends Component {
             </div>
           </div>
         </div>
+        <SshManager />
       </div>
     );
   }

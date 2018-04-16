@@ -23,6 +23,7 @@ export default {
   slsUrl: 'http://fn-{USER}-{ENV}-{FN}:8080',
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
   slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
+  sshManagerUrl: `http://${prefix}api.lunchbadger.com/users/customer/{USER}`,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

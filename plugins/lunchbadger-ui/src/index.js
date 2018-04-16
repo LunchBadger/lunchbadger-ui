@@ -31,6 +31,7 @@ import Select from './Form/Select';
 import CodeEditor from './Form/CodeEditor';
 
 import Table from './Table/Table';
+import CopyOnHover from './CopyOnHover/CopyOnHover';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import {Form} from './utils/Formsy/main';
@@ -89,6 +90,7 @@ export {
   CollapsibleProperties,
   ContextualInformationMessage,
   ContextualMenu,
+  CopyOnHover,
   Entity,
   EntityActionButtons,
   EntityProperties,

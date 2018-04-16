@@ -13,7 +13,8 @@ const serviceUrls = [
   'customerUrl',
   'kubeWatcherApiUrl',
   'slsApiUrl',
-  'slsUrl'
+  'slsUrl',
+  'sshManagerUrl'
 ];
 
 class Cfg {

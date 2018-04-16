@@ -1,0 +1,24 @@
+.CopyOnHover {
+  display: inline-block;
+  width: 100%;
+  border-radius: 10px;
+  padding: 5px 8px;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    background-color: #EEE;
+    .button {
+      display: block;
+    }
+  }
+  .button {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    background-color: rgba(#EEE, 0.9);
+    display: none;
+    .iconCopy {
+      margin: 5px;
+    }
+  }
+}

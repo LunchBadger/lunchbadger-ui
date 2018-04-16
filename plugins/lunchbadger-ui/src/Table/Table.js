@@ -18,33 +18,39 @@ export default class TableComponent extends PureComponent {
     widths: PropTypes.array,
     paddings: PropTypes.array,
     centers: PropTypes.array,
+    tableLayout: PropTypes.string,
+    verticalAlign: PropTypes.string,
   };
 
   static defaultProps = {
     widths: [],
     paddings: [],
     centers: [],
+    tableLayout: 'auto',
+    verticalAlign: 'bottom',
   };
 
   getColumnStyles = (idx, isHeader = false) => {
-    const {widths, paddings, centers} = this.props;
+    const {widths, paddings, centers, verticalAlign} = this.props;
     return {
       width: widths[idx],
       padding: !paddings[idx] ? 0 : (isHeader ? '0 8px' : undefined),
-      verticalAlign: (!paddings[idx] || isHeader) ? 'middle' : 'bottom',
+      verticalAlign: (!paddings[idx] || isHeader) ? 'middle' : verticalAlign,
       textAlign: centers[idx] ? 'center' : 'left',
     };
   };
 
   render() {
-    const {columns, data, widths} = this.props;
+    const {columns, data, widths, tableLayout} = this.props;
     const minWidth = widths.reduce((size, item) => size += item || 100, 0);
+    const style = {tableLayout};
     return (
       <div style={{overflowX: 'auto'}}>
         <div style={{minWidth}}>
           <Table
             className="Table"
             selectable={false}
+            style={style}
           >
             <TableHeader
               adjustForCheckbox={false}

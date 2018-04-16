@@ -168,6 +168,7 @@
     text-indent: 10px;
     .EntityProperty__field {
       color: #FFF;
+      position: relative;
     }
     &:before {
       display: block;
@@ -178,7 +179,6 @@
       left: 10px;
       right: 0;
       bottom: 5px;
-      z-index: -1;
       border-radius: 5px;
     }
   }

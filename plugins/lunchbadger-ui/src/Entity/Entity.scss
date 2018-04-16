@@ -6,7 +6,6 @@
   color: rgb(41, 134, 156);
   position: relative;
   display: block;
-  background: $ui-light;
   border-radius: 3px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   padding: 0;
@@ -16,6 +15,9 @@
   font-weight: normal;
   .multiEnvNotDev & {
     transform: none;
+  }
+  form {
+    background: $ui-light;
   }
   &.editable {
     z-index: 15;
@@ -33,14 +35,17 @@
   }
   &.wip {
     pointer-events: none !important;
-    z-index: 15;
+    transform: none !important;
+    .Toolbox,
     .canvas-element__extra {
       // max-height: 0;
       visibility: hidden;
     }
   }
   &.semitransparent {
-    opacity: .4 !important;
+    form {
+      opacity: .4 !important;
+    }
   }
   &.gray {
     filter: grayscale(1);

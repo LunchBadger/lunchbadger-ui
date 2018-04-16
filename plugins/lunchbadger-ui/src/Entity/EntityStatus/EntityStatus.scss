@@ -15,6 +15,9 @@
   top: 4px;
   right: 13px;
   z-index: 16;
+  .canvas__container--editing & {
+    z-index: 9;
+  }
   &:before {
     display: none;
     content: '';

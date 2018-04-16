@@ -38,9 +38,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
     type += 'Bundled';
     updateAction += 'Bundled';
   }
-  const prevName = state.entities[type][entity.id].name;
-  const isDifferent = entity.loaded && model.name !== prevName;
-  updatedEntity = Model.create({...entity.toJSON(), ...model, ready: false});
+  const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
+  updatedEntity = Model.create({
+    configFile: entity.configFile,
+    ...entity.toJSON(),
+    ...model,
+    ready: false,
+  });
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
@@ -57,13 +61,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
         public: updatedEntity.public,
       });
       if (files === undefined) {
-        const prevModelJsName = `${prevName.toLowerCase()}.js`;
-        const prevContent = state.entities.workspaceFiles.files.server.models[prevModelJsName];
-        files = prevContent;
+        files = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
       }
     }
-    const {body} = await ModelService.upsert(updatedEntity.toJSON());
-    updatedEntity = Model.create(body);
+    const {body: {lunchbadgerId}} = await ModelService.upsert(updatedEntity.toJSON());
+    const {body} = await ModelService.load();
+    const updatedModel = body.find(item => item.lunchbadgerId === lunchbadgerId);
+    updatedEntity = Model.create(updatedModel);
     await ModelService.deleteProperties(updatedEntity.workspaceId);
     if (model.properties.length > 0) {
       const upsertProperties = model.properties.map((item) => {
@@ -93,7 +97,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       }
     }
     if (files) {
-      await dispatch(workspaceFilesUpdate(`${updatedEntity.name.toLowerCase()}.js`, files));
+      await dispatch(workspaceFilesUpdate(updatedEntity.modelJsName, files));
     } else {
       await dispatch(workspaceFilesReload());
     }

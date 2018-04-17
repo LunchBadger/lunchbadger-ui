@@ -33,7 +33,16 @@ class ApiClient {
           return reject(error);
         }
         if (response.statusCode >= 400) {
-          const message = (body.error && body.error.stack) ? body.error.stack : body;
+          let message = body;
+          if (typeof body === 'object') {
+            message = JSON.stringify(body);
+          }
+          if (body.err && typeof body.err === 'string') {
+            message = body.err;
+          }
+          if (body.error && body.error.stack) {
+            message = body.error.stack;
+          }
           return reject(new ApiError(response.statusCode, message));
         }
         if (response.statusCode === 0) {

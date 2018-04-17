@@ -2,6 +2,9 @@ import React, {PureComponent} from 'react';
 import SshManagerService from '../../../services/SshManagerService';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
 import {
+  Form,
+  EntityActionButtons,
+  EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
   Table,
@@ -17,6 +20,8 @@ class SshManager extends PureComponent {
       publicKeys: [],
       showRemovingModal: false,
       idToRemove: null,
+      adding: false,
+      invalid: '',
     };
   }
 
@@ -38,6 +43,20 @@ class SshManager extends PureComponent {
     await this.loadPublicKeys();
   };
 
+  handleUpload = async (model) => {
+    if (model.publicKey === '') {
+      this.setState({invalid: 'no key provided'});
+      return;
+    }
+    try {
+      await SshManagerService.create(model);
+      this.setState({adding: false});
+      await this.loadPublicKeys();
+    } catch (e) {
+      this.setState({invalid: e.message});
+    }
+  };
+
   sortByKey = key => (a, b) => {
     let x = a[key];
     let y = b[key];
@@ -51,12 +70,16 @@ class SshManager extends PureComponent {
   };
 
   renderPublicKeys = () => {
-    const {publicKeys} = this.state;
+    const {
+      publicKeys,
+      adding,
+      invalid,
+    } = this.state;
     const columns = [
       'Created at',
       'Title',
       'Fingerprint',
-      '',
+      <IconButton icon="iconPlus" onClick={() => this.setState({adding: true})} />,
     ];
     const data = publicKeys
       .sort(this.sortByKey('created_at'))
@@ -83,14 +106,34 @@ class SshManager extends PureComponent {
       true,
       false,
     ];
-    return <Table
-      columns={columns}
-      data={data}
-      widths={widths}
-      paddings={paddings}
-      tableLayout="fixed"
-      verticalAlign="middle"
-    />;
+    return (
+      <div>
+        {adding && (
+          <Form name="publicKey" onValidSubmit={this.handleUpload}>
+            <EntityProperty
+              name="publicKey"
+              value=""
+              title="New public Key"
+              placeholder="Enter public key here..."
+              textarea
+              invalid={invalid}
+            />
+            <EntityActionButtons
+              onCancel={() => this.setState({adding: false, invalid: ''})}
+              okLabel="Upload"
+            />
+          </Form>
+        )}
+        <Table
+          columns={columns}
+          data={data}
+          widths={widths}
+          paddings={paddings}
+          tableLayout="fixed"
+          verticalAlign="middle"
+        />;
+      </div>
+    );
   };
 
   render() {

@@ -105,7 +105,7 @@ export default class Gateway extends BaseModel {
     if (consumerManagement) {
       tabs.push({
         name: 'customerManagement',
-        label: 'Customer Management',
+        label: 'Consumer Management',
         icon: 'iconCustomerManagement',
       });
     }

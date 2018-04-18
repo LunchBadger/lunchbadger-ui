@@ -27,6 +27,7 @@ class ApiClient {
         json: true,
         headers: _.extend(this._getHeaders(), {})
       }, options);
+      console.log(999, req);
       request(req, (error, response, body) => {
         if (error) {
           error.statusCode = 0;

@@ -7,7 +7,7 @@ class SshManagerService {
 
   load = () => this.api.get('/ssh');
 
-  create = body => this.api.post('/ssh', {body, headers: {Origin: document.location.origin}});
+  create = body => this.api.post('/ssh', {body});
 
   remove = id => this.api.delete(`/ssh/${id}`);
 

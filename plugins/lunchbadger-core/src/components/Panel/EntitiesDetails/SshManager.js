@@ -38,7 +38,7 @@ class SshManager extends PureComponent {
 
   handleUploadPublicKey = () => {
     this.setState({adding: true}, () => {
-      const input = findDOMNode(this.formRef).querySelector('textarea:nth-child(2)');
+      const input = findDOMNode(this.formRef).querySelector('input');
       input && input.focus();
     });
   };

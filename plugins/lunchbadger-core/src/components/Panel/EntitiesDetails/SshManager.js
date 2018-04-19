@@ -59,7 +59,7 @@ class SshManager extends PureComponent {
     }
     this.setState({uploadDisabled: true});
     try {
-      const {body: {hash: {id}}} = await SshManagerService.create(model);
+      const {body: {result: {id}}} = await SshManagerService.create(model);
       if (id === 0) {
         this.setState({invalid: 'upload failure (invalid key or already provided)', uploadDisabled: false});
         return;
@@ -130,10 +130,16 @@ class SshManager extends PureComponent {
             onValidSubmit={this.handleUpload}
           >
             <EntityProperty
+              name="title"
+              value=""
+              title="Title"
+              placeholder="Enter title here..."
+            />
+            <EntityProperty
               name="publicKey"
               value=""
-              title="Upload public key"
-              placeholder="Enter public key here..."
+              title="Key"
+              placeholder="Enter key here..."
               textarea
               invalid={invalid}
             />

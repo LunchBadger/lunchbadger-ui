@@ -40,8 +40,13 @@ class ApiClient {
           if (body.err && typeof body.err === 'string') {
             message = body.err;
           }
-          if (body.error && body.error.stack) {
-            message = body.error.stack;
+          if (body.error) {
+            if (body.error.stack) {
+              message = body.error.stack;
+            }
+            if (typeof body.error === 'string') {
+              message = body.error;
+            }
           }
           return reject(new ApiError(response.statusCode, message));
         }

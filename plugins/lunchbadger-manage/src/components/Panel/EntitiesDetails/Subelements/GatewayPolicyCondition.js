@@ -124,6 +124,13 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
+  handleMoveCondition = (idx, step) => () => {
+    const state = _.cloneDeep(this.state);
+    const [item] = state.properties[0].value.splice(idx, 1);
+    state.properties[0].value.splice(idx + step, 0, item);
+    this.changeState(state);
+  };
+
   handleAddCustomParameter = (type) => {
     const state = _.cloneDeep(this.state);
     state.properties.push({
@@ -254,6 +261,18 @@ export default class GatewayPolicyCondition extends PureComponent {
                     icon="iconDelete"
                     name={`remove__${prefix}condition${idx}`}
                     onClick={this.handleRemoveCondition(idx)}
+                  />
+                  <IconButton
+                    icon="iconArrowDown"
+                    name={`down__${prefix}condition${idx}`}
+                    onClick={this.handleMoveCondition(idx, 1)}
+                    disabled={idx === value.length - 1}
+                  />
+                  <IconButton
+                    icon="iconArrowUp"
+                    name={`up__${prefix}condition${idx}`}
+                    onClick={this.handleMoveCondition(idx, -1)}
+                    disabled={idx === 0}
                   />
                 </div>
               )}

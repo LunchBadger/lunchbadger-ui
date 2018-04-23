@@ -45,6 +45,7 @@
     position: relative;
     & > .GatewayPolicyCondition__button {
       display: none;
+      top: 5px;
     }
     &:hover > .GatewayPolicyCondition__button {
       display: block;

@@ -14,7 +14,6 @@ export default class SystemDefcon1Error extends PureComponent {
   render() {
     const {index, children, onRemove, stack, request} = this.props;
     const {stackVisible, requestDataVisible} = this.state;
-    console.log(11, request)
     return (
       <div>
         <h3>

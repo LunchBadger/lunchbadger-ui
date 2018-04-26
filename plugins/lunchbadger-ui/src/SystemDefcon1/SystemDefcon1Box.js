@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import cs from 'classnames';
+import SystemDefcon1Error from './SystemDefcon1Error';
 import {SmoothCollapse} from '../';
 import {toggleSystemDefcon1, removeSystemDefcon1} from '../../../../plugins/lunchbadger-core/src/reduxActions';
 import LoginManager from '../../../../plugins/lunchbadger-core/src/utils/auth';
@@ -70,16 +71,33 @@ class SystemDefcon1Box extends Component {
               </div>
               <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
                 <div className="SystemDefcon1__box__content__details--box">
-                  {errors.map(({error: item}, idx) => (
-                    <div key={idx}>
-                      <h3>
-                        Error {idx + 1}
-                        {' '}
-                        <small className="removeError" onClick={this.handleRemove(item)}>remove</small>
-                      </h3>
-                      <pre>{item}</pre>
-                    </div>
-                  ))}
+                  {errors.map(({error: {error: {
+                    message,
+                    stack,
+                    request,
+                    endpoint,
+                    name,
+                    method,
+                    statusCode,
+                  }}}, idx) => {
+                    const isHtml = message.startsWith('<!DOCTYPE');
+                    return (
+                      <SystemDefcon1Error
+                        key={idx}
+                        index={idx + 1}
+                        stack={stack}
+                        request={request}
+                        onRemove={this.handleRemove(message)}
+                      >
+                        <pre>
+                          {method} on {endpoint}
+                          <br />
+                          {name} {statusCode !== 0 && statusCode}: {!isHtml && message}
+                        </pre>
+                        {isHtml && <span dangerouslySetInnerHTML={{__html: message}} />}
+                      </SystemDefcon1Error>
+                    );
+                  })}
                 </div>
               </SmoothCollapse>
             </div>

@@ -53,8 +53,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actions.updateDataSource(updatedEntity));
     await dispatch(coreActions.saveToServer());
     return updatedEntity;
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
@@ -84,8 +84,8 @@ export const remove = entity => async (dispatch, getState) => {
     if (isAutoSave) {
       await dispatch(coreActions.saveToServer());
     }
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
@@ -103,8 +103,8 @@ export const saveOrder = orderedIds => async (dispatch, getState) => {
     dispatch(actions.updateDataSources(reordered));
     try {
       await DataSourceService.upsert(reordered);
-    } catch (err) {
-      dispatch(coreActions.addSystemDefcon1(err));
+    } catch (error) {
+      dispatch(coreActions.addSystemDefcon1({error}));
     }
   }
 };

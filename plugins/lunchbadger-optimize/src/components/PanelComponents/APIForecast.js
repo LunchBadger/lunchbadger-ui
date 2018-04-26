@@ -112,8 +112,8 @@ class APIForecast extends Component {
           this.setForecast(this.props.entity, this.state.selectedDate, this.props.isExpanded);
         }
       });
-    }).catch((err) => {
-      this.props.dispatch(coreActions.addSystemDefcon1(err));
+    }).catch((error) => {
+      this.props.dispatch(coreActions.addSystemDefcon1({error}));
     });
   }
 

@@ -104,8 +104,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actions[updateAction](updatedEntity));
     await dispatch(coreActions.saveToServer());
     return updatedEntity;
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
@@ -127,8 +127,8 @@ export const remove = (entity, action = 'removeModel') => async (dispatch) => {
     if (isAutoSave) {
       await dispatch(coreActions.saveToServer());
     }
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
@@ -146,8 +146,8 @@ export const saveOrder = orderedIds => async (dispatch, getState) => {
     dispatch(actions.updateModels(reordered));
     try {
       await ModelService.upsert(reordered);
-    } catch (err) {
-      dispatch(coreActions.addSystemDefcon1(err));
+    } catch (error) {
+      dispatch(coreActions.addSystemDefcon1({error}));
     }
   }
 };
@@ -166,8 +166,8 @@ export const bundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateModelBundled(updatedModel));
     dispatch(actions.removeModel(updatedModel));
     await dispatch(coreActions.saveToServer());
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
@@ -185,8 +185,8 @@ export const unbundle = (microservice, model) => async (dispatch) => {
     dispatch(actions.updateModel(updatedModel));
     dispatch(actions.removeModelBundled(updatedModel));
     await dispatch(coreActions.saveToServer());
-  } catch (err) {
-    dispatch(coreActions.addSystemDefcon1(err));
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
   }
 }
 

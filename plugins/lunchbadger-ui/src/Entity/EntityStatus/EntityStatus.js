@@ -11,18 +11,18 @@ const icon = {
 };
 
 const tooltip = {
-  deploying: 'The gateway is deploying',
-  crashed: 'The gateway is not running',
-  deleting: 'The gateway is deleting',
+  deploying: 'is deploying',
+  crashed: 'is not running',
+  deleting: 'is deleting',
 }
 
 export default class EntityStatus extends PureComponent {
   render() {
-    const {status} = this.props;
+    const {status, type} = this.props;
     if (!status) return null;
     return (
       <ContextualInformationMessage
-        tooltip={tooltip[status]}
+        tooltip={`The ${type.toLowerCase()} ${tooltip[status]}`}
         direction="bottomRight"
       >
         <div className={cs('EntityStatus', status)}>

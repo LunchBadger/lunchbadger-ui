@@ -9,7 +9,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.onLoadCompose:
       return action.payload[3].body.reduce((map, service) => {
-        if (!service.serverless) return map;
+        if (!service.serverless || Object.keys(service.serverless).length === 0) return map;
         const {
           service: name,
           lunchbadger: {id, itemOrder} = {id: uuid.v4(), itemOrder: 0},

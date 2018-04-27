@@ -92,7 +92,7 @@ class SshManager extends PureComponent {
     } = this.state;
     const columns = [
       'Created at',
-      'Email',
+      'Key Id',
       'Label',
       'Fingerprint',
       adding ? '' : <IconButton icon="iconPlus" onClick={this.handleUploadPublicKey} />,
@@ -109,9 +109,7 @@ class SshManager extends PureComponent {
         const email = key.split(' ').pop();
         return [
           created_at.replace(/[TZ]/g, ' ').trim(),
-          <CopyOnHover copy={title}>
-            {/@/.test(email) && email}
-          </CopyOnHover>,
+          /@/.test(email) ? <CopyOnHover copy={email}>{email}</CopyOnHover> : '',
           <CopyOnHover copy={title}>{title}</CopyOnHover>,
           <CopyOnHover copy={fingerprint}>{fingerprint}</CopyOnHover>,
           <IconButton icon="iconDelete" onClick={() => this.handleRemovePublicKey(id)} />,

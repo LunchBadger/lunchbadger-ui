@@ -1,3 +1,23 @@
 .SshManager {
   margin: 0 20px 20px 0;
+  form {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    margin: 5px 5px 5px 0;
+    padding: 25px 15px;
+    .EntityProperty {
+      color: #4190CE;
+      margin-right: 0;
+      &__error {
+        margin-left: 8px;
+      }
+    }
+    .EntityActionButtons {
+      text-align: right;
+      margin: 0 -15px;
+      .EntityActionButtons__inner {
+        display: inline-block;
+        width: 300px;
+      }
+    }
+  }
 }

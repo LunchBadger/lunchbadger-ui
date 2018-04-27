@@ -70,6 +70,7 @@ class EntityProperty extends Component {
     type: PropTypes.string,
     noMarginRight: PropTypes.bool,
     icon: PropTypes.string,
+    textarea: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -97,6 +98,7 @@ class EntityProperty extends Component {
     classes: '',
     slugify: false,
     icon: '',
+    textarea: false,
   };
 
   constructor(props) {
@@ -200,6 +202,7 @@ class EntityProperty extends Component {
       tmpPrefix,
       invalidUnderlineColor,
       slugify,
+      textarea,
     } = this.props;
     if (object) {
       const columns = [
@@ -314,6 +317,7 @@ class EntityProperty extends Component {
         alignRight={alignRight}
         invalidUnderlineColor={invalidUnderlineColor}
         slugify={slugify}
+        textarea={textarea}
       />
     );
   };

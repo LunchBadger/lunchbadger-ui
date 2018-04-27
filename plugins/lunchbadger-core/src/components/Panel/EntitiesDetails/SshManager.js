@@ -1,7 +1,11 @@
 import React, {PureComponent} from 'react';
+import {findDOMNode} from 'react-dom';
 import SshManagerService from '../../../services/SshManagerService';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
 import {
+  Form,
+  EntityActionButtons,
+  EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
   Table,
@@ -17,6 +21,9 @@ class SshManager extends PureComponent {
       publicKeys: [],
       showRemovingModal: false,
       idToRemove: null,
+      adding: false,
+      invalid: '',
+      uploadDisabled: false,
     };
   }
 
@@ -29,6 +36,13 @@ class SshManager extends PureComponent {
     this.setState({publicKeys});
   };
 
+  handleUploadPublicKey = () => {
+    this.setState({adding: true}, () => {
+      const input = findDOMNode(this.formRef).querySelector('input');
+      input && input.focus();
+    });
+  };
+
   handleRemovePublicKey = idToRemove => this.setState({showRemovingModal: true, idToRemove});
 
   removePublicKey = async () => {
@@ -36,6 +50,25 @@ class SshManager extends PureComponent {
     const {idToRemove} = this.state;
     await SshManagerService.remove(idToRemove);
     await this.loadPublicKeys();
+  };
+
+  handleUpload = async (model) => {
+    if (model.publicKey === '') {
+      this.setState({invalid: 'no key provided'});
+      return;
+    }
+    this.setState({uploadDisabled: true});
+    try {
+      const {body: {result: {id}}} = await SshManagerService.create(model);
+      if (id === 0) {
+        this.setState({invalid: 'upload failure (invalid key or already provided)', uploadDisabled: false});
+        return;
+      }
+      this.setState({adding: false, invalid: '', uploadDisabled: false});
+      await this.loadPublicKeys();
+    } catch (e) {
+      this.setState({invalid: e.message, uploadDisabled: false});
+    }
   };
 
   sortByKey = key => (a, b) => {
@@ -47,16 +80,21 @@ class SshManager extends PureComponent {
     if (typeof y == 'string') {
       y = (''+y).toLowerCase();
     }
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
   };
 
   renderPublicKeys = () => {
-    const {publicKeys} = this.state;
+    const {
+      publicKeys,
+      adding,
+      invalid,
+      uploadDisabled,
+    } = this.state;
     const columns = [
       'Created at',
       'Title',
       'Fingerprint',
-      '',
+      adding ? '' : <IconButton icon="iconPlus" onClick={this.handleUploadPublicKey} />,
     ];
     const data = publicKeys
       .sort(this.sortByKey('created_at'))
@@ -83,14 +121,45 @@ class SshManager extends PureComponent {
       true,
       false,
     ];
-    return <Table
-      columns={columns}
-      data={data}
-      widths={widths}
-      paddings={paddings}
-      tableLayout="fixed"
-      verticalAlign="middle"
-    />;
+    return (
+      <div>
+        {adding && (
+          <Form
+            ref={r => this.formRef = r}
+            name="publicKey"
+            onValidSubmit={this.handleUpload}
+          >
+            <EntityProperty
+              name="title"
+              value=""
+              title="Title"
+              placeholder="Enter title here..."
+            />
+            <EntityProperty
+              name="publicKey"
+              value=""
+              title="Key"
+              placeholder="Enter key here..."
+              textarea
+              invalid={invalid}
+            />
+            <EntityActionButtons
+              onCancel={() => this.setState({adding: false, invalid: ''})}
+              okLabel="Upload"
+              okDisabled={uploadDisabled}
+            />
+          </Form>
+        )}
+        <Table
+          columns={columns}
+          data={data}
+          widths={widths}
+          paddings={paddings}
+          tableLayout="fixed"
+          verticalAlign="middle"
+        />
+      </div>
+    );
   };
 
   render() {

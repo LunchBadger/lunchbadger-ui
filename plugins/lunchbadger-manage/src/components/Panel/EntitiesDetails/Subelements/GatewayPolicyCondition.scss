@@ -81,6 +81,10 @@
   &:hover > .GatewayPolicyCondition__button {
     display: block;
   }
+  &__draggable {
+    z-index: 1006;
+    background-color: #FFF;
+  }
 }
 
 .panel__details .GatewayPolicyCondition .EntityProperty {

@@ -5737,6 +5737,11 @@
       "resolved": "https://registry.npmjs.org/react-simple-di/-/react-simple-di-1.2.0.tgz",
       "dev": true
     },
+    "react-sortable-hoc": {
+      "version": "0.6.8",
+      "from": "react-sortable-hoc@latest",
+      "resolved": "https://registry.npmjs.org/react-sortable-hoc/-/react-sortable-hoc-0.6.8.tgz"
+    },
     "react-stubber": {
       "version": "1.0.0",
       "from": "react-stubber@>=1.0.0 <2.0.0",

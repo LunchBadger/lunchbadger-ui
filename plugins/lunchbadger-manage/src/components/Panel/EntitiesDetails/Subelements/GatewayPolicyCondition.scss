@@ -19,19 +19,13 @@
       width: 1px;
       background-color: #e0e0e0;
       left: -13px;
-      top: -25px;
-      bottom: 25px;
-    }
-    &.nestedSingle:before {
-      bottom: auto;
-      height: 69px;
-    }
-    &.first:before {
       top: -13px;
+      bottom: 14px;
     }
+    &.nestedSingle:before,
     &.last:before {
       bottom: auto;
-      height: 81px;
+      height: 69px;
     }
   }
   .EntityProperty {

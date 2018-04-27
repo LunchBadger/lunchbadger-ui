@@ -45,7 +45,6 @@
     position: relative;
     & > .GatewayPolicyCondition__button {
       display: none;
-      top: 5px;
     }
     &:hover > .GatewayPolicyCondition__button {
       display: block;
@@ -84,6 +83,18 @@
   &__draggable {
     z-index: 1006;
     background-color: #FFF;
+    &:hover > .GatewayPolicyCondition > .GatewayPolicyCondition__handler {
+      display: block;
+    }
+  }
+  &__handler {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    cursor: ns-resize;
+    top: 35px;
+    left: -7px;
+    display: none;
   }
 }
 

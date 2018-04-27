@@ -5,7 +5,12 @@ import _ from 'lodash';
 import cs from 'classnames';
 import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
 import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
-import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
+import {
+  iconConditionAllOf,
+  iconConditionNot,
+  iconConditionOneOf,
+  iconReorder,
+} from '../../../../../../../src/icons';
 import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyCondition.scss';
 
@@ -125,13 +130,6 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(state);
   };
 
-  handleMoveCondition = (idx, step) => () => {
-    const state = _.cloneDeep(this.state);
-    const [item] = state.properties[0].value.splice(idx, 1);
-    state.properties[0].value.splice(idx + step, 0, item);
-    this.changeState(state);
-  };
-
   handleAddCustomParameter = (type) => {
     const state = _.cloneDeep(this.state);
     state.properties.push({
@@ -215,7 +213,7 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(this.getState(name, obj));
   };
 
-  DragHandle = SortableHandle(() => <span style={{position: 'absolute'}}>::</span>);
+  DragHandle = SortableHandle(() => <IconSVG className="GatewayPolicyCondition__handler" svg={iconReorder} />);
 
   SortableItem = SortableElement(({children}) => (
     <div className={cs('GatewayPolicyCondition__draggable', 'panel__details', 'editable')}>
@@ -255,18 +253,6 @@ export default class GatewayPolicyCondition extends PureComponent {
                   icon="iconDelete"
                   name={`remove__${prefix}condition${idx}`}
                   onClick={this.handleRemoveCondition(idx)}
-                />
-                <IconButton
-                  icon="iconArrowDown"
-                  name={`down__${prefix}condition${idx}`}
-                  onClick={this.handleMoveCondition(idx, 1)}
-                  disabled={idx === value.length - 1}
-                />
-                <IconButton
-                  icon="iconArrowUp"
-                  name={`up__${prefix}condition${idx}`}
-                  onClick={this.handleMoveCondition(idx, -1)}
-                  disabled={idx === 0}
                 />
               </div>
             )}

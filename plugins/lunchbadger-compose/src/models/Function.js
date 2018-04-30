@@ -8,6 +8,7 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 
 export default class Function_ extends BaseModel {
   static type = 'Function_';
+  static friendlyName = 'Function';
   static entities = 'functions';
 
   _ports = [];

@@ -1,3 +1,4 @@
+import slug from 'slug';
 import {actions} from './actions';
 import {ModelService, SLSService} from '../services';
 import Function_ from '../models/Function';
@@ -61,15 +62,14 @@ export const update = (entity, model) => async (dispatch, getState) => {
 export const remove = entity => async (dispatch) => {
   const isAutoSave = entity.loaded;
   const updatedEntity = entity.recreate();
-  updatedEntity.ready = false;
   updatedEntity.deleting = true;
+  const itemName = `function-${slug(entity.name, {lower: true})}`;
+  localStorage.setItem(itemName, JSON.stringify(updatedEntity.toJSON()));
   dispatch(actions.updateFunction(updatedEntity));
   try {
     if (isAutoSave) {
       await SLSService.remove(entity.name);
-
     }
-    dispatch(actions.removeFunction(entity));
     if (isAutoSave) {
       await dispatch(coreActions.saveToServer());
     }

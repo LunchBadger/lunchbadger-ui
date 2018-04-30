@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
+import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
 import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
-import {iconConditionAllOf, iconConditionNot, iconConditionOneOf} from '../../../../../../../src/icons';
+import {
+  iconConditionAllOf,
+  iconConditionNot,
+  iconConditionOneOf,
+  iconReorder,
+} from '../../../../../../../src/icons';
 import {determineType, getDefaultValueByType} from '../../../../utils';
 import './GatewayPolicyCondition.scss';
 
@@ -207,6 +213,61 @@ export default class GatewayPolicyCondition extends PureComponent {
     this.changeState(this.getState(name, obj));
   };
 
+  DragHandle = SortableHandle(() => <IconSVG className="GatewayPolicyCondition__handler" svg={iconReorder} />);
+
+  SortableItem = SortableElement(({children}) => (
+    <div className={cs('GatewayPolicyCondition__draggable', 'panel__details', 'editable')}>
+      <div className="GatewayPolicyCondition">
+        <this.DragHandle />
+        {children}
+      </div>
+    </div>
+  ))
+
+  SortableList = SortableContainer(({
+    value,
+    schemas,
+    prefix,
+    onChangeState,
+    propIdx,
+    horizontal,
+  }) => (
+    <div>
+      {value.map((condition, idx) => (
+        <this.SortableItem key={condition.id} index={idx}>
+          <div className="GatewayPolicyCondition__C">
+            <GatewayPolicyCondition
+              ref={r => this.policyConditionRef = r}
+              condition={condition}
+              schemas={schemas}
+              prefix={`${prefix}[conditions][${idx}]`}
+              onChangeState={onChangeState}
+              onChange={this.onChange('conditions', propIdx, idx)}
+              nested={idx === 0 ? 'first' : (idx === value.length - 1 ? 'last': 'other')}
+              nestedSingle={value.length === 1}
+              horizontal={horizontal}
+            />
+            {value.length !== 1 && (
+              <div className="GatewayPolicyCondition__button">
+                <IconButton
+                  icon="iconDelete"
+                  name={`remove__${prefix}condition${idx}`}
+                  onClick={this.handleRemoveCondition(idx)}
+                />
+              </div>
+            )}
+          </div>
+        </this.SortableItem>
+      ))}
+    </div>
+  ));
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    const state = _.cloneDeep(this.state);
+    state.properties[0].value = arrayMove(state.properties[0].value, oldIndex, newIndex);
+    this.changeState(state);
+  };
+
   renderProperty = (item, propIdx) => {
     const {id, name, value, type, types, description, label, width, custom} = item;
     const {
@@ -234,32 +295,18 @@ export default class GatewayPolicyCondition extends PureComponent {
     );
     if (name === 'conditions') return (
       <span key={id}>
-        <div>
-          {value.map((condition, idx) => (
-            <div key={condition.id} className="GatewayPolicyCondition__C">
-              <GatewayPolicyCondition
-                ref={r => this.policyConditionRef = r}
-                condition={condition}
-                schemas={schemas}
-                prefix={`${prefix}[conditions][${idx}]`}
-                onChangeState={onChangeState}
-                onChange={this.onChange('conditions', propIdx, idx)}
-                nested={idx === 0 ? 'first' : (idx === value.length - 1 ? 'last': 'other')}
-                nestedSingle={value.length === 1}
-                horizontal={horizontal}
-              />
-              {value.length !== 1 && (
-                <div className="GatewayPolicyCondition__button">
-                  <IconButton
-                    icon="iconDelete"
-                    name={`remove__${prefix}condition${idx}`}
-                    onClick={this.handleRemoveCondition(idx)}
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <this.SortableList
+          value={value}
+          schemas={schemas}
+          prefix={prefix}
+          onChangeState={onChangeState}
+          propIdx={propIdx}
+          horizontal={horizontal}
+          useDragHandle
+          onSortEnd={this.onSortEnd}
+          lockAxis="y"
+          lockToContainerEdges
+        />
       </span>
     );
     if (types) {

@@ -19,19 +19,13 @@
       width: 1px;
       background-color: #e0e0e0;
       left: -13px;
-      top: -25px;
-      bottom: 25px;
-    }
-    &.nestedSingle:before {
-      bottom: auto;
-      height: 69px;
-    }
-    &.first:before {
       top: -13px;
+      bottom: 14px;
     }
+    &.nestedSingle:before,
     &.last:before {
       bottom: auto;
-      height: 81px;
+      height: 69px;
     }
   }
   .EntityProperty {
@@ -79,6 +73,22 @@
   }
   &:hover > .GatewayPolicyCondition__button {
     display: block;
+  }
+  &__draggable {
+    z-index: 1006;
+    background-color: #FFF;
+    &:hover > .GatewayPolicyCondition > .GatewayPolicyCondition__handler {
+      display: block;
+    }
+  }
+  &__handler {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    cursor: ns-resize;
+    top: 35px;
+    left: -7px;
+    display: none;
   }
 }
 

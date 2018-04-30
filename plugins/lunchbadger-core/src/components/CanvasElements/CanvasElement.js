@@ -370,7 +370,7 @@ export default (ComposedComponent) => {
           });
         }
       }
-      const {type} = this.props.entity.constructor;
+      const {type, friendlyName} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
       return (
         <div className={cs('CanvasElement', type, status, {highlighted, editable, wip: processing, semitransparent})}>
@@ -428,7 +428,10 @@ export default (ComposedComponent) => {
                 </span>
               </TwoOptionModal>
             )}
-            <EntityStatus status={status} />
+            <EntityStatus
+              type={friendlyName || type}
+              status={status}
+            />
             {this.state.showNotRunningModal && (
               <OneOptionModal
                 confirmText="OK"

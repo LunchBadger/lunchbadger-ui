@@ -19,6 +19,7 @@ import {
   Checkbox,
   Table,
   IconButton,
+  Transitioning,
 } from '../../../../../lunchbadger-ui/src';
 import './GatewayDetails.scss';
 
@@ -666,7 +667,7 @@ class GatewayDetails extends PureComponent {
       <div className="pipelines" key="pipelines">
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
-          collapsible={collapsible}
+          collapsible={<Transitioning>{collapsible}</Transitioning >}
           button={
             <IconButton
               icon="iconPlus"

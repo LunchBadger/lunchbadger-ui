@@ -34,6 +34,7 @@ import Table from './Table/Table';
 import CopyOnHover from './CopyOnHover/CopyOnHover';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import Transitioning from './Transitioning/Transitioning';
 import {Form} from './utils/Formsy/main';
 
 import {
@@ -116,6 +117,7 @@ export {
   Tool,
   Toolbox,
   TopBar,
+  Transitioning,
   entityIcons,
   dataSourceIcons,
 };

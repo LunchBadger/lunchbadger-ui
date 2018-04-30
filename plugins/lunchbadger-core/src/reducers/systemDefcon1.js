@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
   const newState = {...state};
   switch (action.type) {
     case actionTypes.addSystemDefcon1:
-      const error = action.payload.error.stack || action.payload.error.message || action.payload.error;
+      const error = action.payload.error;
       const {source} = action.payload;
       if (!newState.errors.map(item => item.error).includes(error)) {
         newState.errors = [{error, source}, ...newState.errors];
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
       newState.visible = !newState.visible;
       return newState;
     case actionTypes.removeSystemDefcon1:
-      newState.errors = newState.errors.filter(item => item.error !== action.payload);
+      newState.errors = newState.errors.filter(item => item.error.error.message !== action.payload);
       if (newState.errors.length === 0) {
         newState.visible = false;
       }

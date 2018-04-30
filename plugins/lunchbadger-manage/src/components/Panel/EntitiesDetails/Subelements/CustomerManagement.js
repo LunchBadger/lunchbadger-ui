@@ -16,6 +16,7 @@ import {
 } from '../../../../../../lunchbadger-ui/src';
 import {iconCheck} from '../../../../../../../src/icons';
 const {TwoOptionModal} = LunchBadgerCore.components;
+const {coreActions} = LunchBadgerCore.utils;
 import './CustomerManagement.scss';
 
 const tabs = [
@@ -72,45 +73,61 @@ class CustomerManagement extends PureComponent {
 
   loadUsers = async (start = 0) => {
     const {api} = this.props;
-    const {body: {users, nextKey}} = await api.getUsers(start);
-    const state = {
-      users: (start === 0 ? [] : this.state.users).concat(users),
-    };
-    if (+nextKey === 0) {
-      state.loadingUsers = false;
-    } else {
-      this.loadUsers(nextKey);
+    try {
+      const {body: {users, nextKey}} = await api.getUsers(start);
+      const state = {
+        users: (start === 0 ? [] : this.state.users).concat(users),
+      };
+      if (+nextKey === 0) {
+        state.loadingUsers = false;
+      } else {
+        this.loadUsers(nextKey);
+      }
+      this.setState(state);
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
-    this.setState(state);
   };
 
   loadApps = async (start = 0) => {
     const {api} = this.props;
-    const {body: {apps, nextKey}} = await api.getApps(start);
-    const state = {
-      apps: (start === 0 ? [] : this.state.apps).concat(apps),
-    };
-    if (+nextKey === 0) {
-      state.loadingApps = false;
-    } else {
-      this.loadApps(nextKey);
+    try {
+      const {body: {apps, nextKey}} = await api.getApps(start);
+      const state = {
+        apps: (start === 0 ? [] : this.state.apps).concat(apps),
+      };
+      if (+nextKey === 0) {
+        state.loadingApps = false;
+      } else {
+        this.loadApps(nextKey);
+      }
+      this.setState(state);
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
-    this.setState(state);
   };
 
   loadCredentials = async (consumerId) => {
     if (!consumerId) return;
     const {api} = this.props;
-    const {body} = await api.getCredentials(consumerId);
-    const credentials = _.cloneDeep(this.state.credentials);
-    credentials[consumerId] = body.credentials;
-    this.setState({credentials});
+    try {
+      const {body} = await api.getCredentials(consumerId);
+      const credentials = _.cloneDeep(this.state.credentials);
+      credentials[consumerId] = body.credentials;
+      this.setState({credentials});
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
+    }
   };
 
   loadScopes = async () => {
     const {api} = this.props;
-    const {body: {scopes}} = await api.getScopes();
-    this.setState({scopes});
+    try {
+      const {body: {scopes}} = await api.getScopes();
+      this.setState({scopes});
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
+    }
   };
 
   handleTabClick = activeTab => () => this.setState({activeTab});
@@ -137,13 +154,17 @@ class CustomerManagement extends PureComponent {
       entryToRemoveType: null,
       [`loading${entryToRemoveType}`]: true,
     });
-    if (entryToRemoveType === 'Users') {
-      await api.removeUser(entryToRemove);
-      await this.loadUsers();
-      await this.loadApps();
-    } else if (entryToRemoveType === 'Apps') {
-      await api.removeApp(entryToRemove);
-      await this.loadApps();
+    try {
+      if (entryToRemoveType === 'Users') {
+        await api.removeUser(entryToRemove);
+        await this.loadUsers();
+        await this.loadApps();
+      } else if (entryToRemoveType === 'Apps') {
+        await api.removeApp(entryToRemove);
+        await this.loadApps();
+      }
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
   };
 
@@ -172,8 +193,8 @@ class CustomerManagement extends PureComponent {
         }
         await this.loadApps();
       }
-    } catch (e) {
-      // console.log(e); // FIXME
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
   };
 
@@ -183,45 +204,65 @@ class CustomerManagement extends PureComponent {
       consumerId,
       type,
     };
-    await api.createCredentials(body);
-    await this.loadCredentials(consumerId)
+    try {
+      await api.createCredentials(body);
+      await this.loadCredentials(consumerId);
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
+    }
   };
 
   handleStatusChange = async ({currentTarget: {checked: status}}) => {
     const {entry, activeTab} = this.state;
     const {api} = this.props;
-    if (activeTab === 'Users') {
-      await api.setUserStatus(entry, status);
-      await this.loadUsers();
-    } else if (activeTab === 'Apps') {
-      await api.setAppStatus(entry, status);
-      await this.loadApps();
+    try {
+      if (activeTab === 'Users') {
+        await api.setUserStatus(entry, status);
+        await this.loadUsers();
+      } else if (activeTab === 'Apps') {
+        await api.setAppStatus(entry, status);
+        await this.loadApps();
+      }
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
   };
 
   handleCredentialsStatusChange = (type, consumerId, id) => async ({currentTarget: {checked: status}}) => {
     const {api} = this.props;
-    await api.setCredentialsStatus(type, id, status);
-    await this.loadCredentials(consumerId);
+    try {
+      await api.setCredentialsStatus(type, id, status);
+      await this.loadCredentials(consumerId);
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
+    }
   };
 
   handleCredentialsScopesChange = (type, consumerId, id) => async (scopes) => {
     const {api} = this.props;
-    await api.setCredentialsScopes(type, id, scopes);
-    await this.loadCredentials(consumerId);
+    try {
+      await api.setCredentialsScopes(type, id, scopes);
+      await this.loadCredentials(consumerId);
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
+    }
   };
 
   handleScopesChange = async (scopes) => {
     const {api} = this.props;
     const newScopes = _.difference(scopes, this.state.scopes);
     const removedScopes = _.difference(this.state.scopes, scopes);
-    if (newScopes.length > 0) {
-      await api.createScopes(newScopes);
+    try {
+      if (newScopes.length > 0) {
+        await api.createScopes(newScopes);
+      }
+      for (let scope of removedScopes) {
+        await api.removeScope(scope);
+      }
+      await this.loadScopes();
+    } catch (error) {
+      this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
-    for (let scope of removedScopes) {
-      await api.removeScope(scope);
-    }
-    await this.loadScopes();
   };
 
   preventSubmit = event => {

@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
 import {findDOMNode} from 'react-dom';
+import {PropTypes} from 'prop-types';
 import SshManagerService from '../../../services/SshManagerService';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
+import {addSystemDefcon1} from '../../../reduxActions/systemDefcon1';
 import {
   Form,
   EntityActionButtons,
@@ -15,6 +17,10 @@ import {
 import './SshManager.scss';
 
 class SshManager extends PureComponent {
+  static contextTypes = {
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,8 +38,12 @@ class SshManager extends PureComponent {
   }
 
   loadPublicKeys = async () => {
-    const {body: {publicKeys}} = await SshManagerService.load();
-    this.setState({publicKeys});
+    try {
+      const {body: {publicKeys}} = await SshManagerService.load();
+      this.setState({publicKeys});
+    } catch (error) {
+      this.context.store.dispatch(addSystemDefcon1({error}));
+    }
   };
 
   handleUploadPublicKey = () => {
@@ -48,7 +58,11 @@ class SshManager extends PureComponent {
   removePublicKey = async () => {
     this.setState({showRemovingModal: false});
     const {idToRemove} = this.state;
-    await SshManagerService.remove(idToRemove);
+    try {
+      await SshManagerService.remove(idToRemove);
+    } catch (error) {
+      this.context.store.dispatch(addSystemDefcon1({error}));
+    }
     await this.loadPublicKeys();
   };
 
@@ -66,8 +80,12 @@ class SshManager extends PureComponent {
       }
       this.setState({adding: false, invalid: '', uploadDisabled: false});
       await this.loadPublicKeys();
-    } catch (e) {
-      this.setState({invalid: e.message, uploadDisabled: false});
+    } catch (error) {
+      if (error.statusCode === 404) {
+        this.context.store.dispatch(addSystemDefcon1({error}));
+      } else {
+        this.setState({invalid: error.message, uploadDisabled: false});
+      }
     }
   };
 

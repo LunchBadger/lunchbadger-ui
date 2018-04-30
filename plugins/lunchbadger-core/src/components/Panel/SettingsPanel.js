@@ -37,8 +37,8 @@ class SettingsPanel extends Component {
       this.setState({
         accessKey: data.body.key,
       });
-    } catch (err) {
-      this.context.store.dispatch(addSystemDefcon1(err));
+    } catch (error) {
+      this.context.store.dispatch(addSystemDefcon1({error}));
     }
   }
 
@@ -51,8 +51,8 @@ class SettingsPanel extends Component {
       this.setState({
         accessKey: data.body.key,
       });
-    } catch (err) {
-      this.context.store.dispatch(addSystemDefcon1(err));
+    } catch (error) {
+      this.context.store.dispatch(addSystemDefcon1({error}));
     };
   }
 

@@ -24,6 +24,8 @@ const allowedPingStatuses = [
   504,
 ];
 
+const retriesAmount = 48;
+
 class AppLoader extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +76,7 @@ class AppLoader extends Component {
   load() {
     ConfigStoreService.upsertProject()
       .then(() => {
-        return waitForProject(48, 2500);
+        return waitForProject(retriesAmount, 2500);
       })
       .then(() => {
         this.setState({loaded: true});
@@ -124,10 +126,17 @@ class AppLoader extends Component {
   }
 
   renderError() {
+    const error = {
+      statusCode: 0,
+      message: this.state.error.message,
+      name: 'Error',
+      endpoint: 'WorkspaceStatus',
+      method: `${retriesAmount} PING retries`,
+    };
     return (
       <div className="app">
         <div className="app__loading-error">
-          <SystemDefcon1 server errors={[this.state.error.message]} />
+          <SystemDefcon1 server errors={[{error: {error}}]} />
         </div>
       </div>
     );

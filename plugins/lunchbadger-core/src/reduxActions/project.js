@@ -15,11 +15,11 @@ export const loadFromServer = () => async (dispatch, getState) => {
       item.action && dispatch(item.action(responses[idx]));
       item.actions && item.actions.map(action => dispatch(action(responses[idx])));
     });
-  } catch (err) {
-    if (err.statusCode === 401) {
+  } catch (error) {
+    if (error.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(addSystemDefcon1(err));
+      dispatch(addSystemDefcon1({error}));
     }
   }
   dispatch(actions.setLoadingProject(false));
@@ -38,18 +38,18 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   if (onSaves.length > 0) {
     try {
       await Promise.all(onSaves.map(item => item.onSave(state)));
-    } catch (err) {
-      dispatch(addSystemDefcon1(err));
+    } catch (error) {
+      dispatch(addSystemDefcon1({error}));
     }
   }
   const data = onProjectSave.reduce((map, item) => ({...map, ...item(state, options)}), {});
   try {
     await ProjectService.save(data);
-  } catch (err) {
-    if (err.statusCode === 401) {
+  } catch (error) {
+    if (error.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(addSystemDefcon1(err));
+      dispatch(addSystemDefcon1({error}));
     }
   }
   if (options.showMessage) {
@@ -69,15 +69,15 @@ export const clearServer = () => async (dispatch, getState) => {
     if (onProjectClear.length > 0) {
       try {
         await Promise.all(onProjectClear.map(action => dispatch(action())));
-      } catch (err) {
-        dispatch(addSystemDefcon1(err));
+      } catch (error) {
+        dispatch(addSystemDefcon1({error}));
       }
     }
-  } catch (err) {
-    if (err.statusCode === 401) {
+  } catch (error) {
+    if (error.statusCode === 401) {
       LoginManager().refreshLogin();
     } else {
-      dispatch(addSystemDefcon1(err));
+      dispatch(addSystemDefcon1({error}));
     }
   }
   dispatch(actions.addSystemInformationMessage({

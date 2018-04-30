@@ -9,6 +9,7 @@ import {
   IconMenu,
   EntityPropertyLabel,
   CollapsibleProperties,
+  Transitioning,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType, getDefaultValueByType} from '../../../../utils';
@@ -407,20 +408,22 @@ export default class GatewayPolicyAction extends PureComponent {
     return (
       <div className="GatewayPolicyAction">
         {addButton}
-        {reorderedParameters.map((item, idx) => (
-          <div key={item.id} className="GatewayPolicyAction__parameter">
-            {this.renderProperty(item)}
-            {this.isDeletePropertyButton(item) && (
-              <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
-                <IconButton
-                  icon="iconDelete"
-                  name={`remove__${prefix}Parameter${idx}`}
-                  onClick={this.handleParameterRemove(item.id)}
-                />
-              </div>
-            )}
-          </div>
-        ))}
+        <Transitioning>
+          {reorderedParameters.map((item, idx) => (
+            <div key={item.id} className="GatewayPolicyAction__parameter">
+              {this.renderProperty(item)}
+              {this.isDeletePropertyButton(item) && (
+                <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
+                  <IconButton
+                    icon="iconDelete"
+                    name={`remove__${prefix}Parameter${idx}`}
+                    onClick={this.handleParameterRemove(item.id)}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </Transitioning>
       </div>
     );
   }

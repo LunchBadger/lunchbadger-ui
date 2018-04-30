@@ -334,20 +334,22 @@ class GatewayDetails extends PureComponent {
           {button}
           <EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>
         </div>
-        {policy.conditionAction.map((pair, idx) => (
-          <GatewayPolicyCAPair
-            key={pair.id}
-            nr={idx + 1}
-            renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
-            renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
-            onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-            onMoveDown={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-            onMoveUp={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-            moveDownDisabled={idx === policy.conditionAction.length - 1}
-            moveUpDisabled={idx === 0}
-            prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
-          />
-        ))}
+        <Transitioning>
+          {policy.conditionAction.map((pair, idx) => (
+            <GatewayPolicyCAPair
+              key={pair.id}
+              nr={idx + 1}
+              renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
+              renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
+              onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+              onMoveDown={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
+              onMoveUp={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
+              moveDownDisabled={idx === policy.conditionAction.length - 1}
+              moveUpDisabled={idx === 0}
+              prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
+            />
+          ))}
+        </Transitioning>
       </div>
     );
   };
@@ -406,7 +408,7 @@ class GatewayDetails extends PureComponent {
     return (
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
-        collapsible={collapsible}
+        collapsible={<Transitioning>{collapsible}</Transitioning>}
         button={
           <IconButton
             icon="iconPlus"
@@ -667,7 +669,7 @@ class GatewayDetails extends PureComponent {
       <div className="pipelines" key="pipelines">
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
-          collapsible={<Transitioning>{collapsible}</Transitioning >}
+          collapsible={<Transitioning>{collapsible}</Transitioning>}
           button={
             <IconButton
               icon="iconPlus"

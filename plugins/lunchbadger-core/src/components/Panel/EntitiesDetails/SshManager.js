@@ -110,7 +110,8 @@ class SshManager extends PureComponent {
     } = this.state;
     const columns = [
       'Created at',
-      'Title',
+      'Key Id',
+      'Label',
       'Fingerprint',
       adding ? '' : <IconButton icon="iconPlus" onClick={this.handleUploadPublicKey} />,
     ];
@@ -121,19 +122,26 @@ class SshManager extends PureComponent {
         created_at,
         title,
         fingerprint,
-      }) => [
-        created_at.replace(/[TZ]/g, ' ').trim(),
-        <CopyOnHover copy={title}>{title}</CopyOnHover>,
-        <CopyOnHover copy={fingerprint}>{fingerprint}</CopyOnHover>,
-        <IconButton icon="iconDelete" onClick={() => this.handleRemovePublicKey(id)} />,
-    ]);
+        key,
+      }) => {
+        const email = key.split(' ').pop();
+        return [
+          created_at.replace(/[TZ]/g, ' ').trim(),
+          /@/.test(email) ? <CopyOnHover copy={email}>{email}</CopyOnHover> : '',
+          <CopyOnHover copy={title}>{title}</CopyOnHover>,
+          <CopyOnHover copy={fingerprint}>{fingerprint}</CopyOnHover>,
+          <IconButton icon="iconDelete" onClick={() => this.handleRemovePublicKey(id)} />,
+        ];
+      });
     const widths = [
-      160,
-      400,
+      140,
+      290,
+      270,
       undefined,
       50,
     ];
     const paddings = [
+      true,
       true,
       true,
       true,
@@ -150,8 +158,8 @@ class SshManager extends PureComponent {
             <EntityProperty
               name="title"
               value=""
-              title="Title"
-              placeholder="Enter title here..."
+              title="Label"
+              placeholder="Enter label here..."
             />
             <EntityProperty
               name="publicKey"

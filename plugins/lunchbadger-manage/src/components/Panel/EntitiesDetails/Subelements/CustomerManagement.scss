@@ -43,6 +43,7 @@
   }
   &__table {
     position: relative;
+    margin-bottom: 20px;
     td {
       user-select: text;
     }
@@ -135,6 +136,24 @@
     }
     .Select-value-label {
       padding-bottom: 4px;
+    }
+  }
+  &__create {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    margin: 5px 5px 5px 0;
+    padding: 25px 0 0 25px;
+    &--field,
+    &--buttons {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    &--field {
+      width: calc(100% - 280px);
+    }
+    &--buttons {
+      margin-left: 40px;
+      width: 240px;
+      margin-bottom: 25px;
     }
   }
 }

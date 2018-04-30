@@ -4,9 +4,9 @@ import cs from 'classnames';
 import _ from 'lodash';
 import GatewayPolicyAction from './GatewayPolicyAction';
 import {
+  Button,
   Table,
   IconButton,
-  Button,
   Checkbox,
   CollapsibleProperties,
   EntityProperty,
@@ -23,6 +23,7 @@ const tabs = [
   'Users',
   'Apps',
   'Scopes',
+  'Credentials',
 ];
 
 const credentialsTypes = [
@@ -46,7 +47,6 @@ class CustomerManagement extends PureComponent {
       entry: null,
       users: [],
       apps: [],
-      credentials: [],
       showRemovingModal: false,
       entryToRemove: null,
       entryToRemoveType: null,
@@ -57,6 +57,10 @@ class CustomerManagement extends PureComponent {
       filterUsers: '',
       filterApps: '',
       userId: null,
+      pendingNewCredential: '',
+      pendingCredentialConsumer: '',
+      pendingCredentialCreation: false,
+      validationError: '',
     };
   }
 
@@ -66,10 +70,15 @@ class CustomerManagement extends PureComponent {
   }
 
   componentDidMount() {
-    this.loadUsers();
+    this.loadData();
+  }
+
+  loadData = async () => {
     this.loadApps();
     this.loadScopes();
-  }
+    await this.loadUsers();
+    this.loadAllCredentials();
+  };
 
   loadUsers = async (start = 0) => {
     const {api} = this.props;
@@ -114,10 +123,26 @@ class CustomerManagement extends PureComponent {
       const {body} = await api.getCredentials(consumerId);
       const credentials = _.cloneDeep(this.state.credentials);
       credentials[consumerId] = body.credentials;
+      credentials[consumerId].forEach(item => item.consumerId = consumerId);
       this.setState({credentials});
     } catch (error) {
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
+  };
+
+  loadAllCredentials = async () => {
+    const {api} = this.props;
+    const {body} = await api.getAllCredentials();
+    const credentials = {};
+    body.credentials.forEach((item) => {
+      const {consumerId} = item;
+      if (!consumerId) return;
+      if (!credentials[consumerId]) {
+        credentials[consumerId] = [];
+      }
+      credentials[consumerId].push(item);
+    });
+    this.setState({credentials});
   };
 
   loadScopes = async () => {
@@ -198,7 +223,15 @@ class CustomerManagement extends PureComponent {
     }
   };
 
-  handleCreateCredentials = (consumerId, type) => async () => {
+  handleCreateCredentials = (consumerId, type, kind) => async () => {
+    if (!consumerId) {
+      this.setState({
+        pendingCredentialConsumer: '',
+        pendingNewCredential: `${type}|${kind}`,
+        validationError: '',
+      });
+      return;
+    }
     const {api} = this.props;
     const body = {
       consumerId,
@@ -210,6 +243,27 @@ class CustomerManagement extends PureComponent {
     } catch (error) {
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
+  };
+
+  handleAddCredential = async (type, kind) => {
+    const {pendingCredentialConsumer} = this.state;
+    if (!pendingCredentialConsumer) {
+      this.setState({validationError: 'consumer not defined'});
+      return;
+    }
+    const valueProp = kind === 'users' ? 'username' : 'name';
+    const consumer = this.state[kind].find(item => item[valueProp] === pendingCredentialConsumer);
+    if (!consumer) {
+      this.setState({validationError: 'consumer not found'});
+      return;
+    }
+    this.setState({pendingCredentialCreation: true});
+    await this.handleCreateCredentials(consumer.id, type)();
+    this.setState({
+      pendingCredentialConsumer: '',
+      pendingCredentialCreation: false,
+      pendingNewCredential: '',
+    });
   };
 
   handleStatusChange = async ({currentTarget: {checked: status}}) => {
@@ -511,27 +565,76 @@ class CustomerManagement extends PureComponent {
     );
   };
 
-  renderCredentialsList = (consumerId) => {
-    credentialsTypes
+  renderCredentialsList = (consumerId) => (
+    <div>
+      {credentialsTypes.map(type => (
+        <CollapsibleProperties
+          key={type}
+          bar={<EntityPropertyLabel>{type}</EntityPropertyLabel>}
+          collapsible={this.renderCredentialsListByType(consumerId, type)}
+          barToggable
+          defaultOpened
+        />
+      ))}
+    </div>
+  );
+
+  renderAddCredential = (type, kind) => {
+    const valueProp = kind === 'users' ? 'username' : 'name';
+    let values = this.state[kind];
+    if (['basic-auth', 'oauth2'].includes(type)) {
+      values = values.filter(({id}) => !Object.keys(this.state.credentials).includes(id));
+    }
+    const options = values.map(item => ({value: item[valueProp]}));
+    const {pendingCredentialCreation, validationError} = this.state;
     return (
-      <div>
-        {credentialsTypes.map(type => (
-          <CollapsibleProperties
-            key={type}
-            bar={<EntityPropertyLabel>{type}</EntityPropertyLabel>}
-            collapsible={this.renderCredentialsListByType(consumerId, type)}
-            barToggable
-            defaultOpened
+      <div className="CustomerManagement__create">
+        <div className="CustomerManagement__create--field">
+          <EntityProperty
+            title={`Create ${type} for ${kind === 'users' ? 'username' : 'app'}`}
+            name="tmp[create]"
+            value=""
+            autocomplete
+            options={options}
+            onBlur={({target: {value: pendingCredentialConsumer}}) => this.setState({pendingCredentialConsumer})}
+            invalid={validationError}
+            width="100%"
           />
-        ))}
+        </div>
+        <div className="CustomerManagement__create--buttons">
+          <Button
+            onClick={() => this.setState({pendingNewCredential: ''})}
+          >
+            Cancel
+          </Button>
+          <Button
+            name="submit"
+            onClick={() => this.handleAddCredential(type, kind)}
+            disabled={pendingCredentialCreation}
+          >
+            Create
+          </Button>
+        </div>
       </div>
     );
   };
 
   renderCredentialsListByType = (consumerId, type) => {
+    if (consumerId) return this.renderCredentialsListByTypeAndKind(consumerId, type);
+    const [selectedType, selectedKind] = this.state.pendingNewCredential.split('|');
+    return (
+      <div>
+        {type === selectedType && selectedKind === 'users' && this.renderAddCredential(type, 'users')}
+        {this.renderCredentialsListByTypeAndKind(null, type, 'users')}
+        {type === selectedType && selectedKind === 'apps' && this.renderAddCredential(type, 'apps')}
+        {this.renderCredentialsListByTypeAndKind(null, type, 'apps')}
+      </div>
+    );
+  };
+
+  renderCredentialsListByTypeAndKind = (consumerId, type, kind) => {
     const {loadingUsers, loadingApps} = this.state;
     const loading = loadingUsers || loadingApps;
-    const credentials = this.state.credentials[consumerId] || [];
     const columns = [];
     const widths = [
       type === 'key-auth' ? 200 : 100,
@@ -542,23 +645,61 @@ class CustomerManagement extends PureComponent {
     ];
     const paddings = [true, true, false, false, false];
     const centers = [false, false, type !== 'key-auth', true, false];
+    let credentials;
+    if (consumerId) {
+      credentials = this.state.credentials[consumerId] || [];
+    } else {
+      credentials = [];
+      Object.keys(this.state.credentials).forEach((consId) => {
+        const consumer = this.state[kind].find(({id}) => id === consId);
+        if (consumer) {
+          const name = consumer[kind === 'users' ? 'username' : 'name'];
+          this.state.credentials[consId].forEach((item) => {
+            if (item.type === type) {
+              credentials.push({...item, name});
+            }
+          });
+        }
+      });
+      columns.push(kind === 'users' ? 'Username' : 'App name');
+      widths.unshift(120);
+      paddings.unshift(true);
+      centers.unshift(false);
+      if (kind === 'apps') {
+        columns.push('Username');
+        widths.unshift(120);
+        paddings.unshift(true);
+        centers.unshift(false);
+      }
+    }
     const data = [];
     if (type === 'basic-auth') {
       columns.push('PasswordKey');
       columns.push('Password');
       credentials
         .filter(item => item.type === type)
-        .forEach(({password, passwordKey, isActive, autoGeneratePassword}) => data.push([
-          passwordKey,
-          password,
-          '', // autoGeneratePassword ? check : '',
-          <Checkbox
-            name="consumerManagement[credentials-basic-auth-status]"
-            value={isActive}
-            handleChange={this.handleCredentialsStatusChange('basic-auth', consumerId, consumerId)}
-          />,
-          '',
-        ]));
+        .forEach((entry) => {
+          const {name, password, passwordKey, isActive} = entry;
+          const id = consumerId || entry.consumerId;
+          const item = [
+            passwordKey,
+            password,
+            '', // autoGeneratePassword ? check : '',
+            <Checkbox
+              name="consumerManagement[credentials-basic-auth-status]"
+              value={isActive}
+              handleChange={this.handleCredentialsStatusChange('basic-auth', id, id)}
+            />,
+            '',
+          ];
+          if (!consumerId) {
+            if (kind === 'apps') {
+              item.unshift('user');
+            }
+            item.unshift(name);
+          }
+          data.push(item);
+        })
     }
     if (type === 'key-auth') {
       columns.push('KeyId');
@@ -566,50 +707,62 @@ class CustomerManagement extends PureComponent {
       const scopesOptions = (this.state.scopes || []).map(label => ({label, value: label}));
       credentials
         .filter(item => item.type === type)
-        .forEach(({keyId, keySecret, isActive, scopes}) => data.push([
-          keyId,
-          keySecret,
-          <Select
-            name="consumerManagement[credentials-key-auth-scopes]"
-            placeholder="null"
-            value={eval(scopes) || []}
-            multiple
-            autocomplete
-            options={scopesOptions}
-            handleChange={this.handleCredentialsScopesChange('key-auth', consumerId, keyId)}
-          />,
-          <Checkbox
-            name="consumerManagement[credentials-key-auth-status]"
-            value={isActive}
-            handleChange={this.handleCredentialsStatusChange('key-auth', consumerId, keyId)}
-          />,
-          '',
-        ]));
+        .forEach((entry) => {
+          const {name, keyId, keySecret, isActive, scopes} = entry;
+          const id = consumerId || entry.consumerId;
+          const item = [
+            keyId,
+            keySecret,
+            <Select
+              name="consumerManagement[credentials-key-auth-scopes]"
+              placeholder="null"
+              value={eval(scopes) || []}
+              multiple
+              autocomplete
+              options={scopesOptions}
+              handleChange={this.handleCredentialsScopesChange('key-auth', id, keyId)}
+            />,
+            <Checkbox
+              name="consumerManagement[credentials-key-auth-status]"
+              value={isActive}
+              handleChange={this.handleCredentialsStatusChange('key-auth', id, keyId)}
+            />,
+            '',
+          ];
+          if (!consumerId) item.unshift(name);
+          data.push(item);
+        });
     }
     if (type === 'oauth2') {
       columns.push('PasswordKey');
       columns.push('Secret');
       credentials
         .filter(item => item.type === type)
-        .forEach(({secret, passwordKey, isActive, autoGeneratePassword}) => data.push([
-          passwordKey,
-          secret,
-          '', // autoGeneratePassword ? check : '',
-          <Checkbox
-            name="consumerManagement[credentials-oauth2-status]"
-            value={isActive}
-            handleChange={this.handleCredentialsStatusChange('oauth2', consumerId, consumerId)}
-          />,
-          '',
-        ]));
+        .forEach((entry) => {
+          const {name, secret, passwordKey, isActive} = entry;
+          const id = consumerId || entry.consumerId;
+          const item = [
+            passwordKey,
+            secret,
+            '', // autoGeneratePassword ? check : '',
+            <Checkbox
+              name="consumerManagement[credentials-oauth2-status]"
+              value={isActive}
+              handleChange={this.handleCredentialsStatusChange('oauth2', id, id)}
+            />,
+            '',
+          ];
+          if (!consumerId) item.unshift(name);
+          data.push(item);
+        });
     }
     columns.push(type === 'key-auth' ? 'Scopes' : ''); //'AutoGeneratePassword');
     columns.push('Active');
-    let isAddButton = true;
-    if (type !== 'key-auth') {
+    let isAddButton = false;
+    if (consumerId && type !== 'key-auth') {
       isAddButton = !credentials.find(item => item.type === type);
     }
-    columns.push(isAddButton ? <IconButton icon="iconPlus" onClick={this.handleCreateCredentials(consumerId, type)} /> : '');
+    columns.push(isAddButton ? <IconButton icon="iconPlus" onClick={this.handleCreateCredentials(consumerId, type, kind)} /> : '');
     return (
       <div className={cs('CustomerManagement__table', {loading})}>
         <Table

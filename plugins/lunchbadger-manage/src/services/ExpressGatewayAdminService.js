@@ -44,6 +44,8 @@ class ExpressGatewayAdminService {
 
   setAppStatus = (id, status) => this.api.put(`/apps/${id}/status`, {body: {status}});
 
+  getAllCredentials = () => this.api.get('/credentials');
+
   getCredentials = consumerId => this.api.get(`/credentials/${consumerId}`);
 
   createCredentials = body => this.api.post('/credentials', {body});

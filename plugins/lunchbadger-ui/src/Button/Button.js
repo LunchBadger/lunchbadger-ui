@@ -4,7 +4,7 @@ import cs from 'classnames';
 import './Button.scss';
 
 const Button = ({type, children, onClick, name, disabled}) => {
-  const classNames = cs('Button', name, {disabled});
+  const classNames = cs('Button', name, type, {disabled});
   if (type === 'submit') return <button type="submit" className={classNames}>{children}</button>
   return <div className={classNames} onClick={onClick}>{children}</div>;
 };

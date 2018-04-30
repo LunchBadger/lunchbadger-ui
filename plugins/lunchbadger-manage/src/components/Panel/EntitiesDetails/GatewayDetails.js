@@ -532,14 +532,16 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            {http.enabled && (
-              <EntityProperty
-                title="Port"
-                placeholder=" "
-                name="http[port]"
-                value={http.port}
-              />
-            )}
+            <Transitioning>
+              {http.enabled && (
+                <EntityProperty
+                  title="Port"
+                  placeholder=" "
+                  name="http[port]"
+                  value={http.port}
+                />
+              )}
+            </Transitioning>
           </div>
         </div>
         <div>
@@ -552,16 +554,20 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            {https.enabled && (
-              <EntityProperty
-                title="Port"
-                placeholder=" "
-                name="https[port]"
-                value={https.port}
-              />
-            )}
+            <Transitioning>
+              {https.enabled && (
+                <EntityProperty
+                  title="Port"
+                  placeholder=" "
+                  name="https[port]"
+                  value={https.port}
+                />
+              )}
+            </Transitioning>
           </div>
-          {https.enabled && table}
+          <Transitioning>
+            {https.enabled && table}
+          </Transitioning>
         </div>
       </div>
     );
@@ -597,24 +603,28 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable">
-            {admin.enabled && (
-              <EntityProperty
-                title="Hostname"
-                placeholder=" "
-                name="admin[hostname]"
-                value={admin.hostname}
-              />
-            )}
+            <Transitioning>
+              {admin.enabled && (
+                <EntityProperty
+                  title="Hostname"
+                  placeholder=" "
+                  name="admin[hostname]"
+                  value={admin.hostname}
+                />
+              )}
+            </Transitioning>
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            {admin.enabled && (
-              <EntityProperty
-                title="Port"
-                placeholder=" "
-                name="admin[port]"
-                value={admin.port}
-              />
-            )}
+            <Transitioning>
+              {admin.enabled && (
+                <EntityProperty
+                  title="Port"
+                  placeholder=" "
+                  name="admin[port]"
+                  value={admin.port}
+                />
+              )}
+            </Transitioning>
           </div>
         </div>
       </div>

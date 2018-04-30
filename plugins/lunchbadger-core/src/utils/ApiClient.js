@@ -41,6 +41,9 @@ class ApiClient {
           if (body.err && typeof body.err === 'string') {
             message = body.err;
           }
+          if (body.message) {
+            message = body.message;
+          }
           if (body.error) {
             if (body.error.stack) {
               message = body.error.stack;

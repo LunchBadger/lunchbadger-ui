@@ -24,6 +24,7 @@
   &:active {
     background-color: rgb(233, 233, 233);
   }
+  &.submit,
   &[type=submit] {
     border-color: rgb(65, 144, 205);
     background-color: rgb(65, 144, 205);

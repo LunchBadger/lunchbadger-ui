@@ -12,6 +12,7 @@ import {
   Input,
   Checkbox,
   Table,
+  Transitioning,
 } from '../../../../../lunchbadger-ui/src';
 
 const requestMethods = [
@@ -266,7 +267,11 @@ export default class Rest extends PureComponent {
           value={!!headers}
           handleChange={this.handleToggleOptionsHeaders}
         />
-        {!!headers && this.renderOptionHeadersParameters(headers)}
+        <div>
+          <Transitioning>
+            {!!headers && this.renderOptionHeadersParameters(headers)}
+          </Transitioning>
+        </div>
       </div>
     );
   };
@@ -348,14 +353,18 @@ export default class Rest extends PureComponent {
             />
           </span>
         )}
-        {!!options && (
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Headers</EntityPropertyLabel>}
-            collapsible={this.renderOptionHeaders(options.headers)}
-            defaultOpened
-            barToggable
-          />
-        )}
+        <div>
+          <Transitioning>
+            {!!options && (
+              <CollapsibleProperties
+                bar={<EntityPropertyLabel>Headers</EntityPropertyLabel>}
+                collapsible={this.renderOptionHeaders(options.headers)}
+                defaultOpened
+                barToggable
+              />
+            )}
+          </Transitioning>
+        </div>
       </div>
     );
   };
@@ -556,7 +565,7 @@ export default class Rest extends PureComponent {
     const {predefined, operations} = this.state;
     const predefinedOptions = Object.keys(predefinedRests).map(value => ({label: predefinedRests[value].label, value}));
     const operationsCollapsible = (
-      <div>
+      <Transitioning>
         {operations.map((operation, idx) => (
           <div className="Rest__operations__collapsible" key={operation.id}>
             <CollapsibleProperties
@@ -576,7 +585,7 @@ export default class Rest extends PureComponent {
             />
           </div>
         ))}
-      </div>
+      </Transitioning>
     );
     let widthPredefined;
     if (!plain) {

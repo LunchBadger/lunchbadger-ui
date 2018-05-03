@@ -1,0 +1,19 @@
+.Sortable {
+  &__draggable {
+    z-index: 1006;
+    background-color: #FFF;
+    position: relative;
+    margin-left: -20px;
+    padding-left: 20px;
+    &:hover > .Sortable__handler {
+      display: block;
+    }
+  }
+  &__handler {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    cursor: ns-resize;
+    display: none;
+  }
+}

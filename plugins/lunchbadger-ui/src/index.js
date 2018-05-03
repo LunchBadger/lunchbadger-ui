@@ -34,6 +34,7 @@ import Table from './Table/Table';
 import CopyOnHover from './CopyOnHover/CopyOnHover';
 
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
+import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
 import {Form} from './utils/Formsy/main';
 
@@ -110,6 +111,7 @@ export {
   RnD,
   Select,
   SmoothCollapse,
+  Sortable,
   SystemDefcon1,
   SystemInformationMessages,
   SystemNotifications,

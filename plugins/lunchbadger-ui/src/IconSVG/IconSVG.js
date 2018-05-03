@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 
 class IconSVG extends Component {
   render() {
-    const {svg, className} = this.props;
+    const {svg, className, styles} = this.props;
     return (
-      <span className={className} dangerouslySetInnerHTML={{__html: svg}} />
+      <span
+        className={className}
+        dangerouslySetInnerHTML={{__html: svg}}
+        style={styles}
+      />
     );
   }
 }
@@ -13,10 +17,12 @@ class IconSVG extends Component {
 IconSVG.propTypes = {
   svg: PropTypes.string,
   className: PropTypes.string,
+  styles: PropTypes.object,
 };
 
 IconSVG.defaultProps = {
   className: '',
+  styles: {},
 }
 
 export default IconSVG;

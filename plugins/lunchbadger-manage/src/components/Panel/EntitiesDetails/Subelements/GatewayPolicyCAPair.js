@@ -10,10 +10,6 @@ export default class GatewayPolicyCAPair extends PureComponent {
     renderAction: PropTypes.func,
     nr: PropTypes.number,
     onRemove: PropTypes.func,
-    onMoveDown: PropTypes.func,
-    onMoveUp: PropTypes.func,
-    moveDownDisabled: PropTypes.bool,
-    moveUpDisabled: PropTypes.bool,
     prefix: PropTypes.string,
   };
 
@@ -51,10 +47,6 @@ export default class GatewayPolicyCAPair extends PureComponent {
     const {
       nr,
       onRemove,
-      onMoveDown,
-      onMoveUp,
-      moveDownDisabled,
-      moveUpDisabled,
       prefix,
     } = this.props;
     const {horizontal} = this.state;
@@ -74,18 +66,6 @@ export default class GatewayPolicyCAPair extends PureComponent {
                 icon="iconDelete"
                 name={`remove__${prefix}`}
                 onClick={onRemove}
-              />
-              <IconButton
-                icon="iconArrowDown"
-                name={`moveDown__${prefix}`}
-                onClick={onMoveDown}
-                disabled={moveDownDisabled}
-              />
-              <IconButton
-                icon="iconArrowUp"
-                name={`moveUp__${prefix}`}
-                onClick={onMoveUp}
-                disabled={moveUpDisabled}
               />
               <IconButton
                 icon="iconModeHorizontal"

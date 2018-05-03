@@ -2265,6 +2265,11 @@
       "from": "dom-helpers@>=3.2.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/dom-helpers/-/dom-helpers-3.2.1.tgz"
     },
+    "dom-walk": {
+      "version": "0.1.1",
+      "from": "dom-walk@>=0.1.0 <0.2.0",
+      "resolved": "https://registry.npmjs.org/dom-walk/-/dom-walk-0.1.1.tgz"
+    },
     "domain-browser": {
       "version": "1.1.7",
       "from": "domain-browser@>=1.1.1 <2.0.0",
@@ -2997,6 +3002,18 @@
       "from": "glob-parent@>=2.0.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz",
       "dev": true
+    },
+    "global": {
+      "version": "4.3.2",
+      "from": "global@>=4.3.0 <4.4.0",
+      "resolved": "https://registry.npmjs.org/global/-/global-4.3.2.tgz",
+      "dependencies": {
+        "process": {
+          "version": "0.5.2",
+          "from": "process@>=0.5.1 <0.6.0",
+          "resolved": "https://registry.npmjs.org/process/-/process-0.5.2.tgz"
+        }
+      }
     },
     "globals": {
       "version": "9.16.0",
@@ -4237,6 +4254,11 @@
       "from": "mime-types@>=2.1.7 <2.2.0",
       "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.13.tgz"
     },
+    "min-document": {
+      "version": "2.19.0",
+      "from": "min-document@>=2.19.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/min-document/-/min-document-2.19.0.tgz"
+    },
     "minimatch": {
       "version": "3.0.3",
       "from": "minimatch@>=3.0.2 <4.0.0",
@@ -4396,6 +4418,11 @@
       "from": "negotiator@0.6.1",
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.1.tgz",
       "dev": true
+    },
+    "nested-property": {
+      "version": "0.0.7",
+      "from": "nested-property@>=0.0.7 <0.0.8",
+      "resolved": "https://registry.npmjs.org/nested-property/-/nested-property-0.0.7.tgz"
     },
     "netmask": {
       "version": "1.0.6",
@@ -5286,6 +5313,11 @@
       "from": "querystringify@>=0.0.0 <0.1.0",
       "resolved": "https://registry.npmjs.org/querystringify/-/querystringify-0.0.4.tgz"
     },
+    "rafl": {
+      "version": "1.2.2",
+      "from": "rafl@>=1.2.1 <1.3.0",
+      "resolved": "https://registry.npmjs.org/rafl/-/rafl-1.2.2.tgz"
+    },
     "randomatic": {
       "version": "1.1.6",
       "from": "randomatic@>=1.1.3 <2.0.0",
@@ -5656,6 +5688,11 @@
       "from": "react-inspector@>=1.1.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/react-inspector/-/react-inspector-1.1.2.tgz",
       "dev": true
+    },
+    "react-joyride": {
+      "version": "1.11.4",
+      "from": "react-joyride@latest",
+      "resolved": "https://registry.npmjs.org/react-joyride/-/react-joyride-1.11.4.tgz"
     },
     "react-jss": {
       "version": "2.1.1",
@@ -6118,6 +6155,11 @@
       "from": "script-loader@>=0.7.0 <0.8.0",
       "resolved": "https://registry.npmjs.org/script-loader/-/script-loader-0.7.0.tgz",
       "dev": true
+    },
+    "scroll": {
+      "version": "2.0.3",
+      "from": "scroll@>=2.0.3 <3.0.0",
+      "resolved": "https://registry.npmjs.org/scroll/-/scroll-2.0.3.tgz"
     },
     "selenium-server-standalone-jar": {
       "version": "2.53.1",

@@ -28,6 +28,7 @@ const objectsToRegister = [
   'onValidate',
   'panelMenu',
   'models',
+  'walkthrough',
 ];
 
 const registerArrays = (plugins, plugs) => {

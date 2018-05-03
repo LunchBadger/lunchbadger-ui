@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 import {IconSVG} from '../';
 import {iconReorder} from '../../../../src/icons';
@@ -31,11 +32,11 @@ const SortableItem = SortableElement(({children, inPanel = false, ...props}) => 
 
 class SortableList extends PureComponent {
   render() {
-    const {items, renderItem, ...props} = this.props;
+    const {items, renderItem, inPanel, ...props} = this.props;
     return (
-      <div className="Sortable">
+      <div className={cs('Sortable', {onCanvas: !inPanel})}>
         {items.map((item, idx) => (
-          <SortableItem key={item.id} index={idx} {...props}>
+          <SortableItem key={item.id} index={idx} inPanel={inPanel} {...props}>
             {renderItem(item, idx)}
           </SortableItem>
         ))}
@@ -56,6 +57,11 @@ class Sortable extends PureComponent {
     inPanel: PropTypes.bool,
   };
 
+  getContainer = () => document
+    .getElementsByClassName(this.props.inPanel
+      ? 'BaseDetails__content'
+      : 'canvas__wrapper')[0];
+
   render() {
     const {
       onSortEnd,
@@ -73,7 +79,7 @@ class Sortable extends PureComponent {
         useDragHandle
         lockAxis="y"
         lockToContainerEdges
-        getContainer={() => document.getElementsByClassName('BaseDetails__content')[0]}
+        getContainer={this.getContainer}
         handlerOffsetTop={handlerOffsetTop}
         handlerOffsetLeft={handlerOffsetLeft}
         inPanel={inPanel}

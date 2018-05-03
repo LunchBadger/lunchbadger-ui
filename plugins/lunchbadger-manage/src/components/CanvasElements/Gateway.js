@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
-// import update from 'react-addons-update';
+import {arrayMove} from 'react-sortable-hoc';
 import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
@@ -16,6 +16,7 @@ import {
   CollapsibleProperties,
   IconButton,
   Input,
+  Sortable,
 } from '../../../../lunchbadger-ui/src';
 import './Gateway.scss';
 
@@ -147,14 +148,22 @@ class Gateway extends Component {
     }
   };
 
+  handleReorderPolicies = pipelineIdx => ({oldIndex, newIndex}) => {
+    if (oldIndex === newIndex) return;
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies = arrayMove(pipelines[pipelineIdx].policies, oldIndex, newIndex);
+    this.changeState({pipelines});
+  };
+
   getPolicyInputOptions = () => Object.keys(this.context.store.getState().entities.gatewaySchemas.policy)
     .map(label => ({label, value: label}));
 
   renderPipeline = (pipeline, pipelineIdx) => {
     const options = this.getPolicyInputOptions();
     const collapsible = (
-      <div>
-        {pipeline.policies.map((policy, policyIdx) => (
+      <Sortable
+        items={pipeline.policies}
+        renderItem={(policy, policyIdx) => (
           <div key={policyIdx}>
             <EntityProperty
               name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
@@ -184,8 +193,9 @@ class Gateway extends Component {
               ))}
             </div>
           </div>
-        ))}
-      </div>
+        )}
+        onSortEnd={this.handleReorderPolicies(pipelineIdx)}
+      />
     );
     return (
       <CollapsibleProperties

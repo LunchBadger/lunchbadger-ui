@@ -234,12 +234,14 @@ class GatewayDetails extends PureComponent {
   };
 
   handleReorderPolicies = pipelineIdx => ({oldIndex, newIndex}) => {
+    if (oldIndex === newIndex) return;
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies = arrayMove(pipelines[pipelineIdx].policies, oldIndex, newIndex);
     this.changeState({pipelines});
   };
 
   handleReorderCAPairs = (pipelineIdx, policyIdx) => ({oldIndex, newIndex}) => {
+    if (oldIndex === newIndex) return;
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies[policyIdx].conditionAction =
       arrayMove(pipelines[pipelineIdx].policies[policyIdx].conditionAction, oldIndex, newIndex);

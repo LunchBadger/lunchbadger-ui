@@ -7,6 +7,9 @@
     padding-left: 20px;
     &:hover > .Sortable__handler {
       display: block;
+      .Entity:not(.editable) .Sortable.onCanvas & {
+        display: none;
+      }
     }
   }
   &__handler {

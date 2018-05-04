@@ -14,7 +14,8 @@ const serviceUrls = [
   'kubeWatcherApiUrl',
   'slsApiUrl',
   'slsUrl',
-  'sshManagerUrl'
+  'sshManagerUrl',
+  'gitCloneCommand'
 ];
 
 class Cfg {

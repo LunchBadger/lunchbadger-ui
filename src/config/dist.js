@@ -11,6 +11,7 @@ export default {
   kubeWatcherApiUrl: 'https://kube-watcher.lunchbadger.com',
   slsApiUrl: 'https://sls-{USER}-{ENV}.lunchbadger.io',
   sshManagerUrl: 'https://api.lunchbadger.com/users/customer/{USER}',
+  gitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/{ENV}.git',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

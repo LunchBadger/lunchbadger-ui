@@ -4,56 +4,17 @@ import PropTypes from 'prop-types';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Panel from './Panel';
 import panelKeys from '../../constants/panelKeys';
-import {addSystemDefcon1} from '../../reduxActions/systemDefcon1';
-import ConfigStoreService from '../../services/ConfigStoreService';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
-import {getUser} from '../../utils/auth';
 import SshManager from './EntitiesDetails/SshManager';
 import './SettingsPanel.scss';
 
 class SettingsPanel extends Component {
   static type = 'SettingsPanel';
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     props.parent.storageKey = panelKeys.SETTINGS_PANEL;
-    this.state = {
-      accessKey: null
-    };
-  }
-
-  componentWillMount() {
-    this.getAccessKey();
-  }
-
-  getAccessKey = async () => {
-    try {
-      const data = await ConfigStoreService.getAccessKey();
-      this.setState({
-        accessKey: data.body.key,
-      });
-    } catch (error) {
-      this.context.store.dispatch(addSystemDefcon1({error}));
-    }
-  }
-
-  onRegenerate = async () => {
-    this.setState({
-      accessKey: null,
-    });
-    try {
-      const data = await ConfigStoreService.regenerateAccessKey();
-      this.setState({
-        accessKey: data.body.key,
-      });
-    } catch (error) {
-      this.context.store.dispatch(addSystemDefcon1({error}));
-    };
   }
 
   onRestartWorkspace = () => ProjectService.restartWorkspace();
@@ -63,17 +24,7 @@ class SettingsPanel extends Component {
   onReinstall = () => ProjectService.reinstallDeps();
 
   render() {
-    let cloneCommand;
-    if (this.state.accessKey) {
-      const anchor = document.createElement('a');
-      anchor.href = Config.get('gitBaseUrl');
-      anchor.pathname += `/${getUser().profile.sub}.git`;
-      anchor.username = 'git';
-      anchor.password = this.state.accessKey;
-      cloneCommand = `git clone ${anchor.href}`;
-    } else {
-      cloneCommand = '...';
-    }
+    const cloneCommand = Config.get('gitCloneCommand');
     const workspaceUrl = Config.get('workspaceUrl');
     return (
       <div className="panel__body settings">
@@ -110,9 +61,6 @@ class SettingsPanel extends Component {
                   <i className="fa fa-copy iconCopy" />
                 </CopyToClipboard>
               )}
-            </div>
-            <div>
-              <button onClick={this.onRegenerate}>Regenerate</button>
             </div>
           </div>
         </div>

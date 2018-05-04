@@ -84,6 +84,7 @@ class App extends Component {
       currentlyOpenedPanel,
       isEntityEditable,
       walkthrough,
+      loadingProject,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -120,7 +121,7 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
-          <Walkthrough steps={walkthroughSteps} />
+          {!loadingProject && <Walkthrough steps={walkthroughSteps} />}
         </div>
       </Provider>
     );
@@ -136,6 +137,7 @@ const selector = createSelector(
   state => state.states.currentlyOpenedPanel,
   state => !!state.states.currentEditElement,
   state => state.plugins.walkthrough,
+  state => state.loadingProject,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -145,6 +147,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
+    loadingProject,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -154,6 +157,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
+    loadingProject,
   }),
 );
 

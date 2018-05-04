@@ -3,6 +3,14 @@ import PropTypes from 'prop-types';
 import Joyride from 'react-joyride';
 import './Walkthrough.scss';
 
+const locale = {
+  back: 'Back',
+  close: 'Close',
+  last: 'Got it',
+  next: 'Next',
+  skip: 'Skip',
+};
+
 class Walkthrough extends PureComponent {
   static propTypes = {
     steps: PropTypes.array,
@@ -39,6 +47,7 @@ class Walkthrough extends PureComponent {
         disableOverlay
         showBackButton={false}
         callback={this.handleCallback}
+        locale={locale}
       />
     );
   }

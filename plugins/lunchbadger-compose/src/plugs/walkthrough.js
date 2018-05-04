@@ -52,7 +52,7 @@ export default {
   },
   '04': {
     title: 'Microservice Entities',
-    text: 'This Entity is still in-development. It\'s not recommended for use at this time.',
+    text: '<i>This Entity is still in-development. It\'s not recommended for use at this time.</i>',
     selector: '.Tool.microservice',
     position: 'right',
   },

@@ -1,7 +1,7 @@
 .panel__metrics-drop {
   max-width: 780px;
-  margin: 25px auto;
-  min-height: calc(100% - 50px);
+  margin: 0 auto;
+  min-height: 100%;
   padding: 150px 75px;
   border: 1px dashed #bdbdbd;
   border-radius: 5px;
@@ -10,12 +10,15 @@
   text-align: center;
   color: #e7e7e7;
   position: relative;
-
   &--over,
   &:hover {
     color: #00abff;
     border-color: #00abff;
   }
+}
+.panel__body.metrics {
+  height: 100%;
+  padding: 25px 0;
 }
 
 .panel__metrics-drop__inside {

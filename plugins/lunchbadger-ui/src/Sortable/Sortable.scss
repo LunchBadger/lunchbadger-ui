@@ -1,6 +1,6 @@
 .Sortable {
   &__draggable {
-    z-index: 1006;
+    z-index: 1005;
     background-color: #FFF;
     position: relative;
     margin-left: -20px;
@@ -10,6 +10,12 @@
       .Entity:not(.editable) .Sortable.onCanvas & {
         display: none;
       }
+    }
+  }
+  &.onCanvas .Sortable__draggable {
+    z-index: auto;
+    .editable & {
+      z-index: 1005;
     }
   }
   &__handler {

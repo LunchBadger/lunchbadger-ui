@@ -13,7 +13,13 @@ import Spinner from './Spinner';
 import PanelContainer from '../Panel/PanelContainer';
 import DetailsPanel from '../Panel/DetailsPanel';
 import {loadFromServer} from '../../reduxActions';
-import {Aside, SystemInformationMessages, SystemNotifications, SystemDefcon1} from '../../../../lunchbadger-ui/src';
+import {
+  Aside,
+  SystemInformationMessages,
+  SystemNotifications,
+  SystemDefcon1,
+  Walkthrough,
+} from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
@@ -77,12 +83,18 @@ class App extends Component {
       multiEnvIndex,
       currentlyOpenedPanel,
       isEntityEditable,
+      walkthrough,
+      loadingProject,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
       // filter: multiEnvDelta ? 'grayscale(100%) opacity(70%)' : undefined,
     }
     const multiEnvNotDev = multiEnvIndex > 0;
+    const walkthroughSteps = Object.keys(walkthrough)
+      .sort()
+      .map(key => walkthrough[key]);
+    const walkthrougVisible = !loadingProject && getUser().profile.sub === 'walkthrough';
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -110,6 +122,7 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
+          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} />}
         </div>
       </Provider>
     );
@@ -124,6 +137,8 @@ const selector = createSelector(
   state => state.multiEnvironments.environments.length,
   state => state.states.currentlyOpenedPanel,
   state => !!state.states.currentEditElement,
+  state => state.plugins.walkthrough,
+  state => state.loadingProject,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -132,6 +147,8 @@ const selector = createSelector(
     multiEnvAmount,
     currentlyOpenedPanel,
     isEntityEditable,
+    walkthrough,
+    loadingProject,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -140,6 +157,8 @@ const selector = createSelector(
     multiEnvAmount,
     currentlyOpenedPanel,
     isEntityEditable,
+    walkthrough,
+    loadingProject,
   }),
 );
 

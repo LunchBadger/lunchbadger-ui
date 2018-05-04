@@ -10,4 +10,5 @@ export default [
   'skar',
   'test',
   'vc',
+  'walkthrough',
 ];

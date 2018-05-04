@@ -36,6 +36,7 @@ import CopyOnHover from './CopyOnHover/CopyOnHover';
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
+import Walkthrough from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
 
 import {
@@ -120,6 +121,7 @@ export {
   Toolbox,
   TopBar,
   Transitioning,
+  Walkthrough,
   entityIcons,
   dataSourceIcons,
 };

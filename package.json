@@ -118,6 +118,7 @@
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.1",
+    "react-joyride": "^1.11.4",
     "react-modal-dialog": "^3.0.2",
     "react-notify-toast": "^0.1.2",
     "react-redux": "^4.4.7",

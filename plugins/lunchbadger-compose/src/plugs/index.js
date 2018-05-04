@@ -12,6 +12,7 @@ import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
 import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onEntitiesStatusesChange from './onEntitiesStatusesChange';
+import walkthrough from './walkthrough';
 
 export default {
   tools,
@@ -28,4 +29,5 @@ export default {
   onConnectionMovedStrategy,
   onConnectionDeletedStrategy,
   onEntitiesStatusesChange,
+  walkthrough,
 };

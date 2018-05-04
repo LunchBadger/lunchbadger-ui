@@ -67,12 +67,10 @@ export default {
   '08': {
     title: 'Accessing Gateway Instances',
     text: `All gateways will be accessible via the following domain name pattern:
-<br /><br />
 <code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
-<br /><br />
-For example, if your gateway is named "Gateway" and your User ID is "999", your gateway will be accessible at:
-<br /><br />
-<code>http://gateway-999-dev.lunchbadger.io</code>
+<br />
+For example, if your gateway is named "Gateway" and your User ID is "99", your gateway will be accessible at:
+<code>http://gateway-99-dev.lunchbadger.io</code>
 `,
     selector: '.Gateway__pipeline0 > div:nth-child(2) > div',
     position: 'left',

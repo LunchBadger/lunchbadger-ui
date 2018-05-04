@@ -43,7 +43,7 @@ class Walkthrough extends PureComponent {
         run={run}
         autoStart
         showSkipButton
-        showStepsProgress
+        showStepsProgress={false}
         disableOverlay
         showBackButton={false}
         callback={this.handleCallback}

@@ -94,6 +94,7 @@ class App extends Component {
     const walkthroughSteps = Object.keys(walkthrough)
       .sort()
       .map(key => walkthrough[key]);
+    const walkthrougVisible = !loadingProject && getUser().profile.sub === 'walkthrough';
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -121,7 +122,7 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
-          {!loadingProject && <Walkthrough steps={walkthroughSteps} />}
+          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} />}
         </div>
       </Provider>
     );

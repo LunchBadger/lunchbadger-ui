@@ -99,7 +99,7 @@ class APIForecast extends Component {
       if (data.length) {
         forecastData = data[0];
       } else {
-        forecastData = this.props.entity.toJSON();
+        forecastData = Object.values(data)[0];
       }
       this.context.store.dispatch(updateAPIForecast(this.props.entity.id, forecastData));
       this.setState({data: ForecastDataParser.prepareData(forecastData)}, () => {

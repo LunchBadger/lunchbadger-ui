@@ -19,25 +19,25 @@ const setStatesToSave = (state) => {
       states.push({key, value});
     }
   });
-  const {currentForecast, currentForecastInformation} = state.states;
-  if (currentForecast) {
-    states.push({
-      key: 'currentForecast',
-      value: {
-        id: currentForecast.forecast.id,
-        expanded: currentForecast.expanded || false,
-        left: currentForecast.forecast.left || 0,
-        top: currentForecast.forecast.top || 0,
-        selectedDate: currentForecast.selectedDate,
-      },
-    });
-  }
-  if (currentForecastInformation) {
-    states.push({
-      key: 'currentForecastInformation',
-      value: currentForecastInformation,
-    });
-  }
+  // const {currentForecast, currentForecastInformation} = state.states;
+  // if (currentForecast) {
+  //   states.push({
+  //     key: 'currentForecast',
+  //     value: {
+  //       id: currentForecast.forecast.id,
+  //       expanded: currentForecast.expanded || false,
+  //       left: currentForecast.forecast.left || 0,
+  //       top: currentForecast.forecast.top || 0,
+  //       selectedDate: currentForecast.selectedDate,
+  //     },
+  //   });
+  // }
+  // if (currentForecastInformation) {
+  //   states.push({
+  //     key: 'currentForecastInformation',
+  //     value: currentForecastInformation,
+  //   });
+  // }
   const multiEnvironments = _.cloneDeep(state.multiEnvironments);
   multiEnvironments.environments.forEach((_, idx) => {
     multiEnvironments.environments[idx].entities = {};

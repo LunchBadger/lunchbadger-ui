@@ -85,7 +85,7 @@ For example, if your gateway is named "Gateway" and your User ID is "999", your 
     title: 'Consumer Management',
     text: 'All Gateway Entities contain an icon for accessing Consumer Management. This icon will open up a Consumer Management panel.',
     selector: '.Toolbox__button--customerManagement',
-    position: 'bottom',
+    position: 'left',
     onAfter: cb => {
       document.querySelector('.Entity.Gateway .Toolbox__button--customerManagement').click();
       setTimeout(cb, 1500);
@@ -107,7 +107,7 @@ For example, if your gateway is named "Gateway" and your User ID is "999", your 
     title: 'API Request Flow',
     text: 'When an API request is received, it flows through the LunchBadger Entities defined on the Canvas.',
     selector: '.Entity.Gateway',
-    position: 'bottom',
+    position: 'left',
   },
   '11': {
     text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /api/cars.',

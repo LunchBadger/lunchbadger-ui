@@ -94,11 +94,18 @@ class CollapsibleProperties extends Component {
             )}
           </div>
         </div>
-        <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
+        {!untoggable && (
+          <SmoothCollapse expanded={expanded} heightTransition="800ms ease">
+            <div className="CollapsibleProperties__collapsible">
+              {collapsible}
+            </div>
+          </SmoothCollapse>
+        )}
+        {untoggable && (
           <div className="CollapsibleProperties__collapsible">
             {collapsible}
           </div>
-        </SmoothCollapse>
+        )}
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import {arrayMove} from 'react-sortable-hoc';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -20,6 +21,7 @@ import {
   Table,
   IconButton,
   Transitioning,
+  Sortable,
 } from '../../../../../lunchbadger-ui/src';
 import './GatewayDetails.scss';
 
@@ -170,14 +172,6 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
-  reorderPipelinePolicy = (pipelineIdx, idx, step) => () => {
-    const pipelines = _.cloneDeep(this.state.pipelines);
-    const tmp = pipelines[pipelineIdx].policies[idx + step];
-    pipelines[pipelineIdx].policies[idx + step] = pipelines[pipelineIdx].policies[idx];
-    pipelines[pipelineIdx].policies[idx] = tmp;
-    this.changeState({pipelines});
-  };
-
   handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const {name} = pipelines[pipelineIdx].policies[policyIdx];
@@ -203,14 +197,6 @@ class GatewayDetails extends PureComponent {
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies[policyIdx].conditionAction.splice(idx, 1);
-    this.changeState({pipelines});
-  };
-
-  reorderCAPair = (pipelineIdx, policyIdx, idx, step) => () => {
-    const pipelines = _.cloneDeep(this.state.pipelines);
-    const tmp = pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx + step];
-    pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx + step] = pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx];
-    pipelines[pipelineIdx].policies[policyIdx].conditionAction[idx] = tmp;
     this.changeState({pipelines});
   };
 
@@ -245,6 +231,21 @@ class GatewayDetails extends PureComponent {
     if (size - 1 === idx) {
       this.addParameter(kind, pipelineIdx, policyIdx, pairIdx)();
     }
+  };
+
+  handleReorderPolicies = pipelineIdx => ({oldIndex, newIndex}) => {
+    if (oldIndex === newIndex) return;
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies = arrayMove(pipelines[pipelineIdx].policies, oldIndex, newIndex);
+    this.changeState({pipelines});
+  };
+
+  handleReorderCAPairs = (pipelineIdx, policyIdx) => ({oldIndex, newIndex}) => {
+    if (oldIndex === newIndex) return;
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    pipelines[pipelineIdx].policies[policyIdx].conditionAction =
+      arrayMove(pipelines[pipelineIdx].policies[policyIdx].conditionAction, oldIndex, newIndex);
+    this.changeState({pipelines});
   };
 
   renderParameters = (pipelineIdx, policyIdx, pairIdx, pair, kind) => {
@@ -334,22 +335,22 @@ class GatewayDetails extends PureComponent {
           {button}
           <EntityPropertyLabel>Condition / action pairs</EntityPropertyLabel>
         </div>
-        <Transitioning>
-          {policy.conditionAction.map((pair, idx) => (
+        <Sortable
+          items={policy.conditionAction}
+          renderItem={(pair, idx) => (
             <GatewayPolicyCAPair
               key={pair.id}
               nr={idx + 1}
               renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
               renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
               onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-              onMoveDown={this.reorderCAPair(pipelineIdx, policyIdx, idx, 1)}
-              onMoveUp={this.reorderCAPair(pipelineIdx, policyIdx, idx, -1)}
-              moveDownDisabled={idx === policy.conditionAction.length - 1}
-              moveUpDisabled={idx === 0}
               prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
             />
-          ))}
-        </Transitioning>
+          )}
+          onSortEnd={this.handleReorderCAPairs(pipelineIdx, policyIdx)}
+          inPanel
+          handlerOffsetTop={10}
+        />
       </div>
     );
   };
@@ -374,41 +375,37 @@ class GatewayDetails extends PureComponent {
   };
 
   renderPipeline = (pipeline, pipelineIdx) => {
-    const collapsible = pipeline.policies.map((policy, idx) => (
-      <CollapsibleProperties
-        key={policy.id}
-        bar={this.renderPolicyInput(pipelineIdx, idx, policy)}
-        collapsible={this.renderPolicy(policy, pipelineIdx, idx)}
-        button={(
-          <span>
-            <IconButton
-              icon="iconDelete"
-              name={`remove__pipelines${pipelineIdx}policies${idx}`}
-              onClick={this.removePipelinePolicy(pipelineIdx, idx)}
-            />
-            <IconButton
-              icon="iconArrowDown"
-              name={`moveDown__pipelines${pipelineIdx}policies${idx}`}
-              onClick={this.reorderPipelinePolicy(pipelineIdx, idx, 1)}
-              disabled={idx === pipeline.policies.length - 1}
-            />
-            <IconButton
-              icon="iconArrowUp"
-              name={`moveUp__pipelines${pipelineIdx}policies${idx}`}
-              onClick={this.reorderPipelinePolicy(pipelineIdx, idx, -1)}
-              disabled={idx === 0}
-            />
-          </span>
+    const collapsible = (
+      <Sortable
+        items={pipeline.policies}
+        renderItem={(policy, idx) => (
+          <CollapsibleProperties
+            key={policy.id}
+            bar={this.renderPolicyInput(pipelineIdx, idx, policy)}
+            collapsible={this.renderPolicy(policy, pipelineIdx, idx)}
+            button={(
+              <span>
+                <IconButton
+                  icon="iconDelete"
+                  name={`remove__pipelines${pipelineIdx}policies${idx}`}
+                  onClick={this.removePipelinePolicy(pipelineIdx, idx)}
+                />
+              </span>
+            )}
+            defaultOpened
+            space="0"
+            buttonOnHover
+            noDividers
+          />
         )}
-        defaultOpened
-        space="0"
-        buttonOnHover
+        onSortEnd={this.handleReorderPolicies(pipelineIdx)}
+        inPanel
       />
-    ));
+    );
     return (
       <CollapsibleProperties
         bar={<EntityPropertyLabel>Policies</EntityPropertyLabel>}
-        collapsible={<Transitioning>{collapsible}</Transitioning>}
+        collapsible={collapsible}
         button={
           <IconButton
             icon="iconPlus"

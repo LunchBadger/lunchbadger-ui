@@ -24,6 +24,7 @@ export default {
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
   slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   sshManagerUrl: `http://${prefix}api.lunchbadger.com/users/customer/{USER}`,
+  gitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

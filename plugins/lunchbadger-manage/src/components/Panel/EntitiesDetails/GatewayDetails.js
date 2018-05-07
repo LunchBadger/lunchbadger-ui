@@ -477,7 +477,7 @@ class GatewayDetails extends PureComponent {
     const accessProperties = [
       {
         name: 'accessUrl',
-        title: 'Access URL',
+        title: 'Gateway URL',
         value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
         fake: true,
         link: true,

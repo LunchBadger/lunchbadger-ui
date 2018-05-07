@@ -16,6 +16,21 @@
     .panel__details__enableable .panel__details__checkbox.hideable {
       width: auto;
     }
+    &.access {
+      .EntityProperty {
+        display: block;
+        margin-right: 0;
+        &Label {
+          color: #4190CE;
+          text-transform: uppercase;
+          font-size: 14px;
+          font-weight: 600;
+        }
+        &__field--text {
+          padding: 0;
+        }
+      }
+    }
   }
   &__bar {
     min-width: 300px;

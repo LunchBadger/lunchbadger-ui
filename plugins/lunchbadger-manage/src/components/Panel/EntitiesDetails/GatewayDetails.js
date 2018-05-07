@@ -482,13 +482,6 @@ class GatewayDetails extends PureComponent {
         fake: true,
         link: true,
       },
-      {
-        name: 'adminApiUrl',
-        title: 'Admin api URL',
-        value: Config.get('expressGatewayAdminApiUrl').replace('{NAME}', slugifiedName),
-        fake: true,
-        link: true,
-      },
     ];
     return (
       <div className="general access" key="access">

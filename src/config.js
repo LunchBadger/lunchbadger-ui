@@ -10,6 +10,7 @@ const serviceUrls = [
   'workspaceApiUrl',
   'forecastApiUrl',
   'expressGatewayAdminApiUrl',
+  'expressGatewayAccessApiUrl',
   'customerUrl',
   'kubeWatcherApiUrl',
   'slsApiUrl',

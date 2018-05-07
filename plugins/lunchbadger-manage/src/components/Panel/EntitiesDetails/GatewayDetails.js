@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {arrayMove} from 'react-sortable-hoc';
+import slug from 'slug';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -15,6 +16,7 @@ import CustomerManagement from './Subelements/CustomerManagement';
 import {
   EntityProperty,
   EntityPropertyLabel,
+  EntityProperties,
   CollapsibleProperties,
   Input,
   Checkbox,
@@ -23,6 +25,7 @@ import {
   Transitioning,
   Sortable,
 } from '../../../../../lunchbadger-ui/src';
+import Config from '../../../../../../src/config';
 import './GatewayDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -468,6 +471,25 @@ class GatewayDetails extends PureComponent {
     }
   };
 
+  renderAccessSection = () => {
+    const {name} = this.props.entity;
+    const slugifiedName = slug(name, {lower: true});
+    const accessProperties = [
+      {
+        name: 'accessUrl',
+        title: 'Gateway URL',
+        value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
+        fake: true,
+        link: true,
+      },
+    ];
+    return (
+      <div className="general access" key="access">
+        <EntityProperties properties={accessProperties} />
+      </div>
+    );
+  };
+
   renderProtocolSection = () => {
     const {http, https} = this.state;
     const columns = [
@@ -705,6 +727,7 @@ class GatewayDetails extends PureComponent {
 
   render() {
     const sections = [
+      {title: 'Access'},
       {title: 'Protocol'},
       {title: 'Admin'},
       {title: 'Pipelines'},

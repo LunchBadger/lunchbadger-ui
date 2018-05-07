@@ -71,6 +71,7 @@ class EntityProperty extends Component {
     noMarginRight: PropTypes.bool,
     icon: PropTypes.string,
     textarea: PropTypes.bool,
+    link: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -99,6 +100,7 @@ class EntityProperty extends Component {
     slugify: false,
     icon: '',
     textarea: false,
+    link: false,
   };
 
   constructor(props) {
@@ -355,6 +357,7 @@ class EntityProperty extends Component {
       type,
       noMarginRight,
       icon,
+      link,
     } = this.props;
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
@@ -420,11 +423,18 @@ class EntityProperty extends Component {
           </EntityPropertyLabel>
         )}
         <div className={cs('EntityProperty__field', plainName, getPlainText(classes))}>
-          <div className='EntityProperty__field--text' onClick={onClick}>
-            <span className={textValueClassNames} onClick={onViewModeClick}>
-              {textValue}
-            </span>
-          </div>
+          {!link && (
+            <div className='EntityProperty__field--text' onClick={onClick}>
+              <span className={textValueClassNames} onClick={onViewModeClick}>
+                {textValue}
+              </span>
+            </div>
+          )}
+          {link && (
+            <div className='EntityProperty__field--text'>
+              <a href={textValue} target="_blank" title={textValue}>{textValue}</a>
+            </div>
+          )}
           {!fake && this.renderField()}
           {postfix !== '' && <span className="EntityProperty__postfix">{postfix}</span>}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}

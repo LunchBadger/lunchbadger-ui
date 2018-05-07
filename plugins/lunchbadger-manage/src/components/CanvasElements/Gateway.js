@@ -281,7 +281,14 @@ class Gateway extends Component {
   };
 
   render() {
-    const {validations: {data}, entity, entityDevelopment, onResetField, multiEnvIndex} = this.props;
+    const {
+      validations: {data},
+      entity,
+      entityDevelopment,
+      onResetField,
+      multiEnvIndex,
+      editable,
+    } = this.props;
     const elementClass = cs('Gateway', {
       'multi': multiEnvIndex > 0,
     });

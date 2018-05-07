@@ -79,6 +79,13 @@
           cursor: pointer;
         }
       }
+      a {
+        color: inherit;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
     &--input {
       display: none;

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
 import {arrayMove} from 'react-sortable-hoc';
-import slug from 'slug';
 import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
@@ -13,14 +12,12 @@ import GatewayPolicyAction from '../Panel/EntitiesDetails/Subelements/GatewayPol
 import {
   EntityProperty,
   EntityPropertyLabel,
-  EntityProperties,
   EntitySubElements,
   CollapsibleProperties,
   IconButton,
   Input,
   Sortable,
 } from '../../../../lunchbadger-ui/src';
-import Config from '../../../../../src/config';
 import './Gateway.scss';
 
 const {CanvasElement, DraggableGroup, Port} = LunchBadgerCore.components;
@@ -292,31 +289,12 @@ class Gateway extends Component {
       multiEnvIndex,
       editable,
     } = this.props;
-    const {name} = entity;
-    const slugifiedName = slug(name, {lower: true});
     const elementClass = cs('Gateway', {
       'multi': multiEnvIndex > 0,
     });
-    const accessProperties = [
-      {
-        name: 'accessUrl',
-        title: 'Access URL',
-        value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
-        fake: true,
-        link: true,
-      },
-      {
-        name: 'adminApiUrl',
-        title: 'Admin api URL',
-        value: Config.get('expressGatewayAdminApiUrl').replace('{NAME}', slugifiedName),
-        fake: true,
-        link: true,
-      },
-    ];
     return (
       <div className={elementClass}>
         {this.renderHiddenFields()}
-        <EntityProperties properties={accessProperties} />
         <EntitySubElements
           title="Pipelines"
           onAdd={this.addPipeline}

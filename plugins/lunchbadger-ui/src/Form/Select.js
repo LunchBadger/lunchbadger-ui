@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import cs from 'classnames';
@@ -40,6 +41,23 @@ class Select extends Component {
       val: props.getValue(),
     };
   }
+
+  componentDidMount() {
+    window.addEventListener('changeInputSelect', this.changeInputSelect);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('changeInputSelect', this.changeInputSelect);
+  }
+
+  changeInputSelect = ({detail: {selector, value, callback}}) => {
+    const expectedInput = document.querySelector(selector);
+    const thisInput = findDOMNode(this.wrapperRef);
+    if (expectedInput === thisInput) {
+      this._handleChange(null, null, value);
+      setTimeout(callback);
+    }
+  };
 
   _handleBlur = (event) => {
     if (this.state.focused) return; // if (event.target.value === '') return;
@@ -203,7 +221,10 @@ class Select extends Component {
     const {className, name, autocomplete, multiple} = this.props;
     const multiselect = autocomplete && multiple;
     return (
-      <div className={cs(className, getPlainText(`select__${name}`), {SelectComp: !multiselect})}>
+      <div
+        className={cs(className, getPlainText(`select__${name}`), {SelectComp: !multiselect})}
+        ref={r => this.wrapperRef = r}
+      >
         {this.renderField()}
       </div>
     );

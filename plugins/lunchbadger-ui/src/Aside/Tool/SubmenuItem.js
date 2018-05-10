@@ -26,7 +26,7 @@ class SubmenuItem extends Component {
     const {icon, label, name, wizard, plain, wizardTooltip} = this.props;
     return (
       <MenuItem
-        onTouchTap={this.onClick}
+        onClick={this.onClick}
         style={{fontSize: 18, minHeight: 34, lineHeight: '34px'}}
         innerDivStyle={{padding: 0}}
       >

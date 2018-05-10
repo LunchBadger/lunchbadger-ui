@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import slug from 'slug';
 import cs from 'classnames';
@@ -36,6 +37,23 @@ class Input extends Component {
     invalidUnderlineColor: '#f44336',
     slugify: false,
   }
+
+  componentDidMount() {
+    window.addEventListener('changeInputText', this.changeInputText);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('changeInputText', this.changeInputText);
+  }
+
+  changeInputText = ({detail: {selector, value, callback}}) => {
+    const expectedInput = document.querySelector(selector);
+    const thisInput = findDOMNode(this.wrapperRef);
+    if (expectedInput === thisInput) {
+      this._handleChange({target: {value}});
+      setTimeout(callback);
+    }
+  };
 
   _handleKeyPress = (event) => {
     if (typeof this.props.handleKeyPress === 'function') {
@@ -120,7 +138,11 @@ class Input extends Component {
       underlineStyles.borderColor = 'rgba(0, 0, 0, 0)';
     }
     return (
-      <div className={cs(className, getPlainText(`input__${name}`))} style={{display: type === 'hidden' ? 'none' : undefined}}>
+      <div
+        className={cs(className, getPlainText(`input__${name}`))}
+        style={{display: type === 'hidden' ? 'none' : undefined}}
+        ref={r => this.wrapperRef = r}
+      >
         <TextField
           value={getValue()}
           type={type || 'text'}

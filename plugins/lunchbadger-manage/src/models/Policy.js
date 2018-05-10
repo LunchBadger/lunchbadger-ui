@@ -58,4 +58,8 @@ export default class Policy extends BaseModel {
     );
   }
 
+  hasConditionActionWithServiceEndpoint(serviceEndpoint) {
+    return this._conditionAction.find(({action}) => action.serviceEndpoint === serviceEndpoint);
+  }
+
 }

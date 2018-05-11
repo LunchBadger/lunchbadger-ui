@@ -108,15 +108,17 @@ class GatewayDetails extends PureComponent {
           });
           // restoring current serviceEndpoints connections
           (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
-            paper.connect({
-              source: document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor'),
-              target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
-              parameters: {
-                forceDropped: true,
-                discardAutoSave: true,
-              }
-            }, {
-              fireEvent: true,
+            setTimeout(() => {
+              paper.connect({
+                source: document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor'),
+                target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
+                parameters: {
+                  forceDropped: true,
+                  discardAutoSave: true,
+                }
+              }, {
+                fireEvent: true,
+              });
             });
           });
         }

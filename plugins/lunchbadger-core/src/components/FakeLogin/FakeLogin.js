@@ -6,7 +6,6 @@ import Header from '../Header/Header';
 import {Form, EntityProperty, Button} from '../../../../lunchbadger-ui/src/';
 import isStorageSupported from '../../utils/isStorageSupported';
 import messages from '../../utils/messages';
-import envs from '../../utils/fakeLoginEnvs';
 import Config from '../../../../../src/config';
 import './FakeLogin.scss';
 
@@ -46,10 +45,8 @@ export default class FakeLogin extends PureComponent {
     let wrongUser = true;
     let preferredUsername;
     if (Object.keys(logins).length === 0) {
-      if (envs.includes(login)) {
-        wrongUser = false;
-        preferredUsername = password;
-      }
+      wrongUser = false;
+      preferredUsername = password;
     } else {
       if (logins[login] === md5(password)) {
         wrongUser = false;

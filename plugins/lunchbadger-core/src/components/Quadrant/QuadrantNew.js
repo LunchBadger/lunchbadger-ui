@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
@@ -118,7 +119,7 @@ class Quadrant extends PureComponent {
     const {orderedIds, draggingId} = this.state;
     return connectDropTarget(
       <div
-        className="quadrant"
+        className={cs('quadrant', title)}
         ref={(ref) => this.quadrantDOM = ref}
         style={styles}
       >

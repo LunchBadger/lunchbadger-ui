@@ -27,6 +27,7 @@ class Canvas extends Component {
   }
 
   componentDidMount() {
+    window.addEventListener('connectPorts', this.connectPorts);
     this.canvasWrapperDOM.addEventListener('scroll', this.onCanvasScroll);
     this.paper = this.context.paper.initialize();
     this._attachPaperEvents();
@@ -41,12 +42,26 @@ class Canvas extends Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('connectPorts', this.connectPorts);
     this.props.dispatch(actions.clearProject(true));
     if (this.canvasWrapperDOM) {
       this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
     }
     this.context.paper.stopRepaintingEverything();
   }
+
+  connectPorts = ({detail: {from, to, callback}}) => {
+    this.paper.connect({
+      source: document.querySelector(from).querySelector('.port__anchor'),
+      target: document.querySelector(to).querySelector('.port__anchor'),
+      parameters: {
+        forceDropped: true,
+      }
+    }, {
+      fireEvent: true,
+    });
+    setTimeout(callback);
+  };
 
   handleInitialConnections = () => {
     const {store: {getState}} = this.context;

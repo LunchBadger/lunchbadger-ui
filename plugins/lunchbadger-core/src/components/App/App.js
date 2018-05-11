@@ -84,7 +84,7 @@ class App extends Component {
       currentlyOpenedPanel,
       isEntityEditable,
       walkthrough,
-      loadingProject,
+      loadedProject,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -93,8 +93,13 @@ class App extends Component {
     const multiEnvNotDev = multiEnvIndex > 0;
     const walkthroughSteps = Object.keys(walkthrough)
       .sort()
-      .map(key => walkthrough[key]);
-    const walkthrougVisible = !loadingProject && getUser().profile.sub === 'walkthrough';
+      .map(key => {
+        if (!walkthrough[key].selector) {
+          walkthrough[key].selector = 'body';
+        }
+        return walkthrough[key];
+      });
+    const walkthrougVisible = loadedProject && getUser().profile.sub === 'walkthrough';
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -138,7 +143,7 @@ const selector = createSelector(
   state => state.states.currentlyOpenedPanel,
   state => !!state.states.currentEditElement,
   state => state.plugins.walkthrough,
-  state => state.loadingProject,
+  state => state.loadedProject,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -148,7 +153,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
-    loadingProject,
+    loadedProject,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -158,7 +163,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
-    loadingProject,
+    loadedProject,
   }),
 );
 

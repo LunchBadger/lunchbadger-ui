@@ -452,7 +452,7 @@
     },
     "async": {
       "version": "2.1.4",
-      "from": "async@>=2.0.1 <3.0.0",
+      "from": "https://registry.npmjs.org/async/-/async-2.1.4.tgz",
       "resolved": "https://registry.npmjs.org/async/-/async-2.1.4.tgz"
     },
     "async-each": {

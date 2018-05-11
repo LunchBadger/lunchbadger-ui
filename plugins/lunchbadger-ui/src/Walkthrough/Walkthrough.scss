@@ -9,8 +9,41 @@ $joyride-close-visible: false;
 
 @import '~react-joyride/lib/react-joyride';
 
+.joyride-overlay {
+  z-index: 3500;
+}
 .joyride-tooltip {
   font-weight: 400;
+  z-index: 3510;
+  &.left,
+  &.right {
+    &[data-target=".Gateway__pipeline0 > div:nth-child(2) > div"] {
+      margin-top: -25px;
+    }
+    &[data-target=".Tool__submenuItem.memory"],
+    &[data-target=".Tool__submenuItem.serviceendpoint"],
+    &[data-target=".Tool__submenuItem.apiendpoint"],
+    &[data-target=".Entity.Gateway .Toolbox__button--customerManagement"] {
+      margin-top: -20px;
+    }
+    &[data-target=".Tool.dataSource"],
+    &[data-target=".Tool.model"],
+    &[data-target=".Tool.function"],
+    &[data-target=".Tool.microservice"],
+    &[data-target=".Tool.endpoint"],
+    &[data-target=".Tool.gateway"] {
+      margin-top: -5px;
+    }
+    &[data-target=".Entity.Gateway .Gateway"] {
+      margin-top: 30px;
+    }
+    &[data-target=".Entity.Model .EntitySubElements__main"] {
+      margin-top: 50px;
+    }
+    &[data-target=".Aside"] {
+      margin-top: 203px;
+    }
+  }
   &__button {
     &--skip {
       color: #bbb;
@@ -34,11 +67,13 @@ $joyride-close-visible: false;
   }
   code {
     color: #24292e;
-    background-color: #f6f8fa;
+    background-color: #eee;
+    border: 1px solid #ddd;
     font-size: 13px;
     font-weight: 300;
-    padding: 8px;
+    padding: 5px 8px;
     border-radius: 3px;
     display: block;
+    margin-top: 10px;
   }
 }

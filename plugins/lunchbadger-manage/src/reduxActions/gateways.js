@@ -134,7 +134,9 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
   pipeline.policies
     .filter(({name}) => name === 'proxy')
     .forEach((policy) => {
-      policy.addConditionAction(ConditionAction.create({action}));
+      if (!policy.hasConditionActionWithServiceEndpoint(endpoint.id)) {
+        policy.addConditionAction(ConditionAction.create({action}));
+      }
     });
   dispatch(actions.updateGateway(gateway));
 };

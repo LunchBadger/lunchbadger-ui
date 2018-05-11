@@ -99,7 +99,7 @@ class App extends Component {
         }
         return walkthrough[key];
       });
-    const walkthrougVisible = loadedProject && getUser().profile.sub === 'walkthrough';
+    const walkthrougVisible = loadedProject && !localStorage.getItem('walkthroughShown');
     return (
       <Provider connectionsStore={Connections}>
         <div>

@@ -160,10 +160,9 @@ export default class Gateway extends BaseModel {
       for (let id in apiEndpointEntities) {
         await this.adminApi.putApiEndpoint(id, apiEndpointEntities[id].toApiJSON());
       }
-      for (let i = 0; i < gatewayPipelines.body.length; i += 1) {
-        const pipeline = gatewayPipelines.body[i];
-        if (pipeline.name === 'admin') continue;
-        await this.adminApi.deletePipeline(pipeline.name);
+      for (let id in gatewayPipelines.body) {
+        if (id === 'admin') continue;
+        await this.adminApi.deletePipeline(id);
       }
       for (let i = 0; i < this.pipelines.length; i += 1) {
         const pipeline = this.pipelines[i];

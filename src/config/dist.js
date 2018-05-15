@@ -18,6 +18,7 @@ export default {
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',
     redirect_uri: 'https://app.lunchbadger.com',
     scope: 'openid profile email',
+    automaticSilentRenew: true,
     metadata: {
       issuer: 'https://www.lunchbadger.com',
       authorization_endpoint: 'https://www.lunchbadger.com/oauth/authorize',

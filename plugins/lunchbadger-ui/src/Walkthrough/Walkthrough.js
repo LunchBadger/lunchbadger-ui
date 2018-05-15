@@ -28,6 +28,9 @@ class Walkthrough extends PureComponent {
   }
 
   handleCallback = ({type, step}) => {
+    if (type === 'finished') {
+      localStorage.setItem('walkthroughShown', true);
+    }
     if (type === 'step:before' && step.onBefore) {
       step.selector = step.waitForSelector;
       series([

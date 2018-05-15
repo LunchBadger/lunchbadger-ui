@@ -10,6 +10,7 @@ const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const {defaultEntityNames} = LunchBadgerCore.utils;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -273,6 +274,14 @@ export default class Model extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsFrom = Connections.search({fromId: this.id});
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
   processModel(model, properties) {

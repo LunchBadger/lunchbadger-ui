@@ -135,6 +135,8 @@ class ModelDetails extends PureComponent {
     return entity.processModel(model, this.state.properties);
   }
 
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
+
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
   handlePropertyToggleCollapse = id => () => {

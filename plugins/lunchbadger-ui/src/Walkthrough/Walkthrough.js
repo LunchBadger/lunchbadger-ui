@@ -18,6 +18,7 @@ const locale = {
 class Walkthrough extends PureComponent {
   static propTypes = {
     steps: PropTypes.array,
+    lsKey: PropTypes.string,
   };
 
   constructor(props) {
@@ -36,7 +37,7 @@ class Walkthrough extends PureComponent {
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
-      localStorage.setItem('walkthroughShown', true);
+      localStorage.setItem(this.props.lsKey, true);
     }
     this.setState({index});
     if (type === 'step:before') {

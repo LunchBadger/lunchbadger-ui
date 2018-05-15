@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import cs from 'classnames';
 import Joyride from 'react-joyride';
 import series from 'async/series';
 import './Walkthrough.scss';
@@ -23,21 +24,40 @@ class Walkthrough extends PureComponent {
     super(props);
     this.state = {
       run: true,
+      showNextButton: true,
+      showOverlay: true,
+      showTooltip: true,
+      overlayBack: false,
+      index: 0,
+      allowClicksThruHole: false,
     };
     this.showed = !props.emptyProject;
   }
 
-  handleCallback = ({type, step}) => {
+  handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
       localStorage.setItem('walkthroughShown', true);
     }
-    if (type === 'step:before' && step.onBefore) {
-      step.selector = step.waitForSelector;
-      series([
-        this.api.setRun(false),
-        ...step.onBefore(this.api),
-        this.api.setRun(true),
-      ]);
+    this.setState({index});
+    if (type === 'step:before') {
+      this.setState({
+        showNextButton: !step.triggerNext,
+        allowClicksThruHole: !!step.allowClicksThruHole,
+      });
+      if (step.triggerNext) {
+        const actions = step.triggerNext(this.api);
+        await series(actions, () => this.joyride.next());
+      }
+      if (step.onBefore) {
+        if (step.waitForSelector) {
+          step.selector = step.waitForSelector;
+        }
+        series([
+          this.api.setRun(false),
+          ...step.onBefore(this.api),
+          this.api.setRun(true),
+        ]);
+      }
     }
     if (type === 'step:after' && step.onAfter) {
       series([
@@ -50,6 +70,9 @@ class Walkthrough extends PureComponent {
 
   api = {
     setRun: run => cb => this.setState({run}, cb),
+    setShowOverlay: showOverlay => cb => this.setState({showOverlay}, cb),
+    setShowTooltip: showTooltip => cb => this.setState({showTooltip}, cb),
+    setOverlayBack: overlayBack => cb => this.setState({overlayBack}, cb),
     click: selector => cb => series([
       this.api.waitUntilPresent(selector),
       cb => {
@@ -143,29 +166,44 @@ class Walkthrough extends PureComponent {
       await new Promise(r => setTimeout(r, timeout));
       cb();
     },
+    setStepText: text => cb => {
+      this.props.steps[this.state.index].text = text;
+      this.forceUpdate(cb);
+    },
   };
 
   rafAsync = () => new Promise(resolve => requestAnimationFrame(resolve));
 
   render() {
     const {steps} = this.props;
-    const {run} = this.state;
+    const {
+      run,
+      showNextButton,
+      showOverlay,
+      showTooltip,
+      overlayBack,
+      allowClicksThruHole,
+    } = this.state;
     if (this.showed) return <div />;
     return (
-      <Joyride
-        ref={r => this.joyride = r}
-        steps={steps}
-        type="continuous"
-        run={run}
-        autoStart
-        showSkipButton
-        showStepsProgress={false}
-        disableOverlay
-        showBackButton={false}
-        callback={this.handleCallback}
-        locale={locale}
-        allowClicksThruHole={false}
-      />
+      <div className={cs('Walkthrough', {showNextButton, showTooltip, overlayBack})}>
+        <Joyride
+          ref={r => this.joyride = r}
+          steps={steps}
+          type="continuous"
+          run={run}
+          showOverlay={showOverlay}
+          autoStart
+          showSkipButton
+          showStepsProgress={false}
+          disableOverlay
+          showBackButton={false}
+          callback={this.handleCallback}
+          locale={locale}
+          allowClicksThruHole={allowClicksThruHole}
+          keyboardNavigation={false}
+        />
+      </div>
     );
   }
 }

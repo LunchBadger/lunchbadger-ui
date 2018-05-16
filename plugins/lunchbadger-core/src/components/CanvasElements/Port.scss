@@ -49,6 +49,9 @@
     background: #DF5F37;
     z-index: $z-index-high;
   }
+  &--highlighted {
+    background: #4190CE;
+  }
 }
 
 .port__middle {

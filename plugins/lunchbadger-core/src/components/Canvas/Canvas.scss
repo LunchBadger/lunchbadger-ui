@@ -50,27 +50,35 @@
     .multiEnvDelta & {
       filter: grayscale(100%);
     }
-    &.jsplumb-hover {
-      z-index: 10;
-
+    &.highlighted {
+      z-index: 16;
       & > svg {
         circle {
-          fill: #919191;
+          fill: #4190CE;
         }
       }
+      & > path {
+        stroke: #4190CE;
+      }
     }
-  }
-
-  .jsplumb-connector {
+    &.jsplumb-hover {
+      z-index: 17;
+      & > svg {
+        circle {
+          fill: #b10000;
+        }
+      }
+      & > path {
+        stroke: #b10000;
+      }
+    }
     &.loading {
       opacity: 0.4;
-
       & + .remove-button {
         display: none !important;
       }
     }
   }
-
   .remove-button {
     color: $ui-light;
     background: red;
@@ -81,7 +89,7 @@
     font-size: 11px;
     cursor: pointer;
     display: none;
-    z-index: 15;
+    z-index: 17;
 
     &.jsplumb-hover {
       display: block;

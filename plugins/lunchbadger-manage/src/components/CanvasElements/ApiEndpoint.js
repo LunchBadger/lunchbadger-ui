@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import cs from 'classnames';
 import _ from 'lodash';
 import ApiEndpointPath from './Subelements/ApiEndpointPath';
 import {
   EntityProperties,
-  EntityProperty,
   EntitySubElements,
 } from '../../../../lunchbadger-ui/src';
 import './ApiEndpoint.scss';
@@ -51,8 +49,6 @@ class ApiEndpoint extends Component {
       this.props.onFieldUpdate(field, evt.target.value);
     }
   }
-
-  // onPathChange = event => this.setState({path: event.target.value});
 
   handlePathTab = idx => {
     const size = this.state.paths.length;
@@ -114,27 +110,18 @@ class ApiEndpoint extends Component {
         })}
       </EntitySubElements>
     );
-    // const {entity: {url}, validations: {data}, entityDevelopment, onResetField} = this.props;
-    // const mainProperties = [
-    //   {
-    //     name: 'url',
-    //     title: 'URL',
-    //     value: url,
-    //     invalid: data.url,
-    //     onBlur: this.handleFieldChange('url'),
-    //   },
-    // ];
-    // mainProperties.forEach((item, idx) => {
-    //   mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
-    //   mainProperties[idx].onResetField = onResetField;
-    // });
-    // return <EntityProperties properties={mainProperties} />;
   }
 
   renderMainProperties = () => {
     const {entity, validations, validationsForced, entityDevelopment, onResetField, nested, index} = this.props;
     const name = nested ? `apiEndpoints[${index}][host]` : 'host';
     const {data} = validationsForced || validations;
+    const hiddenInputs = [
+      {
+        name: nested ? `apiEndpoints[${index}][methods]` : 'methods',
+        value: entity.methods,
+      },
+    ];
     const mainProperties = [
       {
         name,
@@ -142,6 +129,7 @@ class ApiEndpoint extends Component {
         value: entity.host,
         invalid: data.host,
         onBlur: this.handleFieldChange('host'),
+        hiddenInputs,
       },
     ];
     mainProperties[0].isDelta = this.state.host !== entityDevelopment.host;

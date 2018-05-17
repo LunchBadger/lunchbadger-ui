@@ -51,11 +51,7 @@ import SshManagerService from './services/SshManagerService';
 
 // utils
 import ApiClient from './utils/ApiClient';
-// import * as URLParams from './utils/URLParamsBind';
-// import {waitForStores} from './utils/waitForStores';
 import LoginManager, {createLoginManager, getUser} from './utils/auth';
-// import {loadFromServer, saveToServer} from './utils/serverIo';
-// import handleFatals from './utils/handleFatals';
 import actionsCreator from './utils/actionsCreator';
 import {actions, actionTypes} from './reduxActions/actions';
 import * as coreActions from './reduxActions';
@@ -64,78 +60,60 @@ import checkFields from './utils/checkFields';
 import * as storeUtils from './utils/storeUtils';
 import storeReducers, {registerPlugin} from './utils/storeReducers';
 import diff from './diff';
+import requestMethods from './utils/requestMethods';
 
 import './utils/formValidators';
 
-// import {registerPlugin as registerPluginNew} from '../../../src/reducers';
 import reducers from './reducers/reducers';
 import plugs from './plugs';
 
 registerPlugin({}, plugs, reducers);
 
 let LunchBadgerCore = {
-  // dispatcher: {
-  //   AppDispatcher: AppDispatcher
-  // },
-  // actions: {
-  //   registerPlugin: registerPlugin,
-  //   Connection: {
-  //     removeConnection: removeConnection
-  //   },
-  //   Stores: {
-  //     AppState: {
-  //       initialize: initializeAppState
-  //     }
-  //   }
-  // },
   components: {
-    App: App,
-    AppLoader: AppLoader,
-    Panel: Panel,
-    CanvasElement: CanvasElement,
-    BaseDetails: BaseDetails,
-    CollapsableDetails: CollapsableDetails,
-    Input: Input,
-    Textarea: Textarea,
-    Checkbox: Checkbox,
-    Select: Select,
-    InputField: InputField,
-    CheckboxField: CheckboxField,
-    SelectField: SelectField,
-    CloseButton: CloseButton,
-    SaveButton: SaveButton,
-    Draggable: Draggable,
-    DraggableGroup: DraggableGroup,
-    Modal: Modal,
-    OneOptionModal: OneOptionModal,
-    TwoOptionModal: TwoOptionModal,
-    Quadrant: Quadrant,
+    App,
+    AppLoader,
+    Panel,
+    CanvasElement,
+    BaseDetails,
+    CollapsableDetails,
+    Input,
+    Textarea,
+    Checkbox,
+    Select,
+    InputField,
+    CheckboxField,
+    SelectField,
+    CloseButton,
+    SaveButton,
+    Draggable,
+    DraggableGroup,
+    Modal,
+    OneOptionModal,
+    TwoOptionModal,
+    Quadrant,
     Port: PortComponent,
-    ElementsBundler: ElementsBundler
+    ElementsBundler
   },
   stores: {
-    // BaseStore: BaseStore,
-    // AppState: AppState,
-    // Pluggable: Pluggable,
-    // Connection: Connection,
     Connections,
   },
   models: {
-    BaseModel: BaseModel,
-    Plugin: Plugin,
-    PanelButtonComponent: PanelButtonComponent,
-    PanelComponent: PanelComponent,
-    ToolComponent: ToolComponent,
-    ToolGroupComponent: ToolGroupComponent,
-    QuadrantComponent: QuadrantComponent,
-    Port: Port,
+    BaseModel,
+    Plugin,
+    PanelButtonComponent,
+    PanelComponent,
+    ToolComponent,
+    ToolGroupComponent,
+    QuadrantComponent,
+    Port,
     Connection: ConnectionModel,
-    PanelDetailsComponent: PanelDetailsComponent,
-    Strategy: Strategy
+    PanelDetailsComponent,
+    Strategy
   },
   constants: {
-    panelKeys: panelKeys,
-    portGroups: portGroups
+    panelKeys,
+    portGroups
   },
   services: {
     ProjectService,
@@ -144,21 +122,14 @@ let LunchBadgerCore = {
     SshManagerService
   },
   utils: {
-    ApiClient: ApiClient,
-    // URLParams: URLParams,
-    // waitForStores: waitForStores,
-    // handleFatals: handleFatals,
+    ApiClient,
     actionsCreator,
     actions,
     actionTypes,
     coreActions,
-    // serverIo: {
-    //   loadFromServer: loadFromServer,
-    //   saveToServer: saveToServer
-    // },
-    LoginManager: LoginManager,
-    createLoginManager: createLoginManager,
-    getUser: getUser,
+    LoginManager,
+    createLoginManager,
+    getUser,
     propertyTypes: [
       {label: 'String', value: 'string'},
       {label: 'Number', value: 'number'},
@@ -185,6 +156,7 @@ let LunchBadgerCore = {
     storeReducers,
     registerPlugin,
     diff,
+    requestMethods,
   },
 };
 

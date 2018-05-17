@@ -13,6 +13,7 @@ export default class ApiEndpoint extends BaseModel {
   wasBundled = false;
   host = '*';
   paths = [];
+  methods = [];
 
   constructor(id, name) {
     super(id);
@@ -30,6 +31,7 @@ export default class ApiEndpoint extends BaseModel {
     return super.create({
       ...data,
       paths: this.deserializePaths(data.paths),
+      methods: this.deserializePaths(data.methods),
     });
   }
 
@@ -47,6 +49,9 @@ export default class ApiEndpoint extends BaseModel {
     if (this.paths.length > 0) {
       json.paths = this.paths;
     }
+    if (this.methods.length > 0) {
+      json.methods = this.methods;
+    }
     return json;
   }
 
@@ -58,6 +63,9 @@ export default class ApiEndpoint extends BaseModel {
     if (this.paths.length > 0) {
       json.paths = this.paths;
     }
+    if (this.methods.length > 0) {
+      json.methods = this.methods;
+    }
     return json;
   }
 
@@ -65,6 +73,12 @@ export default class ApiEndpoint extends BaseModel {
     if (typeof paths === 'undefined') return [];
     if (typeof paths === 'string') return [paths];
     return paths;
+  }
+
+  static deserializeMethods(methods) {
+    if (typeof methods === 'undefined') return [];
+    if (typeof methods === 'string') return [methods];
+    return methods;
   }
 
   get ports() {
@@ -110,6 +124,11 @@ export default class ApiEndpoint extends BaseModel {
     (model.paths || []).forEach((path) => {
       if (path.trim() === '') return;
       data.paths.push(path.trim());
+    });
+    data.methods = [];
+    (model.methods || []).forEach((method) => {
+      if (method.trim() === '') return;
+      data.methods.push(method.trim());
     })
     return data;
   }

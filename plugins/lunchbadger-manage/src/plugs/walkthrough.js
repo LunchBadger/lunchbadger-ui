@@ -1,15 +1,23 @@
 export default {
   '050': {
     title: 'Endpoint Dropdown Menu',
-    text: 'Selecting this icon will reveal available Endpoint Entities.',
+    text: `
+Selecting this icon will reveal available Endpoint Entities.
+<br /><br />
+C'mon, click it!`,
     selector: '.Tool.endpoint',
     position: 'right',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('div[role=presentation]'),
+    ],
   },
   '051': {
     title: 'Service Endpoint Entities',
     text: 'These are references to your backend services. Used as Express Gateway service endpoints when connected to a Gateway Entity.',
     waitForSelector: '.Tool__submenuItem.serviceendpoint',
     position: 'right',
+    allowClicksThruHole: false,
     onBefore: api => [
       api.openEntitySubmenu('endpoint'),
     ],
@@ -23,67 +31,259 @@ export default {
       api.unselectEntities(),
     ],
   },
-  '070': {
+  '0700': {
     title: 'Gateway Entities',
     text: 'Clicking this icon creates a new Gateway Entity on the canvas with a corresponding Gateway Deployment running in Kubernetes.',
     selector: '.Tool.gateway',
     position: 'right',
-  },
-  '071': {
-    text: 'Each Gateway consists of one or more Pipelines.',
-    waitForSelector: '.Entity.Gateway .Gateway',
-    position: 'left',
-    onBefore: api => [
-      api.addEntity('gateway'),
-      api.setTextValue('.Entity.Gateway .input__pipelines0name', 'CarPipeline'),
-      api.click('.button__add__pipelines0policy'),
-      api.setSelectValue('.Entity.Gateway .select__pipelines0policies0name', 'proxy'),
-      api.click('.button__add__Pipelines'),
-      api.setTextValue('.Entity.Gateway .input__pipelines1name', 'FunctionPipeline'),
-      api.click('.button__add__pipelines1policy'),
-      api.setSelectValue('.Entity.Gateway .select__pipelines1policies0name', 'proxy'),
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable'),
     ],
-    onAfter: api => [
-      api.deployGateway('Gateway'),
+  },
+  '0701': {
+    text: 'Each Gateway consists of one or more Pipelines.',
+    selector: '.Entity.Gateway.editable .Gateway',
+    position: 'left',
+    allowClicksThruHole: false,
+  },
+  '0702': {
+    text: `
+Let's name first pipeline as <pre>CarPipeline</pre>`,
+    selector: '.Entity.Gateway.editable .input__pipelines0name',
+    position: 'left',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines0name input[value="CarPipeline"]'),
       api.unselectEntities(),
     ],
   },
-  '072': {
+  '0703': {
+    text: `
+Let's add a policy to the pipeline.
+`,
+    selector: '.Entity.Gateway.editable .button__add__pipelines0policy',
+    position: 'top-right',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable .select__pipelines0policies0name'),
+    ],
+  },
+  '0704': {
+    text: `
+Let's set <pre>proxy</pre> as policy here.
+`,
+    selector: '.Entity.Gateway.editable .select__pipelines0policies0name',
+    position: 'left',
+    allowClicksThruHole: true,
+    onBefore: api => [
+      api.setOverlayBack(true),
+    ],
+    onAfter: api => [
+      api.setOverlayBack(false),
+    ],
+    triggerNext: api => [
+      api.waitUntilNotPresent('.Entity.Gateway.editable .Gateway__pipeline0 .port-in.port__disabled'),
+    ],
+  },
+  '0705': {
+    text: `
+Let's add the second pipeline.
+`,
+    selector: '.Entity.Gateway.editable .button__add__Pipelines',
+    position: 'top-right',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name'),
+    ],
+  },
+  '0706': {
+    text: `
+Let's name <pre>FunctionPipeline</pre> as the second pipeline.
+`,
+    selector: '.Entity.Gateway.editable .input__pipelines1name',
+    position: 'left',
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name input[value="FunctionPipeline"]'),
+      api.unselectEntities(),
+    ],
+  },
+  '0707': {
+    text: `
+Let's add a policy to the second pipeline.
+`,
+    selector: '.Entity.Gateway.editable .button__add__pipelines1policy',
+    position: 'top-right',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.editable .select__pipelines1policies0name'),
+    ],
+  },
+  '0708': {
+    text: `
+Let's set <pre>proxy</pre> as policy here also.
+`,
+    selector: '.Entity.Gateway.editable .select__pipelines1policies0name',
+    position: 'left',
+    allowClicksThruHole: true,
+    onBefore: api => [
+      api.setOverlayBack(true),
+    ],
+    onAfter: api => [
+      api.setOverlayBack(false),
+    ],
+    triggerNext: api => [
+      api.waitUntilNotPresent('.Entity.Gateway.editable .Gateway__pipeline1 .port-in.port__disabled'),
+    ],
+  },
+  '0709': {
+    text: `
+Click <pre>OK</pre> to deploy a gateway.
+`,
+    selector: '.Entity.Gateway.editable .submit',
+    position: 'left',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.setShowOverlay(false),
+      api.waitUntilNotPresent('.Entity.Gateway.editable'),
+      api.wait(1000),
+      api.setShowOverlay(true),
+    ],
+  },
+  '0710': {
+    text: 'Gateway is deploying...',
+    position: 'left',
+    selector: '.Entity.Gateway',
+    allowClicksThruHole: false,
+    triggerNext: api => [
+      api.waitUntilNotPresent('.CanvasElement.Gateway.deploying'),
+      api.setStepText('Gateway has been deployed!'),
+      api.waitUntilLoadersGone(),
+    ],
+  },
+  '0711': {
     text: 'Model, Service Endpoint, and Function Entities can all be connected to the left-hand side of a Pipeline.',
     selector: '.quadrant.Private .quadrant__body',
     position: 'right',
   },
-  '073': {
-    text: 'API Endpoint Entities connect to the right-hand side of a Pipeline.',
-    waitForSelector: '.quadrant.Public .quadrant__body',
+  '0712': {
+    text: `
+Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting their ports.
+`,
+    selector: '.Entity.Model .port-out',
     position: 'left',
+    allowClicksThruHole: true,
     onBefore: api => [
-      api.connectPorts('.Entity.Model .port-out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
-      api.click('.Entity.ApiEndpoint .button__add__PATHS'),
-      api.setTextValue('.Entity.ApiEndpoint .input__paths0', '/api/cars'),
-      api.submitCanvasEntity('ApiEndpoint'),
-      api.connectPorts('.Entity.Function_ .port-out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
-      api.click('.Entity.ApiEndpoint.editable .button__add__PATHS'),
-      api.setTextValue('.Entity.ApiEndpoint.editable .input__paths0', '/api/myfunction'),
-      api.submitCanvasEntity('ApiEndpoint'),
-      api.unselectEntities(),
+      api.setShowOverlay(false),
+    ],
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
+      api.setStepText('Entities are connecting...'),
+      api.waitUntilProjectSaved(),
+      api.setShowOverlay(true),
     ],
   },
-  '074': {
+  '0713': {
+    text: `
+API Endpoint Entities connect to the right-hand side of a Pipeline.
+<br /><br />
+Click <pre>OK</pre> to submit Car Api Endpoint.
+`,
+    selector: '.quadrant.Public .quadrant__body',
+    position: 'left',
+    triggerNext: api => [
+      api.setShowOverlay(false),
+      api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
+      api.setShowTooltip(false),
+      api.waitUntilProjectSaved(),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+  },
+  '0714': {
+    text: `
+Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connecting their ports.
+`,
+    selector: '.Entity.Function_ .port-out',
+    position: 'left',
+    allowClicksThruHole: true,
+    onBefore: api => [
+      api.setShowOverlay(false),
+    ],
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
+      api.setStepText('Entities are connecting...'),
+      api.waitUntilProjectSaved(),
+      api.setShowOverlay(true),
+    ],
+  },
+  '0715': {
+    text: `
+Click <pre>OK</pre> to submit Function Api Endpoint.
+`,
+    selector: '.Entity.ApiEndpoint.editable',
+    position: 'left',
+    triggerNext: api => [
+      api.setShowOverlay(false),
+      api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
+      api.setShowTooltip(false),
+      api.waitUntilProjectSaved(),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+  },
+  '0716': {
+    text: 'Click this icon to open pipelines details panel',
+    waitForSelector: '.Entity.Gateway .Toolbox__button--pipelines',
+    position: 'left',
+    allowClicksThruHole: true,
+    onBefore: api => [
+      api.click('.Entity.Gateway'),
+    ],
+    triggerNext: api => [
+      api.waitUntilPresent('.DetailsPanel.visible .BaseDetails.pipelines'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.wait(2000),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+  },
+  '0717': {
     text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
     <br /><br />
     More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
-    waitForSelector: '.DetailsPanel .pipelines .CollapsibleProperties.noDividers',
+    selector: '.DetailsPanel .pipelines .CollapsibleProperties.noDividers',
     position: 'bottom',
-    onBefore: api => [
-      api.openEntityDetails('Gateway', 'pipelines'),
-    ],
-    onAfter: api => [
-      api.discardEntityDetails(),
-      api.unselectEntities(),
+    allowClicksThruHole: false,
+  },
+  '0718': {
+    text: 'Click this icon to open Consumer Management details panel',
+    selector: '.DetailsPanel .Toolbox__button--customerManagement',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement'),
+    ]
+  },
+  '0719': {
+    text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
+    selector: '.DetailsPanel .CustomerManagement',
+    position: 'top',
+  },
+  '0720': {
+    text: 'Click <pre>Cancel</pre> to close details panel',
+    selector: '.DetailsPanel .cancel',
+    triggerNext: api => [
+      api.waitUntilNotPresent('.DetailsPanel.visible'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.wait(2000),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
     ],
   },
-  '075': {
+  '0721': {
     title: 'Accessing Gateway Instances',
     text: `
 All gateways will be accessible via the following domain name pattern:
@@ -94,30 +294,6 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
 `,
     selector: '.Gateway__pipeline0 > div:nth-child(2) > div',
     position: 'left',
-  },
-  '076': {
-    title: 'Consumer Management',
-    text: 'All Gateway Entities contain an icon for accessing Consumer Management. This icon will open up a Consumer Management panel.',
-    waitForSelector: '.Entity.Gateway .Toolbox__button--customerManagement',
-    position: 'left',
-    onBefore: api => [
-      api.click('.Entity.Gateway'),
-    ],
-    onAfter: api => [
-      api.unselectEntities(),
-    ],
-  },
-  '077': {
-    text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
-    waitForSelector: '.DetailsPanel .CustomerManagement',
-    position: 'top',
-    onBefore: api => [
-      api.openEntityDetails('Gateway', 'customerManagement', 1500),
-    ],
-    onAfter: api => [
-      api.discardEntityDetails(),
-      api.unselectEntities(),
-    ],
   },
   '080': {
     title: 'API Request Flow',

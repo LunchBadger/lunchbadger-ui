@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -8,8 +9,11 @@ import {
   Table,
   IconButton,
 } from '../../../../../lunchbadger-ui/src';
+import './ApiEndpointDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const {requestMethods} = LunchBadgerCore.utils;
+const methodsOptions = requestMethods.map(label => ({label, value: label}));
 
 class ApiEndpointDetails extends Component {
   static propTypes = {
@@ -30,6 +34,8 @@ class ApiEndpointDetails extends Component {
   stateFromStores = props => ({
     changed: false,
     paths: props.entity.paths.slice(),
+    methods: props.entity.methods.slice(),
+    scopes: props.entity.scopes.slice(),
   });
 
   onPropsUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
@@ -72,9 +78,64 @@ class ApiEndpointDetails extends Component {
     this.changeState({paths});
   };
 
-  renderPropertiesSection = () => {
-    const {paths} = this.state;
+  handleMethodsChange = methods => this.changeState({methods});
+
+  handleScopesChange = scopes => this.changeState({scopes});
+
+  renderHostSection = () => {
     const {host} = this.props.entity;
+    return (
+      <EntityProperty
+        key="host"
+        title="Host"
+        placeholder=" "
+        name="host"
+        value={host}
+        width="100%"
+      />
+    );
+  };
+
+  renderMethodsSection = () => {
+    const {methods} = this.state;
+    return (
+      <EntityProperty
+        key="methods"
+        title="Methods"
+        name="methods"
+        value={methods}
+        placeholder=" "
+        type="array"
+        width="100%"
+        options={methodsOptions}
+        chips
+        autocomplete
+        onChange={this.handleMethodsChange}
+      />
+    );
+  };
+
+  renderScopesSection = () => {
+    const {scopes} = this.state;
+    return (
+      <EntityProperty
+        key="scopes"
+        title="Scopes"
+        name="scopes"
+        value={scopes}
+        placeholder=" "
+        type="array"
+        width="100%"
+        options={[]}
+        chips
+        autocomplete
+        onChange={this.handleScopesChange}
+      />
+    );
+  };
+
+  renderPathsSection = () => {
+    const {paths} = this.state;
     const columns = [
       'Path',
       <IconButton icon="iconPlus" onClick={this.addPath} />,
@@ -98,41 +159,25 @@ class ApiEndpointDetails extends Component {
       widths={widths}
       paddings={paddings}
     />;
-    const collapsible = (
-      <div>
-        <EntityProperty
-          title="Host"
-          placeholder=" "
-          name="host"
-          value={host}
-          width="100%"
-        />
-        <CollapsibleProperties
-          bar={<EntityPropertyLabel>Paths</EntityPropertyLabel>}
-          collapsible={table}
-          defaultOpened
-          untoggable
-          space="15px 0 5px"
-        />
-      </div>
-    )
     return (
       <CollapsibleProperties
         key="paths"
-        bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
-        collapsible={collapsible}
-        barToggable
+        bar={<EntityPropertyLabel>Paths</EntityPropertyLabel>}
+        collapsible={table}
         defaultOpened
       />
     );
-  }
+  };
 
   render() {
     const sections = [
-      {title: 'Properties'},
+      {title: 'Host'},
+      {title: 'Methods'},
+      {title: 'Scopes'},
+      {title: 'Paths'},
     ];
     return (
-      <div className="panel__details">
+      <div className={cs('ApiEndpointDetails', 'panel__details')}>
         {sections.map(({title, render}) => this[`render${render || title}Section`]())}
       </div>
     );

@@ -1,0 +1,18 @@
+.ApiEndpointDetails {
+  .EntityProperty {
+    display: block;
+    margin-right: 0px;
+    padding-top: 0;
+    &.array {
+      max-width: 295px;
+      padding-top: 20px;
+    }
+  }
+  .CollapsibleProperties {
+    padding-left: 0;
+    margin-left: -15px;
+    &__bar {
+      margin-left: 10px;
+    }
+  }
+}

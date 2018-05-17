@@ -15,17 +15,7 @@ import {
   Transitioning,
 } from '../../../../../lunchbadger-ui/src';
 
-const requestMethods = [
-  'GET',
-  'POST',
-  'PUT',
-  'DELETE',
-  'PATCH',
-  'OPTIONS',
-  'HEAD',
-  'TRACE',
-  'CONNECT',
-];
+const {requestMethods} = LunchBadgerCore.utils;
 
 const transformParameters = (template, kind) => {
   if (!template[kind]) {

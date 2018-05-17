@@ -694,7 +694,7 @@ class CustomerManagement extends PureComponent {
           ];
           if (!consumerId) {
             if (kind === 'apps') {
-              item.unshift('user');
+              item.unshift('');
             }
             item.unshift(name);
           }
@@ -729,7 +729,12 @@ class CustomerManagement extends PureComponent {
             />,
             '',
           ];
-          if (!consumerId) item.unshift(name);
+          if (!consumerId) {
+            if (kind === 'apps') {
+              item.unshift('');
+            }
+            item.unshift(name);
+          }
           data.push(item);
         });
     }
@@ -752,15 +757,24 @@ class CustomerManagement extends PureComponent {
             />,
             '',
           ];
-          if (!consumerId) item.unshift(name);
+          if (!consumerId) {
+            if (kind === 'apps') {
+              item.unshift('');
+            }
+            item.unshift(name);
+          }
           data.push(item);
         });
     }
     columns.push(type === 'key-auth' ? 'Scopes' : ''); //'AutoGeneratePassword');
     columns.push('Active');
     let isAddButton = false;
-    if (consumerId && type !== 'key-auth') {
-      isAddButton = !credentials.find(item => item.type === type);
+    if (consumerId) {
+      if (type === 'key-auth') {
+        isAddButton = true;
+      } else {
+        isAddButton = !credentials.find(item => item.type === type);
+      }
     }
     columns.push(isAddButton ? <IconButton icon="iconPlus" onClick={this.handleCreateCredentials(consumerId, type, kind)} /> : '');
     return (

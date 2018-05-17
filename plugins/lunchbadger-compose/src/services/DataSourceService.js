@@ -6,11 +6,11 @@ class DataSourceService {
 
   initialize = () => this.api = new ApiClient(Config.get('workspaceApiUrl'), getUser().id_token);
 
-  load = () => this.api.get('Facets/server/datasources');
+  load = () => this.api.get('/Facets/server/datasources');
 
-  upsert = body => this.api.post('DataSourceDefinitions', {body});
+  upsert = body => this.api.post('/DataSourceDefinitions', {body});
 
-  delete = id => this.api.delete(`DataSourceDefinitions/${id}`);
+  delete = id => this.api.delete(`/DataSourceDefinitions/${id}`);
 
 }
 

@@ -6,7 +6,7 @@ class ForecastService {
 
   initialize = () => this.api = new ApiClient(Config.get('forecastApiUrl'), getUser().id_token);
 
-  get = id => this.api.get('Forecasts', {
+  get = id => this.api.get('/Forecasts', {
     qs: {
       filter: JSON.stringify({
         where: {
@@ -18,9 +18,9 @@ class ForecastService {
     }
   });
 
-  getByForecast = id => this.api.get(`Forecasts/${id}`);
+  getByForecast = id => this.api.get(`/Forecasts/${id}`);
 
-  save = body => this.api.put('Forecasts', {body});
+  save = body => this.api.put('/Forecasts', {body});
 
 }
 

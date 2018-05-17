@@ -14,6 +14,7 @@ export default class ApiEndpoint extends BaseModel {
   host = '*';
   paths = [];
   methods = [];
+  scopes = [];
 
   constructor(id, name) {
     super(id);
@@ -31,7 +32,8 @@ export default class ApiEndpoint extends BaseModel {
     return super.create({
       ...data,
       paths: this.deserializePaths(data.paths),
-      methods: this.deserializePaths(data.methods),
+      methods: this.deserializeMethods(data.methods),
+      scopes: this.deserializeScopes(data.scopes),
     });
   }
 
@@ -52,6 +54,9 @@ export default class ApiEndpoint extends BaseModel {
     if (this.methods.length > 0) {
       json.methods = this.methods;
     }
+    if (this.scopes.length > 0) {
+      json.scopes = this.scopes;
+    }
     return json;
   }
 
@@ -66,6 +71,9 @@ export default class ApiEndpoint extends BaseModel {
     if (this.methods.length > 0) {
       json.methods = this.methods;
     }
+    if (this.scopes.length > 0) {
+      json.scopes = this.scopes;
+    }
     return json;
   }
 
@@ -79,6 +87,12 @@ export default class ApiEndpoint extends BaseModel {
     if (typeof methods === 'undefined') return [];
     if (typeof methods === 'string') return [methods];
     return methods;
+  }
+
+  static deserializeScopes(scopes) {
+    if (typeof scopes === 'undefined') return [];
+    if (typeof methods === 'string') return [scopes];
+    return scopes;
   }
 
   get ports() {
@@ -129,7 +143,12 @@ export default class ApiEndpoint extends BaseModel {
     (model.methods || []).forEach((method) => {
       if (method.trim() === '') return;
       data.methods.push(method.trim());
-    })
+    });
+    data.scopes = [];
+    (model.scopes || []).forEach((scope) => {
+      if (scope.trim() === '') return;
+      data.scopes.push(scope.trim());
+    });
     return data;
   }
 

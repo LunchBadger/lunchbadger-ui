@@ -121,6 +121,10 @@ class ApiEndpoint extends Component {
         name: nested ? `apiEndpoints[${index}][methods]` : 'methods',
         value: entity.methods,
       },
+      {
+        name: nested ? `apiEndpoints[${index}][scopes]` : 'scopes',
+        value: entity.scopes,
+      },
     ];
     const mainProperties = [
       {

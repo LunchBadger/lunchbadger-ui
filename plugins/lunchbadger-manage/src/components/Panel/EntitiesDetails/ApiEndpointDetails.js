@@ -35,6 +35,7 @@ class ApiEndpointDetails extends Component {
     changed: false,
     paths: props.entity.paths.slice(),
     methods: props.entity.methods.slice(),
+    scopes: props.entity.scopes.slice(),
   });
 
   onPropsUpdate = (props = this.props, callback) => this.setState({...this.stateFromStores(props)}, callback);
@@ -79,6 +80,8 @@ class ApiEndpointDetails extends Component {
 
   handleMethodsChange = methods => this.changeState({methods});
 
+  handleScopesChange = scopes => this.changeState({scopes});
+
   renderHostSection = () => {
     const {host} = this.props.entity;
     return (
@@ -91,7 +94,45 @@ class ApiEndpointDetails extends Component {
         width="100%"
       />
     );
-  }
+  };
+
+  renderMethodsSection = () => {
+    const {methods} = this.state;
+    return (
+      <EntityProperty
+        key="methods"
+        title="Methods"
+        name="methods"
+        value={methods}
+        placeholder=" "
+        type="array"
+        width="100%"
+        options={methodsOptions}
+        chips
+        autocomplete
+        onChange={this.handleMethodsChange}
+      />
+    );
+  };
+
+  renderScopesSection = () => {
+    const {scopes} = this.state;
+    return (
+      <EntityProperty
+        key="scopes"
+        title="Scopes"
+        name="scopes"
+        value={scopes}
+        placeholder=" "
+        type="array"
+        width="100%"
+        options={[]}
+        chips
+        autocomplete
+        onChange={this.handleScopesChange}
+      />
+    );
+  };
 
   renderPathsSection = () => {
     const {paths} = this.state;
@@ -126,31 +167,13 @@ class ApiEndpointDetails extends Component {
         defaultOpened
       />
     );
-  }
-
-  renderMethodsSection = () => {
-    const {methods} = this.state;
-    return (
-      <EntityProperty
-        key="methods"
-        title="Methods"
-        name="methods"
-        value={methods}
-        placeholder=" "
-        type="array"
-        width="100%"
-        options={methodsOptions}
-        chips
-        autocomplete
-        onChange={this.handleMethodsChange}
-      />
-    );
-  }
+  };
 
   render() {
     const sections = [
       {title: 'Host'},
       {title: 'Methods'},
+      {title: 'Scopes'},
       {title: 'Paths'},
     ];
     return (

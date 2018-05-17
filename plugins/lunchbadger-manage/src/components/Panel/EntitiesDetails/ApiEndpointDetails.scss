@@ -2,8 +2,10 @@
   .EntityProperty {
     display: block;
     margin-right: 0px;
+    padding-top: 0;
     &.array {
       max-width: 295px;
+      padding-top: 20px;
     }
   }
   .CollapsibleProperties {

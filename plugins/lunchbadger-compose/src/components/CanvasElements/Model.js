@@ -22,6 +22,10 @@ class Model extends Component {
     nested: false,
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     const stateFromStores = (newProps) => {
@@ -86,6 +90,8 @@ class Model extends Component {
   // }
 
   processModel = model => this.props.entity.processModel(model, this.state.properties);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   getEntityDiffProps = (model) => {
     if (!model) return null;

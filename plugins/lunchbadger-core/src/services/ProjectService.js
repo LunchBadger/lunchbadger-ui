@@ -7,11 +7,11 @@ class ProjectService {
 
   getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
 
-  load = () => this.api.get(`Projects/${this.getProjectId()}`);
+  load = () => this.api.get(`/Projects/${this.getProjectId()}`);
 
-  save = data => this.api.patch('Projects', {body: {id: this.getProjectId(), ...data}});
+  save = data => this.api.patch('/Projects', {body: {id: this.getProjectId(), ...data}});
 
-  clearProject = () => this.api.post(`Projects/${this.getProjectId()}/clear`);
+  clearProject = () => this.api.post(`/Projects/${this.getProjectId()}/clear`);
 
   monitorStatus = () => this.api.eventSource('/WorkspaceStatus/change-stream');
 

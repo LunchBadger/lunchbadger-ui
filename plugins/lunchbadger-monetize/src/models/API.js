@@ -116,6 +116,12 @@ export default class API extends BaseModel {
     return this._accept;
   }
 
+  get ports() {
+    return this.apiEndpoints
+      .map(apiEndpoint => apiEndpoint.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

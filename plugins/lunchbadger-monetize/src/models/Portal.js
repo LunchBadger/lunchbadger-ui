@@ -91,6 +91,12 @@ export default class Portal extends BaseModel {
     this._rootUrl = url;
   }
 
+  get ports() {
+    return this.apis
+      .map(api => api.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

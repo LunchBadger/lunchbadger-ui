@@ -1,5 +1,7 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
 import {findDOMNode} from 'react-dom';
 import classNames from 'classnames';
@@ -9,7 +11,7 @@ import _ from 'lodash';
 import './Port.scss';
 
 @inject('connectionsStore') @observer
-export default class Port extends PureComponent {
+class Port extends PureComponent {
   static propTypes = {
     elementId: PropTypes.string.isRequired,
     way: PropTypes.oneOf(['in', 'out']).isRequired,
@@ -24,8 +26,14 @@ export default class Port extends PureComponent {
   }
 
   static contextTypes = {
+    store: PropTypes.object,
     paper: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.highlighted = [];
+  }
 
   componentWillMount() {
     this.paper = this.context.paper.getInstance();
@@ -34,6 +42,7 @@ export default class Port extends PureComponent {
 
   componentDidMount() {
     const portDOM = findDOMNode(this.refs.port);
+    const {way, scope} = this.props;
     const endpointOptions = {
       maxConnections: -1,
       paintStyle: {
@@ -55,22 +64,22 @@ export default class Port extends PureComponent {
         // [0.5, 1, 0, 1, 0, 0, 'bottom'],
         [0, 0.5, -1, 0, 11, 2, 'left']
       ],
-      scope: this.props.scope,
+      scope,
     };
     this.paper.makeSource(portDOM, {
-      endpoint: ['Dot', {radius: 4}],
+      endpoint: ['Dot', {radius: 9}],
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);
     this.paper.makeTarget(portDOM, {
-      endpoint: ['Dot', {radius: 4}],
+      endpoint: ['Dot', {radius: 9}],
       allowLoopback: false,
       deleteEndpointsOnDetach: true
     }, endpointOptions);
-    if (this.props.way === 'in') {
+    if (way === 'in') {
       this._checkAndReattachTargetConnections();
     }
-    if (this.props.way === 'out') {
+    if (way === 'out') {
       this._checkAndReattachSourceConnections();
     }
   }
@@ -81,6 +90,8 @@ export default class Port extends PureComponent {
       this.paper.setTargetScope(portDOM, nextProps.scope);
       this.paper.setSourceScope(portDOM, nextProps.scope);
     }
+    const {currentElement, way, elementId} = nextProps;
+    this.processHiglightedConnections(currentElement, way, elementId);
   }
 
   componentWillUnmount() {
@@ -100,6 +111,36 @@ export default class Port extends PureComponent {
       });
     });
   }
+
+  processHiglightedConnections = (currentElement, way, elementId) => {
+    const highlighted = this.getHighlightedConnections(currentElement, way, elementId);
+    if (highlighted !== this.highlighted) {
+      try {
+        this.highlighted.forEach(({connection}) => {
+          connection.removeType('highlighted');
+          connection.endpoints.forEach(endpoint => endpoint.removeType('highlighted'));
+        });
+      } catch (e) {}
+      this.highlighted = highlighted;
+      this.highlighted.forEach(({connection}) => {
+        connection.setType('highlighted');
+        connection.endpoints.forEach(endpoint => endpoint.addType('highlighted'));
+      });
+    }
+  }
+
+  getHighlightedConnections = (currentElement, way, elementId) => {
+    const {entities} = this.context.store.getState();
+    if (currentElement) {
+      const {id, type} = currentElement;
+      if (entities[type] && entities[type][id]) {
+        return entities[type][id]
+          .connectedPorts()
+          .filter(item => item[way] === elementId);
+      }
+    }
+    return [];
+  };
 
   _checkAndReattachTargetConnections() {
     const {elementId, connectionsStore} = this.props;
@@ -138,7 +179,15 @@ export default class Port extends PureComponent {
   }
 
   render() {
-    const {way, elementId, middle, className, connectionsStore, disabled} = this.props;
+    const {
+      way,
+      elementId,
+      middle,
+      className,
+      connectionsStore,
+      disabled,
+      currentElement,
+    } = this.props;
     const isConnected = connectionsStore.isPortConnected(way, elementId);
     const portClass = classNames('canvas-element__port', 'port', {
       'canvas-element__port--out': way === 'out',
@@ -146,8 +195,18 @@ export default class Port extends PureComponent {
       'port__middle': middle,
       'port__disabled': disabled,
     });
+    let highlighted = false;
+    const {entities} = this.context.store.getState();
+    if (currentElement) {
+      const {id, type} = currentElement;
+      if (entities[type] && entities[type][id]) {
+        highlighted = !!entities[type][id].connectedPorts()
+          .find(item => item[way] === elementId);
+      }
+    }
     const portAnchorClass = classNames('port__anchor', {
       'port__anchor--connected': isConnected,
+      'port__anchor--highlighted': highlighted,
     });
     return (
       <div ref="port__wrap">
@@ -163,3 +222,11 @@ export default class Port extends PureComponent {
     );
   }
 }
+
+const connector = createSelector(
+  state => state.states.currentElement,
+  state => state.loadedProject,
+  (currentElement, loadedProject) => ({currentElement, loadedProject}),
+);
+
+export default connect(connector)(Port);

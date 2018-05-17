@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import Connections from '../stores/Connections';
 
 export default class BaseModel {
   _id = null;
@@ -87,4 +88,23 @@ export default class BaseModel {
   get ready() {
     return this._ready;
   }
+
+  connectedPorts() {
+    const ids = Object.keys(
+      this.ports
+        .map(({id}) => id)
+        .reduce((prev, curr) => {
+          prev[curr] = 1;
+          return prev;
+        }, {})
+    );
+    return ids
+      .reduce((prev, curr) => [
+        ...prev,
+        ...Connections.search({fromId: curr}),
+        ...Connections.search({toId: curr}),
+      ], [])
+      .map(({fromId, toId, info: {connection}}) => ({out: fromId, in: toId, connection}));
+  }
+
 }

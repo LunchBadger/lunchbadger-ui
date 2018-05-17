@@ -244,6 +244,12 @@ export default class Gateway extends BaseModel {
     return this._policies;
   }
 
+  get ports() {
+    return this.pipelines
+      .map(pipeline => pipeline.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
   /**
    * @param pipeline {Pipeline}
    */

@@ -41,6 +41,15 @@ const connectionTypes = {
     cssClass: 'loading',
     detachable: false,
   },
+  highlighted: {
+    cssClass: 'highlighted',
+  }
+};
+
+const endpointTypes = {
+  highlighted: {
+    cssClass: 'highlighted',
+  }
 };
 
 class Paper {
@@ -48,6 +57,7 @@ class Paper {
   initialize = () => {
     this.instance = jsPlumb.getInstance(jsPlumbConfig);
     this.instance.registerConnectionTypes(connectionTypes);
+    this.instance.registerEndpointTypes(endpointTypes);
     this.repaintInternal = setInterval(this.repaint, 50);
     return this.instance;
   }

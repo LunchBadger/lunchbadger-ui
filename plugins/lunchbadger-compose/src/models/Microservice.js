@@ -68,6 +68,10 @@ export default class Microservice extends BaseModel {
     return this._accept;
   }
 
+  get ports() {
+    return this.models.map(id => ({id}));
+  }
+
   validate(model) {
     return (dispatch, getState) => {
       const validations = {data: {}};

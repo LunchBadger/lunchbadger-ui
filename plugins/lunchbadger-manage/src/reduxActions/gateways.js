@@ -15,16 +15,7 @@ export const add = () => (dispatch, getState) => {
   const types = quadrants[2].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
   const pipelines = {Pipeline: {policies: initialPipelinePolicies}};
-  const policies = [
-    'basic-auth',
-    'cors',
-    'expression',
-    'key-auth',
-    'log',
-    'oauth2',
-    'proxy',
-    'rate-limit',
-  ]; //Object.keys(entities.gatewaySchemas.policy);
+  const policies = Object.keys(entities.gatewaySchemas.policy);
   const entity = Gateway.create({
     name: 'Gateway',
     itemOrder,

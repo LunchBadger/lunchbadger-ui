@@ -33,6 +33,7 @@ class Walkthrough extends PureComponent {
       allowClicksThruHole: false,
     };
     this.showed = !props.emptyProject;
+    this.waitMethod = 'waitByAnimationFrame';
   }
 
   handleCallback = async ({type, index, step}) => {
@@ -89,14 +90,18 @@ class Walkthrough extends PureComponent {
     ]),
     waitUntilPresent: selector => async cb => {
       while (document.querySelector(selector) === null) {
-        await this.rafAsync();
+        await this[this.waitMethod](500);
       }
       cb();
     },
     waitUntilNotPresent: selector => async cb => {
       while (document.querySelector(selector) !== null) {
-        await this.rafAsync();
+        await this[this.waitMethod](500);
       }
+      cb();
+    },
+    setWaitMethod: (waitMethod = 'waitByAnimationFrame') => cb => {
+      this.waitMethod = waitMethod;
       cb();
     },
     save: () => cb => series([
@@ -104,14 +109,14 @@ class Walkthrough extends PureComponent {
       () => cb(),
     ]),
     waitUntilLoadersGone: () => cb => series([
+      this.api.setWaitMethod('waitBySetTimeout'),
       this.api.waitUntilPresent('.spinner__overlay'),
       this.api.waitUntilNotPresent('.spinner__overlay'),
+      this.api.setWaitMethod(),
       () => cb(),
     ]),
     waitUntilProjectSaved: () => cb => series([
       this.api.waitUntilLoadersGone(),
-      this.api.click('.SystemInformationMessages .SystemInformationMessages__item.All-data-has-been-synced-with-API .SystemInformationMessages__item__delete'),
-      this.api.waitUntilNotPresent('.SystemInformationMessages .SystemInformationMessages__item.All-data-has-been-synced-with-API'),
       () => cb(),
     ]),
     openEntitySubmenu: kind => cb => series([
@@ -158,8 +163,10 @@ class Walkthrough extends PureComponent {
     ]),
     deployGateway: entity => cb => series([
       this.api.submitCanvasEntity(entity),
+      this.api.setWaitMethod('waitBySetTimeout'),
       this.api.waitUntilPresent(`.CanvasElement.${entity}.deploying`),
       this.api.waitUntilNotPresent(`.CanvasElement.${entity}.deploying`),
+      this.api.setWaitMethod(),
       this.api.waitUntilLoadersGone(),
       () => cb(),
     ]),
@@ -173,7 +180,9 @@ class Walkthrough extends PureComponent {
     },
   };
 
-  rafAsync = () => new Promise(resolve => requestAnimationFrame(resolve));
+  waitByAnimationFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+
+  waitBySetTimeout = timeout => new Promise(res => setTimeout(res, timeout));
 
   render() {
     const {steps} = this.props;

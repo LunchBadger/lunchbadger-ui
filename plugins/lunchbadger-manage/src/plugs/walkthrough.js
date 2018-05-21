@@ -156,7 +156,9 @@ Click <pre>OK</pre> to deploy a gateway.
     selector: '.Entity.Gateway',
     allowClicksThruHole: false,
     triggerNext: api => [
+      api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Gateway.deploying'),
+      api.setWaitMethod(),
       api.setStepText('Gateway has been deployed!'),
       api.waitUntilLoadersGone(),
     ],

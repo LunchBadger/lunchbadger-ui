@@ -204,13 +204,13 @@ Let's add a path.
   },
   '0715': {
     text: `
-      Let's set path here as: <pre>/api/cars</pre>
+      Let's set path here as: <pre>/api/car*</pre>
 `,
     selector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/cars"]'),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]'),
     ],
   },
   '0716': {
@@ -257,13 +257,13 @@ Let's add a path.
   },
   '0719': {
     text: `
-      Let's set path here as: <pre>/api/myfunction</pre>
+      Let's set path here as: <pre>/api/myfunction*</pre>
 `,
     selector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction"]'),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
     ],
   },
   '0720': {

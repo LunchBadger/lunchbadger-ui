@@ -2,164 +2,6 @@ export default [
   {
     "type": "config",
     "schema": {
-      "$id": "http://express-gateway.io/models/gateway.config.json",
-      "type": "object",
-      "properties": {
-        "http": {
-          "type": "object",
-          "properties": {
-            "port": {
-              "type": "number"
-            }
-          }
-        },
-        "https": {
-          "type": "object",
-          "properties": {
-            "port": {
-              "type": "number"
-            },
-            "tls": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object",
-                "properties": {
-                  "key": {
-                    "type": "string"
-                  },
-                  "cert": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "admin": {
-          "type": "object",
-          "properties": {
-            "port": {
-              "type": "number"
-            },
-            "hostname": {
-              "type": "string"
-            }
-          }
-        },
-        "apiEndpoints": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "host": {
-                "type": "string"
-              },
-              "paths": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "pathRegex": {
-                "type": "string",
-                "format": "regex"
-              },
-              "scopes": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "methods": {
-                "type": [
-                  "string",
-                  "array"
-                ],
-                "items": {
-                  "type": "array"
-                }
-              }
-            }
-          }
-        },
-        "serviceEndpoints": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "url": {
-                "type": "string"
-              },
-              "urls": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "policies": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "pipelines": {
-          "type": [
-            "object",
-            "array"
-          ],
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "apiEndpoints": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "policies": {
-                "type": "array",
-                "items": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "action": {
-                        "type": "object"
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "condition": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "name"
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "type": "config",
-    "schema": {
       "$id": "http://express-gateway.io/models/system.config.json",
       "type": "object",
       "properties": {
@@ -203,10 +45,16 @@ export default [
             "cipherKey",
             "algorithm",
             "saltRounds"
-          ]
+          ],
+          "default": {
+
+          }
         },
         "session": {
-          "type": "object"
+          "type": "object",
+          "default": {
+
+          }
         },
         "accessTokens": {
           "type": "object",
@@ -222,12 +70,34 @@ export default [
             "timeToExpiry": {
               "type": "number",
               "default": 720000
+            },
+            "issuer": {
+              "type": "string"
+            },
+            "audience": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "subject": {
+              "type": "string"
+            },
+            "algorithm": {
+              "type": "string",
+              "default": "HS256"
             }
           },
           "required": [
             "tokenType",
             "timeToExpiry"
-          ]
+          ],
+          "default": {
+
+          }
         },
         "refreshTokens": {
           "type": "object",
@@ -239,7 +109,10 @@ export default [
           },
           "required": [
             "timeToExpiry"
-          ]
+          ],
+          "default": {
+
+          }
         },
         "authorizationCodes": {
           "type": "object",
@@ -251,7 +124,10 @@ export default [
           },
           "required": [
             "timeToExpiry"
-          ]
+          ],
+          "default": {
+
+          }
         },
         "plugins": {
           "type": "object"
@@ -265,6 +141,193 @@ export default [
         "refreshTokens",
         "authorizationCodes"
       ]
+    }
+  },
+  {
+    "type": "config",
+    "schema": {
+      "$id": "http://express-gateway.io/models/gateway.config.json",
+      "type": "object",
+      "properties": {
+        "http": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            }
+          }
+        },
+        "https": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            },
+            "tls": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "cert": {
+                    "type": "string"
+                  },
+                  "ca": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "admin": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "number"
+            },
+            "hostname": {
+              "type": "string"
+            }
+          }
+        },
+        "apiEndpoints": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string"
+              },
+              "paths": {
+                "type": [
+                  "string",
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "pathRegex": {
+                "type": "string",
+                "format": "regex"
+              },
+              "scopes": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "methods": {
+                "type": [
+                  "string",
+                  "array"
+                ],
+                "items": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "serviceEndpoints": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "urls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            },
+            "oneOf": [
+              {
+                "required": [
+                  "url"
+                ]
+              },
+              {
+                "required": [
+                  "urls"
+                ]
+              }
+            ]
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pipelines": {
+          "type": [
+            "object",
+            "array",
+            "null"
+          ],
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "apiEndpoints": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "policies": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "condition": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   },
   {
@@ -445,7 +508,8 @@ export default [
           ],
           "items": {
             "type": "string"
-          }
+          },
+          "default": "*"
         },
         "methods": {
           "type": [
@@ -454,7 +518,15 @@ export default [
           ],
           "items": {
             "type": "string"
-          }
+          },
+          "default": [
+            "GET",
+            "HEAD",
+            "PUT",
+            "PATCH",
+            "POST",
+            "DELETE"
+          ]
         },
         "allowedHeaders": {
           "type": [
@@ -478,7 +550,8 @@ export default [
           "type": "integer"
         },
         "optionsSuccessStatus": {
-          "type": "integer"
+          "type": "integer",
+          "default": 204
         }
       }
     }
@@ -579,26 +652,32 @@ export default [
       "type": "object",
       "properties": {
         "apiKeyHeader": {
-          "type": "string"
+          "type": "string",
+          "default": "Authorization"
         },
         "apiKeyHeaderScheme": {
-          "type": "string"
+          "type": "string",
+          "default": "apiKey"
         },
         "apiKeyField": {
-          "type": "string"
+          "type": "string",
+          "default": "apiKey"
         },
         "passThrough": {
           "type": "boolean",
           "default": false
         },
         "disableHeaders": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "disableHeadersScheme": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "disableQueryParam": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         }
       }
     }
@@ -678,22 +757,28 @@ export default [
           "type": "string"
         },
         "windowMs": {
-          "type": "integer"
+          "type": "integer",
+          "default": 60000
         },
         "delayAfter": {
-          "type": "integer"
+          "type": "integer",
+          "default": 1
         },
         "delayMs": {
-          "type": "integer"
+          "type": "integer",
+          "default": 1000
         },
         "max": {
-          "type": "integer"
+          "type": "integer",
+          "default": 5
         },
         "message": {
-          "type": "string"
+          "type": "string",
+          "default": "Too many requests, please try again later."
         },
         "statusCode": {
-          "type": "integer"
+          "type": "integer",
+          "default": 429
         }
       }
     }
@@ -717,19 +802,6 @@ export default [
         "statusCode",
         "message"
       ]
-    }
-  },
-  {
-    "type": "policy",
-    "schema": {
-      "$id": "http://express-gateway.io/policies/cAdvisor.json",
-      "type": "object",
-      "properties": {
-        "headerName": {
-          "type": "string",
-          "default": "eg-consumer-id"
-        }
-      }
     }
   },
   {
@@ -893,6 +965,12 @@ export default [
     "type": "condition",
     "schema": {
       "$id": "http://express-gateway.io/schemas/conditions/anonymous.json"
+    }
+  },
+  {
+    "type": "condition",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/conditions/tlsClientAuthenticated.json"
     }
   }
 ];

@@ -74,43 +74,45 @@ class CustomerManagement extends PureComponent {
   }
 
   loadData = async () => {
-    this.loadApps();
-    this.loadScopes();
     await this.loadUsers();
+    await this.loadApps();
+    this.loadScopes();
     this.loadAllCredentials();
   };
 
-  loadUsers = async (start = 0) => {
+  loadBatch = async (kind, start = 0) => {
     const {api} = this.props;
+    const data = [];
+    const {body} = await api[`get${kind}`](start);
+    let nextBatch = [];
+    if (+body.nextKey !== 0) {
+      nextBatch = await this.loadBatch(kind, body.nextKey);
+    }
+    return [
+      ...data,
+      ...body[kind.toLowerCase()],
+      ...nextBatch,
+    ];
+  };
+
+  loadUsers = async () => {
     try {
-      const {body: {users, nextKey}} = await api.getUsers(start);
-      const state = {
-        users: (start === 0 ? [] : this.state.users).concat(users),
-      };
-      if (+nextKey === 0) {
-        state.loadingUsers = false;
-      } else {
-        this.loadUsers(nextKey);
-      }
-      this.setState(state);
+      const users = await this.loadBatch('Users');
+      this.setState({users, loadingUsers: false});
     } catch (error) {
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
   };
 
-  loadApps = async (start = 0) => {
-    const {api} = this.props;
+  loadApps = async () => {
     try {
-      const {body: {apps, nextKey}} = await api.getApps(start);
-      const state = {
-        apps: (start === 0 ? [] : this.state.apps).concat(apps),
-      };
-      if (+nextKey === 0) {
-        state.loadingApps = false;
-      } else {
-        this.loadApps(nextKey);
-      }
-      this.setState(state);
+      const apps = await this.loadBatch('Apps');
+      apps.forEach((app) => {
+        if (!app.username) {
+          app.username = this.state.users.find(({id}) => id === app.userId).username;
+        }
+      });
+      this.setState({apps, loadingApps: false});
     } catch (error) {
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
@@ -337,7 +339,7 @@ class CustomerManagement extends PureComponent {
 
   filterApps = item => {
     const check = new RegExp(this.state.filterApps, 'i');
-    return check.test(item.name);
+    return check.test(item.name) || check.test(item.username);
   };
 
   sortByKey = key => (a, b) => {
@@ -474,9 +476,9 @@ class CustomerManagement extends PureComponent {
     const data = filteredApps
       .filter(userId !== null ? () => true : this.filterApps)
       .sort(this.sortByKey('name'))
-      .map(({id, userId, name, redirectUri, isActive}) => [
+      .map(({id, name, username, redirectUri, isActive}) => [
       name,
-      (users.find(({id}) => id === userId) || {username: 'User removed'}).username,
+      username,
       redirectUri,
       isActive ? check : '',
       <IconButton icon="iconArrowRight" onClick={this.handleEntry(id, 'Apps')} />,
@@ -515,6 +517,7 @@ class CustomerManagement extends PureComponent {
       delete app.isActive;
       delete app.id;
       delete app.userId;
+      delete app.username;
     } else {
       schemas.properties.userId = {
         type: 'string',
@@ -656,7 +659,12 @@ class CustomerManagement extends PureComponent {
           const name = consumer[kind === 'users' ? 'username' : 'name'];
           this.state.credentials[consId].forEach((item) => {
             if (item.type === type) {
-              credentials.push({...item, name});
+              const entry = {...item, name};
+              if (kind === 'apps') {
+                const {userId} = this.state.apps.find(({id}) => id === consId);
+                entry.username = this.state.users.find(({id}) => id === userId).username;
+              }
+              credentials.push(entry);
             }
           });
         }
@@ -679,7 +687,7 @@ class CustomerManagement extends PureComponent {
       credentials
         .filter(item => item.type === type)
         .forEach((entry) => {
-          const {name, password, passwordKey, isActive} = entry;
+          const {name, username, password, passwordKey, isActive} = entry;
           const id = consumerId || entry.consumerId;
           const item = [
             passwordKey,
@@ -694,7 +702,7 @@ class CustomerManagement extends PureComponent {
           ];
           if (!consumerId) {
             if (kind === 'apps') {
-              item.unshift('');
+              item.unshift(username);
             }
             item.unshift(name);
           }
@@ -708,7 +716,7 @@ class CustomerManagement extends PureComponent {
       credentials
         .filter(item => item.type === type)
         .forEach((entry) => {
-          const {name, keyId, keySecret, isActive, scopes} = entry;
+          const {name, username, keyId, keySecret, isActive, scopes} = entry;
           const id = consumerId || entry.consumerId;
           const item = [
             keyId,
@@ -731,7 +739,7 @@ class CustomerManagement extends PureComponent {
           ];
           if (!consumerId) {
             if (kind === 'apps') {
-              item.unshift('');
+              item.unshift(username);
             }
             item.unshift(name);
           }
@@ -744,7 +752,7 @@ class CustomerManagement extends PureComponent {
       credentials
         .filter(item => item.type === type)
         .forEach((entry) => {
-          const {name, secret, passwordKey, isActive} = entry;
+          const {name, username, secret, passwordKey, isActive} = entry;
           const id = consumerId || entry.consumerId;
           const item = [
             passwordKey,
@@ -759,7 +767,7 @@ class CustomerManagement extends PureComponent {
           ];
           if (!consumerId) {
             if (kind === 'apps') {
-              item.unshift('');
+              item.unshift(username);
             }
             item.unshift(name);
           }

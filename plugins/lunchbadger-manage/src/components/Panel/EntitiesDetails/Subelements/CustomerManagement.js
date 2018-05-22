@@ -161,7 +161,7 @@ class CustomerManagement extends PureComponent {
     if (['Users', 'Apps'].includes(activeTab)) {
       this.loadCredentials(entry);
     }
-    this.setState({entry, activeTab, userId});
+    this.setState({entry, activeTab, userId}, () => this.props.onEntryChange(entry !== null));
   };
 
   handleToRemove = (entryToRemove, entryToRemoveType) => () => this.setState({
@@ -200,7 +200,7 @@ class CustomerManagement extends PureComponent {
     const {api} = this.props;
     const {entry} = this.state;
     const loading = `loading${users ? 'Users' : 'Apps'}`;
-    this.setState({entry: null, [loading]: true});
+    this.setState({entry: null, [loading]: true}, () => this.props.onEntryChange(false));
     try {
       if (users) {
         if (entry === 0) {

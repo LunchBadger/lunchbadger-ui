@@ -16,6 +16,10 @@ class Microservice extends Component {
     parent: PropTypes.object
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -71,6 +75,8 @@ class Microservice extends Component {
     });
     return model;
   }
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
 

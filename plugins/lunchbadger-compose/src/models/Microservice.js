@@ -3,6 +3,7 @@ import Model from './Model';
 import {update, remove} from '../reduxActions/microservices';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Microservice extends BaseModel {
   static type = 'Microservice';
@@ -112,6 +113,20 @@ export default class Microservice extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    let connectionsFrom = [];
+    this.models.forEach((fromId) => {
+      connectionsFrom = [
+        ...connectionsFrom,
+        ...Connections.search({fromId}),
+      ];
+    });
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
 }

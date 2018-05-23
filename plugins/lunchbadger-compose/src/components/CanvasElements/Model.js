@@ -47,22 +47,11 @@ class Model extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   PrivateStore.addChangeListener(this.onPropsUpdate);
-  // }
-  //
   componentWillReceiveProps(nextProps) {
     if (nextProps.entity !== this.props.entity) {
       this.onPropsUpdate(nextProps);
     }
-    // if (!this.props.editable && nextProps.entity.contextPath !== this.state.contextPath) {
-    //   this.setState(this.initState());
-    // }
   }
-  //
-  // componentWillUnmount() {
-  //   PrivateStore.removeChangeListener(this.onPropsUpdate);
-  // }
 
   initState = (props = this.props) => {
     const {contextPath, name} = props.entity;
@@ -73,21 +62,6 @@ class Model extends Component {
   }
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
-
-  // update(model) {
-  //   const data = {
-  //     properties: [],
-  //   };
-  //   addPropertiesToData(model, this.props.entity, data.properties, this.state.properties);
-  //   const validations = this.validate(model);
-  //   if (validations.isValid) {
-  //     updateModel(
-  //       this.props.entity.id,
-  //       Object.assign(model, data),
-  //     );
-  //   }
-  //   return validations;
-  // }
 
   processModel = model => this.props.entity.processModel(model, this.state.properties);
 

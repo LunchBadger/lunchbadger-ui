@@ -22,6 +22,7 @@
   &.horizontal {
     .GatewayPolicyCAPair__box {
       display: flex;
+      overflow: auto;
       .GatewayPolicyCAPair__wrapper:first-child {
         border-right: 1px solid #e0e0e0;
       }

@@ -22,6 +22,10 @@ export default class Gateway extends BaseModel {
   _pipelines = [];
   _policies = [];
   system = {};
+  zoomWindow = {
+    width: 1150,
+    height: 750,
+  };
 
   running = true;
   deleting = null;

@@ -41,6 +41,7 @@ export default class Model extends BaseModel {
     'lunchbadgerId',
     'elementDOM',
     'slugifyName',
+    'zoomWindow',
   ];
 
   _ports = [];
@@ -53,6 +54,10 @@ export default class Model extends BaseModel {
   public = true;
   strict = false;
   wasBundled = false;
+  zoomWindow = {
+    width: 1090,
+    height: 750,
+  };
 
   static deserializers = {
     http: (obj, val) => {

@@ -16,6 +16,10 @@ export default class Function_ extends BaseModel {
   service = null;
   running = true;
   isCanvasEditDisabled = true;
+  zoomWindow = {
+    width: 1005,
+    height: 750,
+  };
 
   constructor(id, name) {
     super(id);

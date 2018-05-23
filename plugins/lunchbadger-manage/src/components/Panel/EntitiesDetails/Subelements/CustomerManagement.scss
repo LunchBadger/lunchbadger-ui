@@ -18,6 +18,7 @@
     }
   }
   &__list {
+    position: relative;
     min-width: 914px;
     padding-top: 41px;
   }
@@ -26,6 +27,7 @@
   }
   &__entry {
     margin-top: 65px;
+    min-width: 914px;
   }
   &__details .CollapsibleProperties__bar__right--button {
     right: 5px;
@@ -85,7 +87,6 @@
     left: 0;
     width: 100%;
     background-color: #FFF;
-    padding: 15px 15px 0;
     z-index: 1;
     .tab {
       display: inline-block;
@@ -103,7 +104,7 @@
   }
   &__finder {
     position: absolute;
-    top: 5px;
+    top: -10px;
     right: 0;
     z-index: 2;
   }

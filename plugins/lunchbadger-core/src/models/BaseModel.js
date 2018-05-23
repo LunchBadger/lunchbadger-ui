@@ -15,6 +15,10 @@ export default class BaseModel {
   itemOrder = 0;
   loaded = true;
   slugifyName = false;
+  zoomWindow = {
+    width: 420,
+    height: 600,
+  };
 
   static deserializers = {};
 

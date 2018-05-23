@@ -250,6 +250,16 @@ export default class Gateway extends BaseModel {
       .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
+  getHighlightedPorts(selectedSubelementIds = []) {
+    return this.pipelines
+      .filter(pipeline => selectedSubelementIds.length === 0
+        ? true
+        : selectedSubelementIds.includes(pipeline.id)
+      )
+      .map(pipeline => pipeline.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
   /**
    * @param pipeline {Pipeline}
    */

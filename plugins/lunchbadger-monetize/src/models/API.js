@@ -122,6 +122,16 @@ export default class API extends BaseModel {
       .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
+  getHighlightedPorts(selectedSubelementIds = []) {
+    return this.apiEndpoints
+      .filter(apiEndpoin => selectedSubelementIds.length === 0
+        ? true
+        : selectedSubelementIds.includes(apiEndpoin.id)
+      )
+      .map(apiEndpoint => apiEndpoint.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

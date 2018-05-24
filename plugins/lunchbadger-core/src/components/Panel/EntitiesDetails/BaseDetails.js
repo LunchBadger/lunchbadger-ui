@@ -35,6 +35,7 @@ export default (ComposedComponent) => {
           isValid: true,
           data: {}
         },
+        isOkEnabled: false,
       }
     }
 
@@ -136,14 +137,18 @@ export default (ComposedComponent) => {
 
     closePopup = () => this.context.store.dispatch(setCurrentZoom({...this.props.rect, close: true}));
 
+    setOkEnabled = isOkEnabled => this.setState({isOkEnabled});
+
     render() {
-      const {validations} = this.state;
-      const {isCanvasEditDisabled} = this.props.entity;
+      const {entity, rect} = this.props;
+      const {isCanvasEditDisabled, name} = entity;
+      const {validations, isPristine, formValid, isOkEnabled} = this.state;
       const underlineStyle = {
         borderColor: '#8dbde2',
       }
+      const okDisabled = (isPristine || !formValid) && !isOkEnabled;
       return (
-        <div className={cs('BaseDetails', 'details-panel__element', this.props.rect.tab, {isCanvasEditDisabled})}>
+        <div className={cs('BaseDetails', 'details-panel__element', rect.tab, {isCanvasEditDisabled})}>
           <Form
             name="panelForm"
             ref="form"
@@ -156,7 +161,7 @@ export default (ComposedComponent) => {
             <div className="BaseDetails__name">
               <EntityProperty
                 name="name"
-                value={this.props.entity.name}
+                value={name}
                 underlineStyle={underlineStyle}
                 invalidUnderlineColor="#FFF"
               />
@@ -180,7 +185,7 @@ export default (ComposedComponent) => {
                 zoom
                 onCancel={this.closePopup}
                 onOk={this.update}
-                okDisabled={false} //this.state.isPristine || !this.state.formValid}
+                okDisabled={okDisabled}
               />
             </div>
           </Form>

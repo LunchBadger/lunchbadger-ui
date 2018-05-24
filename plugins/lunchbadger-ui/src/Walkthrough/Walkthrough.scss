@@ -70,11 +70,13 @@ $joyride-close-visible: false;
       &[data-target=".Entity.Model.editable .select__properties0type"],
       &[data-target=".Entity.Model .submit"],
       &[data-target=".Entity.Function_.editable .submit"],
-      &[data-target=".Entity.Gateway.editable .submit"] {
+      &[data-target=".Entity.Gateway.editable .submit"],
+      &[data-target=".Entity.ApiEndpoint.editable .submit"] {
         margin-top: -15px;
       }
       &[data-target=".Entity.Gateway.editable .input__pipelines0name"],
-      &[data-target=".Entity.Gateway.editable .select__pipelines0policies0name"] {
+      &[data-target=".Entity.Gateway.editable .select__pipelines0policies0name"],
+      &[data-target=".Entity.ApiEndpoint.editable .input__paths0"] {
         margin-top: -10px;
       }
       &[data-target=".Tool.dataSource"],

@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import {findDOMNode} from 'react-dom';
 import {PropTypes} from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import SshManagerService from '../../../services/SshManagerService';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
 import {addSystemDefcon1} from '../../../reduxActions/systemDefcon1';
@@ -31,10 +33,14 @@ class SshManager extends PureComponent {
       invalid: '',
       uploadDisabled: false,
     };
+    this.loaded = false;
   }
 
-  componentWillMount() {
-    this.loadPublicKeys();
+  componentWillUpdate(nextProps) {
+    if (!this.loaded && nextProps.currentlyOpenedPanel === 'SETTINGS_PANEL') {
+      this.loaded = true;
+      this.loadPublicKeys();
+    }
   }
 
   loadPublicKeys = async () => {
@@ -215,4 +221,9 @@ class SshManager extends PureComponent {
   }
 }
 
-export default SshManager;
+const selector = createSelector(
+  state => state.states.currentlyOpenedPanel,
+  currentlyOpenedPanel => ({currentlyOpenedPanel}),
+);
+
+export default connect(selector)(SshManager);

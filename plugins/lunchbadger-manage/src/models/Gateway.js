@@ -22,6 +22,10 @@ export default class Gateway extends BaseModel {
   _pipelines = [];
   _policies = [];
   system = {};
+  zoomWindow = {
+    width: 1150,
+    height: 750,
+  };
 
   running = true;
   deleting = null;
@@ -246,6 +250,16 @@ export default class Gateway extends BaseModel {
 
   get ports() {
     return this.pipelines
+      .map(pipeline => pipeline.ports)
+      .reduce((prev, curr) => [...prev, ...curr], []);
+  }
+
+  getHighlightedPorts(selectedSubelementIds = []) {
+    return this.pipelines
+      .filter(pipeline => selectedSubelementIds.length === 0
+        ? true
+        : selectedSubelementIds.includes(pipeline.id)
+      )
       .map(pipeline => pipeline.ports)
       .reduce((prev, curr) => [...prev, ...curr], []);
   }

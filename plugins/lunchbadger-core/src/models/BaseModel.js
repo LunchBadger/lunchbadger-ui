@@ -15,6 +15,10 @@ export default class BaseModel {
   itemOrder = 0;
   loaded = true;
   slugifyName = false;
+  zoomWindow = {
+    width: 420,
+    height: 600,
+  };
 
   static deserializers = {};
 
@@ -73,6 +77,10 @@ export default class BaseModel {
     });
   }
 
+  getHighlightedPorts() {
+    return this.ports;
+  }
+
   set id(id) {
     this._id = id;
   }
@@ -89,9 +97,9 @@ export default class BaseModel {
     return this._ready;
   }
 
-  connectedPorts() {
+  connectedPorts(selectedSubelementIds) {
     const ids = Object.keys(
-      this.ports
+      this.getHighlightedPorts(selectedSubelementIds)
         .map(({id}) => id)
         .reduce((prev, curr) => {
           prev[curr] = 1;

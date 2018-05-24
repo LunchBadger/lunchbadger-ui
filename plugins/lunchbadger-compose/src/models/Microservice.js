@@ -3,6 +3,7 @@ import Model from './Model';
 import {update, remove} from '../reduxActions/microservices';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Microservice extends BaseModel {
   static type = 'Microservice';
@@ -72,6 +73,15 @@ export default class Microservice extends BaseModel {
     return this.models.map(id => ({id}));
   }
 
+  getHighlightedPorts(selectedSubelementIds = []) {
+    return this.models
+      .filter(id => selectedSubelementIds.length === 0
+        ? true
+        : selectedSubelementIds.includes(id)
+      )
+      .map(id => ({id}))
+  }
+
   validate(model) {
     return (dispatch, getState) => {
       const validations = {data: {}};
@@ -112,6 +122,20 @@ export default class Microservice extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    let connectionsFrom = [];
+    this.models.forEach((fromId) => {
+      connectionsFrom = [
+        ...connectionsFrom,
+        ...Connections.search({fromId}),
+      ];
+    });
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
 }

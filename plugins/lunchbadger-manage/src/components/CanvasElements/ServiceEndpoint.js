@@ -14,6 +14,10 @@ class ServiceEndpoint extends Component {
     entity: PropTypes.object.isRequired,
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {...this.stateFromStores(props)};
@@ -39,13 +43,9 @@ class ServiceEndpoint extends Component {
     return entity.processModel(model);
   };
 
-  changeState = obj => this.setState(obj);
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
-  // handleFieldChange = field => (evt) => {
-  //   if (typeof this.props.onFieldUpdate === 'function') {
-  //     this.props.onFieldUpdate(field, evt.target.value);
-  //   }
-  // }
+  changeState = obj => this.setState(obj);
 
   handleUrlTab = idx => () => {
     const size = this.state.urls.length;

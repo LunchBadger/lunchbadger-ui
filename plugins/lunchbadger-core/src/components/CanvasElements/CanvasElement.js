@@ -114,6 +114,13 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       this.setFlatModel();
+      if (this.entityRef && !this.props.entity.loaded) {
+        findDOMNode(this.entityRef).scrollIntoView({
+          block: 'end',
+          inline: 'nearest',
+          behavior: 'smooth',
+        });
+      }
     }
 
     setFlatModel = () => {
@@ -203,6 +210,7 @@ export default (ComposedComponent) => {
     }
 
     handleZoom = tab => () => {
+      const {zoomWindow} = this.props.entity;
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
       const rect = {
@@ -211,6 +219,7 @@ export default (ComposedComponent) => {
         width: Math.round(width),
         height: Math.round(height),
         tab,
+        zoomWindow,
       };
       this.props.dispatch(setCurrentZoom(rect));
     };

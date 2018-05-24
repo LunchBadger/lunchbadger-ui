@@ -114,6 +114,13 @@ export default (ComposedComponent) => {
 
     componentDidMount() {
       this.setFlatModel();
+      if (this.entityRef && !this.props.entity.loaded) {
+        findDOMNode(this.entityRef).scrollIntoView({
+          block: 'end',
+          inline: 'nearest',
+          behavior: 'smooth',
+        });
+      }
     }
 
     setFlatModel = () => {

@@ -29,6 +29,9 @@ export default class RnD extends PureComponent {
       width = entityZoomWindow.width;
       height = entityZoomWindow.height;
     }
+    const {innerWidth, innerHeight} = window;
+    width = Math.min(width, innerWidth - 20);
+    height = Math.min(height, innerHeight - 40);
     this.state = {
       left: 0,
       top: 0,

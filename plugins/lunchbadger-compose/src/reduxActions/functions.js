@@ -69,9 +69,9 @@ export const remove = entity => async (dispatch) => {
   try {
     if (isAutoSave) {
       await SLSService.remove(entity.name);
-    }
-    if (isAutoSave) {
       await dispatch(coreActions.saveToServer());
+    } else {
+      dispatch(actions.removeFunction(entity));
     }
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));

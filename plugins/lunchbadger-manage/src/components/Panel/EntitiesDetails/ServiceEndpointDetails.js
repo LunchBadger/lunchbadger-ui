@@ -15,6 +15,10 @@ class ServiceEndpointDetails extends PureComponent {
     entity: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {...this.stateFromStores(props)};
@@ -39,6 +43,8 @@ class ServiceEndpointDetails extends PureComponent {
     const {entity} = this.props;
     return entity.processModel(model);
   };
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   changeState = obj => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();

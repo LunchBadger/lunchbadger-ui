@@ -4,6 +4,7 @@ import {update, remove} from '../reduxActions/serviceEndpoints';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class ServiceEndpoint extends BaseModel {
   static type = 'ServiceEndpoint';
@@ -86,6 +87,14 @@ export default class ServiceEndpoint extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsFrom = Connections.search({fromId: this.id});
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
   processModel(model) {

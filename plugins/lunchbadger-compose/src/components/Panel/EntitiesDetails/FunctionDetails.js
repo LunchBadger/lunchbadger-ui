@@ -19,7 +19,13 @@ class FunctionDetails extends PureComponent {
     entity: PropTypes.object.isRequired
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   renderDetailsSection = () => {
     const {loaded: fake, service} = this.props.entity;

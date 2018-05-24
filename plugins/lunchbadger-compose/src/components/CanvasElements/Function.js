@@ -17,10 +17,12 @@ class Function_ extends Component {
   };
 
   static contextTypes = {
-    store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   renderPorts = () => {
     return this.props.entity.ports.map((port) => (

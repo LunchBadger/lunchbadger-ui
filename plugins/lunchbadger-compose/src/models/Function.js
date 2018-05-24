@@ -5,6 +5,7 @@ import Config from '../../../../src/config';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Function_ extends BaseModel {
   static type = 'Function_';
@@ -100,6 +101,14 @@ export default class Function_ extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsFrom = Connections.search({fromId: this.id});
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
   processModel(model) {

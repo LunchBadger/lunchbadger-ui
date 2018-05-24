@@ -59,7 +59,6 @@ class ModelDetails extends PureComponent {
   };
 
   static contextTypes = {
-    store: PropTypes.object,
     paper: PropTypes.object,
   };
 

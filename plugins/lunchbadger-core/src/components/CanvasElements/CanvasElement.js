@@ -193,17 +193,16 @@ export default (ComposedComponent) => {
       dispatch(clearCurrentElement());
     }
 
-    handleEdit = (event) => {
+    handleEdit = () => {
       const {dispatch, multiEnvIndex, multiEnvDelta, entity: {isCanvasEditDisabled}} = this.props;
       if (isCanvasEditDisabled || (multiEnvDelta && multiEnvIndex > 0)) {
         event.stopPropagation();
         return;
       }
       dispatch(setCurrentEditElement(this.props.entity));
-      event.stopPropagation();
     }
 
-    handleZoom = tab => (event) => {
+    handleZoom = tab => () => {
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
       const rect = {
@@ -214,7 +213,6 @@ export default (ComposedComponent) => {
         tab,
       };
       this.props.dispatch(setCurrentZoom(rect));
-      event.stopPropagation();
     };
 
     resetFormModel = () => {

@@ -610,6 +610,8 @@ class GatewayDetails extends PureComponent {
     this.changeState({admin});
   };
 
+  handleCredentialsEntryChange = enabled => this.props.parent.setOkEnabled(enabled);
+
   renderAdminSection = () => {
     const {admin} = this.state;
     const collapsible = (
@@ -722,6 +724,7 @@ class GatewayDetails extends PureComponent {
         <CustomerManagement
           ref={r => this.customerManagementRef = r}
           api={adminApi}
+          onEntryChange={this.handleCredentialsEntryChange}
         />
       </div>
     );

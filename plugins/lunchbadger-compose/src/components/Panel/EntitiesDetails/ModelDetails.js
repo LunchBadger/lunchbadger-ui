@@ -210,6 +210,9 @@ class ModelDetails extends PureComponent {
 
   onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
+  handleCodeEditorChange = () =>
+    this.setState({changed: true}, () => this.props.parent.checkPristine());
+
   handleChangePropertyType = id => (type) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
@@ -522,6 +525,7 @@ class ModelDetails extends PureComponent {
           fullWidth={true}
           initialHeight={200}
           mode="editor"
+          onChange={this.handleCodeEditorChange}
         />
       </div>
     );

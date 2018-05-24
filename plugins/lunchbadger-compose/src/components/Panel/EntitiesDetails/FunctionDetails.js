@@ -41,6 +41,9 @@ class FunctionDetails extends PureComponent {
 
   renderTriggersSection = () => <FunctionTriggers id={this.props.entity.id} details />;
 
+  handleFilesEditorChange = () =>
+    this.setState({changed: true}, () => this.props.parent.checkPristine());
+
   renderFunctionCodeSection = () => {
     const {files, serverless: {provider: {runtime}}} = this.props.entity.service;
     const {editorCodeLanguage} = runtimeMapping(runtime);
@@ -48,6 +51,7 @@ class FunctionDetails extends PureComponent {
       <FilesEditor
         lang={editorCodeLanguage}
         files={files}
+        onChange={this.handleFilesEditorChange}
       />
     );
   };

@@ -72,6 +72,15 @@ export default class Microservice extends BaseModel {
     return this.models.map(id => ({id}));
   }
 
+  getHighlightedPorts(selectedSubelementIds = []) {
+    return this.models
+      .filter(id => selectedSubelementIds.length === 0
+        ? true
+        : selectedSubelementIds.includes(id)
+      )
+      .map(id => ({id}))
+  }
+
   validate(model) {
     return (dispatch, getState) => {
       const validations = {data: {}};

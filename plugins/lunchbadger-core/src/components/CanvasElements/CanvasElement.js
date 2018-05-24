@@ -204,6 +204,7 @@ export default (ComposedComponent) => {
     }
 
     handleZoom = tab => (event) => {
+      const {zoomWindow} = this.props.entity;
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
       const rect = {
@@ -212,6 +213,7 @@ export default (ComposedComponent) => {
         width: Math.round(width),
         height: Math.round(height),
         tab,
+        zoomWindow,
       };
       this.props.dispatch(setCurrentZoom(rect));
       event.stopPropagation();

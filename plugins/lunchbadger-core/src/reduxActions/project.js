@@ -2,6 +2,7 @@ import {actions} from './actions';
 import {addSystemDefcon1} from './systemDefcon1';
 import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
+import userStorage from '../utils/userStorage';
 import {updateEntitiesStatues} from './';
 
 export const loadFromServer = () => async (dispatch, getState) => {
@@ -64,6 +65,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
 export const clearServer = () => async (dispatch, getState) => {
   const {onProjectClear} = getState().plugins;
   dispatch(actions.clearProject());
+  userStorage.remove('zoomWindow');
   try {
     await ProjectService.clearProject();
     if (onProjectClear.length > 0) {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import Rnd from 'react-rnd';
 import {IconSVG, entityIcons, Toolbox} from '../';
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './RnD.scss';
 
 export default class RnD extends PureComponent {
@@ -21,11 +22,21 @@ export default class RnD extends PureComponent {
     super(props);
     this.deltaX = 0;
     this.deltaY = 0;
+    const {rect, entityId} = props;
+    let {width, height} = rect.zoomWindow;
+    const entityZoomWindow = userStorage.getObjectKey('zoomWindow', entityId);
+    if (entityZoomWindow) {
+      width = entityZoomWindow.width;
+      height = entityZoomWindow.height;
+    }
+    const {innerWidth, innerHeight} = window;
+    width = Math.min(width, innerWidth - 20);
+    height = Math.min(height, innerHeight - 40);
     this.state = {
       left: 0,
       top: 0,
-      width: 'auto',
-      height: 'auto',
+      width,
+      height,
     };
   }
 
@@ -79,6 +90,11 @@ export default class RnD extends PureComponent {
     if (['topLeft', 'top', 'topRight'].includes(dir)) {
       this.deltaY -= height;
     }
+    const {offsetWidth, offsetHeight} = refToElement;
+    userStorage.setObjectKey('zoomWindow', this.props.entityId, {
+      width: offsetWidth,
+      height: offsetHeight,
+    });
   };
 
   handleDragStart = (event, data) => {
@@ -104,7 +120,7 @@ export default class RnD extends PureComponent {
       rect,
     } = this.props;
     const {x, y, width: maxWidth, height: maxHeight} = rect;
-    const {opened, custom, left, top} = this.state;
+    const {opened, custom, left, top, width, height} = this.state;
     return (
       <div
         ref={r => this.refWrap = r}
@@ -120,7 +136,7 @@ export default class RnD extends PureComponent {
           z={1005}
           bounds=".canvas__zoom-area"
           dragHandleClassName=".RnD__header"
-          default={{x, y}}
+          default={{x, y, width, height}}
           onResizeStart={this.handleResizeStart}
           onResize={this.handleResize}
           onResizeStop={this.handleResizeStop}

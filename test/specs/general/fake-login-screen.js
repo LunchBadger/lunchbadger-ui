@@ -1,7 +1,7 @@
 var page;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'General: fake login screen': function (browser) {
     page = browser.page.lunchBadger();
     const username = 'John Doe';

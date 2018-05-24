@@ -201,6 +201,13 @@ export default class GatewayPolicyAction extends PureComponent {
     const {id, name, value, type, types, description, label, width, custom, postfix} = item;
     const {prefix} = this.props;
     if (types) {
+      let customFitWidth = 220;
+      if (['number', 'integer', 'array'].includes(type)) {
+        customFitWidth = 190;
+      }
+      if (type === 'object') {
+        customFitWidth = 170;
+      }
       return (
         <div key={id} className="GatewayPolicyAction">
           {custom && (
@@ -232,7 +239,7 @@ export default class GatewayPolicyAction extends PureComponent {
             name,
             value,
             label: custom ? 'Parameter Value' : name,
-            width: `calc(100% - ${custom ? 220 : 190}px)`,
+            width: `calc(100% - ${custom ? customFitWidth : 190}px)`,
             enum: item.enum,
             custom,
           })}
@@ -246,7 +253,7 @@ export default class GatewayPolicyAction extends PureComponent {
         name: `${prefix}[${name}]`,
         value,
         onBlur: this.handlePropertyValueChange(id),
-        width: width || 'calc(100% - 50px)',
+        width: width || 'calc(100% - 20px)',
         description,
         placeholder: ' ',
         type,
@@ -274,6 +281,7 @@ export default class GatewayPolicyAction extends PureComponent {
       if ((type === 'string' && custom) || type === 'jscode') {
         Object.assign(props, {
           codeEditor: true,
+          width: width || 'calc(100% - 50px)',
         });
       }
       if (type === 'string' && item.enum.length) {

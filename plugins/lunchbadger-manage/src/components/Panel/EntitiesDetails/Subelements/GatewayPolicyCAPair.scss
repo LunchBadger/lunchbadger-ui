@@ -31,4 +31,22 @@
       }
     }
   }
+  .EntityProperty {
+    &.types,
+    &.select {
+      min-width: 0;
+    }
+    &.string,
+    &.boolean,
+    &.integer,
+    &.number {
+      min-width: 90px;
+    }
+    &.array {
+      min-width: 250px;
+    }
+    &.object {
+      min-width: 270px;
+    }
+  }
 }

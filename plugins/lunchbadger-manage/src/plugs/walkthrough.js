@@ -186,13 +186,38 @@ Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting th
     ],
   },
   '0713': {
-    text: `
-API Endpoint Entities connect to the right-hand side of a Pipeline.
-<br /><br />
-Click <pre>OK</pre> to submit Car Api Endpoint.
-`,
+    text: 'API Endpoint Entities connect to the right-hand side of a Pipeline.',
     selector: '.quadrant.Public .quadrant__body',
     position: 'left',
+    allowClicksThruHole: false,
+  },
+  '0714': {
+    text: `
+Let's add a path.
+`,
+    selector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
+    position: 'top',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0'),
+    ],
+  },
+  '0715': {
+    text: `
+      Let's set path here as: <pre>/api/car*</pre>
+`,
+    selector: '.Entity.ApiEndpoint.editable .input__paths0',
+    position: 'left',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]'),
+    ],
+  },
+  '0716': {
+    text: 'Click <pre>OK</pre> to submit Car Api Endpoint',
+    selector: '.Entity.ApiEndpoint.editable .submit',
+    position: 'left',
+    allowClicksThruHole: true,
     triggerNext: api => [
       api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
@@ -202,7 +227,7 @@ Click <pre>OK</pre> to submit Car Api Endpoint.
       api.setShowOverlay(true),
     ],
   },
-  '0714': {
+  '0717': {
     text: `
 Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connecting their ports.
 `,
@@ -219,12 +244,33 @@ Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connectin
       api.setShowOverlay(true),
     ],
   },
-  '0715': {
+  '0718': {
     text: `
-Click <pre>OK</pre> to submit Function Api Endpoint.
+Let's add a path.
 `,
-    selector: '.Entity.ApiEndpoint.editable',
+    selector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
+    position: 'top',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0'),
+    ],
+  },
+  '0719': {
+    text: `
+      Let's set path here as: <pre>/api/myfunction*</pre>
+`,
+    selector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
+    ],
+  },
+  '0720': {
+    text: 'Click <pre>OK</pre> to submit Function Api Endpoint',
+    selector: '.Entity.ApiEndpoint.editable .submit',
+    position: 'left',
+    allowClicksThruHole: true,
     triggerNext: api => [
       api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
@@ -234,7 +280,7 @@ Click <pre>OK</pre> to submit Function Api Endpoint.
       api.setShowOverlay(true),
     ],
   },
-  '0716': {
+  '0721': {
     text: 'Click this icon to open pipelines details panel',
     waitForSelector: '.Entity.Gateway .Toolbox__button--pipelines',
     position: 'left',
@@ -251,7 +297,7 @@ Click <pre>OK</pre> to submit Function Api Endpoint.
       api.setShowOverlay(true),
     ],
   },
-  '0717': {
+  '0722': {
     text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
     <br /><br />
     More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
@@ -259,7 +305,7 @@ Click <pre>OK</pre> to submit Function Api Endpoint.
     position: 'bottom',
     allowClicksThruHole: false,
   },
-  '0718': {
+  '0723': {
     text: 'Click this icon to open Consumer Management details panel',
     selector: '.DetailsPanel .Toolbox__button--customerManagement',
     position: 'bottom',
@@ -268,12 +314,12 @@ Click <pre>OK</pre> to submit Function Api Endpoint.
       api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement'),
     ]
   },
-  '0719': {
+  '0724': {
     text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
     selector: '.DetailsPanel .CustomerManagement',
     position: 'top',
   },
-  '0720': {
+  '0725': {
     text: 'Click <pre>Cancel</pre> to close details panel',
     selector: '.DetailsPanel .cancel',
     triggerNext: api => [
@@ -285,7 +331,7 @@ Click <pre>OK</pre> to submit Function Api Endpoint.
       api.setShowOverlay(true),
     ],
   },
-  '0721': {
+  '0726': {
     title: 'Accessing Gateway Instances',
     text: `
 All gateways will be accessible via the following domain name pattern:

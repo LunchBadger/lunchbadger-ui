@@ -3,7 +3,7 @@ var dataSourceSelector1;
 var dataSourceSelector2;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Dependency installation: initial status success': function(browser) {
     page = browser.page.lunchBadger();
     dataSourceSelector1 = page.getDataSourceSelector(1);

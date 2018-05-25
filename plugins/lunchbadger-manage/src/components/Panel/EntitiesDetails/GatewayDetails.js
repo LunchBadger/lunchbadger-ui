@@ -22,7 +22,6 @@ import {
   Checkbox,
   Table,
   IconButton,
-  Transitioning,
   Sortable,
 } from '../../../../../lunchbadger-ui/src';
 import Config from '../../../../../../src/config';
@@ -553,16 +552,14 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            <Transitioning>
-              {http.enabled && (
-                <EntityProperty
-                  title="Port"
-                  placeholder=" "
-                  name="http[port]"
-                  value={http.port}
-                />
-              )}
-            </Transitioning>
+            {http.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="http[port]"
+                value={http.port}
+              />
+            )}
           </div>
         </div>
         <div>
@@ -575,20 +572,16 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            <Transitioning>
-              {https.enabled && (
-                <EntityProperty
-                  title="Port"
-                  placeholder=" "
-                  name="https[port]"
-                  value={https.port}
-                />
-              )}
-            </Transitioning>
+            {https.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="https[port]"
+                value={https.port}
+              />
+            )}
           </div>
-          <Transitioning>
-            {https.enabled && table}
-          </Transitioning>
+          {https.enabled && table}
         </div>
       </div>
     );
@@ -626,28 +619,24 @@ class GatewayDetails extends PureComponent {
             />
           </div>
           <div className="panel__details__checkbox hideable">
-            <Transitioning>
-              {admin.enabled && (
-                <EntityProperty
-                  title="Hostname"
-                  placeholder=" "
-                  name="admin[hostname]"
-                  value={admin.hostname}
-                />
-              )}
-            </Transitioning>
+            {admin.enabled && (
+              <EntityProperty
+                title="Hostname"
+                placeholder=" "
+                name="admin[hostname]"
+                value={admin.hostname}
+              />
+            )}
           </div>
           <div className="panel__details__checkbox hideable narrow">
-            <Transitioning>
-              {admin.enabled && (
-                <EntityProperty
-                  title="Port"
-                  placeholder=" "
-                  name="admin[port]"
-                  value={admin.port}
-                />
-              )}
-            </Transitioning>
+            {admin.enabled && (
+              <EntityProperty
+                title="Port"
+                placeholder=" "
+                name="admin[port]"
+                value={admin.port}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -702,7 +691,7 @@ class GatewayDetails extends PureComponent {
       <div className="pipelines" key="pipelines">
         <CollapsibleProperties
           bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
-          collapsible={<Transitioning>{collapsible}</Transitioning>}
+          collapsible={collapsible}
           button={
             <IconButton
               icon="iconPlus"

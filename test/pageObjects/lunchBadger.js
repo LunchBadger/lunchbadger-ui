@@ -1,4 +1,6 @@
 const fs = require('fs');
+const login = 'test';
+
 let notifiedCoverage = false;
 
 var pageCommands = {
@@ -10,12 +12,18 @@ var pageCommands = {
   },
 
   open: function () {
+    const username = this.getUniqueName('CircleCI');
+    const usernameText = {
+      '.breadcrumbs .breadcrumbs__element.username': username
+    };
     return this
       .openWithoutLogin()
-      .setValueSlow('.input__login input', 'test')
-      .setValueSlow('.input__password input', 'CircleCI')
+      .setValueSlow('.input__login input', login)
+      .setValueSlow('.input__password input', username)
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
+      .closeDemoWizard()
+      .check({text: usernameText})
       .emptyProject();
   },
 
@@ -99,6 +107,15 @@ var pageCommands = {
     return this
       .visible(selector, timeout)
       .click(selector);
+  },
+
+  clickVisibleOnHover: function (hoverSelector, selector) {
+    const self = this;
+    return this
+      .moveToElement(hoverSelector, 5, 5, function () {
+        self.clickVisible(selector);
+        return self;
+      });
   },
 
   setValueSlow: function (selector, value) {
@@ -553,6 +570,12 @@ var pageCommands = {
       .saveProject();
   },
 
+  closeDemoWizard: function () {
+    return this
+      .clickPresent('.joyride-tooltip__button--skip')
+      .notPresent('.joyride-overlay');
+  },
+
   waitForGatewaysRemoved: function () {
     return this
       .notPresent(this.getGatewaySelector(1), 600000); // wait max 10 min for any gateway to be removed
@@ -793,9 +816,10 @@ var pageCommands = {
   },
 
   removePipeline: function (gatewaySelector, pipelineIdx) {
+    const hoverSelector = `${gatewaySelector} .pipelines${pipelineIdx}name`;
     const selector = `${gatewaySelector} .button__remove__pipelines${pipelineIdx}`;
     return this
-      .clickPresent(selector)
+      .clickVisibleOnHover(hoverSelector, selector)
       .notPresent(selector);
   },
 
@@ -830,14 +854,18 @@ var pageCommands = {
   },
 
   removePolicy: function (gatewaySelector, pipelineIdx, policyIdx) {
+    const hoverSelector = `${gatewaySelector} .pipelines${pipelineIdx}policies${policyIdx}namepolicy`;
+    const selector = `${gatewaySelector} .button__remove__pipelines${pipelineIdx}policy${policyIdx}`;
     return this
-      .clickPresent(`${gatewaySelector} .button__remove__pipelines${pipelineIdx}policy${policyIdx}`)
+      .clickVisibleOnHover(hoverSelector, selector)
       .pause(1500);
   },
 
   removePolicyByDetails: function (pipelineIdx, policyIdx) {
+    const hoverSelector = `.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}name`;
+    const selector = `.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}`;
     return this
-      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}`)
+      .clickVisibleOnHover(hoverSelector, selector)
       .pause(1500);
   },
 
@@ -987,8 +1015,10 @@ var pageCommands = {
   },
 
   removeCondition: function (pipelineIdx, policyIdx, pairIdx) {
+    const hoverSelector = `.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`;
+    const selector = `.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`;
     return this
-      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`);
+      .clickVisibleOnHover(hoverSelector, selector);
   },
 
   addSubCondition: function (pipelineIdx, policyIdx, pairIdx, prefix = '') {
@@ -997,8 +1027,10 @@ var pageCommands = {
   },
 
   removeSubCondition: function (pipelineIdx, policyIdx, pairIdx, conditionIdx, prefix = '') {
+    const hoverSelector = `.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}conditions${conditionIdx}name`;
+    const selector = `.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}condition${conditionIdx}`;
     return this
-      .clickPresent(`.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}condition${conditionIdx}`);
+      .clickVisibleOnHover(hoverSelector, selector);
   },
 
   addConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, option, paramIdx, prefix = '') {
@@ -1040,8 +1072,10 @@ var pageCommands = {
   },
 
   removeConditionCustomParameter: function (pipelineIdx, policyIdx, pairIdx, paramIdx, prefix = '') {
+    const hoverSelector = `.DetailsPanel .tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}${paramIdx}name`;
+    const selector = `.DetailsPanel .button__remove__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter${paramIdx}`;
     return this
-      .clickPresent(`.DetailsPanel .button__remove__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}condition${prefix}CustomParameter${paramIdx}`);
+      .clickVisibleOnHover(hoverSelector, selector);
   },
 
   addModelPropertyOnCanvas: function (selector, propertyIdx) {

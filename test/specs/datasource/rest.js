@@ -19,7 +19,7 @@ module.exports = {
       .submitCanvasEntityWithExpectedValidationErrors(entitySelector, ['baseUrl'])
       .selectValueSlow(entitySelector, 'predefined', 'Google-Maps-Location')
       .submitCanvasEntity(entitySelector)
-      .waitForDependencyFinish()
+      // .waitForDependencyFinish()
       .check({
         text: {
           [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',
@@ -53,7 +53,7 @@ module.exports = {
       .checkEntityDetails(expectOptionsHeadersAdded)
       .clickPresent('.DetailsPanel .checkbox__optionsstrictSSL')
       .clickPresent('.DetailsPanel .checkbox__optionsuseQuerystring')
-      .clickPresent('.DetailsPanel .button__remove__optionsHeadersParameter0')
+      .clickVisibleOnHover('.DetailsPanel .input__optionsheadersparams0key', '.DetailsPanel .button__remove__optionsHeadersParameter0')
       .clickPresent('.DetailsPanel .button__add__optionsHeadersParameter')
       .setValueSlow('.DetailsPanel .input__optionsheadersparams1key input', 'content-language')
       .setValueSlow('.DetailsPanel .input__optionsheadersparams1value input', 'en-US')
@@ -74,7 +74,7 @@ module.exports = {
   },
   'Rest: operations headers remove': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templateheaders0key', '.DetailsPanel .button__remove__operation0headersParameter0')
       .checkEntityDetails(expectOperations0HeadersParameterRemoved);
   },
   'Rest: operations headers add': function () {
@@ -86,13 +86,13 @@ module.exports = {
   },
   'Rest: operations headers remove all': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter1')
-      .clickPresent('.DetailsPanel .button__remove__operation0headersParameter0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templateheaders1key', '.DetailsPanel .button__remove__operation0headersParameter1')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templateheaders0key', '.DetailsPanel .button__remove__operation0headersParameter0')
       .checkEntityDetails(expectOperations0HeadersAllParametersRemoved);
   },
   'Rest: operations query remove': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templatequery0key', '.DetailsPanel .button__remove__operation0queryParameter0')
       .checkEntityDetails(expectOperations0QueryParameterRemoved);
   },
   'Rest: operations query add': function () {
@@ -111,18 +111,18 @@ module.exports = {
   },
   'Rest: operations functions remove': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0function0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0functions0key', '.DetailsPanel .button__remove__operation0function0')
       .checkEntityDetails(expectOperations0FunctionsParameterRemoved);
   },
   'Rest: operations functions remove all': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0function0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0functions0key', '.DetailsPanel .button__remove__operation0function0')
       .checkEntityDetails(expectOperations0FunctionsAllParametersRemoved);
   },
   'Rest: operations query remove all': function () {
     page
-      .clickPresent('.DetailsPanel .button__remove__operation0queryParameter1')
-      .clickPresent('.DetailsPanel .button__remove__operation0queryParameter0')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templatequery1key', '.DetailsPanel .button__remove__operation0queryParameter1')
+      .clickVisibleOnHover('.DetailsPanel .input__operations0templatequery0key', '.DetailsPanel .button__remove__operation0queryParameter0')
       .checkEntityDetails(expectOperations0QueryAllParameterRemoved);
   },
   'Rest: remove': function () {

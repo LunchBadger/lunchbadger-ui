@@ -26,7 +26,7 @@ var form;
 var expectedModelJSON;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'EG integration: deploy gateway': function (browser) {
     page = browser.page.lunchBadger();
     memorySelector = page.getDataSourceSelector(1);
@@ -276,7 +276,7 @@ module.exports = {
       .addPolicyCAPair(0, 1, 8)
       .setConditionName(0, 1, 8, 's', 3, 'anonymous')
       .addPolicyCAPair(0, 1, 9)
-      .setConditionName(0, 1, 9, 'a', 6, 'ALL OF', 'conditions0name')
+      .setConditionName(0, 1, 9, 'a', 7, 'ALL OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 10)
       .setConditionName(0, 1, 10, 'f', 1, 'ONE OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 11)
@@ -304,10 +304,13 @@ module.exports = {
       .addConditionCustomParameter(0, 1, 12, 'array', 6)
       .setConditionCustomParameterName(0, 1, 12, 6, 'myArr')
       .setConditionCustomParameterEnum(0, 1, 12, 'myArr', ['one', 'two', 'three'])
+      .addPolicyCAPair(0, 1, 13)
+      .setConditionName(0, 1, 13, 'a', 6, 'tlsClientAuthenticated')
       .checkPipelines(expectConditionsPlain)
   },
   'EG integration: remove custom params': function () {
     page
+      .removeCondition(0, 1, 13)
       .removeConditionCustomParameter(0, 1, 12, 1)
       .removeConditionCustomParameter(0, 1, 12, 2)
       .checkPipelines(expectCustomConditionsRemoved)
@@ -1243,6 +1246,11 @@ const expectConditionsPlain = [
               myBool: true,
               myBool2: true,
               myArr: ['one two three']
+            }
+          },
+          {
+            condition: {
+              name: 'tlsClientAuthenticated'
             }
           }
         ]

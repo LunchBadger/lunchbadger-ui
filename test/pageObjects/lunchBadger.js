@@ -581,6 +581,11 @@ var pageCommands = {
       .notPresent(this.getGatewaySelector(1), 600000); // wait max 10 min for any gateway to be removed
   },
 
+  waitForFunctionRemoved: function () {
+    return this
+      .notPresent(this.getFunctionSelector(1), 600000); // wait max 10 min for any function to be removed
+  },
+
   closeSystemInformationMessage: function (message) {
     const selector = `.SystemInformationMessages .SystemInformationMessages__item.${message} .SystemInformationMessages__item__delete`;
     return this
@@ -1200,6 +1205,15 @@ var pageCommands = {
     return this
       .removeEntity(selector, 300000, check)
       .waitForGatewaysRemoved();
+  },
+
+  removeFunction: function (selector, check = {}) {
+    Object.assign(check, {
+      present: [`${selector} .EntityStatus.deleting`]
+    });
+    return this
+      .removeEntity(selector, 300000, check)
+      .waitForFunctionRemoved();
   }
 };
 

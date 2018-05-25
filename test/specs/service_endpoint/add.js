@@ -3,7 +3,7 @@ var entitySelector;
 var entitySelector2;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Service Endpoint: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getServiceEndpointSelector(1);
@@ -56,7 +56,7 @@ module.exports = {
   'Service endpoint: remove url': function () {
     page
       .editEntity(entitySelector)
-      .clickPresent(entitySelector + ' .button__remove__urls1')
+      .clickVisibleOnHover(entitySelector + ' .input__urls1', entitySelector + ' .button__remove__urls1')
       .waitForElementNotVisible(entitySelector + ' .button__remove__urls0', 5000)
       .submitCanvasEntity(entitySelector)
       .saveProject()

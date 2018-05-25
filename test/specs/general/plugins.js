@@ -1,7 +1,7 @@
 var page;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Tools menu: plugins': function (browser) {
     page = browser.page.lunchBadger();
     page
@@ -20,11 +20,14 @@ const present = [
   '.Tool.function',
   '.Tool.microservice',
   '.Tool.endpoint',
-  '.Tool.gateway'
-];
-const notPresent = [
+  '.Tool.gateway',
+
+  // on staging, below are enabled
   '.Tool.api',
   '.Tool.portal',
   '.header__menu__link.METRICS_PANEL',
   '.header__menu__link.FORECASTS_PANEL'
+];
+const notPresent = [
+
 ];

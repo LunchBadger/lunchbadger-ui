@@ -5,7 +5,7 @@ var modelSelector1;
 var modelSelector2;
 
 module.exports = {
-  '@disabled': true,
+  '@disabled': true, // FIXME enable when changing model/datasource name will be persisten server-side
   'CRUD on canvas: create datasource 1': function (browser) {
     page = browser.page.lunchBadger();
     dataSourceSelector1 = page.getDataSourceSelector(1);

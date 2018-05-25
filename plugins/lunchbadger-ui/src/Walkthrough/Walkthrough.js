@@ -84,8 +84,8 @@ class Walkthrough extends PureComponent {
       () => cb(),
     ]),
     unselectEntities: () => cb => series([
-      this.api.click('.quadrant__title'),
-      this.api.waitUntilNotPresent('.Entity.highlighted'),
+      // this.api.click('.quadrant__title'),
+      // this.api.waitUntilNotPresent('.Entity.highlighted'),
       () => cb(),
     ]),
     waitUntilPresent: selector => async cb => {

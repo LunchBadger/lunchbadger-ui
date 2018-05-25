@@ -178,7 +178,17 @@ class Walkthrough extends PureComponent {
       this.props.steps[this.state.index].text = text;
       this.forceUpdate(cb);
     },
+    blockClicks: () => cb => {
+      document.addEventListener('click', this.stopClickPropagation);
+      cb();
+    },
+    unblockClicks: () => cb => {
+      document.removeEventListener('click', this.stopClickPropagation);
+      cb();
+    },
   };
+
+  stopClickPropagation = event => event.stopPropagation();
 
   waitByAnimationFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 

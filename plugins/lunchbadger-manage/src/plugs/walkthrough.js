@@ -20,6 +20,10 @@ C'mon, click it!`,
     allowClicksThruHole: false,
     onBefore: api => [
       api.openEntitySubmenu('endpoint'),
+      api.blockClicks(),
+    ],
+    onAfter: api => [
+      api.unblockClicks(),
     ],
   },
   '060': {
@@ -27,7 +31,11 @@ C'mon, click it!`,
     text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
     selector: '.Tool__submenuItem.apiendpoint',
     position: 'right',
+    onBefore: api => [
+      api.blockClicks(),
+    ],
     onAfter: api => [
+      api.unblockClicks(),
       api.unselectEntities(),
     ],
   },

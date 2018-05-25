@@ -1,10 +1,10 @@
 <svg version="1.1"xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 20 20" xml:space="preserve">
   <style type="text/css">
-  	.icon-plus-0{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+  	.icon-plus-0{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-width:1.6;}
   </style>
-  <g id="Plus_Icon_3">
-  	<line class="icon-plus-0" x1="10" y1="1.9" x2="10" y2="17.9"/>
-  	<line class="icon-plus-0" x1="2" y1="9.9" x2="18" y2="9.9"/>
+  <g>
+  	<line class="icon-plus-0" x1="10" y1="2" x2="10" y2="18"/>
+  	<line class="icon-plus-0" x1="2" y1="10" x2="18" y2="10"/>
   </g>
-</svg>
+</svg>

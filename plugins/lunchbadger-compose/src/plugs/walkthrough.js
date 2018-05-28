@@ -22,6 +22,10 @@ C'mon, click it!
     allowClicksThruHole: false,
     onBefore: api => [
       api.openEntitySubmenu('dataSource'),
+      api.blockClicks(),
+    ],
+    onAfter: api => [
+      api.unblockClicks(),
     ],
   },
   '012': {
@@ -34,6 +38,12 @@ C'mon, click it!
     selector: '.Tool__submenuItem.memory',
     position: 'right',
     allowClicksThruHole: true,
+    onBefore: api => [
+      api.blockClicks(),
+    ],
+    onAfter: api => [
+      api.unblockClicks(),
+    ],
     triggerNext: api => [
       api.waitUntilPresent('.Entity.DataSource.memory'),
     ],

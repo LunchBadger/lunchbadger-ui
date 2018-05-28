@@ -20,11 +20,14 @@ const present = [
   '.Tool.function',
   '.Tool.microservice',
   '.Tool.endpoint',
-  '.Tool.gateway'
-];
-const notPresent = [
+  '.Tool.gateway',
+
+  // on staging, below are enabled
   '.Tool.api',
   '.Tool.portal',
   '.header__menu__link.METRICS_PANEL',
   '.header__menu__link.FORECASTS_PANEL'
+];
+const notPresent = [
+
 ];

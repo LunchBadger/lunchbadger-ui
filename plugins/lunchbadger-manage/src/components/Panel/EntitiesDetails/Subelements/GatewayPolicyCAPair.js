@@ -51,7 +51,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     } = this.props;
     const {horizontal} = this.state;
     const bar = (
-      <EntityPropertyLabel plain className={`CAPair${nr}Label`}>
+      <EntityPropertyLabel plain className={`CAPair${nr}Label ${prefix}CAPair`}>
         C/A Pair {nr}
       </EntityPropertyLabel>
     );

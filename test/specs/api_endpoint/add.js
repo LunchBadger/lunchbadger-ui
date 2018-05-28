@@ -53,7 +53,7 @@ module.exports = {
   'Api Endpoint: remove path': function () {
     page
       .editEntity(entitySelector)
-      .clickPresent(entitySelector + ' .button__remove__paths0')
+      .clickVisibleOnHover(entitySelector + ' .paths0', entitySelector + ' .button__remove__paths0')
       .submitCanvasEntity(entitySelector)
       .saveProject()
       .reloadPage()

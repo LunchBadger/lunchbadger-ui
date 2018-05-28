@@ -59,22 +59,7 @@ Click <pre>OK</pre> to create Memory Data Source.
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.DataSource.memory.editable'),
-      api.wait(1000),
-      api.setShowOverlay(true),
-    ],
-  },
-  '014': {
-    text: 'Memory Data Source is installing...',
-    position: 'right',
-    selector: '.Entity.DataSource.memory',
-    allowClicksThruHole: false,
-    triggerNext: api => [
-      api.waitUntilProjectSaved(),
-      api.unselectEntities(),
-      api.setStepText('Memory Data Source has been installed!'),
-      api.wait(1000),
     ],
   },
   '020': {
@@ -171,9 +156,6 @@ Click <pre>OK</pre> to create model.
     triggerNext: api => [
       api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Model.editable'),
-      api.setShowTooltip(false),
-      api.waitUntilProjectSaved(),
-      api.setShowTooltip(true),
       api.setShowOverlay(true),
     ],
   },
@@ -189,8 +171,6 @@ Please connect data source connector with Loopback model by connecting their por
     ],
     triggerNext: api => [
       api.waitUntilPresent('.Entity.DataSource.memory .port-out .port__anchor--connected'),
-      api.setStepText('Entities are connecting...'),
-      api.waitUntilProjectSaved(),
       api.setShowOverlay(true),
     ],
   },
@@ -216,6 +196,7 @@ Click <pre>OK</pre> to deploy function,
       api.waitUntilNotPresent('.Entity.Function_.editable'),
       api.wait(1000),
       api.setShowOverlay(true),
+
     ],
   },
   '032': {
@@ -226,9 +207,9 @@ Click <pre>OK</pre> to deploy function,
     triggerNext: api => [
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Function_.deploying'),
+      api.waitUntilNotPresent('.CanvasElement.Function_.wip'),
+      api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.setWaitMethod(),
-      api.setStepText('Function has been deployed!'),
-      api.waitUntilProjectSaved(),
     ],
   },
   '033': {

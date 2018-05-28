@@ -166,15 +166,15 @@ Click <pre>OK</pre> to deploy a gateway.
     triggerNext: api => [
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Gateway.deploying'),
+      api.waitUntilNotPresent('.CanvasElement.Gateway.wip'),
       api.setWaitMethod(),
-      api.setStepText('Gateway has been deployed!'),
-      api.waitUntilLoadersGone(),
     ],
   },
   '0711': {
     text: 'Model, Service Endpoint, and Function Entities can all be connected to the left-hand side of a Pipeline.',
-    selector: '.quadrant.Private .quadrant__body',
+    waitForSelector: '.quadrant.Private .quadrant__body',
     position: 'right',
+    onBefore: () => [],
   },
   '0712': {
     text: `
@@ -188,8 +188,6 @@ Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting th
     ],
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
-      api.setStepText('Entities are connecting...'),
-      api.waitUntilProjectSaved(),
       api.setShowOverlay(true),
     ],
   },
@@ -227,12 +225,7 @@ Let's add a path.
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
-      api.setShowTooltip(false),
-      api.waitUntilProjectSaved(),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
     ],
   },
   '0717': {
@@ -247,8 +240,6 @@ Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connectin
     ],
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
-      api.setStepText('Entities are connecting...'),
-      api.waitUntilProjectSaved(),
       api.setShowOverlay(true),
     ],
   },
@@ -280,22 +271,25 @@ Let's add a path.
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
-      api.setShowTooltip(false),
-      api.waitUntilProjectSaved(),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
     ],
   },
   '0721': {
-    text: 'Click this icon to open pipelines details panel',
-    waitForSelector: '.Entity.Gateway .Toolbox__button--pipelines',
+    text: `
+Click on entity box to reveal it's toolbox
+`,
+    selector: '.Entity.Gateway',
     position: 'left',
     allowClicksThruHole: true,
-    onBefore: api => [
-      api.click('.Entity.Gateway'),
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.Gateway.highlighted'),
     ],
+  },
+  '0722': {
+    text: 'Click this icon to open pipelines details panel',
+    selector: '.Entity.Gateway .Toolbox__button--pipelines',
+    position: 'left',
+    allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.DetailsPanel.visible .BaseDetails.pipelines'),
       api.setShowOverlay(false),
@@ -305,7 +299,7 @@ Let's add a path.
       api.setShowOverlay(true),
     ],
   },
-  '0722': {
+  '0723': {
     text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
     <br /><br />
     More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
@@ -313,7 +307,7 @@ Let's add a path.
     position: 'bottom',
     allowClicksThruHole: false,
   },
-  '0723': {
+  '0724': {
     text: 'Click this icon to open Consumer Management details panel',
     selector: '.DetailsPanel .Toolbox__button--customerManagement',
     position: 'bottom',
@@ -322,12 +316,12 @@ Let's add a path.
       api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement'),
     ]
   },
-  '0724': {
+  '0725': {
     text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
     selector: '.DetailsPanel .CustomerManagement',
     position: 'top',
   },
-  '0725': {
+  '0726': {
     text: 'Click <pre>Cancel</pre> to close details panel',
     selector: '.DetailsPanel .cancel',
     triggerNext: api => [
@@ -339,7 +333,7 @@ Let's add a path.
       api.setShowOverlay(true),
     ],
   },
-  '0726': {
+  '0801': {
     title: 'Accessing Gateway Instances',
     text: `
 All gateways will be accessible via the following domain name pattern:
@@ -351,28 +345,28 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
     selector: '.Gateway__pipeline0 > div:nth-child(2) > div',
     position: 'left',
   },
-  '080': {
+  '0802': {
     title: 'API Request Flow',
     text: 'When an API request is received, it flows through the LunchBadger Entities defined on the Canvas.',
     selector: '.canvas__legend',
     position: 'top',
   },
-  '081': {
+  '0803': {
     text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /api/cars.',
     selector: '.Entity.ApiEndpoint',
     position: 'bottom',
   },
-  '082': {
+  '0804': {
     text: 'The request is routed to a Gateway Pipeline where it flows through the defined Policies.',
     selector: '.Entity.Gateway .Gateway',
     position: 'bottom',
   },
-  '083': {
+  '0805': {
     text: 'The API request then makes its way to an Entity in the Private column (Model, Service Endpoint, or Function). In this example, the request is routed to the Car model.',
     selector: '.Entity.Model',
     position: 'bottom',
   },
-  '084': {
+  '0806': {
     text: 'Models are backed by Data Sources. Behind the scenes, this Loopback model will connect to an in-memory data store.',
     selector: '.Entity.DataSource',
     position: 'bottom',

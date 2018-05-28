@@ -3,7 +3,7 @@ var entitySelector;
 const TEST_WSDL = 'http://www.webservicex.com/globalweather.asmx';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true, // FIXME after soap installing will be server-side fixed
   'Soap: plain soap': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
@@ -61,8 +61,8 @@ module.exports = {
     page
       .setValueSlow('.DetailsPanel .input__securityusername input', 'bauser')
       .setValueSlow('.DetailsPanel .input__securitypassword input', 'bapasswd')
-      .clickPresent('.DetailsPanel .button__remove__operation0')
-      .clickPresent('.DetailsPanel .button__remove__soapHeader0')
+      .clickVisibleOnHover('.DetailsPanel .input__soapOperations0key', '.DetailsPanel .button__remove__operation0')
+      .clickVisibleOnHover('.DetailsPanel .input__soapHeaders0elementKey', '.DetailsPanel .button__remove__soapHeader0')
       .submitDetailsPanel(entitySelector)
       .reloadPage()
       .openEntityInDetailsPanel(entitySelector)

@@ -49,31 +49,10 @@ module.exports = {
     color = page.getUniqueName('color');
     form = {model, color};
     expectedModelJSON = JSON.stringify(Object.assign({}, form, {id: 1}));
-    EXPECT_PROXY_MODEL = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>Cannot GET /api/${MODEL_NAME}</pre>
-</body>
-</html>
-`; // `[${expectedModelJSON}]`
-  EXPECT_PROXY_SERVICE_ENDPOINT = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Error</title>
-</head>
-<body>
-<pre>Cannot GET /robots.txt</pre>
-</body>
-</html>
+    EXPECT_PROXY_MODEL = '[]'; // `[${expectedModelJSON}]`
+    EXPECT_PROXY_SERVICE_ENDPOINT = `User-agent: *
+Disallow: /deny
 `;
-// `User-agent: *
-// Disallow: /deny
-// `;
     page
       .open()
       .addElement('gateway')
@@ -276,7 +255,7 @@ module.exports = {
       .addPolicyCAPair(0, 1, 8)
       .setConditionName(0, 1, 8, 's', 3, 'anonymous')
       .addPolicyCAPair(0, 1, 9)
-      .setConditionName(0, 1, 9, 'a', 6, 'ALL OF', 'conditions0name')
+      .setConditionName(0, 1, 9, 'a', 7, 'ALL OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 10)
       .setConditionName(0, 1, 10, 'f', 1, 'ONE OF', 'conditions0name')
       .addPolicyCAPair(0, 1, 11)
@@ -304,17 +283,20 @@ module.exports = {
       .addConditionCustomParameter(0, 1, 12, 'array', 6)
       .setConditionCustomParameterName(0, 1, 12, 6, 'myArr')
       .setConditionCustomParameterEnum(0, 1, 12, 'myArr', ['one', 'two', 'three'])
+      .addPolicyCAPair(0, 1, 13)
+      .setConditionName(0, 1, 13, 'a', 6, 'tlsClientAuthenticated')
       .checkPipelines(expectConditionsPlain)
   },
   'EG integration: remove custom params': function () {
     page
+      .removeCondition(0, 1, 13)
       .removeConditionCustomParameter(0, 1, 12, 1)
       .removeConditionCustomParameter(0, 1, 12, 2)
       .checkPipelines(expectCustomConditionsRemoved)
   },
   'EG integration: custom params into allOf': function () {
     page
-      .setConditionName(0, 1, 12, 'a', 6, 'ALL OF', 'conditions0name')
+      .setConditionName(0, 1, 12, 'a', 7, 'ALL OF', 'conditions0name')
       .checkPipelines(expectCustomConditions)
   },
   'EG integration: remove C/A pair': function () {
@@ -322,22 +304,22 @@ module.exports = {
       .removeCondition(0, 1, 12)
       .checkPipelines(expectCustomParamsRemoved)
   },
-  'EG integration: C/A reordering': function () {
-    page
-      .check({
-        present: [
-          '.DetailsPanel .button__moveUp__pipelines0policies1pairs0.disabled',
-          '.DetailsPanel .button__moveDown__pipelines0policies1pairs11.disabled'
-        ]
-      })
-      .moveCAPairDown(0, 1, 0)
-      .moveCAPairDown(0, 1, 1)
-      .moveCAPairUp(0, 1, 1)
-      .moveCAPairUp(0, 1, 11)
-      .moveCAPairUp(0, 1, 10)
-      .moveCAPairDown(0, 1, 10)
-      .checkPipelines(expectConditionsReordered)
-  },
+  // 'EG integration: C/A reordering': function () { TODO: test reordering by dnd
+  //   page
+  //     .check({
+  //       present: [
+  //         '.DetailsPanel .button__moveUp__pipelines0policies1pairs0.disabled',
+  //         '.DetailsPanel .button__moveDown__pipelines0policies1pairs11.disabled'
+  //       ]
+  //     })
+  //     .moveCAPairDown(0, 1, 0)
+  //     .moveCAPairDown(0, 1, 1)
+  //     .moveCAPairUp(0, 1, 1)
+  //     .moveCAPairUp(0, 1, 11)
+  //     .moveCAPairUp(0, 1, 10)
+  //     .moveCAPairDown(0, 1, 10)
+  //     .checkPipelines(expectConditionsReordered)
+  // },
   'EG integration: remove conditions': function () {
     page
       .removeCondition(0, 1, 0)
@@ -375,13 +357,13 @@ module.exports = {
   },
   'EG integration: into allOf': function () {
     page
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name')
+      .setConditionName(0, 1, 0, 'a', 7, 'ALL OF', 'conditions0name')
       .checkPipelines(expectIntoAllOf)
   },
   'EG integration: add allOf conditions': function () {
     page
       .addSubCondition(0, 1, 0)
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name', 'conditions1')
+      .setConditionName(0, 1, 0, 'a', 7, 'ALL OF', 'conditions0name', 'conditions1')
       .addSubCondition(0, 1, 0)
       .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions2path', 'conditions2')
       .setConditionParameter(0, 1, 0, 'path', '/a', 'conditions2')
@@ -397,7 +379,7 @@ module.exports = {
       .setConditionName(0, 1, 0, 'e', 1, 'pathExact', 'conditions4path', 'conditions4')
       .setConditionParameter(0, 1, 0, 'path', '/last', 'conditions4')
       .removeSubCondition(0, 1, 0, 2)
-      .setConditionName(0, 1, 0, 'a', 6, 'ALL OF', 'conditions0name', 'conditions0')
+      .setConditionName(0, 1, 0, 'a', 7, 'ALL OF', 'conditions0name', 'conditions0')
       .setConditionName(0, 1, 0, 'f', 1, 'ONE OF', 'conditions1name', 'conditions1')
       .addSubCondition(0, 1, 0, 'conditions1')
       .addSubCondition(0, 1, 0, 'conditions1')
@@ -522,25 +504,6 @@ module.exports = {
         }
       })
       .close();
-    // request.put({url, form}, (err, res, putBody) => {
-    //   page
-    //     .check({
-    //       equal: [[putBody, expectedModelJSON]]
-    //     });
-    //   request(GATEWAY_MODEL_URL, function (errModel, resModel, getModelBody) {
-    //     page
-    //       .check({
-    //         equal: [[getModelBody, EXPECT_PROXY_MODEL]]
-    //       });
-    //     request(GATEWAY_SERVICE_ENDPOINT_URL, function (errSE, resSE, getServiceEndpointBody) {
-    //       page
-    //         .check({
-    //           equal: [[getServiceEndpointBody, EXPECT_PROXY_SERVICE_ENDPOINT]]
-    //         })
-    //         .close();
-    //     });
-    //   });
-    // });
   }
 };
 
@@ -1243,6 +1206,11 @@ const expectConditionsPlain = [
               myBool: true,
               myBool2: true,
               myArr: ['one two three']
+            }
+          },
+          {
+            condition: {
+              name: 'tlsClientAuthenticated'
             }
           }
         ]

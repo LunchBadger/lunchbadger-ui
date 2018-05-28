@@ -5,7 +5,7 @@ var modelSelector1;
 var modelSelector2;
 
 module.exports = {
-  '@disabled': true, // enable when #432 will be fixed
+  '@disabled': true, // FIXME enable when #432 will be fixed + enable when changing model/datasource name will be persisten server-side
   'CRUD on details panel: create datasources': function (browser) {
     page = browser.page.lunchBadger();
     dataSourceSelector1 = page.getDataSourceSelector(1);

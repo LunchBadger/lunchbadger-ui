@@ -45,6 +45,6 @@ export default {
     metrics: false,
     forecasts: false,
     kubeWatcher: true,
-    consumerManagement: false
+    consumerManagement: true
   }
 };

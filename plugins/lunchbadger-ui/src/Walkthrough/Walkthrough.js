@@ -38,7 +38,7 @@ class Walkthrough extends PureComponent {
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
-      // localStorage.setItem(this.props.lsKey, true);
+      localStorage.setItem(this.props.lsKey, true);
     }
     this.setState({index});
     if (type === 'step:before') {
@@ -236,13 +236,13 @@ const selector = createSelector(
     quadrants,
   ) => {
     let emptyProject = true;
-    // Object.values(quadrants).forEach((quadrant) => {
-    //   quadrant.entities.forEach((type) => {
-    //     if (Object.keys(entities[type]).length) {
-    //       emptyProject = false;
-    //     }
-    //   });
-    // })
+    Object.values(quadrants).forEach((quadrant) => {
+      quadrant.entities.forEach((type) => {
+        if (Object.keys(entities[type]).length) {
+          emptyProject = false;
+        }
+      });
+    })
     return {
       emptyProject,
     };

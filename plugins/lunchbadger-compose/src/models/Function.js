@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/functions';
+import {validFunctionName, jsReservedWords} from '../utils';
 import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -90,6 +91,8 @@ export default class Function_ extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
+      if (!validFunctionName(model.name)) validations.data.name = 'Function name must be alphanumeric';
+      // if (jsReservedWords.includes(model.name)) validations.data.name = 'Function name cannot be reserved javascript word';
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

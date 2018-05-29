@@ -165,7 +165,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
     setTimeout(() => {
       const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
+      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`);
       input && input.focus();
     });
   };

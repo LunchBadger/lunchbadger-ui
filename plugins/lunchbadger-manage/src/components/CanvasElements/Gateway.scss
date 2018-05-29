@@ -37,6 +37,12 @@
   &__CA {
     display: none;
   }
+  .EntitySubElements {
+    margin-top: -10px;
+    &__title {
+      margin-left: 16px;
+    }
+  }
 }
 
 .editable .Gateway {

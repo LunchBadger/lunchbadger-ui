@@ -129,7 +129,7 @@ class ApiEndpoint extends Component {
     const mainProperties = [
       {
         name,
-        title: 'host',
+        title: 'URL',
         value: entity.host,
         invalid: data.host,
         onBlur: this.handleFieldChange('host'),

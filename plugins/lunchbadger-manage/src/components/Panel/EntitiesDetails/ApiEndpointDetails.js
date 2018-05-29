@@ -87,7 +87,7 @@ class ApiEndpointDetails extends Component {
     return (
       <EntityProperty
         key="host"
-        title="Host"
+        title="URL"
         placeholder=" "
         name="host"
         value={host}

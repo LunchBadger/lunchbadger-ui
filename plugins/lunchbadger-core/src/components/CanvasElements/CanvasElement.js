@@ -18,7 +18,11 @@ import {
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
-import {Entity, EntityStatus} from '../../../../lunchbadger-ui/src';
+import {
+  Entity,
+  EntityStatus,
+  scrollToElement,
+} from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {
@@ -115,11 +119,7 @@ export default (ComposedComponent) => {
     componentDidMount() {
       this.setFlatModel();
       if (this.entityRef && !this.props.entity.loaded) {
-        findDOMNode(this.entityRef).scrollIntoView({
-          block: 'end',
-          inline: 'nearest',
-          behavior: 'smooth',
-        });
+        scrollToElement(findDOMNode(this.entityRef));
       }
     }
 

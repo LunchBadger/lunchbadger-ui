@@ -91,7 +91,7 @@ export default class Function_ extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
-      if (!validFunctionName(model.name)) validations.data.name = 'Function name must be alphanumeric';
+      if (!validFunctionName(model.name)) validations.data.name = 'It must be a valid JavaScript function name';
       // if (jsReservedWords.includes(model.name)) validations.data.name = 'Function name cannot be reserved javascript word';
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;

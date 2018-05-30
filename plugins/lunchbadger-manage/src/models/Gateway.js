@@ -254,6 +254,10 @@ export default class Gateway extends BaseModel {
       .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
+  get rootUrl() {
+    return Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slug(this.name, {lower: true}));
+  }
+
   getHighlightedPorts(selectedSubelementIds = []) {
     return this.pipelines
       .filter(pipeline => selectedSubelementIds.length === 0

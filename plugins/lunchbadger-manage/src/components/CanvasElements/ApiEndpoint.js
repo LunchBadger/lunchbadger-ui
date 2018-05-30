@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import cs from 'classnames';
 import _ from 'lodash';
+import {inject, observer} from 'mobx-react';
 import ApiEndpointPath from './Subelements/ApiEndpointPath';
 import {
   EntityProperties,
@@ -11,10 +14,16 @@ import './ApiEndpoint.scss';
 
 const CanvasElement = LunchBadgerCore.components.CanvasElement;
 const Port = LunchBadgerCore.components.Port;
+const {storeUtils} = LunchBadgerCore.utils;
 
+@inject('connectionsStore') @observer
 class ApiEndpoint extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired,
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -72,9 +81,19 @@ class ApiEndpoint extends Component {
     const paths = _.cloneDeep(this.state.paths);
     paths.splice(idx, 1);
     this.changeState({paths});
-  }
+  };
 
-  renderPorts() {
+  getGatewayRootUrl = () => {
+    const {entity, connectionsStore} = this.props;
+    const {id} = entity;
+    const conn = connectionsStore.find({toId: id});
+    if (!conn) return '';
+    return storeUtils
+      .findGatewayByPipelineId(this.context.store.getState(), conn.fromId)
+      .rootUrl;
+  };
+
+  renderPorts = () => {
     return this.props.entity.ports.map((port, idx) => (
       <Port
         key={idx}
@@ -84,7 +103,7 @@ class ApiEndpoint extends Component {
         scope={port.portGroup}
       />
     ));
-  }
+  };
 
   renderPaths = () => {
     const {paths} = this.state;
@@ -110,13 +129,16 @@ class ApiEndpoint extends Component {
         })}
       </EntitySubElements>
     );
-  }
+  };
 
   renderMainProperties = () => {
     const {entity, validations, validationsForced, entityDevelopment, onResetField, nested, index} = this.props;
-    const name = nested ? `apiEndpoints[${index}][host]` : 'host';
     const {data} = validationsForced || validations;
     const hiddenInputs = [
+      {
+        name: nested ? `apiEndpoints[${index}][host]` : 'host',
+        value: entity.host,
+      },
       {
         name: nested ? `apiEndpoints[${index}][methods]` : 'methods',
         value: entity.methods,
@@ -126,20 +148,25 @@ class ApiEndpoint extends Component {
         value: entity.scopes,
       },
     ];
-    const mainProperties = [
-      {
-        name,
-        title: 'URL',
-        value: entity.host,
-        invalid: data.host,
-        onBlur: this.handleFieldChange('host'),
-        hiddenInputs,
-      },
-    ];
+    const rootUrl = this.getGatewayRootUrl();
+    const accessUrl = {
+      name: 'accessUrl',
+      title: 'Root URL',
+      value: <i>Unassigned pipeline</i>,
+      fake: true,
+      hiddenInputs,
+    };
+    if (rootUrl) {
+      Object.assign(accessUrl, {
+        value: rootUrl,
+        link: true,
+      });
+    }
+    const mainProperties = [accessUrl];
     mainProperties[0].isDelta = this.state.host !== entityDevelopment.host;
     mainProperties[0].onResetField = () => onResetField('host');
     return <EntityProperties properties={mainProperties} />;
-  }
+  };
 
   render() {
     const {nested} = this.props;
@@ -153,4 +180,9 @@ class ApiEndpoint extends Component {
   }
 }
 
-export default CanvasElement(ApiEndpoint);
+const selector = createSelector(
+  state => state.entities.gateways,
+  gateways => ({gateways}),
+);
+
+export default connect(selector)(CanvasElement(ApiEndpoint));

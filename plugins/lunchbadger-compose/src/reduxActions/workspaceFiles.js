@@ -14,10 +14,21 @@ export const reload = () => async (dispatch) => {
 };
 
 export const update = (name, content) => async (dispatch, getState) => {
-  const workspaceFiles = _.cloneDeep(getState().entities.workspaceFiles);
-  workspaceFiles.files.server.models[name] = content;
+  const modelFile = {
+    files: {
+      server: {
+        models: {
+          [name]: content
+        }
+      }
+    }
+  };
+  const workspaceFiles = Object.assign(
+    _.cloneDeep(getState().entities.workspaceFiles),
+    modelFile
+  );
   try {
-    await WorkspaceFilesService.update(workspaceFiles);
+    await WorkspaceFilesService.update(modelFile);
     return dispatch(actions.updateWorkspaceFiles(workspaceFiles));
   } catch (error) {
     return dispatch(coreActions.addSystemDefcon1({error}));

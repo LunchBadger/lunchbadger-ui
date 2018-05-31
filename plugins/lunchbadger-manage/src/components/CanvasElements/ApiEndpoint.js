@@ -152,7 +152,7 @@ class ApiEndpoint extends Component {
     const accessUrl = {
       name: 'accessUrl',
       title: 'Root URL',
-      value: <i>Unassigned pipeline</i>,
+      value: <i>&nbsp;</i>,
       fake: true,
       hiddenInputs,
     };

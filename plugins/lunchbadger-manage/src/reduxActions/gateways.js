@@ -4,6 +4,7 @@ import _ from 'lodash';
 import slug from 'slug';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
+import Policy from '../models/Policy';
 import initialPipelinePolicies from '../utils/initialPipelinePolicies';
 import ConditionAction from '../models/ConditionAction';
 
@@ -121,6 +122,9 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
   };
   if (endpoint.constructor.type === 'Function_') {
     Object.assign(action, {ignorePath: true});
+  }
+  if (!pipeline.policies.find(({name}) => name === 'proxy')) {
+    pipeline.addPolicy(Policy.create({proxy: []}));
   }
   pipeline.policies
     .filter(({name}) => name === 'proxy')

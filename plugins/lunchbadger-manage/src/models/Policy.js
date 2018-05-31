@@ -16,8 +16,11 @@ export default class Policy extends BaseModel {
     let id = undefined;
     let name = undefined;
     Object.keys(data).forEach((key) => {
-      if (key === 'id') id = data[key];
-      if (key !== 'id') name = key;
+      if (key === 'id') {
+        id = data[key];
+      } else {
+        name = key;
+      }
     });
     return super.create({
       id,

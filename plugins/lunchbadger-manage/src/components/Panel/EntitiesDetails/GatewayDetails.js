@@ -23,6 +23,7 @@ import {
   Table,
   IconButton,
   Sortable,
+  scrollToElement,
 } from '../../../../../lunchbadger-ui/src';
 import Config from '../../../../../../src/config';
 import './GatewayDetails.scss';
@@ -137,11 +138,7 @@ class GatewayDetails extends PureComponent {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
     this.changeState({pipelines});
-    setTimeout(() => {
-      const idx = pipelines.length - 1;
-      const input = document.getElementById(`pipelines[${idx}][name]`);
-      input && input.focus();
-    });
+    setTimeout(() => scrollToElement(document.getElementById(`pipelines[${pipelines.length - 1}][name]`)));
   };
 
   removePipeline = idx => () => {
@@ -165,8 +162,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
     setTimeout(() => {
       const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`);
-      input && input.focus();
+      scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
   };
 
@@ -196,6 +192,10 @@ class GatewayDetails extends PureComponent {
     };
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
+    setTimeout(() => {
+      const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
+      scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
+    });
   };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {

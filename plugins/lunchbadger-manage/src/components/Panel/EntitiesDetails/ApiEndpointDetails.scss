@@ -1,4 +1,10 @@
 .ApiEndpointDetails {
+  .EntityProperties {
+    padding: 0;
+    .EntityProperty__field--text {
+      padding: 0;
+    }
+  }
   .EntityProperty {
     display: block;
     margin-right: 0px;

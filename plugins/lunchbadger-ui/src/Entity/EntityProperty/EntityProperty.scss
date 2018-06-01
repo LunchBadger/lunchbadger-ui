@@ -7,6 +7,11 @@
       border-color: transparent;
       .EntityProperty__field--text {
         display: block;
+        &Value {
+          i {
+            opacity: 0.5;
+          }
+        }
       }
       .EntityProperty__field--input {
         display: none;

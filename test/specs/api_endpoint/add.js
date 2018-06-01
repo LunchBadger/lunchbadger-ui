@@ -17,8 +17,7 @@ module.exports = {
       .reloadPage()
       .check({
         text: {
-          [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'ApiEndpoint',
-          [`${entitySelector} .host .EntityProperty__field--text`]: '*'
+          [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'ApiEndpoint'
         }
       })
       .waitForElementNotPresent(entitySelector + ' .paths0', 5000);
@@ -32,7 +31,6 @@ module.exports = {
     page
       .editEntity(entitySelector)
       .setValueSlow(entitySelector + ' .input__name input', 'Cars')
-      .setValueSlow(entitySelector + ' .input__host input', '*.cars.com')
       .clickPresent(entitySelector + ' .button__add__PATHS')
       .setValueSlow(entitySelector + ' .input__paths0 input', '/cars')
       .clickPresent(entitySelector + ' .button__add__PATHS')
@@ -43,7 +41,6 @@ module.exports = {
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
-          [`${entitySelector} .host .EntityProperty__field--text`]: '*.cars.com',
           [`${entitySelector} .paths0 .EntityProperty__field--text`]: '/cars',
           [`${entitySelector} .paths1 .EntityProperty__field--text`]: '/buses'
         }
@@ -60,7 +57,6 @@ module.exports = {
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
-          [`${entitySelector} .host .EntityProperty__field--text`]: '*.cars.com',
           [`${entitySelector} .paths0 .EntityProperty__field--text`]: '/buses'
         }
       })

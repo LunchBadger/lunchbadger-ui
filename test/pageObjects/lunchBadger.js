@@ -1020,7 +1020,7 @@ var pageCommands = {
   },
 
   removeCondition: function (pipelineIdx, policyIdx, pairIdx) {
-    const hoverSelector = `.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`;
+    const hoverSelector = `.DetailsPanel .pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair .CAPairLabel`;
     const selector = `.DetailsPanel .button__remove__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}`;
     return this
       .clickVisibleOnHover(hoverSelector, selector);

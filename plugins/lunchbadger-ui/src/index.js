@@ -38,6 +38,7 @@ import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
 import Walkthrough from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
+import scrollToElement from './utils/scrollToElement';
 
 import {
   iconApi,
@@ -110,6 +111,7 @@ export {
   Input,
   PanelBar,
   RnD,
+  scrollToElement,
   Select,
   SmoothCollapse,
   Sortable,

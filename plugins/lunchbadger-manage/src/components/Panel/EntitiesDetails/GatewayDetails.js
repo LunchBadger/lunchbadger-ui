@@ -2,7 +2,6 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {arrayMove} from 'react-sortable-hoc';
-import slug from 'slug';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -25,7 +24,6 @@ import {
   Sortable,
   scrollToElement,
 } from '../../../../../lunchbadger-ui/src';
-import Config from '../../../../../../src/config';
 import './GatewayDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -473,13 +471,12 @@ class GatewayDetails extends PureComponent {
   };
 
   renderAccessSection = () => {
-    const {name} = this.props.entity;
-    const slugifiedName = slug(name, {lower: true});
+    const {rootUrl} = this.props.entity;
     const accessProperties = [
       {
         name: 'accessUrl',
-        title: 'Gateway URL',
-        value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
+        title: 'Gateway root URL',
+        value: rootUrl,
         fake: true,
         link: true,
       },

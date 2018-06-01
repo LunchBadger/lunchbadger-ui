@@ -25,14 +25,14 @@ const centers = [false, false, false];
 
 class EntityProperty extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
       PropTypes.bool,
       PropTypes.array,
       PropTypes.object,
-    ]).isRequired,
+    ]),
     title: PropTypes.string,
     placeholder: PropTypes.string,
     invalid: PropTypes.string,
@@ -359,6 +359,11 @@ class EntityProperty extends Component {
       icon,
       link,
     } = this.props;
+    if (name === undefined) return (
+      <div>
+        {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
+      </div>
+    );
     const {contextualVisible, tooltipVisible} = this.state;
     const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', type,

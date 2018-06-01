@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
+import {inject, observer} from 'mobx-react';
 import {
+  EntityProperties,
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
@@ -12,12 +16,17 @@ import {
 import './ApiEndpointDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {requestMethods} = LunchBadgerCore.utils;
+const {requestMethods, storeUtils} = LunchBadgerCore.utils;
 const methodsOptions = requestMethods.map(label => ({label, value: label}));
 
+@inject('connectionsStore') @observer
 class ApiEndpointDetails extends Component {
   static propTypes = {
     entity: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    store: PropTypes.object,
   };
 
   constructor(props) {
@@ -82,18 +91,39 @@ class ApiEndpointDetails extends Component {
 
   handleScopesChange = scopes => this.changeState({scopes});
 
-  renderHostSection = () => {
+  getGatewayRootUrl = () => {
+    const {entity, connectionsStore} = this.props;
+    const {id} = entity;
+    const conn = connectionsStore.find({toId: id});
+    if (!conn) return '';
+    return storeUtils
+      .findGatewayByPipelineId(this.context.store.getState(), conn.fromId)
+      .rootUrl;
+  };
+
+  renderAccessUrlSection = () => {
     const {host} = this.props.entity;
-    return (
-      <EntityProperty
-        key="host"
-        title="URL"
-        placeholder=" "
-        name="host"
-        value={host}
-        width="100%"
-      />
-    );
+    const rootUrl = this.getGatewayRootUrl();
+    const name = 'accessUrl';
+    const accessUrl = {
+      name,
+      title: 'Root URL',
+      value: <i>&nbsp;</i>,
+      fake: true,
+      hiddenInputs: [
+        {
+          name: 'host',
+          value: host,
+        },
+      ],
+    };
+    if (rootUrl) {
+      Object.assign(accessUrl, {
+        value: rootUrl,
+        link: true,
+      });
+    }
+    return <EntityProperties key={name} properties={[accessUrl]} />;
   };
 
   renderMethodsSection = () => {
@@ -171,7 +201,7 @@ class ApiEndpointDetails extends Component {
 
   render() {
     const sections = [
-      {title: 'Host'},
+      {title: 'Root URL', render: 'AccessUrl'},
       {title: 'Methods'},
       {title: 'Scopes'},
       {title: 'Paths'},
@@ -184,4 +214,9 @@ class ApiEndpointDetails extends Component {
   }
 }
 
-export default BaseDetails(ApiEndpointDetails);
+const selector = createSelector(
+  state => state.entities.gateways,
+  gateways => ({gateways}),
+);
+
+export default connect(selector)(BaseDetails(ApiEndpointDetails));

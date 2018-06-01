@@ -295,23 +295,23 @@ class Gateway extends Component {
     const elementClass = cs('Gateway', {
       'multi': multiEnvIndex > 0,
     });
-    const {name, loaded} = entity;
-    const slugifiedName = slug(name, {lower: true});
-    const accessProperties = [
-      {
-        name: 'accessUrl',
-        title: 'Gateway URL',
-        value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
-        fake: true,
-        link: true,
-      },
-    ];
+    // const {name, loaded} = entity;
+    // const slugifiedName = slug(name, {lower: true});
+    // const accessProperties = [
+    //   {
+    //     name: 'accessUrl',
+    //     title: 'Gateway URL',
+    //     value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
+    //     fake: true,
+    //     link: true,
+    //   },
+    // ];
     return (
       <div className={elementClass}>
         {this.renderHiddenFields()}
-        {loaded && (
+        {/*loaded && (
           <EntityProperties properties={accessProperties} />
-        )}
+        )*/}
         <EntitySubElements
           title="Pipelines"
           onAdd={this.addPipeline}

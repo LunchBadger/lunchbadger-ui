@@ -2,7 +2,6 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {arrayMove} from 'react-sortable-hoc';
-import slug from 'slug';
 import Pipeline from '../../../models/Pipeline';
 import Policy from '../../../models/Policy';
 import initialPipelinePolicies from '../../../utils/initialPipelinePolicies';
@@ -23,8 +22,8 @@ import {
   Table,
   IconButton,
   Sortable,
+  scrollToElement,
 } from '../../../../../lunchbadger-ui/src';
-import Config from '../../../../../../src/config';
 import './GatewayDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -137,11 +136,7 @@ class GatewayDetails extends PureComponent {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
     this.changeState({pipelines});
-    setTimeout(() => {
-      const idx = pipelines.length - 1;
-      const input = document.getElementById(`pipelines[${idx}][name]`);
-      input && input.focus();
-    });
+    setTimeout(() => scrollToElement(document.getElementById(`pipelines[${pipelines.length - 1}][name]`)));
   };
 
   removePipeline = idx => () => {
@@ -165,8 +160,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
     setTimeout(() => {
       const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-      const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`);
-      input && input.focus();
+      scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
   };
 
@@ -196,6 +190,10 @@ class GatewayDetails extends PureComponent {
     };
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
+    setTimeout(() => {
+      const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
+      scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
+    });
   };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
@@ -473,13 +471,12 @@ class GatewayDetails extends PureComponent {
   };
 
   renderAccessSection = () => {
-    const {name} = this.props.entity;
-    const slugifiedName = slug(name, {lower: true});
+    const {rootUrl} = this.props.entity;
     const accessProperties = [
       {
         name: 'accessUrl',
-        title: 'Gateway URL',
-        value: Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slugifiedName),
+        title: 'Gateway root URL',
+        value: rootUrl,
         fake: true,
         link: true,
       },

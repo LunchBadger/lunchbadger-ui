@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/functions';
-import {validFunctionName, jsReservedWords} from '../utils';
+import {
+  validFunctionName,
+  javascriptReservedWords,
+  pythonReservedWords,
+  runtimeMapping,
+} from '../utils';
 import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -80,10 +85,11 @@ export default class Function_ extends BaseModel {
       const validations = {data: {}};
       const {functions} = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
-      if (model.name !== '') {
+      const {name, runtime} = model;
+      if (name !== '') {
         const isDuplicateFunctionName = Object.keys(functions)
           .filter(id => id !== this.id)
-          .filter(id => functions[id].name.toLowerCase() === model.name.toLowerCase())
+          .filter(id => functions[id].name.toLowerCase() === name.toLowerCase())
           .length > 0;
         if (isDuplicateFunctionName) {
           validations.data.name = messages.duplicatedEntityName('Function');
@@ -91,8 +97,10 @@ export default class Function_ extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
-      if (!validFunctionName(model.name)) validations.data.name = 'It must be a valid JavaScript function name';
-      // if (jsReservedWords.includes(model.name)) validations.data.name = 'Function name cannot be reserved javascript word';
+      const isNameAlphanumerical = validFunctionName(name);
+      const {language, reservedWords} = runtimeMapping(runtime, true).data;
+      const isReservedWord = reservedWords.includes(name);
+      if (!isNameAlphanumerical || isReservedWord) validations.data.name = `It must be a valid ${language} function name`;
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

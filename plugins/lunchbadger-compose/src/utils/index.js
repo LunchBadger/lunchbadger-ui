@@ -1,10 +1,12 @@
-import jsReservedWords from './jsReservedWords';
+import javascriptReservedWords from './javascriptReservedWords';
+import pythonReservedWords from './pythonReservedWords';
 import runtimeMapping from './runtimeMapping';
 import runtimeOptions from './runtimeOptions';
 import validFunctionName from './validFunctionName';
 
 export {
-  jsReservedWords,
+  javascriptReservedWords,
+  pythonReservedWords,
   runtimeMapping,
   runtimeOptions,
   validFunctionName,

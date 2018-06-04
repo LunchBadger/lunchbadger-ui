@@ -242,7 +242,7 @@ const selector = createSelector(
           emptyProject = false;
         }
       });
-    })
+    });
     return {
       emptyProject,
     };

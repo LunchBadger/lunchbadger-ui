@@ -19,8 +19,8 @@ C'mon, click it!`,
     position: 'right',
     allowClicksThruHole: false,
     onBefore: api => [
-      api.openEntitySubmenu('endpoint'),
       api.blockClicks(),
+      api.wait(1500),
     ],
     onAfter: api => [
       api.unblockClicks(),
@@ -31,6 +31,7 @@ C'mon, click it!`,
     text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
     selector: '.Tool__submenuItem.apiendpoint',
     position: 'right',
+    allowClicksThruHole: false,
     onBefore: api => [
       api.blockClicks(),
     ],
@@ -41,7 +42,10 @@ C'mon, click it!`,
   },
   '0700': {
     title: 'Gateway Entities',
-    text: 'Clicking this icon creates a new Gateway Entity on the canvas with a corresponding Gateway Deployment running in Kubernetes.',
+    text: `
+This icon creates a new Gateway Entity on the canvas with a corresponding Gateway Deployment running in Kubernetes.
+<br /><br />
+C'mon, click it!`,
     selector: '.Tool.gateway',
     position: 'right',
     allowClicksThruHole: true,
@@ -54,6 +58,7 @@ C'mon, click it!`,
     selector: '.Entity.Gateway.editable .Gateway',
     position: 'left',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
   '0702': {
     text: `
@@ -68,34 +73,6 @@ Let's name first pipeline as <pre>CarPipeline</pre>`,
   },
   '0703': {
     text: `
-Let's add a policy to the pipeline.
-`,
-    selector: '.Entity.Gateway.editable .button__add__pipelines0policy',
-    position: 'top-right',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilPresent('.Entity.Gateway.editable .select__pipelines0policies0name'),
-    ],
-  },
-  '0704': {
-    text: `
-Let's set <pre>proxy</pre> as policy here.
-`,
-    selector: '.Entity.Gateway.editable .select__pipelines0policies0name',
-    position: 'left',
-    allowClicksThruHole: true,
-    onBefore: api => [
-      api.setOverlayBack(true),
-    ],
-    onAfter: api => [
-      api.setOverlayBack(false),
-    ],
-    triggerNext: api => [
-      api.waitUntilNotPresent('.Entity.Gateway.editable .Gateway__pipeline0 .port-in.port__disabled'),
-    ],
-  },
-  '0705': {
-    text: `
 Let's add the second pipeline.
 `,
     selector: '.Entity.Gateway.editable .button__add__Pipelines',
@@ -105,46 +82,19 @@ Let's add the second pipeline.
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name'),
     ],
   },
-  '0706': {
+  '0704': {
     text: `
-Let's name <pre>FunctionPipeline</pre> as the second pipeline.
+Let's name the second pipeline as <pre>FunctionPipeline</pre>.
 `,
     selector: '.Entity.Gateway.editable .input__pipelines1name',
     position: 'left',
+    allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name input[value="FunctionPipeline"]'),
       api.unselectEntities(),
     ],
   },
-  '0707': {
-    text: `
-Let's add a policy to the second pipeline.
-`,
-    selector: '.Entity.Gateway.editable .button__add__pipelines1policy',
-    position: 'top-right',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilPresent('.Entity.Gateway.editable .select__pipelines1policies0name'),
-    ],
-  },
-  '0708': {
-    text: `
-Let's set <pre>proxy</pre> as policy here also.
-`,
-    selector: '.Entity.Gateway.editable .select__pipelines1policies0name',
-    position: 'left',
-    allowClicksThruHole: true,
-    onBefore: api => [
-      api.setOverlayBack(true),
-    ],
-    onAfter: api => [
-      api.setOverlayBack(false),
-    ],
-    triggerNext: api => [
-      api.waitUntilNotPresent('.Entity.Gateway.editable .Gateway__pipeline1 .port-in.port__disabled'),
-    ],
-  },
-  '0709': {
+  '0705': {
     text: `
 Click <pre>OK</pre> to deploy a gateway.
 `,
@@ -158,11 +108,12 @@ Click <pre>OK</pre> to deploy a gateway.
       api.setShowOverlay(true),
     ],
   },
-  '0710': {
+  '0706': {
     text: 'Gateway is deploying...',
     position: 'left',
     selector: '.Entity.Gateway',
     allowClicksThruHole: false,
+    onBefore: () => [],
     triggerNext: api => [
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Gateway.deploying'),
@@ -170,13 +121,14 @@ Click <pre>OK</pre> to deploy a gateway.
       api.setWaitMethod(),
     ],
   },
-  '0711': {
+  '0707': {
     text: 'Model, Service Endpoint, and Function Entities can all be connected to the left-hand side of a Pipeline.',
     waitForSelector: '.quadrant.Private .quadrant__body',
     position: 'right',
+    allowClicksThruHole: false,
     onBefore: () => [],
   },
-  '0712': {
+  '0708': {
     text: `
 Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting their ports.
 `,
@@ -191,13 +143,14 @@ Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting th
       api.setShowOverlay(true),
     ],
   },
-  '0713': {
+  '0709': {
     text: 'API Endpoint Entities connect to the right-hand side of a Pipeline.',
     selector: '.quadrant.Public .quadrant__body',
     position: 'left',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
-  '0714': {
+  '0710': {
     text: `
 Let's add a path.
 `,
@@ -208,9 +161,9 @@ Let's add a path.
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0'),
     ],
   },
-  '0715': {
+  '0711': {
     text: `
-      Let's set path here as: <pre>/api/car*</pre>
+Let's set path here as: <pre>/api/car*</pre>
 `,
     selector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
@@ -219,7 +172,7 @@ Let's add a path.
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]'),
     ],
   },
-  '0716': {
+  '0712': {
     text: 'Click <pre>OK</pre> to submit Car Api Endpoint',
     selector: '.Entity.ApiEndpoint.editable .submit',
     position: 'left',
@@ -228,7 +181,7 @@ Let's add a path.
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
     ],
   },
-  '0717': {
+  '0713': {
     text: `
 Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connecting their ports.
 `,
@@ -243,7 +196,7 @@ Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connectin
       api.setShowOverlay(true),
     ],
   },
-  '0718': {
+  '0714': {
     text: `
 Let's add a path.
 `,
@@ -254,9 +207,9 @@ Let's add a path.
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0'),
     ],
   },
-  '0719': {
+  '0715': {
     text: `
-      Let's set path here as: <pre>/api/myfunction*</pre>
+Let's set path here as: <pre>/api/myfunction*</pre>
 `,
     selector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
@@ -265,7 +218,7 @@ Let's add a path.
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
     ],
   },
-  '0720': {
+  '0716': {
     text: 'Click <pre>OK</pre> to submit Function Api Endpoint',
     selector: '.Entity.ApiEndpoint.editable .submit',
     position: 'left',
@@ -274,7 +227,7 @@ Let's add a path.
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
     ],
   },
-  '0721': {
+  '0717': {
     text: `
 Click on entity box to reveal it's toolbox
 `,
@@ -285,7 +238,7 @@ Click on entity box to reveal it's toolbox
       api.waitUntilPresent('.Entity.Gateway.highlighted'),
     ],
   },
-  '0722': {
+  '0718': {
     text: 'Click this icon to open pipelines details panel',
     selector: '.Entity.Gateway .Toolbox__button--pipelines',
     position: 'left',
@@ -299,15 +252,16 @@ Click on entity box to reveal it's toolbox
       api.setShowOverlay(true),
     ],
   },
-  '0723': {
+  '0719': {
     text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
     <br /><br />
     More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
     selector: '.DetailsPanel .pipelines .CollapsibleProperties.noDividers',
     position: 'bottom',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
-  '0724': {
+  '0720': {
     text: 'Click this icon to open Consumer Management details panel',
     selector: '.DetailsPanel .Toolbox__button--customerManagement',
     position: 'bottom',
@@ -316,14 +270,17 @@ Click on entity box to reveal it's toolbox
       api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement'),
     ]
   },
-  '0725': {
+  '0721': {
     text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
     selector: '.DetailsPanel .CustomerManagement',
     position: 'top',
+    allowClicksThruHole: false,
+    onBefore: () => [],
   },
-  '0726': {
+  '0722': {
     text: 'Click <pre>Cancel</pre> to close details panel',
     selector: '.DetailsPanel .cancel',
+    allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),
       api.setShowOverlay(false),
@@ -334,19 +291,6 @@ Click on entity box to reveal it's toolbox
     ],
   },
   '0801': {
-    title: 'Accessing Gateway Instances',
-    text: `
-All gateways will be accessible via the following domain name pattern:
-<code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
-<br />
-For example, if your gateway is named "Gateway" and your User ID is "99", your gateway will be accessible at:
-<code>http://gateway-99-dev.lunchbadger.io</code>
-`,
-    selector: '.Entity.Gateway .accessUrl',
-    position: 'left',
-    allowClicksThruHole: false,
-  },
-  '0802': {
     text: `
 Let's trace API request on an example call.
 <br />
@@ -360,6 +304,20 @@ Click on <pre>CarPipeline</pre> to highlight it.
       api.waitUntilPresent('.Entity.Gateway .EntityProperty__selected .pipelines0name'),
     ],
   },
+  '0802': {
+    title: 'Accessing Gateway Instances',
+    text: `
+All gateways will be accessible via the following domain name pattern:
+<code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
+<br />
+For example, if your gateway is named "Gateway" and your User ID is "99", your gateway will be accessible at:
+<code>http://gateway-99-dev.lunchbadger.io</code>
+`,
+    waitForSelector: '.Entity.ApiEndpoint .accessUrl',
+    position: 'bottom-right',
+    allowClicksThruHole: false,
+    onBefore: () => [],
+  },
   '0803': {
     title: 'API Request Flow',
     text: 'When an API request is received, it flows through the LunchBadger Entities defined on the Canvas.',
@@ -370,26 +328,30 @@ Click on <pre>CarPipeline</pre> to highlight it.
   },
   '0804': {
     text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /api/cars.',
-    selector: '.Entity.ApiEndpoint',
-    position: 'bottom',
+    selector: '.Entity.ApiEndpoint .paths0',
+    position: 'right',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
   '0805': {
     text: 'The request is routed to a Gateway Pipeline where it flows through the defined Policies.',
     selector: '.Entity.Gateway .Gateway__pipeline0',
-    position: 'bottom',
+    position: 'bottom-left',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
   '0806': {
     text: 'The API request then makes its way to an Entity in the Private column (Model, Service Endpoint, or Function). In this example, the request is routed to the Car model.',
     selector: '.Entity.Model',
-    position: 'bottom',
+    position: 'bottom-left',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
   '0807': {
     text: 'Models are backed by Data Sources. Behind the scenes, this Loopback model will connect to an in-memory data store.',
     selector: '.Entity.DataSource',
-    position: 'bottom',
+    position: 'bottom-left',
     allowClicksThruHole: false,
+    onBefore: () => [],
   },
 };

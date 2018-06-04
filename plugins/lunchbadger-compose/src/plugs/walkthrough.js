@@ -21,8 +21,8 @@ C'mon, click it!
     position: 'right',
     allowClicksThruHole: false,
     onBefore: api => [
-      api.openEntitySubmenu('dataSource'),
       api.blockClicks(),
+      api.wait(1500),
     ],
     onAfter: api => [
       api.unblockClicks(),
@@ -176,7 +176,11 @@ Please connect data source connector with Loopback model by connecting their por
   },
   '030': {
     title: 'Function Entities',
-    text: 'A function entity represents a serverless function that runs in your Kubernetes cluster.',
+    text: `
+A function entity represents a serverless function that runs in your Kubernetes cluster.
+<br /><br />
+C'mon, click it!
+`,
     selector: '.Tool.function',
     allowClicksThruHole: true,
     position: 'right',
@@ -240,7 +244,7 @@ C'mon, click it!
   },
   '035': {
     text: `
-Let's close the details panel.
+Click <pre>Cancel</pre> to close the details panel.
 `,
     selector: '.DetailsPanel .cancel',
     position: 'top',

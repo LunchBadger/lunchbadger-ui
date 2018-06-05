@@ -16,6 +16,7 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  let isAutoSave = false;
   const state = getState();
   const {loaded, id, itemOrder} = entity;
   const {name, runtime} = model;
@@ -52,24 +53,27 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.service = slsDeploy.body;
     await SLSService.deploy(name);
     dispatch(actions.updateFunction(updatedEntity));
-    await dispatch(coreActions.saveToServer());
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
-export const remove = entity => async (dispatch) => {
-  const isAutoSave = entity.loaded;
+export const remove = (entity, cb) => async (dispatch) => {
   const updatedEntity = entity.recreate();
   updatedEntity.deleting = true;
   const itemName = `function-${slug(entity.name, {lower: true})}`;
   localStorage.setItem(itemName, JSON.stringify(updatedEntity.toJSON()));
   dispatch(actions.updateFunction(updatedEntity));
   try {
-    if (isAutoSave) {
+    if (entity.loaded) {
       await SLSService.remove(entity.name);
-      await dispatch(coreActions.saveToServer());
+      if (cb) {
+        await dispatch(cb());
+      }
     } else {
       dispatch(actions.removeFunction(entity));
     }

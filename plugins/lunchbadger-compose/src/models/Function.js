@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/functions';
-import {validFunctionName, jsReservedWords} from '../utils';
+import {validFunctionName} from '../utils';
 import Config from '../../../../src/config';
 
-const BaseModel = LunchBadgerCore.models.BaseModel;
-const Port = LunchBadgerCore.models.Port;
+const {BaseModel, Port} = LunchBadgerCore.models;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const {Connections} = LunchBadgerCore.stores;
+const {coreActions} = LunchBadgerCore.utils;
 
 export default class Function_ extends BaseModel {
   static type = 'Function_';
@@ -92,7 +92,6 @@ export default class Function_ extends BaseModel {
       const fields = ['name'];
       checkFields(fields, model, validations.data);
       if (!validFunctionName(model.name)) validations.data.name = 'It must be a valid JavaScript function name';
-      // if (jsReservedWords.includes(model.name)) validations.data.name = 'Function name cannot be reserved javascript word';
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }
@@ -102,16 +101,21 @@ export default class Function_ extends BaseModel {
     return async dispatch => await dispatch(update(this, model));
   }
 
-  remove() {
-    return async dispatch => await dispatch(remove(this));
+  remove(cb) {
+    return async dispatch => await dispatch(remove(this, cb));
   }
 
   beforeRemove(paper) {
     const connectionsFrom = Connections.search({fromId: this.id});
+    let isAutoSave = false;
     connectionsFrom.map((conn) => {
+      isAutoSave = true;
       conn.info.connection.setParameter('discardAutoSave', true);
       paper.detach(conn.info.connection);
     });
+    if (isAutoSave) {
+      return coreActions.saveToServer;
+    }
   }
 
   processModel(model) {

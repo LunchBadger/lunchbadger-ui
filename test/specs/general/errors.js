@@ -9,10 +9,10 @@ module.exports = {
       .open()
       .addElementFromTooltip('dataSource', 'soap')
       .setInput(dataSourceSelector, 'url', 'http://abc.com')
-      .submitCanvasEntity(dataSourceSelector)
+      .submitCanvasEntityWithoutAutoSave(dataSourceSelector)
       .closeWhenSystemDefcon1()
       .check({present: ['.workspace-status__failure']})
-      .removeEntity(dataSourceSelector)
+      .removeEntityWithoutAutoSave(dataSourceSelector)
       .waitForDependencyFinish()
       .check({present: ['.workspace-status__success']})
       .close();

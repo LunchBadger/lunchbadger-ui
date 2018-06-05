@@ -10,7 +10,7 @@ var filesEditorHeight = 0;
 var filesEditorSelector = '.DetailsPanel .FilesEditor';
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Functions: create function': function (browser) {
     page = browser.page.lunchBadger();
     functionSelector = page.getFunctionSelector(1);
@@ -23,7 +23,7 @@ module.exports = {
     page
       .open()
       .addElement('function')
-      .submitCanvasEntity(functionSelector)
+      .submitCanvasEntityWithoutAutoSave(functionSelector)
       .checkFunctionTriggers(functionSelector, {});
   },
   // 'Functions: code editor resize': function () { // FIXME enable after #557 will be fixed
@@ -71,7 +71,7 @@ module.exports = {
   'Functions: datasource trigger': function () {
     page
       .addElementFromTooltip('dataSource', 'memory')
-      .submitCanvasEntity(dataSourceSelector)
+      .submitCanvasEntityWithoutAutoSave(dataSourceSelector)
       .connectPortsWithoutAutoSave(dataSourceSelector, 'out', functionSelector, 'in')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,
@@ -81,7 +81,7 @@ module.exports = {
   'Functions: model trigger': function () {
     page
       .addElement('model')
-      .submitCanvasEntity(modelSelector)
+      .submitCanvasEntityWithoutAutoSave(modelSelector)
       .connectPortsWithoutAutoSave(modelSelector, 'out', functionSelector, 'out')
       .checkFunctionTriggers(functionSelector, {
         'API Gateway': GATEWAY_NAME,

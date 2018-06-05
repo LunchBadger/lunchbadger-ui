@@ -20,6 +20,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
+  let isAutoSave = false;
   if (index > 0) {
     updatedEntity = DataSource.create({...entity.toJSON(), ...model});
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
@@ -51,7 +52,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     updatedEntity = DataSource.create(body);
     dispatch(actions.updateDataSource(updatedEntity));
-    await dispatch(coreActions.saveToServer());
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
@@ -59,12 +62,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = entity => async (dispatch, getState) => {
-  const isAutoSave = entity.loaded;
+  const isAutoSave = false;
   try {
-    if (isAutoSave) {
+    if (entity.loaded) {
       const state = getState();
       const updatedEntity = entity.recreate();
       updatedEntity.ready = false;
+      updatedEntity.deleting = true;
       dispatch(actions.updateDataSource(updatedEntity));
       Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))

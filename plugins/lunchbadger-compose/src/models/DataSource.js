@@ -138,6 +138,11 @@ export default class DataSource extends BaseModel {
     return json;
   }
 
+  get status() {
+    if (this.deleting) return 'deleting';
+    return '';
+  }
+
   get isZoomDisabled() {
     return this.isMemory;
   }

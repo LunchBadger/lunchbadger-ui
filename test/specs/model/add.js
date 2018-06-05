@@ -55,7 +55,7 @@ module.exports = {
   'Model: save': function () {
     page
       .setCanvasEntityName(entitySelector, MODEL_NAME)
-      .submitCanvasEntity(entitySelector);
+      .submitCanvasEntityWithoutAutoSave(entitySelector);
   },
   'Model: unique name check': function () {
     page

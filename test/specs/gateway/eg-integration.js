@@ -36,15 +36,17 @@ module.exports = {
     gatewaySelector2 = page.getGatewaySelector(2);
     apiEndpointModelSelector = page.getApiEndpointSelector(1);
     apiEndpointServiceEndpointSelector = page.getApiEndpointSelector(2);
+    const username = page.getUsername();
     MEMORY_NAME = page.getUniqueName('memory');
     MODEL_NAME = page.getUniqueName('car');
     GATEWAY_NAME = page.getUniqueName('gateway');
     SERVICE_ENDPOINT_NAME = page.getUniqueName('endpoint');
     API_ENDPOINT_1_NAME = `${MODEL_NAME}ApiEndpoint`;
     API_ENDPOINT_2_NAME = `${SERVICE_ENDPOINT_NAME}ApiEndpoint`;
-    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-test-dev.staging.lunchbadger.io/api/${MODEL_NAME}`;
-    GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-test-dev.staging.lunchbadger.io/robots.txt`;
-    url = `http://test-dev.staging.lunchbadger.io/api/${MODEL_NAME}`;
+    const domain = `${username}-dev.staging.lunchbadger.io`;
+    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-${domain}/api/${MODEL_NAME}`;
+    GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-${domain}/robots.txt`;
+    url = `http://${domain}/api/${MODEL_NAME}`;
     model = page.getUniqueName('model');
     color = page.getUniqueName('color');
     form = {model, color};
@@ -415,7 +417,7 @@ Disallow: /deny
     page
       .addElementFromTooltip('dataSource', 'memory')
       .setValueSlow(memorySelector + ' .input__name input', MEMORY_NAME)
-      .submitCanvasEntity(memorySelector);
+      .submitCanvasEntityWithoutAutoSave(memorySelector);
   },
   'EG integration: add model': function () {
     page
@@ -425,7 +427,7 @@ Disallow: /deny
       .setValueSlow(modelSelector + ' .input__properties0name input', 'model')
       .clickPresent(modelSelector + ' .button__add__Properties')
       .setValueSlow(modelSelector + ' .input__properties1name input', 'color')
-      .submitCanvasEntity(modelSelector);
+      .submitCanvasEntityWithoutAutoSave(modelSelector);
   },
   'EG integration: connect datasource and model': function () {
     page

@@ -9,7 +9,7 @@ import Config from '../../../../src/config';
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
-const {defaultEntityNames} = LunchBadgerCore.utils;
+const {defaultEntityNames, coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export default class Model extends BaseModel {
@@ -134,6 +134,11 @@ export default class Model extends BaseModel {
       friendlyName: this.name,
       url: Config.get('customerUrl'),
     };
+  }
+
+  get status() {
+    if (this.deleting) return 'deleting';
+    return '';
   }
 
   get workspaceId() {
@@ -277,16 +282,21 @@ export default class Model extends BaseModel {
     return async dispatch => await dispatch(update(this, model));
   }
 
-  remove() {
-    return async dispatch => await dispatch(remove(this));
+  remove(cb) {
+    return async dispatch => await dispatch(remove(this, cb));
   }
 
   beforeRemove(paper) {
     const connectionsFrom = Connections.search({fromId: this.id});
+    let isAutoSave = false;
     connectionsFrom.map((conn) => {
+      isAutoSave = true;
       conn.info.connection.setParameter('discardAutoSave', true);
       paper.detach(conn.info.connection);
     });
+    if (isAutoSave) {
+      return coreActions.saveToServer;
+    }
   }
 
   processModel(model, properties) {

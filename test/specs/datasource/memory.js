@@ -16,7 +16,7 @@ module.exports = {
     page
       .addElementFromTooltip('dataSource', 'memory')
       .expectUniqueNameError(entitySelector2, 'A data source')
-      .removeEntity(entitySelector)
+      .removeEntityWithoutAutoSave(entitySelector)
       .close();
   }
 };

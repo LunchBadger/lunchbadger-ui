@@ -18,8 +18,9 @@ module.exports = {
       })
       .submitCanvasEntityWithExpectedValidationErrors(entitySelector, ['baseUrl'])
       .selectValueSlow(entitySelector, 'predefined', 'Google-Maps-Location')
-      .submitCanvasEntity(entitySelector)
+      .submitCanvasEntityWithoutAutoSave(entitySelector)
       // .waitForDependencyFinish()
+      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',
@@ -33,7 +34,15 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsLocation)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanel(entitySelector);
+      .submitDetailsPanelWithoutAutoSave(entitySelector)
+      .reloadPage()
+      .check({
+        text: {
+          [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - GeoCode',
+          [`${entitySelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
+          [`${entitySelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
+        }
+      });
   },
   'Rest: options': function () {
     page

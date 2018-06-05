@@ -47,7 +47,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p2')
       .setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'n2')
       .selectValueSlow('.DetailsPanel', 'securitypasswordType', 'PasswordDigest')
-      .submitDetailsPanel(entitySelector)
+      .submitDetailsPanelWithoutAutoSave(entitySelector)
       .reloadPage()
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectAdvancedEdit);
@@ -63,7 +63,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__securitypassword input', 'bapasswd')
       .clickVisibleOnHover('.DetailsPanel .input__soapOperations0key', '.DetailsPanel .button__remove__operation0')
       .clickVisibleOnHover('.DetailsPanel .input__soapHeaders0elementKey', '.DetailsPanel .button__remove__soapHeader0')
-      .submitDetailsPanel(entitySelector)
+      .submitDetailsPanelWithoutAutoSave(entitySelector)
       .reloadPage()
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectRemovedOptions);
@@ -95,7 +95,7 @@ module.exports = {
       .setValueSlow('.DetailsPanel .input__soapHeaders1elementValue input', 'ev3')
       .setValueSlow('.DetailsPanel .input__soapHeaders1prefix input', 'p3')
       .setValueSlow('.DetailsPanel .input__soapHeaders1namespace input', 'n3')
-      .submitDetailsPanel(entitySelector)
+      .submitDetailsPanelWithoutAutoSave(entitySelector)
       .reloadPage()
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectWS);

@@ -342,6 +342,15 @@ var pageCommands = {
       .notPresent(selector, timeout);
   },
 
+  removeEntityWithoutAutoSave: function (selector, timeout, check = {}) {
+    return this
+      .clickVisible(selector)
+      .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .check(check)
+      .notPresent(selector, timeout);
+  },
+
   removeEntityWithDependencyUninstall: function (selector, timeout, check = {}) {
     return this
       .clickVisible(selector)
@@ -622,7 +631,7 @@ var pageCommands = {
       });
       this.notPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`);
     }
-    this.submitCanvasEntity(selector);
+    this.submitCanvasEntityWithoutAutoSave(selector);
     if (config.length === 0) {
       this.notPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)');
     } else {

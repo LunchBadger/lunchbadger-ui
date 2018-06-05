@@ -58,6 +58,7 @@ class FunctionDetails extends PureComponent {
         lang={editorCodeLanguage}
         files={files}
         onChange={this.handleFilesEditorChange}
+        defaultSelect="handler.js"
       />
     );
   };

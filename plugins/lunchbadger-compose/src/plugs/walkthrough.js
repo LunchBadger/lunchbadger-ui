@@ -236,11 +236,8 @@ C'mon, click it!
   },
   '034': {
     text: 'LunchBadger includes a built-in editor.',
-    waitForSelector: '.DetailsPanel .FilesEditor',
+    selector: '.DetailsPanel .FilesEditor',
     position: 'top',
-    onBefore: api => [
-      api.click('.DetailsPanel .FilesEditor__tree > div > div > .children > div:nth-child(2) > div > div'),
-    ],
   },
   '035': {
     text: `

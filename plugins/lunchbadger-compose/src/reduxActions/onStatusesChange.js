@@ -100,7 +100,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
           if (functionRunning === null && !running) return;
           const isDeployed = functionRunning === null;
           if (isDeployed) {
-            isSave = true;
+            // isSave = true;
           }
           updatedEntity = entity.recreate();
           updatedEntity.running = running;

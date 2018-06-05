@@ -23,6 +23,7 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
+  let isAutoSave = false;
   let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;
@@ -48,6 +49,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
+      isAutoSave = true;
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
       const dataSource = Connections.search({toId: entity.id})
@@ -102,30 +104,32 @@ export const update = (entity, model) => async (dispatch, getState) => {
       await dispatch(workspaceFilesReload());
     }
     dispatch(actions[updateAction](updatedEntity));
-    await dispatch(coreActions.saveToServer());
+    if (isAutoSave) {
+      await dispatch(coreActions.saveToServer());
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
-export const remove = (entity, action = 'removeModel') => async (dispatch) => {
-  const isAutoSave = entity.loaded;
+export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
   try {
-    if (isAutoSave) {
+    if (entity.loaded) {
       let updateAction = 'updateModel';
       if (entity.wasBundled) {
         updateAction += 'Bundled';
       }
       const updatedEntity = entity.recreate();
       updatedEntity.ready = false;
+      updatedEntity.deleting = true;
       dispatch(actions[updateAction](updatedEntity));
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
     }
     dispatch(actions[action](entity));
-    if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
+    if (cb) {
+      await dispatch(cb());
     }
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));

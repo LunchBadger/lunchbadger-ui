@@ -12,13 +12,13 @@ var pageCommands = {
   },
 
   open: function () {
-    const username = this.getUniqueName('CircleCI');
+    const username = this.getUniqueName(`CircleCI ${this.getUsername()} `);
     const usernameText = {
       '.breadcrumbs .breadcrumbs__element.username': username
     };
     return this
       .openWithoutLogin()
-      .setValueSlow('.input__login input', login)
+      .setValueSlow('.input__login input', this.getUsername())
       .setValueSlow('.input__password input', username)
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
@@ -510,6 +510,10 @@ var pageCommands = {
     }
     return this
       .check(check);
+  },
+
+  getUsername: function () {
+    return login;
   },
 
   getDataSourceSelector: function (nth) {

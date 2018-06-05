@@ -49,7 +49,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   await Promise.all(entity.models.map((id) =>
     models.includes(id)
     ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.lunchbadgerId === id)))
-    : dispatch(removeModel(modelsBundled[id], 'removeModelBundled'))
+    : dispatch(removeModel(modelsBundled[id], null, 'removeModelBundled'))
   ));
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
@@ -67,7 +67,7 @@ export const remove = entity => async (dispatch, getState) => {
     const id = entity.models[i];
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
-    await dispatch(removeModel(modelsBundled[id], 'removeModelBundled'));
+    await dispatch(removeModel(modelsBundled[id], null, 'removeModelBundled'));
     dispatch(actionsCore.removeEntity(modelsBundled[id]));
   }
   dispatch(actions.removeMicroservice(entity));

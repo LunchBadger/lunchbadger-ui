@@ -192,10 +192,11 @@ export default (ComposedComponent) => {
     handleRemove = () => {
       const {entity, dispatch} = this.props;
       const element = this.element.decoratedComponentInstance || this.element;
+      let cb;
       if (typeof element.onRemove === 'function') {
-        element.onRemove();
+        cb = element.onRemove();
       }
-      dispatch(entity.remove());
+      dispatch(entity.remove(cb));
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
     }

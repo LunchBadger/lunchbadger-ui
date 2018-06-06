@@ -38,6 +38,7 @@ class Walkthrough extends PureComponent {
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
+      this.unblockEnter();
       localStorage.setItem(this.props.lsKey, true);
     }
     this.setState({index});
@@ -89,9 +90,11 @@ class Walkthrough extends PureComponent {
       () => cb(),
     ]),
     waitUntilPresent: selector => async cb => {
+      this.blockEnter();
       while (document.querySelector(selector) === null) {
         await this[this.waitMethod](500);
       }
+      this.unblockEnter();
       cb();
     },
     waitUntilNotPresent: selector => async cb => {
@@ -189,6 +192,14 @@ class Walkthrough extends PureComponent {
   };
 
   stopClickPropagation = event => event.stopPropagation();
+
+  blockEnter = () => document.addEventListener('keydown', this.stopEnter);
+
+  unblockEnter = () => document.removeEventListener('keydown', this.stopEnter);
+
+  stopEnter = ({keyCode, which}) => (keyCode === 13 || which === 13)
+    ? event.preventDefault()
+    : null;
 
   waitByAnimationFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 

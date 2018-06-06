@@ -6,7 +6,8 @@ export default (model, entity, properties, stateProperties) => {
   const idMapping = {};
   Object.keys(model.properties || {}).forEach((key, itemOrder) => {
     const property = model.properties[key];
-    if (property.name.trim().length === 0) return;
+    property.name = property.name.trim();
+    if (property.name.length === 0) return;
     const prop = ModelProperty.create({...property, itemOrder});
     idMapping[prop.id] = property.id;
     props[property.id] = prop;

@@ -30,7 +30,7 @@ class ApiClient {
       request(req, (error, response, body) => {
         const endpoint = [this.url, url.replace(/\//, '')].join('/');
         if (error) {
-          return reject(new ApiError(0, error.message, endpoint, method, req));
+          return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
         }
         if (response.statusCode >= 400) {
           let message = body;
@@ -58,7 +58,7 @@ class ApiClient {
               name = body.error.name;
             }
           }
-          return reject(new ApiError(response.statusCode, message, endpoint, method, req, name));
+          return reject(new ApiError(response.statusCode, message, endpoint, method, req, name, body));
         }
         if (response.statusCode === 0) {
           return reject(new ApiError(0, 'Error communicating with API', endpoint, method, req));
@@ -95,13 +95,14 @@ class ApiClient {
 }
 
 class ApiError extends Error {
-  constructor(statusCode, message, endpoint, method, request, name = 'Error') {
+  constructor(statusCode, message, endpoint, method, request, name = 'Error', body) {
     super(message);
     this.statusCode = statusCode;
     this.endpoint = endpoint;
     this.method = method;
     this.name = name;
     this.request = request;
+    this.body = body;
   }
 }
 

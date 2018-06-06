@@ -34,7 +34,7 @@ export default {
   envId: 'dev',
   features: {
     tritonLogo,
-    tritonObjectStorage: true,
+    tritonObjectStorage: false,
     microservices: true,
     apis: isStaging,
     portals: isStaging,

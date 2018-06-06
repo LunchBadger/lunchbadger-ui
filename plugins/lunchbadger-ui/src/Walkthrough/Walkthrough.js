@@ -197,7 +197,7 @@ class Walkthrough extends PureComponent {
 
   unblockEnter = () => document.removeEventListener('keydown', this.stopEnter);
 
-  stopEnter = ({keyCode, which}) => (keyCode === 13 || which === 13)
+  stopEnter = event => (event.keyCode === 13 || event.which === 13)
     ? event.preventDefault()
     : null;
 

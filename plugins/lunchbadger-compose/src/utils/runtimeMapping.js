@@ -1,8 +1,11 @@
 const editorCodeLanguages = {
   Node: 'javascript',
   Python: 'python',
-  // java: 'java',
-  // 'c#': 'csharp',
+};
+
+const extensions = {
+  Node: 'js',
+  Python: 'py',
 };
 
 export default (runtime, reverse = false) => {
@@ -29,5 +32,6 @@ export default (runtime, reverse = false) => {
     lb: `${env} ${version}`,
     sls: `${env}${version}`,
     editorCodeLanguage: editorCodeLanguages[env],
+    extension: extensions[env],
   };
 };

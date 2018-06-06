@@ -52,13 +52,14 @@ class FunctionDetails extends PureComponent {
 
   renderFunctionCodeSection = () => {
     const {files, serverless: {provider: {runtime}}} = this.props.entity.service;
-    const {editorCodeLanguage} = runtimeMapping(runtime);
+    const {editorCodeLanguage, extension} = runtimeMapping(runtime);
+    const defaultSelect = `handler.${extension}`;
     return (
       <FilesEditor
         lang={editorCodeLanguage}
         files={files}
         onChange={this.handleFilesEditorChange}
-        defaultSelect="handler.js"
+        defaultSelect={defaultSelect}
       />
     );
   };

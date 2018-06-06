@@ -75,6 +75,7 @@ class SystemDefcon1Box extends Component {
                     message,
                     stack,
                     request,
+                    body,
                     endpoint,
                     name,
                     method,
@@ -87,6 +88,7 @@ class SystemDefcon1Box extends Component {
                         index={idx + 1}
                         stack={stack}
                         request={request}
+                        body={body}
                         onRemove={this.handleRemove(message)}
                       >
                         <pre>

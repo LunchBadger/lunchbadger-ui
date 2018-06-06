@@ -5,15 +5,22 @@ export default class SystemDefcon1Error extends PureComponent {
   state = {
     stackVisible: false,
     requestDataVisible: false,
+    responseDataVisible: false,
   };
 
   toggleStackVisible = () => this.setState({stackVisible: !this.state.stackVisible});
 
   toggleRequestDataVisible = () => this.setState({requestDataVisible: !this.state.requestDataVisible});
 
+  toggleResponseDataVisible = () => this.setState({responseDataVisible: !this.state.responseDataVisible});
+
   render() {
-    const {index, children, onRemove, stack, request} = this.props;
-    const {stackVisible, requestDataVisible} = this.state;
+    const {index, children, onRemove, stack, request, body} = this.props;
+    const {
+      stackVisible,
+      requestDataVisible,
+      responseDataVisible,
+    } = this.state;
     return (
       <div>
         <h3>
@@ -21,9 +28,17 @@ export default class SystemDefcon1Error extends PureComponent {
           {' '}
           <small className="removeError" onClick={onRemove}>remove</small>
           {' '}
-          <small className="removeError" onClick={this.toggleRequestDataVisible}>
-            {requestDataVisible ? 'hide' : 'show'} request data
-          </small>
+          {request && (
+            <small className="removeError" onClick={this.toggleRequestDataVisible}>
+              {requestDataVisible ? 'hide' : 'show'} request data
+            </small>
+          )}
+          {' '}
+          {body && (
+            <small className="removeError" onClick={this.toggleResponseDataVisible}>
+              {responseDataVisible ? 'hide' : 'show'} response data
+            </small>
+          )}
           {' '}
           {stack && (
             <small className="removeError" onClick={this.toggleStackVisible}>
@@ -44,6 +59,13 @@ export default class SystemDefcon1Error extends PureComponent {
             REQUEST DATA:
             <br />
             {JSON.stringify(request, null, 2)}
+          </pre>
+        )}
+        {responseDataVisible && (
+          <pre>
+            RESPONSE DATA:
+            <br />
+            {JSON.stringify(body, null, 2)}
           </pre>
         )}
       </div>

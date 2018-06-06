@@ -27,10 +27,12 @@ export default class FilesEditor extends Component {
     lang: PropTypes.string,
     onChange: PropTypes.func,
     files: PropTypes.object,
+    defaultSelect: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
+    const {files, defaultSelect} = props;
     const id = uuid.v4();
     const tree = {
       id,
@@ -42,11 +44,25 @@ export default class FilesEditor extends Component {
     const map = {
       [id]: tree,
     };
-    this.transformFilesIntoTree(tree, props.files, map);
+    this.transformFilesIntoTree(tree, files, map);
+    let active = null;
+    if (defaultSelect) {
+      tree.children.forEach((item) => {
+        if (item.module === defaultSelect) {
+          active = item.id;
+        }
+      });
+      if (!active) {
+        const firstLeaf = tree.children.find(item => item.leaf === true);
+        if (firstLeaf) {
+          active = firstLeaf.id;
+        }
+      }
+    }
     this.state = {
       tree,
       map,
-      active: null,
+      active,
       newFile: false,
     };
     this.codeEditorRefs = {};

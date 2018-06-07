@@ -15,12 +15,12 @@ const Toolbox = ({config, zoom}) => {
           tooltip={label}
           direction="bottom"
         >
-          <div
+          <button
             className={cs('Toolbox__button', `Toolbox__button--${action}`, {selected})}
             onClick={onClick}
           >
             <IconSVG className="Toolbox__button__icon" svg={icons[icon]} />
-          </div>
+          </button>
         </ContextualInformationMessage>
       ))}
     </div>

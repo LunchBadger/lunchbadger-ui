@@ -40,6 +40,11 @@ $joyride-close-visible: false;
     display: none;
     font-weight: 400;
     z-index: 3510;
+    &.bottom-right {
+      &[data-target=".DetailsPanel .Toolbox__button--customerManagement"] {
+        margin-right: 10px;
+      }
+    }
     &.top {
       &[data-target=".Entity.Gateway.editable .button__add__Pipelines"] {
         margin-left: -203px;
@@ -47,7 +52,7 @@ $joyride-close-visible: false;
     }
     &.left,
     &.right {
-      &[data-target=".Entity.Model .button__add__Properties"] {
+      &[data-target=".Entity.Model.editable .button__add__Properties"] {
         margin-top: -30px;
       }
       &[data-target=".Gateway__pipeline0 > div:nth-child(2) > div"],
@@ -68,7 +73,7 @@ $joyride-close-visible: false;
       &[data-target=".Entity.Model.editable .EntityHeader"],
       &[data-target=".Entity.Model.editable .input__properties0name"],
       &[data-target=".Entity.Model.editable .select__properties0type"],
-      &[data-target=".Entity.Model .submit"],
+      &[data-target=".Entity.Model.editable .submit"],
       &[data-target=".Entity.Function_.editable .submit"],
       &[data-target=".Entity.Gateway.editable .submit"],
       &[data-target=".Entity.ApiEndpoint.editable .submit"] {

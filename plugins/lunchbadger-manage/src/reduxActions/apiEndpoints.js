@@ -30,7 +30,7 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
     Connections.addConnection(fromId, toId, {source: outPort});
     setTimeout(() => {
       const {info: {connection}} = Connections.find({fromId, toId});
-      connection && connection.setType('wip');
+      connection && connection.addType('wip');
     });
     dispatch(actions.updateApiEndpoint(entity));
     setTimeout(() => {

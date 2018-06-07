@@ -30,13 +30,13 @@ class SubmenuItem extends Component {
         style={{fontSize: 18, minHeight: 34, lineHeight: '34px'}}
         innerDivStyle={{padding: 0}}
       >
-        <div
+        <button
           className={cs('Tool__submenuItem', name)}
           style={{width: plain ? 130 : 230}}
         >
           <IconSVG className={cs('Tool__icon', 'submenu', {plain})} svg={icons[icon]} />
           <div className={cs('Tool__label', {plain})}>{label}</div>
-        </div>
+        </button>
         {wizard && (
           <ContextualInformationMessage tooltip={wizardTooltip}>
             <span className="Tool__wizard" onClick={this.onWizardClick}>

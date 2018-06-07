@@ -47,23 +47,25 @@ class Walkthrough extends PureComponent {
         showNextButton: !step.triggerNext,
         allowClicksThruHole: !!step.allowClicksThruHole,
       });
-      if (step.triggerNext) {
-        const actions = step.triggerNext(this.api);
-        await series(actions, () => this.joyride.next());
-      }
       if (step.onBefore) {
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
         }
-        series([
+        await series([
           this.api.setRun(false),
           ...step.onBefore(this.api),
           this.api.setRun(true),
         ]);
       }
+      if (step.triggerNext) {
+        const actions = step.triggerNext(this.api);
+        await series(actions, () => this.joyride.next());
+      } else {
+        this.api.focusNext()(() => {});
+      }
     }
     if (type === 'step:after' && step.onAfter) {
-      series([
+      await series([
         this.api.setRun(false),
         ...step.onAfter(this.api),
         this.api.setRun(true),
@@ -84,17 +86,33 @@ class Walkthrough extends PureComponent {
       },
       () => cb(),
     ]),
-    unselectEntities: () => cb => series([
-      // this.api.click('.quadrant__title'),
-      // this.api.waitUntilNotPresent('.Entity.highlighted'),
+    focus: selector => cb => series([
+      this.api.waitUntilPresent(selector),
+      cb => {
+        document.querySelector(selector).focus();
+        cb();
+      },
       () => cb(),
     ]),
-    waitUntilPresent: selector => async cb => {
-      this.blockEnter();
+    blur: selector => cb => series([
+      this.api.waitUntilPresent(selector),
+      cb => {
+        document.querySelector(selector).blur();
+        cb();
+      },
+      () => cb(),
+    ]),
+    focusNext: () => cb => series([
+      this.api.wait(100),
+      this.api.focus('.joyride-tooltip__button--primary'),
+      () => cb(),
+    ]),
+    waitUntilPresent: (selector, blockEnter = true) => async cb => {
+      blockEnter && this.blockEnter();
       while (document.querySelector(selector) === null) {
         await this[this.waitMethod](500);
       }
-      this.unblockEnter();
+      blockEnter && this.unblockEnter();
       cb();
     },
     waitUntilNotPresent: selector => async cb => {
@@ -191,7 +209,10 @@ class Walkthrough extends PureComponent {
     },
   };
 
-  stopClickPropagation = event => event.stopPropagation();
+  stopClickPropagation = event => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   blockEnter = () => document.addEventListener('keydown', this.stopEnter);
 
@@ -247,13 +268,13 @@ const selector = createSelector(
     quadrants,
   ) => {
     let emptyProject = true;
-    Object.values(quadrants).forEach((quadrant) => {
-      quadrant.entities.forEach((type) => {
-        if (Object.keys(entities[type]).length) {
-          emptyProject = false;
-        }
-      });
-    });
+    // Object.values(quadrants).forEach((quadrant) => {
+    //   quadrant.entities.forEach((type) => {
+    //     if (Object.keys(entities[type]).length) {
+    //       emptyProject = false;
+    //     }
+    //   });
+    // });
     return {
       emptyProject,
     };

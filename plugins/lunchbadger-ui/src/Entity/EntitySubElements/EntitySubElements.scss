@@ -14,6 +14,10 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 800ms ease;
+      border: none;
+      padding: 0;
+      outline: none;
+      background: transparent;
       &:hover svg {
         stroke: #3B85BF;
       }

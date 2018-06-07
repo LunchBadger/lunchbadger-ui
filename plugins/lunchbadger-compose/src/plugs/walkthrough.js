@@ -3,16 +3,10 @@ export default {
     title: 'Data Source Dropdown Menu',
     text: `
 Selecting this icon will reveal available data source connectors for your LunchBadger project.
-<br />
-<br />
-C'mon, click it!
 `,
     selector: '.Tool.dataSource',
     position: 'right',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilPresent('div[role=presentation]'),
-    ],
+    allowClicksThruHole: false,
   },
   '011': {
     title: 'Data Source Entities Overview',
@@ -21,8 +15,8 @@ C'mon, click it!
     position: 'right',
     allowClicksThruHole: false,
     onBefore: api => [
+      api.openEntitySubmenu('dataSource'),
       api.blockClicks(),
-      api.wait(1500),
     ],
     onAfter: api => [
       api.unblockClicks(),
@@ -35,17 +29,18 @@ Memory type is different from all other types, because it is in-memory data stor
 <br />
 C'mon, click it!
 `,
-    selector: '.Tool__submenuItem.memory',
+    waitForSelector: '.Tool__submenuItem.memory',
     position: 'right',
     allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.Entity.DataSource.memory', false),
+    ],
     onBefore: api => [
       api.blockClicks(),
+      api.focus('.Tool__submenuItem.memory'),
     ],
     onAfter: api => [
       api.unblockClicks(),
-    ],
-    triggerNext: api => [
-      api.waitUntilPresent('.Entity.DataSource.memory'),
     ],
   },
   '013': {
@@ -55,11 +50,14 @@ If it would be a Loopback data source connector, here you could specify data sou
 <br />
 Click <pre>OK</pre> to create Memory Data Source.
 `,
-    selector: '.Entity.DataSource.memory.editable',
+    waitForSelector: '.Entity.DataSource.memory.editable',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.DataSource.memory.editable'),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.DataSource.editable .submit'),
     ],
   },
   '020': {
@@ -70,11 +68,14 @@ Model Entity represent a visual interface on top of a Loopback Model.
 <br />
 C'mon, click it!
 `,
-    selector: '.Tool.model',
+    waitForSelector: '.Tool.model',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Model.editable .EntityHeader'),
+      api.waitUntilPresent('.Entity.Model.editable .EntityHeader', false),
+    ],
+    onBefore: api => [
+      api.focus('.Tool.model button'),
     ],
   },
   '021': {
@@ -88,6 +89,10 @@ Let's name it <pre>Car</pre>.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="Car"]'),
+      api.blur('.Entity.Model.editable .EntityHeader input'),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Model.editable .EntityHeader input'),
     ],
   },
   '022': {
@@ -101,6 +106,10 @@ Let's name it <pre>cars</pre>.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__httppath input[value="cars"]'),
+      api.blur('.Entity.Model.editable .input__httppath input'),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Model.editable .input__httppath input'),
     ],
   },
   '023': {
@@ -109,22 +118,29 @@ Here, you can add properties you\'d like to expose from your Data Source through
 <br /><br />
 C'mon, click it!
 `,
-    selector: '.Entity.Model .button__add__Properties',
+    waitForSelector: '.Entity.Model.editable .button__add__Properties',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Model.editable .input__properties0name'),
+      api.waitUntilPresent('.Entity.Model.editable .input__properties0name', false),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Model.editable .button__add__Properties'),
     ],
   },
   '024': {
     text: `
-Let's set <pre>year</pre> as name.
+Let's set <pre>year</pre> as name and press tab key.
 `,
-    selector: '.Entity.Model.editable .input__properties0name',
+    waitForSelector: '.Entity.Model.editable .input__properties0name',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__properties0name input[value="year"]'),
+      api.waitUntilNotPresent('.Entity.Model.editable .input__properties0name input:focus'),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Model.editable .input__properties0name input'),
     ],
   },
   '025': {
@@ -133,7 +149,7 @@ Here you can set property type.
 <br /><br />
 Let's set type <pre>Number</pre>.
 `,
-    selector: '.Entity.Model.editable .select__properties0type',
+    waitForSelector: '.Entity.Model.editable .select__properties0type',
     position: 'right',
     allowClicksThruHole: true,
     onBefore: api => [
@@ -144,19 +160,25 @@ Let's set type <pre>Number</pre>.
     ],
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .properties0type__Number'),
+      api.wait(500),
+      api.focus('.Entity.Model.editable .input__properties0name input'),
+      api.blur('.Entity.Model.editable .input__properties0name input'),
     ],
   },
   '026': {
     text: `
 Click <pre>OK</pre> to create model.
 `,
-    selector: '.Entity.Model .submit',
+    waitForSelector: '.Entity.Model.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Model.editable'),
       api.setShowOverlay(true),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Model.editable .submit'),
     ],
   },
   '027': {
@@ -181,18 +203,21 @@ A function entity represents a serverless function that runs in your Kubernetes 
 <br /><br />
 C'mon, click it!
 `,
-    selector: '.Tool.function',
+    waitForSelector: '.Tool.function',
     allowClicksThruHole: true,
     position: 'right',
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Function_.editable'),
+      api.waitUntilPresent('.Entity.Function_.editable', false),
+    ],
+    onBefore: api => [
+      api.focus('.Tool.function button'),
     ],
   },
   '031': {
     text: `
 Click <pre>OK</pre> to deploy function,
 `,
-    selector: '.Entity.Function_.editable .submit',
+    waitForSelector: '.Entity.Function_.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
@@ -200,7 +225,9 @@ Click <pre>OK</pre> to deploy function,
       api.waitUntilNotPresent('.Entity.Function_.editable'),
       api.wait(1000),
       api.setShowOverlay(true),
-
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Function_.editable .submit'),
     ],
   },
   '032': {
@@ -223,15 +250,18 @@ Selecting this icon will open entity in the details panel.
 C'mon, click it!
 `,
     position: 'right',
-    selector: '.Entity.Function_ .Toolbox__button--zoom',
+    waitForSelector: '.Entity.Function_ .Toolbox__button--zoom',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.DetailsPanel.visible .RnD__content'),
+      api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
       api.setShowOverlay(false),
       api.setShowTooltip(false),
       api.wait(1500),
       api.setShowTooltip(true),
       api.setShowOverlay(true),
+    ],
+    onBefore: api => [
+      api.focus('.Entity.Function_ .Toolbox__button--zoom'),
     ],
   },
   '034': {
@@ -243,8 +273,8 @@ C'mon, click it!
     text: `
 Click <pre>Cancel</pre> to close the details panel.
 `,
-    selector: '.DetailsPanel .cancel',
-    position: 'top',
+    waitForSelector: '.DetailsPanel .cancel',
+    position: 'top-right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),
@@ -253,6 +283,9 @@ Click <pre>Cancel</pre> to close the details panel.
       api.wait(1500),
       api.setShowTooltip(true),
       api.setShowOverlay(true),
+    ],
+    onBefore: api => [
+      api.focus('.DetailsPanel .cancel'),
     ],
   },
   '040': {

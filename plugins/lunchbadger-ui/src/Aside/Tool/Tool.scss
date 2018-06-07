@@ -37,6 +37,17 @@
     }
   }
   &__submenuItem {
+    border: none;
+    outline: none;
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    font-family: inherit;;
+    font-weight: inherit;;
+    color: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    cursor: pointer;
     &:before {
       display: none;
       content: '';

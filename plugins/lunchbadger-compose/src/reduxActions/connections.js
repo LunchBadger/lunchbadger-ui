@@ -15,7 +15,7 @@ export const addModelConfigsToConnections = response => (dispatch, getState) => 
 }
 
 export const attach = info => async (dispatch, getState) => {
-  info.connection.setType('wip');
+  info.connection.addType('wip');
   const state = getState();
   Connections.addConnectionByInfo(info);
   const {sourceId, targetId} = info;
@@ -59,7 +59,7 @@ export const detach = info => async (dispatch, getState) => {
 
 export const reattach = info => async (dispatch, getState) => {
   try {
-    info.connection.setType('wip');
+    info.connection.addType('wip');
     const state = getState();
     const {originalTargetId, newSourceId, newTargetId} = info;
     Connections.moveConnection(info);

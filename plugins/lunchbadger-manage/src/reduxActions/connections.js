@@ -5,7 +5,7 @@ const {coreActions, storeUtils} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const attach = info => async (dispatch, getState) => {
-  info.connection.setType('wip');
+  info.connection.addType('wip');
   const {sourceId, targetId} = info;
   const {discardAutoSave} = info.connection.getParameters();
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
@@ -44,7 +44,7 @@ export const detach = info => async (dispatch, getState) => {
 };
 
 export const reattach = info => async (dispatch, getState) => {
-  info.connection.setType('wip');
+  info.connection.addType('wip');
   const {originalSourceId, originalTargetId, newSourceId, newTargetId} = info;
   const oldEndpoint = storeUtils.findEntity(getState(), 1, originalSourceId);
   const newEndpoint = storeUtils.findEntity(getState(), 1, newSourceId);

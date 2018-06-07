@@ -124,7 +124,7 @@ class Port extends PureComponent {
       this.highlighted = highlighted;
       this.highlighted.forEach(({connection}) => {
         if (connection) {
-          connection.setType('highlighted');
+          connection.addType('highlighted');
           connection.endpoints.forEach(endpoint => endpoint.addType('highlighted'));
         }
       });

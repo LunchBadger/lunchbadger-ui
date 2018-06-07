@@ -5,7 +5,7 @@ import {iconLogout} from '../../../../src/icons';
 export default {
   0: {
     icon: 'fa-trash-o',
-    hidden: true,
+    hidden: false,
     confirm: {
       title: 'Clear the workspace',
       ok: 'Clear',

@@ -39,7 +39,7 @@ export default {
   features: {
     tritonLogo: false,
     tritonObjectStorage: false,
-    microservices: true,
+    microservices: false,
     apis: false,
     portals: false,
     metrics: false,

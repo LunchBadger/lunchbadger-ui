@@ -33,7 +33,11 @@ export default class EntitySubElements extends PureComponent {
           <div className="EntitySubElements__title">
             <EntityPropertyLabel>{title}</EntityPropertyLabel>
             {onAdd && (
-              <button className={cs('EntitySubElements__title__add', getPlainText(`button__add__${title}`))} onClick={this.handleClickAdd}>
+              <button
+                type="button"
+                className={cs('EntitySubElements__title__add', getPlainText(`button__add__${title}`))}
+                onClick={this.handleClickAdd}
+              >
                 <IconSVG svg={iconPlus} />
               </button>
             )}

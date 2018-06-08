@@ -16,6 +16,7 @@ const Toolbox = ({config, zoom}) => {
           direction="bottom"
         >
           <button
+            type="button"
             className={cs('Toolbox__button', `Toolbox__button--${action}`, {selected})}
             onClick={onClick}
           >

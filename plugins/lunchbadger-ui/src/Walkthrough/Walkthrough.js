@@ -12,7 +12,7 @@ const locale = {
   close: 'Close',
   last: 'Got it',
   next: 'Next',
-  skip: 'Skip Walkthrough',
+  skip: 'Exit Walkthrough',
 };
 
 class Walkthrough extends PureComponent {

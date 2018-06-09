@@ -120,6 +120,9 @@ export default (ComposedComponent) => {
       this.setFlatModel();
       if (this.entityRef && !this.props.entity.loaded) {
         scrollToElement(findDOMNode(this.entityRef));
+        const inputName = findDOMNode(this.entityRef.getInputNameRef()).querySelector('input');
+        inputName.focus();
+        inputName.setSelectionRange(0, inputName.value.length);
       }
     }
 

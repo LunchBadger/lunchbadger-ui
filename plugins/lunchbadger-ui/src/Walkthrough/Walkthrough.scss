@@ -40,6 +40,11 @@ $joyride-close-visible: false;
     display: none;
     font-weight: 400;
     z-index: 3510;
+    &.bottom {
+      &[data-target=".canvas"] {
+        width: auto !important;
+      }
+    }
     &.bottom-right {
       &[data-target=".DetailsPanel .Toolbox__button--customerManagement"] {
         margin-right: 10px;
@@ -136,6 +141,9 @@ $joyride-close-visible: false;
       border-radius: 3px;
       display: block;
       margin-top: 10px;
+      white-space: nowrap;
+      user-select: text;
+      cursor: text;
     }
     &__main {
       pre {

@@ -23,9 +23,9 @@ Integrate your LunchBadger Project with existing data sources and services, such
     ],
   },
   '012': {
-    title: 'Memory Data Source Selection',
+    title: 'Memory Connector Selection',
     text: `
-Let's get started! Select the Memory Data Source.
+Let's get started! Select the Memory Connector.
 <br />
 <br />
 C'mon, click it!
@@ -190,7 +190,7 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
     ],
   },
   '027': {
-    title: 'Connect Data Source to Model',
+    title: 'Connect Connector to Model',
     text: `
 Click on the <pre>Memory</pre> Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Connector.
 `,

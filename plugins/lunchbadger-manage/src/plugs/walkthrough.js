@@ -340,12 +340,13 @@ Add the following path: <pre>/api/myfunction*</pre>
 All gateways will be accessible via the following domain name pattern:
 <code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
 <br />
-For example, if your gateway is named "Gateway" and your User ID is "99", your gateway will be accessible at:
-<code>http://gateway-99-dev.lunchbadger.io</code>
+Your Gateway will be accessible at:
+<code>$ROOT_URL</code>
 `,
     waitForSelector: '.Entity.ApiEndpoint .accessUrl',
     position: 'bottom-right',
     allowClicksThruHole: false,
+    rootUrlReplacement: true,
     onBefore: () => [],
   },
   '0803': {
@@ -382,10 +383,30 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
   },
   '0807': {
     title: 'Flow to Connector',
-    text: 'Finally, if the request is routed to a Model Entity connected to a data source or service through a Connector the connected data source or service will be queried or updated.',
+    text: 'Finally, if the request is routed to a Model Entity connected to a data source or service through a Connector, the connected data source or service will be queried or updated.',
     waitForSelector: '.Entity.DataSource',
     position: 'bottom-left',
     allowClicksThruHole: false,
     onBefore: () => [],
   },
+  '0808': {
+    title: 'Accessing an API Endpoint',
+    text: `
+Now that you've created your first LunchBadger Project, try interacting with your new endpoints!
+<code>
+$ curl $ROOT_URL/api/myfunction
+<br />
+LunchBadger Function
+<br /><br />
+$ curl $ROOT_URL/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'
+<br />
+{"year":${(new Date()).getFullYear()},"id":1}
+</code>
+`,
+    waitForSelector: '.canvas',
+    position: 'bottom',
+    allowClicksThruHole: false,
+    rootUrlReplacement: true,
+    onBefore: () => [],
+  }
 };

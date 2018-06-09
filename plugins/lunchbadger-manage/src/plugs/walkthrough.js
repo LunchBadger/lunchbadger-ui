@@ -1,43 +1,43 @@
 export default {
-  '050': {
-    title: 'Endpoint Dropdown Menu',
-    text: `
-Selecting this icon will reveal available Endpoint Entities.
-`,
-    selector: '.Tool.endpoint',
-    position: 'right',
-    allowClicksThruHole: false,
-  },
-  '051': {
-    title: 'Service Endpoint Entities',
-    text: 'These are references to your backend services. Used as Express Gateway service endpoints when connected to a Gateway Entity.',
-    waitForSelector: '.Tool__submenuItem.serviceendpoint',
-    position: 'right',
-    allowClicksThruHole: false,
-    onBefore: api => [
-      api.openEntitySubmenu('endpoint'),
-      api.blockClicks(),
-    ],
-    onAfter: api => [
-      api.unblockClicks(),
-    ],
-  },
-  '060': {
-    title: 'API Endpoint Entities',
-    text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
-    waitForSelector: '.Tool__submenuItem.apiendpoint',
-    position: 'right',
-    allowClicksThruHole: false,
-    onBefore: api => [
-      api.blockClicks(),
-    ],
-    onAfter: api => [
-      api.unblockClicks(),
-      api.openEntitySubmenu('endpoint'),
-    ],
-  },
+//   '050': {
+//     title: 'Endpoint Dropdown Menu',
+//     text: `
+// Selecting this icon will reveal available Endpoint Entities.
+// `,
+//     selector: '.Tool.endpoint',
+//     position: 'right',
+//     allowClicksThruHole: false,
+//   },
+//   '051': {
+//     title: 'Service Endpoint Entities',
+//     text: 'These are references to your backend services. Used as Express Gateway service endpoints when connected to a Gateway Entity.',
+//     waitForSelector: '.Tool__submenuItem.serviceendpoint',
+//     position: 'right',
+//     allowClicksThruHole: false,
+//     onBefore: api => [
+//       api.openEntitySubmenu('endpoint'),
+//       api.blockClicks(),
+//     ],
+//     onAfter: api => [
+//       api.unblockClicks(),
+//     ],
+//   },
+//   '060': {
+//     title: 'API Endpoint Entities',
+//     text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
+//     waitForSelector: '.Tool__submenuItem.apiendpoint',
+//     position: 'right',
+//     allowClicksThruHole: false,
+//     onBefore: api => [
+//       api.blockClicks(),
+//     ],
+//     onAfter: api => [
+//       api.unblockClicks(),
+//       api.openEntitySubmenu('endpoint'),
+//     ],
+//   },
   '0700': {
-    title: 'Gateway Entities',
+    title: 'Gateway Entities Overview',
     text: `
 This icon creates a new Gateway Entity on the canvas with a corresponding Gateway Deployment running in Kubernetes.
 <br /><br />
@@ -53,15 +53,21 @@ C'mon, click it!`,
     ],
   },
   '0701': {
-    text: 'Each Gateway consists of one or more Pipelines.',
+    title: 'Pipeline Overview',
+    text: `
+Each Gateway Entity exposes microservices built from models, functions, and service endpoints for public consumption as an API.  A Gateway consists of one or more Pipelines.
+<br /><br />
+A Pipeline is a set of policies that is executed on each API request.
+`,
     waitForSelector: '.Entity.Gateway.editable .Gateway',
     position: 'left',
     allowClicksThruHole: false,
     onBefore: () => [],
   },
   '0702': {
+    title: 'Name the CarPipeline',
     text: `
-Let's name first pipeline as <pre>CarPipeline</pre>`,
+Let's name the first pipeline <pre>CarPipeline</pre>`,
     waitForSelector: '.Entity.Gateway.editable .input__pipelines0name',
     position: 'left',
     allowClicksThruHole: true,
@@ -73,8 +79,9 @@ Let's name first pipeline as <pre>CarPipeline</pre>`,
     ],
   },
   '0703': {
+    title: 'Add a Second Pipeline',
     text: `
-Let's add the second pipeline.
+Let's add a second pipeline.
 `,
     waitForSelector: '.Entity.Gateway.editable .button__add__Pipelines',
     position: 'top-right',
@@ -87,8 +94,9 @@ Let's add the second pipeline.
     ],
   },
   '0704': {
+    title: 'Add Function Pipeline',
     text: `
-Let's name the second pipeline as <pre>FunctionPipeline</pre>.
+Let's name the second pipeline <pre>FunctionPipeline</pre>.
 `,
     selector: '.Entity.Gateway.editable .input__pipelines1name',
     position: 'left',
@@ -98,6 +106,7 @@ Let's name the second pipeline as <pre>FunctionPipeline</pre>.
     ],
   },
   '0705': {
+    title: 'Deploy Gateway',
     text: `
 Click <pre>OK</pre> to deploy a gateway.
 `,
@@ -115,7 +124,8 @@ Click <pre>OK</pre> to deploy a gateway.
     ],
   },
   '0706': {
-    text: 'Gateway is deploying...',
+    title: 'Gateway is Deploying',
+    // text: 'Gateway is deploying...',
     position: 'left',
     waitForSelector: '.Entity.Gateway',
     allowClicksThruHole: false,
@@ -128,6 +138,7 @@ Click <pre>OK</pre> to deploy a gateway.
     ],
   },
   '0707': {
+    title: 'Private Quadrant Overview',
     text: 'Model, Service Endpoint, and Function Entities can all be connected to the left-hand side of a Pipeline.',
     waitForSelector: '.quadrant.Private .quadrant__body',
     position: 'right',
@@ -135,8 +146,9 @@ Click <pre>OK</pre> to deploy a gateway.
     onBefore: () => [],
   },
   '0708': {
+    title: 'Connect Car Model with CarPipeline',
     text: `
-Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting their ports.
+Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
     selector: '.Entity.Model .port-out',
     position: 'left',
@@ -150,13 +162,15 @@ Please connect <pre>Car</pre> model with <pre>CarPipeline</pre> by connecting th
     ],
   },
   '0709': {
-    text: 'API Endpoint Entities connect to the right-hand side of a Pipeline.',
+    title: 'API Endpoint Explanation',
+    text: 'When connecting a microservice entity such as a model, function or service-endpoint, for the first time a new API Endpoint Entity is created automatically. API Endpoint Entities define what will be exposed by a Gateway.',
     selector: '.quadrant.Public .quadrant__body',
     position: 'left',
     allowClicksThruHole: false,
     onBefore: () => [],
   },
   '0710': {
+    title: 'Adding a Path to CarApiEndpoint',
     text: `
 Let's add a path.
 `,
@@ -171,8 +185,9 @@ Let's add a path.
     ],
   },
   '0711': {
+    title: 'Setting a Path on CarApiEndpoint',
     text: `
-Let's set path here as: <pre>/api/car*</pre>
+Add the following path: <pre>/api/car*</pre>
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
@@ -185,7 +200,8 @@ Let's set path here as: <pre>/api/car*</pre>
     ],
   },
   '0712': {
-    text: 'Click <pre>OK</pre> to submit Car Api Endpoint',
+    title: 'Create Car API Endpoint',
+    text: 'Click <pre>OK</pre> to create the Api Endpoint Entity',
     waitForSelector: '.Entity.ApiEndpoint.editable .submit',
     position: 'left',
     allowClicksThruHole: true,
@@ -197,8 +213,9 @@ Let's set path here as: <pre>/api/car*</pre>
     ]
   },
   '0713': {
+    title: 'Connect Function to FunctionPipeline',
     text: `
-Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connecting their ports.
+Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
     waitForSelector: '.Entity.Function_ .port-out',
     position: 'left',
@@ -212,8 +229,9 @@ Please connect <pre>Function</pre> with <pre>FunctionPipeline</pre> by connectin
     ],
   },
   '0714': {
+    title: 'Add a path to FunctionApiEndpoint',
     text: `
-Let's add a path.
+Once again, an API Endpoint Entity is created automatically. Let's add a path.
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
     position: 'top',
@@ -226,8 +244,9 @@ Let's add a path.
     ],
   },
   '0715': {
+    title: 'Setting a Path on FunctionApiEndpoint',
     text: `
-Let's set path here as: <pre>/api/myfunction*</pre>
+Add the following path: <pre>/api/myfunction*</pre>
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
@@ -240,7 +259,8 @@ Let's set path here as: <pre>/api/myfunction*</pre>
     ],
   },
   '0716': {
-    text: 'Click <pre>OK</pre> to submit Function Api Endpoint',
+    title: 'Create Function API Endpoint',
+    text: 'Click <pre>OK</pre> to create the API Endpoint Entity.',
     waitForSelector: '.Entity.ApiEndpoint.editable .submit',
     position: 'left',
     allowClicksThruHole: true,
@@ -251,71 +271,71 @@ Let's set path here as: <pre>/api/myfunction*</pre>
       api.focus('.Entity.ApiEndpoint.editable .submit'),
     ],
   },
-  '0718': {
-    text: 'Click this icon to open pipelines details panel',
-    waitForSelector: '.Entity.Gateway .Toolbox__button--pipelines',
-    position: 'left',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilPresent('.DetailsPanel.visible .BaseDetails.pipelines', false),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(2000),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
-    ],
-    onBefore: api => [
-      api.click('.Entity.Gateway .EntityHeader'),
-      api.focus('.Entity.Gateway .Toolbox__button--pipelines'),
-    ],
-  },
-  '0719': {
-    text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
-    <br /><br />
-    More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
-    waitForSelector: '.DetailsPanel .pipelines .CollapsibleProperties.noDividers',
-    position: 'bottom',
-    allowClicksThruHole: false,
-    onBefore: () => [],
-  },
-  '0720': {
-    text: 'Click this icon to open Consumer Management details panel',
-    waitForSelector: '.DetailsPanel .Toolbox__button--customerManagement',
-    position: 'bottom-right',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement', false),
-    ],
-    onBefore: api => [
-      api.focus('.DetailsPanel .Toolbox__button--customerManagement'),
-    ],
-  },
-  '0721': {
-    text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
-    waitForSelector: '.DetailsPanel .CustomerManagement',
-    position: 'bottom',
-    allowClicksThruHole: false,
-    onBefore: () => [],
-  },
-  '0722': {
-    text: 'Click <pre>Cancel</pre> to close details panel',
-    waitForSelector: '.DetailsPanel .cancel',
-    position: 'top-right',
-    allowClicksThruHole: true,
-    triggerNext: api => [
-      api.waitUntilNotPresent('.DetailsPanel.visible'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(2000),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
-    ],
-    onBefore: api => [
-      api.focus('.DetailsPanel .cancel'),
-    ],
-  },
+  // '0718': {
+  //   text: 'Click this icon to open pipelines details panel',
+  //   waitForSelector: '.Entity.Gateway .Toolbox__button--pipelines',
+  //   position: 'left',
+  //   allowClicksThruHole: true,
+  //   triggerNext: api => [
+  //     api.waitUntilPresent('.DetailsPanel.visible .BaseDetails.pipelines', false),
+  //     api.setShowOverlay(false),
+  //     api.setShowTooltip(false),
+  //     api.wait(2000),
+  //     api.setShowTooltip(true),
+  //     api.setShowOverlay(true),
+  //   ],
+  //   onBefore: api => [
+  //     api.click('.Entity.Gateway .EntityHeader'),
+  //     api.focus('.Entity.Gateway .Toolbox__button--pipelines'),
+  //   ],
+  // },
+  // '0719': {
+  //   text: `Pipelines contain a list of Policies. Policies contain a list of condition-action pairs.
+  //   <br /><br />
+  //   More details on available conditions and policies can be found in the <a href="https://www.express-gateway.io/" target="_blank">Express Gateway Documentation</a>.`,
+  //   waitForSelector: '.DetailsPanel .pipelines .CollapsibleProperties.noDividers',
+  //   position: 'bottom',
+  //   allowClicksThruHole: false,
+  //   onBefore: () => [],
+  // },
+  // '0720': {
+  //   text: 'Click this icon to open Consumer Management details panel',
+  //   waitForSelector: '.DetailsPanel .Toolbox__button--customerManagement',
+  //   position: 'bottom-right',
+  //   allowClicksThruHole: true,
+  //   triggerNext: api => [
+  //     api.waitUntilPresent('.DetailsPanel .BaseDetails.customerManagement', false),
+  //   ],
+  //   onBefore: api => [
+  //     api.focus('.DetailsPanel .Toolbox__button--customerManagement'),
+  //   ],
+  // },
+  // '0721': {
+  //   text: 'Here, you can add Users, Apps, Credentials, and Scopes.',
+  //   waitForSelector: '.DetailsPanel .CustomerManagement',
+  //   position: 'bottom',
+  //   allowClicksThruHole: false,
+  //   onBefore: () => [],
+  // },
+  // '0722': {
+  //   text: 'Click <pre>Cancel</pre> to close details panel',
+  //   waitForSelector: '.DetailsPanel .cancel',
+  //   position: 'top-right',
+  //   allowClicksThruHole: true,
+  //   triggerNext: api => [
+  //     api.waitUntilNotPresent('.DetailsPanel.visible'),
+  //     api.setShowOverlay(false),
+  //     api.setShowTooltip(false),
+  //     api.wait(2000),
+  //     api.setShowTooltip(true),
+  //     api.setShowOverlay(true),
+  //   ],
+  //   onBefore: api => [
+  //     api.focus('.DetailsPanel .cancel'),
+  //   ],
+  // },
   '0802': {
-    title: 'Accessing Gateway Instances',
+    title: 'Accessing Gateways',
     text: `
 All gateways will be accessible via the following domain name pattern:
 <code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
@@ -331,12 +351,13 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
   '0803': {
     title: 'API Request Flow',
     text: 'When an API request is received, it flows through the LunchBadger Entities defined on the Canvas.',
-    waitForSelector: '.canvas__legend',
+    waitForSelector: '.Entity.ApiEndpoint',
     position: 'top',
     allowClicksThruHole: false,
     onBefore: () => [],
   },
   '0804': {
+    title: 'Flow through API Endpoint',
     text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /api/cars.',
     waitForSelector: '.Entity.ApiEndpoint .paths0',
     position: 'bottom-right',
@@ -344,6 +365,7 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
     onBefore: () => [],
   },
   '0805': {
+    title: 'Flow through Gateway Pipeline',
     text: 'The request is routed to a Gateway Pipeline where it flows through the defined Policies.',
     waitForSelector: '.Entity.Gateway .Gateway__pipeline0',
     position: 'bottom-left',
@@ -351,14 +373,16 @@ For example, if your gateway is named "Gateway" and your User ID is "99", your g
     onBefore: () => [],
   },
   '0806': {
-    text: 'The API request then makes its way to an Entity in the Private column (Model, Service Endpoint, or Function). In this example, the request is routed to the Car model.',
+    title: 'Flow through Private Quadrant',
+    text: 'The API request then makes its way to an Entity in the Private quadrant (Model, Service Endpoint, or Function). In this example, the request is routed to <pre>Car</pre> Model Entity.',
     waitForSelector: '.Entity.Model',
     position: 'bottom-left',
     allowClicksThruHole: false,
     onBefore: () => [],
   },
   '0807': {
-    text: 'Models are backed by Data Sources. Behind the scenes, this Loopback model will connect to an in-memory data store.',
+    title: 'Flow to Connector',
+    text: 'Finally, if the request is routed to a Model Entity connected to a data source or service through a Connector the connected data source or service will be queried or updated.',
     waitForSelector: '.Entity.DataSource',
     position: 'bottom-left',
     allowClicksThruHole: false,

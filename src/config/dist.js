@@ -13,6 +13,8 @@ export default {
   slsApiUrl: 'https://sls-{USER}-{ENV}.lunchbadger.io',
   sshManagerUrl: 'https://api.lunchbadger.com/users/customer/{USER}',
   gitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/{ENV}.git',
+  googleAnalyticsID: 'XYZ',
+  googleAnalyticsDebug: false,
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

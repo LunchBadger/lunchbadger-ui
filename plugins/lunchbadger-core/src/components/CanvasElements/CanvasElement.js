@@ -120,6 +120,9 @@ export default (ComposedComponent) => {
       this.setFlatModel();
       if (this.entityRef && !this.props.entity.loaded) {
         scrollToElement(findDOMNode(this.entityRef));
+        const inputName = findDOMNode(this.entityRef.getInputNameRef()).querySelector('input');
+        inputName.focus();
+        inputName.setSelectionRange(0, inputName.value.length);
       }
     }
 
@@ -144,8 +147,7 @@ export default (ComposedComponent) => {
       this.setState({validations});
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
-      const updatedEntity = await dispatch(entity.update(model));
-      dispatch(setCurrentElement(updatedEntity));
+      await dispatch(entity.update(model));
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
           this.setFlatModel();

@@ -12,7 +12,7 @@ const locale = {
   close: 'Close',
   last: 'Got it',
   next: 'Next',
-  skip: 'Skip',
+  skip: 'Exit Walkthrough',
 };
 
 class Walkthrough extends PureComponent {
@@ -48,6 +48,9 @@ class Walkthrough extends PureComponent {
         allowClicksThruHole: !!step.allowClicksThruHole,
       });
       if (step.onBefore) {
+        if (step.rootUrlReplacement) {
+          step.text = step.text.replace(/\$ROOT_URL/g, this.getRootUrl());
+        }
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
         }
@@ -209,6 +212,8 @@ class Walkthrough extends PureComponent {
     },
   };
 
+  getRootUrl = () => document.querySelector('.Entity.ApiEndpoint .accessUrl a').innerHTML;
+
   stopClickPropagation = event => {
     event.preventDefault();
     event.stopPropagation();
@@ -265,7 +270,7 @@ const selector = createSelector(
   state => state.plugins.quadrants,
   (
     entities,
-    quadrants,
+    quadrants
   ) => {
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
@@ -276,7 +281,7 @@ const selector = createSelector(
       });
     });
     return {
-      emptyProject,
+      emptyProject
     };
   },
 );

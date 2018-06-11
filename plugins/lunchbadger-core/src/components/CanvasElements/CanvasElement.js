@@ -144,8 +144,7 @@ export default (ComposedComponent) => {
       this.setState({validations});
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
-      const updatedEntity = await dispatch(entity.update(model));
-      dispatch(setCurrentElement(updatedEntity));
+      await dispatch(entity.update(model));
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
           this.setFlatModel();

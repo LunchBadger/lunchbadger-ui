@@ -28,6 +28,7 @@ export default {
   gitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
   googleAnalyticsID: 'UA-82427970-1',
   googleAnalyticsDebug: true,
+  docsUrl: 'https://docs.lunchbadger.com',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

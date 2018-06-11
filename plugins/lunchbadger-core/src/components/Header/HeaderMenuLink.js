@@ -24,7 +24,7 @@ class HeaderMenuLink extends PureComponent {
   };
 
   render() {
-    const {hidden, icon, svg, pressed, panel, confirm} = this.props;
+    const {hidden, icon, svg, pressed, panel, confirm, url} = this.props;
     const linkClass = cs('header__menu__link', panel, {
       'header__menu__link--hidden': hidden,
       'header__menu__link--pressed': pressed,
@@ -32,10 +32,18 @@ class HeaderMenuLink extends PureComponent {
     const {showConfirmModal} = this.state;
     return (
       <li className="header__menu__element">
-        <span className={linkClass} onClick={this.handleClick}>
-          {icon && <i className={cs('fa', icon)} />}
-          {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
-        </span>
+        {url && (
+          <a className={linkClass} href={url} target="_blank">
+            {icon && <i className={cs('fa', icon)} />}
+            {!icon && url}
+          </a>
+        )}
+        {!url && (
+          <span className={linkClass} onClick={this.handleClick}>
+            {icon && <i className={cs('fa', icon)} />}
+            {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
+          </span>
+        )}
         {confirm && showConfirmModal && (
           <TwoOptionModal
             onClose={() => this.setState({showConfirmModal: false})}

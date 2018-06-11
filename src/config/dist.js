@@ -15,6 +15,7 @@ export default {
   gitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/{ENV}.git',
   googleAnalyticsID: 'UA-82427970-1',
   googleAnalyticsDebug: false,
+  docsUrl: 'https://docs.lunchbadger.com',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

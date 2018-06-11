@@ -1,6 +1,7 @@
 import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
 import {iconLogout} from '../../../../src/icons';
+import Config from '../../../../src/config';
 
 export default {
   0: {
@@ -23,6 +24,10 @@ export default {
     action: togglePanel('SETTINGS_PANEL'),
   },
   11: {
+    icon: 'fa-question',
+    url: Config.get('docsUrl'),
+  },
+  12: {
     svg: iconLogout,
     action: logout(),
     confirm: {

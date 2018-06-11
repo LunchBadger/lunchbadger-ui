@@ -265,7 +265,7 @@ const selector = createSelector(
   state => state.plugins.quadrants,
   (
     entities,
-    quadrants,
+    quadrants
   ) => {
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
@@ -276,7 +276,7 @@ const selector = createSelector(
       });
     });
     return {
-      emptyProject,
+      emptyProject
     };
   },
 );

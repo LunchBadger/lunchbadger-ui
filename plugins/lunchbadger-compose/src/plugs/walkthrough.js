@@ -136,7 +136,7 @@ C'mon, click it!
   '024': {
     title: 'Add a Property',
     text: `
-Let's set <pre>year</pre> as the property name. Press the Tab key on your keyboard to continue.
+Let's set <pre>year</pre> as the property name.
 `,
     waitForSelector: '.Entity.Model.editable .input__properties0name',
     position: 'right',

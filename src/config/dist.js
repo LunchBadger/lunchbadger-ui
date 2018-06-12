@@ -16,6 +16,7 @@ export default {
   googleAnalyticsID: 'UA-82427970-1',
   googleAnalyticsDebug: false,
   docsUrl: 'https://docs.lunchbadger.com',
+  homepageUrl: 'https://www.lunchbadger.com',
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

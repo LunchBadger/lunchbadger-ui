@@ -29,6 +29,7 @@ export default {
   googleAnalyticsID: 'UA-82427970-1',
   googleAnalyticsDebug: true,
   docsUrl: 'https://docs.lunchbadger.com',
+  homepageUrl: 'https://www.lunchbadger.com',
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

@@ -84,7 +84,7 @@ Let's name the first pipeline <pre>CarPipeline</pre>`,
 Let's add a second pipeline.
 `,
     waitForSelector: '.Entity.Gateway.editable .button__add__Pipelines',
-    position: 'top-right',
+    position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name', false),
@@ -114,8 +114,8 @@ Click <pre>OK</pre> to deploy a gateway.
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Gateway.editable'),
+      api.setShowOverlay(false),
       api.wait(1000),
       api.setShowOverlay(true),
     ],
@@ -175,7 +175,7 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
 Let's add a path.
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
-    position: 'top',
+    position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0', false),
@@ -193,7 +193,7 @@ Add the following path: <pre>/api/car*</pre>
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]', false),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .input__paths0 input'),
@@ -234,7 +234,7 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
 Once again, an API Endpoint Entity is created automatically. Let's add a path.
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
-    position: 'top',
+    position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0', false),
@@ -252,7 +252,7 @@ Add the following path: <pre>/api/myfunction*</pre>
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]', false),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .input__paths0 input'),
@@ -338,7 +338,7 @@ Add the following path: <pre>/api/myfunction*</pre>
     title: 'Accessing Gateways',
     text: `
 All gateways will be accessible via the following domain name pattern:
-<code>http://{gateway-name}-{user-id}-dev.lunchbadger.io</code>
+<code>http://{gateway-name}-$USER_ID-dev.lunchbadger.io</code>
 <br />
 Your Gateway will be accessible at:
 <code>$ROOT_URL</code>

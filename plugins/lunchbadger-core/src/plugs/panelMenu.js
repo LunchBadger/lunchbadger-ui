@@ -20,11 +20,12 @@ export default {
   },
   10: {
     icon: 'icon-icon-settings',
-    panel:'SETTINGS_PANEL',
+    panel: 'SETTINGS_PANEL',
     action: togglePanel('SETTINGS_PANEL'),
   },
   11: {
     icon: 'fa-question',
+    name: 'documentation',
     url: Config.get('docsUrl'),
   },
   12: {

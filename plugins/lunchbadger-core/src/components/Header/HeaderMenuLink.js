@@ -24,8 +24,8 @@ class HeaderMenuLink extends PureComponent {
   };
 
   render() {
-    const {hidden, icon, svg, pressed, panel, confirm, url} = this.props;
-    const linkClass = cs('header__menu__link', panel, {
+    const {hidden, icon, svg, pressed, panel, name, confirm, url} = this.props;
+    const linkClass = cs('header__menu__link', panel, name, {
       'header__menu__link--hidden': hidden,
       'header__menu__link--pressed': pressed,
     });

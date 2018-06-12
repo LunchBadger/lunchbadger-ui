@@ -5,11 +5,25 @@ export default {
     selector: '.Aside',
     position: 'right',
   },
-  '999': {
+  '998': {
     title: 'Wrap-up',
-    text: `Now that you\'re armed with the basics of how to use LunchBadger, have fun!
-    Feel free to play around with Entities on the Canvas and direct any questions to your LunchBadger Support Team at <a href="mailto:hello@lunchbadger.com" target="_blank">hello@lunchbadger.com</a>.`,
-    selector: '.Logo',
-    position: 'bottom-left',
+    text: `
+Now that you\'re armed with the basics of how to use LunchBadger, have fun!
+Feel free to play around with Entities on the Canvas and check Documentation site under this icon.
+`,
+    selector: '.header__menu__link.documentation',
+    position: 'right',
+    allowClicksThruHole: false,
+  },
+  '999': {
+    title: `
+We're here to help you!
+`,
+    text: `
+Direct any questions via chat here or to your LunchBadger Support Team at <a href="mailto:hello@lunchbadger.com" target="_blank">hello@lunchbadger.com</a>.
+`,
+    selector: '#drift-widget',
+    position: 'right',
+    allowClicksThruHole: false,
   },
 }

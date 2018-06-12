@@ -52,7 +52,7 @@ Most Connector Entities will present configuration options for connecting to you
 <br />
 Click <pre>OK</pre> to continue.
 `,
-    waitForSelector: '.Entity.DataSource.memory.editable',
+    waitForSelector: '.Entity.DataSource.memory.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
@@ -143,7 +143,6 @@ Let's set <pre>year</pre> as the property name. Press the Tab key on your keyboa
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__properties0name input[value="year"]'),
-      api.waitUntilNotPresent('.Entity.Model.editable .input__properties0name input:focus'),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .input__properties0name input'),
@@ -161,6 +160,7 @@ Select <pre>Number</pre> from the dropdown list.
     allowClicksThruHole: true,
     onBefore: api => [
       api.setOverlayBack(true),
+      api.focus('.Entity.Model.editable .select__properties0type button'),
     ],
     onAfter: api => [
       api.setOverlayBack(false),
@@ -181,9 +181,7 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Model.editable'),
-      api.setShowOverlay(true),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .submit'),
@@ -231,8 +229,8 @@ Click <pre>OK</pre> to deploy function.
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Function_.editable'),
+      api.setShowOverlay(false),
       api.wait(1000),
       api.setShowOverlay(true),
     ],

@@ -18,6 +18,8 @@ export default {
   googleAnalyticsDebug: false,
   docsUrl: 'https://docs.lunchbadger.com',
   homepageUrl: 'https://www.lunchbadger.com',
+  pingAmount: 72,
+  pingIntervalMs: 2500,
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',

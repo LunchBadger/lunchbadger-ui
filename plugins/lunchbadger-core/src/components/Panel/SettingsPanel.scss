@@ -1,10 +1,18 @@
-.iconCopy {
-  vertical-align: top;
-  margin: 8px 0 0 13px;
-  cursor: pointer;
-}
-
-.gitCloneCommand {
-  display: inline-block;
-  vertical-align: top;
+.SettingsPanel {
+  .iconCopy {
+    vertical-align: top;
+    margin: 8px 0 0 13px;
+    cursor: pointer;
+  }
+  .gitCloneCommand {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .details-panel__fieldset {
+    .EntityPropertyLabel {
+      color: #4190CE;
+      margin-left: 0;
+      margin-bottom: 15px;
+    }
+  }
 }

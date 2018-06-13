@@ -5,6 +5,11 @@ import Config from '../../../../src/config';
 
 export default {
   0: {
+    icon: 'fa-floppy-o',
+    hidden: true,
+    action: saveToServer(),
+  },
+  1: {
     icon: 'fa-trash-o',
     hidden: false,
     confirm: {
@@ -13,10 +18,6 @@ export default {
       message: 'Are you sure, you want to clear the workspace?',
     },
     action: clearServer(),
-  },
-  1: {
-    icon: 'fa-floppy-o',
-    action: saveToServer(),
   },
   10: {
     icon: 'icon-icon-settings',

@@ -126,13 +126,7 @@ class AppLoader extends Component {
   }
 
   renderError() {
-    const error = {
-      statusCode: 0,
-      message: this.state.error.message,
-      name: 'Error',
-      endpoint: 'WorkspaceStatus',
-      method: `${retriesAmount} PING retries`,
-    };
+    const error = this.state.error;
     return (
       <div className="app">
         <div className="app__loading-error">

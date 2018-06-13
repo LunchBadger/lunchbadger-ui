@@ -66,6 +66,7 @@ export const clearServer = () => async (dispatch, getState) => {
   const {onProjectClear} = getState().plugins;
   dispatch(actions.clearProject());
   userStorage.remove('zoomWindow');
+  userStorage.remove('entityCollapsed');
   try {
     await ProjectService.clearProject();
     if (onProjectClear.length > 0) {

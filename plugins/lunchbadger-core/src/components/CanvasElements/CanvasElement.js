@@ -18,6 +18,7 @@ import {
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
+import userStorage from '../../utils/userStorage';
 import {
   Entity,
   EntityStatus,
@@ -227,6 +228,9 @@ export default (ComposedComponent) => {
       this.props.dispatch(setCurrentZoom(rect));
     };
 
+    handleOnToggleCollapse = collapsed =>
+      userStorage.setObjectKey('entityCollapsed', this.props.entity.id, collapsed);
+
     resetFormModel = () => {
       if (this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.model);
@@ -321,6 +325,7 @@ export default (ComposedComponent) => {
         />
       );
       const {
+        id,
         ready,
         deleting,
         fake,
@@ -382,6 +387,7 @@ export default (ComposedComponent) => {
       }
       const {type, friendlyName} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
+      const defaultExpanded = !userStorage.getObjectKey('entityCollapsed', id);
       return (
         <div className={cs('CanvasElement', type, status, {highlighted, editable, wip: processing, semitransparent})}>
             <Entity
@@ -409,6 +415,8 @@ export default (ComposedComponent) => {
               connectDropTarget={connectDropTarget}
               isDelta={isDelta}
               slugifyName={slugifyName}
+              onToggleCollapse={this.handleOnToggleCollapse}
+              defaultExpanded={defaultExpanded}
             >
               {!fake && (
                 <ComposedComponent

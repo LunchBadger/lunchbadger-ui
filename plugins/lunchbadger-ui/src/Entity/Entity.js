@@ -11,7 +11,7 @@ class Entity extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: true,
+      expanded: props.defaultExpanded,
       marginTopPorts: {},
     }
   }
@@ -38,6 +38,7 @@ class Entity extends PureComponent {
       }
     });
     this.setState({expanded});
+    this.props.onToggleCollapse(!expanded);
     event.stopPropagation();
   }
 
@@ -140,10 +141,12 @@ Entity.propTypes = {
   onValidSubmit: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
   onDoubleClick: PropTypes.func.isRequired,
+  onToggleCollapse: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   connector: PropTypes.string,
   semitransparent: PropTypes.bool,
+  defaultExpanded: PropTypes.bool.isRequired,
 };
 
 export default Entity;

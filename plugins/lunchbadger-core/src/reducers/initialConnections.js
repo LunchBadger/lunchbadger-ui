@@ -19,6 +19,7 @@ export default (state = [], action) => {
       Connections.removeConnection(id);
       Connections.removeConnection(null, id);
       userStorage.removeObjectKey('zoomWindow', id);
+      userStorage.removeObjectKey('entityCollapsed', id);
       return state;
     case actionTypes.clearProject:
       Connections.removeConnections();

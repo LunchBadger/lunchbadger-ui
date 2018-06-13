@@ -16,6 +16,13 @@ const locale = {
   skip: 'Exit Walkthrough',
 };
 
+const blockedKeyCodes = [
+  9,  // tab
+  13  // enter
+];
+
+export let blockedEscapingKeys = [false];
+
 class Walkthrough extends PureComponent {
   static propTypes = {
     steps: PropTypes.array,
@@ -38,7 +45,7 @@ class Walkthrough extends PureComponent {
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
-      this.unblockEnter();
+      this.unblockEscapingKeys();
       userStorage.set('walkthroughShown', true);
     }
     this.setState({index});
@@ -49,7 +56,10 @@ class Walkthrough extends PureComponent {
       });
       if (step.onBefore) {
         if (step.rootUrlReplacement) {
-          step.text = step.text.replace(/\$ROOT_URL/g, this.getRootUrl());
+          step.text = step.text
+            .replace(/\$ROOT_URL/g, this.getRootUrl())
+            .replace(/\$USER_ID/g, this.props.userId);
+
         }
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
@@ -110,12 +120,12 @@ class Walkthrough extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
-    waitUntilPresent: (selector, blockEnter = true) => async cb => {
-      blockEnter && this.blockEnter();
+    waitUntilPresent: (selector, blockEscapingKeys = true) => async cb => {
+      blockEscapingKeys && this.blockEscapingKeys();
       while (document.querySelector(selector) === null) {
         await this[this.waitMethod](500);
       }
-      blockEnter && this.unblockEnter();
+      blockEscapingKeys && this.unblockEscapingKeys();
       cb();
     },
     waitUntilNotPresent: selector => async cb => {
@@ -219,13 +229,22 @@ class Walkthrough extends PureComponent {
     event.stopPropagation();
   };
 
-  blockEnter = () => document.addEventListener('keydown', this.stopEnter);
+  blockEscapingKeys = () => {
+    document.addEventListener('keydown', this.stopEscapingKeys);
+    blockedEscapingKeys[0] = true;
+  };
 
-  unblockEnter = () => document.removeEventListener('keydown', this.stopEnter);
+  unblockEscapingKeys = () => {
+    document.removeEventListener('keydown', this.stopEscapingKeys);
+    blockedEscapingKeys[0] = false;
+  };
 
-  stopEnter = event => (event.keyCode === 13 || event.which === 13)
-    ? event.preventDefault()
-    : null;
+  stopEscapingKeys = event => {
+    if (blockedKeyCodes.includes(event.keyCode) || blockedKeyCodes.includes(event.which)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
 
   waitByAnimationFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 

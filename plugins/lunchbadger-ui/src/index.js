@@ -36,7 +36,7 @@ import CopyOnHover from './CopyOnHover/CopyOnHover';
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
-import Walkthrough from './Walkthrough/Walkthrough';
+import Walkthrough, {blockedEscapingKeys} from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
 import scrollToElement from './utils/scrollToElement';
 
@@ -88,6 +88,7 @@ const dataSourceIcons = {
 
 export {
   Aside,
+  blockedEscapingKeys,
   Button,
   Checkbox,
   CodeEditor,

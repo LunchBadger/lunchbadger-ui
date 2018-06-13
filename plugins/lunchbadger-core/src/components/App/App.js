@@ -101,6 +101,7 @@ class App extends Component {
         return walkthrough[key];
       });
     const walkthrougVisible = loadedProject && !userStorage.get('walkthroughShown');
+    const userId = getUser().profile.sub;
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -128,7 +129,12 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
-          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} />}
+          {walkthrougVisible && (
+            <Walkthrough
+              steps={walkthroughSteps}
+              userId={userId}
+            />
+          )}
         </div>
       </Provider>
     );

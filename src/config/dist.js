@@ -30,7 +30,7 @@ export default {
       issuer: 'https://www.lunchbadger.com',
       authorization_endpoint: 'https://www.lunchbadger.com/oauth/authorize',
       userinfo_endpoint: 'https://www.lunchbadger.com/oauth/me',
-      end_session_endpoint: 'https://www.lunchbadger.com/logout'
+      end_session_endpoint: 'https://www.lunchbadger.com/logout/'
     },
     // use pem-jwk npm to produce this from the public key in the OIDC server
     signingKeys: [

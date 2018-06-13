@@ -50,19 +50,16 @@ $joyride-close-visible: false;
         margin-right: 10px;
       }
     }
-    &.top {
-      &[data-target=".Entity.Gateway.editable .button__add__Pipelines"] {
-        margin-left: -203px;
-      }
-    }
     &.left,
     &.right {
       &[data-target=".Entity.Model.editable .button__add__Properties"] {
         margin-top: -30px;
       }
+      &[data-target=".Entity.Gateway.editable .button__add__Pipelines"],
       &[data-target=".Gateway__pipeline0 > div:nth-child(2) > div"],
       &[data-target=".Entity.Model .port-out"],
-      &[data-target=".Entity.Function_ .port-out"] {
+      &[data-target=".Entity.Function_ .port-out"],
+      &[data-target=".Entity.ApiEndpoint.editable .button__add__PATHS"] {
         margin-top: -25px;
       }
       &[data-target=".Entity.Gateway .Toolbox__button--pipelines"] {
@@ -75,6 +72,7 @@ $joyride-close-visible: false;
       &[data-target=".Entity.Function_ .Toolbox__button--zoom"] {
         margin-top: -20px;
       }
+      &[data-target=".Entity.DataSource.memory.editable .submit"],
       &[data-target=".Entity.Model.editable .EntityHeader"],
       &[data-target=".Entity.Model.editable .input__properties0name"],
       &[data-target=".Entity.Model.editable .select__properties0type"],

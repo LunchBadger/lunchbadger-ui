@@ -21,6 +21,7 @@ import {
   Walkthrough,
 } from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
+import userStorage from '../../utils/userStorage';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
 import './App.scss';
@@ -99,8 +100,7 @@ class App extends Component {
         }
         return walkthrough[key];
       });
-    const walkthroughShownKey = `walkthroughShown-${getUser().profile.preferred_username}`;
-    const walkthrougVisible = loadedProject && !localStorage.getItem(walkthroughShownKey);
+    const walkthrougVisible = loadedProject && !userStorage.get('walkthroughShown');
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -128,7 +128,7 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
-          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} lsKey={walkthroughShownKey} />}
+          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} />}
         </div>
       </Provider>
     );

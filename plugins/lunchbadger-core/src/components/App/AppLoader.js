@@ -14,6 +14,8 @@ import {updateEntitiesStatues} from '../../reduxActions';
 import './AppLoader.scss';
 
 const envId = Config.get('envId');
+const pingAmount = Config.get('pingAmount');
+const pingIntervalMs = Config.get('pingIntervalMs');
 const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
 
 const allowedPingStatuses = [
@@ -23,8 +25,6 @@ const allowedPingStatuses = [
   503,
   504,
 ];
-
-const retriesAmount = 48;
 
 class AppLoader extends Component {
   constructor(props) {
@@ -76,7 +76,7 @@ class AppLoader extends Component {
   load() {
     ConfigStoreService.upsertProject()
       .then(() => {
-        return waitForProject(retriesAmount, 2500);
+        return waitForProject(pingAmount, pingIntervalMs);
       })
       .then(() => {
         this.setState({loaded: true});

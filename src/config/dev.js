@@ -31,6 +31,8 @@ export default {
   googleAnalyticsDebug: true,
   docsUrl: 'https://docs.lunchbadger.com',
   homepageUrl: 'https://www.lunchbadger.com',
+  pingAmount: 72,
+  pingIntervalMs: 2500,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',

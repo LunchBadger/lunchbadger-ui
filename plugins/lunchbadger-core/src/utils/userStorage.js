@@ -1,6 +1,6 @@
 import {getUser} from './auth';
 
-const getKeyName = key => `${key}-${getUser().profile.preferred_username}`;
+const getKeyName = key => `${key}-${getUser().profile.sub}`;
 
 const userStorage = {
   set: (name, value) => localStorage.setItem(getKeyName(name), value),

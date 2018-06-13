@@ -5,6 +5,7 @@ import {createSelector} from 'reselect';
 import cs from 'classnames';
 import Joyride from 'react-joyride';
 import series from 'async/series';
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './Walkthrough.scss';
 
 const locale = {
@@ -18,7 +19,6 @@ const locale = {
 class Walkthrough extends PureComponent {
   static propTypes = {
     steps: PropTypes.array,
-    lsKey: PropTypes.string,
   };
 
   constructor(props) {
@@ -39,7 +39,7 @@ class Walkthrough extends PureComponent {
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
       this.unblockEnter();
-      localStorage.setItem(this.props.lsKey, true);
+      userStorage.set('walkthroughShown', true);
     }
     this.setState({index});
     if (type === 'step:before') {

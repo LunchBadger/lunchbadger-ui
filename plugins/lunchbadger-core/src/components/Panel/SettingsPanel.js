@@ -7,6 +7,7 @@ import panelKeys from '../../constants/panelKeys';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import SshManager from './EntitiesDetails/SshManager';
+import {EntityPropertyLabel} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
 class SettingsPanel extends Component {
@@ -24,7 +25,8 @@ class SettingsPanel extends Component {
   onReinstall = () => ProjectService.reinstallDeps();
 
   render() {
-    const cloneCommand = Config.get('gitCloneCommand');
+    const loopbackGitCloneCommand = Config.get('loopbackGitCloneCommand');
+    const serverlessGitCloneCommand = Config.get('serverlessGitCloneCommand');
     const workspaceUrl = Config.get('workspaceUrl');
     return (
       <div className="panel__body settings">
@@ -49,18 +51,30 @@ class SettingsPanel extends Component {
         </div>
         <div className="details-panel__element">
           <div className="details-panel__fieldset">
-            <label className="details-panel__label">
+            <EntityPropertyLabel>
               Access via Git
+            </EntityPropertyLabel>
+            <label className="details-panel__label">
+              Models and Connectors
             </label>
             <div className="details-panel__static-field">
               <pre className="gitCloneCommand">
-                {cloneCommand}
+                {loopbackGitCloneCommand}
               </pre>
-              {cloneCommand !== '...' && (
-                <CopyToClipboard text={cloneCommand}>
-                  <i className="fa fa-copy iconCopy" />
-                </CopyToClipboard>
-              )}
+              <CopyToClipboard text={loopbackGitCloneCommand}>
+                <i className="fa fa-copy iconCopy" />
+              </CopyToClipboard>
+            </div>
+            <label className="details-panel__label">
+              Serverless Functions
+            </label>
+            <div className="details-panel__static-field">
+              <pre className="gitCloneCommand">
+                {serverlessGitCloneCommand}
+              </pre>
+              <CopyToClipboard text={serverlessGitCloneCommand}>
+                <i className="fa fa-copy iconCopy" />
+              </CopyToClipboard>
             </div>
           </div>
         </div>

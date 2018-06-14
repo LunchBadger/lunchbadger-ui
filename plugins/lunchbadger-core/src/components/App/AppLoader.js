@@ -43,9 +43,7 @@ class AppLoader extends Component {
 
   componentDidMount() {
     if (isKubeWatcherEnabled) {
-      this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
-      this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
-      this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
+      this.initKubeWatcher();
     }
   }
 
@@ -55,6 +53,15 @@ class AppLoader extends Component {
       this.kubeWatcherMonitor = null;
     }
   }
+
+  initKubeWatcher = () => {
+    if (this.kubeWatcherMonitor) {
+      this.kubeWatcherMonitor.close();
+    }
+    this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
+    this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
+    this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
+  };
 
   onKubeWatcherData = (message) => {
     const data = JSON.parse(message.data)[envId];
@@ -71,7 +78,10 @@ class AppLoader extends Component {
     }
   };
 
-  onKubeWatcherError = () => this.setState({workspaceRunning: false});
+  onKubeWatcherError = () => {
+    this.setState({workspaceRunning: false});
+    this.initKubeWatcher();
+  };
 
   load() {
     ConfigStoreService.upsertProject()

@@ -20,8 +20,6 @@ class DetailsPanel extends Component {
     };
   }
 
-  handleClosePopup = () => this.props.dispatch(setCurrentZoom(undefined));
-
   handleTabChange = tab => () => {
     const {dispatch, zoom} = this.props;
     dispatch(setCurrentZoom({...zoom, tab}));
@@ -97,7 +95,6 @@ class DetailsPanel extends Component {
         rect={zoom}
         name={name}
         type={type}
-        onClose={this.handleClosePopup}
         toolbox={toolboxConfig}
         entityId={id}
       >

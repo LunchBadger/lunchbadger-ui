@@ -16,7 +16,6 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  let isAutoSave = false;
   const state = getState();
   const {loaded, id, itemOrder} = entity;
   const {name, runtime} = model;
@@ -39,8 +38,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity = Function_.create(data);
   dispatch(actions.updateFunction(updatedEntity));
   updatedEntity = updatedEntity.recreate();
-  updatedEntity.ready = true;
-  updatedEntity.running = true;
   try {
     if (!loaded) {
       const [env, version] = runtime.toLowerCase().split(' ');
@@ -52,14 +49,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
     const slsDeploy = await SLSService.update(name, updatedEntity.service);
     updatedEntity.service = slsDeploy.body;
     await SLSService.deploy(name);
-    dispatch(actions.updateFunction(updatedEntity));
-    if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
-    }
-    return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
+  updatedEntity.running = true;
+  updatedEntity.ready = true;
+  dispatch(actions.updateFunction(updatedEntity));
+  return updatedEntity;
 };
 
 export const remove = (entity, cb) => async (dispatch) => {

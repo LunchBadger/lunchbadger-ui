@@ -1,41 +1,41 @@
 export default {
-//   '050': {
-//     title: 'Endpoint Dropdown Menu',
-//     text: `
-// Selecting this icon will reveal available Endpoint Entities.
-// `,
-//     selector: '.Tool.endpoint',
-//     position: 'right',
-//     allowClicksThruHole: false,
-//   },
-//   '051': {
-//     title: 'Service Endpoint Entities',
-//     text: 'These are references to your backend services. Used as Express Gateway service endpoints when connected to a Gateway Entity.',
-//     waitForSelector: '.Tool__submenuItem.serviceendpoint',
-//     position: 'right',
-//     allowClicksThruHole: false,
-//     onBefore: api => [
-//       api.openEntitySubmenu('endpoint'),
-//       api.blockClicks(),
-//     ],
-//     onAfter: api => [
-//       api.unblockClicks(),
-//     ],
-//   },
-//   '060': {
-//     title: 'API Endpoint Entities',
-//     text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
-//     waitForSelector: '.Tool__submenuItem.apiendpoint',
-//     position: 'right',
-//     allowClicksThruHole: false,
-//     onBefore: api => [
-//       api.blockClicks(),
-//     ],
-//     onAfter: api => [
-//       api.unblockClicks(),
-//       api.openEntitySubmenu('endpoint'),
-//     ],
-//   },
+  //   '050': {
+  //     title: 'Endpoint Dropdown Menu',
+  //     text: `
+  // Selecting this icon will reveal available Endpoint Entities.
+  // `,
+  //     selector: '.Tool.endpoint',
+  //     position: 'right',
+  //     allowClicksThruHole: false,
+  //   },
+  //   '051': {
+  //     title: 'Service Endpoint Entities',
+  //     text: 'These are references to your backend services. Used as Express Gateway service endpoints when connected to a Gateway Entity.',
+  //     waitForSelector: '.Tool__submenuItem.serviceendpoint',
+  //     position: 'right',
+  //     allowClicksThruHole: false,
+  //     onBefore: api => [
+  //       api.openEntitySubmenu('endpoint'),
+  //       api.blockClicks(),
+  //     ],
+  //     onAfter: api => [
+  //       api.unblockClicks(),
+  //     ],
+  //   },
+  //   '060': {
+  //     title: 'API Endpoint Entities',
+  //     text: 'Used as Express Gateway API Endpoints for clients connecting to Gateway Entities.',
+  //     waitForSelector: '.Tool__submenuItem.apiendpoint',
+  //     position: 'right',
+  //     allowClicksThruHole: false,
+  //     onBefore: api => [
+  //       api.blockClicks(),
+  //     ],
+  //     onAfter: api => [
+  //       api.unblockClicks(),
+  //       api.openEntitySubmenu('endpoint'),
+  //     ],
+  //   },
   '0700': {
     title: 'Gateway Entities Overview',
     text: `
@@ -187,13 +187,13 @@ Let's add a path.
   '0711': {
     title: 'Setting a Path on CarApiEndpoint',
     text: `
-Add the following path: <pre>/api/car*</pre>
+Add the following path: <pre>/api/cars*</pre>
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/car*"]'),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/cars*"]'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .input__paths0 input'),

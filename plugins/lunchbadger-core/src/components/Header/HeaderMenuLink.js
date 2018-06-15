@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import cs from 'classnames';
-import {IconSVG} from '../../../../lunchbadger-ui/src/index.js';
+import {IconSVG, ContextualInformationMessage} from '../../../../lunchbadger-ui/src/index.js';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 
 class HeaderMenuLink extends PureComponent {
@@ -24,7 +24,17 @@ class HeaderMenuLink extends PureComponent {
   };
 
   render() {
-    const {hidden, icon, svg, pressed, panel, name, confirm, url} = this.props;
+    const {
+      hidden,
+      icon,
+      svg,
+      pressed,
+      panel,
+      name,
+      confirm,
+      url,
+      tooltip,
+    } = this.props;
     const linkClass = cs('header__menu__link', panel, name, {
       'header__menu__link--hidden': hidden,
       'header__menu__link--pressed': pressed,
@@ -33,16 +43,26 @@ class HeaderMenuLink extends PureComponent {
     return (
       <li className="header__menu__element">
         {url && (
-          <a className={linkClass} href={url} target="_blank">
-            {icon && <i className={cs('fa', icon)} />}
-            {!icon && url}
-          </a>
+          <ContextualInformationMessage
+            tooltip={tooltip}
+            direction="bottom"
+          >
+            <a className={linkClass} href={url} target="_blank">
+              {icon && <i className={cs('fa', icon)} />}
+              {!icon && url}
+            </a>
+          </ContextualInformationMessage>
         )}
         {!url && (
-          <span className={linkClass} onClick={this.handleClick}>
-            {icon && <i className={cs('fa', icon)} />}
-            {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
-          </span>
+          <ContextualInformationMessage
+            tooltip={tooltip}
+            direction="bottom"
+          >
+            <span className={linkClass} onClick={this.handleClick}>
+              {icon && <i className={cs('fa', icon)} />}
+              {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
+            </span>
+          </ContextualInformationMessage>
         )}
         {confirm && showConfirmModal && (
           <TwoOptionModal

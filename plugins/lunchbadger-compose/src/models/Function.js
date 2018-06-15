@@ -17,6 +17,7 @@ export default class Function_ extends BaseModel {
   slugifyName = true;
   service = null;
   running = true;
+  allowEditWhenCrashed = true;
   isCanvasEditDisabled = true;
   zoomWindow = {
     width: 1005,

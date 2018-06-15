@@ -289,8 +289,8 @@ export default (ComposedComponent) => {
 
     handleClick = (event) => {
       const {entity, dispatch, running} = this.props;
-      const {ready} = entity;
-      if (!ready || !running) return;
+      const {ready, allowEditWhenCrashed} = entity;
+      if (!ready || (!running && !allowEditWhenCrashed)) return;
       dispatch(setCurrentElement(entity));
       event.stopPropagation();
     }
@@ -334,9 +334,10 @@ export default (ComposedComponent) => {
         slugifyName,
         status,
         isCanvasEditDisabled,
+        allowEditWhenCrashed,
       } = entity;
       const deploying = status === 'deploying';
-      const processing = !ready || !running || !!deleting;
+      const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
@@ -360,7 +361,7 @@ export default (ComposedComponent) => {
             label: 'Remove',
           });
         }
-        if (!isZoomDisabled && running) {
+        if (!isZoomDisabled && (running || (!running && allowEditWhenCrashed && !deploying))) {
           toolboxConfig.push({
             action: 'zoom',
             icon: 'iconBasics',
@@ -389,7 +390,13 @@ export default (ComposedComponent) => {
       const editable = editable_ || !loaded;
       const defaultExpanded = !userStorage.getObjectKey('entityCollapsed', id);
       return (
-        <div className={cs('CanvasElement', type, status, {highlighted, editable, wip: processing, semitransparent})}>
+        <div className={cs('CanvasElement', type, status, {
+          highlighted,
+          editable,
+          wip: processing,
+          semitransparent,
+          allowEditWhenCrashed: allowEditWhenCrashed,
+        })}>
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}
@@ -476,7 +483,7 @@ export default (ComposedComponent) => {
       isPanelOpened,
       entity,
     ) => {
-      const {id, name, loaded, running: entityRunning} = entity;
+      const {id, name, loaded, running: entityRunning, allowEditWhenCrashed} = entity;
       const running = entityRunning === undefined ? true : entityRunning;
       const multiEnvIndex = multiEnvironments.selected;
       const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
@@ -484,7 +491,7 @@ export default (ComposedComponent) => {
       if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
         multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
       }
-      const highlighted = !!running && !!currentElement && currentElement.id === id;
+      const highlighted = (!!running || (!running && !!allowEditWhenCrashed)) && !!currentElement && currentElement.id === id;
       const editable = !!running && !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,

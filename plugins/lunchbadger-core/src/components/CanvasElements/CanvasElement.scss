@@ -3,7 +3,7 @@
 .CanvasElement {
   position: relative;
   &.deploying:hover,
-  &.crashed:hover {
+  &.crashed:not(.allowEditWhenCrashed):hover {
     .Toolbox {
       opacity: 1;
       z-index: 17;

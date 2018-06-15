@@ -14,10 +14,6 @@ export default class RnD extends PureComponent {
     type: PropTypes.string.isRequired,
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.deltaX = 0;
@@ -53,7 +49,7 @@ export default class RnD extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {rect: {x, y, close}, onClose} = nextProps;
+    const {rect: {x, y, close}} = nextProps;
     if (close) {
       this.setState({
         opened: false,
@@ -63,7 +59,6 @@ export default class RnD extends PureComponent {
         top: -this.deltaY,
         custom: false,
       });
-      setTimeout(onClose, 1000);
     }
   }
 

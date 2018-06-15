@@ -12,6 +12,9 @@ import './SettingsPanel.scss';
 
 const {gitAccess} = Config.get('features');
 
+const dummyLoopbackGitCloneCommand = 'git clone git@xxxxxxxxx.xxxxxxxxx.xxx:xxxxxxxxx-xxxxxxxxx/xxxxxxxxx.xxx';
+const dummyServerlessGitCloneCommand = 'git clone git@xxxxxxxxxx.xxxxxxxxxx.xxx:xxxxxxxxxx-xxxxxxxxxx/xxxxxxxxxx.xxx';
+
 class SettingsPanel extends Component {
   static type = 'SettingsPanel';
 
@@ -29,10 +32,10 @@ class SettingsPanel extends Component {
   render() {
     const loopbackGitCloneCommand = gitAccess
       ? Config.get('loopbackGitCloneCommand')
-      : 'git clone git@xxxxxxxxx.xxxxxxxxx.xxx:xxxxxxxxx-xxxxxxxxx/xxxxxxxxx.xxx';
+      : dummyLoopbackGitCloneCommand;
     const serverlessGitCloneCommand = gitAccess
       ? Config.get('serverlessGitCloneCommand')
-      : 'git clone git@xxxxxxxxxx.xxxxxxxxxx.xxx:xxxxxxxxxx-xxxxxxxxxx/xxxxxxxxxx.xxx';
+      : dummyServerlessGitCloneCommand;
     const workspaceUrl = Config.get('workspaceUrl');
     return (
       <div className="panel__body settings">

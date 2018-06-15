@@ -114,7 +114,7 @@ export default class CodeEditor extends PureComponent {
 
   handleInputChange = ({target: {value}}) => this.changeCode(value);
 
-  handleEditorChange = (_, editor) => this.changeCode(editor.getValue());
+  handleEditorChange = value => this.changeCode(value);
 
   render() {
     const {lang, fullWidth, name, onTab} = this.props;
@@ -151,7 +151,7 @@ export default class CodeEditor extends PureComponent {
               theme="monokai"
               mode={lang}
               value={code}
-              onBlur={this.handleEditorChange}
+              onChange={this.handleEditorChange}
               setOptions={options}
             />
           </ResizableBox>

@@ -52,6 +52,8 @@ export default {
     metrics: false,
     forecasts: false,
     kubeWatcher: true,
-    consumerManagement: true
+    consumerManagement: true,
+    gitAccess: false,
+    uploadPublicKeys: false
   }
 };

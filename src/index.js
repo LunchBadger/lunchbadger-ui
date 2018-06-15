@@ -15,10 +15,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.80', [
+console.info('LBAPP VERSION 0.81', [
   [
     'master Feature/663 Add tooltips to header menu #671',
-    'Bugfix/664 Allow editing invalid functions #672'
+    'Bugfix/664 Allow editing invalid functions #672',
+    'Bugfix/369 Re-labeling database in redis and mongodb #674'
   ],
   [
     'master Hide reinit, restart, resintall button and change walkthrough #670',

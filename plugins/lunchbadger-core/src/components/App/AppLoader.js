@@ -80,7 +80,7 @@ class AppLoader extends Component {
 
   onKubeWatcherError = () => {
     this.setState({workspaceRunning: false});
-    this.initKubeWatcher();
+    setTimeout(() => this.initKubeWatcher(), 1000);
   };
 
   load() {

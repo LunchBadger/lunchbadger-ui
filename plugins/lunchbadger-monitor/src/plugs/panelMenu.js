@@ -9,6 +9,7 @@ if (Config.get('features').metrics) {
     icon: 'icon-icon-metrics',
     panel: METRICS_PANEL,
     action: coreActions.togglePanel(METRICS_PANEL),
+    tooltip: 'Metrics',
   };
 }
 

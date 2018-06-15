@@ -7,7 +7,7 @@ import panelKeys from '../../constants/panelKeys';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import SshManager from './EntitiesDetails/SshManager';
-import { EntityPropertyLabel } from '../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
 const {gitAccess} = Config.get('features');

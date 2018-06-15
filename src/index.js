@@ -15,9 +15,10 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.78', [
+console.info('LBAPP VERSION 0.79', [
   [
-    'master Hide reinit, restart, resintall button and change walkthrough #670'
+    'master Hide reinit, restart, resintall button and change walkthrough #670',
+    'Feature/663 Add tooltips to header menu #671'
   ],
   [
     'master Bugfix/56 Baking workspace infinite loop #649',

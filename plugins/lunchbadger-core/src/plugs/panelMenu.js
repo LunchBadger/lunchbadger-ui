@@ -8,6 +8,7 @@ export default {
     icon: 'fa-floppy-o',
     hidden: true,
     action: saveToServer(),
+    tooltip: 'Save project',
   },
   1: {
     icon: 'fa-trash-o',
@@ -18,16 +19,19 @@ export default {
       message: 'Are you sure, you want to clear the workspace?',
     },
     action: clearServer(),
+    tooltip: 'Clear project',
   },
   10: {
     icon: 'icon-icon-settings',
     panel: 'SETTINGS_PANEL',
     action: togglePanel('SETTINGS_PANEL'),
+    tooltip: 'Settings panel',
   },
   11: {
     icon: 'fa-question',
     name: 'documentation',
     url: Config.get('docsUrl'),
+    tooltip: 'Documentation',
   },
   12: {
     svg: iconLogout,
@@ -37,5 +41,6 @@ export default {
       ok: 'Log out',
       message: 'Are you sure, you want to log out from the workspace?',
     },
+    tooltip: 'Logout',
   },
 };

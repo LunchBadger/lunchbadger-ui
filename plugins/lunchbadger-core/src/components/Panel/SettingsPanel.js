@@ -94,36 +94,6 @@ class SettingsPanel extends Component {
             )}
           </div>
         </div>
-        <div className="details-panel__element">
-          <div className="details-panel__fieldset">
-            <label className="details-panel__label">
-              Restart application
-            </label>
-            <div className="details-panel__static-field">
-              <button onClick={this.onRestartWorkspace}>Restart</button>
-            </div>
-          </div>
-        </div>
-        <div className="details-panel__element">
-          <div className="details-panel__fieldset">
-            <label className="details-panel__label">
-              Reset application
-            </label>
-            <div className="details-panel__static-field">
-              <button onClick={this.onResetWorkspace}>Reset</button>
-            </div>
-          </div>
-        </div>
-        <div className="details-panel__element">
-          <div className="details-panel__fieldset">
-            <label className="details-panel__label">
-              Reinstall dependencies
-            </label>
-            <div className="details-panel__static-field">
-              <button onClick={this.onReinstall}>Reinstall</button>
-            </div>
-          </div>
-        </div>
         <SshManager />
       </div>
     );

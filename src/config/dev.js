@@ -48,7 +48,9 @@ export default {
     metrics: isStaging,
     forecasts: isStaging,
     kubeWatcher: true,
-    consumerManagement: isStaging
+    consumerManagement: isStaging,
+    gitAccess: false,
+    uploadPublicKeys: false
   },
   logins
 };

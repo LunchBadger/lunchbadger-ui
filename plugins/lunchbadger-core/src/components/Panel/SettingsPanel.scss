@@ -4,9 +4,25 @@
     margin: 8px 0 0 13px;
     cursor: pointer;
   }
-  .gitCloneCommand {
-    display: inline-block;
-    vertical-align: top;
+  .accessViaGit {
+    position: relative;
+    .data.blocked {
+      -webkit-filter: blur(5px);
+      filter: blur(5px);
+    }
+    .gitCloneCommand {
+      display: inline-block;
+      vertical-align: top;
+    }
+    .accessInfo {
+      position: absolute;
+      top: 80px;
+      left: 40px;
+      border: 1px solid #888;
+      padding: 20px;
+      background-color: #FFFDF4;
+      font-weight: 400;
+    }
   }
   .details-panel__fieldset {
     .EntityPropertyLabel {

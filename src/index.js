@@ -15,7 +15,28 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.1');
+console.info('LBAPP VERSION 0.78', [
+  [
+    'master Hide reinit, restart, resintall button and change walkthrough #670'
+  ],
+  [
+    'master Bugfix/56 Baking workspace infinite loop #649',
+    'Feature/651 Make git access premium feature #668',
+    'Bugfix/604 OK needs to be enabled for change in editor #669'
+  ],
+  [
+    'master Feature/623 docs link #634',
+    'Feature/625 add Google Analytics and Drift #635',
+    'Feature/623 Homepage url #636',
+    'Bugfix/637 Hitting tab key during model prop step may break walkthrough #639',
+    'Feature/633 Git access url needs to be included for functions #641',
+    'Bugfix/607 walkthrough is looking at password instead of username #642',
+    'Feature/638 Looking out should preserve ui state #644',
+    'Feature/643 Hide save button #645',
+    'Feature/646 Change ping amount from 48 to 72 #647',
+    'Bugfix/56 Baking workspace infinite loop #649'
+  ]
+]);
 
 ReactGA.initialize(Config.get('googleAnalyticsID'), {
   debug: Config.get('googleAnalyticsDebug')

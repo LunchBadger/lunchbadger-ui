@@ -59,6 +59,7 @@ export default class CodeEditor extends PureComponent {
   componentDidMount() {
     this.recalculateWidth();
     window.addEventListener('rndresized', this.recalculateWidth);
+    window.addEventListener('rnddragged', this.recalculateTooltips);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,6 +74,10 @@ export default class CodeEditor extends PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('rndresized', this.recalculateWidth);
+    window.removeEventListener('rnddragged', this.recalculateTooltips);
+    if (this.style) {
+      document.getElementsByTagName('head')[0].removeChild(this.style);
+    }
   }
 
   recalculateWidth = () => {
@@ -85,6 +90,19 @@ export default class CodeEditor extends PureComponent {
     }
     this.setState(state);
   }
+
+  recalculateTooltips = () => {
+    const RnDDOM = document.getElementsByClassName('RnD');
+    if (RnDDOM.length === 1) {
+      const {x, y} = RnDDOM[0].getBoundingClientRect();
+      if (!this.style) {
+        this.style = document.createElement('style');
+        this.style.type = 'text/css';
+        document.getElementsByTagName('head')[0].appendChild(this.style);
+      }
+      this.style.innerHTML = `.ace_tooltip {transform: translate(${-x}px, ${-y}px);}`;
+    }
+  };
 
   discardChanges = () => this.setState({code: this.props.value, mode: this.props.mode});
 

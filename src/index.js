@@ -15,10 +15,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.82', [
+console.info('LBAPP VERSION 0.83', [
   [
     'master Bugfix/675 Unauthorized error should logout #677',
-    'Feature/676 settings tooltip fix #678'
+    'Feature/676 settings tooltip fix #678',
+    'Bugfix/673 Unaligned warnings in code editor #679'
   ],
   [
     'master Feature/663 Add tooltips to header menu #671',

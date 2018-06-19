@@ -49,8 +49,8 @@ export default {
     forecasts: isStaging,
     kubeWatcher: true,
     consumerManagement: isStaging,
-    gitAccess: false,
-    uploadPublicKeys: false
+    gitAccess: true,
+    uploadPublicKeys: true
   },
   logins
 };

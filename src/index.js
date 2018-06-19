@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.88', [
+console.info('LBAPP VERSION 0.89', [
   [
     'master Bugfix/675 Unauthorized error should logout #677',
     'Feature/676 settings tooltip fix #678',
@@ -24,7 +24,8 @@ console.info('LBAPP VERSION 0.88', [
     'Feature/650 onbeforeunload #682',
     'Bugfix/558 Functions are removed on project clear #683',
     'Feature/684 turn on access via git for staging #685',
-    'Bugfix/559 Remove connections on function delete #686'
+    'Bugfix/559 Remove connections on function delete #686',
+    'Bugfix/572 Select truncated value #690'
   ],
   [
     'master Feature/663 Add tooltips to header menu #671',

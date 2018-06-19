@@ -69,6 +69,13 @@ class AppLoader extends Component {
     if (data.workspace) {
       workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
     }
+    if (!this.state.workspaceRunning && workspaceRunning) {
+      if (!this.triggered) {
+        this.triggered = true;
+      } else {
+        document.location.reload();
+      }
+    }
     this.setState({workspaceRunning});
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;

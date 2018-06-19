@@ -61,6 +61,7 @@ import * as storeUtils from './utils/storeUtils';
 import storeReducers, {registerPlugin} from './utils/storeReducers';
 import diff from './diff';
 import requestMethods from './utils/requestMethods';
+import userStorage from './utils/userStorage';
 
 import './utils/formValidators';
 
@@ -157,6 +158,7 @@ let LunchBadgerCore = {
     registerPlugin,
     diff,
     requestMethods,
+    userStorage,
   },
 };
 

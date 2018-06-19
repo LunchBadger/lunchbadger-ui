@@ -3,7 +3,7 @@ import Gateway from '../models/Gateway';
 import {actionTypes} from '../reduxActions/actions';
 import Pipeline from '../models/Pipeline';
 
-const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
+const {actionTypes: coreActionTypes, userStorage} = LunchBadgerCore.utils;
 
 export default (state = {}, action) => {
   const newState = {...state};
@@ -33,7 +33,7 @@ export default (state = {}, action) => {
         newState[key] = Gateway.create(newState[key]);
         newState[key].deleting = true;
         if (!newState[key].fake) {
-          localStorage.setItem(`gateway-${slug(newState[key].name, {lower: true})}`, JSON.stringify(newState[key]));
+          userStorage.setObjectKey('gateway', slug(newState[key].name, {lower: true}), newState[key]);
         }
       });
       return newState;

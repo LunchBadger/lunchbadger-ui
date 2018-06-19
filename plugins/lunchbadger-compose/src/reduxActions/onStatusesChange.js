@@ -6,7 +6,7 @@ import Function_ from '../models/Function';
 
 const envId = Config.get('envId');
 const {getUser} = LunchBadgerCore.utils;
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
 
 const transformFunctionStatuses = (functionStatuses) => {
   const statuses = {};
@@ -79,12 +79,12 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
     if (status === null) {
       if (functionDeleting) {
         dispatch(actions.removeFunction(entity));
-        localStorage.removeItem(`function-${slug}`);
+        userStorage.removeObjectKey('function', slug);
       }
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageFunction = JSON.parse(localStorage.getItem(`function-${slug}`) || '{}');
+        const storageFunction = userStorage.getObjectKey('function', slug);
         const fake = !storageFunction.name;
         updatedEntity = Function_.create({
           ...storageFunction,
@@ -112,7 +112,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
     }
   });
   if (Object.keys(entries).length === 0) {
-    Object.keys(localStorage).filter(key => key.startsWith('function-')).map(key => localStorage.removeItem(key));
+    userStorage.remove('function');
   }
   if (isSave) {
     await dispatch(coreActions.saveToServer({showMessage: false}));

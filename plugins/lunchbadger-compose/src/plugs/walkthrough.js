@@ -253,7 +253,6 @@ You'll see this Rocket Ship icon whenever an artifact is being deployed to your 
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Function_.deploying'),
       api.waitUntilNotPresent('.CanvasElement.Function_.wip'),
-      api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.setWaitMethod(),
     ],
   },
@@ -276,6 +275,8 @@ C'mon, click it!
       api.setShowOverlay(true),
     ],
     onBefore: api => [
+      api.click('.Entity.Function_'),
+      api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.focus('.Entity.Function_ .Toolbox__button--zoom'),
     ],
   },

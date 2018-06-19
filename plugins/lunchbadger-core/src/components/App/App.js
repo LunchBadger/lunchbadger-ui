@@ -56,6 +56,18 @@ class App extends Component {
     this.props.dispatch(loadFromServer());
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  }
+
+  handleBeforeUnload = (event) => {
+    if (this.props.pendingEdit) {
+      const message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?';
+      (event || window.event).returnValue = message;
+      return message;
+    }
+  };
+
   renderHeader = () => {
     const {isEntityEditable} = this.props;
     const username = getUser().profile.preferred_username;
@@ -151,6 +163,7 @@ const selector = createSelector(
   state => !!state.states.currentEditElement,
   state => state.plugins.walkthrough,
   state => state.loadedProject,
+  state => !!state.states.zoom,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -161,6 +174,7 @@ const selector = createSelector(
     isEntityEditable,
     walkthrough,
     loadedProject,
+    isZoomWindowOpened,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -171,6 +185,7 @@ const selector = createSelector(
     isEntityEditable,
     walkthrough,
     loadedProject,
+    pendingEdit: isEntityEditable || isZoomWindowOpened,
   }),
 );
 

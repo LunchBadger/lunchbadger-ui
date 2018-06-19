@@ -25,7 +25,7 @@ export default {
     icon: 'icon-icon-settings',
     panel: 'SETTINGS_PANEL',
     action: togglePanel('SETTINGS_PANEL'),
-    tooltip: 'Settings panel',
+    tooltip: 'Settings',
   },
   11: {
     icon: 'fa-question',

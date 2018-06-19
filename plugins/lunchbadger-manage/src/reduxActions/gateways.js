@@ -9,7 +9,7 @@ import initialPipelinePolicies from '../utils/initialPipelinePolicies';
 import ConditionAction from '../models/ConditionAction';
 
 const {Connections} = LunchBadgerCore.stores;
-const {coreActions, actions: actionsCore, storeUtils} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, storeUtils, userStorage} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -73,8 +73,7 @@ export const remove = entity => async (dispatch) => {
   if (isAutoSave) {
     const updatedEntity = entity.recreate();
     updatedEntity.deleting = true;
-    const itemName = `gateway-${slug(entity.name, {lower: true})}`;
-    localStorage.setItem(itemName, JSON.stringify(updatedEntity.toJSON()));
+    userStorage.setObjectKey('gateway', slug(entity.name, {lower: true}), updatedEntity.toJSON());
     dispatch(actions.updateGateway(updatedEntity));
     await dispatch(coreActions.saveToServer());
   } else {

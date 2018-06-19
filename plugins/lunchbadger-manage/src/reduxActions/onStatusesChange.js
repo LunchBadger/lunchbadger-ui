@@ -6,7 +6,7 @@ import Gateway from '../models/Gateway';
 
 const envId = Config.get('envId');
 const {getUser} = LunchBadgerCore.utils;
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
 
 const transformGatewayStatuses = (gatewayStatuses) => {
   const statuses = {};
@@ -82,12 +82,12 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
     if (status === null) {
       if (gatewayDeleting) {
         dispatch(actions.removeGateway(entity));
-        localStorage.removeItem(`gateway-${slug}`);
+        userStorage.removeObjectKey('gateway', slug);
       }
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageGateway = JSON.parse(localStorage.getItem(`gateway-${slug}`) || '{}');
+        const storageGateway = userStorage.getObjectKey('gateway', slug) || {};
         const fake = !storageGateway.name;
         updatedEntity = Gateway.create({
           ...storageGateway,
@@ -116,7 +116,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
     }
   });
   if (Object.keys(entries).length === 0) {
-    Object.keys(localStorage).filter(key => key.startsWith('gateway-')).map(key => localStorage.removeItem(key));
+    userStorage.remove('gateway');
   }
   if (isSave) {
     await dispatch(coreActions.saveToServer({showMessage: false}));

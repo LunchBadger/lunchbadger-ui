@@ -84,7 +84,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageFunction = userStorage.getObjectKey('function', slug);
+        const storageFunction = userStorage.getObjectKey('function', slug) || {};
         const fake = !storageFunction.name;
         updatedEntity = Function_.create({
           ...storageFunction,

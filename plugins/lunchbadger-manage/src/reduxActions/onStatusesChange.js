@@ -87,7 +87,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageGateway = userStorage.getObjectKey('gateway', slug);
+        const storageGateway = userStorage.getObjectKey('gateway', slug) || {};
         const fake = !storageGateway.name;
         updatedEntity = Gateway.create({
           ...storageGateway,

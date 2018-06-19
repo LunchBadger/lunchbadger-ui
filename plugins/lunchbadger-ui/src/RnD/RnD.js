@@ -46,6 +46,7 @@ export default class RnD extends PureComponent {
       top: `calc(50% - ${y}px)`,
     }));
     setTimeout(this.dispatchResizeEvent, 1000);
+    setTimeout(this.dispatchDragEvent, 1500);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,11 +80,17 @@ export default class RnD extends PureComponent {
 
   handleResizeStop = (event, dir, refToElement, delta) => {
     const {width, height} = delta;
+    let isNewDelta = false;
     if (['topLeft', 'left', 'bottomLeft'].includes(dir)) {
       this.deltaX -= width;
+      isNewDelta = true;
     }
     if (['topLeft', 'top', 'topRight'].includes(dir)) {
       this.deltaY -= height;
+      isNewDelta = true;
+    }
+    if (isNewDelta) {
+      this.dispatchDragEvent();
     }
     const {offsetWidth, offsetHeight} = refToElement;
     userStorage.setObjectKey('zoomWindow', this.props.entityId, {
@@ -102,9 +109,12 @@ export default class RnD extends PureComponent {
     const {x, y} = data;
     this.deltaX += x - this.deltaXStart;
     this.deltaY += y - this.deltaYStart;
+    this.dispatchDragEvent();
   };
 
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
+
+  dispatchDragEvent = () => window.dispatchEvent(new Event('rnddragged'));
 
   render() {
     const {

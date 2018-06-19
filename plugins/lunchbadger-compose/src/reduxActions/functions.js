@@ -1,10 +1,10 @@
 import slug from 'slug';
 import {actions} from './actions';
-import {ModelService, SLSService} from '../services';
+import {SLSService} from '../services';
 import Function_ from '../models/Function';
 import {runtimeMapping} from '../utils';
 
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -49,20 +49,19 @@ export const update = (entity, model) => async (dispatch, getState) => {
     const slsDeploy = await SLSService.update(name, updatedEntity.service);
     updatedEntity.service = slsDeploy.body;
     await SLSService.deploy(name);
+    updatedEntity.running = true;
+    updatedEntity.ready = true;
+    dispatch(actions.updateFunction(updatedEntity));
+    return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
-  updatedEntity.running = true;
-  updatedEntity.ready = true;
-  dispatch(actions.updateFunction(updatedEntity));
-  return updatedEntity;
 };
 
 export const remove = (entity, cb) => async (dispatch) => {
   const updatedEntity = entity.recreate();
   updatedEntity.deleting = true;
-  const itemName = `function-${slug(entity.name, {lower: true})}`;
-  localStorage.setItem(itemName, JSON.stringify(updatedEntity.toJSON()));
+  userStorage.setObjectKey('function', slug(entity.name, {lower: true}), updatedEntity.toJSON());
   dispatch(actions.updateFunction(updatedEntity));
   try {
     if (entity.loaded) {

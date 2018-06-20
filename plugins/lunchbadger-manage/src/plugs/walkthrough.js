@@ -396,11 +396,11 @@ Now that you've created your first LunchBadger Project, try interacting with you
 <code>
 $ curl $ROOT_URL/api/myfunction
 <br />
-LunchBadger Function
+<strong>LunchBadger Function</strong>
 <br /><br />
 $ curl $ROOT_URL/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'
 <br />
-{"year":${(new Date()).getFullYear()},"id":1}
+<strong>{"year":${(new Date()).getFullYear()},"id":1}</strong>
 </code>
 `,
     waitForSelector: '.canvas',

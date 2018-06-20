@@ -147,6 +147,13 @@ $joyride-close-visible: false;
       white-space: nowrap;
       user-select: text;
       cursor: text;
+      strong {
+        font-weight: inherit;
+        color: #047C99;
+        &:before {
+          content: '▸ ';
+        }
+      }
     }
     &__main {
       pre {

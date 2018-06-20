@@ -5,12 +5,14 @@ import Config from '../../../../src/config';
 
 export default {
   0: {
+    name: 'projectSave',
     icon: 'fa-floppy-o',
     hidden: true,
     action: saveToServer(),
     tooltip: 'Save project',
   },
   1: {
+    name: 'projectClear',
     icon: 'fa-trash-o',
     hidden: false,
     confirm: {

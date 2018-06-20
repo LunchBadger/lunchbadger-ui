@@ -7,6 +7,7 @@ import panelKeys from '../../constants/panelKeys';
 import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import SshManager from './EntitiesDetails/SshManager';
+import RestartWalkthrough from './EntitiesDetails/RestartWalkthrough';
 import {EntityPropertyLabel} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
@@ -42,11 +43,12 @@ class SettingsPanel extends Component {
         <div className="panel__title">
           Settings
         </div>
+        <RestartWalkthrough />
         <div className="details-panel__element">
           <div className="details-panel__fieldset">
-            <label className="details-panel__label">
+            <EntityPropertyLabel>
               Your application URLs
-            </label>
+            </EntityPropertyLabel>
             <div className="details-panel__static-field">
               <a href={workspaceUrl} target="_blank">
                 {workspaceUrl}

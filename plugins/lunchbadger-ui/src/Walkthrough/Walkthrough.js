@@ -39,7 +39,6 @@ class Walkthrough extends PureComponent {
       index: 0,
       allowClicksThruHole: false,
     };
-    this.showed = !props.emptyProject;
     this.waitMethod = 'waitByAnimationFrame';
   }
 
@@ -47,6 +46,7 @@ class Walkthrough extends PureComponent {
     if (type === 'finished') {
       this.unblockEscapingKeys();
       userStorage.set('walkthroughShown', true);
+      this.joyride.reset(true);
     }
     this.setState({index});
     if (type === 'step:before') {
@@ -251,7 +251,11 @@ class Walkthrough extends PureComponent {
   waitBySetTimeout = timeout => new Promise(res => setTimeout(res, timeout));
 
   render() {
-    const {steps} = this.props;
+    const {
+      steps,
+      loadedProject,
+      emptyProject,
+    } = this.props;
     const {
       run,
       showNextButton,
@@ -259,8 +263,10 @@ class Walkthrough extends PureComponent {
       showTooltip,
       overlayBack,
       allowClicksThruHole,
+      index,
     } = this.state;
-    if (this.showed) return <div />;
+    const showWalkthrough = loadedProject && emptyProject && !userStorage.get('walkthroughShown');
+    if (!showWalkthrough && index === 0) return <div />;
     return (
       <div className={cs('Walkthrough', {showNextButton, showTooltip, overlayBack})}>
         <Joyride
@@ -287,9 +293,11 @@ class Walkthrough extends PureComponent {
 const selector = createSelector(
   state => state.entities,
   state => state.plugins.quadrants,
+  state => state.loadedProject,
   (
     entities,
-    quadrants
+    quadrants,
+    loadedProject,
   ) => {
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
@@ -300,7 +308,8 @@ const selector = createSelector(
       });
     });
     return {
-      emptyProject
+      emptyProject,
+      loadedProject,
     };
   },
 );

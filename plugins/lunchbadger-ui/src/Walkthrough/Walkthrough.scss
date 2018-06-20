@@ -45,6 +45,11 @@ $joyride-close-visible: false;
         width: auto !important;
       }
     }
+    &.bottom-left {
+      &[data-target=".RestartWalkthrough"] {
+        margin-left: 30px;
+      }
+    }
     &.bottom-right {
       &[data-target=".DetailsPanel .Toolbox__button--customerManagement"] {
         margin-right: 10px;

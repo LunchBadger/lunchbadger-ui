@@ -254,6 +254,7 @@ class Walkthrough extends PureComponent {
     const {
       steps,
       loadedProject,
+      loadingProject,
       emptyProject,
     } = this.props;
     const {
@@ -265,7 +266,10 @@ class Walkthrough extends PureComponent {
       allowClicksThruHole,
       index,
     } = this.state;
-    const showWalkthrough = loadedProject && emptyProject && !userStorage.get('walkthroughShown');
+    const showWalkthrough = loadedProject
+      && !loadingProject
+      && emptyProject
+      && !userStorage.get('walkthroughShown');
     if (!showWalkthrough && index === 0) return <div />;
     return (
       <div className={cs('Walkthrough', {showNextButton, showTooltip, overlayBack})}>
@@ -294,10 +298,12 @@ const selector = createSelector(
   state => state.entities,
   state => state.plugins.quadrants,
   state => state.loadedProject,
+  state => state.loadingProject,
   (
     entities,
     quadrants,
     loadedProject,
+    loadingProject,
   ) => {
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
@@ -310,6 +316,7 @@ const selector = createSelector(
     return {
       emptyProject,
       loadedProject,
+      loadingProject,
     };
   },
 );

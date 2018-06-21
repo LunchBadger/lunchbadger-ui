@@ -7,6 +7,7 @@ import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import paper from '../../utils/paper';
+import LoginManager from '../../utils/auth';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
@@ -85,8 +86,12 @@ class AppLoader extends Component {
     }
   };
 
-  onKubeWatcherError = () => {
+  onKubeWatcherError = (event) => {
     this.setState({workspaceRunning: false});
+    if (event && event.status === 401) {
+      LoginManager().refreshLogin();
+      return;
+    }
     setTimeout(() => this.initKubeWatcher(), 1000);
   };
 

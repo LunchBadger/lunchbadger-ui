@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
       const {source} = action.payload;
       if (!newState.errors.map(item => item.error).includes(error)) {
         newState.errors = [{error, source}, ...newState.errors];
-        console.error(error);
+        console.error(error.error);
       }
       newState.visible = true;
       return newState;

@@ -12,9 +12,9 @@ export const addModelConfigsToConnections = response => (dispatch, getState) => 
       toId: storeUtils.findEntityByName(state, 1, item.name).id,
     }));
   dispatch(actionsCore.addInitialConnections(connections));
-}
+};
 
-export const attach = info => async (dispatch, getState) => {
+export const attachWithModel = info => async (dispatch, getState) => {
   info.connection.addType('wip');
   const state = getState();
   Connections.addConnectionByInfo(info);
@@ -37,7 +37,16 @@ export const attach = info => async (dispatch, getState) => {
   await dispatch(coreActions.saveToServer());
 };
 
-export const detach = info => async (dispatch, getState) => {
+export const attachWithFunction = info => async (dispatch) => {
+  Connections.addConnectionByInfo(info);
+  try {
+    await dispatch(coreActions.saveToServer());
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
+  }
+};
+
+export const detachWithModel = info => async (dispatch, getState) => {
   const state = getState();
   const {sourceId: fromId, targetId: toId} = info;
   Connections.removeConnection(fromId, toId);
@@ -57,7 +66,17 @@ export const detach = info => async (dispatch, getState) => {
   }
 };
 
-export const reattach = info => async (dispatch, getState) => {
+export const detachWithFunction = info => async (dispatch) => {
+  const {sourceId: fromId, targetId: toId} = info;
+  Connections.removeConnection(fromId, toId);
+  try {
+    await dispatch(coreActions.saveToServer());
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
+  }
+};
+
+export const reattachWithModel = info => async (dispatch, getState) => {
   try {
     info.connection.addType('wip');
     const state = getState();
@@ -91,4 +110,13 @@ export const reattach = info => async (dispatch, getState) => {
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
-}
+};
+
+export const reattachWithFunction = info => async (dispatch) => {
+  Connections.moveConnection(info);
+  try {
+    await dispatch(coreActions.saveToServer());
+  } catch (error) {
+    dispatch(coreActions.addSystemDefcon1({error}));
+  }
+};

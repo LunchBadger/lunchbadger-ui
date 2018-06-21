@@ -46,6 +46,7 @@ class Quadrant extends PureComponent {
     index: PropTypes.number,
     scrollLeft: PropTypes.number,
     recalculateQuadrantsWidths: PropTypes.func,
+    style: PropTypes.object,
   };
 
   static contextTypes = {
@@ -110,7 +111,16 @@ class Quadrant extends PureComponent {
   }
 
   render() {
-    const {title, connectDropTarget, scrollLeft, resizable, width, components, connectionsStore} = this.props;
+    const {
+      title,
+      connectDropTarget,
+      scrollLeft,
+      resizable,
+      width,
+      components,
+      connectionsStore,
+      style,
+    } = this.props;
     const styles = {width};
     const titleStyles = {
       ...styles,
@@ -121,7 +131,7 @@ class Quadrant extends PureComponent {
       <div
         className={cs('quadrant', title)}
         ref={(ref) => this.quadrantDOM = ref}
-        style={styles}
+        style={{...styles, ...style}}
       >
         <div className="quadrant__title" style={titleStyles}>
           {title}

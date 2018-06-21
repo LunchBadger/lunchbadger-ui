@@ -5,26 +5,8 @@
   position: relative;
   border-right: 1px solid $ui-base-border;
   flex: 0 0 auto;
-  padding-bottom: 35px;
-
-  &:before {
-    content: '';
-    opacity: 0;
-    bottom: 0;
-    left: 0;
-    top: 30px;
-    transition: all 0.3s ease;
-    position: absolute;
-    width: calc(100% + 1px);
-    background: #000;
-  }
-
-  .canvas__container--editing & {
-    &:before {
-      z-index: 10;
-      opacity: 0.34;
-    }
-  }
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .quadrant__title {
@@ -43,7 +25,25 @@
 
 .quadrant__body {
   padding: 50px 20px 20px;
+  min-height: calc(100% - 30px);
   position: relative;
+  &:before {
+    content: '';
+    opacity: 0;
+    height: 100%;
+    left: 0;
+    top: 30px;
+    transition: all 0.3s ease;
+    position: absolute;
+    width: calc(100% + 1px);
+    background: #000;
+  }
+  .canvas__container--editing & {
+    &:before {
+      z-index: 10;
+      opacity: 0.34;
+    }
+  }
 }
 
 .quadrant__resize-handle {

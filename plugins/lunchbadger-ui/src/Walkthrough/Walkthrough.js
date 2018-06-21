@@ -5,7 +5,9 @@ import {createSelector} from 'reselect';
 import cs from 'classnames';
 import Joyride from 'react-joyride';
 import series from 'async/series';
+import {cloneDeep} from 'lodash';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
+import OneOptionModal from '../../../lunchbadger-core/src/components/Generics/Modal/OneOptionModal';
 import './Walkthrough.scss';
 
 const locale = {
@@ -30,7 +32,26 @@ class Walkthrough extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = this.initState(props);
+  }
+
+  componentDidMount() {
+    window.addEventListener('walkthroughRestarted', this.onWalkthroughRestart);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('walkthroughRestarted', this.onWalkthroughRestart);
+  }
+
+  onWalkthroughRestart = () => {
+    this.setState(this.initState());
+    this.restarted = true;
+  };
+
+  initState = (props = this.props) => {
+    this.waitMethod = 'waitByAnimationFrame';
+    this.steps = cloneDeep(props.steps);
+    return {
       run: true,
       showNextButton: true,
       showOverlay: true,
@@ -39,13 +60,14 @@ class Walkthrough extends PureComponent {
       index: 0,
       allowClicksThruHole: false,
     };
-    this.waitMethod = 'waitByAnimationFrame';
-  }
+  };
+
+  exitWalkthrough = () => userStorage.set('walkthroughShown', true);
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
+      this.exitWalkthrough();
       this.unblockEscapingKeys();
-      userStorage.set('walkthroughShown', true);
       this.joyride.reset(true);
     }
     this.setState({index});
@@ -72,7 +94,7 @@ class Walkthrough extends PureComponent {
       }
       if (step.triggerNext) {
         const actions = step.triggerNext(this.api);
-        await series(actions, () => this.joyride.next());
+        await series(actions, () => this.joyride && this.joyride.next());
       } else {
         this.api.focusNext()(() => {});
       }
@@ -209,7 +231,7 @@ class Walkthrough extends PureComponent {
       cb();
     },
     setStepText: text => cb => {
-      this.props.steps[this.state.index].text = text;
+      this.steps[this.state.index].text = text;
       this.forceUpdate(cb);
     },
     blockClicks: () => cb => {
@@ -251,8 +273,8 @@ class Walkthrough extends PureComponent {
   waitBySetTimeout = timeout => new Promise(res => setTimeout(res, timeout));
 
   render() {
+    const {steps} = this;
     const {
-      steps,
       loadedProject,
       loadingProject,
       emptyProject,
@@ -270,7 +292,20 @@ class Walkthrough extends PureComponent {
       && !loadingProject
       && emptyProject
       && !userStorage.get('walkthroughShown');
-    if (!showWalkthrough && index === 0) return <div />;
+    const showWaitingScreen = loadedProject
+      && !emptyProject
+      && !userStorage.get('walkthroughShown')
+      && this.restarted;
+    if (showWaitingScreen && !index) return (
+      <OneOptionModal
+        title="Waiting for Walkthrough"
+        // confirmText="Discard Walkthrough"
+        // onClose={this.exitWalkthrough}
+      >
+        Please wait, until all entities will be removed from the canvas.
+      </OneOptionModal>
+    );
+    if (!showWalkthrough && !index) return <div />;
     return (
       <div className={cs('Walkthrough', {showNextButton, showTooltip, overlayBack})}>
         <Joyride

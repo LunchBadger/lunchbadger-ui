@@ -84,7 +84,8 @@ $joyride-close-visible: false;
       &[data-target=".Entity.Model.editable .submit"],
       &[data-target=".Entity.Function_.editable .submit"],
       &[data-target=".Entity.Gateway.editable .submit"],
-      &[data-target=".Entity.ApiEndpoint.editable .submit"] {
+      &[data-target=".Entity.ApiEndpoint.editable .submit"],
+      &[data-target=".header__menu__link.SETTINGS_PANEL"] {
         margin-top: -15px;
       }
       &[data-target=".Entity.Gateway.editable .input__pipelines0name"],

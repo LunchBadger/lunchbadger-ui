@@ -21,6 +21,7 @@ export default class RestartWalkthrough extends PureComponent {
   handleRestart = () => {
     userStorage.remove('walkthroughShown');
     this.context.store.dispatch(clearServer());
+    window.dispatchEvent(new Event('walkthroughRestarted'));
   };
 
   render() {

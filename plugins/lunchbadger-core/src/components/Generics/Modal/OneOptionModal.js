@@ -16,11 +16,15 @@ class OneOptionModal extends Component {
 
   render() {
     const {title, children, confirmText: label, onClose: onClick} = this.props;
+    const buttons = [];
+    if (onClick) {
+      buttons.push({label, onClick});
+    }
     return (
       <SystemDefcon1
         title={title}
         content={children}
-        buttons={[{label, onClick}]}
+        buttons={buttons}
       />
     );
   }

@@ -54,5 +54,23 @@ All entities will be removed from the canvas.
     position: 'bottom-left',
     allowClicksThruHole: false,
     onBefore: () => [],
+  },
+  '905': {
+    title: 'Close Settings',
+    text: `
+Let's end the walkthrough by closing Settings.
+`,
+    selector: '.header__menu__link.SETTINGS_PANEL',
+    position: 'left',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.SettingsPanel[style="height: 0px;"]'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.wait(1500),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+    onBefore: () => [],
   }
 }

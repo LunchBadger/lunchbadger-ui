@@ -44,6 +44,7 @@ export class LoginManager {
         window.location = '#';
         this.user = user;
         Config.apiUrlsReplacements(this.user.profile.sub);
+        window.localStorage.setItem('login_refresh_attempts', 0);
         return true;
       })
       .catch(err => {

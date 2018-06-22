@@ -138,7 +138,7 @@ class Port extends PureComponent {
       if (entities[type] && entities[type][id]) {
         return entities[type][id]
           .connectedPorts(currentlySelectedSubelements)
-          .filter(item => item[way] === elementId);
+          .filter(item => item[elementId] === way);
       }
     }
     return [];
@@ -204,7 +204,7 @@ class Port extends PureComponent {
       const {id, type} = currentElement;
       if (entities[type] && entities[type][id]) {
         highlighted = !!entities[type][id].connectedPorts(currentlySelectedSubelements)
-          .find(item => item[way] === elementId);
+          .find(item => item[elementId] === way);
       }
     }
     const portAnchorClass = classNames('port__anchor', {

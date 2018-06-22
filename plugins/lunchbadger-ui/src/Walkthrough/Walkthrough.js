@@ -5,6 +5,9 @@ import {createSelector} from 'reselect';
 import cs from 'classnames';
 import Joyride from 'react-joyride';
 import series from 'async/series';
+import {cloneDeep} from 'lodash';
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
+import OneOptionModal from '../../../lunchbadger-core/src/components/Generics/Modal/OneOptionModal';
 import './Walkthrough.scss';
 
 const locale = {
@@ -12,18 +15,43 @@ const locale = {
   close: 'Close',
   last: 'Got it',
   next: 'Next',
-  skip: 'Skip',
+  skip: 'Exit Walkthrough',
 };
+
+const blockedKeyCodes = [
+  9,  // tab
+  13  // enter
+];
+
+export let blockedEscapingKeys = [false];
 
 class Walkthrough extends PureComponent {
   static propTypes = {
     steps: PropTypes.array,
-    lsKey: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = this.initState(props);
+  }
+
+  componentDidMount() {
+    window.addEventListener('walkthroughRestarted', this.onWalkthroughRestart);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('walkthroughRestarted', this.onWalkthroughRestart);
+  }
+
+  onWalkthroughRestart = () => {
+    this.setState(this.initState());
+    this.restarted = true;
+  };
+
+  initState = (props = this.props) => {
+    this.waitMethod = 'waitByAnimationFrame';
+    this.steps = cloneDeep(props.steps);
+    return {
       run: true,
       showNextButton: true,
       showOverlay: true,
@@ -32,14 +60,15 @@ class Walkthrough extends PureComponent {
       index: 0,
       allowClicksThruHole: false,
     };
-    this.showed = !props.emptyProject;
-    this.waitMethod = 'waitByAnimationFrame';
-  }
+  };
+
+  exitWalkthrough = () => userStorage.set('walkthroughShown', true);
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
-      this.unblockEnter();
-      localStorage.setItem(this.props.lsKey, true);
+      this.exitWalkthrough();
+      this.unblockEscapingKeys();
+      this.joyride.reset(true);
     }
     this.setState({index});
     if (type === 'step:before') {
@@ -48,6 +77,12 @@ class Walkthrough extends PureComponent {
         allowClicksThruHole: !!step.allowClicksThruHole,
       });
       if (step.onBefore) {
+        if (step.rootUrlReplacement) {
+          step.text = step.text
+            .replace(/\$ROOT_URL/g, this.getRootUrl())
+            .replace(/\$USER_ID/g, this.props.userId);
+
+        }
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
         }
@@ -59,7 +94,7 @@ class Walkthrough extends PureComponent {
       }
       if (step.triggerNext) {
         const actions = step.triggerNext(this.api);
-        await series(actions, () => this.joyride.next());
+        await series(actions, () => this.joyride && this.joyride.next());
       } else {
         this.api.focusNext()(() => {});
       }
@@ -107,12 +142,12 @@ class Walkthrough extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
-    waitUntilPresent: (selector, blockEnter = true) => async cb => {
-      blockEnter && this.blockEnter();
+    waitUntilPresent: (selector, blockEscapingKeys = true) => async cb => {
+      blockEscapingKeys && this.blockEscapingKeys();
       while (document.querySelector(selector) === null) {
         await this[this.waitMethod](500);
       }
-      blockEnter && this.unblockEnter();
+      blockEscapingKeys && this.unblockEscapingKeys();
       cb();
     },
     waitUntilNotPresent: selector => async cb => {
@@ -196,7 +231,7 @@ class Walkthrough extends PureComponent {
       cb();
     },
     setStepText: text => cb => {
-      this.props.steps[this.state.index].text = text;
+      this.steps[this.state.index].text = text;
       this.forceUpdate(cb);
     },
     blockClicks: () => cb => {
@@ -209,25 +244,41 @@ class Walkthrough extends PureComponent {
     },
   };
 
+  getRootUrl = () => document.querySelector('.Entity.ApiEndpoint .accessUrl a').innerHTML;
+
   stopClickPropagation = event => {
     event.preventDefault();
     event.stopPropagation();
   };
 
-  blockEnter = () => document.addEventListener('keydown', this.stopEnter);
+  blockEscapingKeys = () => {
+    document.addEventListener('keydown', this.stopEscapingKeys);
+    blockedEscapingKeys[0] = true;
+  };
 
-  unblockEnter = () => document.removeEventListener('keydown', this.stopEnter);
+  unblockEscapingKeys = () => {
+    document.removeEventListener('keydown', this.stopEscapingKeys);
+    blockedEscapingKeys[0] = false;
+  };
 
-  stopEnter = event => (event.keyCode === 13 || event.which === 13)
-    ? event.preventDefault()
-    : null;
+  stopEscapingKeys = event => {
+    if (blockedKeyCodes.includes(event.keyCode) || blockedKeyCodes.includes(event.which)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
 
   waitByAnimationFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
 
   waitBySetTimeout = timeout => new Promise(res => setTimeout(res, timeout));
 
   render() {
-    const {steps} = this.props;
+    const {steps} = this;
+    const {
+      loadedProject,
+      loadingProject,
+      emptyProject,
+    } = this.props;
     const {
       run,
       showNextButton,
@@ -235,8 +286,26 @@ class Walkthrough extends PureComponent {
       showTooltip,
       overlayBack,
       allowClicksThruHole,
+      index,
     } = this.state;
-    if (this.showed) return <div />;
+    const showWalkthrough = loadedProject
+      && !loadingProject
+      && emptyProject
+      && !userStorage.get('walkthroughShown');
+    const showWaitingScreen = loadedProject
+      && !emptyProject
+      && !userStorage.get('walkthroughShown')
+      && this.restarted;
+    if (showWaitingScreen && !index) return (
+      <OneOptionModal
+        title="Waiting for Walkthrough"
+        // confirmText="Discard Walkthrough"
+        // onClose={this.exitWalkthrough}
+      >
+        Please wait, until all entities will be removed from the canvas.
+      </OneOptionModal>
+    );
+    if (!showWalkthrough && !index) return <div />;
     return (
       <div className={cs('Walkthrough', {showNextButton, showTooltip, overlayBack})}>
         <Joyride
@@ -263,9 +332,13 @@ class Walkthrough extends PureComponent {
 const selector = createSelector(
   state => state.entities,
   state => state.plugins.quadrants,
+  state => state.loadedProject,
+  state => state.loadingProject,
   (
     entities,
     quadrants,
+    loadedProject,
+    loadingProject,
   ) => {
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
@@ -277,6 +350,8 @@ const selector = createSelector(
     });
     return {
       emptyProject,
+      loadedProject,
+      loadingProject,
     };
   },
 );

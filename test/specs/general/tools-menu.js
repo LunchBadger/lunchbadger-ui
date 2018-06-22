@@ -3,7 +3,7 @@ var microserviceSelector;
 var microserviceSelector2;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true, // microservices are turned off for now
   'Microservice: aside tools menu selected': function (browser) {
     page = browser.page.lunchBadger();
     microserviceSelector = page.getMicroserviceSelector(1);

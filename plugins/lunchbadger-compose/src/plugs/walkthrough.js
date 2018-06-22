@@ -1,16 +1,16 @@
 export default {
   '010': {
-    title: 'Data Source Dropdown Menu',
+    title: 'Connectors Menu',
     text: `
-Selecting this icon will reveal available data source connectors for your LunchBadger project.
+Integrate your LunchBadger Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Connectors.
 `,
     selector: '.Tool.dataSource',
     position: 'right',
     allowClicksThruHole: false,
   },
   '011': {
-    title: 'Data Source Entities Overview',
-    text: 'Each data source entity will come with its own set of properties specific for that type of connection.  These entities correspond with a matching data source connector that can be used with your underlying Loopback project.',
+    title: 'Connector Entities Overview',
+    text: 'Each Connector Entity will come with its own set of properties specific for that connection type.',
     waitForSelector: 'div[role=presentation]',
     position: 'right',
     allowClicksThruHole: false,
@@ -23,8 +23,9 @@ Selecting this icon will reveal available data source connectors for your LunchB
     ],
   },
   '012': {
+    title: 'Memory Connector Selection',
     text: `
-Memory type is different from all other types, because it is in-memory data store, and not a Loopback data source connector.
+Let's get started! Select the Memory Connector.
 <br />
 <br />
 C'mon, click it!
@@ -44,13 +45,14 @@ C'mon, click it!
     ],
   },
   '013': {
+    title: 'Memory Connector Creation',
     text: `
-If it would be a Loopback data source connector, here you could specify data source properties, like host, port, etc.
+Most Connector Entities will present configuration options for connecting to your data source or service, such as host, port, username, and password. We don't need these with the Memory Connector.
 <br />
 <br />
-Click <pre>OK</pre> to create Memory Data Source.
+Click <pre>OK</pre> to continue.
 `,
-    waitForSelector: '.Entity.DataSource.memory.editable',
+    waitForSelector: '.Entity.DataSource.memory.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
@@ -61,9 +63,9 @@ Click <pre>OK</pre> to create Memory Data Source.
     ],
   },
   '020': {
-    title: 'Model Entities',
+    title: 'Model Entities Overview',
     text: `
-Model Entity represent a visual interface on top of a Loopback Model.
+Models are objects with properties. A Model can be connected to a Connector to read and write data to a data source or service.  Custom logic can be created on a Model using JavaScript.
 <br />
 <br />
 C'mon, click it!
@@ -79,8 +81,9 @@ C'mon, click it!
     ],
   },
   '021': {
+    title: 'Name the Model Entity',
     text: `
-Here you define Loopback Model name.
+Here, you define the name of the Model Entity.
 <br /><br />
 Let's name it <pre>Car</pre>.
 `,
@@ -96,8 +99,9 @@ Let's name it <pre>Car</pre>.
     ],
   },
   '022': {
+    title: 'Model Entity Context Path',
     text: `
-Here, you can define context path.
+The Context Path assigns a URL path for the Model Entity's built in RESTFul endpoint.
 <br /><br />
 Let's name it <pre>cars</pre>.
 `,
@@ -113,8 +117,9 @@ Let's name it <pre>cars</pre>.
     ],
   },
   '023': {
+    title: 'Model Properties Overview',
     text: `
-Here, you can add properties you\'d like to expose from your Data Source through your API Endpoint.
+Select the plus icon to assign properties to the Model Entity. Properties map to fields to a data source connected through a Connector.
 <br /><br />
 C'mon, click it!
 `,
@@ -129,31 +134,33 @@ C'mon, click it!
     ],
   },
   '024': {
+    title: 'Add a Property',
     text: `
-Let's set <pre>year</pre> as name and press tab key.
+Let's set <pre>year</pre> as the property name.
 `,
     waitForSelector: '.Entity.Model.editable .input__properties0name',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__properties0name input[value="year"]'),
-      api.waitUntilNotPresent('.Entity.Model.editable .input__properties0name input:focus'),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .input__properties0name input'),
     ],
   },
   '025': {
+    title: 'Set the Property Type',
     text: `
-Here you can set property type.
+Let's set the Property type.
 <br /><br />
-Let's set type <pre>Number</pre>.
+Select <pre>Number</pre> from the dropdown list.
 `,
     waitForSelector: '.Entity.Model.editable .select__properties0type',
     position: 'right',
     allowClicksThruHole: true,
     onBefore: api => [
       api.setOverlayBack(true),
+      api.focus('.Entity.Model.editable .select__properties0type button'),
     ],
     onAfter: api => [
       api.setOverlayBack(false),
@@ -166,24 +173,24 @@ Let's set type <pre>Number</pre>.
     ],
   },
   '026': {
+    title: 'Finish Creating the Model',
     text: `
-Click <pre>OK</pre> to create model.
+Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
 `,
     waitForSelector: '.Entity.Model.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Model.editable'),
-      api.setShowOverlay(true),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .submit'),
     ],
   },
   '027': {
+    title: 'Connect Connector to Model',
     text: `
-Please connect data source connector with Loopback model by connecting their ports.
+Click on the <pre>Memory</pre> Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Connector.
 `,
     selector: '.Entity.DataSource.memory .port-out',
     position: 'bottom-left',
@@ -197,9 +204,9 @@ Please connect data source connector with Loopback model by connecting their por
     ],
   },
   '030': {
-    title: 'Function Entities',
+    title: 'Function Entities Overview',
     text: `
-A function entity represents a serverless function that runs in your Kubernetes cluster.
+A Function Entity represents a serverless function that's managed by your LunchBadger Project.
 <br /><br />
 C'mon, click it!
 `,
@@ -214,15 +221,16 @@ C'mon, click it!
     ],
   },
   '031': {
+    title: 'Deploy Function',
     text: `
-Click <pre>OK</pre> to deploy function,
+Click <pre>OK</pre> to deploy function.
 `,
     waitForSelector: '.Entity.Function_.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
-      api.setShowOverlay(false),
       api.waitUntilNotPresent('.Entity.Function_.editable'),
+      api.setShowOverlay(false),
       api.wait(1000),
       api.setShowOverlay(true),
     ],
@@ -231,7 +239,13 @@ Click <pre>OK</pre> to deploy function,
     ],
   },
   '032': {
-    text: 'Function is deploying...',
+    title: 'Function is Deploying',
+    text: `
+The Function Entity is deploying.
+<br />
+<br />
+You'll see this Rocket Ship icon whenever an artifact is being deployed to your Kubernetes cluster.
+`,
     position: 'right',
     selector: '.Entity.Function_',
     allowClicksThruHole: false,
@@ -239,13 +253,13 @@ Click <pre>OK</pre> to deploy function,
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Function_.deploying'),
       api.waitUntilNotPresent('.CanvasElement.Function_.wip'),
-      api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.setWaitMethod(),
     ],
   },
   '033': {
+    title: 'View Function Details',
     text: `
-Selecting this icon will open entity in the details panel.
+The ellipses icon will open a Details Panel.
 <br /><br />
 C'mon, click it!
 `,
@@ -261,17 +275,25 @@ C'mon, click it!
       api.setShowOverlay(true),
     ],
     onBefore: api => [
+      api.click('.Entity.Function_'),
+      api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.focus('.Entity.Function_ .Toolbox__button--zoom'),
     ],
   },
   '034': {
-    text: 'LunchBadger includes a built-in editor.',
-    selector: '.DetailsPanel .FilesEditor',
+    title: `
+Function Entity's Built-in Editor
+`,
+    text: 'Edit LunchBadger Functions with the built-in editor.',
+    waitForSelector: '.DetailsPanel .FilesEditor',
     position: 'top',
+    allowClicksThruHole: false,
+    onBefore: () => [],
   },
   '035': {
+    title: 'Return to Canvas from Details Panel',
     text: `
-Click <pre>Cancel</pre> to close the details panel.
+Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
     position: 'top-right',
@@ -288,10 +310,10 @@ Click <pre>Cancel</pre> to close the details panel.
       api.focus('.DetailsPanel .cancel'),
     ],
   },
-  '040': {
-    title: 'Microservice Entities',
-    text: '<i>This Entity is still in-development. It\'s not recommended for use at this time.</i>',
-    selector: '.Tool.microservice',
-    position: 'right',
-  },
+  // '040': {
+  //   title: 'Microservices Entity Overview',
+  //   text: '<i>This Entity is still in-development. It\'s not recommended for use at this time.</i>',
+  //   selector: '.Tool.microservice',
+  //   position: 'right',
+  // },
 };

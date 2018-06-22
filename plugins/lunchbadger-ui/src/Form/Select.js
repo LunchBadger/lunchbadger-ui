@@ -188,8 +188,11 @@ class Select extends Component {
       />
     );
     const iconStyle = {
-      backgroundColor: '#FFF',
-      height: 39,
+      width: 24,
+      height: 38,
+      border: 0,
+      padding: '10px 0 0',
+      background: 'linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1), rgba(255, 255, 255, 1))',
     };
     return (
       <SelectField

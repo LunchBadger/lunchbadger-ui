@@ -7,6 +7,7 @@ import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import paper from '../../utils/paper';
+import LoginManager from '../../utils/auth';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
@@ -14,6 +15,8 @@ import {updateEntitiesStatues} from '../../reduxActions';
 import './AppLoader.scss';
 
 const envId = Config.get('envId');
+const pingAmount = Config.get('pingAmount');
+const pingIntervalMs = Config.get('pingIntervalMs');
 const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
 
 const allowedPingStatuses = [
@@ -23,8 +26,6 @@ const allowedPingStatuses = [
   503,
   504,
 ];
-
-const retriesAmount = 48;
 
 class AppLoader extends Component {
   constructor(props) {
@@ -43,9 +44,7 @@ class AppLoader extends Component {
 
   componentDidMount() {
     if (isKubeWatcherEnabled) {
-      this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
-      this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
-      this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
+      this.initKubeWatcher();
     }
   }
 
@@ -56,11 +55,27 @@ class AppLoader extends Component {
     }
   }
 
+  initKubeWatcher = () => {
+    if (this.kubeWatcherMonitor) {
+      this.kubeWatcherMonitor.close();
+    }
+    this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
+    this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
+    this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);
+  };
+
   onKubeWatcherData = (message) => {
     const data = JSON.parse(message.data)[envId];
     let workspaceRunning = false;
     if (data.workspace) {
       workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
+    }
+    if (!this.state.workspaceRunning && workspaceRunning) {
+      if (!this.triggered) {
+        this.triggered = true;
+      } else {
+        document.location.reload();
+      }
     }
     this.setState({workspaceRunning});
     if (this.prevMessage !== message.data) {
@@ -71,12 +86,19 @@ class AppLoader extends Component {
     }
   };
 
-  onKubeWatcherError = () => this.setState({workspaceRunning: false});
+  onKubeWatcherError = (event) => {
+    this.setState({workspaceRunning: false});
+    if (event && event.status === 401) {
+      LoginManager().refreshLogin();
+      return;
+    }
+    setTimeout(() => this.initKubeWatcher(), 1000);
+  };
 
   load() {
     ConfigStoreService.upsertProject()
       .then(() => {
-        return waitForProject(retriesAmount, 2500);
+        return waitForProject(pingAmount, pingIntervalMs);
       })
       .then(() => {
         this.setState({loaded: true});
@@ -126,13 +148,7 @@ class AppLoader extends Component {
   }
 
   renderError() {
-    const error = {
-      statusCode: 0,
-      message: this.state.error.message,
-      name: 'Error',
-      endpoint: 'WorkspaceStatus',
-      method: `${retriesAmount} PING retries`,
-    };
+    const error = this.state.error;
     return (
       <div className="app">
         <div className="app__loading-error">

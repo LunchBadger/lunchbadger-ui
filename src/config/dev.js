@@ -25,7 +25,14 @@ export default {
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
   slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   sshManagerUrl: `http://${prefix}api.lunchbadger.com/users/customer/{USER}`,
-  gitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
+  loopbackGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
+  serverlessGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/functions.git`,
+  googleAnalyticsID: 'UA-82427970-1',
+  googleAnalyticsDebug: true,
+  docsUrl: 'https://docs.lunchbadger.com',
+  homepageUrl: 'https://www.lunchbadger.com',
+  pingAmount: 72,
+  pingIntervalMs: 2500,
   user: {
     sub: 'demo',
     email: 'foo@lunchbadger.com',
@@ -35,13 +42,15 @@ export default {
   features: {
     tritonLogo,
     tritonObjectStorage: false,
-    microservices: true,
+    microservices: false,
     apis: isStaging,
     portals: isStaging,
     metrics: isStaging,
     forecasts: isStaging,
     kubeWatcher: true,
-    consumerManagement: isStaging
+    consumerManagement: isStaging,
+    gitAccess: true,
+    uploadPublicKeys: true
   },
   logins
 };

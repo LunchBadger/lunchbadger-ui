@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 // const {Input, Select, Textarea} = LunchBadgerCore.components;
 const {propertyTypes} = LunchBadgerCore.utils;
-import {Input, Select, Checkbox, IconSVG} from '../../../../../lunchbadger-ui/src';
+import {
+  Input,
+  Select,
+  Checkbox,
+  IconSVG,
+  blockedEscapingKeys,
+} from '../../../../../lunchbadger-ui/src';
 import {iconDelete, iconPlus} from '../../../../../../src/icons';
 import './ModelProperty.scss';
 
@@ -15,6 +21,7 @@ class ModelPropertyDetails extends Component {
 
   checkTabButton = (event) => {
     if ((event.which === 9 || event.keyCode === 9) && !event.shiftKey && this.props.propertiesCount === this.props.idx + 1) {
+      if (blockedEscapingKeys[0]) return;
       const {parentId, addAction} = this.props;
       addAction(parentId)();
     }

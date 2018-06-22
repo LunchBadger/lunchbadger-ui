@@ -77,15 +77,8 @@ class DataSourceDetails extends Component {
         name: 'port',
         value: port,
       });
-      let title = 'Database';
-      if (isMongoDB) {
-        title = 'Collection';
-      }
-      if (isRedis) {
-        title = 'Namespace';
-      }
       fields.push({
-        title,
+        title: 'Database',
         name: 'database',
         value: database,
       });

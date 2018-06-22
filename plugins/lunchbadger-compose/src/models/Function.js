@@ -17,6 +17,7 @@ export default class Function_ extends BaseModel {
   slugifyName = true;
   service = null;
   running = true;
+  allowEditWhenCrashed = true;
   isCanvasEditDisabled = true;
   zoomWindow = {
     width: 1005,
@@ -106,9 +107,10 @@ export default class Function_ extends BaseModel {
   }
 
   beforeRemove(paper) {
+    const connectionsTo = Connections.search({toId: this.id});
     const connectionsFrom = Connections.search({fromId: this.id});
     let isAutoSave = false;
-    connectionsFrom.map((conn) => {
+    [...connectionsTo, ...connectionsFrom].map((conn) => {
       isAutoSave = true;
       conn.info.connection.setParameter('discardAutoSave', true);
       paper.detach(conn.info.connection);

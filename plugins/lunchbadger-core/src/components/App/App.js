@@ -21,6 +21,7 @@ import {
   Walkthrough,
 } from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
+import userStorage from '../../utils/userStorage';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
 import './App.scss';
@@ -55,6 +56,18 @@ class App extends Component {
     this.props.dispatch(loadFromServer());
   }
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  }
+
+  handleBeforeUnload = (event) => {
+    if (this.props.pendingEdit) {
+      const message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?';
+      (event || window.event).returnValue = message;
+      return message;
+    }
+  };
+
   renderHeader = () => {
     const {isEntityEditable} = this.props;
     const username = getUser().profile.preferred_username;
@@ -84,7 +97,6 @@ class App extends Component {
       currentlyOpenedPanel,
       isEntityEditable,
       walkthrough,
-      loadedProject,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -99,8 +111,7 @@ class App extends Component {
         }
         return walkthrough[key];
       });
-    const walkthroughShownKey = `walkthroughShown-${getUser().profile.preferred_username}`;
-    const walkthrougVisible = loadedProject && !localStorage.getItem(walkthroughShownKey);
+    const userId = getUser().profile.sub;
     return (
       <Provider connectionsStore={Connections}>
         <div>
@@ -128,7 +139,10 @@ class App extends Component {
             )}
           </div>
           <DetailsPanel />
-          {walkthrougVisible && <Walkthrough steps={walkthroughSteps} lsKey={walkthroughShownKey} />}
+          <Walkthrough
+            steps={walkthroughSteps}
+            userId={userId}
+          />
         </div>
       </Provider>
     );
@@ -144,7 +158,7 @@ const selector = createSelector(
   state => state.states.currentlyOpenedPanel,
   state => !!state.states.currentEditElement,
   state => state.plugins.walkthrough,
-  state => state.loadedProject,
+  state => !!state.states.zoom,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -154,7 +168,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
-    loadedProject,
+    isZoomWindowOpened,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -164,7 +178,7 @@ const selector = createSelector(
     currentlyOpenedPanel,
     isEntityEditable,
     walkthrough,
-    loadedProject,
+    pendingEdit: isEntityEditable || isZoomWindowOpened,
   }),
 );
 

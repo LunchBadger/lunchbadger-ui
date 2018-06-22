@@ -16,7 +16,8 @@ const serviceUrls = [
   'slsApiUrl',
   'slsUrl',
   'sshManagerUrl',
-  'gitCloneCommand'
+  'loopbackGitCloneCommand',
+  'serverlessGitCloneCommand'
 ];
 
 class Cfg {

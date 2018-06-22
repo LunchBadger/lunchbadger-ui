@@ -2,6 +2,7 @@ import request from 'request';
 import EventSource from 'eventsource';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
+import LoginManager from './auth';
 
 class ApiClient {
   constructor(url, idToken) {
@@ -13,7 +14,7 @@ class ApiClient {
   _getHeaders() {
     const headers = {};
     if (this.idToken) {
-      headers['Authorization'] = `JWT ${this.idToken}`;
+      headers['Authorization'] = `Bearer ${this.idToken}`;
     }
     return headers;
   }
@@ -57,6 +58,9 @@ class ApiClient {
             if (body.error.name) {
               name = body.error.name;
             }
+          }
+          if (response.status === 401 || response.statusCode === 401) {
+            LoginManager().refreshLogin();
           }
           return reject(new ApiError(response.statusCode, message, endpoint, method, req, name, body));
         }

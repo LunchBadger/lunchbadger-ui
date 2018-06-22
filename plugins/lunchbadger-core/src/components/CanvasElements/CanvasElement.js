@@ -18,6 +18,7 @@ import {
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
+import userStorage from '../../utils/userStorage';
 import {
   Entity,
   EntityStatus,
@@ -120,6 +121,9 @@ export default (ComposedComponent) => {
       this.setFlatModel();
       if (this.entityRef && !this.props.entity.loaded) {
         scrollToElement(findDOMNode(this.entityRef));
+        const inputName = findDOMNode(this.entityRef.getInputNameRef()).querySelector('input');
+        inputName.focus();
+        inputName.setSelectionRange(0, inputName.value.length);
       }
     }
 
@@ -224,6 +228,9 @@ export default (ComposedComponent) => {
       this.props.dispatch(setCurrentZoom(rect));
     };
 
+    handleOnToggleCollapse = collapsed =>
+      userStorage.setObjectKey('entityCollapsed', this.props.entity.id, collapsed);
+
     resetFormModel = () => {
       if (this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.model);
@@ -282,8 +289,8 @@ export default (ComposedComponent) => {
 
     handleClick = (event) => {
       const {entity, dispatch, running} = this.props;
-      const {ready} = entity;
-      if (!ready || !running) return;
+      const {ready, allowEditWhenCrashed} = entity;
+      if (!ready || (!running && !allowEditWhenCrashed)) return;
       dispatch(setCurrentElement(entity));
       event.stopPropagation();
     }
@@ -318,6 +325,7 @@ export default (ComposedComponent) => {
         />
       );
       const {
+        id,
         ready,
         deleting,
         fake,
@@ -326,9 +334,10 @@ export default (ComposedComponent) => {
         slugifyName,
         status,
         isCanvasEditDisabled,
+        allowEditWhenCrashed,
       } = entity;
       const deploying = status === 'deploying';
-      const processing = !ready || !running || !!deleting;
+      const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
       const semitransparent = !ready || !running;
       const {validations} = this.state;
       let isDelta = entity !== multiEnvEntity;
@@ -352,7 +361,7 @@ export default (ComposedComponent) => {
             label: 'Remove',
           });
         }
-        if (!isZoomDisabled && running) {
+        if (!isZoomDisabled && (running || (!running && allowEditWhenCrashed && !deploying))) {
           toolboxConfig.push({
             action: 'zoom',
             icon: 'iconBasics',
@@ -379,8 +388,15 @@ export default (ComposedComponent) => {
       }
       const {type, friendlyName} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
+      const defaultExpanded = !userStorage.getObjectKey('entityCollapsed', id);
       return (
-        <div className={cs('CanvasElement', type, status, {highlighted, editable, wip: processing, semitransparent})}>
+        <div className={cs('CanvasElement', type, status, {
+          highlighted,
+          editable,
+          wip: processing,
+          semitransparent,
+          allowEditWhenCrashed: allowEditWhenCrashed,
+        })}>
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}
@@ -406,6 +422,8 @@ export default (ComposedComponent) => {
               connectDropTarget={connectDropTarget}
               isDelta={isDelta}
               slugifyName={slugifyName}
+              onToggleCollapse={this.handleOnToggleCollapse}
+              defaultExpanded={defaultExpanded}
             >
               {!fake && (
                 <ComposedComponent
@@ -465,7 +483,7 @@ export default (ComposedComponent) => {
       isPanelOpened,
       entity,
     ) => {
-      const {id, name, loaded, running: entityRunning} = entity;
+      const {id, name, loaded, running: entityRunning, allowEditWhenCrashed} = entity;
       const running = entityRunning === undefined ? true : entityRunning;
       const multiEnvIndex = multiEnvironments.selected;
       const multiEnvDelta = multiEnvironments.environments[multiEnvIndex].delta;
@@ -473,7 +491,7 @@ export default (ComposedComponent) => {
       if (multiEnvIndex > 0 && multiEnvironments.environments[multiEnvIndex].entities[id]) {
         multiEnvEntity = multiEnvironments.environments[multiEnvIndex].entities[id];
       }
-      const highlighted = !!running && !!currentElement && currentElement.id === id;
+      const highlighted = (!!running || (!running && !!allowEditWhenCrashed)) && !!currentElement && currentElement.id === id;
       const editable = !!running && !!currentEditElement && currentEditElement.id === id;
       return {
         multiEnvIndex,

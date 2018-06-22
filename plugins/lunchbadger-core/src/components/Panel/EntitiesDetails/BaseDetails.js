@@ -101,8 +101,8 @@ export default (ComposedComponent) => {
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
       this.closePopup();
-      const updatedEntity = await dispatch(entity.update(model));
-      dispatch(setCurrentElement(updatedEntity));
+      dispatch(setCurrentElement(entity));
+      await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
     }
 
@@ -135,7 +135,11 @@ export default (ComposedComponent) => {
       }
     }
 
-    closePopup = () => this.context.store.dispatch(setCurrentZoom({...this.props.rect, close: true}));
+    closePopup = () => {
+      const {dispatch} = this.context.store;
+      dispatch(setCurrentZoom({...this.props.rect, close: true}));
+      setTimeout(() => dispatch(setCurrentZoom(undefined)), 1000);
+    }
 
     setOkEnabled = isOkEnabled => this.setState({isOkEnabled});
 

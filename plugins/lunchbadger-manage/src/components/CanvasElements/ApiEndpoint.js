@@ -9,6 +9,7 @@ import ApiEndpointPath from './Subelements/ApiEndpointPath';
 import {
   EntityProperties,
   EntitySubElements,
+  blockedEscapingKeys,
 } from '../../../../lunchbadger-ui/src';
 import './ApiEndpoint.scss';
 
@@ -60,6 +61,7 @@ class ApiEndpoint extends Component {
   }
 
   handlePathTab = idx => {
+    if (blockedEscapingKeys[0]) return;
     const size = this.state.paths.length;
     if (size - 1 === idx) {
       this.addPath();

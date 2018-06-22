@@ -6,6 +6,7 @@ import {createSelector} from 'reselect';
 import SshManagerService from '../../../services/SshManagerService';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
 import {addSystemDefcon1} from '../../../reduxActions/systemDefcon1';
+import Config from '../../../../../../src/config';
 import {
   Form,
   EntityActionButtons,
@@ -17,6 +18,8 @@ import {
   CopyOnHover,
 } from '../../../../../lunchbadger-ui/src';
 import './SshManager.scss';
+
+const {uploadPublicKeys} = Config.get('features');
 
 class SshManager extends PureComponent {
   static contextTypes = {
@@ -54,6 +57,7 @@ class SshManager extends PureComponent {
 
   handleUploadPublicKey = () => {
     this.setState({adding: true}, () => {
+      if (!uploadPublicKeys) return;
       const input = findDOMNode(this.formRef).querySelector('input');
       input && input.focus();
     });
@@ -155,7 +159,12 @@ class SshManager extends PureComponent {
     ];
     return (
       <div>
-        {adding && (
+        {adding && !uploadPublicKeys && (
+          <div className="accessInfo">
+            Public keys upload is not part of the trial - please contact LunchBadger support to learn more
+          </div>
+        )}
+        {adding && uploadPublicKeys && (
           <Form
             ref={r => this.formRef = r}
             name="publicKey"

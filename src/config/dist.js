@@ -12,7 +12,14 @@ export default {
   kubeWatcherApiUrl: 'https://kube-watcher.lunchbadger.com',
   slsApiUrl: 'https://sls-{USER}-{ENV}.lunchbadger.io',
   sshManagerUrl: 'https://api.lunchbadger.com/users/customer/{USER}',
-  gitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/{ENV}.git',
+  loopbackGitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/{ENV}.git',
+  serverlessGitCloneCommand: 'git clone git@git.lunchbadger.com:customer-{USER}/functions.git',
+  googleAnalyticsID: 'UA-82427970-1',
+  googleAnalyticsDebug: false,
+  docsUrl: 'https://docs.lunchbadger.com',
+  homepageUrl: 'https://www.lunchbadger.com',
+  pingAmount: 72,
+  pingIntervalMs: 2500,
   oauth: {
     authority: 'https://www.lunchbadger.com',
     client_id: '4kzhU5LqlUpQJmjbMevWkWyt9adeKK',
@@ -23,7 +30,7 @@ export default {
       issuer: 'https://www.lunchbadger.com',
       authorization_endpoint: 'https://www.lunchbadger.com/oauth/authorize',
       userinfo_endpoint: 'https://www.lunchbadger.com/oauth/me',
-      end_session_endpoint: 'https://www.lunchbadger.com/logout'
+      end_session_endpoint: 'https://www.lunchbadger.com/logout/'
     },
     // use pem-jwk npm to produce this from the public key in the OIDC server
     signingKeys: [
@@ -39,12 +46,14 @@ export default {
   features: {
     tritonLogo: false,
     tritonObjectStorage: false,
-    microservices: true,
+    microservices: false,
     apis: false,
     portals: false,
     metrics: false,
     forecasts: false,
     kubeWatcher: true,
-    consumerManagement: true
+    consumerManagement: true,
+    gitAccess: false,
+    uploadPublicKeys: false
   }
 };

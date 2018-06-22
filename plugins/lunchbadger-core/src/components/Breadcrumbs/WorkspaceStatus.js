@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import classnames from 'classnames';
+import LoginManager from '../../utils/auth';
 import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
 import {addSystemDefcon1, toggleSystemDefcon1, clearSystemDefcon1} from '../../reduxActions/systemDefcon1';
@@ -72,7 +73,12 @@ class WorkspaceStatus extends Component {
 
   onConnected = () => this.setState({connected: true});
 
-  onDisconnected = () => this.setState({connected: false});
+  onDisconnected = (event) => {
+    this.setState({connected: false});
+    if (event && event.status === 401) {
+      LoginManager().refreshLogin();
+    }
+  }
 
   onModalClose = () => location.reload();
 

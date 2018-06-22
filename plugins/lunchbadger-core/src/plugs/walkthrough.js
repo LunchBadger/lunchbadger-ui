@@ -44,11 +44,9 @@ Click this icon to open Settings.
     ],
   },
   '904': {
-    title: 'Restart Walkthrough',
+    title: 'Walkthrough',
     text: `
 You can restart the walkthrough process here.
-<br />
-All entities will be removed from the canvas.
 `,
     waitForSelector: '.RestartWalkthrough',
     position: 'bottom-left',

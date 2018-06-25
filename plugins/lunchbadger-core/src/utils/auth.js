@@ -45,7 +45,7 @@ export class LoginManager {
         this.user = user;
         Config.apiUrlsReplacements(this.user.profile.sub);
         window.localStorage.setItem('login_refresh_attempts', 0);
-        localStorage.setItem('logoutCalled', false);
+        localStorage.setItem('logoutCalled', 0);
         return true;
       })
       .catch(err => {
@@ -69,7 +69,7 @@ export class LoginManager {
   }
 
   logout() {
-    localStorage.setItem('logoutCalled', true);
+    localStorage.setItem('logoutCalled', 1);
     this.um.removeUser().then(() => {
       this.um.signoutRedirect();
     });
@@ -93,7 +93,7 @@ export class DummyLoginManager {
     this.user.profile.sub = fakeLogin;
     this.user.profile.preferred_username = localStorage.getItem('preferred_username');
     Config.apiUrlsReplacements(this.user.profile.sub);
-    localStorage.setItem('logoutCalled', false);
+    localStorage.setItem('logoutCalled', 0);
     return Promise.resolve(this.user);
   }
 
@@ -103,7 +103,7 @@ export class DummyLoginManager {
 
   logout() {
     if (!isStorageSupported) return;
-    localStorage.setItem('logoutCalled', true);
+    localStorage.setItem('logoutCalled', 1);
     localStorage.removeItem('fakeLogin');
     localStorage.removeItem('preferred_username');
     document.location.reload();

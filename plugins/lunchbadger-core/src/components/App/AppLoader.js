@@ -59,7 +59,7 @@ class AppLoader extends Component {
     if (this.kubeWatcherMonitor) {
       this.kubeWatcherMonitor.close();
     }
-    if (!window.localStorage.getItem('logoutCalled')) {
+    if (!+window.localStorage.getItem('logoutCalled')) {
       this.kubeWatcherMonitor = KubeWatcherService.monitorStatuses();
       this.kubeWatcherMonitor.addEventListener('message', this.onKubeWatcherData);
       this.kubeWatcherMonitor.addEventListener('error', this.onKubeWatcherError);

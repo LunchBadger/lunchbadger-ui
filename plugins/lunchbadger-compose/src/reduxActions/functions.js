@@ -50,12 +50,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.service = slsDeploy.body;
     await SLSService.deploy(name);
     updatedEntity.running = true;
-    updatedEntity.ready = true;
-    dispatch(actions.updateFunction(updatedEntity));
-    return updatedEntity;
   } catch (error) {
+    updatedEntity.running = false;
     dispatch(coreActions.addSystemDefcon1({error}));
   }
+  updatedEntity.ready = true;
+  dispatch(actions.updateFunction(updatedEntity));
+  return updatedEntity;
 };
 
 export const remove = (entity, cb) => async (dispatch) => {

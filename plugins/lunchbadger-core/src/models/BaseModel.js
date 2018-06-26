@@ -112,7 +112,15 @@ export default class BaseModel {
         ...Connections.search({fromId: curr}),
         ...Connections.search({toId: curr}),
       ], [])
-      .map(({fromId, toId, info: {connection}}) => ({out: fromId, in: toId, connection}));
+      .filter(({info: {connection}}) => !!connection)
+      .map(({fromId, toId, info: {connection}}) => {
+        const {source, target} = connection;
+        const sourceClassList = source.parentElement.classList;
+        const targetClassList = target.parentElement.classList;
+        const fromDir = sourceClassList.contains('port-out') ? 'out' : 'in';
+        const toDir = targetClassList.contains('port-in') ? 'in' : 'out';
+        return {[fromId]: fromDir, [toId]: toDir, connection};
+      });
   }
 
 }

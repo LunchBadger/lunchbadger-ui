@@ -35,7 +35,6 @@ export default class RestartWalkthrough extends PureComponent {
           <div>
             <p>
             You can restart the walkthrough process here.
-            It will start, when all entities will be removed from the canvas.
             </p>
             <p>
             <strong>

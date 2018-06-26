@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.101', [
+console.info('LBAPP VERSION 0.102', [
   [
     'master Bugfix/675 Unauthorized error should logout #677',
     'Feature/676 settings tooltip fix #678',
@@ -35,7 +35,8 @@ console.info('LBAPP VERSION 0.101', [
     'Bugfix/688 Autosave for function connections #701',
     'Bugfix/687 Wrong port highlighted in function #705',
     'Feature/695 Walkthrough reset text changw #706',
-    'Bugfix/702 token refresh in change-stream #707'
+    'Bugfix/702 token refresh in change-stream #707',
+    'Bugfix/711 Python function with error cannot be edited #714'
   ],
   [
     'master Feature/663 Add tooltips to header menu #671',

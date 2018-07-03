@@ -1,6 +1,7 @@
 import uuid from 'uuid';
 import DataSource from '../models/DataSource';
 import {actionTypes} from '../reduxActions/actions';
+import catchDatasourceErrors from '../utils/catchDatasourceErrors.js';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
@@ -32,6 +33,8 @@ export default (state = {}, action) => {
       return newState;
     case coreActionTypes.clearProject:
       return {};
+    case coreActionTypes.addEntityError:
+      return catchDatasourceErrors(state, action.payload);
     default:
       return state;
   }

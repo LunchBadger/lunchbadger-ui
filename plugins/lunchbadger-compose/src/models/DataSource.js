@@ -84,6 +84,7 @@ export default class DataSource extends BaseModel {
       password: this.password,
       itemOrder: this.itemOrder,
       lunchbadgerId: this.id,
+      error: this.error,
     };
     if (this.isWithPort) {
       delete json.url;
@@ -256,6 +257,20 @@ export default class DataSource extends BaseModel {
     ].includes(this._connector);
   }
 
+  get nodeModules() {
+    const modules = [this._connector];
+    if (this.isSalesforce) {
+      modules.push('jsforce');
+    }
+    if (this.isSoap) {
+      modules.push('strong-soap');
+    }
+    if (this.isPostgresql) {
+      modules.push('pg');
+    }
+    return modules;
+  }
+
   get isMemory() {
     return this._connector === 'memory';
   }
@@ -282,6 +297,10 @@ export default class DataSource extends BaseModel {
 
   get isRedis() {
     return this._connector === 'redis';
+  }
+
+  get isPostgresql() {
+    return this._connector === 'postgresql';
   }
 
   get isTritonObjectStorage() {

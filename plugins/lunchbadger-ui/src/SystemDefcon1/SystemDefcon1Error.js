@@ -15,7 +15,7 @@ export default class SystemDefcon1Error extends PureComponent {
   toggleResponseDataVisible = () => this.setState({responseDataVisible: !this.state.responseDataVisible});
 
   render() {
-    const {index, children, onRemove, stack, request, body} = this.props;
+    const {index, children, onRemove, stack, request, body, hideRemoveButton} = this.props;
     const {
       stackVisible,
       requestDataVisible,
@@ -26,7 +26,9 @@ export default class SystemDefcon1Error extends PureComponent {
         <h3>
           Error {index}
           {' '}
-          <small className="removeError" onClick={onRemove}>remove</small>
+          {!hideRemoveButton && (
+            <small className="removeError" onClick={onRemove}>remove</small>
+          )}
           {' '}
           {request && (
             <small className="removeError" onClick={this.toggleRequestDataVisible}>

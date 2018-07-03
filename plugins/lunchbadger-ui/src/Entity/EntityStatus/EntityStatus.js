@@ -18,14 +18,14 @@ const tooltip = {
 
 export default class EntityStatus extends PureComponent {
   render() {
-    const {status, type} = this.props;
+    const {status, type, onClick} = this.props;
     if (!status) return null;
     return (
       <ContextualInformationMessage
         tooltip={`The ${type.toLowerCase()} ${tooltip[status]}`}
         direction="bottomRight"
       >
-        <div className={cs('EntityStatus', status)}>
+        <div className={cs('EntityStatus', status)} onClick={onClick}>
           <IconSVG svg={icons[icon[status]]} />
         </div>
       </ContextualInformationMessage>

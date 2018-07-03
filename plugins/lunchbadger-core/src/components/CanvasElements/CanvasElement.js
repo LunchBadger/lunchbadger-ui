@@ -21,8 +21,10 @@ import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import userStorage from '../../utils/userStorage';
 import {
   Entity,
+  EntityError,
   EntityStatus,
   scrollToElement,
+  SystemDefcon1,
 } from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
@@ -95,6 +97,7 @@ export default (ComposedComponent) => {
       this.state = {
         showRemovingModal: false,
         showNotRunningModal: false,
+        showEntityError: false,
         validations: {
           isValid: true,
           data: {}
@@ -335,11 +338,12 @@ export default (ComposedComponent) => {
         status,
         isCanvasEditDisabled,
         allowEditWhenCrashed,
+        error,
       } = entity;
       const deploying = status === 'deploying';
       const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
       const semitransparent = !ready || !running;
-      const {validations} = this.state;
+      const {validations, showEntityError} = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
       const tabs = entity.tabs || [];
@@ -457,6 +461,7 @@ export default (ComposedComponent) => {
               type={friendlyName || type}
               status={status}
             />
+            {error && <EntityError onClick={() => this.setState({showEntityError: true})} />}
             {this.state.showNotRunningModal && (
               <OneOptionModal
                 confirmText="OK"
@@ -464,6 +469,17 @@ export default (ComposedComponent) => {
               >
                 Currently edited {type} stopped running.
               </OneOptionModal>
+            )}
+            {showEntityError && (
+              <SystemDefcon1
+                title={error.friendlyTitle}
+                content={error.friendlyMessage}
+                errors={[{error: {error}}]}
+                defaultDetailsCollapse
+                toggleErrorDetailsText='error details'
+                onClose={() => this.setState({showEntityError: false})}
+                hideRemoveButton
+              />
             )}
         </div>
       );

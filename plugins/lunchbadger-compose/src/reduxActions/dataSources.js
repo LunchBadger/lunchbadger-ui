@@ -27,7 +27,12 @@ export const update = (entity, model) => async (dispatch, getState) => {
     return updatedEntity;
   }
   const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;
-  updatedEntity = DataSource.create({...entity.toJSON(), ...model, ready: false});
+  updatedEntity = DataSource.create({
+    ...entity.toJSON(),
+    ...model,
+    ready: false,
+    error: null,
+  });
   dispatch(actions.updateDataSource(updatedEntity));
   try {
     if (isDifferent) {
@@ -69,6 +74,7 @@ export const remove = entity => async (dispatch, getState) => {
       const updatedEntity = entity.recreate();
       updatedEntity.ready = false;
       updatedEntity.deleting = true;
+      updatedEntity.error = null;
       dispatch(actions.updateDataSource(updatedEntity));
       Connections.search({fromId: entity.id})
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))

@@ -1,3 +1,4 @@
+import React from 'react';
 import slug from 'slug';
 import {actions} from './actions';
 import {SLSService} from '../services';
@@ -31,6 +32,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     ...model,
     ready: false,
     running: null,
+    error: null,
   };
   if (!data.service.serverless) {
     data.service.serverless = {provider: {runtime: runtimeMapping(runtime, true).sls}};
@@ -52,7 +54,21 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.running = true;
   } catch (error) {
     updatedEntity.running = false;
-    dispatch(coreActions.addSystemDefcon1({error}));
+    if (
+      error.request
+      && error.request.url === '/deploy'
+      && error.body
+      && error.body.info === 'deploy failed'
+    ) {
+      error.friendlyTitle = <div>Function <code>{updatedEntity.name}</code> deploy failed</div>;
+      error.friendlyMessage = `
+        Function deployment failed.
+        Please check, if function code, you provided, is correct and valid.
+      `;
+      updatedEntity.error = error;
+    } else {
+      dispatch(coreActions.addSystemDefcon1({error}));
+    }
   }
   updatedEntity.ready = true;
   dispatch(actions.updateFunction(updatedEntity));
@@ -62,6 +78,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
 export const remove = (entity, cb) => async (dispatch) => {
   const updatedEntity = entity.recreate();
   updatedEntity.deleting = true;
+  updatedEntity.error = null;
   userStorage.setObjectKey('function', slug(entity.name, {lower: true}), updatedEntity.toJSON());
   dispatch(actions.updateFunction(updatedEntity));
   try {

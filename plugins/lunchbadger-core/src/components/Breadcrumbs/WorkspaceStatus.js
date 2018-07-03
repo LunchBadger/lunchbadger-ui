@@ -67,7 +67,10 @@ class WorkspaceStatus extends Component {
         name: 'Workspace',
         statusCode: 'crashed',
       };
-      this.props.dispatch(addSystemDefcon1({error}, 'workspace'));
+      const entityErrorProcessed = this.props.dispatch(addSystemDefcon1({error}, 'workspace'));
+      if (entityErrorProcessed) {
+        this.setState({status: 'running'});
+      }
     }
   }
 

@@ -11,6 +11,7 @@ const {actions, actionTypes} = actionsCreator(
     'setEntitiesStatuses',
 
     'addSystemDefcon1',
+    'addEntityError',
     'toggleSystemDefcon1',
     'removeSystemDefcon1',
     'clearSystemDefcon1',

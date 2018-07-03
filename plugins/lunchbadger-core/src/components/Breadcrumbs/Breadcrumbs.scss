@@ -7,6 +7,10 @@
   width: 100%;
   text-align: center;
   display: table-cell;
+  .status {
+    display: inline-block;
+    width: 20px;
+  }
 }
 
 .breadcrumbs__element {

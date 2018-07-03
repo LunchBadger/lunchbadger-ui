@@ -18,6 +18,7 @@ import FilesEditor from './FilesEditor/FilesEditor';
 
 import Entity from './Entity/Entity';
 import EntityActionButtons from './Entity/EntityActionButtons/EntityActionButtons';
+import EntityError from './Entity/EntityError/EntityError';
 import EntityProperties from './Entity/EntityProperties/EntityProperties';
 import EntityProperty from './Entity/EntityProperty/EntityProperty';
 import EntityPropertyLabel from './Entity/EntityPropertyLabel/EntityPropertyLabel';
@@ -98,6 +99,7 @@ export {
   CopyOnHover,
   Entity,
   EntityActionButtons,
+  EntityError,
   EntityProperties,
   EntityProperty,
   EntityPropertyLabel,

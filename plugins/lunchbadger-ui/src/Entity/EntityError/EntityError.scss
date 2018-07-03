@@ -1,0 +1,17 @@
+.EntityError {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  background-color: #e85742;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #FFF;
+  text-align: center;
+  border: 2px solid #FFF;
+  line-height: 21px;
+  cursor: pointer;
+  &:before {
+    content: '!';
+  }
+}

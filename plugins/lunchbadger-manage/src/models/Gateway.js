@@ -9,6 +9,7 @@ import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const {Connections} = LunchBadgerCore.stores;
+const {storeUtils: {findGatewayByPipelineId}} = LunchBadgerCore.utils;
 const {consumerManagement} = Config.get('features');
 
 export default class Gateway extends BaseModel {
@@ -58,6 +59,7 @@ export default class Gateway extends BaseModel {
   toJSON(opts) {
     const options = Object.assign({
       isForServer: false,
+      isForDiff: false,
     }, opts);
     const json = {
       id: this.id,
@@ -95,7 +97,27 @@ export default class Gateway extends BaseModel {
     if (options.plain === this.id) {
       json.pipelines = [];
     }
+    if (options.isForDiff) {
+      if (this.running) {
+        json.pipelines = this.pipelines.reduce((map, pipeline) => {
+          map[pipeline.id] = pipeline;
+          return map;
+        }, {});
+      } else {
+        json.pipelines = {};
+      }
+    }
     return json;
+  }
+
+  toModelJSON() {
+    return {
+      admin: this.admin,
+      http: this.http,
+      https: this.https,
+      name: this.name,
+      pipelines: this.pipelines.map(item => item.toModelJSON()),
+    };
   }
 
   get tabs() {
@@ -123,54 +145,81 @@ export default class Gateway extends BaseModel {
     return '';
   }
 
-  async onSave(state) {
+  async onSave(state, delta, data, prevData) {
     if (this.loaded && this.running) {
-      const [gatewayServiceEndpoints, gatewayApiEndpoints, gatewayPipelines] = await Promise.all([
-        this.adminApi.getServiceEndpoints(),
-        this.adminApi.getApiEndpoints(),
-        this.adminApi.getPipelines(),
-      ]);
-      for (let id in gatewayServiceEndpoints.body) {
-        if (id === 'admin') continue;
-        await this.adminApi.deleteServiceEndpoint(id);
-      }
-      for (let id in gatewayApiEndpoints.body) {
-        if (id === 'admin') continue;
-        await this.adminApi.deleteApiEndpoint(id);
-      }
-      const {entities: {serviceEndpoints, apiEndpoints, functions, models, modelsBundled, apis, portals}} = state;
-      const serviceEndpointEntities = {...serviceEndpoints, ...models, ...functions, ...modelsBundled};
-      for (let id in serviceEndpointEntities) {
-        if (!serviceEndpointEntities[id].deleting) {
-          await this.adminApi.putServiceEndpoint(id, serviceEndpointEntities[id].toApiJSON());
+      const endpointOperations = {};
+      const pipelineOperations = {};
+      const {entities} = state;
+      const kinds = {
+        apiEndpoints: 'ApiEndpoint',
+        serviceEndpoints: 'ServiceEndpoint',
+        models: 'ServiceEndpoint',
+        functions: 'ServiceEndpoint',
+      };
+      for (let i in delta) {
+        const {op, path} = delta[i];
+        const [kind, id] = path;
+        if (Object.keys(kinds).includes(kind)) {
+          const isAdd = op === 'add' && path.length === 2;
+          const isDelete = op === 'remove' && path.length === 2;
+          const isRename = op === 'replace' && path.length === 3 && path[2] === 'name';
+          const operation = `${isDelete ? 'delete' : 'put'}${kinds[kind]}`;
+          const body = isDelete ? null : entities[kind][id].toApiJSON();
+          let addOperation = true;
+          if (kind === 'models' || kind === 'functions') {
+            addOperation = false;
+            if (isAdd || isDelete || isRename) {
+              addOperation = true;
+            }
+          }
+          if (addOperation) {
+            endpointOperations[id] = {operation, body};
+          }
+        }
+        if (kind === 'gateways' && path.length >= 4 && path[2] === 'pipelines') {
+          const isDelete = op === 'remove' && path.length === 4;
+          if (id === this.id) {
+            const idPipeline = path[3];
+            const operation = `${isDelete ? 'delete' : 'put'}Pipeline`;
+            const pipelineIdx = entities.gateways[id].pipelines.findIndex(({id}) => id === idPipeline);
+            const body = isDelete ? null : entities.gateways[id].pipelines[pipelineIdx].toApiJSON();
+            pipelineOperations[idPipeline] = {operation, body};
+          }
+        }
+        if (kind === 'connections' && path.length >= 2) {
+          const connectionPrev = prevData.connections[id];
+          if (connectionPrev) {
+            const pipelineIdPrev = connectionPrev.fromId;
+            const gatewayPrev = findGatewayByPipelineId(state, pipelineIdPrev);
+            if (gatewayPrev && gatewayPrev.id === this.id) {
+              const pipelinePrev = entities.gateways[this.id].pipelines.find(({id}) => id === pipelineIdPrev);
+              if (pipelinePrev) {
+                const body = pipelinePrev.toApiJSON();
+                pipelineOperations[pipelineIdPrev] = {operation: 'putPipeline', body};
+              }
+            }
+          }
+          const connectionCurr = data.connections[id];
+          if (connectionCurr) {
+            const pipelineIdCurr = connectionCurr.fromId;
+            const gatewayCurr = findGatewayByPipelineId(state, pipelineIdCurr);
+            if (gatewayCurr && gatewayCurr.id === this.id) {
+              const pipelineCurr = entities.gateways[this.id].pipelines.find(({id}) => id === pipelineIdCurr);
+              if (pipelineCurr) {
+                const body = pipelineCurr.toApiJSON();
+                pipelineOperations[pipelineIdCurr] = {operation: 'putPipeline', body};
+              }
+            }
+          }
         }
       }
-      const apiEndpointEntities = {};
-      for (let id in apiEndpoints) {
-        if (apiEndpoints[id].loaded) {
-          apiEndpointEntities[id] = apiEndpoints[id];
-        }
+      for (let id in endpointOperations) {
+        const {operation, body} = endpointOperations[id];
+        await this.adminApi[operation](id, body);
       }
-      for (let id in apis) {
-        if (apis[id].loaded) {
-          apis[id].apiEndpoints.map(endpoint => apiEndpointEntities[endpoint.id] = endpoint);
-        }
-      }
-      for (let id in portals) {
-        if (portals[id].loaded) {
-          portals[id].apis.map(api => api.apiEndpoints.map(endpoint => apiEndpointEntities[endpoint.id] = endpoint));
-        }
-      }
-      for (let id in apiEndpointEntities) {
-        await this.adminApi.putApiEndpoint(id, apiEndpointEntities[id].toApiJSON());
-      }
-      for (let id in gatewayPipelines.body) {
-        if (id === 'admin') continue;
-        await this.adminApi.deletePipeline(id);
-      }
-      for (let i = 0; i < this.pipelines.length; i += 1) {
-        const pipeline = this.pipelines[i];
-        await this.adminApi.putPipeline(pipeline.id, pipeline.toApiJSON());
+      for (let id in pipelineOperations) {
+        const {operation, body} = pipelineOperations[id];
+        await this.adminApi[operation](id, body);
       }
     }
   }
@@ -325,6 +374,7 @@ export default class Gateway extends BaseModel {
   }
 
   processModel(model) {
+    console.log(999, model);
     const data = _.cloneDeep(model);
     data.https.tls = {};
     if (model.https.enabled) {

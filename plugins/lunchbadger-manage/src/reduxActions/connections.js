@@ -14,7 +14,7 @@ export const attach = info => async (dispatch, getState) => {
     dispatch(addServiceEndpointIntoProxy(endpoint, pipelineId));
     if (!Connections.findHistory({fromId: endpoint.id, toId: pipelineId})) {
       const outPort = document.getElementById(`port_out_${pipelineId}`).querySelector('.port__anchor');
-      dispatch(addAndConnect(endpoint, pipelineId, outPort));
+      await dispatch(addAndConnect(endpoint, pipelineId, outPort));
     }
   }
   Connections.addConnectionByInfo(info);
@@ -55,7 +55,7 @@ export const reattach = info => async (dispatch, getState) => {
     dispatch(addServiceEndpointIntoProxy(newEndpoint, newPipelineId));
     if (!Connections.findHistory({fromId: newEndpoint.id, toId: newPipelineId})) {
       const outPort = document.getElementById(`port_out_${newPipelineId}`).querySelector('.port__anchor');
-      dispatch(addAndConnect(newEndpoint, newPipelineId, outPort));
+      await dispatch(addAndConnect(newEndpoint, newPipelineId, outPort));
     }
   }
   Connections.moveConnection(info);

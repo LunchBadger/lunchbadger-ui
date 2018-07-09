@@ -166,4 +166,4 @@ const connector = createSelector(
   }),
 );
 
-export default connect(connector)(CanvasElement(Microservice));
+export default connect(connector, null, null, {withRef: true})(CanvasElement(Microservice));

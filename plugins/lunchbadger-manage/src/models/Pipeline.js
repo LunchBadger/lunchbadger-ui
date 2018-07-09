@@ -44,11 +44,22 @@ export default class Pipeline extends BaseModel {
       id: this.id,
       name: this.name,
       policies: this.policies.map(policy => policy.toJSON()),
-    }
+    };
+  }
+
+  toModelJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      policies: this.policies.map(policy => policy.toModelJSON()),
+    };
   }
 
   toApiJSON() {
-    const apiEndpoints = Connections.search({fromId: this.id}).map(conn => conn.toId);
+    const apiEndpoints = Connections
+      .search({fromId: this.id})
+      .filter(({info}) => !info.connection.hasType('wip'))
+      .map(conn => conn.toId);
     const json = {
       friendlyName: this.name,
       policies: this.policies.map(policy => policy.toApiJSON()),

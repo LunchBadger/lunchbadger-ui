@@ -79,8 +79,7 @@ class Gateway extends Component {
     (model.pipelines || []).forEach(({id, policies}) => {
       if (!(policies || []).find(({name}) => name === 'proxy')) {
         const connectionsTo = Connections.search({toId: id});
-        const connectionsFrom = Connections.search({fromId: id});
-        [...connectionsTo, ...connectionsFrom].map((conn) => {
+        connectionsTo.forEach((conn) => {
           conn.info.connection.setParameter('discardAutoSave', true);
           paper.detach(conn.info.connection);
         });
@@ -167,7 +166,7 @@ class Gateway extends Component {
       <Sortable
         items={pipeline.policies}
         renderItem={(policy, policyIdx) => (
-          <div key={policyIdx}>
+          <div key={policy.id}>
             <EntityProperty
               name={`pipelines[${pipelineIdx}][policies][${policyIdx}][name]`}
               value={policy.name || options[0].value}
@@ -175,10 +174,19 @@ class Gateway extends Component {
               onDelete={this.deletePipelinePolicy(pipelineIdx, policyIdx)}
               onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
               autocomplete
+              hiddenInputs={[{
+                name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`,
+                value: policy.id,
+              }]}
             />
             <div className="Gateway__CA">
               {policy.conditionAction.map((pair, pairIdx) => (
-                <div key={pairIdx}>
+                <div key={pair.id}>
+                  <Input
+                    type="hidden"
+                    value={pair.id}
+                    name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][id]`}
+                  />
                   <GatewayPolicyCondition
                     ref={r => this.policyCARefs[`${pairIdx}_condition`] = r}
                     condition={pair.condition}

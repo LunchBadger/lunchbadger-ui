@@ -58,7 +58,7 @@ const boxTarget = {
 
   drop(props, monitor, component) {
     const item = monitor.getItem();
-    const element = component.element.decoratedComponentInstance || component.element;
+    const element = component.element.wrappedInstance || component.element;
     if (props.isPanelOpened) {
       return;
     }
@@ -107,7 +107,10 @@ export default (ComposedComponent) => {
       const {editable, highlighted} = props;
       this._handleDrop(props);
       if (props.entity !== entity) {
-        setTimeout(this.setFlatModel);
+        setTimeout(() => {
+          this.setFlatModel();
+          this.resetFormModel();
+        });
       }
       if ((editable || highlighted) && running && !props.running) {
         dispatch(clearCurrentEditElement());
@@ -129,7 +132,8 @@ export default (ComposedComponent) => {
 
     setFlatModel = () => {
       if (this.entityRef) {
-        this.state.model = getFlatModel(this.entityRef.getFormRef().getModel());
+        const model = this.props.entity.toModelJSON() || this.entityRef.getFormRef().getModel();
+        this.state.model = getFlatModel(model);
       }
     }
 
@@ -140,7 +144,7 @@ export default (ComposedComponent) => {
     update = async (props) => {
       const {entity, dispatch} = this.props;
       let model = props;
-      const element = this.element.decoratedComponentInstance || this.element;
+      const element = this.element.wrappedInstance || this.element;
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);
       }
@@ -157,7 +161,7 @@ export default (ComposedComponent) => {
     }
 
     updateName = (evt) => {
-      const element = this.element.decoratedComponentInstance || this.element;
+      const element = this.element.wrappedInstance || this.element;
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
       }
@@ -194,7 +198,7 @@ export default (ComposedComponent) => {
 
     handleRemove = () => {
       const {entity, dispatch} = this.props;
-      const element = this.element.decoratedComponentInstance || this.element;
+      const element = this.element.wrappedInstance || this.element;
       let cb;
       if (typeof element.onRemove === 'function') {
         cb = element.onRemove();
@@ -248,7 +252,7 @@ export default (ComposedComponent) => {
         if (!this.state.isValid) {
           this.setState({validations: {isValid: true, data: {}}});
         }
-        const element = this.element.decoratedComponentInstance || this.element;
+        const element = this.element.wrappedInstance || this.element;
         if (typeof element.discardChanges === 'function') {
           element.discardChanges(() => setTimeout(this.resetFormModel));
         } else {

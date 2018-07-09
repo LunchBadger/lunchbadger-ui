@@ -13,7 +13,13 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState) => {
+const addApiWipConnection = (fromId, toId) => new Promise(resolve => setTimeout(() => {
+  const {info: {connection}} = Connections.find({fromId, toId});
+  connection && connection.addType('wip');
+  resolve();
+}));
+
+export const addAndConnect = (endpoint, fromId, outPort) => async (dispatch, getState) => {
   const state = getState();
   const {entities, plugins: {quadrants}, states} = state;
   const isPanelClosed = !states.currentlyOpenedPanel;
@@ -28,11 +34,8 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
     });
     const toId = entity.id;
     Connections.addConnection(fromId, toId, {source: outPort});
-    setTimeout(() => {
-      const {info: {connection}} = Connections.find({fromId, toId});
-      connection && connection.addType('wip');
-    });
-    dispatch(actions.updateApiEndpoint(entity));
+    await dispatch(actions.updateApiEndpoint(entity));
+    await addApiWipConnection(fromId, toId);
     setTimeout(() => {
       const value = {
         id: entity.id,

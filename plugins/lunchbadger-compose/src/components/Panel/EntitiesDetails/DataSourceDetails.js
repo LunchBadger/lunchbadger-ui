@@ -19,6 +19,10 @@ class DataSourceDetails extends Component {
     entity: PropTypes.object.isRequired,
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +33,8 @@ class DataSourceDetails extends Component {
   handleStateChange = () => this.setState({changed: true}, () => this.props.parent.checkPristine());
 
   processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   discardChanges = callback => {
     if (this.compRef) {

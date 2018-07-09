@@ -6,7 +6,7 @@ const feedFlatModel = (json, data, prefix = '') => {
       const pfx = prefix ? `[${key}]` : key;
       if (Array.isArray(json[key])) {
         json[key].forEach((item, idx) => feedFlatModel(item, data, `${prefix}${pfx}[${idx}]`));
-      } else if (typeof json[key] === 'object') {
+      } else if (typeof json[key] === 'object' && json[key]) {
         Object.keys(json[key]).forEach(() => feedFlatModel(json[key], data, `${prefix}${pfx}`));
       } else {
         data[`${prefix}${pfx}`] = json[key];

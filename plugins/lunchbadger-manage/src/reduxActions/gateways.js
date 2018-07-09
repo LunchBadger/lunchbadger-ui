@@ -117,7 +117,8 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
   const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
   const action = {
     serviceEndpoint: endpoint.id,
-    changeOrigin: true,
+    changeOrigin: true, // FIXME: fill based on schemas required params
+    strategy: 'round-robin',
   };
   if (endpoint.constructor.type === 'Function_') {
     Object.assign(action, {ignorePath: true});

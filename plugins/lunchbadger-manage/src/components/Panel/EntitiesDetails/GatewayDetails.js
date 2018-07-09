@@ -91,8 +91,7 @@ class GatewayDetails extends PureComponent {
       // remove connections for pipelines having no proxy policy
       if (!((policies || []).find(({name}) => name === 'proxy'))) {
         const connectionsTo = Connections.search({toId: id});
-        const connectionsFrom = Connections.search({fromId: id});
-        [...connectionsTo, ...connectionsFrom].forEach((conn) => {
+        connectionsTo.forEach((conn) => {
           conn.info.connection.setParameter('discardAutoSave', true);
           paper.detach(conn.info.connection);
         });
@@ -340,14 +339,20 @@ class GatewayDetails extends PureComponent {
         <Sortable
           items={policy.conditionAction}
           renderItem={(pair, idx) => (
-            <GatewayPolicyCAPair
-              key={pair.id}
-              nr={idx + 1}
-              renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
-              renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
-              onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
-              prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
-            />
+            <div key={pair.id}>
+              <Input
+                type="hidden"
+                value={pair.id}
+                name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${idx}][id]`}
+              />
+              <GatewayPolicyCAPair
+                nr={idx + 1}
+                renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
+                renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
+                onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
+                prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
+              />
+            </div>
           )}
           onSortEnd={this.handleReorderCAPairs(pipelineIdx, policyIdx)}
           inPanel

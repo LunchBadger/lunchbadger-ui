@@ -2,9 +2,9 @@ import _ from 'lodash';
 import {update, remove} from '../reduxActions/dataSources';
 import predefinedRests from '../utils/predefinedRests';
 
-const BaseModel = LunchBadgerCore.models.BaseModel;
-const Port = LunchBadgerCore.models.Port;
+const {BaseModel, Port} = LunchBadgerCore.models;
 const portGroups = LunchBadgerCore.constants.portGroups;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class DataSource extends BaseModel {
   static type = 'DataSource';
@@ -393,6 +393,14 @@ export default class DataSource extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsFrom = Connections.search({fromId: this.id});
+    connectionsFrom.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
   processModel(model) {

@@ -25,6 +25,7 @@ class ApiEndpoint extends Component {
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -47,10 +48,9 @@ class ApiEndpoint extends Component {
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
-  processModel = model => {
-    const {entity} = this.props;
-    return entity.processModel(model);
-  };
+  processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   changeState = obj => this.setState(obj);
 
@@ -187,4 +187,4 @@ const selector = createSelector(
   gateways => ({gateways}),
 );
 
-export default connect(selector)(CanvasElement(ApiEndpoint));
+export default connect(selector, null, null, {withRef: true})(CanvasElement(ApiEndpoint));

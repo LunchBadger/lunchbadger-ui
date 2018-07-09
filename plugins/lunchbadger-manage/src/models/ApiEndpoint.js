@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/apiEndpoints';
 
-const BaseModel = LunchBadgerCore.models.BaseModel;
-const Port = LunchBadgerCore.models.Port;
+const {BaseModel, Port} = LunchBadgerCore.models;
 const portGroups = LunchBadgerCore.constants.portGroups;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class ApiEndpoint extends BaseModel {
   static type = 'ApiEndpoint';
@@ -134,6 +134,14 @@ export default class ApiEndpoint extends BaseModel {
 
   remove() {
     return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsTo = Connections.search({toId: this.id});
+    connectionsTo.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
   }
 
   processModel(model) {

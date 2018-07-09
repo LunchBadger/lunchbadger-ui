@@ -23,7 +23,6 @@ export const add = () => (dispatch, getState) => {
 
 export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
-  let isAutoSave = false;
   let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;
@@ -49,7 +48,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
-      isAutoSave = true;
       await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
       const dataSource = Connections.search({toId: entity.id})
@@ -104,9 +102,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       await dispatch(workspaceFilesReload());
     }
     dispatch(actions[updateAction](updatedEntity));
-    if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
-    }
+    await dispatch(coreActions.saveToServer({saveProject: false}));
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
@@ -131,6 +127,7 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
     if (cb) {
       await dispatch(cb());
     }
+    await dispatch(coreActions.saveToServer({saveProject: false}));
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }

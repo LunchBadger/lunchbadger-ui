@@ -15,10 +15,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.103', [
+console.info('LBAPP VERSION 0.104', [
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
-    'Feature/715 Error handling #716'
+    'Feature/715 Error handling #716',
+    'Bugfix/598 audit autosave gateways #718'
   ],
   [
     'master Bugfix/675 Unauthorized error should logout #677',

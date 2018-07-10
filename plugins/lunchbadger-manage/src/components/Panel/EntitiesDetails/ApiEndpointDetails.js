@@ -27,6 +27,7 @@ class ApiEndpointDetails extends Component {
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -51,10 +52,9 @@ class ApiEndpointDetails extends Component {
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
-  processModel = model => {
-    const {entity} = this.props;
-    return entity.processModel(model);
-  };
+  processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   changeState = (obj, cb) => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();

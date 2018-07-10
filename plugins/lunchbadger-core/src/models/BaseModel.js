@@ -81,6 +81,10 @@ export default class BaseModel {
     return this.ports;
   }
 
+  toModelJSON() {
+    return undefined;
+  }
+
   set id(id) {
     this._id = id;
   }

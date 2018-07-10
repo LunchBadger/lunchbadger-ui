@@ -33,7 +33,15 @@ export default class Policy extends BaseModel {
     return {
       id: this.id,
       [this.name]: this.conditionAction.map(conditionAction => conditionAction.toJSON()),
-    }
+    };
+  }
+
+  toModelJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      pairs: this.conditionAction.map(conditionAction => conditionAction.toJSON()),
+    };
   }
 
   toApiJSON() {

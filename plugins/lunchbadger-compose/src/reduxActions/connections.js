@@ -34,7 +34,6 @@ export const attachWithModel = info => async (dispatch, getState) => {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
   info.connection.removeType('wip');
-  await dispatch(coreActions.saveToServer());
 };
 
 export const attachWithFunction = info => async (dispatch) => {
@@ -60,7 +59,6 @@ export const detachWithModel = info => async (dispatch, getState) => {
   };
   try {
     await ModelService.upsertModelConfig(modelConfig);
-    await dispatch(coreActions.saveToServer());
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
@@ -96,6 +94,7 @@ export const reattachWithModel = info => async (dispatch, getState) => {
     }
     const dataSource = storeUtils.findEntity(state, 0, newSourceId);
     const model = storeUtils.findEntity(state, 1, newTargetId);
+    const modelPrev = storeUtils.findEntity(state, 1, originalTargetId);
     if (model.constructor.type === 'Model') {
       await ModelService.upsertModelConfig({
         name: model.name,
@@ -106,7 +105,9 @@ export const reattachWithModel = info => async (dispatch, getState) => {
       });
     }
     info.connection.removeType('wip');
-    await dispatch(coreActions.saveToServer());
+    if (model.constructor.type === 'Function_' || modelPrev.constructor.type === 'Function_') {
+      await dispatch(coreActions.saveToServer());
+    }
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }

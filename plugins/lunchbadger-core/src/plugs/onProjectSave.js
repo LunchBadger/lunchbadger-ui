@@ -56,15 +56,25 @@ const setStatesToSave = (state) => {
 }
 
 export default [
-  state => ({
-    name: 'main',
-    connections: Connections
-      .search({})
-      .filter(({fromId, toId, info}) => {
-        return !info.connection.hasType('wip')
-          && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
-      })
-      .map(({fromId, toId}) => ({fromId, toId})),
-    states: setStatesToSave(state),
-  }),
+  (state, opts) => {
+    const options = Object.assign({
+      isForDiff: false,
+    }, opts);
+    const data = {
+      connections: Connections
+        .search({})
+        .filter(({fromId, toId, info}) => {
+          return !info.connection.hasType('wip')
+            && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
+        })
+        .map(({fromId, toId}) => ({fromId, toId})),
+    };
+    if (!options.isForDiff) {
+      Object.assign(data, {
+        name: 'main',
+        states: setStatesToSave(state),
+      });
+    }
+    return data;
+  },
 ];

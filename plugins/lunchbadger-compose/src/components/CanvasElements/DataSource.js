@@ -14,7 +14,13 @@ class DataSource extends Component {
     entity: PropTypes.object.isRequired,
   };
 
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   processModel = model => this.props.entity.processModel(model);
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {

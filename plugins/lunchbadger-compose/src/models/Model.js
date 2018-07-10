@@ -287,6 +287,11 @@ export default class Model extends BaseModel {
   }
 
   beforeRemove(paper) {
+    const connectionsTo = Connections.search({toId: this.id});
+    connectionsTo.map((conn) => {
+      conn.info.connection.setParameter('discardAutoSave', true);
+      paper.detach(conn.info.connection);
+    });
     const connectionsFrom = Connections.search({fromId: this.id});
     let isAutoSave = false;
     connectionsFrom.map((conn) => {

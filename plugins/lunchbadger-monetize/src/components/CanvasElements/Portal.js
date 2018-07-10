@@ -211,4 +211,4 @@ const selector = createSelector(
   currentlySelectedSubelements => ({currentlySelectedSubelements}),
 );
 
-export default connect(selector)(CanvasElement(Portal));
+export default connect(selector, null, null, {withRef: true})(CanvasElement(Portal));

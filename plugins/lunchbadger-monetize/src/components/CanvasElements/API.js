@@ -43,9 +43,11 @@ class API extends Component {
     .refs
     .apiEndpoint
     .getWrappedInstance()
+    .getWrappedInstance()
     .getDecoratedComponentInstance()
     .getDecoratedComponentInstance()
-    .element;
+    .element
+    .wrappedInstance;
 
   processModel = model => {
     if (!model.apiEndpoints) model.apiEndpoints = [];

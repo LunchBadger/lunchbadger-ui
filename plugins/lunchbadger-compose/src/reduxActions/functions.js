@@ -48,6 +48,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     const slsDeploy = await SLSService.update(name, updatedEntity.service);
     updatedEntity.service = slsDeploy.body;
+    await dispatch(coreActions.saveToServer({saveProject: false}));
     await SLSService.deploy(name);
     updatedEntity.running = true;
   } catch (error) {
@@ -70,6 +71,7 @@ export const remove = (entity, cb) => async (dispatch) => {
       if (cb) {
         await dispatch(cb());
       }
+      await dispatch(coreActions.saveToServer({saveProject: false}));
     } else {
       dispatch(actions.removeFunction(entity));
     }

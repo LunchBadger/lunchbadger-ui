@@ -219,4 +219,4 @@ const selector = createSelector(
   gateways => ({gateways}),
 );
 
-export default connect(selector)(BaseDetails(ApiEndpointDetails));
+export default connect(selector, null, null, {withRef: true})(BaseDetails(ApiEndpointDetails));

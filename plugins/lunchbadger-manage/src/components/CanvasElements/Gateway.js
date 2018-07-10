@@ -230,10 +230,10 @@ class Gateway extends Component {
   );
 
   renderPipelinePorts = pipeline => {
-    const {entity: {deleting}} = this.props;
+    const {entity: {deleting, running}} = this.props;
     const {ports, policies} = pipeline;
     const hasProxyPolicy = !!policies.find(item => item.name === 'proxy');
-    const disabled = deleting; // !hasProxyPolicy || deleting
+    const disabled = deleting || !running; // !hasProxyPolicy || deleting
     return ports.map((port) => {
       const scope = port.portGroup; // hasProxyPolicy ? port.portGroup : port.id;
       return (

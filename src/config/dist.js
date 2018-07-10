@@ -1,4 +1,5 @@
 export default {
+  enableConfigStoreApi: false,
   configStoreApiUrl: 'https://api.lunchbadger.com/api',
   gitBaseUrl: 'https://api.lunchbadger.com/git',
   projectApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',

@@ -2,19 +2,21 @@ import ApiClient from '../utils/ApiClient';
 import Config from '../../../../src/config';
 import {getUser} from '../utils/auth';
 
+const enableConfigStoreApi = Config.get('enableConfigStoreApi');
+
 class ConfigStoreService {
-  initialize = () => this.api = new ApiClient(Config.get('configStoreApiUrl'), getUser().id_token);
+  initialize = () => {
+    if (enableConfigStoreApi) {
+      this.api = new ApiClient(Config.get('configStoreApiUrl'), getUser().id_token);
+    }
+  };
 
-  upsertProject = () => this.api.post('/producers', {body: {id: getUser().profile.sub}});
+  upsertProject = () => {
+    if (enableConfigStoreApi) {
+      return this.api.post('/producers', {body: {id: getUser().profile.sub}});
+    }
+    return Promise.resolve();
+  }
 }
 
-class FakeConfigStoreService {
-  initialize = () => {};
-  upsertProject = () => Promise.resolve();
-}
-
-if (Config.get('enableConfigStoreApi') {
-  export default new ConfigStoreService();
-} else {
-  export default new FakeConfigStoreService();
-}
+export default new ConfigStoreService();

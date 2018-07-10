@@ -9,10 +9,27 @@ import LoginManager from '../../../../plugins/lunchbadger-core/src/utils/auth';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
+  static propTypes = {
+    server: PropTypes.bool,
+    errors: PropTypes.array,
+    defaultDetailsCollapse: PropTypes.bool,
+    toggleErrorDetailsText: PropTypes.string,
+    onClose: PropTypes.func,
+    hideRemoveButton: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    server: false,
+    errors: [],
+    defaultDetailsCollapse: false,
+    toggleErrorDetailsText: 'server output details',
+    hideRemoveButton: false,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      visibleError: true,
+      visibleError: !props.defaultDetailsCollapse,
     }
   }
 
@@ -30,9 +47,11 @@ class SystemDefcon1Box extends Component {
   toggleVisibleError = () => this.setState({visibleError: !this.state.visibleError});
 
   handleClose = () => {
-    const {dispatch, server} = this.props;
+    const {dispatch, server, onClose} = this.props;
     if (server) {
       LoginManager().logout();
+    } else if (onClose) {
+      onClose();
     } else {
       dispatch(toggleSystemDefcon1());
     }
@@ -43,7 +62,15 @@ class SystemDefcon1Box extends Component {
   handleBoxClick = event => event.stopPropagation();
 
   render() {
-    const {title, server, errors, content, buttons} = this.props;
+    const {
+      title,
+      server,
+      errors,
+      content,
+      buttons,
+      toggleErrorDetailsText,
+      hideRemoveButton,
+    } = this.props;
     const {visibleError} = this.state;
     const titleTxt = title || (server ? 'Server Failure' : 'The workspace crashed');
     const contentTxt = content || (server
@@ -66,7 +93,7 @@ class SystemDefcon1Box extends Component {
                   className="SystemDefcon1__box__content__details--link"
                   onClick={this.toggleVisibleError}
                 >
-                  {visibleError ? 'Hide' : 'Show'} server output details
+                  {visibleError ? 'Hide' : 'Show'} {toggleErrorDetailsText}
                 </span>
               </div>
               <SmoothCollapse expanded={visibleError} heightTransition="500ms ease">
@@ -90,6 +117,7 @@ class SystemDefcon1Box extends Component {
                         request={request}
                         body={body}
                         onRemove={this.handleRemove(message)}
+                        hideRemoveButton={hideRemoveButton}
                       >
                         <pre>
                           {method} on {endpoint}
@@ -125,15 +153,5 @@ class SystemDefcon1Box extends Component {
     );
   }
 }
-
-SystemDefcon1Box.propTypes = {
-  server: PropTypes.bool,
-  errors: PropTypes.array,
-};
-
-SystemDefcon1Box.defaultProps = {
-  server: false,
-  errors: [],
-};
 
 export default connect(null)(SystemDefcon1Box);

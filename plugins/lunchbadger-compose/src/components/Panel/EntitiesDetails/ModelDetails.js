@@ -573,4 +573,4 @@ const selector = createSelector(
   }),
 );
 
-export default connect(selector)(BaseDetails(ModelDetails));
+export default connect(selector, null, null, {withRef: true})(BaseDetails(ModelDetails));

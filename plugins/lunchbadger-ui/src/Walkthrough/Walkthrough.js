@@ -88,6 +88,12 @@ class Walkthrough extends PureComponent {
         showNextButton: !step.triggerNext,
         allowClicksThruHole: !!step.allowClicksThruHole,
       });
+      if (index === 0 && step.onPageReload) {
+        if (!this.stepsExecuted[`${type}-${index}-onPageReload`]) {
+          this.stepsExecuted[`${type}-${index}-onPageReload`] = true;
+          await series(step.onPageReload(this.api));
+        }
+      }
       if (step.onBefore) {
         if (step.rootUrlReplacement) {
           step.text = step.text
@@ -227,6 +233,11 @@ class Walkthrough extends PureComponent {
     setCanvasEntityName: (entity, name) => this.api.setTextValue(`.Entity.${entity} .input__name`, name),
     connectPorts: (from, to) => cb => series([
       callback => window.dispatchEvent(new CustomEvent('connectPorts', {detail: {from, to, callback}})),
+      this.api.waitUntilProjectSaved(),
+      () => cb(),
+    ]),
+    disconnectPorts: (from, to) => cb => series([
+      callback => window.dispatchEvent(new CustomEvent('disconnectPorts', {detail: {from, to, callback}})),
       this.api.waitUntilProjectSaved(),
       () => cb(),
     ]),

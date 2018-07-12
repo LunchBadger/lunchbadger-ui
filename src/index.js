@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.114', [
+console.info('LBAPP VERSION 0.115', [
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
     'Feature/715 Error handling #716',
@@ -27,7 +27,8 @@ console.info('LBAPP VERSION 0.114', [
     'Feature/731 walkthrough continue after connecting with pipeline #732',
     'Bugfix/733 ApiEndpoint is not auto-added, when connecting again service endpoint #738',
     'Feature/728 Add python 3.6 selector for function #739',
-    'Feature/740 connection remove icon #741'
+    'Feature/740 connection remove icon #741',
+    'Feature/721 Add validations to service endpoint urls #742'
   ],
   [
     'master Bugfix/675 Unauthorized error should logout #677',

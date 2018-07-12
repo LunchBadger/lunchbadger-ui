@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.110', [
+console.info('LBAPP VERSION 0.111', [
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
     'Feature/715 Error handling #716',
@@ -23,7 +23,8 @@ console.info('LBAPP VERSION 0.110', [
     'Bugfix/654 Cannot delete model from zoom window #725',
     'Bugfix/658 Its possible to connect with deploying or crashed gateway #726',
     'Bugfix/657 Wrong row deleted in service and api endpoint #727',
-    'Feature/640 preserve state of walkthrough after page reload #724'
+    'Feature/640 preserve state of walkthrough after page reload #724',
+    'Feature/731 walkthrough continue after connecting with pipeline #732'
   ],
   [
     'master Bugfix/675 Unauthorized error should logout #677',

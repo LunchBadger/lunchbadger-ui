@@ -69,6 +69,12 @@ class ApiEndpointDetails extends Component {
     }
   };
 
+  handlePathChange = idx => ({target: {value}}) => {
+    const paths = this.state.paths.slice();
+    paths[idx] = value;
+    this.changeState({paths});
+  };
+
   addPath = () => {
     const paths = this.state.paths.slice();
     paths.push('');
@@ -180,6 +186,7 @@ class ApiEndpointDetails extends Component {
         fullWidth
         hideUnderline
         handleKeyDown={this.handlePathTab(idx)}
+        handleBlur={this.handlePathChange(idx)}
       />,
       <IconButton icon="iconDelete" onClick={this.removePath(idx)} />,
     ]);

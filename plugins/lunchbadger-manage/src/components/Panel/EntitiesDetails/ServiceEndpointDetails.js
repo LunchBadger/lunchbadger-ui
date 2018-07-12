@@ -58,6 +58,12 @@ class ServiceEndpointDetails extends PureComponent {
     }
   };
 
+  handleUrlChanged = idx => ({target: {value}}) => {
+    const urls = this.state.urls.slice();
+    urls[idx] = value;
+    this.changeState({urls});
+  };
+
   addUrl = () => {
     const urls = this.state.urls.slice();
     urls.push('');
@@ -92,6 +98,7 @@ class ServiceEndpointDetails extends PureComponent {
         fullWidth
         hideUnderline
         handleKeyDown={this.handleUrlTab(idx)}
+        handleBlur={this.handleUrlChanged(idx)}
       />,
       idx === 0 ? null : <IconButton icon="iconDelete" onClick={this.removeUrl(idx)} />,
     ]);

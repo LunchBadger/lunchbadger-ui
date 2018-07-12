@@ -6,6 +6,18 @@ const portGroups = LunchBadgerCore.constants.portGroups;
 const Port = LunchBadgerCore.models.Port;
 const {Connections} = LunchBadgerCore.stores;
 
+const isValidUrl = (string) => {
+  try {
+    const url = new URL(string);
+    if (!['http', 'https'].includes(url.protocol.replace(':', ''))) {
+      return false;
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 export default class ServiceEndpoint extends BaseModel {
   static type = 'ServiceEndpoint';
   static entities = 'serviceEndpoints';
@@ -76,6 +88,11 @@ export default class ServiceEndpoint extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
+      model.urls.forEach((url, idx) => {
+        if (!isValidUrl(url)) {
+          validations.data[`urls[${idx}]`] = 'URL has invalid format';
+        }
+      })
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

@@ -14,6 +14,7 @@ Integrate your LunchBadger Project with existing data sources and services, such
     waitForSelector: 'div[role=presentation]',
     position: 'right',
     allowClicksThruHole: false,
+    skipLastStep: true,
     onBefore: api => [
       api.openEntitySubmenu('dataSource'),
       api.blockClicks(),
@@ -33,6 +34,7 @@ C'mon, click it!
     waitForSelector: '.Tool__submenuItem.memory',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.DataSource.memory', false),
     ],
@@ -73,6 +75,7 @@ C'mon, click it!
     waitForSelector: '.Tool.model',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .EntityHeader', false),
     ],
@@ -90,6 +93,7 @@ Let's name it <pre>Car</pre>.
     selector: '.Entity.Model.editable .EntityHeader',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="Car"]'),
       api.blur('.Entity.Model.editable .EntityHeader input'),
@@ -108,6 +112,7 @@ Let's name it <pre>cars</pre>.
     selector: '.Entity.Model.editable .EntityProperties .EntityProperty',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__httppath input[value="cars"]'),
       api.blur('.Entity.Model.editable .input__httppath input'),
@@ -126,6 +131,7 @@ C'mon, click it!
     waitForSelector: '.Entity.Model.editable .button__add__Properties',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__properties0name', false),
     ],
@@ -141,6 +147,7 @@ Let's set <pre>year</pre> as the property name.
     waitForSelector: '.Entity.Model.editable .input__properties0name',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .input__properties0name input[value="year"]'),
     ],
@@ -158,6 +165,7 @@ Select <pre>Number</pre> from the dropdown list.
     waitForSelector: '.Entity.Model.editable .select__properties0type',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     onBefore: api => [
       api.setOverlayBack(true),
       api.focus('.Entity.Model.editable .select__properties0type button'),
@@ -212,6 +220,7 @@ C'mon, click it!
 `,
     waitForSelector: '.Tool.function',
     allowClicksThruHole: true,
+    skipLastStep: true,
     position: 'right',
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Function_.editable', false),
@@ -266,6 +275,7 @@ C'mon, click it!
     position: 'right',
     waitForSelector: '.Entity.Function_ .Toolbox__button--zoom',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
       api.setShowOverlay(false),
@@ -288,6 +298,7 @@ Function Entity's Built-in Editor
     waitForSelector: '.DetailsPanel .FilesEditor',
     position: 'top',
     allowClicksThruHole: false,
+    skipLastStep: true,
     onBefore: () => [],
   },
   '035': {

@@ -37,7 +37,7 @@ class Canvas extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.loadingProject && !nextProps.loadingProject && !this.connectionsHandled) {
       this.connectionsHandled = true;
-      setTimeout(this.handleInitialConnections);
+      this.handleInitialConnections();
     }
   }
 

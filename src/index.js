@@ -15,13 +15,14 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.108', [
+console.info('LBAPP VERSION 0.109', [
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
     'Feature/715 Error handling #716',
     'Bugfix/598 audit autosave gateways #718',
     'Bugfix/654 Cannot delete model from zoom window #725',
-    'Bugfix/658 Its possible to connect with deploying or crashed gateway #726'
+    'Bugfix/658 Its possible to connect with deploying or crashed gateway #726',
+    'Bugfix/657 Wrong row deleted in service and api endpoint #727'
   ],
   [
     'master Bugfix/675 Unauthorized error should logout #677',

@@ -278,7 +278,8 @@ export default (ComposedComponent) => {
 
     handleValidationFieldClick = field => ({target}) => {
       const closestCanvasElement = target.closest('.Entity');
-      const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${field}`);
+      const id = field.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+      const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${id}`);
       if (closestInput) {
         closestInput.focus();
       }

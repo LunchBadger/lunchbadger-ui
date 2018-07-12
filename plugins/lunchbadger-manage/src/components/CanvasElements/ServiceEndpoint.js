@@ -86,6 +86,7 @@ class ServiceEndpoint extends Component {
 
   renderUrls = () => {
     const {urls} = this.state;
+    const {validations: {data}} = this.props;
     return (
       <EntitySubElements
         title={`URL${urls.length === 1 ? '' : 'S'}`}
@@ -98,6 +99,7 @@ class ServiceEndpoint extends Component {
             placeholder="Enter url here"
             name={`urls[${idx}]`}
             value={url}
+            invalid={data[`urls[${idx}]`]}
             onDelete={this.removeUrl(idx)}
             onTab={this.handleUrlTab(idx)}
           />

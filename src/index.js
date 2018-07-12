@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.111', [
+console.info('LBAPP VERSION 0.112', [
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
     'Feature/715 Error handling #716',
@@ -24,7 +24,8 @@ console.info('LBAPP VERSION 0.111', [
     'Bugfix/658 Its possible to connect with deploying or crashed gateway #726',
     'Bugfix/657 Wrong row deleted in service and api endpoint #727',
     'Feature/640 preserve state of walkthrough after page reload #724',
-    'Feature/731 walkthrough continue after connecting with pipeline #732'
+    'Feature/731 walkthrough continue after connecting with pipeline #732',
+    'Bugfix/733 ApiEndpoint is not auto-added, when connecting again service endpoint #738'
   ],
   [
     'master Bugfix/675 Unauthorized error should logout #677',

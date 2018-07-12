@@ -45,6 +45,7 @@ C'mon, click it!`,
     waitForSelector: '.Tool.gateway',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable', false),
     ],
@@ -62,6 +63,7 @@ A Pipeline is a set of policies that is executed on each API request.
     waitForSelector: '.Entity.Gateway.editable .Gateway',
     position: 'left',
     allowClicksThruHole: false,
+    skipLastStep: true,
     onBefore: () => [],
   },
   '0702': {
@@ -71,6 +73,7 @@ Let's name the first pipeline <pre>CarPipeline</pre>`,
     waitForSelector: '.Entity.Gateway.editable .input__pipelines0name',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines0name input[value="CarPipeline"]'),
     ],
@@ -86,6 +89,7 @@ Let's add a second pipeline.
     waitForSelector: '.Entity.Gateway.editable .button__add__Pipelines',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name', false),
     ],
@@ -101,6 +105,7 @@ Let's name the second pipeline <pre>FunctionPipeline</pre>.
     selector: '.Entity.Gateway.editable .input__pipelines1name',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable .input__pipelines1name input[value="FunctionPipeline"]'),
     ],
@@ -153,6 +158,8 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
     selector: '.Entity.Model .port-out',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
+    unblockNext: true,
     onBefore: api => [
       api.setShowOverlay(false),
     ],
@@ -167,6 +174,7 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
     selector: '.quadrant.Public .quadrant__body',
     position: 'left',
     allowClicksThruHole: false,
+    skipLastStep: true,
     onBefore: () => [],
   },
   '0710': {
@@ -177,6 +185,7 @@ Let's add a path.
     waitForSelector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0', false),
     ],
@@ -192,6 +201,7 @@ Add the following path: <pre>/api/cars*</pre>
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/cars*"]'),
     ],
@@ -220,6 +230,8 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
     waitForSelector: '.Entity.Function_ .port-out',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
+    unblockNext: true,
     onBefore: api => [
       api.setShowOverlay(false),
     ],
@@ -236,6 +248,7 @@ Once again, an API Endpoint Entity is created automatically. Let's add a path.
     waitForSelector: '.Entity.ApiEndpoint.editable .button__add__PATHS',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0', false),
     ],
@@ -251,6 +264,7 @@ Add the following path: <pre>/api/myfunction*</pre>
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
     ],

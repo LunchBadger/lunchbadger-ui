@@ -5,7 +5,9 @@ const getKeyName = key => `${key}-${getUser().profile.sub}`;
 const userStorage = {
   set: (name, value) => localStorage.setItem(getKeyName(name), value),
   get: name => localStorage.getItem(getKeyName(name)),
+  getNumber: name => +localStorage.getItem(getKeyName(name)) || 0,
   remove: name => localStorage.removeItem(getKeyName(name)),
+  exists: name => localStorage.getItem(getKeyName(name)) != null,
 };
 
 Object.assign(userStorage, {

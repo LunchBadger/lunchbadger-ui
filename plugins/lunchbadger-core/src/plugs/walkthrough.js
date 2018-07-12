@@ -34,6 +34,7 @@ Click this icon to open Settings.
     selector: '.header__menu__link.SETTINGS_PANEL',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.SettingsPanel[style="height: 0px;"]'),
       api.setShowOverlay(false),
@@ -53,6 +54,7 @@ All entities will be removed from the canvas.
     waitForSelector: '.RestartWalkthrough',
     position: 'bottom-left',
     allowClicksThruHole: false,
+    skipLastStep: true,
     onBefore: () => [],
   },
   '905': {

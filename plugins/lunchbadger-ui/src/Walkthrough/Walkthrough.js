@@ -34,6 +34,7 @@ class Walkthrough extends PureComponent {
     super(props);
     this.state = this.initState(props);
     this.stepsExecuted = {};
+    this.skipedLastStep = 1;
   }
 
   componentDidMount() {
@@ -45,6 +46,9 @@ class Walkthrough extends PureComponent {
   }
 
   onWalkthroughRestart = () => {
+    userStorage.remove('walkthroughLastStep');
+    this.stepsExecuted = {};
+    this.skipedLastStep = 1;
     this.setState(this.initState());
     this.restarted = true;
   };
@@ -52,6 +56,10 @@ class Walkthrough extends PureComponent {
   initState = (props = this.props) => {
     this.waitMethod = 'waitByAnimationFrame';
     this.steps = cloneDeep(props.steps);
+    const walkthroughLastStep = userStorage.getNumber('walkthroughLastStep');
+    if (walkthroughLastStep > 0) {
+      this.steps = this.steps.splice(walkthroughLastStep, this.steps.length - walkthroughLastStep);
+    }
     return {
       run: true,
       showNextButton: true,
@@ -63,7 +71,10 @@ class Walkthrough extends PureComponent {
     };
   };
 
-  exitWalkthrough = () => userStorage.set('walkthroughShown', true);
+  exitWalkthrough = () => {
+    userStorage.remove('walkthroughLastStep');
+    userStorage.set('walkthroughShown', true);
+  }
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
@@ -82,7 +93,6 @@ class Walkthrough extends PureComponent {
           step.text = step.text
             .replace(/\$ROOT_URL/g, this.getRootUrl())
             .replace(/\$USER_ID/g, this.props.userId);
-
         }
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
@@ -100,7 +110,9 @@ class Walkthrough extends PureComponent {
         const actions = step.triggerNext(this.api);
         await series(actions, () => {
           if (!this.stepsExecuted[`${type}-${index}-next`]) {
-            this.stepsExecuted[`${type}-${index}-next`] = true;
+            if (!step.unblockNext) {
+              this.stepsExecuted[`${type}-${index}-next`] = true;
+            }
             this.joyride && this.joyride.next();
           }
         });
@@ -108,14 +120,23 @@ class Walkthrough extends PureComponent {
         this.api.focusNext()(() => {});
       }
     }
-    if (type === 'step:after' && step.onAfter) {
-      if (!this.stepsExecuted[`${type}-${index}`]) {
-        this.stepsExecuted[`${type}-${index}`] = true;
-        await series([
-          this.api.setRun(false),
-          ...step.onAfter(this.api),
-          this.api.setRun(true),
-        ]);
+    if (type === 'step:after') {
+      if (step.onAfter) {
+        if (!this.stepsExecuted[`${type}-${index}`]) {
+          this.stepsExecuted[`${type}-${index}`] = true;
+          await series([
+            this.api.setRun(false),
+            ...step.onAfter(this.api),
+            this.api.setRun(true),
+          ]);
+        }
+      }
+      if (step.skipLastStep) {
+        this.skipedLastStep += 1;
+      } else {
+        const walkthroughLastStep = userStorage.getNumber('walkthroughLastStep');
+        userStorage.set('walkthroughLastStep', walkthroughLastStep + this.skipedLastStep);
+        this.skipedLastStep = 1;
       }
     }
   };
@@ -302,7 +323,7 @@ class Walkthrough extends PureComponent {
     } = this.state;
     const showWalkthrough = loadedProject
       && !loadingProject
-      && emptyProject
+      && (emptyProject || (!emptyProject && userStorage.exists('walkthroughLastStep')))
       && !userStorage.get('walkthroughShown');
     const showWaitingScreen = loadedProject
       && !emptyProject

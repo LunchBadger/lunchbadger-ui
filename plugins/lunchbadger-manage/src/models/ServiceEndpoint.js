@@ -92,7 +92,10 @@ export default class ServiceEndpoint extends BaseModel {
         if (!isValidUrl(url)) {
           validations.data[`urls[${idx}]`] = 'URL has invalid format';
         }
-      })
+      });
+      if (model.urls.length === 0) {
+        validations.data['urls[0]'] = 'At least one URL has to be defined';
+      }
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

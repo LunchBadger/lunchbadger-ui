@@ -51,7 +51,8 @@ export default {
     kubeWatcher: true,
     consumerManagement: isStaging,
     gitAccess: true,
-    uploadPublicKeys: true
+    uploadPublicKeys: true,
+    appUrls: true
   },
   logins
 };

@@ -11,7 +11,7 @@ import RestartWalkthrough from './EntitiesDetails/RestartWalkthrough';
 import {EntityPropertyLabel} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
-const {gitAccess} = Config.get('features');
+const {gitAccess, appUrls} = Config.get('features');
 
 const dummyLoopbackGitCloneCommand = 'git clone git@xxxxxxxxx.xxxxxxxxx.xxx:xxxxxxxxx-xxxxxxxxx/xxxxxxxxx.xxx';
 const dummyServerlessGitCloneCommand = 'git clone git@xxxxxxxxxx.xxxxxxxxxx.xxx:xxxxxxxxxx-xxxxxxxxxx/xxxxxxxxxx.xxx';
@@ -44,22 +44,24 @@ class SettingsPanel extends Component {
           Settings
         </div>
         <RestartWalkthrough />
-        <div className="details-panel__element">
-          <div className="details-panel__fieldset">
-            <EntityPropertyLabel>
-              Your application URLs
-            </EntityPropertyLabel>
-            <div className="details-panel__static-field">
-              <a href={workspaceUrl} target="_blank">
-                {workspaceUrl}
-              </a> (root)
-              <br />
-              <a href={workspaceUrl + '/explorer'} target="_blank">
-                {workspaceUrl + '/explorer'}
-              </a> (API explorer)
+        {appUrls && (
+          <div className="details-panel__element">
+            <div className="details-panel__fieldset">
+              <EntityPropertyLabel>
+                Your application URLs
+              </EntityPropertyLabel>
+              <div className="details-panel__static-field">
+                <a href={workspaceUrl} target="_blank">
+                  {workspaceUrl}
+                </a> (root)
+                <br />
+                <a href={workspaceUrl + '/explorer'} target="_blank">
+                  {workspaceUrl + '/explorer'}
+                </a> (API explorer)
+              </div>
             </div>
           </div>
-        </div>
+        )}
         <div className="accessViaGit details-panel__element">
           <div className="details-panel__fieldset">
             <EntityPropertyLabel>

@@ -47,6 +47,7 @@ class SshManager extends PureComponent {
   }
 
   loadPublicKeys = async () => {
+    if (!uploadPublicKeys) return;
     try {
       const {body: {publicKeys}} = await SshManagerService.load();
       this.setState({publicKeys});

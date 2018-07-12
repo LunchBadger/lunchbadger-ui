@@ -167,6 +167,9 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
       api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
       api.setShowOverlay(true),
     ],
+    onPageReload: api => [
+      api.disconnectPorts('.Entity.Model .port-out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
+    ],
   },
   '0709': {
     title: 'API Endpoint Explanation',
@@ -238,6 +241,9 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
       api.setShowOverlay(true),
+    ],
+    onPageReload: api => [
+      api.disconnectPorts('.Entity.Function_ .port-out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
     ],
   },
   '0714': {

@@ -80,17 +80,13 @@
     }
   }
   .remove-button {
-    color: $ui-light;
-    background: red;
+    background: red url('data:image/svg+xml;utf8,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" xml:space="preserve"><g><line style="stroke:#FFF;stroke-width:1.8;" x1="14" y1="6" x2="6" y2="14"/><line style="stroke:#FFF;stroke-width:1.8;" x1="6" y1="6" x2="14" y2="14"/></g></svg>');
     border-radius: 50%;
     width: 18px;
     height: 18px;
-    padding: 3px 6px;
-    font-size: 11px;
     cursor: pointer;
     display: none;
     z-index: 17;
-
     &.jsplumb-hover {
       display: block;
     }

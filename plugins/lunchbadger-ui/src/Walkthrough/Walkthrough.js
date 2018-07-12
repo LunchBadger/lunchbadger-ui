@@ -33,6 +33,7 @@ class Walkthrough extends PureComponent {
   constructor(props) {
     super(props);
     this.state = this.initState(props);
+    this.stepsExecuted = {};
   }
 
   componentDidMount() {
@@ -86,25 +87,36 @@ class Walkthrough extends PureComponent {
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
         }
-        await series([
-          this.api.setRun(false),
-          ...step.onBefore(this.api),
-          this.api.setRun(true),
-        ]);
+        if (!this.stepsExecuted[`${type}-${index}`]) {
+          this.stepsExecuted[`${type}-${index}`] = true;
+          await series([
+            this.api.setRun(false),
+            ...step.onBefore(this.api),
+            this.api.setRun(true),
+          ]);
+        }
       }
       if (step.triggerNext) {
         const actions = step.triggerNext(this.api);
-        await series(actions, () => this.joyride && this.joyride.next());
+        await series(actions, () => {
+          if (!this.stepsExecuted[`${type}-${index}-next`]) {
+            this.stepsExecuted[`${type}-${index}-next`] = true;
+            this.joyride && this.joyride.next();
+          }
+        });
       } else {
         this.api.focusNext()(() => {});
       }
     }
     if (type === 'step:after' && step.onAfter) {
-      await series([
-        this.api.setRun(false),
-        ...step.onAfter(this.api),
-        this.api.setRun(true),
-      ]);
+      if (!this.stepsExecuted[`${type}-${index}`]) {
+        this.stepsExecuted[`${type}-${index}`] = true;
+        await series([
+          this.api.setRun(false),
+          ...step.onAfter(this.api),
+          this.api.setRun(true),
+        ]);
+      }
     }
   };
 

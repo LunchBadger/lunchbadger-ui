@@ -8,7 +8,11 @@ export default (model, entity, properties, stateProperties) => {
     const property = model.properties[key];
     property.name = property.name.trim();
     if (property.name.length === 0) return;
-    const prop = ModelProperty.create({...property, itemOrder});
+    const prop = ModelProperty.create({
+      ...property,
+      lunchbadgerId: property.id,
+      itemOrder,
+    });
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
     const [parentId] = key.split('/');

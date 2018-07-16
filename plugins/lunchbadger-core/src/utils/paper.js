@@ -22,7 +22,6 @@ const jsPlumbConfig = {
     [
       'Label',
       {
-        label: 'X',
         id: 'remove-button',
         cssClass: 'remove-button',
       },

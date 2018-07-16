@@ -15,7 +15,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.116', [
+console.info('LBAPP VERSION 0.117', [
+  [
+    'master Feature/655 service endpoint first path cannot be removed #743',
+    'Feature/719 audit autosave model #748'
+  ],
   [
     'master Bugfix/711 Python function with error cannot be edited #714',
     'Feature/715 Error handling #716',
@@ -52,20 +56,6 @@ console.info('LBAPP VERSION 0.116', [
     'Feature/695 Walkthrough reset text changw #706',
     'Bugfix/702 token refresh in change-stream #707',
     'Bugfix/711 Python function with error cannot be edited #714'
-  ],
-  [
-    'master Feature/663 Add tooltips to header menu #671',
-    'Bugfix/664 Allow editing invalid functions #672',
-    'Bugfix/369 Re-labeling database in redis and mongodb #674'
-  ],
-  [
-    'master Hide reinit, restart, resintall button and change walkthrough #670',
-    'Feature/663 Add tooltips to header menu #671'
-  ],
-  [
-    'master Bugfix/56 Baking workspace infinite loop #649',
-    'Feature/651 Make git access premium feature #668',
-    'Bugfix/604 OK needs to be enabled for change in editor #669'
   ]
 ]);
 

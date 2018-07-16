@@ -27,8 +27,10 @@ class DetailsPanel extends Component {
 
   handleRemove = () => {
     const {currentElement, dispatch} = this.props;
-    dispatch(setCurrentZoom(undefined));
-    const baseDetails = this.element.decoratedComponentInstance || this.element;
+    let baseDetails = this.element;
+    if (this.element.getWrappedInstance) {
+      baseDetails = this.element.getWrappedInstance();
+    }
     if (baseDetails) {
       const element = baseDetails.getElementRef();
       if (element && typeof element.onRemove === 'function') {
@@ -37,6 +39,7 @@ class DetailsPanel extends Component {
     }
     dispatch(currentElement.remove());
     dispatch(actions.removeEntity(currentElement));
+    dispatch(setCurrentZoom(undefined));
     dispatch(clearCurrentElement());
   };
 

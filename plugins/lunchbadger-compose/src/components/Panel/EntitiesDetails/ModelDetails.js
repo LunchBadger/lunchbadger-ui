@@ -7,6 +7,7 @@ import {inject, observer} from 'mobx-react';
 import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
+import {reload as workspaceFilesReload} from '../../../reduxActions/workspaceFiles';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
@@ -83,6 +84,13 @@ class ModelDetails extends PureComponent {
         ...stateFromStores(props),
       }, callback);
     };
+  }
+
+  componentWillMount() {
+    const {workspaceFiles, dispatch} = this.props;
+    if (!workspaceFiles.files) {
+      dispatch(workspaceFilesReload());
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -522,6 +530,7 @@ class ModelDetails extends PureComponent {
 
   renderModelCodeSection = () => {
     const {entity, workspaceFiles} = this.props;
+    if (!workspaceFiles.files) return <div />;
     const file = workspaceFiles.files.server.models[entity.modelJsName];
     return (
       <div>

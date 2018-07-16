@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.117', [
+console.info('LBAPP VERSION 0.118', [
   [
     'master Feature/655 service endpoint first path cannot be removed #743',
     'Feature/719 audit autosave model #748'

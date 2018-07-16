@@ -28,6 +28,7 @@ class Canvas extends Component {
 
   componentDidMount() {
     window.addEventListener('connectPorts', this.connectPorts);
+    window.addEventListener('disconnectPorts', this.disconnectPorts);
     this.canvasWrapperDOM.addEventListener('scroll', this.onCanvasScroll);
     this.paper = this.context.paper.initialize();
     this._attachPaperEvents();
@@ -37,12 +38,13 @@ class Canvas extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.loadingProject && !nextProps.loadingProject && !this.connectionsHandled) {
       this.connectionsHandled = true;
-      setTimeout(this.handleInitialConnections);
+      this.handleInitialConnections();
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('connectPorts', this.connectPorts);
+    window.removeEventListener('disconnectPorts', this.disconnectPorts);
     this.props.dispatch(actions.clearProject(true));
     if (this.canvasWrapperDOM) {
       this.canvasWrapperDOM.removeEventListener('scroll', this.onCanvasScroll);
@@ -52,6 +54,19 @@ class Canvas extends Component {
 
   connectPorts = ({detail: {from, to, callback}}) => {
     this.paper.connect({
+      source: document.querySelector(from).querySelector('.port__anchor'),
+      target: document.querySelector(to).querySelector('.port__anchor'),
+      parameters: {
+        forceDropped: true,
+      }
+    }, {
+      fireEvent: true,
+    });
+    setTimeout(callback);
+  };
+
+  disconnectPorts = ({detail: {from, to, callback}}) => {
+    this.paper.detach({
       source: document.querySelector(from).querySelector('.port__anchor'),
       target: document.querySelector(to).querySelector('.port__anchor'),
       parameters: {
@@ -120,6 +135,8 @@ class Canvas extends Component {
     const source = document.querySelector(`#${sourceElement}`);
     const target = document.querySelector(`#${targetElement}`);
     if (!source || !target) return null;
+    if (source.parentElement.classList.contains('port__disabled')) return false;
+    if (target.parentElement.classList.contains('port__disabled')) return false;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       if ((source.parentElement.classList.contains('port-Function_') && target.parentElement.classList.contains('port-Model')) ||

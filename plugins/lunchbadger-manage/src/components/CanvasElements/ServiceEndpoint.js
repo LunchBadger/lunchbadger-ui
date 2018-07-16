@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import {
   EntityProperty,
   EntitySubElements,
@@ -54,6 +55,12 @@ class ServiceEndpoint extends Component {
     }
   };
 
+  handleUrlChanged = idx => ({target: {value}}) => {
+    const urls = _.cloneDeep(this.state.urls);
+    urls[idx] = value;
+    this.changeState({urls});
+  };
+
   addUrl = () => {
     const urls = _.cloneDeep(this.state.urls);
     urls.push('');
@@ -103,6 +110,7 @@ class ServiceEndpoint extends Component {
             invalid={data[`urls[${idx}]`]}
             onDelete={canBeDeleted ? this.removeUrl(idx) : undefined}
             onTab={this.handleUrlTab(idx)}
+            onBlur={this.handleUrlChanged(idx)}
           />
         ))}
       </EntitySubElements>

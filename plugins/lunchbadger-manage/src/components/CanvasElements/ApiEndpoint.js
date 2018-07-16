@@ -68,6 +68,12 @@ class ApiEndpoint extends Component {
     }
   };
 
+  handlePathChange = (idx, value) => {
+    const paths = _.cloneDeep(this.state.paths);
+    paths[idx] = value;
+    this.changeState({paths});
+  };
+
   addPath = () => {
     const paths = _.cloneDeep(this.state.paths);
     paths.push('');
@@ -126,6 +132,7 @@ class ApiEndpoint extends Component {
               path={path}
               onRemovePath={this.removePath}
               onPathTab={this.handlePathTab}
+              onPathChange={this.handlePathChange}
             />
           );
         })}

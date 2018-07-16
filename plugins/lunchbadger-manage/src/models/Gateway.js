@@ -374,7 +374,6 @@ export default class Gateway extends BaseModel {
   }
 
   processModel(model) {
-    console.log(999, model);
     const data = _.cloneDeep(model);
     data.https.tls = {};
     if (model.https.enabled) {

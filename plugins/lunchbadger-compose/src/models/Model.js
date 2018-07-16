@@ -5,12 +5,19 @@ import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
 import Config from '../../../../src/config';
+import {getModelJsFilename} from '../utils';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
 const portGroups = LunchBadgerCore.constants.portGroups;
 const {defaultEntityNames, coreActions} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
+
+const reduceItemByLunchbadgerId = (map, item) => {
+  const element = item.toJSON();
+  map[element.lunchbadgerId] = element;
+  return map;
+};
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -107,8 +114,18 @@ export default class Model extends BaseModel {
     return 'lunchbadgerId';
   }
 
-  toJSON() {
-    return {
+  toJSON(opts) {
+    const options = Object.assign({
+      isModelForDiff: false,
+      isPropertiesForDiff: false,
+      isRelationsForDiff: false,
+    }, opts);
+    const {
+      isModelForDiff,
+      isPropertiesForDiff,
+      isRelationsForDiff,
+    } = options;
+    const json = {
       id: this.workspaceId,
       facetName: 'server',
       name: this.name,
@@ -126,7 +143,19 @@ export default class Model extends BaseModel {
       lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
       ...this.userFields
+    };
+    if ((isModelForDiff || isPropertiesForDiff || isRelationsForDiff) && !this.loaded) return {};
+    if (isModelForDiff) {
+      delete json.properties;
+      delete json.relations;
     }
+    if (isPropertiesForDiff) {
+      return this.properties.reduce(reduceItemByLunchbadgerId, {});
+    }
+    if (isRelationsForDiff) {
+      return this.relations.reduce(reduceItemByLunchbadgerId, {});
+    }
+    return json;
   }
 
   toApiJSON() {
@@ -245,7 +274,7 @@ export default class Model extends BaseModel {
   }
 
   get modelJsName() {
-    return this.configFile.split('/').pop().replace(/\.json$/,'') + '.js';
+    return getModelJsFilename(this.name);
   }
 
   validate(model) {

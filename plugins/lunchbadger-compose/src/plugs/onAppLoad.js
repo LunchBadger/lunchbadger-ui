@@ -3,7 +3,6 @@ import {
   ModelService,
   ModelConfigsService,
   SLSService,
-  WorkspaceFilesService,
 } from '../services';
 import {actions} from '../reduxActions/actions';
 import {addModelConfigsToConnections} from '../reduxActions/connections';
@@ -16,7 +15,6 @@ export default [
       ModelService.load(),
       ModelConfigsService.load(),
       SLSService.load(),
-      WorkspaceFilesService.load(),
     ]),
     callback: actions.onLoadCompose,
     actions: [

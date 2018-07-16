@@ -120,6 +120,8 @@ class Canvas extends Component {
     const source = document.querySelector(`#${sourceElement}`);
     const target = document.querySelector(`#${targetElement}`);
     if (!source || !target) return null;
+    if (source.parentElement.classList.contains('port__disabled')) return false;
+    if (target.parentElement.classList.contains('port__disabled')) return false;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
       if ((source.parentElement.classList.contains('port-Function_') && target.parentElement.classList.contains('port-Model')) ||

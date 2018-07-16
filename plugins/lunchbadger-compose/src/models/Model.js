@@ -5,6 +5,7 @@ import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
 import Config from '../../../../src/config';
+import {getModelJsFilename} from '../utils';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -273,7 +274,7 @@ export default class Model extends BaseModel {
   }
 
   get modelJsName() {
-    return this.configFile.split('/').pop().replace(/\.json$/,'') + '.js';
+    return getModelJsFilename(this.name);
   }
 
   validate(model) {

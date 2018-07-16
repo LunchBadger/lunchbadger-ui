@@ -27,6 +27,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
   const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
   const state = getState();
+  const prevFiles = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
   let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;
@@ -44,7 +45,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
   updatedEntity = Model.create({
-    configFile: entity.configFile,
     ...entity.toJSON(),
     ...model,
     ready: false,
@@ -75,10 +75,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       }
     }
     if (deltaModel.length > 0) {
-      const {body: {lunchbadgerId}} = await ModelService.upsert(updatedEntity.toJSON());
-      const {body} = await ModelService.load();
-      const updatedModel = body.find(item => item.lunchbadgerId === lunchbadgerId);
-      updatedEntity = Model.create(updatedModel);
+      await ModelService.upsert(updatedEntity.toJSON());
     }
     if (deltaProperties.length > 0) {
       await ModelService.deleteProperties(updatedEntity.workspaceId);
@@ -110,9 +107,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
         });
       }
     }
-    if (files) {
+    if (isDifferent || (files && files !== prevFiles)) {
       await dispatch(workspaceFilesUpdate(updatedEntity.modelJsName, files));
-    } else {
+    } else if (!entity.loaded) {
       await dispatch(workspaceFilesReload());
     }
     updatedEntity.ready = true;

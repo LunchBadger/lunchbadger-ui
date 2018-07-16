@@ -11,7 +11,12 @@ export default class ApiEndpointPath extends PureComponent {
   handlePathTab = () => {
     const {idx, onPathTab} = this.props;
     onPathTab(idx);
-  }
+  };
+
+  handlePathChange = ({target: {value}}) => {
+    const {idx, onPathChange} = this.props;
+    onPathChange(idx, value);
+  };
 
   render() {
     const {name, path, idx} = this.props;
@@ -23,6 +28,7 @@ export default class ApiEndpointPath extends PureComponent {
         value={path}
         onDelete={this.handleRemovePath}
         onTab={this.handlePathTab}
+        onBlur={this.handlePathChange}
       />
     );
   }

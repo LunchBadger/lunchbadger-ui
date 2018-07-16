@@ -3,12 +3,11 @@ import {
   ModelService,
   ModelConfigsService,
   SLSService,
-  WorkspaceFilesService,
 } from '../services';
 import {actions} from '../reduxActions/actions';
 import {addModelConfigsToConnections} from '../reduxActions/connections';
 import {removeNonExistentSubModels} from '../reduxActions/microservices';
-
+import {reload as workspaceFilesReload} from '../reduxActions/workspaceFiles';
 export default [
   {
     request: async () => await Promise.all([
@@ -16,12 +15,12 @@ export default [
       ModelService.load(),
       ModelConfigsService.load(),
       SLSService.load(),
-      WorkspaceFilesService.load(),
     ]),
     callback: actions.onLoadCompose,
     actions: [
       addModelConfigsToConnections,
       removeNonExistentSubModels,
+      workspaceFilesReload,
     ],
   }
 ];

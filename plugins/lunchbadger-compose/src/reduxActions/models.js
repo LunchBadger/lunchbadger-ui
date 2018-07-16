@@ -1,3 +1,4 @@
+import {diff} from 'just-diff';
 import {actions} from './actions';
 import {ModelService} from '../services';
 import Model from '../models/Model';
@@ -22,7 +23,11 @@ export const add = () => (dispatch, getState) => {
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  const beforeUpdateModel = entity.toJSON({isModelForDiff: true});
+  const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
+  const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
   const state = getState();
+  const prevFiles = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
   let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;
@@ -40,16 +45,21 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
   updatedEntity = Model.create({
-    configFile: entity.configFile,
     ...entity.toJSON(),
     ...model,
     ready: false,
   });
+  const afterUpdateModel = updatedEntity.toJSON({isModelForDiff: true});
+  const afterUpdateProperties = updatedEntity.toJSON({isPropertiesForDiff: true});
+  const afterUpdateRelations = updatedEntity.toJSON({isRelationsForDiff: true});
+  const deltaModel = diff(beforeUpdateModel, afterUpdateModel);
+  const deltaProperties = diff(beforeUpdateProperties, afterUpdateProperties);
+  const deltaRelations = diff(beforeUpdateRelations, afterUpdateRelations);
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
-      await ModelService.delete(entity.workspaceId);
       await ModelService.deleteModelConfig(entity.workspaceId);
+      await ModelService.delete(entity.workspaceId);
       const dataSource = Connections.search({toId: entity.id})
         .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
         .find(item => item instanceof DataSource);
@@ -64,24 +74,25 @@ export const update = (entity, model) => async (dispatch, getState) => {
         files = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
       }
     }
-    const {body: {lunchbadgerId}} = await ModelService.upsert(updatedEntity.toJSON());
-    const {body} = await ModelService.load();
-    const updatedModel = body.find(item => item.lunchbadgerId === lunchbadgerId);
-    updatedEntity = Model.create(updatedModel);
-    await ModelService.deleteProperties(updatedEntity.workspaceId);
-    if (model.properties.length > 0) {
-      const upsertProperties = model.properties.map((item) => {
-        item.attach(updatedEntity);
-        return item.toJSON();
-      });
-      const {body: properties} = await ModelService.upsertProperties(upsertProperties);
-      updatedEntity.properties = properties.map((item) => {
-        const property = ModelProperty.create(item);
-        property.attach(updatedEntity);
-        return property;
-      });
+    if (deltaModel.length > 0) {
+      await ModelService.upsert(updatedEntity.toJSON());
     }
-    if (model.relations) {
+    if (deltaProperties.length > 0) {
+      await ModelService.deleteProperties(updatedEntity.workspaceId);
+      if (model.properties.length > 0) {
+        const upsertProperties = model.properties.map((item) => {
+          item.attach(updatedEntity);
+          return item.toJSON();
+        });
+        const {body: properties} = await ModelService.upsertProperties(upsertProperties);
+        updatedEntity.properties = properties.map((item) => {
+          const property = ModelProperty.create(item);
+          property.attach(updatedEntity);
+          return property;
+        });
+      }
+    }
+    if (model.relations && deltaRelations.length > 0) {
       await ModelService.deleteRelations(updatedEntity.workspaceId);
       if (model.relations.length > 0) {
         const upsertRelations = model.relations.map((item) => {
@@ -96,11 +107,12 @@ export const update = (entity, model) => async (dispatch, getState) => {
         });
       }
     }
-    if (files) {
+    if (isDifferent || (files && files !== prevFiles)) {
       await dispatch(workspaceFilesUpdate(updatedEntity.modelJsName, files));
-    } else {
+    } else if (!entity.loaded) {
       await dispatch(workspaceFilesReload());
     }
+    updatedEntity.ready = true;
     dispatch(actions[updateAction](updatedEntity));
     await dispatch(coreActions.saveToServer({saveProject: false}));
     return updatedEntity;

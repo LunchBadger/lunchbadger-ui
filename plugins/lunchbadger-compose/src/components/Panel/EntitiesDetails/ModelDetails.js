@@ -420,13 +420,20 @@ class ModelDetails extends PureComponent {
     const widths = [300, 220, 300, undefined, 70];
     const paddings = [true, true, true, true, false];
     const data = this.state.relations.map((relation, idx) => [
-      <Input
-        name={`relations[${idx}][name]`}
-        value={relation.name}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-      />,
+      <div>
+        <Input
+          value={relation.id}
+          type="hidden"
+          name={`relations[${idx}][lunchbadgerId]`}
+        />
+        <Input
+          name={`relations[${idx}][name]`}
+          value={relation.name}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />
+      </div>,
       <Select
         name={`relations[${idx}][type]`}
         value={relation.type || 'hasMany'}
@@ -515,6 +522,7 @@ class ModelDetails extends PureComponent {
 
   renderModelCodeSection = () => {
     const {entity, workspaceFiles} = this.props;
+    if (!workspaceFiles.files) return <div />;
     const file = workspaceFiles.files.server.models[entity.modelJsName];
     return (
       <div>

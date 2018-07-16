@@ -23,6 +23,7 @@ class Model extends Component {
   };
 
   static contextTypes = {
+    store: PropTypes.object,
     paper: PropTypes.object,
   };
 

@@ -94,6 +94,7 @@ class ServiceEndpoint extends Component {
   renderUrls = () => {
     const {urls} = this.state;
     const {validations: {data}} = this.props;
+    const canBeDeleted = urls.length > 1;
     return (
       <EntitySubElements
         title={`URL${urls.length === 1 ? '' : 'S'}`}
@@ -107,28 +108,13 @@ class ServiceEndpoint extends Component {
             name={`urls[${idx}]`}
             value={url}
             invalid={data[`urls[${idx}]`]}
-            onDelete={this.removeUrl(idx)}
+            onDelete={canBeDeleted ? this.removeUrl(idx) : undefined}
             onTab={this.handleUrlTab(idx)}
             onBlur={this.handleUrlChanged(idx)}
           />
         ))}
       </EntitySubElements>
     );
-    // const {entity: {url}, validations: {data}, entityDevelopment, onResetField} = this.props;
-    // const mainProperties = [
-    //   {
-    //     name: 'url',
-    //     title: 'URL',
-    //     value: url,
-    //     invalid: data.url,
-    //     onBlur: this.handleFieldChange('url'),
-    //   },
-    // ];
-    // mainProperties.forEach((item, idx) => {
-    //   mainProperties[idx].isDelta = item.value !== entityDevelopment[item.name];
-    //   mainProperties[idx].onResetField = onResetField;
-    // });
-    // return <EntityProperties properties={mainProperties} />;
   }
 
   render() {

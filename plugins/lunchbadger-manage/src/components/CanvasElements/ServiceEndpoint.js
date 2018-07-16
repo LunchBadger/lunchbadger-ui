@@ -94,7 +94,7 @@ class ServiceEndpoint extends Component {
   renderUrls = () => {
     const {urls} = this.state;
     const {validations: {data}} = this.props;
-    const isDelete = urls.length > 1;
+    const canBeDeleted = urls.length > 1;
     return (
       <EntitySubElements
         title={`URL${urls.length === 1 ? '' : 'S'}`}
@@ -108,7 +108,7 @@ class ServiceEndpoint extends Component {
             name={`urls[${idx}]`}
             value={url}
             invalid={data[`urls[${idx}]`]}
-            onDelete={isDelete? this.removeUrl(idx) : undefined}
+            onDelete={canBeDeleted ? this.removeUrl(idx) : undefined}
             onTab={this.handleUrlTab(idx)}
             onBlur={this.handleUrlChanged(idx)}
           />

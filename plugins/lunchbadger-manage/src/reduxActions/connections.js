@@ -12,8 +12,10 @@ export const attach = info => async (dispatch, getState) => {
   if (endpoint) {
     const pipelineId = storeUtils.formatId(targetId);
     dispatch(addServiceEndpointIntoProxy(endpoint, pipelineId));
-    const outPort = document.getElementById(`port_out_${pipelineId}`).querySelector('.port__anchor');
-    await dispatch(addAndConnect(endpoint, pipelineId, outPort));
+    if (!Connections.findHistory({fromId: endpoint.id, toId: pipelineId})) {
+      const outPort = document.getElementById(`port_out_${pipelineId}`).querySelector('.port__anchor');
+      await dispatch(addAndConnect(endpoint, pipelineId, outPort));
+    }
   }
   Connections.addConnectionByInfo(info);
   info.connection.removeType('wip');
@@ -51,8 +53,10 @@ export const reattach = info => async (dispatch, getState) => {
     const newPipelineId = storeUtils.formatId(newTargetId);
     dispatch(removeServiceEndpointFromProxy(oldEndpoint.id, oldPipelineId));
     dispatch(addServiceEndpointIntoProxy(newEndpoint, newPipelineId));
-    const outPort = document.getElementById(`port_out_${newPipelineId}`).querySelector('.port__anchor');
-    await dispatch(addAndConnect(newEndpoint, newPipelineId, outPort));
+    if (!Connections.findHistory({fromId: newEndpoint.id, toId: newPipelineId})) {
+      const outPort = document.getElementById(`port_out_${newPipelineId}`).querySelector('.port__anchor');
+      await dispatch(addAndConnect(newEndpoint, newPipelineId, outPort));
+    }
   }
   Connections.moveConnection(info);
   info.connection.removeType('wip');

@@ -14,7 +14,7 @@ class ApiClient {
   _getHeaders() {
     const headers = {};
     if (this.idToken) {
-      headers['Authorization'] = `Bearer ${this.idToken}`;
+      headers['Authorization'] = `JWT ${this.idToken}`;
     }
     return headers;
   }

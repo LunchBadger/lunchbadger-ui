@@ -147,6 +147,14 @@ class Connections {
     return _.find(this.connectionsHistory, filter);
   }
 
+  removeFromHistory(fromId, toId){
+    const index = _.findIndex(this.connectionsHistory, {
+      fromId: formatId(fromId),
+      toId: formatId(toId),
+    });
+    this.connectionsHistory.splice(index, 1);
+  }
+
   @computed get conns() {
     return this.connections.map(({fromId, toId}) => ({fromId, toId}));
   }

@@ -38,7 +38,7 @@ class Function_ extends Component {
 
   renderMainProperties = () => {
     const {entity, onResetField} = this.props;
-    let runtime = runtimeOptions[0];
+    let runtime = runtimeOptions.find(({defaultSelected}) => defaultSelected).value;
     const {service} = entity;
     if (service && service.serverless) {
       runtime = runtimeMapping(service.serverless.provider.runtime).lb;
@@ -48,7 +48,7 @@ class Function_ extends Component {
         name: 'runtime',
         title: 'Runtime',
         value: runtime,
-        options: runtimeOptions.map(label => ({label, value: label})),
+        options: runtimeOptions,
         fake: entity.loaded,
       },
     ];

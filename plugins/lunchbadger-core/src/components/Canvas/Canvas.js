@@ -66,15 +66,18 @@ class Canvas extends Component {
   };
 
   disconnectPorts = ({detail: {from, to, callback}}) => {
+    const fromElement = document.querySelector(from);
+    const toElement = document.querySelector(to);
     this.paper.detach({
-      source: document.querySelector(from).querySelector('.port__anchor'),
-      target: document.querySelector(to).querySelector('.port__anchor'),
+      source: fromElement.querySelector('.port__anchor'),
+      target: toElement.querySelector('.port__anchor'),
       parameters: {
         forceDropped: true,
       }
     }, {
       fireEvent: true,
     });
+    Connections.removeFromHistory(fromElement.id, toElement.id);
     setTimeout(callback);
   };
 

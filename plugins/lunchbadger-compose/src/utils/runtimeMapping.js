@@ -1,37 +1,24 @@
-const editorCodeLanguages = {
-  Node: 'javascript',
-  Python: 'python',
+import runtimeOptions from './runtimeOptions';
+
+const languagesSettings = {
+  dotnetcore: ['dot', 'net'],
+  go: ['golang', 'go'],
+  java: ['java', 'java'],
+  nodejs: ['javascript', 'js'],
+  php: ['php', 'php'],
+  python: ['python', 'py'],
+  ruby: ['ruby', 'ruby'],
 };
 
-const extensions = {
-  Node: 'js',
-  Python: 'py',
-};
-
-export default (runtime, reverse = false) => {
-  let arr;
-  let mapping;
-  if (!reverse) {
-    arr = runtime.replace(/(\d)/, ' $1').split(' ');
-    mapping = {
-      nodejs: 'Node',
-      python: 'Python',
-    };
-
-  } else {
-    arr = runtime.toLowerCase().split(' ');
-    mapping = {
-      node: 'nodejs',
-      python: 'python',
-    }
-  }
-  const env = mapping[arr[0]];
-  const version = arr[1];
+export default (sls) => {
+  const [env, version] = sls.split(':');
+  const lb = runtimeOptions.find(({value}) => value === sls).label;
+  const [editorCodeLanguage, extension] = languagesSettings[env];
   return {
     data: {env, version},
-    lb: `${env} ${version}`,
-    sls: `${env}${version}`,
-    editorCodeLanguage: editorCodeLanguages[env],
-    extension: extensions[env],
+    lb,
+    sls,
+    editorCodeLanguage,
+    extension,
   };
 };

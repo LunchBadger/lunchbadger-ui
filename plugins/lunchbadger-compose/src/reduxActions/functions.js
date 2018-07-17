@@ -42,7 +42,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity = updatedEntity.recreate();
   try {
     if (!loaded) {
-      const [env, version] = runtime.toLowerCase().split(' ');
+      const [env, version] = runtime.split(':');
       const slsCreate = await SLSService.create({name, env, version, lunchbadger: {id, itemOrder}});
       updatedEntity.service = slsCreate.body;
     } else {

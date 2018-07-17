@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {Provider} from 'react-redux';
-import {createStore, applyMiddleware, compose} from 'redux';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import ReactGA from 'react-ga';
 import Config from './config';
 import thunk from 'redux-thunk';
@@ -87,8 +87,8 @@ const loginManager = LunchBadgerCore.utils.createLoginManager();
 
 loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) return;
-  const {id_token, profile} = loginManager.user;
-  ReactGA.set({userId: profile.sub});
+  const { id_token, profile } = loginManager.user;
+  ReactGA.set({ userId: profile.sub });
   global.ID_TOKEN = id_token; // FIXME: quick and dirty fix for urgent demo
   let middleware = compose(applyMiddleware(thunk));
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {

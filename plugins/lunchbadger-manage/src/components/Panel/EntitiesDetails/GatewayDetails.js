@@ -105,7 +105,7 @@ class GatewayDetails extends PureComponent {
           });
           // restoring current serviceEndpoints connections
           (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
-            setTimeout(() => {
+            // setTimeout(() => {
               paper.connect({
                 source: document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor'),
                 target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
@@ -116,7 +116,7 @@ class GatewayDetails extends PureComponent {
               }, {
                 fireEvent: true,
               });
-            });
+            // });
           });
         }
       });

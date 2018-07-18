@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import slug from 'slug';
 import _ from 'lodash';
+import FunctionLogs from './FunctionLogs';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -64,11 +65,14 @@ class FunctionDetails extends PureComponent {
     );
   };
 
+  renderLogsSection = () => <FunctionLogs name={this.props.entity.name} />;
+
   render() {
     const sections = [
       {title: 'Details'},
       {title: 'Triggers'},
       {title: 'Function Code', render: 'FunctionCode'},
+      {title: 'Logs'},
     ];
     return (
       <div className="FunctionDetails">

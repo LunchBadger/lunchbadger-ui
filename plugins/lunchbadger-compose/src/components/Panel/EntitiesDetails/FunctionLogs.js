@@ -11,6 +11,7 @@ export default class FunctionLogs extends PureComponent {
     this.state = {
       loading: true,
       logs: '',
+      error: null,
     };
   }
 
@@ -20,9 +21,23 @@ export default class FunctionLogs extends PureComponent {
 
   reloadLogs = async (softLoad) => {
     if (softLoad && this.state.loading) return;
-    this.setState({loading: true}, this.scrollDown);
-    const {body: {logs}} = await SLSService.loadLogs(this.props.name);
-    this.setState({logs, loading: false}, this.scrollDown);
+    this.setState({
+      loading: true,
+      error: null,
+    }, this.scrollDown);
+    try {
+      const {body: {logs}} = await SLSService.loadLogs(this.props.name);
+      this.setState({
+        logs,
+        loading: false,
+      }, this.scrollDown);
+    } catch ({message: error}) {
+      this.setState({
+        logs: '',
+        error,
+        loading: false,
+      }, this.scrollDown);
+    }
   };
 
   scrollDown = () => this.contentRef.scrollTop = 10e5;
@@ -31,6 +46,7 @@ export default class FunctionLogs extends PureComponent {
     const {
       loading,
       logs,
+      error,
     } = this.state;
     return (
       <div className="FunctionLogs">
@@ -47,6 +63,7 @@ export default class FunctionLogs extends PureComponent {
             {logs}
           </pre>
           {loading && <pre>Loading...</pre>}
+          {error && <code dangerouslySetInnerHTML={{__html: error}} />}
         </div>
       </div>
     );

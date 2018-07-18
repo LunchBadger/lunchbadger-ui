@@ -23,9 +23,13 @@
     color: #b4b5b0;
     height: 200px;
     overflow-y: auto;
-    pre {
+    & > pre,
+    & > code {
       font-size: 12px;
       white-space: pre-wrap;
+    }
+    & > code {
+      display: inline-flex;
     }
   }
 }

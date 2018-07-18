@@ -18,6 +18,8 @@ class SLSService {
 
   remove = name => this.api.delete(`/service/${name}`);
 
+  loadLogs = name => this.api.get(`/service/${name}/logs`);
+
   clear = () => this.api.delete('/service');
 
 }

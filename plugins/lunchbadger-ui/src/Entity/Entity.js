@@ -5,6 +5,7 @@ import EntityHeader from './EntityHeader/EntityHeader';
 import EntityValidationErrors from './EntityValidationErrors/EntityValidationErrors';
 import EntityActionButtons from './EntityActionButtons/EntityActionButtons';
 import {SmoothCollapse, Toolbox, Form} from '../';
+import userStorage from '../../../../plugins/lunchbadger-core/src/utils/userStorage';
 import './Entity.scss';
 
 class Entity extends PureComponent {
@@ -13,6 +14,13 @@ class Entity extends PureComponent {
     this.state = {
       expanded: props.defaultExpanded,
       marginTopPorts: {},
+    }
+  }
+
+  componentDidMount() {
+    const collapsed = userStorage.getObjectKey('entityCollapsed', this.props.entityId);
+    if (collapsed) {
+      this.handleToggleExpand();
     }
   }
 
@@ -27,7 +35,10 @@ class Entity extends PureComponent {
   getFormRef = () => this.refs.form;
 
   handleToggleExpand = (event) => {
-    const expanded = !this.state.expanded;
+    let expanded = this.state.expanded;
+    if (event) {
+      expanded = !expanded;
+    }
     this.refs.data.querySelectorAll('.port__middle').forEach((portRef) => {
       if (!expanded) {
         const marginTop = +window.getComputedStyle(portRef).marginTop.replace('px', '');
@@ -37,9 +48,11 @@ class Entity extends PureComponent {
         portRef.style.marginTop = `${this.state.marginTopPorts[portRef.id]}px`;
       }
     });
-    this.setState({expanded});
-    this.props.onToggleCollapse(!expanded);
-    event.stopPropagation();
+    if (event) {
+      this.setState({expanded});
+      this.props.onToggleCollapse(!expanded);
+      event && event.stopPropagation();
+    }
   }
 
   render() {

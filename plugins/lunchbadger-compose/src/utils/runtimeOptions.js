@@ -13,7 +13,11 @@ export default [
   },
   {
     label: 'Node 6',
-    value: 'nodejs:6',
+    value: 'nodejs:6'
+  },
+  {
+    label: 'Node 8',
+    value: 'nodejs:8',
     defaultSelected: true
   },
   {

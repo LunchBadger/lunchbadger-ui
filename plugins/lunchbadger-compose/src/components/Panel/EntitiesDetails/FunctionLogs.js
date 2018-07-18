@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import cs from 'classnames';
 import SLSService from '../../../services/SLSService';
+import {IconButton} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
 
 export default class FunctionLogs extends PureComponent {
@@ -14,22 +15,39 @@ export default class FunctionLogs extends PureComponent {
   }
 
   componentWillMount() {
-    this.loadLogs();
+    this.reloadLogs(false);
   }
 
-  loadLogs = async () => {
-    this.setState({loading: true});
+  reloadLogs = async (softLoad) => {
+    if (softLoad && this.state.loading) return;
+    this.setState({loading: true}, this.scrollDown);
     const {body: {logs}} = await SLSService.loadLogs(this.props.name);
-    this.setState({logs, loading: false});
+    this.setState({logs, loading: false}, this.scrollDown);
   };
 
+  scrollDown = () => this.contentRef.scrollTop = 10e5;
+
   render() {
-    const {loading, logs} = this.state;
+    const {
+      loading,
+      logs,
+    } = this.state;
     return (
-      <div className={cs('FunctionLogs', {loading})}>
-        <pre>
-          {logs}
-        </pre>
+      <div className="FunctionLogs">
+        <IconButton
+          icon="iconReload"
+          name="reloadLogs"
+          onClick={this.reloadLogs}
+        />
+        <div
+          ref={r => this.contentRef = r}
+          className="FunctionLogs__content"
+        >
+          <pre>
+            {logs}
+          </pre>
+          {loading && <pre>Loading...</pre>}
+        </div>
       </div>
     );
   }

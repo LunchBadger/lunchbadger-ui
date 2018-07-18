@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>LunchBadger</title>
@@ -13,24 +14,24 @@
   <script>
     "use strict";
 
-    !function() {
+    !function () {
       var t = window.driftt = window.drift = window.driftt || [];
       if (!t.init) {
         if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-        t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
-        t.factory = function(e) {
-          return function() {
-            var n = Array.prototype.slice.call(arguments);
-            return n.unshift(e), t.push(n), t;
+        t.invoked = !0, t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+          t.factory = function (e) {
+            return function () {
+              var n = Array.prototype.slice.call(arguments);
+              return n.unshift(e), t.push(n), t;
+            };
+          }, t.methods.forEach(function (e) {
+            t[e] = t.factory(e);
+          }), t.load = function (t) {
+            var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+            o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+            var i = document.getElementsByTagName("script")[0];
+            i.parentNode.insertBefore(o, i);
           };
-        }, t.methods.forEach(function(e) {
-          t[e] = t.factory(e);
-        }), t.load = function(t) {
-          var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-          o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-          var i = document.getElementsByTagName("script")[0];
-          i.parentNode.insertBefore(o, i);
-        };
       }
     }();
     drift.SNIPPET_VERSION = '0.3.1';
@@ -39,6 +40,7 @@
   <!-- End of Async Drift Code -->
 
 </head>
+
 <body>
   <div id="app"></div>
 
@@ -48,16 +50,10 @@
   <!--<script src="//fb.me/react-15.0.2.js"></script>
   <script src="//fb.me/react-dom-15.0.2.js"></script>-->
   <script type="text/javascript" src="//cdn.plot.ly/plotly-latest.min.js"></script>
-<<<<<<< HEAD
-  <script type="text/javascript" src="/vendor.js?rnd=0.121"></script>
-  <script type="text/javascript" src="/core.js?rnd=0.121"></script>
-  <script type="text/javascript" src="/plugins.js?rnd=0.121"></script>
-  <script type="text/javascript" src="/start.js?rnd=0.121"></script>
-=======
-  <script type="text/javascript" src="/vendor.js?rnd=0.120"></script>
-  <script type="text/javascript" src="/core.js?rnd=0.120"></script>
-  <script type="text/javascript" src="/plugins.js?rnd=0.120"></script>
-  <script type="text/javascript" src="/start.js?rnd=0.120"></script>
->>>>>>> Feature/747 add new fn types (#753)
+  <script type="text/javascript" src="/vendor.js?rnd=0.122"></script>
+  <script type="text/javascript" src="/core.js?rnd=0.122"></script>
+  <script type="text/javascript" src="/plugins.js?rnd=0.122"></script>
+  <script type="text/javascript" src="/start.js?rnd=0.122"></script>
 </body>
+
 </html>

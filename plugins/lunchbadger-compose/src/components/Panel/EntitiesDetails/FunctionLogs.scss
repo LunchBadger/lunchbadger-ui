@@ -1,0 +1,35 @@
+.FunctionLogs {
+  position: relative;
+  .IconButton {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background-color: #4190CE;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    svg {
+      fill: #fff;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: 4px;
+      left: 5px;
+    }
+  }
+  &__content {
+    padding: 10px;
+    background-color: #2a2b21;
+    color: #b4b5b0;
+    height: 200px;
+    overflow-y: auto;
+    & > pre,
+    & > code {
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+    & > code {
+      display: inline-flex;
+    }
+  }
+}

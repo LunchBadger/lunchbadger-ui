@@ -56,6 +56,25 @@ export default {
     consumerManagement: true,
     gitAccess: false,
     uploadPublicKeys: false,
-    appUrls: false
+    appUrls: false,
+    fnTypes: [
+      {
+        label: 'Node 6',
+        value: 'nodejs:6'
+      },
+      {
+        label: 'Node 8',
+        value: 'nodejs:8',
+        defaultSelected: true
+      },
+      {
+        label: 'Python 2.7',
+        value: 'python:2.7'
+      },
+      {
+        label: 'Python 3.6',
+        value: 'python:3.6'
+      }
+    ]
   }
 };

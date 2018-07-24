@@ -27,7 +27,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
   const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
   const state = getState();
-  const prevFiles = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
+  const prevFiles = (state.entities.workspaceFiles.files.server.models || {})[entity.modelJsName];
   let {files} = model;
   delete model.files;
   const index = state.multiEnvironments.selected;

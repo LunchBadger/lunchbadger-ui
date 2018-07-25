@@ -112,7 +112,7 @@ export default class Function_ extends BaseModel {
     let isAutoSave = false;
     [...connectionsTo, ...connectionsFrom].map((conn) => {
       isAutoSave = true;
-      conn.info.connection.setParameter('discardAutoSave', true);
+      conn.info.source.classList.add('discardAutoSave');
       paper.detach(conn.info.connection);
     });
     if (isAutoSave) {

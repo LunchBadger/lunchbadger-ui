@@ -139,7 +139,7 @@ export default class ApiEndpoint extends BaseModel {
   beforeRemove(paper) {
     const connectionsTo = Connections.search({toId: this.id});
     connectionsTo.map((conn) => {
-      conn.info.connection.setParameter('discardAutoSave', true);
+      conn.info.source.classList.add('discardAutoSave');
       paper.detach(conn.info.connection);
     });
   }

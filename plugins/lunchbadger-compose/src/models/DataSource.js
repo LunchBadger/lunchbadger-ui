@@ -398,7 +398,7 @@ export default class DataSource extends BaseModel {
   beforeRemove(paper) {
     const connectionsFrom = Connections.search({fromId: this.id});
     connectionsFrom.map((conn) => {
-      conn.info.connection.setParameter('discardAutoSave', true);
+      conn.info.source.classList.add('discardAutoSave');
       paper.detach(conn.info.connection);
     });
   }

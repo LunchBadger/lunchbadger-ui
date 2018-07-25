@@ -367,7 +367,7 @@ export default class Gateway extends BaseModel {
       const connectionsTo = Connections.search({toId: id});
       const connectionsFrom = Connections.search({fromId: id});
       [...connectionsTo, ...connectionsFrom].map((conn) => {
-        conn.info.connection.setParameter('discardAutoSave', true);
+        conn.info.source.classList.add('discardAutoSave');
         paper.detach(conn.info.connection);
       });
     });

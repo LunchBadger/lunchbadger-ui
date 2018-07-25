@@ -65,8 +65,8 @@ export default [
     const connections = Connections
       .search({})
       .filter(({fromId, toId, info}) => {
-        const wip = !(info.connection && info.connection.hasType('wip'));
-        return wip
+        const wip = !info.connection || info.connection.hasType('wip');
+        return !wip
           && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
       })
       .map(({fromId, toId}) => ({fromId, toId}));

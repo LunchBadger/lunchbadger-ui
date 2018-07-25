@@ -76,17 +76,11 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   //   return;
   // }
   const onSaves = onBeforeProjectSave.reduce((map, item) => [...map, ...item(state)], []);
-  if (onSaves.length > 0) {
-    try {
-      await Promise.all(onSaves.map(item => item.onSave(state, delta, currData, prevData)));
-    } catch (error) {
-      dispatch(addSystemDefcon1({error}));
-    }
-  }
   try {
-    if (saveProject) {
-      await ProjectService.save(data);
-    }
+    await Promise.all([
+      ...onSaves.map(item => item.onSave(state, delta, currData, prevData)),
+      saveProject ? ProjectService.save(data) : undefined,
+    ]);
     prevData = currData;
   } catch (error) {
     if (error.statusCode === 401) {

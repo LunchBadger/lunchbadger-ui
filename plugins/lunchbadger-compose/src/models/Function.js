@@ -20,7 +20,7 @@ export default class Function_ extends BaseModel {
   allowEditWhenCrashed = true;
   isCanvasEditDisabled = true;
   zoomWindow = {
-    width: 1005,
+    width: 1004,
     height: 750,
   };
 

@@ -418,6 +418,7 @@ export default (ComposedComponent) => {
               semitransparent={semitransparent}
               invalid={!validations.isValid}
               toolboxConfig={toolboxConfig}
+              entityId={this.props.entity.id}
               name={this.props.entity.name}
               onNameChange={this.updateName}
               onNameBlur={this.handleFieldUpdate}

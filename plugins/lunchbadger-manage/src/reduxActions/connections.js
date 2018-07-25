@@ -7,20 +7,20 @@ const {Connections} = LunchBadgerCore.stores;
 export const attach = info => async (dispatch, getState) => {
   info.connection.addType('wip');
   const {sourceId, targetId} = info;
-  const {discardAutoSave} = info.connection.getParameters();
+  const discardAutoSave = info.source.classList.contains('discardAutoSave');
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
   if (endpoint) {
     const pipelineId = storeUtils.formatId(targetId);
     dispatch(addServiceEndpointIntoProxy(endpoint, pipelineId));
     if (!Connections.findHistory({fromId: endpoint.id, toId: pipelineId})) {
       const outPort = document.getElementById(`port_out_${pipelineId}`).querySelector('.port__anchor');
-      await dispatch(addAndConnect(endpoint, pipelineId, outPort));
+      dispatch(addAndConnect(endpoint, pipelineId, outPort));
     }
   }
   Connections.addConnectionByInfo(info);
   info.connection.removeType('wip');
   if (discardAutoSave) {
-    info.connection.setParameter('discardAutoSave', false);
+    info.source.classList.remove('discardAutoSave');
   } else {
     await dispatch(coreActions.saveToServer());
   }
@@ -28,9 +28,9 @@ export const attach = info => async (dispatch, getState) => {
 
 export const detach = info => async (dispatch, getState) => {
   const {sourceId, targetId} = info;
-  const {discardAutoSave} = info.connection.getParameters();
+  const discardAutoSave = info.source.classList.contains('discardAutoSave');
   if (discardAutoSave) {
-    info.connection.setParameter('discardAutoSave', false);
+    info.source.classList.remove('discardAutoSave');
   }
   const endpoint = storeUtils.findEntity(getState(), 1, sourceId);
   if (endpoint) {

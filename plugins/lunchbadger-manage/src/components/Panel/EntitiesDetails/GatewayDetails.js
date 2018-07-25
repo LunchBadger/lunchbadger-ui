@@ -92,7 +92,7 @@ class GatewayDetails extends PureComponent {
       if (!((policies || []).find(({name}) => name === 'proxy'))) {
         const connectionsTo = Connections.search({toId: id});
         connectionsTo.forEach((conn) => {
-          conn.info.connection.setParameter('discardAutoSave', true);
+          conn.info.source.classList.add('discardAutoSave');
           paper.detach(conn.info.connection);
         });
       }
@@ -100,22 +100,23 @@ class GatewayDetails extends PureComponent {
         if (policy.name === 'proxy') {
           // removing old serviceEndpoints connections
           Connections.search({toId: id}).forEach((conn) => {
-            conn.info.connection.setParameter('discardAutoSave', true);
+            conn.info.source.classList.add('discardAutoSave');
             paper.detach(conn.info.connection);
           });
           // restoring current serviceEndpoints connections
           (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
-            setTimeout(() => {
-              paper.connect({
-                source: document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor'),
-                target: document.getElementById(`port_in_${id}`).querySelector('.port__anchor'),
-                parameters: {
-                  forceDropped: true,
-                  discardAutoSave: true,
-                }
-              }, {
-                fireEvent: true,
-              });
+            // FIXME: crashes, when new pipelines with proxy are defined
+            const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');
+            const target = document.getElementById(`port_in_${id}`).querySelector('.port__anchor');
+            source.classList.add('discardAutoSave');
+            paper.connect({
+              source,
+              target,
+              parameters: {
+                forceDropped: true,
+              }
+            }, {
+              fireEvent: true,
             });
           });
         }

@@ -133,7 +133,7 @@ export default class Microservice extends BaseModel {
       ];
     });
     connectionsFrom.map((conn) => {
-      conn.info.connection.setParameter('discardAutoSave', true);
+      conn.info.source.classList.add('discardAutoSave');
       paper.detach(conn.info.connection);
     });
   }

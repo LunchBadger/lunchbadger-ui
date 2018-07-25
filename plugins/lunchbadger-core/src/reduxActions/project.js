@@ -25,7 +25,16 @@ export const loadFromServer = () => async (dispatch, getState) => {
       item.actions && item.actions.map(action => dispatch(action(responses[idx])));
     });
     const connections = responses[0].body.connections
-      .map(({fromId, toId}) => ({fromId, toId}));
+      .map(({fromId, toId}) => ({fromId, toId}))
+      .reduce((map, item) => {
+        if (!map[item.fromId]) {
+          map[item.fromId] = {};
+        }
+        if (!map[item.fromId][item.toId]) {
+          map[item.fromId][item.toId] = true;
+        }
+        return map;
+      }, {});
     prevData = {
       ...onProjectSave.reduce((map, item) => ({...map, ...item(getState(), {isForDiff: true})}), {}),
       connections,

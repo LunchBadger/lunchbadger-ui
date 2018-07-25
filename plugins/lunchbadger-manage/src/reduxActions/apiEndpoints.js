@@ -13,30 +13,25 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-const addApiWipConnection = (fromId, toId) => new Promise(resolve => setTimeout(() => {
-  const {info: {connection}} = Connections.find({fromId, toId});
-  connection && connection.addType('wip');
-  resolve();
-}));
-
-export const addAndConnect = (endpoint, fromId, outPort) => async (dispatch, getState) => {
+export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState) => {
   const state = getState();
   const {entities, plugins: {quadrants}, states} = state;
   const isPanelClosed = !states.currentlyOpenedPanel;
   if (isPanelClosed) {
-    const types = quadrants[3].entities;
-    const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-    const entity = ApiEndpoint.create({
-      name: endpoint.name + 'ApiEndpoint',
-      path: endpoint.contextPath,
-      itemOrder,
-      loaded: false,
-    });
-    const toId = entity.id;
-    Connections.addConnection(fromId, toId, {source: outPort});
-    await dispatch(actions.updateApiEndpoint(entity));
-    await addApiWipConnection(fromId, toId);
-    setTimeout(() => {
+    setTimeout(async () => {
+      const types = quadrants[3].entities;
+      const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+      const entity = ApiEndpoint.create({
+        name: endpoint.name + 'ApiEndpoint',
+        path: endpoint.contextPath,
+        itemOrder,
+        loaded: false,
+      });
+      const toId = entity.id;
+      Connections.addConnection(fromId, toId, {source: outPort});
+      await dispatch(actions.updateApiEndpoint(entity));
+      const {info: {connection}} = Connections.find({fromId, toId});
+      connection && connection.addType('wip');
       const value = {
         id: entity.id,
         type: entity.constructor.entities,

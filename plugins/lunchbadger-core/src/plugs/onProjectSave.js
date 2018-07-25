@@ -60,17 +60,31 @@ export default [
     const options = Object.assign({
       isForDiff: false,
     }, opts);
-    const data = {
-      connections: Connections
-        .search({})
-        .filter(({fromId, toId, info}) => {
-          return !info.connection.hasType('wip')
-            && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
-        })
-        .map(({fromId, toId}) => ({fromId, toId})),
-    };
-    if (!options.isForDiff) {
+    const {isForDiff} = options;
+    const data = {};
+    const connections = Connections
+      .search({})
+      .filter(({fromId, toId, info}) => {
+        const wip = !info.connection || info.connection.hasType('wip');
+        return !wip
+          && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
+      })
+      .map(({fromId, toId}) => ({fromId, toId}));
+    if (isForDiff) {
       Object.assign(data, {
+        connections: connections.reduce((map, item) => {
+          if (!map[item.fromId]) {
+            map[item.fromId] = {};
+          }
+          if (!map[item.fromId][item.toId]) {
+            map[item.fromId][item.toId] = true;
+          }
+          return map;
+        }, {}),
+      });
+    } else {
+      Object.assign(data, {
+        connections,
         name: 'main',
         states: setStatesToSave(state),
       });

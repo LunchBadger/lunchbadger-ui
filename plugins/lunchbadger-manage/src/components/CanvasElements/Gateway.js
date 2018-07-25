@@ -80,7 +80,7 @@ class Gateway extends Component {
       if (!(policies || []).find(({name}) => name === 'proxy')) {
         const connectionsTo = Connections.search({toId: id});
         connectionsTo.forEach((conn) => {
-          conn.info.connection.setParameter('discardAutoSave', true);
+          conn.info.source.classList.add('discardAutoSave');
           paper.detach(conn.info.connection);
         });
       }

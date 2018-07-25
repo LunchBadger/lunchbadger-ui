@@ -189,7 +189,7 @@ export default class Gateway extends BaseModel {
         if (kind === 'connections' && path.length >= 2) {
           const connectionPrev = prevData.connections[id];
           if (connectionPrev) {
-            const pipelineIdPrev = connectionPrev.fromId;
+            const pipelineIdPrev = id;
             const gatewayPrev = findGatewayByPipelineId(state, pipelineIdPrev);
             if (gatewayPrev && gatewayPrev.id === this.id) {
               const pipelinePrev = entities.gateways[this.id].pipelines.find(({id}) => id === pipelineIdPrev);
@@ -201,7 +201,7 @@ export default class Gateway extends BaseModel {
           }
           const connectionCurr = data.connections[id];
           if (connectionCurr) {
-            const pipelineIdCurr = connectionCurr.fromId;
+            const pipelineIdCurr = id;
             const gatewayCurr = findGatewayByPipelineId(state, pipelineIdCurr);
             if (gatewayCurr && gatewayCurr.id === this.id) {
               const pipelineCurr = entities.gateways[this.id].pipelines.find(({id}) => id === pipelineIdCurr);
@@ -367,7 +367,7 @@ export default class Gateway extends BaseModel {
       const connectionsTo = Connections.search({toId: id});
       const connectionsFrom = Connections.search({fromId: id});
       [...connectionsTo, ...connectionsFrom].map((conn) => {
-        conn.info.connection.setParameter('discardAutoSave', true);
+        conn.info.source.classList.add('discardAutoSave');
         paper.detach(conn.info.connection);
       });
     });

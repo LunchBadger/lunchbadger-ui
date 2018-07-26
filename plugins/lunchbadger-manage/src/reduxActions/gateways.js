@@ -1,4 +1,3 @@
-import React from 'react';
 import {actions} from './actions';
 import _ from 'lodash';
 import slug from 'slug';

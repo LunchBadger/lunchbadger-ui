@@ -107,6 +107,10 @@ export default class ApiEndpoint extends BaseModel {
     this._ports = ports;
   }
 
+  get apiEndpoints() {
+    return [this];
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

@@ -4,6 +4,7 @@ import APIPlan from './APIPlan';
 
 const ApiEndpoint = LunchBadgerManage.models.ApiEndpoint;
 const BaseModel = LunchBadgerCore.models.BaseModel;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class API extends BaseModel {
   static type = 'API';
@@ -160,4 +161,15 @@ export default class API extends BaseModel {
   remove() {
     return async dispatch => await dispatch(remove(this));
   }
+
+  beforeRemove(paper) {
+    (this.apiEndpoints || []).forEach(({id}) => {
+      const connectionsTo = Connections.search({toId: id});
+      connectionsTo.map((conn) => {
+        conn.info.source.classList.add('discardAutoSave');
+        paper.detach(conn.info.connection);
+      });
+    });
+  }
+
 }

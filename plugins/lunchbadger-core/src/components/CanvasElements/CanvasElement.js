@@ -239,7 +239,7 @@ export default (ComposedComponent) => {
       userStorage.setObjectKey('entityCollapsed', this.props.entity.id, collapsed);
 
     resetFormModel = () => {
-      if (this.entityRef.getFormRef()) {
+      if (this.entityRef && this.entityRef.getFormRef()) {
         this.entityRef.getFormRef().reset(this.state.model);
       }
     }

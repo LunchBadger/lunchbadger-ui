@@ -10,6 +10,7 @@ export default [
       isForServer: true,
       isForDiff: false,
     }, opts);
+    const {isForDiff} = options;
     const {entities} = state;
     let serviceEndpoints = Object.keys(entities.serviceEndpoints)
       .map(key => entities.serviceEndpoints[key].toJSON());
@@ -19,7 +20,14 @@ export default [
     let gateways = Object.values(entities.gateways)
       .filter(({deleting}) => !deleting)
       .map(entity => entity.toJSON(options));
-    if (options.isForDiff) {
+    if (isForDiff) {
+      const {plugins: {quadrants}} = state;
+      apiEndpoints = quadrants[3].connectionEntities
+        .map(type => ({type, ids: Object.keys(entities[type])}))
+        .map(({type, ids}) => ids.map(id => state.entities[type][id].apiEndpoints))
+        .reduce((arr, item) => arr.concat(...item), [])
+        .filter(item => item.loaded)
+        .map(item => item.toJSON());
       serviceEndpoints = serviceEndpoints.reduce(reduceIntoMap, {});
       apiEndpoints = apiEndpoints.reduce(reduceIntoMap, {});
       gateways = gateways.reduce(reduceIntoMap, {});

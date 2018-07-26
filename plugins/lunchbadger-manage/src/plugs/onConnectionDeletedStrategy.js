@@ -12,8 +12,7 @@ const checkConnectionDelete = info => (_, getState) => {
     return true;
   }
   const isGatewayOut = storeUtils.findGatewayByPipelineId(state, sourceId);
-  // FIXME - check for endpoints inside apis and endpoints inside apis inside portals
-  const isPublic = storeUtils.isInQuadrant(state, 3, targetId);
+  const isPublic = storeUtils.isInPublicQuadrant(state, targetId);
   if (isGatewayOut && isPublic) {
     return true;
   }

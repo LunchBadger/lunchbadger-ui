@@ -15,7 +15,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.128', [
+console.info('LBAPP VERSION 0.129', [
+  [
+    'master Feature/722 admin api calls parallel with project api calls #765',
+    'Feature/599 autosave apis #768'
+  ],
   [
     'master Feature/399 fn types per environment #763',
     'Feature/722 admin api calls parallel with project api calls #765'

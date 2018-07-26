@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {actions} from './actions';
 import API from '../models/API';
 
@@ -23,6 +24,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
+  const removedApiEndpoints = _.difference(
+    entity.apiEndpoints.map(p => p.id),
+    (model.apiEndpoints || []).map(p => p.id),
+  );
+  removedApiEndpoints.forEach((id) => {
+    Connections.removeConnection(null, id);
+  });
   updatedEntity = API.create({...entity.toJSON(), ...model});
   dispatch(actions.updateAPI(updatedEntity));
   await dispatch(coreActions.saveToServer());

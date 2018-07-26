@@ -17,6 +17,7 @@ class API extends Component {
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -54,6 +55,8 @@ class API extends Component {
     model.apiEndpoints = model.apiEndpoints.map(({id}, idx) => this.getSubApiEndpoint(id).processModel(model.apiEndpoints[idx]));
     return model;
   }
+
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   handleDeleteApiEndpoint = id => () => this.setState({apiEndpoints: this.state.apiEndpoints.filter((item) => item.id !== id)});
 

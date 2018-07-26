@@ -57,25 +57,28 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   }
 };
 
-export const bundle = (api, endpoint) => (dispatch) => {
+export const bundle = (api, endpoint) => async (dispatch) => {
   const updatedApi = api.recreate();
   updatedApi.addEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
   dispatch(manageActions.removeApiEndpoint(endpoint));
+  await dispatch(coreActions.saveToServer());
 };
 
-export const unbundle = (api, endpoint) => (dispatch) => {
+export const unbundle = (api, endpoint) => async (dispatch) => {
   const updatedApi = api.recreate();
   updatedApi.removeEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
   endpoint.wasBundled = false;
   dispatch(manageActions.updateApiEndpoint(endpoint));
+  await dispatch(coreActions.saveToServer());
 };
 
-export const rebundle = (fromApi, toApi, endpoint) => (dispatch) => {
+export const rebundle = (fromApi, toApi, endpoint) => async (dispatch) => {
   const updatedFromApi = fromApi.recreate();
   updatedFromApi.removeEndpoint(endpoint);
   const updatedToApi = toApi.recreate();
   updatedToApi.addEndpoint(endpoint);
   dispatch(actions.updateAPIs([updatedFromApi, updatedToApi]));
+  await dispatch(coreActions.saveToServer());
 };

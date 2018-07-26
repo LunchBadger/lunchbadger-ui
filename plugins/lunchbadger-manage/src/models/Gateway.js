@@ -9,7 +9,7 @@ import Config from '../../../../src/config';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const {Connections} = LunchBadgerCore.stores;
-const {storeUtils: {findGatewayByPipelineId}} = LunchBadgerCore.utils;
+const {storeUtils: {findGatewayByPipelineId, isInPublicQuadrant}} = LunchBadgerCore.utils;
 const {consumerManagement} = Config.get('features');
 
 export default class Gateway extends BaseModel {
@@ -164,7 +164,9 @@ export default class Gateway extends BaseModel {
           const isDelete = op === 'remove' && path.length === 2;
           const isRename = op === 'replace' && path.length === 3 && path[2] === 'name';
           const operation = `${isDelete ? 'delete' : 'put'}${kinds[kind]}`;
-          const body = isDelete ? null : entities[kind][id].toApiJSON();
+          const body = isDelete
+            ? null
+            : (entities[kind][id] || isInPublicQuadrant(state, id)).toApiJSON();
           let addOperation = true;
           if (kind === 'models' || kind === 'functions') {
             addOperation = false;

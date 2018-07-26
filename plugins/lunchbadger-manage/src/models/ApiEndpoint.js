@@ -108,7 +108,7 @@ export default class ApiEndpoint extends BaseModel {
   }
 
   get apiEndpoints() {
-    return [{id: this.id}];
+    return [this];
   }
 
   validate(model) {

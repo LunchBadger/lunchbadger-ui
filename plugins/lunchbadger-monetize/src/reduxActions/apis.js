@@ -1,7 +1,7 @@
 import {actions} from './actions';
 import API from '../models/API';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {actions: manageActions} = LunchBadgerManage.utils;
 const {Connections} = LunchBadgerCore.stores;
 
@@ -14,21 +14,22 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = API.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
   updatedEntity = API.create({...entity.toJSON(), ...model});
   dispatch(actions.updateAPI(updatedEntity));
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
   entity.apiEndpoints.forEach(({id}) => {
     Connections.removeConnection(null, id);
   });
@@ -36,6 +37,9 @@ export const remove = entity => (dispatch) => {
     dispatch(LunchBadgerOptimize.actions.removeAPIForecast(entity.id));
   }
   dispatch(actions.removeAPI(entity));
+  if (entity.loaded) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

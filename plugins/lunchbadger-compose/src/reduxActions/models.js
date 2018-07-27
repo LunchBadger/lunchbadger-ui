@@ -39,7 +39,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   let type = 'models';
   let updateAction = 'updateModel';
-  if (entity.wasBundled) {
+  const {wasBundled} = entity;
+  if (wasBundled) {
     type += 'Bundled';
     updateAction += 'Bundled';
   }
@@ -114,7 +115,9 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     updatedEntity.ready = true;
     dispatch(actions[updateAction](updatedEntity));
-    await dispatch(coreActions.saveToServer({saveProject: false}));
+    if (!wasBundled) {
+      await dispatch(coreActions.saveToServer({saveProject: false}));
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
@@ -123,9 +126,10 @@ export const update = (entity, model) => async (dispatch, getState) => {
 
 export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
   try {
-    if (entity.loaded) {
+    const {loaded, wasBundled} = entity;
+    if (loaded) {
       let updateAction = 'updateModel';
-      if (entity.wasBundled) {
+      if (wasBundled) {
         updateAction += 'Bundled';
       }
       const updatedEntity = entity.recreate();
@@ -139,7 +143,9 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
     if (cb) {
       await dispatch(cb());
     }
-    await dispatch(coreActions.saveToServer({saveProject: false}));
+    if (!wasBundled) {
+      await dispatch(coreActions.saveToServer({saveProject: false}));
+    }
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }

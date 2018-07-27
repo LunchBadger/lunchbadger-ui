@@ -46,6 +46,10 @@ export const update = (entity, model) => async (dispatch, getState) => {
   );
   removedModels.forEach((id) => {
     Connections.removeConnection(id);
+    if (LunchBadgerManage) {
+      const {removeServiceEndpointFromProxies} = LunchBadgerManage.utils;
+      dispatch(removeServiceEndpointFromProxies(id));
+    }
   });
   const models = model.models.map(({lunchbadgerId}) => lunchbadgerId);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});

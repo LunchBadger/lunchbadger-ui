@@ -96,6 +96,11 @@ export const registerPlugin = (_entities, plugs, _reducers = {}) => {
             ...plugins.quadrants[key].serviceEndpointEntities,
             ...(plugs.quadrants[key].serviceEndpointEntities || [])
           ];
+          if (!plugins.quadrants[key].modelEntities) plugins.quadrants[key].modelEntities = [];
+          plugins.quadrants[key].modelEntities = [
+            ...plugins.quadrants[key].modelEntities,
+            ...(plugs.quadrants[key].modelEntities || [])
+          ];
         }
       });
     }

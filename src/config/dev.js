@@ -43,7 +43,7 @@ export default {
   features: {
     tritonLogo,
     tritonObjectStorage: false,
-    microservices: false,
+    microservices: true,
     apis: isStaging,
     portals: isStaging,
     metrics: isStaging,

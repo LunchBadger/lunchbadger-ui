@@ -49,6 +49,7 @@ export default class Model extends BaseModel {
     'elementDOM',
     'slugifyName',
     'zoomWindow',
+    'models'
   ];
 
   _ports = [];
@@ -246,6 +247,10 @@ export default class Model extends BaseModel {
     const fields = {};
     this._getUserFieldsKeys().forEach(key => fields[key] = this[key]);
     return fields;
+  }
+
+  get models() {
+    return [this];
   }
 
   get extendedUserFields() {

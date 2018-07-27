@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {actions} from './actions';
 import Microservice from '../models/Microservice';
 import {update as updateModel, remove as removeModel} from './models';
@@ -31,7 +32,6 @@ export const removeNonExistentSubModels = () => (dispatch, getState) => {
 };
 
 export const update = (entity, model) => async (dispatch, getState) => {
-  const isAutoSave = entity.models.length > 0;
   const {multiEnvironments, entities: {modelsBundled}} = getState();
   const index = multiEnvironments.selected;
   let updatedEntity;
@@ -40,6 +40,17 @@ export const update = (entity, model) => async (dispatch, getState) => {
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
+  const removedModels = _.difference(
+    entity.models,
+    (model.models || []).map(p => p.lunchbadgerId),
+  );
+  removedModels.forEach((id) => {
+    Connections.removeConnection(id);
+    if (LunchBadgerManage) {
+      const {removeServiceEndpointFromProxies} = LunchBadgerManage.utils;
+      dispatch(removeServiceEndpointFromProxies(id));
+    }
+  });
   const models = model.models.map(({lunchbadgerId}) => lunchbadgerId);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
   dispatch(actions.updateMicroservice(updatedEntity));
@@ -54,14 +65,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
   updatedEntity = updatedEntity.recreate();
   updatedEntity.ready = true;
   dispatch(actions.updateMicroservice(updatedEntity));
-  if (isAutoSave) {
-    // await dispatch(coreActions.saveToServer());
-  }
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
 export const remove = entity => async (dispatch, getState) => {
-  const isAutoSave = entity.loaded && entity.models.length > 0;
   const modelsBundled = getState().entities.modelsBundled;
   for (let i = 0; i < entity.models.length; i += 1) {
     const id = entity.models[i];
@@ -71,8 +79,8 @@ export const remove = entity => async (dispatch, getState) => {
     dispatch(actionsCore.removeEntity(modelsBundled[id]));
   }
   dispatch(actions.removeMicroservice(entity));
-  if (isAutoSave) {
-    // await dispatch(coreActions.saveToServer());
+  if (entity.loaded) {
+    await dispatch(coreActions.saveToServer());
   }
 };
 

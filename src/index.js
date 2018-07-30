@@ -15,12 +15,13 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.131', [
+console.info('LBAPP VERSION 0.132', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
     'Feature/600 autosave portals #769',
-    'Feature/595 autosave microservices #770'
+    'Feature/595 autosave microservices #770',
+    'Bugfix/766 cannot add new connected pipelines via zoom window #776'
   ],
   [
     'master Feature/399 fn types per environment #763',

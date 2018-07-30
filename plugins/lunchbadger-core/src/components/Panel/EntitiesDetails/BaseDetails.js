@@ -136,6 +136,7 @@ export default (ComposedComponent) => {
     }
 
     closePopup = () => {
+      this.discardChanges();
       const {dispatch} = this.context.store;
       dispatch(setCurrentZoom({...this.props.rect, close: true}));
       setTimeout(() => dispatch(setCurrentZoom(undefined)), 1000);

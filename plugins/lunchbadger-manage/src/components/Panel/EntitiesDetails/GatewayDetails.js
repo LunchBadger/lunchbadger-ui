@@ -42,6 +42,7 @@ class GatewayDetails extends PureComponent {
   constructor(props) {
     super(props);
     this.state = this.stateFromStores(props);
+    this.originalPipelines = _.cloneDeep(this.state.pipelines);
     this.policyCARefs = {};
   }
 
@@ -68,6 +69,7 @@ class GatewayDetails extends PureComponent {
   onPropsUpdate = (props = this.props, callback) => this.setState(this.stateFromStores(props), callback);
 
   discardChanges = (callback) => {
+    this.updateGatewayPipelines(this.originalPipelines);
     Object.keys(this.policyCARefs).forEach(key => this.policyCARefs[key] && this.policyCARefs[key].discardChanges());
     this.onPropsUpdate(this.props, callback);
   };
@@ -129,8 +131,16 @@ class GatewayDetails extends PureComponent {
 
   changeState = (obj, cb) => this.setState({...obj, changed: true}, () => {
     this.props.parent.checkPristine();
+    this.updateGatewayPipelines(this.state.pipelines);
     cb && cb();
   });
+
+  updateGatewayPipelines = pipelines => window.dispatchEvent(
+    new CustomEvent('updateGatewayPipelines', {detail: {
+      gatewayId: this.props.entity.id,
+      pipelines,
+    }})
+  );
 
   addPipeline = () => {
     const pipelines = _.cloneDeep(this.state.pipelines);

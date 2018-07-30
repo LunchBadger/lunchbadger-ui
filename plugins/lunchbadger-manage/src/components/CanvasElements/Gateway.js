@@ -50,11 +50,25 @@ class Gateway extends Component {
     this.policiesSchemas = policy;
   }
 
+  componentDidMount() {
+    window.addEventListener('updateGatewayPipelines', this.updateGatewayPipelines);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
       this.onPropsUpdate(nextProps);
     }
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('updateGatewayPipelines', this.updateGatewayPipelines);
+  }
+
+  updateGatewayPipelines = ({detail: {gatewayId, pipelines}}) => {
+    if (this.props.entity.id === gatewayId) {
+      this.changeState({pipelines});
+    }
+  };
 
   stateFromStores = props => {
     const {dnsPrefix, pipelines} = props.entity;

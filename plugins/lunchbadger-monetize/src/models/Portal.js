@@ -3,6 +3,7 @@ import {update, remove} from '../reduxActions/portals';
 import API from './API';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
+const {Connections} = LunchBadgerCore.stores;
 
 export default class Portal extends BaseModel {
   static type = 'Portal';
@@ -125,4 +126,15 @@ export default class Portal extends BaseModel {
   remove() {
     return async dispatch => await dispatch(remove(this));
   }
+
+  beforeRemove(paper) {
+    (this.apiEndpoints || []).forEach(({id}) => {
+      const connectionsTo = Connections.search({toId: id});
+      connectionsTo.map((conn) => {
+        conn.info.source.classList.add('discardAutoSave');
+        paper.detach(conn.info.connection);
+      });
+    });
+  }
+
 }

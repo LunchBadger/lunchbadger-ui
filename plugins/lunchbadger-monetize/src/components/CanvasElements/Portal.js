@@ -5,7 +5,6 @@ import {createSelector} from 'reselect';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import classNames from 'classnames';
 import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
-import {addSystemInformationMessage} from '../../../../lunchbadger-ui/src/actions';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
@@ -24,6 +23,7 @@ class Portal extends Component {
 
   static contextTypes = {
     store: PropTypes.object,
+    paper: PropTypes.object,
   };
 
   constructor(props) {
@@ -37,25 +37,7 @@ class Portal extends Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.ready && !this.props.ready) {
-  //     this._onDeploy();
-  //   }
-  //   // if (nextState === null || this.state.hasConnection !== nextState.hasConnection) {
-  //   //   const hasConnection = nextProps.entity.publicEndpoints.some((publicEndpoint) => {
-  //   //     return Connection.getConnectionsForTarget(publicEndpoint.id).length;
-  //   //   });
-  //   //   if (hasConnection) {
-  //   //     this.setState({hasConnection: true});
-  //   //   } else {
-  //   //     this.setState({hasConnection: false});
-  //   //   }
-  //   // }
-  // }
-
-  // _onDeploy() {
-  //   this.props.parent.triggerElementAutofocus(); // FIXME
-  // }
+  onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {

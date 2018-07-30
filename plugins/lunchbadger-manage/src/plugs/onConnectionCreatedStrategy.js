@@ -13,8 +13,7 @@ const checkConnection = (info) => (_, getState) => {
     return !Connections.isFromTo(sourceId, targetId);
   }
   const isGatewayOut = storeUtils.findGatewayByPipelineId(state, sourceId);
-  // FIXME - check for endpoints inside apis and endpoints inside apis inside portals
-  const isPublic = storeUtils.isInQuadrant(state, 3, targetId);
+  const isPublic = storeUtils.isInPublicQuadrant(state, targetId);
   if (isGatewayOut && isPublic) {
     return !Connections.isFromTo(sourceId, targetId);
   }

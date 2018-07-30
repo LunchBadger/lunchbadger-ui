@@ -1,7 +1,8 @@
+import _ from 'lodash';
 import {actions} from './actions';
 import API from '../models/API';
 
-const {actions: coreActions} = LunchBadgerCore.utils;
+const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {actions: manageActions} = LunchBadgerManage.utils;
 const {Connections} = LunchBadgerCore.stores;
 
@@ -14,21 +15,29 @@ export const add = () => (dispatch, getState) => {
   return entity;
 }
 
-export const update = (entity, model) => (dispatch, getState) => {
+export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = API.create({...entity.toJSON(), ...model});
-    dispatch(coreActions.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
+    dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
+  const removedApiEndpoints = _.difference(
+    entity.apiEndpoints.map(p => p.id),
+    (model.apiEndpoints || []).map(p => p.id),
+  );
+  removedApiEndpoints.forEach((id) => {
+    Connections.removeConnection(null, id);
+  });
   updatedEntity = API.create({...entity.toJSON(), ...model});
   dispatch(actions.updateAPI(updatedEntity));
+  await dispatch(coreActions.saveToServer());
   return updatedEntity;
 };
 
-export const remove = entity => (dispatch) => {
+export const remove = entity => async (dispatch) => {
   entity.apiEndpoints.forEach(({id}) => {
     Connections.removeConnection(null, id);
   });
@@ -36,6 +45,9 @@ export const remove = entity => (dispatch) => {
     dispatch(LunchBadgerOptimize.actions.removeAPIForecast(entity.id));
   }
   dispatch(actions.removeAPI(entity));
+  if (entity.loaded) {
+    await dispatch(coreActions.saveToServer());
+  }
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {
@@ -53,25 +65,28 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   }
 };
 
-export const bundle = (api, endpoint) => (dispatch) => {
+export const bundle = (api, endpoint) => async (dispatch) => {
   const updatedApi = api.recreate();
   updatedApi.addEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
   dispatch(manageActions.removeApiEndpoint(endpoint));
+  await dispatch(coreActions.saveToServer());
 };
 
-export const unbundle = (api, endpoint) => (dispatch) => {
+export const unbundle = (api, endpoint) => async (dispatch) => {
   const updatedApi = api.recreate();
   updatedApi.removeEndpoint(endpoint);
   dispatch(actions.updateAPI(updatedApi));
   endpoint.wasBundled = false;
   dispatch(manageActions.updateApiEndpoint(endpoint));
+  await dispatch(coreActions.saveToServer());
 };
 
-export const rebundle = (fromApi, toApi, endpoint) => (dispatch) => {
+export const rebundle = (fromApi, toApi, endpoint) => async (dispatch) => {
   const updatedFromApi = fromApi.recreate();
   updatedFromApi.removeEndpoint(endpoint);
   const updatedToApi = toApi.recreate();
   updatedToApi.addEndpoint(endpoint);
   dispatch(actions.updateAPIs([updatedFromApi, updatedToApi]));
+  await dispatch(coreActions.saveToServer());
 };

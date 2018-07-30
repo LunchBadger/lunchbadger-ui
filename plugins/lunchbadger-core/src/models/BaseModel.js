@@ -116,7 +116,7 @@ export default class BaseModel {
         ...Connections.search({fromId: curr}),
         ...Connections.search({toId: curr}),
       ], [])
-      .filter(({info: {connection}}) => !!connection)
+      .filter(({info: {connection}}) => !!connection && connection.source && connection.target)
       .map(({fromId, toId, info: {connection}}) => {
         const {source, target} = connection;
         const sourceClassList = source.parentElement.classList;

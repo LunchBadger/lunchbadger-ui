@@ -1,4 +1,3 @@
-import React from 'react';
 import {actions} from './actions';
 import _ from 'lodash';
 import slug from 'slug';
@@ -148,4 +147,18 @@ export const removeServiceEndpointFromProxy = (serviceEndpoint, pipelineId) => (
       policy.removeConditionActionByServiceEndpoint(serviceEndpoint);
     });
   dispatch(actions.updateGateway(gateway));
+};
+
+export const removeServiceEndpointFromProxies = serviceEndpoint => (dispatch, getState) => {
+  const state = getState();
+  const {entities: {gateways}} = state;
+  Object.values(gateways).forEach((entity) => {
+    const gateway = entity.recreate();
+    gateway.pipelines.forEach((pipeline) => {
+      pipeline.policies
+        .filter(({name}) => name === 'proxy')
+        .forEach(policy => policy.removeConditionActionByServiceEndpoint(serviceEndpoint));
+    });
+    dispatch(actions.updateGateway(gateway));
+  });
 };

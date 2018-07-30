@@ -10,6 +10,22 @@ export const isInQuadrant = (state, quadrantIdx, entityId) =>
     id => id === formatId(entityId),
   );
 
+export const isInPrivateQuadrant = (state, entityId) => _.find(
+    state.plugins.quadrants[1].modelEntities
+      .map(type => ({type, ids: Object.keys(state.entities[type])}))
+      .map(({type, ids}) => ids.map(id => state.entities[type][id].models))
+      .reduce((arr, item) => arr.concat(...item), []),
+    ({id}) => id === formatId(entityId),
+  );
+
+export const isInPublicQuadrant = (state, entityId) => _.find(
+    state.plugins.quadrants[3].connectionEntities
+      .map(type => ({type, ids: Object.keys(state.entities[type])}))
+      .map(({type, ids}) => ids.map(id => state.entities[type][id].apiEndpoints))
+      .reduce((arr, item) => arr.concat(...item), []),
+    ({id}) => id === formatId(entityId),
+  );
+
 export const findEntity = (state, quadrantIdx, id) =>
   state.plugins.quadrants[quadrantIdx].connectionEntities
     .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))

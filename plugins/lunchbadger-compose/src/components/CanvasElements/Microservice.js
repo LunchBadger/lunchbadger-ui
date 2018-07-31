@@ -8,7 +8,17 @@ import ModelComponent from './Subelements/Model';
 import {bundle, unbundle, rebundle} from '../../reduxActions/models';
 import './Microservice.scss';
 
-const {CanvasElement, DraggableGroup, ElementsBundler, TwoOptionModal} = LunchBadgerCore.components;
+const {
+  components: {
+    CanvasElement,
+    DraggableGroup,
+    ElementsBundler,
+    TwoOptionModal,
+  },
+  utils: {
+    coreActions,
+  },
+} = LunchBadgerCore;
 
 class Microservice extends Component {
   static propTypes = {
@@ -24,7 +34,9 @@ class Microservice extends Component {
     super(props);
     this.state = {
       isShowingModal: false,
+      isShowingModalMultiple: false,
       bundledItem: null,
+      bundledItems: [],
       models: props.models,
     }
     this.onPropsUpdate = (props = this.props, callback) => this.setState({models: props.models}, callback);
@@ -44,19 +56,32 @@ class Microservice extends Component {
         bundledItem: item,
       });
     }
-  }
+  };
 
   handleModalConfirm = () => {
     const item = this.state.bundledItem;
     const {entity} = item;
     this.props.dispatch(unbundle(item.parent, entity));
-  }
+  };
 
   handleModalClose = () => this.setState({isShowingModal: false});
 
   bundleModel = (microservice, model) => this.props.dispatch(bundle(microservice, model));
 
   moveBetweenMicroservice = (from, to, model) => this.props.dispatch(rebundle(from, to, model));
+
+  handleMultipleUnbundle = () => this.setState({
+    isShowingModalMultiple: true,
+    bundledItems: this.props.currentlySelectedSubelements,
+  });
+
+  handleModalMultipleClose = () => this.setState({isShowingModalMultiple: false});
+
+  handleModalMultipleConfirm = () => {
+    const {entity, dispatch} = this.props;
+    this.state.bundledItems.forEach(item => dispatch(unbundle(entity, item)));
+    dispatch(coreActions.clearCurrentElement());
+  };
 
   getSubModel = id => this.modelsRefs[id]
     .getWrappedInstance()
@@ -108,6 +133,13 @@ class Microservice extends Component {
   }
 
   render() {
+    const {entity, parent} = this.props;
+    const {
+      isShowingModal,
+      isShowingModalMultiple,
+      bundledItem,
+      bundledItems,
+    } = this.state;
     return (
       <div>
         <EntitySubElements
@@ -116,7 +148,8 @@ class Microservice extends Component {
         >
           <DraggableGroup
             iconClass="icon-icon-microservice"
-            entity={this.props.entity}
+            entity={entity}
+            groupEndDrag={this.handleMultipleUnbundle}
           >
             {this.renderModels()}
           </DraggableGroup>
@@ -125,19 +158,19 @@ class Microservice extends Component {
           <ElementsBundler
             {...this.props}
             canDropCheck={
-              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-              && !_.includes(this.props.entity.models, item.entity.lunchbadgerId)
+              (item) => _.includes(entity.accept, item.entity.constructor.type)
+              && !_.includes(entity.models, item.entity.lunchbadgerId)
             }
-            onAddCheck={(item) => !_.includes(this.props.entity.models, item.entity.lunchbadgerId)}
+            onAddCheck={(item) => !_.includes(entity.models, item.entity.lunchbadgerId)}
             onAdd={this.bundleModel}
             onMove={this.moveBetweenMicroservice}
             dropText="Drag Models Here"
             modalTitle="Bundle Microservice"
-            parent={this.props.parent}
-            entity={this.props.entity}
+            parent={parent}
+            entity={entity}
           />
         </div>
-        {this.state.isShowingModal && (
+        {isShowingModal && (
           <TwoOptionModal
             title="Unbundle Microservice"
             confirmText="Yes"
@@ -147,9 +180,25 @@ class Microservice extends Component {
           >
             <span>
               Are you sure you want to unbundle
-              "{this.state.bundledItem.entity.name}"
+              "{bundledItem.entity.name}"
               from
-              "{this.props.entity.name}"?
+              "{entity.name}"?
+            </span>
+          </TwoOptionModal>
+        )}
+        {isShowingModalMultiple && (
+          <TwoOptionModal
+            title="Unbundle Microservice"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this.handleModalMultipleClose}
+            onSave={this.handleModalMultipleConfirm}
+          >
+            <span>
+              Are you sure you want to unbundle
+              "{bundledItems.map(({name}) => name).join(', ')}"
+              from
+              "{entity.name}"?
             </span>
           </TwoOptionModal>
         )}
@@ -161,8 +210,10 @@ class Microservice extends Component {
 const connector = createSelector(
   (_, props) => props.entity.models,
   state => state.entities.modelsBundled,
-  (ids, models) => ({
+  state => state.states.currentlySelectedSubelements,
+  (ids, models, currentlySelectedSubelements) => ({
     models: ids.map(id => models[id]).filter(item => !!item),
+    currentlySelectedSubelements,
   }),
 );
 

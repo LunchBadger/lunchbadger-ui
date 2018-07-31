@@ -154,7 +154,7 @@ class Microservice extends Component {
           main
         >
           <DraggableGroup
-            iconClass="icon-icon-microservice"
+            icon="Model"
             entity={entity}
             groupEndDrag={this.handleMultipleUnbundle}
           >

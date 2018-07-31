@@ -172,7 +172,7 @@ class API extends Component {
         >
           <div className="canvas-element__endpoints" ref="endpoints">
             <DraggableGroup
-              iconClass="icon-icon-product"
+              icon="ApiEndpoint"
               entity={entity}
               groupEndDrag={this.handleMultipleUnbundle}
             >

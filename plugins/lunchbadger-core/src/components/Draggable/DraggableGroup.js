@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
+import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
 import './DraggableGroup.scss';
 
 const boxSource = {
@@ -30,7 +31,7 @@ class DraggableGroup extends PureComponent {
     connectDragSource: PropTypes.func,
     connectDragPreview: PropTypes.func,
     entity: PropTypes.object.isRequired,
-    iconClass: PropTypes.string.isRequired
+    icon: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -38,19 +39,30 @@ class DraggableGroup extends PureComponent {
   };
 
   render() {
-    const {connectDragSource, connectDragPreview, currentlySelectedSubelements} = this.props;
+    const {
+      connectDragSource,
+      connectDragPreview,
+      currentlySelectedSubelements,
+      children,
+      icon,
+    } = this.props;
     return connectDragSource(
       <div className="draggable-group">
-        {this.props.children}
+        {children}
         {connectDragPreview(
           <div className="draggable-group__preview">
             <div className="draggable-group__preview__icon">
-              <i className={this.props.iconClass}/>
+              <IconSVG svg={entityIcons[icon]}/>
             </div>
             <div className="draggable-group__preview__items">
-              {currentlySelectedSubelements.map(element => {
-                return <div className="draggable-group__preview__title" key={element.id}>{element.name}</div>
-              })}
+              {currentlySelectedSubelements.map(({id, name}) => (
+                <div
+                  key={id}
+                  className="draggable-group__preview__title"
+                >
+                    {name}
+                </div>
+              ))}
             </div>
           </div>
         )}

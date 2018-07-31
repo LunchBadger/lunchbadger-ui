@@ -5,7 +5,7 @@ import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
 import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
-import {EntityProperty, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import {EntityProperty, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
 import Model from '../Model';
 import './Model.scss';
 
@@ -118,7 +118,7 @@ class SubModel extends PureComponent {
         {connectDragPreview(
           <div className="draggable-group__preview">
             <div className="draggable-group__preview__icon">
-              <i className={'icon-icon-microservice'}/>
+              <IconSVG svg={entityIcons.Model}/>
             </div>
             <div className="draggable-group__preview__items">
               <div className="draggable-group__preview__title">

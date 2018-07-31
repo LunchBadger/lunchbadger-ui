@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
-import {EntityProperty, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import {EntityProperty, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
 import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './ApiEndpoint.scss';
 
@@ -114,7 +114,7 @@ class SubApiEndpoint extends Component {
         {connectDragPreview(
           <div className="draggable-group__preview">
             <div className="draggable-group__preview__icon">
-              <i className={'icon-icon-product'}/>
+              <IconSVG svg={entityIcons.ApiEndpoint}/>
             </div>
             <div className="draggable-group__preview__items">
               <div className="draggable-group__preview__title">

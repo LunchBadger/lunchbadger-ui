@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
 import ApiEndpoint from './SubApiEndpoint';
-import {EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
 import './API.scss';
 
 // FIXME - handle toggleSubelement
@@ -122,7 +122,7 @@ class API extends Component {
         {connectDragPreview(
           <div className="draggable-group__preview">
             <div className="draggable-group__preview__icon">
-              <i className={'icon-icon-product'}/>
+              <IconSVG svg={entityIcons.API}/>
             </div>
             <div className="draggable-group__preview__items">
               <div className="draggable-group__preview__title">

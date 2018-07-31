@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.135', [
+console.info('LBAPP VERSION 0.136', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -24,7 +24,8 @@ console.info('LBAPP VERSION 0.135', [
     'Bugfix/766 cannot add new connected pipelines via zoom window #776',
     'Bugfix/773 Model and Function should only allow connection to correct pipelines #779',
     'Feature/775 Add copy to clipboard icons in walkthrough #780',
-    'Bugfix/771 bundled entities #783'
+    'Bugfix/771 bundled entities #783',
+    'Feature/774 Redundant saved message #784'
   ],
   [
     'master Feature/399 fn types per environment #763',

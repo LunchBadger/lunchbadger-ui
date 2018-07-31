@@ -83,6 +83,13 @@ class Microservice extends Component {
     dispatch(coreActions.clearCurrentElement());
   };
 
+  handleDropCheck = (item) => {
+    const {entity} = this.props;
+    const accept = _.includes(entity.accept, item.entity.constructor.type);
+    const bundled = _.includes(entity.models, item.entity.lunchbadgerId);
+    return accept && !bundled;
+  };
+
   getSubModel = id => this.modelsRefs[id]
     .getWrappedInstance()
     .getDecoratedComponentInstance()
@@ -157,10 +164,7 @@ class Microservice extends Component {
         <div className="canvas-element__drop">
           <ElementsBundler
             {...this.props}
-            canDropCheck={
-              (item) => _.includes(entity.accept, item.entity.constructor.type)
-              && !_.includes(entity.models, item.entity.lunchbadgerId)
-            }
+            canDropCheck={this.handleDropCheck}
             onAddCheck={(item) => !_.includes(entity.models, item.entity.lunchbadgerId)}
             onAdd={this.bundleModel}
             onMove={this.moveBetweenMicroservice}

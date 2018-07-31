@@ -31,6 +31,7 @@ const boxSource = {
 
 @DragSource('canvasElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 
@@ -39,6 +40,7 @@ class SubModel extends PureComponent {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     connectDragSource: PropTypes.func.isRequired,
+    connectDragPreview: PropTypes.func,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
     left: PropTypes.number.isRequired,
@@ -76,6 +78,7 @@ class SubModel extends PureComponent {
   render() {
     const {
       connectDragSource,
+      connectDragPreview,
       currentlySelectedSubelements,
       entity,
       index,
@@ -112,6 +115,18 @@ class SubModel extends PureComponent {
           }
           defaultOpened
         />
+        {connectDragPreview(
+          <div className="draggable-group__preview">
+            <div className="draggable-group__preview__icon">
+              <i className={'icon-icon-microservice'}/>
+            </div>
+            <div className="draggable-group__preview__items">
+              <div className="draggable-group__preview__title">
+                {entity.name}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

@@ -31,6 +31,7 @@ const boxSource = {
 
 @DragSource('canvasElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 
@@ -39,6 +40,7 @@ class SubApiEndpoint extends Component {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     connectDragSource: PropTypes.func.isRequired,
+    connectDragPreview: PropTypes.func,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
     left: PropTypes.number.isRequired,
@@ -69,6 +71,7 @@ class SubApiEndpoint extends Component {
   render() {
     const {
       connectDragSource,
+      connectDragPreview,
       currentlySelectedSubelements,
       entity,
       index,
@@ -108,6 +111,18 @@ class SubApiEndpoint extends Component {
           }
           defaultOpened
         />
+        {connectDragPreview(
+          <div className="draggable-group__preview">
+            <div className="draggable-group__preview__icon">
+              <i className={'icon-icon-product'}/>
+            </div>
+            <div className="draggable-group__preview__items">
+              <div className="draggable-group__preview__title">
+                {entity.name}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

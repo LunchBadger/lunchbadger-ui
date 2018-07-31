@@ -344,7 +344,7 @@ class Gateway extends Component {
           main
         >
           <DraggableGroup
-            iconClass="icon-icon-gateway"
+            icon="Gateway"
             entity={entity}
           >
             {this.renderPipelines()}

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 import _ from 'lodash';
 import Plan from './Subelements/Plan';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
@@ -7,7 +9,17 @@ import ApiEndpointComponent from './Subelements/ApiEndpoint';
 import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
 import './API.scss';
 
-const {TwoOptionModal, CanvasElement, DraggableGroup, ElementsBundler} = LunchBadgerCore.components;
+const {
+  components: {
+    TwoOptionModal,
+    CanvasElement,
+    DraggableGroup,
+    ElementsBundler,
+  },
+  utils: {
+    coreActions,
+  },
+} = LunchBadgerCore;
 
 class API extends Component {
   static propTypes = {
@@ -25,7 +37,9 @@ class API extends Component {
     this.previousConnection = null;
     this.state = {
       isShowingModal: false,
+      isShowingModalMultiple: false,
       bundledItem: null,
+      bundledItems: [],
       apiEndpoints: props.entity.apiEndpoints,
     };
     this.onPropsUpdate = (props = this.props, callback) => this.setState({apiEndpoints: props.entity.apiEndpoints}, callback);
@@ -65,6 +79,19 @@ class API extends Component {
     callback && callback();
   });
 
+  handleMultipleUnbundle = () => this.setState({
+    isShowingModalMultiple: true,
+    bundledItems: this.props.currentlySelectedSubelements,
+  });
+
+  handleCloseMultiple = () => this.setState({isShowingModalMultiple: false});
+
+  handleModalMultipleConfirm = () => {
+    const {entity, dispatch} = this.props;
+    this.state.bundledItems.forEach(item => dispatch(unbundle(entity, item)));
+    dispatch(coreActions.clearCurrentElement());
+  };
+
   renderPlans = () => {
     return this.props.entity.plans.map(plan => <Plan key={plan.id} entity={plan} />);
   }
@@ -102,7 +129,7 @@ class API extends Component {
     }
   }
 
-  _handleClose = () => {
+  handleClose = () => {
     this.setState({isShowingModal: false});
   }
 
@@ -124,6 +151,12 @@ class API extends Component {
 
   render() {
     const {entity, parent} = this.props;
+    const {
+      isShowingModal,
+      isShowingModalMultiple,
+      bundledItem,
+      bundledItems,
+    } = this.state;
     return (
       <div>
         {entity.plans.length > 0 && (
@@ -139,8 +172,9 @@ class API extends Component {
         >
           <div className="canvas-element__endpoints" ref="endpoints">
             <DraggableGroup
-              iconClass="icon-icon-product"
+              icon="ApiEndpoint"
               entity={entity}
+              groupEndDrag={this.handleMultipleUnbundle}
             >
               {this.renderEndpoints()}
             </DraggableGroup>
@@ -160,19 +194,35 @@ class API extends Component {
             />
           </div>
         </EntitySubElements>
-        {this.state.isShowingModal && (
+        {isShowingModal && (
           <TwoOptionModal
             title="Unbundle API"
             confirmText="Yes"
             discardText="No"
-            onClose={this._handleClose}
+            onClose={this.handleClose}
             onSave={this.unbundle}
           >
             <span>
               Are you sure you want to unbundle
-              "{this.state.bundledItem.entity.name}"
+              "{bundledItem.entity.name}"
               from
-              "{this.props.entity.name}"?
+              "{entity.name}"?
+            </span>
+          </TwoOptionModal>
+        )}
+        {isShowingModalMultiple && (
+          <TwoOptionModal
+            title="Unbundle API"
+            confirmText="Yes"
+            discardText="No"
+            onClose={this.handleCloseMultiple}
+            onSave={this.handleModalMultipleConfirm}
+          >
+            <span>
+              Are you sure you want to unbundle
+              "{bundledItems.map(({name}) => name).join(', ')}"
+              from
+              "{entity.name}"?
             </span>
           </TwoOptionModal>
         )}
@@ -181,4 +231,11 @@ class API extends Component {
   }
 }
 
-export default CanvasElement(API);
+const connector = createSelector(
+  state => state.states.currentlySelectedSubelements,
+  (currentlySelectedSubelements) => ({
+    currentlySelectedSubelements,
+  }),
+);
+
+export default connect(connector, null, null, {withRef: true})(CanvasElement(API));

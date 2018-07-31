@@ -5,18 +5,17 @@
 .draggable-group__preview {
   position: absolute;
   z-index: -1;
-  border-radius: 6px;
+  border-radius: 5px;
   padding: 10px 15px;
-  bottom: 15%;
+  bottom: 0;
   left: 0;
-  background: #01667D;
+  background: #4190CE;
   max-width: 300px;
   width: 100%;
   right: 0;
-  display: none; //table
-  line-height: 1.65;
-  transition: all 1s ease;
-
+  display: table;
+  line-height: 26px;
+  transition: none;
   .collapsed &,
   .wip &,
   .dragging &,
@@ -26,7 +25,7 @@
 }
 
 .draggable-group__preview__title {
-  font-size: 20px;
+  font-size: 18px;
   color: #fff;
   white-space: nowrap;
   width: 100%;

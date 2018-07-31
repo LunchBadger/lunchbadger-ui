@@ -95,11 +95,6 @@ class Walkthrough extends PureComponent {
         }
       }
       if (step.onBefore) {
-        if (step.rootUrlReplacement) {
-          step.text = step.text
-            .replace(/\$ROOT_URL/g, this.getRootUrl())
-            .replace(/\$USER_ID/g, this.props.userId);
-        }
         if (step.waitForSelector) {
           step.selector = step.waitForSelector;
         }
@@ -286,6 +281,10 @@ class Walkthrough extends PureComponent {
       document.removeEventListener('click', this.stopClickPropagation);
       cb();
     },
+    getReplacement: id => ({
+      ROOT_URL: this.getRootUrl(),
+      USER_ID: this.props.userId,
+    })[id],
   };
 
   getRootUrl = () => document.querySelector('.Entity.ApiEndpoint .accessUrl a').innerHTML;

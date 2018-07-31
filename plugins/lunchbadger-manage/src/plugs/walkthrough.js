@@ -1,3 +1,6 @@
+import React from 'react';
+import {CopyOnHover} from '../../../lunchbadger-ui/src';
+
 export default {
   //   '050': {
   //     title: 'Endpoint Dropdown Menu',
@@ -373,18 +376,24 @@ Add the following path: <pre>/api/myfunction*</pre>
   // },
   '0802': {
     title: 'Accessing Gateways',
-    text: `
-All gateways will be accessible via the following domain name pattern:
-<code>http://{gateway-name}-$USER_ID-dev.lunchbadger.io</code>
-<br />
-Your Gateway will be accessible at:
-<code>$ROOT_URL</code>
-`,
-    waitForSelector: '.Entity.ApiEndpoint .accessUrl',
+    selector: '.Entity.ApiEndpoint .accessUrl',
     position: 'bottom-right',
     allowClicksThruHole: false,
-    rootUrlReplacement: true,
-    onBefore: () => [],
+    onBefore: api => [
+      api.setStepText(
+        <div>
+          All gateways will be accessible via the following domain name pattern:
+          <code>{'http://{gateway-name}'}-{api.getReplacement('USER_ID')}-dev.lunchbadger.io</code>
+          <br />
+          Your Gateway will be accessible at:
+          <code>
+            <CopyOnHover copy={api.getReplacement('ROOT_URL')}>
+              {api.getReplacement('ROOT_URL')}
+            </CopyOnHover>
+          </code>
+        </div>
+      ),
+    ],
   },
   '0803': {
     title: 'API Request Flow',
@@ -428,22 +437,31 @@ Your Gateway will be accessible at:
   },
   '0808': {
     title: 'Accessing an API Endpoint',
-    text: `
-Now that you've created your first LunchBadger Project, try interacting with your new endpoints!
-<code>
-$ curl $ROOT_URL/api/myfunction
-<br />
-<strong>LunchBadger Function</strong>
-<br /><br />
-$ curl $ROOT_URL/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'
-<br />
-<strong>{"year":${(new Date()).getFullYear()},"id":1}</strong>
-</code>
-`,
     waitForSelector: '.canvas',
     position: 'bottom',
     allowClicksThruHole: false,
-    rootUrlReplacement: true,
-    onBefore: () => [],
+    onBefore: api => [
+      api.setStepText(
+        <div>
+          Now that you''ve created your first LunchBadger Project, try interacting with your new endpoints!
+          <code>
+            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/api/myfunction`}>
+              $ curl {api.getReplacement('ROOT_URL')}/api/myfunction
+            </CopyOnHover>
+            <br />
+            <strong>LunchBadger Function</strong>
+            <br />
+            <br />
+            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}>
+              {`$ curl ${api.getReplacement('ROOT_URL')}/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}
+            </CopyOnHover>
+            <br />
+            <strong>
+              {'{"year":${(new Date()).getFullYear()},"id":1}'}
+            </strong>
+          </code>
+        </div>
+      )
+    ],
   }
 };

@@ -15,7 +15,26 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.1');
+console.info('LBAPP VERSION 0.81', [
+  '776',
+  '759 763 762',
+  '748 749',
+  '720 735 737',
+  '714 720',
+  '714',
+  '704 703 707 700 713',
+  '704 703 707 700',
+  '704 703 707',
+  '704 703',
+  '704',
+  '692 696 697 698',
+  '692 683 686 690',
+  '685',
+  '674 677',
+  '674',
+  '671',
+  '647'
+]);
 
 ReactGA.initialize(Config.get('googleAnalyticsID'), {
   debug: Config.get('googleAnalyticsDebug')

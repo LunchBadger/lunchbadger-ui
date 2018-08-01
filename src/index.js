@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.139', [
+console.info('LBAPP VERSION 0.140', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',

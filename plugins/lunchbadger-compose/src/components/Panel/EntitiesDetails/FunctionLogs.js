@@ -4,6 +4,8 @@ import SLSService from '../../../services/SLSService';
 import {IconButton, ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
 
+const errorMessage = 'Loading logs failed with error:';
+
 export default class FunctionLogs extends PureComponent {
 
   constructor(props) {
@@ -21,10 +23,14 @@ export default class FunctionLogs extends PureComponent {
 
   reloadLogs = async (softLoad) => {
     if (softLoad && this.state.loading) return;
-    this.setState({
+    const state = {
       loading: true,
       error: null,
-    }, this.scrollDown);
+    };
+    if (this.state.logs === errorMessage) {
+      state.logs = '';
+    }
+    this.setState(state, this.scrollDown);
     try {
       const {body: {logs}} = await SLSService.loadLogs(this.props.name);
       this.setState({
@@ -33,7 +39,7 @@ export default class FunctionLogs extends PureComponent {
       }, this.scrollDown);
     } catch ({message: error}) {
       this.setState({
-        logs: 'Loading logs failed with error:',
+        logs: errorMessage,
         error,
         loading: false,
       }, this.scrollDown);

@@ -1,5 +1,6 @@
 .FunctionLogs {
   position: relative;
+  height: 100%;
   .IconButton {
     position: absolute;
     top: 7px;
@@ -21,7 +22,7 @@
     padding: 10px;
     background-color: #2a2b21;
     color: #b4b5b0;
-    height: 200px;
+    height: 100%;
     overflow-y: auto;
     & > pre,
     & > code {

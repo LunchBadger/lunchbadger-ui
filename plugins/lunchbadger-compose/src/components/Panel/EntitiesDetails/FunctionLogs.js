@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import cs from 'classnames';
 import SLSService from '../../../services/SLSService';
-import {IconButton} from '../../../../../lunchbadger-ui/src';
+import {IconButton, ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
 
 export default class FunctionLogs extends PureComponent {
@@ -33,7 +33,7 @@ export default class FunctionLogs extends PureComponent {
       }, this.scrollDown);
     } catch ({message: error}) {
       this.setState({
-        logs: '',
+        logs: 'Loading logs failed with error:',
         error,
         loading: false,
       }, this.scrollDown);
@@ -49,23 +49,25 @@ export default class FunctionLogs extends PureComponent {
       error,
     } = this.state;
     return (
-      <div className="FunctionLogs">
-        <IconButton
-          icon="iconReload"
-          name="reloadLogs"
-          onClick={this.reloadLogs}
-        />
-        <div
-          ref={r => this.contentRef = r}
-          className="FunctionLogs__content"
-        >
-          <pre>
-            {logs}
-          </pre>
-          {loading && <pre>Loading...</pre>}
-          {error && <code dangerouslySetInnerHTML={{__html: error}} />}
+      <ResizableWrapper>
+        <div className="FunctionLogs">
+          <IconButton
+            icon="iconReload"
+            name="reloadLogs"
+            onClick={this.reloadLogs}
+          />
+          <div
+            ref={r => this.contentRef = r}
+            className="FunctionLogs__content"
+          >
+            <pre>
+              {logs}
+            </pre>
+            {loading && <pre>Loading...</pre>}
+            {error && <code dangerouslySetInnerHTML={{__html: error}} />}
+          </div>
         </div>
-      </div>
+      </ResizableWrapper>
     );
   }
 }

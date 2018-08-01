@@ -129,7 +129,7 @@ class Portal extends Component {
         <EntityProperties properties={mainProperties} />
         <EntitySubElements title="APIs" main>
           <DraggableGroup
-            iconClass="icon-icon-portal"
+            icon="Api"
             entity={this.props.entity}
             groupEndDrag={() => this._handleMultipleUnbundle()}
           >

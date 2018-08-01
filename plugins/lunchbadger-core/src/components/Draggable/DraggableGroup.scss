@@ -5,18 +5,16 @@
 .draggable-group__preview {
   position: absolute;
   z-index: -1;
-  border-radius: 6px;
-  padding: 10px 15px;
-  bottom: 15%;
+  border-radius: 5px;
+  padding: 0 15px;
+  bottom: 0;
   left: 0;
-  background: #01667D;
+  background: #4190CE;
   max-width: 300px;
   width: 100%;
   right: 0;
-  display: none; //table
-  line-height: 1.65;
-  transition: all 1s ease;
-
+  display: table;
+  transition: none;
   .collapsed &,
   .wip &,
   .dragging &,
@@ -26,12 +24,13 @@
 }
 
 .draggable-group__preview__title {
-  font-size: 20px;
+  font-size: 18px;
   color: #fff;
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 26px;
 }
 
 .draggable-group__preview__icon {
@@ -39,13 +38,19 @@
   vertical-align: top;
   padding-right: 18px;
   width: 40px;
-  font-size: 22px;
   color: #fff;
   text-align: center;
   height: 0;
+  padding-top: 8px;
+  svg {
+    width: 30px;
+    height: auto;
+    stroke: #FFF;
+  }
 }
 
 .draggable-group__preview__items {
   display: table-cell;
   vertical-align: top;
+  padding: 10px 0;
 }

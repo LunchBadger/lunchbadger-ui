@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.136', [
+console.info('LBAPP VERSION 0.137', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -25,7 +25,8 @@ console.info('LBAPP VERSION 0.136', [
     'Bugfix/773 Model and Function should only allow connection to correct pipelines #779',
     'Feature/775 Add copy to clipboard icons in walkthrough #780',
     'Bugfix/771 bundled entities #783',
-    'Feature/774 Redundant saved message #784'
+    'Feature/774 Redundant saved message #784',
+    'Bugfix/786 Basic auth / oauth2 custom password #787'
   ],
   [
     'master Feature/399 fn types per environment #763',

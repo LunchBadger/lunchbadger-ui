@@ -18,7 +18,7 @@ const boxTarget = {
         if (typeof item.handleEndDrag === 'function') {
           item.handleEndDrag(item);
         }
-      } else if (item.appState) {
+      } else if (item.groupEndDrag) {
         if (typeof item.groupEndDrag === 'function') {
           item.groupEndDrag();
         }

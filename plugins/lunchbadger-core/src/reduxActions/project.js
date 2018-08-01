@@ -8,11 +8,6 @@ import {updateEntitiesStatues} from './';
 
 let prevData;
 
-const showSavedMessage = dispatch => dispatch(actions.addSystemInformationMessage({
-  type: 'success',
-  message: 'All data has been synced with API',
-}));
-
 export const loadFromServer = () => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(true));
   dispatch(actions.setLoadedProject(false));
@@ -55,10 +50,10 @@ export const loadFromServer = () => async (dispatch, getState) => {
 export const saveToServer = (opts) => async (dispatch, getState) => {
   dispatch(actions.setLoadingProject(true));
   const options = Object.assign({
-    showMessage: true,
+    showMessage: true, // relict since #774
     saveProject: true,
   }, opts);
-  const {showMessage, saveProject} = options;
+  const {saveProject} = options;
   const state = getState();
   const {onProjectSave, onBeforeProjectSave} = state.plugins;
   const currData = onProjectSave.reduce((map, item) => ({
@@ -71,7 +66,6 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   //   console.log('NO CHANGE', delta, currData, prevData);
   //   setTimeout(() => {
   //     dispatch(actions.setLoadingProject(false));
-  //     showSavedMessage(dispatch);
   //   }, 100);
   //   return;
   // }
@@ -88,9 +82,6 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     } else {
       dispatch(addSystemDefcon1({error}));
     }
-  }
-  if (showMessage) {
-    showSavedMessage(dispatch);
   }
   dispatch(actions.setLoadingProject(false));
 };

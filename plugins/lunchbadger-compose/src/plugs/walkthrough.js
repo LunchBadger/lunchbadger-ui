@@ -203,12 +203,9 @@ Click on the <pre>Memory</pre> Connector circular connection port and drag your 
     selector: '.Entity.DataSource.memory .port-out',
     position: 'bottom-left',
     allowClicksThruHole: true,
-    onBefore: api => [
-      api.setShowOverlay(false),
-    ],
     triggerNext: api => [
+      api.setHole({width: '69px'}),
       api.waitUntilPresent('.Entity.DataSource.memory .port-out .port__anchor--connected'),
-      api.setShowOverlay(true),
     ],
   },
   '030': {

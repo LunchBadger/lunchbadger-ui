@@ -158,6 +158,48 @@
       margin-bottom: 25px;
     }
   }
+  &__pending {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    margin: 5px 5px 5px 0;
+    padding: 25px 15px;
+    position: relative;
+    &.loading {
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.75);
+      }
+    }
+    .EntityProperty {
+      vertical-align: top;
+    }
+    .EntityActionButtons {
+      text-align: right;
+      margin: 0 -15px;
+      &__inner {
+        display: inline-block;
+        width: 300px;
+      }
+    }
+    .info {
+      font-size: 18px;
+      text-align: center;
+      padding-bottom: 25px;
+      code {
+        display: block;
+        background-color: #EEE;
+        padding: 0 10px;
+        border-radius: 4px;
+        border: 1px solid #DDD;
+        margin: 10px 0;
+      }
+    }
+  }
 }
 
 @keyframes loader-animation {

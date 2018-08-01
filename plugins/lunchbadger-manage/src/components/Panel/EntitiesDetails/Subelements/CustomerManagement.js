@@ -13,6 +13,8 @@ import {
   EntityPropertyLabel,
   IconSVG,
   Select,
+  EntityActionButtons,
+  CopyOnHover,
 } from '../../../../../../lunchbadger-ui/src';
 import {iconCheck} from '../../../../../../../src/icons';
 const {TwoOptionModal} = LunchBadgerCore.components;
@@ -61,6 +63,9 @@ class CustomerManagement extends PureComponent {
       pendingCredentialConsumer: '',
       pendingCredentialCreation: false,
       validationError: '',
+      pendingCredentialCreate: null,
+      autoGeneratePassword: true,
+      invalidGeneratedPassword: false,
     };
   }
 
@@ -225,7 +230,24 @@ class CustomerManagement extends PureComponent {
     }
   };
 
-  handleCreateCredentials = (consumerId, type, kind) => async () => {
+  handleCreateCredentials = (consumerId, type, kind) => () => this.setState({
+    pendingCredentialCreate: {
+      consumerId,
+      type,
+      kind,
+    },
+  });
+
+  createCredentials = async () => {
+    const {pendingCredentialCreate} = this.state;
+    this.setState({
+      pendingCredentialCreate: {
+        ...pendingCredentialCreate,
+        password: '',
+      },
+      invalidGeneratedPassword: false,
+    });
+    const {consumerId, type, kind} = pendingCredentialCreate;
     if (!consumerId) {
       this.setState({
         pendingCredentialConsumer: '',
@@ -239,8 +261,36 @@ class CustomerManagement extends PureComponent {
       consumerId,
       type,
     };
+    const notKeyAuth = type !== 'key-auth';
+    const passwordKey = type === 'basic-auth' ? 'password' : 'secret';
+    let autoGeneratePassword;
+    let password;
+    if (notKeyAuth) {
+      autoGeneratePassword = document.querySelector('#autoGeneratePassword').checked;
+      body.credential = {autoGeneratePassword};
+      if (!autoGeneratePassword) {
+        password = document.querySelector('#password').value;
+        if (password === '') {
+          this.setState({
+            pendingCredentialCreate: {
+              ...pendingCredentialCreate,
+              password: undefined,
+            },
+            invalidGeneratedPassword: true,
+          });
+          return;
+        }
+        body.credential[passwordKey] = password;
+      }
+    }
     try {
-      await api.createCredentials(body);
+      const response = await api.createCredentials(body);
+      if (notKeyAuth) {
+        this.setState({pendingCredentialCreate: {
+          ...pendingCredentialCreate,
+          password: autoGeneratePassword ? response.body[passwordKey] : password,
+        }});
+      }
       await this.loadCredentials(consumerId);
     } catch (error) {
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
@@ -636,7 +686,13 @@ class CustomerManagement extends PureComponent {
   };
 
   renderCredentialsListByTypeAndKind = (consumerId, type, kind) => {
-    const {loadingUsers, loadingApps} = this.state;
+    const {
+      loadingUsers,
+      loadingApps,
+      pendingCredentialCreate,
+      autoGeneratePassword,
+      invalidGeneratedPassword,
+    } = this.state;
     const loading = loadingUsers || loadingApps;
     const columns = [];
     const widths = [
@@ -682,16 +738,19 @@ class CustomerManagement extends PureComponent {
     }
     const data = [];
     if (type === 'basic-auth') {
-      columns.push('PasswordKey');
-      columns.push('Password');
+      columns.push('CreatedAt');
       credentials
         .filter(item => item.type === type)
         .forEach((entry) => {
-          const {name, username, password, passwordKey, isActive} = entry;
+          const {
+            name,
+            username,
+            isActive,
+            createdAt,
+          } = entry;
           const id = consumerId || entry.consumerId;
           const item = [
-            passwordKey,
-            password,
+            createdAt,
             '', // autoGeneratePassword ? check : '',
             <Checkbox
               name="consumerManagement[credentials-basic-auth-status]"
@@ -747,16 +806,19 @@ class CustomerManagement extends PureComponent {
         });
     }
     if (type === 'oauth2') {
-      columns.push('PasswordKey');
-      columns.push('Secret');
+      columns.push('CreatedAt');
       credentials
         .filter(item => item.type === type)
         .forEach((entry) => {
-          const {name, username, secret, passwordKey, isActive} = entry;
+          const {
+            name,
+            username,
+            isActive,
+            createdAt,
+          } = entry;
           const id = consumerId || entry.consumerId;
           const item = [
-            passwordKey,
-            secret,
+            createdAt,
             '', // autoGeneratePassword ? check : '',
             <Checkbox
               name="consumerManagement[credentials-oauth2-status]"
@@ -774,19 +836,84 @@ class CustomerManagement extends PureComponent {
           data.push(item);
         });
     }
-    columns.push(type === 'key-auth' ? 'Scopes' : ''); //'AutoGeneratePassword');
+    columns.push(type === 'key-auth' ? 'Scopes' : '');
     columns.push('Active');
     let isAddButton = false;
     if (consumerId) {
       if (type === 'key-auth') {
         isAddButton = true;
       } else {
-        isAddButton = !credentials.find(item => item.type === type);
+        isAddButton = !credentials
+          .find(item => item.type === type && item.isActive);
       }
     }
     columns.push(isAddButton ? <IconButton icon="iconPlus" onClick={this.handleCreateCredentials(consumerId, type, kind)} /> : '');
+    let pendingCredentialCreateSection = <div />;
+    if (pendingCredentialCreate
+      && pendingCredentialCreate.consumerId === consumerId
+      && pendingCredentialCreate.type === type
+    ) {
+      if (!pendingCredentialCreate.password) {
+        pendingCredentialCreateSection = (
+          <div className={cs('CustomerManagement__pending', {
+            loading: pendingCredentialCreate.password === ''
+          })}>
+            <div>
+              <EntityProperty
+                name="autoGeneratePassword"
+                title="AutoGeneratePassword"
+                value={autoGeneratePassword}
+                bool
+                width={150}
+                onChange={({target: {checked}}) => this.setState({autoGeneratePassword: checked})}
+              />
+              {!autoGeneratePassword && (
+                <EntityProperty
+                  name="password"
+                  title="Password"
+                  value=""
+                  width="calc(100% - 190px)"
+                  invalid={invalidGeneratedPassword ? 'Invalid password' : ''}
+                />
+              )}
+            </div>
+            <EntityActionButtons
+              onCancel={() => this.setState({pendingCredentialCreate: null})}
+              okLabel="Create"
+              onOk={this.createCredentials}
+              submit={false}
+            />
+          </div>
+        );
+      } else {
+        pendingCredentialCreateSection = (
+          <div className="CustomerManagement__pending">
+            <div className="info">
+              Your {type} is created with password:
+              <code>
+                <CopyOnHover copy={pendingCredentialCreate.password}>
+                  {pendingCredentialCreate.password}
+                </CopyOnHover>
+              </code>
+              {'Please write it down and keep in a safe place, as it won\'t be shown again.'}
+            </div>
+            <EntityActionButtons
+              skipCancel
+              okLabel="Got it"
+              onOk={() => this.setState({
+                pendingCredentialCreate: null,
+                autoGeneratePassword: true,
+                invalidGeneratedPassword: false,
+              })}
+              submit={false}
+            />
+          </div>
+        );
+      }
+    }
     return (
       <div className={cs('CustomerManagement__table', {loading})}>
+        {pendingCredentialCreateSection}
         <Table
           columns={columns}
           widths={widths}

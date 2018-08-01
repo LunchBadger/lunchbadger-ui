@@ -15,8 +15,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.83', [
-  '776 787 784 789',
+console.info('LBAPP VERSION 0.84', [
+  '776 787 784 789 783',
   '776 787',
   '776',
   '759 763 762',

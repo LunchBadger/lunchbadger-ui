@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import AceEditor from 'react-ace';
-import {ResizableBox} from 'react-resizable';
 import brace from 'brace';
 import 'brace/mode/dot';
 import 'brace/mode/golang';
@@ -13,7 +12,7 @@ import 'brace/mode/python';
 import 'brace/mode/ruby';
 import 'brace/theme/monokai';
 import './CodeEditor.scss';
-import {EntityProperty, IconButton} from '../';
+import {EntityProperty, IconButton, Resizable} from '../';
 
 const options = {
   enableBasicAutocompletion: true,
@@ -157,14 +156,13 @@ export default class CodeEditor extends PureComponent {
           />
         </div>
         <div className="CodeEditor__editor">
-          <ResizableBox
+          <Resizable
             width={width}
             height={height}
-            minConstraints={[200, 100]}
-            maxConstraints={[maxWidth, 3000]}
+            maxWidth={maxWidth}
             onResize={this.handleFunctionCodeResize}
             onResizeStop={this.handleResizeStop}
-            axis={fullWidth ? 'y' : 'both'}
+            fullWidth={fullWidth}
           >
             <AceEditor
               width={`${width}px`}
@@ -175,7 +173,7 @@ export default class CodeEditor extends PureComponent {
               onChange={this.handleEditorChange}
               setOptions={options}
             />
-          </ResizableBox>
+          </Resizable>
         </div>
         {mode === 'both' && (
           <div className="CodeEditor__button">

@@ -5,18 +5,10 @@
   padding: 5px 8px;
   position: relative;
   cursor: pointer;
-  &:hover {
-    background-color: #EEE;
-    .button {
-      display: block;
-    }
-  }
+  background-color: #EEE;
   .button {
-    position: absolute;
-    top: 2px;
-    right: 5px;
+    display: inline-block;
     background-color: rgba(#EEE, 0.9);
-    display: none;
     .iconCopy {
       margin: 5px;
     }

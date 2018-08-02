@@ -1,7 +1,7 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
   viewBox="0 0 100 100" xml:space="preserve">
   <style>
-  .icon-reorder { stroke: none; fill: #e0e0e0;}
+  .icon-reorder { stroke: none; fill: #aaa;}
   </style>
   <g>
     <polygon points="50,0 70,25 30,25" class="icon-reorder" />

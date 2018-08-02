@@ -9,6 +9,8 @@ import {
   CollapsibleProperties,
   IconButton,
   EntityProperty,
+  entityIcons,
+  IconSVG,
 } from '../../../../../lunchbadger-ui/src';
 import '../Gateway.scss';
 
@@ -32,6 +34,7 @@ const boxSource = {
 
 @DragSource('canvasElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 
@@ -60,6 +63,7 @@ class Pipeline extends PureComponent {
   render() {
     const {
       connectDragSource,
+      connectDragPreview,
       entity,
       idx,
       renderPipelinePorts,
@@ -84,6 +88,18 @@ class Pipeline extends PureComponent {
           noDividers
           buttonOnHover
         />
+        {connectDragPreview(
+          <div className="draggable-group__preview">
+            <div className="draggable-group__preview__icon">
+              <IconSVG svg={entityIcons.Gateway}/>
+            </div>
+            <div className="draggable-group__preview__items">
+              <div className="draggable-group__preview__title">
+                {entity.name}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

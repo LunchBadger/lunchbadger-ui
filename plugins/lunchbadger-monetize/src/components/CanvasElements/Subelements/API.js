@@ -6,7 +6,7 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
 import ApiEndpoint from './SubApiEndpoint';
-import {EntityPropertyLabel, CollapsibleProperties} from '../../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
 import './API.scss';
 
 // FIXME - handle toggleSubelement
@@ -31,6 +31,7 @@ const boxSource = {
 
 @DragSource('canvasElement', boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 
@@ -39,6 +40,7 @@ class API extends Component {
     parent: PropTypes.object.isRequired,
     entity: PropTypes.object.isRequired,
     connectDragSource: PropTypes.func,
+    connectDragPreview: PropTypes.func,
     isDragging: PropTypes.bool,
     id: PropTypes.any.isRequired,
     paper: PropTypes.object,
@@ -83,7 +85,12 @@ class API extends Component {
   }
 
   render() {
-    const {connectDragSource, currentlySelectedSubelements} = this.props;
+    const {
+      connectDragSource,
+      connectDragPreview,
+      entity,
+      // currentlySelectedSubelements,
+    } = this.props;
     // const elementClass = classNames({
     //   subapi: true,
     //   'subapi--opened': this.state.opened,
@@ -99,7 +106,7 @@ class API extends Component {
           <CollapsibleProperties
             bar={(
               <span className="Portal__APIs__title">
-                {this.props.entity.name}
+                {entity.name}
               </span>
             )}
             collapsible={
@@ -112,6 +119,18 @@ class API extends Component {
             defaultOpened
           />
         </div>
+        {connectDragPreview(
+          <div className="draggable-group__preview">
+            <div className="draggable-group__preview__icon">
+              <IconSVG svg={entityIcons.API}/>
+            </div>
+            <div className="draggable-group__preview__items">
+              <div className="draggable-group__preview__title">
+                {entity.name}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

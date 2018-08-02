@@ -78,12 +78,16 @@ class Walkthrough extends PureComponent {
 
   handleCallback = async ({type, index, step}) => {
     if (type === 'finished') {
+      if (this.onExit) {
+        series(this.onExit(this.api));
+      }
       this.exitWalkthrough();
       this.unblockEscapingKeys();
       this.joyride.reset(true);
     }
     this.setState({index});
     if (type === 'step:before') {
+      this.onExit = step.onExit;
       this.setState({
         showNextButton: !step.triggerNext,
         allowClicksThruHole: !!step.allowClicksThruHole,
@@ -285,6 +289,32 @@ class Walkthrough extends PureComponent {
       ROOT_URL: this.getRootUrl(),
       USER_ID: this.props.userId,
     })[id],
+    setHole: styles => cb => {
+      setTimeout(() => {
+        const holeElement = document.querySelector('.joyride-hole');
+        for (let style in styles) {
+          const val = styles[style];
+          if (val < 0) {
+            holeElement.style[style] = `${+holeElement.style[style].replace('px', '') + val}px`;
+          } else {
+            holeElement.style[style] = val;
+          }
+        }
+        cb();
+      });
+    },
+    addClass: (selector, className) => cb => {
+      setTimeout(() => {
+        document.querySelector(selector).classList.add(className);
+        cb();
+      })
+    },
+    removeClass: (selector, className) => cb => {
+      setTimeout(() => {
+        document.querySelector(selector).classList.remove(className);
+        cb();
+      })
+    },
   };
 
   getRootUrl = () => document.querySelector('.Entity.ApiEndpoint .accessUrl a').innerHTML;

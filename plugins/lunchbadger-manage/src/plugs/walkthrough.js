@@ -163,15 +163,23 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
     allowClicksThruHole: true,
     skipLastStep: true,
     unblockNext: true,
-    onBefore: api => [
-      api.setShowOverlay(false),
-    ],
     triggerNext: api => [
+      api.addClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
+      api.addClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
+      api.setHole({
+        width: '69px',
+        height: '114px',
+      }),
       api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
-      api.setShowOverlay(true),
+      api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
+      api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Model .port-out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
+    ],
+    onExit: api => [
+      api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
+      api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
     ],
   },
   '0709': {
@@ -233,20 +241,29 @@ Add the following path: <pre>/api/cars*</pre>
     text: `
 Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
-    waitForSelector: '.Entity.Function_ .port-out',
+    selector: '.Entity.Function_ .port-out',
     position: 'left',
     allowClicksThruHole: true,
     skipLastStep: true,
     unblockNext: true,
-    onBefore: api => [
-      api.setShowOverlay(false),
-    ],
     triggerNext: api => [
+      api.addClass('.CanvasElement.Model .port-out', 'port__disabled'),
+      api.addClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
+      api.setHole({
+        top: -60,
+        width: '69px',
+        height: '92px',
+      }),
       api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
-      api.setShowOverlay(true),
+      api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
+      api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Function_ .port-out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
+    ],
+    onExit: api => [
+      api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
+      api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
     ],
   },
   '0714': {

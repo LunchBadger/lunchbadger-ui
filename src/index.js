@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.144', [
+console.info('LBAPP VERSION 0.145', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -31,7 +31,8 @@ console.info('LBAPP VERSION 0.144', [
     'Feature/757 function logs resizable #791',
     'Feature/730 Gateway deployment interrupted with page reload #793',
     'Feature/758 auto refresh in function logs #794',
-    ''
+    'Feature/790 APIs highlighted in portal #795',
+    'Feature/796 Default handlers selected in function code #797'
   ],
   [
     'master Feature/399 fn types per environment #763',

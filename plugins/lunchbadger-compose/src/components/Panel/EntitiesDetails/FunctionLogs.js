@@ -1,5 +1,4 @@
 import React, {PureComponent} from 'react';
-import cs from 'classnames';
 import SLSService from '../../../services/SLSService';
 import {IconButton, ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
@@ -14,12 +13,28 @@ export default class FunctionLogs extends PureComponent {
       loading: true,
       logs: '',
       error: null,
+      counter: '',
     };
   }
 
   componentWillMount() {
     this.reloadLogs(false);
+    this.interval = setInterval(this.autorefreshInterval, 1000);
+    this.tick = 0;
   }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  autorefreshInterval = () => {
+    const {autorefresh, period} = this.props;
+    const refresh = autorefresh && (this.tick % period === 0);
+    const counter = period - this.tick % period;
+    autorefresh && this.setState({counter});
+    refresh && this.reloadLogs();
+    this.tick += 1;
+  };
 
   reloadLogs = async (softLoad) => {
     if (softLoad && this.state.loading) return;
@@ -53,15 +68,12 @@ export default class FunctionLogs extends PureComponent {
       loading,
       logs,
       error,
+      counter,
     } = this.state;
+    const {autorefresh} = this.props;
     return (
       <ResizableWrapper>
         <div className="FunctionLogs">
-          <IconButton
-            icon="iconReload"
-            name="reloadLogs"
-            onClick={this.reloadLogs}
-          />
           <div
             ref={r => this.contentRef = r}
             className="FunctionLogs__content"
@@ -73,6 +85,11 @@ export default class FunctionLogs extends PureComponent {
             {error && <code dangerouslySetInnerHTML={{__html: error}} />}
           </div>
         </div>
+        {autorefresh && (
+          <div className="FunctionLogs__counter">
+            {counter}
+          </div>
+        )}
       </ResizableWrapper>
     );
   }

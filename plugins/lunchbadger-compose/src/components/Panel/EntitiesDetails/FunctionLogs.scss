@@ -1,23 +1,6 @@
 .FunctionLogs {
   position: relative;
   height: 100%;
-  .IconButton {
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    background-color: #4190CE;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    svg {
-      fill: #fff;
-      width: 20px;
-      height: 20px;
-      position: relative;
-      top: 4px;
-      left: 5px;
-    }
-  }
   &__content {
     padding: 10px;
     background-color: #2a2b21;
@@ -32,5 +15,15 @@
     & > code {
       display: inline-flex;
     }
+  }
+  &__counter {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #FFF;
+    opacity: 0.5;
+    font-size: 12px;
+    line-height: 1;
+    font-family: monospace;
   }
 }

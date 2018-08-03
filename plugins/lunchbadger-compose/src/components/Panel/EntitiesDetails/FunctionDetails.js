@@ -1,8 +1,8 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import slug from 'slug';
 import _ from 'lodash';
 import FunctionLogs from './FunctionLogs';
+import FunctionLogsRefresher from './FunctionLogsRefresher';
 import {
   EntityProperty,
   EntityPropertyLabel,
@@ -13,7 +13,18 @@ import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
 import './FunctionDetails.scss';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const {
+  components: {BaseDetails},
+  utils: {userStorage},
+} = LunchBadgerCore;
+const autorefreshDefaultPeriod = 10;
+const autorefreshPeriods = [
+  autorefreshDefaultPeriod,
+  15,
+  20,
+  30,
+  60,
+].map(v => ({label: `${v} sec`, value: v}));
 
 class FunctionDetails extends PureComponent {
   static propTypes = {
@@ -23,6 +34,14 @@ class FunctionDetails extends PureComponent {
   static contextTypes = {
     paper: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      autorefreshLogs: userStorage.get('functionLogsAutorefresh') === 'on',
+      autorefreshPeriod: +userStorage.get('functionLogsAutorefreshPeriod') || autorefreshDefaultPeriod,
+    };
+  }
 
   processModel = model => this.props.entity.processModel(model);
 
@@ -65,22 +84,59 @@ class FunctionDetails extends PureComponent {
     );
   };
 
-  renderLogsSection = () => <FunctionLogs name={this.props.entity.name} />;
+  renderLogsSection = () => {
+    const {autorefreshLogs, autorefreshPeriod} = this.state;
+    return (
+      <FunctionLogs
+        ref={r => this.logsRef = r}
+        name={this.props.entity.name}
+        autorefresh={autorefreshLogs}
+        period={autorefreshPeriod}
+      />
+    );
+  };
+
+  handleAutorefreshLogsToggle = ({target: {checked: autorefreshLogs}}) => {
+    this.setState({autorefreshLogs});
+    userStorage.set('functionLogsAutorefresh', autorefreshLogs ? 'on' : 'off');
+  };
+
+  handleReloadLogs = () => this.logsRef.reloadLogs();
+
+  handleAutorefreshPeriodChange = autorefreshPeriod => {
+    this.setState({autorefreshPeriod});
+    userStorage.set('functionLogsAutorefreshPeriod', autorefreshPeriod);
+  };
+
+  renderLogsRefresherSection = () => {
+    const {autorefreshLogs, autorefreshPeriod} = this.state;
+    return (
+      <FunctionLogsRefresher
+        autorefresh={autorefreshLogs}
+        period={autorefreshPeriod}
+        periodOptions={autorefreshPeriods}
+        onAutorefreshToggle={this.handleAutorefreshLogsToggle}
+        onReloadLogs={this.handleReloadLogs}
+        onPeriodChange={this.handleAutorefreshPeriodChange}
+      />
+    );
+  };
 
   render() {
     const sections = [
       {title: 'Details'},
       {title: 'Triggers'},
       {title: 'Function Code', render: 'FunctionCode'},
-      {title: 'Logs'},
+      {title: 'Logs', renderButton: 'LogsRefresher'},
     ];
     return (
       <div className="FunctionDetails">
-        {sections.map(({title, render}) => (
+        {sections.map(({title, render, renderButton}) => (
           <CollapsibleProperties
             key={title}
             bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
             collapsible={this[`render${render || title}Section`]()}
+            button={renderButton && this[`render${renderButton}Section`]()}
             barToggable
             defaultOpened
           />

@@ -25,6 +25,7 @@ export default class Gateway extends BaseModel {
    * @private
    */
   _pipelines = [];
+  _pipelinesLunchbadger = undefined;
   _policies = [];
   system = {};
   zoomWindow = {
@@ -71,6 +72,9 @@ export default class Gateway extends BaseModel {
       dnsPrefix: 'gateway',
       policies: this.policies,
       pipelines: this.pipelines.map(item => item.toJSON()),
+      pipelinesLunchbadger: this.pipelinesLunchbadger
+        ? this.pipelines.map(item => item.toJSON())
+        : undefined,
       itemOrder: this.itemOrder,
       system: this.system,
     };
@@ -297,6 +301,14 @@ export default class Gateway extends BaseModel {
    */
   get pipelines() {
     return this._pipelines;
+  }
+
+  set pipelinesLunchbadger(pipelinesLunchbadger) {
+    this._pipelinesLunchbadger = pipelinesLunchbadger;
+  }
+
+  get pipelinesLunchbadger() {
+    return this._pipelinesLunchbadger;
   }
 
   set policies(policies) {

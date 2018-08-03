@@ -46,7 +46,16 @@ export const update = (entity, model) => async (dispatch, getState) => {
     Connections.removeConnection(id);
     Connections.removeConnection(null, id);
   });
-  updatedEntity = Gateway.create({...entity.toJSON(), ...model, loaded: true, ready: false});
+  const entityData = {
+    ...entity.toJSON(),
+    ...model,
+    loaded: true,
+    ready: false,
+  };
+  if (isAutoSave) {
+    entityData.pipelinesLunchbadger = true;
+  }
+  updatedEntity = Gateway.create(entityData);
   if (!entity.loaded) {
     updatedEntity.running = null;
   }

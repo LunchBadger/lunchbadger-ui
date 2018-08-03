@@ -1,0 +1,62 @@
+.FunctionLogsRefresher {
+  margin-right: 45px;
+  cursor: auto;
+  &__cell {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 4px;
+    &.period {
+      margin-right: 10px;;
+      opacity: 0;
+      transition: opacity 300ms ease;
+      overflow: hidden;
+      white-space: nowrap;
+      pointer-events: none;
+      & > span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 24px;
+      }
+      .SelectComp {
+        width: 72px;
+      }
+    }
+    label {
+      color: #4b4b4b !important;
+      margin-left: -10px;
+    }
+  }
+  &__btn {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    background-color: #4190CE;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 300ms ease;
+    .IconButton {
+      width: 30px;
+      height: 30px;
+      svg {
+        fill: #fff;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        top: 4px;
+        left: 5px;
+      }
+    }
+  }
+  &.autorefresh {
+    .FunctionLogsRefresher__cell.period {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .FunctionLogsRefresher__btn {
+      opacity: 0.3;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+}

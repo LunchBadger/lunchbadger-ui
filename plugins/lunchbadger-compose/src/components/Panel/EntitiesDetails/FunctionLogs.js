@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import SLSService from '../../../services/SLSService';
-import {ResizableWrapper} from '../../../../../lunchbadger-ui/src';
+import {IconButton, ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
 
 const errorMessage = 'Loading logs failed with error:';

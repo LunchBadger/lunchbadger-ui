@@ -40,6 +40,8 @@ import Transitioning from './Transitioning/Transitioning';
 import Walkthrough, {blockedEscapingKeys} from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
 import scrollToElement from './utils/scrollToElement';
+import Resizable from './Resizable/Resizable';
+import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
 
 import {
   iconApi,
@@ -113,6 +115,8 @@ export {
   IconSVG,
   Input,
   PanelBar,
+  Resizable,
+  ResizableWrapper,
   RnD,
   scrollToElement,
   Select,

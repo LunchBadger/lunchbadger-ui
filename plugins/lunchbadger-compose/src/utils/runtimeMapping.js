@@ -1,13 +1,13 @@
 import runtimeOptions from './runtimeOptions';
 
 const languagesSettings = {
-  dotnetcore: ['dot', 'net'],
+  dotnetcore: ['dot', 'cs'],
   go: ['golang', 'go'],
   java: ['java', 'java'],
   nodejs: ['javascript', 'js'],
   php: ['php', 'php'],
   python: ['python', 'py'],
-  ruby: ['ruby', 'ruby'],
+  ruby: ['ruby', 'rb'],
 };
 
 export default (sls) => {

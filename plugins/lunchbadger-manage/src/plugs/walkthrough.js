@@ -210,14 +210,14 @@ Let's add a path.
   '0711': {
     title: 'Setting a Path on CarApiEndpoint',
     text: `
-Add the following path: <pre>/api/cars*</pre>
+Add the following path: <pre>/cars*</pre>
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/cars*"]'),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/cars*"]'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .input__paths0 input'),
@@ -405,7 +405,7 @@ Add the following path: <pre>/api/myfunction*</pre>
   },
   '0804': {
     title: 'Flow through API Endpoint',
-    text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /api/cars.',
+    text: 'First, the API request comes in through an API Endpoint.  In this case, that endpoint is /cars.',
     waitForSelector: '.Entity.ApiEndpoint .paths0',
     position: 'bottom-right',
     allowClicksThruHole: false,
@@ -452,8 +452,8 @@ Add the following path: <pre>/api/myfunction*</pre>
             <strong>LunchBadger Function</strong>
             <br />
             <br />
-            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}>
-              {`$ curl ${api.getReplacement('ROOT_URL')}/api/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}
+            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}>
+              {`$ curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}
             </CopyOnHover>
             <br />
             <strong>

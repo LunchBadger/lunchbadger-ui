@@ -9,10 +9,17 @@ import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
 
-const TwoOptionModal = LunchBadgerCore.components.TwoOptionModal;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const DraggableGroup = LunchBadgerCore.components.DraggableGroup;
-const ElementsBundler = LunchBadgerCore.components.ElementsBundler;
+const {
+  components: {
+    TwoOptionModal,
+    CanvasElement,
+    DraggableGroup,
+    ElementsBundler,
+  },
+  utils: {
+    coreActions,
+  },
+} = LunchBadgerCore;
 
 class Portal extends Component {
   static propTypes = {
@@ -104,7 +111,8 @@ class Portal extends Component {
   unbundleMultiple = () => {
     const {store: {dispatch}} = this.context;
     this.state.bundledItems.forEach(item => dispatch(unbundle(this.props.entity, item)));
-  }
+    dispatch(coreActions.clearCurrentElement());
+  };
 
   render() {
     const elementClass = classNames({
@@ -129,7 +137,7 @@ class Portal extends Component {
         <EntityProperties properties={mainProperties} />
         <EntitySubElements title="APIs" main>
           <DraggableGroup
-            icon="Api"
+            icon="API"
             entity={this.props.entity}
             groupEndDrag={() => this._handleMultipleUnbundle()}
           >

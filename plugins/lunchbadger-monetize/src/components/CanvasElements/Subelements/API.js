@@ -2,14 +2,18 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-// import classNames from 'classnames';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
 import ApiEndpoint from './SubApiEndpoint';
-import {EntityPropertyLabel, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
+import {
+  EntityProperty,
+  EntityPropertyLabel,
+  CollapsibleProperties,
+  entityIcons,
+  IconSVG,
+} from '../../../../../lunchbadger-ui/src';
+import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './API.scss';
-
-// FIXME - handle toggleSubelement
 
 const boxSource = {
   beginDrag(props) {
@@ -58,16 +62,12 @@ class API extends Component {
     };
   }
 
-  renderEndpoints() {
-    return this.props.entity.apiEndpoints.map((api) => {
-      return (
-        <ApiEndpoint
-          key={api.id}
-          entity={api}
-        />
-      );
-    });
-  }
+  renderEndpoints = () => this.props.entity.apiEndpoints.map(api => (
+    <ApiEndpoint
+      key={api.id}
+      entity={api}
+    />
+  ));
 
   toggleOpenState = () => {
     const opened = !this.state.opened;
@@ -82,6 +82,11 @@ class API extends Component {
       }
     });
     this.state.opened = opened;
+  };
+
+  handleNameClick = () => {
+    const {parent, entity, dispatch} = this.props;
+    setTimeout(() => dispatch(toggleSubelement(parent, entity)));
   }
 
   render() {
@@ -89,26 +94,22 @@ class API extends Component {
       connectDragSource,
       connectDragPreview,
       entity,
-      // currentlySelectedSubelements,
+      currentlySelectedSubelements,
+      id,
     } = this.props;
-    // const elementClass = classNames({
-    //   subapi: true,
-    //   'subapi--opened': this.state.opened,
-    //   'subapi--closed': !this.state.opened
-    // });
-    // const apiInfoClass = classNames({
-    //   'subapi__info': true,
-    //   'subapi__info--selected': _.find(currentlySelectedSubelements, {id: this.props.id})
-    // });
     return connectDragSource(
       <div className="Portal__APIs">
         <div ref="api">
           <CollapsibleProperties
-            bar={(
-              <span className="Portal__APIs__title">
-                {entity.name}
-              </span>
-            )}
+            bar={
+              <EntityProperty
+                name="tmp"
+                value={entity.name}
+                onClick={this.handleNameClick}
+                selected={!!_.find(currentlySelectedSubelements, {id})}
+                fake
+              />
+            }
             collapsible={
               <div ref="data">
                 <EntityPropertyLabel className="Pipeline__policies">Endpoints</EntityPropertyLabel>

@@ -33,21 +33,3 @@
     overflow: hidden;
   }
 }
-
-.react-resizable {
-  position: relative;
-}
-.react-resizable-handle {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  bottom: -8px;
-  right: -8px;
-  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIxMHB4IiBoZWlnaHQ9IjEwcHgiPjxnPjxwYXRoIGQ9Ik0gNiA2IEwgMCA2IEwgMCA0LjIgTCA0IDQuMiBMIDQuMiA0LjIgTCA0LjIgMCBMIDYgMCBMIDYgNiBMIDYgNiBaIiBmaWxsPSIjNDE5MENFIi8+PC9nPjwvc3ZnPg==');
-  background-position: bottom right;
-  padding: 0 3px 3px 0;
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  box-sizing: border-box;
-  cursor: nwse-resize;
-}

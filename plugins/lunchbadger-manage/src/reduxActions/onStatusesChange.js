@@ -3,6 +3,7 @@ import slug from 'slug';
 import Config from '../../../../src/config';
 import {actions} from './actions';
 import Gateway from '../models/Gateway';
+import Pipeline from '../models/Pipeline';
 
 const envId = Config.get('envId');
 const {getUser} = LunchBadgerCore.utils;
@@ -83,6 +84,12 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
       if (gatewayDeleting) {
         dispatch(actions.removeGateway(entity));
         userStorage.removeObjectKey('gateway', slug);
+      } else if (typeof entity.pipelinesLunchbadger === 'object') {
+        updatedEntity = entity.recreate();
+        updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
+        updatedEntity.pipelinesLunchbadger = undefined;
+        updatedEntity.running = null;
+        dispatch(actions.updateGateway(updatedEntity));
       }
     } else {
       const {running} = status;
@@ -111,6 +118,12 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           dispatch(actions.updateGateway(updatedEntity));
           const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showGatewayStatusChangeMessage(dispatch, gatewayName, message);
+        } else if (typeof entity.pipelinesLunchbadger === 'object') {
+          updatedEntity = entity.recreate();
+          updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
+          updatedEntity.pipelinesLunchbadger = undefined;
+          dispatch(actions.updateGateway(updatedEntity));
+          isSave = true;
         }
       }
     }

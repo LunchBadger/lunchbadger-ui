@@ -1,8 +1,9 @@
 import React, {PureComponent} from 'react';
-import cs from 'classnames';
 import SLSService from '../../../services/SLSService';
-import {IconButton} from '../../../../../lunchbadger-ui/src';
+import {IconButton, ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
+
+const errorMessage = 'Loading logs failed with error:';
 
 export default class FunctionLogs extends PureComponent {
 
@@ -12,19 +13,39 @@ export default class FunctionLogs extends PureComponent {
       loading: true,
       logs: '',
       error: null,
+      counter: '',
     };
   }
 
   componentWillMount() {
     this.reloadLogs(false);
+    this.interval = setInterval(this.autorefreshInterval, 1000);
+    this.tick = 0;
   }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  autorefreshInterval = () => {
+    const {autorefresh, period} = this.props;
+    const refresh = autorefresh && (this.tick % period === 0);
+    const counter = period - this.tick % period;
+    autorefresh && this.setState({counter});
+    refresh && this.reloadLogs();
+    this.tick += 1;
+  };
 
   reloadLogs = async (softLoad) => {
     if (softLoad && this.state.loading) return;
-    this.setState({
+    const state = {
       loading: true,
       error: null,
-    }, this.scrollDown);
+    };
+    if (this.state.logs === errorMessage) {
+      state.logs = '';
+    }
+    this.setState(state, this.scrollDown);
     try {
       const {body: {logs}} = await SLSService.loadLogs(this.props.name);
       this.setState({
@@ -33,7 +54,7 @@ export default class FunctionLogs extends PureComponent {
       }, this.scrollDown);
     } catch ({message: error}) {
       this.setState({
-        logs: '',
+        logs: errorMessage,
         error,
         loading: false,
       }, this.scrollDown);
@@ -47,25 +68,29 @@ export default class FunctionLogs extends PureComponent {
       loading,
       logs,
       error,
+      counter,
     } = this.state;
+    const {autorefresh} = this.props;
     return (
-      <div className="FunctionLogs">
-        <IconButton
-          icon="iconReload"
-          name="reloadLogs"
-          onClick={this.reloadLogs}
-        />
-        <div
-          ref={r => this.contentRef = r}
-          className="FunctionLogs__content"
-        >
-          <pre>
-            {logs}
-          </pre>
-          {loading && <pre>Loading...</pre>}
-          {error && <code dangerouslySetInnerHTML={{__html: error}} />}
+      <ResizableWrapper>
+        <div className="FunctionLogs">
+          <div
+            ref={r => this.contentRef = r}
+            className="FunctionLogs__content"
+          >
+            <pre>
+              {logs}
+            </pre>
+            {loading && <pre>Loading...</pre>}
+            {error && <code dangerouslySetInnerHTML={{__html: error}} />}
+          </div>
         </div>
-      </div>
+        {autorefresh && (
+          <div className="FunctionLogs__counter">
+            {counter}
+          </div>
+        )}
+      </ResizableWrapper>
     );
   }
 }

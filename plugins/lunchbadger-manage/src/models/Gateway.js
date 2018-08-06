@@ -7,13 +7,17 @@ import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
 import {clearEmptyObjectPlaceholders} from '../utils';
 import Config from '../../../../src/config';
 
-const BaseModel = LunchBadgerCore.models.BaseModel;
-const {Connections} = LunchBadgerCore.stores;
-const {storeUtils: {
-  findGatewayByPipelineId,
-  isInPrivateQuadrant,
-  isInPublicQuadrant,
-}} = LunchBadgerCore.utils;
+const {
+  utils: {
+    storeUtils: {
+      findGatewayByPipelineId,
+      isInPrivateQuadrant,
+      isInPublicQuadrant,
+    }
+  },
+  stores: {Connections},
+  models: {BaseModel}
+} = LunchBadgerCore;
 const {consumerManagement} = Config.get('features');
 
 export default class Gateway extends BaseModel {
@@ -108,9 +112,11 @@ export default class Gateway extends BaseModel {
     if (options.isForDiff) {
       if (this.running) {
         json.pipelines = this.pipelines.reduce((map, pipeline) => {
-          map[pipeline.id] = pipeline;
+          map[pipeline.id] = pipeline.toApiJSON(options);
           return map;
         }, {});
+        json.connectedApiEndpoints = Object.keys(json.pipelines)
+          .reduce((map, item) => ({...map, ...json.pipelines[item].apiEndpoints}), {});
       } else {
         json.pipelines = {};
       }
@@ -164,6 +170,7 @@ export default class Gateway extends BaseModel {
         models: 'ServiceEndpoint',
         functions: 'ServiceEndpoint',
       };
+      const {connectedApiEndpoints} = this;
       for (let i in delta) {
         const {op, path} = delta[i];
         const [kind, id] = path;
@@ -185,6 +192,11 @@ export default class Gateway extends BaseModel {
             if (isAdd || isDelete || isRename) {
               addOperation = true;
             }
+          } else if (kind === 'apiEndpoints') {
+            addOperation = false;
+            if (connectedApiEndpoints.includes(id)) {
+              addOperation = true;
+            }
           }
           if (addOperation) {
             endpointOperations[id] = {operation, body};
@@ -198,6 +210,15 @@ export default class Gateway extends BaseModel {
             const pipelineIdx = entities.gateways[id].pipelines.findIndex(({id}) => id === idPipeline);
             const body = isDelete ? null : entities.gateways[id].pipelines[pipelineIdx].toApiJSON();
             pipelineOperations[idPipeline] = {operation, body};
+          }
+        }
+        if (kind === 'gateways' && path.length === 4 && path[2] === 'connectedApiEndpoints') {
+          if (id === this.id) {
+            const isDelete = op === 'remove';
+            const apiEndpointId = path[3];
+            const operation = `${isDelete ? 'delete' : 'put'}ApiEndpoint`;
+            const body = isDelete ? null : isInPublicQuadrant(state, apiEndpointId).toApiJSON();
+            endpointOperations[apiEndpointId] = {operation, body};
           }
         }
         if (kind === 'connections' && path.length >= 2) {
@@ -327,6 +348,13 @@ export default class Gateway extends BaseModel {
 
   get rootUrl() {
     return Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slug(this.name, {lower: true}));
+  }
+
+  get connectedApiEndpoints() {
+    return this.pipelines
+      .map(({id}) => id)
+      .map(id => Connections.search({fromId: id}).map(({toId}) => toId))
+      .reduce((prevVal, currVal) => [...prevVal, ...currVal], []);
   }
 
   getHighlightedPorts(selectedSubelementIds = []) {

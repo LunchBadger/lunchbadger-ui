@@ -31,7 +31,7 @@ export const loadFromServer = () => async (dispatch, getState) => {
         return map;
       }, {});
     prevData = {
-      ...onProjectSave.reduce((map, item) => ({...map, ...item(getState(), {isForDiff: true})}), {}),
+      ...onProjectSave.reduce((map, item) => ({...map, ...item(getState(), {isForDiff: true, connections})}), {}),
       connections,
     };
     // console.log('INIT prevData', prevData);

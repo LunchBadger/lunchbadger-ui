@@ -285,14 +285,14 @@ Once again, an API Endpoint Entity is created automatically. Let's add a path.
   '0715': {
     title: 'Setting a Path on FunctionApiEndpoint',
     text: `
-Add the following path: <pre>/api/myfunction*</pre>
+Add the following path: <pre>/myfunction*</pre>
 `,
     waitForSelector: '.Entity.ApiEndpoint.editable .input__paths0',
     position: 'left',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/api/myfunction*"]'),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable .input__paths0 input[value="/myfunction*"]'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .input__paths0 input'),
@@ -445,8 +445,8 @@ Add the following path: <pre>/api/myfunction*</pre>
         <div>
           Now that you''ve created your first LunchBadger Project, try interacting with your new endpoints!
           <code>
-            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/api/myfunction`}>
-              $ curl {api.getReplacement('ROOT_URL')}/api/myfunction
+            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/myfunction`}>
+              $ curl {api.getReplacement('ROOT_URL')}/myfunction
             </CopyOnHover>
             <br />
             <strong>LunchBadger Function</strong>

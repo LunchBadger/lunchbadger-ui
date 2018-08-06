@@ -387,9 +387,7 @@ Add the following path: <pre>/api/myfunction*</pre>
           <br />
           Your Gateway will be accessible at:
           <code>
-            <CopyOnHover copy={api.getReplacement('ROOT_URL')}>
-              {api.getReplacement('ROOT_URL')}
-            </CopyOnHover>
+            {api.getReplacement('ROOT_URL')}
           </code>
         </div>
       ),

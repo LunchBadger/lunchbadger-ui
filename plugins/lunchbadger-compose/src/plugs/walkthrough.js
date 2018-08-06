@@ -247,7 +247,7 @@ Click <pre>OK</pre> to deploy function.
   '032': {
     title: 'Function is Deploying',
     text: `
-The Function Entity is deploying.
+Please wait till the <pre>myfunction</pre> is deployed and the walkthrough will continue automatically.
 <br />
 <br />
 You'll see this Rocket Ship icon whenever an artifact is being deployed to your Kubernetes cluster.

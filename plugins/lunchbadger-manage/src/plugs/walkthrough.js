@@ -133,7 +133,7 @@ Click <pre>OK</pre> to deploy a gateway.
   },
   '0706': {
     title: 'Gateway is Deploying',
-    // text: 'Gateway is deploying...',
+    text: 'Please wait till the <pre>Gateway</pre> is deployed and the walkthrough will continue automatically.',
     position: 'left',
     waitForSelector: '.Entity.Gateway',
     allowClicksThruHole: false,

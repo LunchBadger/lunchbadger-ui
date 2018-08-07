@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.150', [
+console.info('LBAPP VERSION 0.151', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -37,7 +37,8 @@ console.info('LBAPP VERSION 0.150', [
     'Feature/802 walkthrough: remove /api for function on API endpoint #803',
     'Bugfix/801 remove clipboard icon from walkthrough #804',
     'Feature/10 Walkthrough: tell user to wait till deployed #805',
-    'Feature/806 Dangling api endpoints in EG #807'
+    'Feature/806 Dangling api endpoints in EG #807',
+    'Feature/788 Password strength meter for basic-auth and oauth2 #811'
   ],
   [
     'master Feature/399 fn types per environment #763',

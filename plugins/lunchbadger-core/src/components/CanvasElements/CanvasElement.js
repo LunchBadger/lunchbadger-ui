@@ -398,6 +398,7 @@ export default (ComposedComponent) => {
       const {type, friendlyName} = this.props.entity.constructor;
       const editable = editable_ || !loaded;
       const defaultExpanded = !userStorage.getObjectKey('entityCollapsed', id);
+      if (deleting) return null;
       return (
         <div className={cs('CanvasElement', type, status, {
           highlighted,

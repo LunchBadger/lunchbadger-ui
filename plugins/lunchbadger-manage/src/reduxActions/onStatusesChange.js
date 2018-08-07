@@ -15,8 +15,11 @@ const transformGatewayStatuses = (gatewayStatuses) => {
   Object.keys(gatewayStatuses).forEach((key) => {
     const slugArr = key.replace(`gateway-${projectSlug}`, '').split('-');
     const slug = slugArr.slice(0, slugArr.length - 2).join('-');
-    if (statuses[slug] && statuses[slug].status.running) return;
-    statuses[slug] = gatewayStatuses[key];
+    const {id} = gatewayStatuses[key];
+    const slugId = `${id}-${slug}`;
+    if (statuses[slugId] && statuses[slugId].status.running) return;
+    statuses[slugId] = gatewayStatuses[key];
+    statuses[slugId].slug = slug;
   });
   return statuses;
 };
@@ -26,32 +29,30 @@ const transformGateways = (entities) => {
   Object.values(entities)
     .filter(({loaded}) => loaded)
     .forEach((gateway) => {
-      gateways[slug(gateway.name, {lower: true})] = gateway;
+      const slugId = `${gateway.id}-${slug(gateway.name, {lower: true})}`;
+      gateways[slugId] = gateway;
     });
   return gateways;
 };
 
 const combineEntities = (statuses, gateways) => {
   const entries = {};
-  Object.keys(statuses).forEach((name) => {
-    entries[name] = statuses[name];
-    if (gateways[name]) {
-      entries[name].entity = gateways[name];
-      entries[name].action = '';
+  Object.keys(statuses).forEach((id) => {
+    entries[id] = statuses[id];
+    if (gateways[id]) {
+      entries[id].entity = gateways[id];
     } else {
-      entries[name].entity = null;
-      entries[name].action = 'new';
+      entries[id].entity = null;
     }
   });
-  Object.keys(gateways).forEach((name) => {
-    if (entries[name]) {
+  Object.keys(gateways).forEach((id) => {
+    if (entries[id]) {
 
     } else {
-      entries[name] = {
+      entries[id] = {
         status: null,
-        entity: gateways[name],
+        entity: gateways[id],
       };
-      entries[name].action = 'new2';
     }
   });
   return entries;
@@ -77,13 +78,17 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
   const entries = combineEntities(statuses, gateways);
   let updatedEntity;
   let isSave = false;
-  Object.keys(entries).forEach(async (slug) => {
-    const {status, entity} = entries[slug];
-    const {running: gatewayRunning, deleting: gatewayDeleting, name: gatewayName} = entity || {};
+  Object.keys(entries).forEach(async (slugId) => {
+    const {status, entity, slug} = entries[slugId];
+    const {
+      running: gatewayRunning,
+      deleting: gatewayDeleting,
+      name: gatewayName,
+    } = entity || {};
     if (status === null) {
       if (gatewayDeleting) {
         dispatch(actions.removeGateway(entity));
-        userStorage.removeObjectKey('gateway', slug);
+        userStorage.removeObjectKey('gateway', slugId);
       } else if (typeof entity.pipelinesLunchbadger === 'object') {
         updatedEntity = entity.recreate();
         updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
@@ -94,7 +99,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageGateway = userStorage.getObjectKey('gateway', slug) || {};
+        const storageGateway = userStorage.getObjectKey('gateway', slugId) || {};
         const fake = !storageGateway.name;
         updatedEntity = Gateway.create({
           ...storageGateway,
@@ -118,7 +123,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           dispatch(actions.updateGateway(updatedEntity));
           const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showGatewayStatusChangeMessage(dispatch, gatewayName, message);
-        } else if (typeof entity.pipelinesLunchbadger === 'object') {
+        } else if (running && typeof entity.pipelinesLunchbadger === 'object') {
           updatedEntity = entity.recreate();
           updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
           updatedEntity.pipelinesLunchbadger = undefined;

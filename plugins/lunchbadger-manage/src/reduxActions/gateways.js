@@ -56,11 +56,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
     entityData.pipelinesLunchbadger = true;
   }
   updatedEntity = Gateway.create(entityData);
-  if (!entity.loaded) {
+  if (isAutoSave) {
     updatedEntity.running = null;
-  }
-  if (isNameChange) {
-    updatedEntity.running = false;
   }
   dispatch(actions.updateGateway(updatedEntity));
   if (isAutoSave) {
@@ -81,7 +78,8 @@ export const remove = entity => async (dispatch) => {
   if (isAutoSave) {
     const updatedEntity = entity.recreate();
     updatedEntity.deleting = true;
-    userStorage.setObjectKey('gateway', slug(entity.name, {lower: true}), updatedEntity.toJSON());
+    const slugId = `${entity.id}-${slug(entity.name, {lower: true})}`;
+    userStorage.setObjectKey('gateway', slugId, updatedEntity.toJSON());
     dispatch(actions.updateGateway(updatedEntity));
     await dispatch(coreActions.saveToServer());
   } else {

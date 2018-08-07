@@ -15,6 +15,7 @@ import {
   Select,
   EntityActionButtons,
   CopyOnHover,
+  PasswordStrengthMeter,
 } from '../../../../../../lunchbadger-ui/src';
 import {iconCheck} from '../../../../../../../src/icons';
 const {TwoOptionModal} = LunchBadgerCore.components;
@@ -403,6 +404,8 @@ class CustomerManagement extends PureComponent {
     }
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
   };
+
+  handlePasswordChange = ({target: {value}}) => this.passwordStrengthMeterRef.setPassword(value);
 
   renderFinder = () => {
     const {activeTab} = this.state;
@@ -874,6 +877,12 @@ class CustomerManagement extends PureComponent {
                   value=""
                   width="calc(100% - 190px)"
                   invalid={invalidGeneratedPassword ? 'Invalid password' : ''}
+                  onChange={this.handlePasswordChange}
+                />
+              )}
+              {!autoGeneratePassword && (
+                <PasswordStrengthMeter
+                  ref={r => this.passwordStrengthMeterRef = r}
                 />
               )}
             </div>

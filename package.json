@@ -140,6 +140,7 @@
     "reselect": "^3.0.1",
     "slug": "^0.9.1",
     "stream-http": "github:rlisagor/stream-http",
-    "uuid": "^2.0.2"
+    "uuid": "^2.0.2",
+    "zxcvbn": "^4.4.2"
   }
 }

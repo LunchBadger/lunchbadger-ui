@@ -35,7 +35,8 @@ export default (state = {}, action) => {
         newState[key] = Function_.create(newState[key]);
         newState[key].deleting = true;
         if (!newState[key].fake) {
-          userStorage.setObjectKey('function', slug(newState[key].name, {lower: true}), newState[key]);
+          const slugId = `${newState[key].id}-${slug(newState[key].name, {lower: true})}`;
+          userStorage.setObjectKey('function', slugId, newState[key]);
         }
       });
       return newState;

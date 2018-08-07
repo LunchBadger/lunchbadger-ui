@@ -55,7 +55,12 @@ export default class Pipeline extends BaseModel {
     };
   }
 
-  toApiJSON() {
+  toApiJSON(opts) {
+    const options = Object.assign({
+      isForDiff: false,
+      connections,
+    }, opts);
+    const {isForDiff, connections} = options;
     const apiEndpoints = Connections
       .search({fromId: this.id})
       .filter(({info}) => {
@@ -68,6 +73,17 @@ export default class Pipeline extends BaseModel {
       policies: this.policies.map(policy => policy.toApiJSON()),
       apiEndpoints: apiEndpoints.length > 0 ? apiEndpoints : undefined,
     };
+    if (isForDiff) {
+      if (json.apiEndpoints) {
+        json.apiEndpoints = json.apiEndpoints.reduce((map, id) => {
+          map[id] = true;
+          return map;
+        }, {});
+      } else if (connections) {
+        json.apiEndpoints = connections[this.id];
+      }
+      json.apiEndpoints = json.apiEndpoints || {};
+    }
     return json;
   }
 

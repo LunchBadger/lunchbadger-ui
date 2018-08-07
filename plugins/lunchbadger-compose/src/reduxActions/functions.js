@@ -80,7 +80,8 @@ export const remove = (entity, cb) => async (dispatch) => {
   const updatedEntity = entity.recreate();
   updatedEntity.deleting = true;
   updatedEntity.error = null;
-  userStorage.setObjectKey('function', slug(entity.name, {lower: true}), updatedEntity.toJSON());
+  const slugId = `${entity.id}-${slug(entity.name, {lower: true})}`;
+  userStorage.setObjectKey('function', slugId, updatedEntity.toJSON());
   dispatch(actions.updateFunction(updatedEntity));
   try {
     if (entity.loaded) {

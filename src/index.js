@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.152', [
+console.info('LBAPP VERSION 0.153', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -39,7 +39,8 @@ console.info('LBAPP VERSION 0.152', [
     'Feature/10 Walkthrough: tell user to wait till deployed #805',
     'Feature/806 Dangling api endpoints in EG #807',
     'Feature/788 Password strength meter for basic-auth and oauth2 #811',
-    'Feature/808 utilize new pod id for ui entity state comparision for gateways #812'
+    'Feature/808 utilize new pod id for ui entity state comparision for gateways #812',
+    'Feature/809 Utilize new pod id for UI entity state comparision for functions #813'
   ],
   [
     'master Feature/399 fn types per environment #763',

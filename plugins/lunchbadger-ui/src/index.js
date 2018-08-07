@@ -42,6 +42,7 @@ import {Form} from './utils/Formsy/main';
 import scrollToElement from './utils/scrollToElement';
 import Resizable from './Resizable/Resizable';
 import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
+import PasswordStrengthMeter from './PasswordStrengthMeter/PasswordStrengthMeter';
 
 import {
   iconApi,
@@ -115,6 +116,7 @@ export {
   IconSVG,
   Input,
   PanelBar,
+  PasswordStrengthMeter,
   Resizable,
   ResizableWrapper,
   RnD,

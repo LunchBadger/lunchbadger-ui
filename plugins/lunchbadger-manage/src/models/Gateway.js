@@ -390,7 +390,7 @@ export default class Gateway extends BaseModel {
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateName = Object.keys(entities)
-          .filter(id => id !== this.id && !entities[id].deleting)
+          .filter(id => id !== this.id)
           .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {

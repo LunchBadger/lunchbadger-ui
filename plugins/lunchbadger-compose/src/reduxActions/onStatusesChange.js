@@ -14,8 +14,11 @@ const transformFunctionStatuses = (functionStatuses) => {
   Object.keys(functionStatuses).forEach((key) => {
     const slugArr = key.replace(`fn-${projectSlug}`, '').split('-');
     const slug = slugArr.slice(0, slugArr.length - 2).join('-');
-    if (statuses[slug] && statuses[slug].status.running) return;
-    statuses[slug] = functionStatuses[key];
+    const {id} = functionStatuses[key];
+    const slugId = `${id}-${slug}`;
+    if (statuses[slugId] && statuses[slugId].status.running) return;
+    statuses[slugId] = functionStatuses[key];
+    statuses[slugId].slug = slug;
   });
   return statuses;
 };
@@ -25,28 +28,29 @@ const transformFunctions = (entities) => {
   Object.values(entities)
     .filter(({loaded}) => loaded)
     .forEach((function_) => {
-      functions[slug(function_.name, {lower: true})] = function_;
+      const slugId = `${function_.id}-${slug(function_.name, {lower: true})}`;
+      functions[slugId] = function_;
     });
   return functions;
 };
 
 const combineEntities = (statuses, functions) => {
   const entries = {};
-  Object.keys(statuses).forEach((name) => {
-    entries[name] = statuses[name];
-    if (functions[name]) {
-      entries[name].entity = functions[name];
+  Object.keys(statuses).forEach((id) => {
+    entries[id] = statuses[id];
+    if (functions[id]) {
+      entries[id].entity = functions[id];
     } else {
-      entries[name].entity = null;
+      entries[id].entity = null;
     }
   });
-  Object.keys(functions).forEach((name) => {
-    if (entries[name]) {
+  Object.keys(functions).forEach((id) => {
+    if (entries[id]) {
 
     } else {
-      entries[name] = {
+      entries[id] = {
         status: null,
-        entity: functions[name],
+        entity: functions[id],
       };
     }
   });
@@ -73,18 +77,18 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
   const entries = combineEntities(statuses, functions);
   let updatedEntity;
   let isSave = false;
-  Object.keys(entries).forEach(async (slug) => {
-    const {status, entity} = entries[slug];
+  Object.keys(entries).forEach(async (slugId) => {
+    const {status, entity, slug} = entries[slugId];
     const {running: functionRunning, deleting: functionDeleting, name: functionName} = entity || {};
     if (status === null) {
       if (functionDeleting) {
         dispatch(actions.removeFunction(entity));
-        userStorage.removeObjectKey('function', slug);
+        userStorage.removeObjectKey('function', slugId);
       }
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageFunction = userStorage.getObjectKey('function', slug) || {};
+        const storageFunction = userStorage.getObjectKey('function', slugId) || {};
         const fake = !storageFunction.name;
         updatedEntity = Function_.create({
           ...storageFunction,

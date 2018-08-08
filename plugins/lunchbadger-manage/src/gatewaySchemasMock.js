@@ -750,11 +750,16 @@ export default [
         "ttl": {
           "type": "integer",
           "default": 60
+        },
+        "passThrough": {
+          "type": "boolean",
+          "default": false
         }
       },
       "required": [
         "endpoint",
-        "ttl"
+        "ttl",
+        "passThrough"
       ]
     }
   },

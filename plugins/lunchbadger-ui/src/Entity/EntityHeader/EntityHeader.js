@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import cs from 'classnames';
 import {entityIcons, IconSVG, EntityProperty} from '../../';
 import './EntityHeader.scss';
 
@@ -21,12 +22,13 @@ class EntityHeader extends Component {
       onToggleExpand,
       invalid,
       slugifyName,
+      subtitle,
     } = this.props;
     const underlineStyle = {
       borderColor: '#8dbde2',
     }
     return (
-      <div className="EntityHeader">
+      <div className={cs('EntityHeader', {subtitle})}>
         <div className="EntityHeader__icon" onClick={onToggleExpand}>
           <IconSVG svg={entityIcons[type]}/>
         </div>
@@ -42,6 +44,11 @@ class EntityHeader extends Component {
             invalidUnderlineColor="#FFF"
             slugify={slugifyName}
           />
+          {subtitle && (
+            <div className="EntityHeader__subtitle">
+              {subtitle}
+            </div>
+          )}
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {update, remove} from '../reduxActions/functions';
-import {validFunctionName} from '../utils';
+import {validFunctionName, runtimeMapping} from '../utils';
 import Config from '../../../../src/config';
 
 const {BaseModel, Port} = LunchBadgerCore.models;
@@ -74,6 +74,11 @@ export default class Function_ extends BaseModel {
 
   set ports(ports) {
     this._ports = ports;
+  }
+
+  get subtitle() {
+    if (!this.service || !this.service.serverless) return '';
+    return runtimeMapping(this.service.serverless.provider.runtime).lb;
   }
 
   validate(model) {

@@ -15,7 +15,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.88', [
+console.info('LBAPP VERSION 0.89', [
+  '811',
   '807',
   '805',
   '797',
@@ -27,9 +28,7 @@ console.info('LBAPP VERSION 0.88', [
   '748 749',
   '720 735 737',
   '714 720',
-  '714',
-  '704 703 707 700 713',
-  '704 703 707 700'
+  '714'
 ]);
 
 ReactGA.initialize(Config.get('googleAnalyticsID'), {

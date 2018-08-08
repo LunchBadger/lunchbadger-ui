@@ -6,6 +6,7 @@ import {
   EntityProperty,
   EntityValidationErrors,
   EntityActionButtons,
+  CopyOnHover,
 } from '../../../../../lunchbadger-ui/src';
 import {
   changePanelStatus,
@@ -184,6 +185,12 @@ export default (ComposedComponent) => {
                 {...this.props}
                 {...this.state}
               />
+              <div className="BaseDetails__id">
+                Entity ID:
+                <CopyOnHover copy={entity.id}>
+                  {entity.id}
+                </CopyOnHover>
+              </div>
             </div>
             <div className="BaseDetails__buttons">
               <EntityActionButtons

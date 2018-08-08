@@ -344,6 +344,7 @@ export default (ComposedComponent) => {
         isCanvasEditDisabled,
         allowEditWhenCrashed,
         error,
+        subtitle,
       } = entity;
       const deploying = status === 'deploying';
       const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
@@ -435,6 +436,7 @@ export default (ComposedComponent) => {
               slugifyName={slugifyName}
               onToggleCollapse={this.handleOnToggleCollapse}
               defaultExpanded={defaultExpanded}
+              subtitle={subtitle}
             >
               {!fake && (
                 <ComposedComponent

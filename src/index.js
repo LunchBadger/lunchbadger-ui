@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.156', [
+console.info('LBAPP VERSION 0.157', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -42,7 +42,8 @@ console.info('LBAPP VERSION 0.156', [
     'Feature/808 utilize new pod id for ui entity state comparision for gateways #812',
     'Feature/809 Utilize new pod id for UI entity state comparision for functions #813',
     'Feature/810 delete gateway and function entities right away but allow name to be reused immediately #814',
-    'Feature/781 Add runtime in collapsed functions #815'
+    'Feature/781 Add runtime in collapsed functions #815',
+    'Feature/817 Sync UI with EG schemas #818'
   ],
   [
     'master Feature/399 fn types per environment #763',

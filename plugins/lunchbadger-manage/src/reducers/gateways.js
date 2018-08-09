@@ -33,7 +33,8 @@ export default (state = {}, action) => {
         newState[key] = Gateway.create(newState[key]);
         newState[key].deleting = true;
         if (!newState[key].fake) {
-          userStorage.setObjectKey('gateway', slug(newState[key].name, {lower: true}), newState[key]);
+          const slugId = `${newState[key].id}-${slug(newState[key].name, {lower: true})}`;
+          userStorage.setObjectKey('gateway', slugId, newState[key]);
         }
       });
       return newState;

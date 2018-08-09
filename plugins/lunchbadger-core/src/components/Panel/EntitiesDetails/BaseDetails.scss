@@ -4,23 +4,29 @@
     height: 100%;
     position: relative;
   }
-  &.isCanvasEditDisabled {
-    .BaseDetails__name {
-      display: none;
-    }
-  }
   &__name {
     position: absolute;
     top: -48px;
     left: 61px;
     right: 66px;
     background-color: #4190CE;
-    max-width: 200px;
+    max-width: 340px;
     .EntityProperty {
       margin-right: 0;
     }
     .EntityProperty__field {
       color: #FFF;
+      height: 27px;
+      &--input,
+      &--input > div {
+        height: 100% !important;
+        hr {
+          bottom: 0 !important;
+        }
+      }
+      &--text {
+        line-height: 27px;
+      }
       input {
         &::-webkit-input-placeholder {
           color: inherit;
@@ -58,20 +64,28 @@
     background-color: #FFF;
   }
   &__id {
+    position: absolute;
+    left: 8px;
+    bottom: -20px;
     font-size: 12px;
-    margin: 15px -15px -15px -15px;
-    padding: 15px;
-    color: #888;
+    color: #EEE;
     white-space: nowrap;
-    border-top: 1px solid #f8f8f8;
-    text-align: right;
+    opacity: 0.6;
+    font-weight: 300;
     .CopyOnHover {
       width: auto;
-      margin-left: 10px;
-      padding: 0 6px;
+      margin-left: 5px;
+      padding: 0;
       font-family: monospace;
       font-size: 13px;
-      color: #666;
+      color: #FFF;
+      line-height: 16px;
+      background-color: transparent;
+      font-weight: 300;
+      .button {
+        background-color: transparent;
+        margin-left: 5px;
+      }
     }
   }
 }

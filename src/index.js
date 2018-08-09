@@ -15,7 +15,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.162', [
+console.info('LBAPP VERSION 0.163', [
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -45,7 +45,8 @@ console.info('LBAPP VERSION 0.162', [
     'Feature/781 Add runtime in collapsed functions #815',
     'Feature/817 Sync UI with EG schemas #818',
     'Feature/822 add entity id to zoom window #824',
-    'Feature/767 Add apiEndpoint unique name validations vs apis and portals #826'
+    'Feature/767 Add apiEndpoint unique name validations vs apis and portals #826',
+    'Feature/825 add possibility in schemas to set policy parameter label #827'
   ],
   [
     'master Feature/399 fn types per environment #763',

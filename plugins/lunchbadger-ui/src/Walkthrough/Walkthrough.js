@@ -416,7 +416,7 @@ const selector = createSelector(
     let emptyProject = true;
     Object.values(quadrants).forEach((quadrant) => {
       quadrant.entities.forEach((type) => {
-        if (Object.keys(entities[type]).length) {
+        if (Object.values(entities[type]).filter(({deleting}) => !deleting).length) {
           emptyProject = false;
         }
       });

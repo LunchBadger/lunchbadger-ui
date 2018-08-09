@@ -114,12 +114,22 @@ export default class ApiEndpoint extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.apiEndpoints;
+      const {apiEndpoints, apis, portals} = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
-        const isDuplicateName = Object.keys(entities)
-          .filter(id => id !== this.id)
-          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+        let names = Object.values(apiEndpoints)
+          .reduce((map, {id, name}) => [...map, {id, name}], []);
+        if (apis) {
+          names = Object.values(apis)
+            .reduce((map, {apiEndpointsNames}) => [...map, ...apiEndpointsNames], names);
+        }
+        if (portals) {
+          names = Object.values(portals)
+            .reduce((map, {apiEndpointsNames}) => [...map, ...apiEndpointsNames], names);
+        }
+        const isDuplicateName = names
+          .filter(({id}) => id !== this.id)
+          .filter(({name}) => name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
           validations.data.name = messages.duplicatedEntityName('API Endpoint');

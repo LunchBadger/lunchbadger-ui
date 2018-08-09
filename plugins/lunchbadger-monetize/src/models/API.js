@@ -133,6 +133,10 @@ export default class API extends BaseModel {
       .reduce((prev, curr) => [...prev, ...curr], []);
   }
 
+  get apiEndpointsNames() {
+    return this.apiEndpoints.reduce((map, {id, name}) => [...map, {id, name}], []);
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

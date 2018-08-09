@@ -72,4 +72,26 @@
       }
     }
   }
+  &__subtitle {
+    position: absolute;
+    bottom: 0;
+    left: 68px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 300ms ease;
+  }
+  .name .EntityProperty__field--textValue {
+    position: relative;
+    top: 0;
+    transition: top 300ms ease;
+  }
+  .collapsed &.subtitle {
+    .name .EntityProperty__field--textValue {
+      top: -10px;
+    }
+    .EntityHeader__subtitle {
+      bottom: 5px;
+      opacity: 1;
+    }
+  }
 }

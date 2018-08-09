@@ -88,7 +88,7 @@ export default class Function_ extends BaseModel {
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateFunctionName = Object.keys(functions)
-          .filter(id => id !== this.id)
+          .filter(id => id !== this.id && !functions[id].deleting)
           .filter(id => functions[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateFunctionName) {

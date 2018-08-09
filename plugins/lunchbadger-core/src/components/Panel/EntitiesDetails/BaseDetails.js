@@ -147,7 +147,7 @@ export default (ComposedComponent) => {
 
     render() {
       const {entity, rect} = this.props;
-      const {id, hideEntityId} = entity;
+      const {id} = entity;
       const {isCanvasEditDisabled, name} = entity;
       const {validations, isPristine, formValid, isOkEnabled} = this.state;
       const underlineStyle = {
@@ -171,7 +171,12 @@ export default (ComposedComponent) => {
                 value={name}
                 underlineStyle={underlineStyle}
                 invalidUnderlineColor="#FFF"
+                fake={isCanvasEditDisabled}
               />
+              <div className="BaseDetails__id">
+                Entity ID:
+                <CopyOnHover copy={id}>{id}</CopyOnHover>
+              </div>
             </div>
             <div className="BaseDetails__content">
               {!validations.isValid && (
@@ -186,12 +191,6 @@ export default (ComposedComponent) => {
                 {...this.props}
                 {...this.state}
               />
-              {!hideEntityId && (
-                <div className="BaseDetails__id">
-                  Entity ID:
-                  <CopyOnHover copy={id}>{id}</CopyOnHover>
-                </div>
-              )}
             </div>
             <div className="BaseDetails__buttons">
               <EntityActionButtons

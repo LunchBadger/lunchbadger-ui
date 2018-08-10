@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import BadgerLogo from './badger-logo.svg';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import Config from '../../../../../src/config';
+import {GAEvent} from '../../../../lunchbadger-ui/src';
 import './Header.scss';
 
 const homepageUrl = Config.get('homepageUrl');
@@ -18,7 +19,10 @@ export default class Logo extends PureComponent {
     event.preventDefault();
   };
 
-  handleRedirect = () => document.location.href = homepageUrl;
+  handleRedirect = () => {
+    GAEvent('Header Menu', 'Exited App');
+    document.location.href = homepageUrl;
+  };
 
   render() {
     const {showConfirmModal} = this.state;

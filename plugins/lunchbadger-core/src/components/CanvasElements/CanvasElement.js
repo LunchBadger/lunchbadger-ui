@@ -237,7 +237,7 @@ export default (ComposedComponent) => {
         zoomWindow,
       };
       this.props.dispatch(setCurrentZoom(rect));
-      GAEvent('Canvas', 'Opened Zoom Window', `${gaType}/${tab}`);
+      GAEvent('Zoom Window', 'Opened', `${gaType}: ${tab}`);
     };
 
     handleOnToggleCollapse = collapsed =>

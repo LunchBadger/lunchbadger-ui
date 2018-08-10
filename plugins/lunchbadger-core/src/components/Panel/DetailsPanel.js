@@ -21,8 +21,10 @@ class DetailsPanel extends Component {
   }
 
   handleTabChange = tab => () => {
-    const {dispatch, zoom} = this.props;
+    const {dispatch, zoom, currentElement} = this.props;
     dispatch(setCurrentZoom({...zoom, tab}));
+    const gaLabel = `${currentElement.gaType}: ${zoom.tab} => ${tab}`;
+    GAEvent('Zoom Window', 'Switched Tab', gaLabel);
   };
 
   handleRemove = () => {
@@ -41,7 +43,7 @@ class DetailsPanel extends Component {
     dispatch(actions.removeEntity(currentElement));
     dispatch(setCurrentZoom(undefined));
     dispatch(clearCurrentElement());
-    GAEvent('Canvas', 'Removed Entity from Zoom Window', currentElement.gaType);
+    GAEvent('Zoom Window', 'Removed Entity', currentElement.gaType);
   };
 
   renderDetails() {

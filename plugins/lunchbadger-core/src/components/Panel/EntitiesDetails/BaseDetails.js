@@ -106,7 +106,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
-      GAEvent('Canvas', 'Saved And Closed Zoom Window', this.props.entity.gaType);
+      GAEvent('Zoom Window', 'Saved And Closed', this.props.entity.gaType);
     }
 
     checkPristine = (_model, changed) => {
@@ -144,7 +144,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentZoom({...this.props.rect, close: true}));
       setTimeout(() => dispatch(setCurrentZoom(undefined)), 1000);
       if (event) {
-        GAEvent('Canvas', 'Closed Zoom Window', this.props.entity.gaType);
+        GAEvent('Zoom Window', 'Closed', this.props.entity.gaType);
       }
     }
 

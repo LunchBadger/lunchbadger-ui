@@ -349,6 +349,7 @@ export default (ComposedComponent) => {
         allowEditWhenCrashed,
         error,
         subtitle,
+        gaType,
       } = entity;
       const deploying = status === 'deploying';
       const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
@@ -441,6 +442,7 @@ export default (ComposedComponent) => {
               onToggleCollapse={this.handleOnToggleCollapse}
               defaultExpanded={defaultExpanded}
               subtitle={subtitle}
+              gaType={gaType}
             >
               {!fake && (
                 <ComposedComponent

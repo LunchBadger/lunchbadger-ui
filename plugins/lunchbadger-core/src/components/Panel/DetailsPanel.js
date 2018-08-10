@@ -6,7 +6,7 @@ import cs from 'classnames';
 import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
-import {RnD} from '../../../../lunchbadger-ui/src';
+import {RnD, GAEvent} from '../../../../lunchbadger-ui/src';
 import './DetailsPanel.scss';
 
 @inject('connectionsStore') @observer
@@ -41,6 +41,7 @@ class DetailsPanel extends Component {
     dispatch(actions.removeEntity(currentElement));
     dispatch(setCurrentZoom(undefined));
     dispatch(clearCurrentElement());
+    GAEvent('Canvas', 'Removed Entity from Zoom Window', currentElement.gaType);
   };
 
   renderDetails() {

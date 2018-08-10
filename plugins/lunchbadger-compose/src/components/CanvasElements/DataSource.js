@@ -37,14 +37,16 @@ class DataSource extends Component {
   };
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
+    const {entity} = this.props;
+    return entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
           way={port.portType}
           elementId={port.id}
           scope={port.portGroup}
-          className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+          className={`port-${entity.constructor.type} port-${port.portGroup}`}
+          gaType={entity.gaType}
         />
       );
     });

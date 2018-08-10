@@ -102,13 +102,15 @@ class ApiEndpoint extends Component {
   };
 
   renderPorts = () => {
-    return this.props.entity.ports.map((port, idx) => (
+    const {entity} = this.props;
+    return entity.ports.map((port, idx) => (
       <Port
         key={idx}
         way={port.portType}
         elementId={port.id}
-        className={`port-${this.props.entity.constructor.type} port-${port.portGroup}`}
+        className={`port-${entity.constructor.type} port-${port.portGroup}`}
         scope={port.portGroup}
+        gaType={entity.gaType}
       />
     ));
   };

@@ -50,7 +50,8 @@ class SubModel extends PureComponent {
   };
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
+    const {entity} = this.props;
+    return entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
@@ -58,6 +59,7 @@ class SubModel extends PureComponent {
           middle
           elementId={port.id}
           scope={port.portGroup}
+          gaType={`Microservice[${entity.gaType}]`}
         />
       );
     });

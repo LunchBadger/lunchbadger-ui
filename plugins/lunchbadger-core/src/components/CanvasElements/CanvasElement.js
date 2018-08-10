@@ -158,7 +158,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentEditElement(null));
       await dispatch(entity.update(model));
       const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
-      GAEvent('Canvas', gaAction, entity.gaType || entity.constructor.type);
+      GAEvent('Canvas', gaAction, entity.gaType);
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
           this.setFlatModel();
@@ -212,7 +212,7 @@ export default (ComposedComponent) => {
       dispatch(entity.remove(cb));
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
-      GAEvent('Canvas', 'Removed Entity', entity.gaType || entity.constructor.type);
+      GAEvent('Canvas', 'Removed Entity', entity.gaType);
     }
 
     handleEdit = () => {

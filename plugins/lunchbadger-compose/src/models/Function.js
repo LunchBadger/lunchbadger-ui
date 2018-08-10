@@ -81,6 +81,10 @@ export default class Function_ extends BaseModel {
     return runtimeMapping(this.service.serverless.provider.runtime).lb;
   }
 
+  get gaType() {
+    return 'Function';
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

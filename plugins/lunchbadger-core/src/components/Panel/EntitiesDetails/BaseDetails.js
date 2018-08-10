@@ -6,6 +6,7 @@ import {
   EntityProperty,
   EntityValidationErrors,
   EntityActionButtons,
+  CopyOnHover,
 } from '../../../../../lunchbadger-ui/src';
 import {
   changePanelStatus,
@@ -146,6 +147,7 @@ export default (ComposedComponent) => {
 
     render() {
       const {entity, rect} = this.props;
+      const {id} = entity;
       const {isCanvasEditDisabled, name} = entity;
       const {validations, isPristine, formValid, isOkEnabled} = this.state;
       const underlineStyle = {
@@ -169,7 +171,12 @@ export default (ComposedComponent) => {
                 value={name}
                 underlineStyle={underlineStyle}
                 invalidUnderlineColor="#FFF"
+                fake={isCanvasEditDisabled}
               />
+              <div className="BaseDetails__id">
+                Entity ID:
+                <CopyOnHover copy={id}>{id}</CopyOnHover>
+              </div>
             </div>
             <div className="BaseDetails__content">
               {!validations.isValid && (

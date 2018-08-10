@@ -36,7 +36,6 @@ export default class Gateway extends BaseModel {
     width: 1150,
     height: 750,
   };
-
   running = true;
   deleting = null;
   fake = null;

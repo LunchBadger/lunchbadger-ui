@@ -35,6 +35,20 @@
   &__bar {
     min-width: 300px;
   }
+  &__id {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+    .CopyOnHover {
+      width: auto;
+      padding: 0 6px;
+      font-weight: 400;
+      color: #666;
+      margin-left: 10px;
+    }
+  }
 }
 
 .BaseDetails.general .GatewayDetails .general,

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import Rnd from 'react-rnd';
-import {IconSVG, entityIcons, Toolbox} from '../';
+import {IconSVG, entityIcons, Toolbox, GAEvent} from '../';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './RnD.scss';
 
@@ -93,10 +93,17 @@ export default class RnD extends PureComponent {
       this.dispatchDragEvent();
     }
     const {offsetWidth, offsetHeight} = refToElement;
+    const prevSize = userStorage.getObjectKey('zoomWindow', this.props.entityId);
     userStorage.setObjectKey('zoomWindow', this.props.entityId, {
       width: offsetWidth,
       height: offsetHeight,
     });
+    if (!prevSize || prevSize.width !== offsetWidth) {
+      GAEvent('Zoom Window', 'Resized Width', dir, offsetWidth);
+    }
+    if (!prevSize || prevSize.height !== offsetHeight) {
+      GAEvent('Zoom Window', 'Resized Height', dir, offsetHeight);
+    }
   };
 
   handleDragStart = (event, data) => {

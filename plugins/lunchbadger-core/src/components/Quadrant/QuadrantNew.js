@@ -108,13 +108,14 @@ class Quadrant extends PureComponent {
     const orderedIds = this.state.orderedIds.filter(item => item.id !== id);
     orderedIds.splice(hoverIndex, 0, {id, type});
     this.updateOrderedIds(orderedIds, id);
-  }
+  };
 
   saveOrder = () => {
     const {store: {dispatch}} = this.context;
     dispatch(saveOrder(this.state.orderedIds.map(item => item.id)));
     this.setState({draggingId: ''});
-  }
+    GAEvent('Canvas', 'Reordered Entities in Quadrant', this.props.title);
+  };
 
   render() {
     const {

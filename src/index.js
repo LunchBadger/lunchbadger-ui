@@ -8,7 +8,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
-import Config from './config';
 import {GA} from '../plugins/lunchbadger-ui/src';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';

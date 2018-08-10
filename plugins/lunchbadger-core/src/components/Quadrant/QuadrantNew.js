@@ -7,6 +7,7 @@ import {inject, observer} from 'mobx-react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
+import {GAEvent} from '../../../../lunchbadger-ui/src';
 import './Quadrant.scss';
 
 const boxTarget = {
@@ -95,7 +96,12 @@ class Quadrant extends PureComponent {
   recalculateQuadrantWidth = (event) => {
     const {recalculateQuadrantsWidths, index} = this.props;
     recalculateQuadrantsWidths(index, event.clientX - this.quadrantDOM.getBoundingClientRect().left);
-  }
+  };
+
+  handleResizeEnd = () => {
+    const {title, width} = this.props;
+    GAEvent('Canvas', 'Resized Quadrant', title, Math.floor(width));
+  };
 
   moveEntity = (id, dragIndex, hoverIndex) => {
     const type = this.state.orderedIds.find(item => item.id === id).type;
@@ -158,7 +164,12 @@ class Quadrant extends PureComponent {
             );
           })}
         </div>
-        {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
+        {resizable && (
+          <QuadrantResizeHandle
+            onDrag={this.recalculateQuadrantWidth}
+            onDragEnd={this.handleResizeEnd}
+          />
+        )}
       </div>
     );
   }

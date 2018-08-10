@@ -254,6 +254,7 @@ class Gateway extends Component {
           middle={true}
           scope={scope}
           disabled={disabled}
+          gaType="Pipeline"
         />
       );
     });

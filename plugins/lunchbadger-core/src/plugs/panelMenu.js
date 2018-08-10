@@ -2,6 +2,7 @@ import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
 import {iconLogout} from '../../../../src/icons';
 import Config from '../../../../src/config';
+import {GAEvent} from '../../../lunchbadger-ui/src';
 
 export default {
   0: {
@@ -33,6 +34,7 @@ export default {
     icon: 'fa-question',
     name: 'documentation',
     url: Config.get('docsUrl'),
+    action: () => GAEvent('Header Menu', 'Documentation'),
     tooltip: 'Documentation',
   },
   12: {

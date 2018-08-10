@@ -25,6 +25,7 @@ import {
   EntityStatus,
   scrollToElement,
   SystemDefcon1,
+  GAEvent,
 } from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
@@ -156,6 +157,8 @@ export default (ComposedComponent) => {
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
       await dispatch(entity.update(model));
+      const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
+      GAEvent('Canvas', gaAction, entity.gaType);
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
           this.setFlatModel();
@@ -209,6 +212,7 @@ export default (ComposedComponent) => {
       dispatch(entity.remove(cb));
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
+      GAEvent('Canvas', 'Removed Entity', entity.gaType);
     }
 
     handleEdit = () => {
@@ -221,7 +225,7 @@ export default (ComposedComponent) => {
     }
 
     handleZoom = tab => () => {
-      const {zoomWindow} = this.props.entity;
+      const {zoomWindow, gaType} = this.props.entity;
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
       const rect = {
@@ -233,6 +237,7 @@ export default (ComposedComponent) => {
         zoomWindow,
       };
       this.props.dispatch(setCurrentZoom(rect));
+      GAEvent('Zoom Window', 'Opened', `${gaType}: ${tab}`);
     };
 
     handleOnToggleCollapse = collapsed =>
@@ -345,6 +350,7 @@ export default (ComposedComponent) => {
         allowEditWhenCrashed,
         error,
         subtitle,
+        gaType,
       } = entity;
       const deploying = status === 'deploying';
       const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
@@ -437,6 +443,7 @@ export default (ComposedComponent) => {
               onToggleCollapse={this.handleOnToggleCollapse}
               defaultExpanded={defaultExpanded}
               subtitle={subtitle}
+              gaType={gaType}
             >
               {!fake && (
                 <ComposedComponent

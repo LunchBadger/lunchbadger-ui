@@ -10,7 +10,8 @@ export default class ApiEndpoint extends Component {
   };
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
+    const {entity} = this.props;
+    return entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
@@ -18,6 +19,7 @@ export default class ApiEndpoint extends Component {
           middle={true}
           elementId={port.id}
           scope={port.portGroup}
+          gaType={`Portal[Api[${entity.gaType}]]`}
         />
       );
     });

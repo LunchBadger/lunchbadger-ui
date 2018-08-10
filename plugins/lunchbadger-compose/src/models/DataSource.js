@@ -343,6 +343,10 @@ export default class DataSource extends BaseModel {
 
   set zoomWindow(_) {}
 
+  get gaType() {
+    return `${this.constructor.type} ${this.connector}`;
+  }
+
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};

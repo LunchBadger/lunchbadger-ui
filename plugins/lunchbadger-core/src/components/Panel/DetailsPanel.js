@@ -71,7 +71,7 @@ class DetailsPanel extends Component {
     const {zoom, currentElement} = this.props;
     if (!(zoom && currentElement)) return <div />;
     const {tab} = zoom;
-    const {name, id} = currentElement;
+    const {name, id, gaType} = currentElement;
     const {type} = currentElement.constructor;
     const tabs = currentElement.tabs || [];
     const toolboxConfig = [{
@@ -103,6 +103,7 @@ class DetailsPanel extends Component {
         type={type}
         toolbox={toolboxConfig}
         entityId={id}
+        gaType={gaType}
       >
         {this.renderDetails()}
       </RnD>

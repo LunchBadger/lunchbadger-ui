@@ -79,6 +79,7 @@ export default class RnD extends PureComponent {
   handleResize = () => this.dispatchResizeEvent();
 
   handleResizeStop = (event, dir, refToElement, delta) => {
+    const {entityId, gaType} = this.props;
     const {width, height} = delta;
     let isNewDelta = false;
     if (['topLeft', 'left', 'bottomLeft'].includes(dir)) {
@@ -93,16 +94,16 @@ export default class RnD extends PureComponent {
       this.dispatchDragEvent();
     }
     const {offsetWidth, offsetHeight} = refToElement;
-    const prevSize = userStorage.getObjectKey('zoomWindow', this.props.entityId);
-    userStorage.setObjectKey('zoomWindow', this.props.entityId, {
+    const prevSize = userStorage.getObjectKey('zoomWindow', entityId);
+    userStorage.setObjectKey('zoomWindow', entityId, {
       width: offsetWidth,
       height: offsetHeight,
     });
     if (!prevSize || prevSize.width !== offsetWidth) {
-      GAEvent('Zoom Window', 'Resized Width', dir, offsetWidth);
+      GAEvent('Zoom Window', 'Resized Width', gaType, offsetWidth);
     }
     if (!prevSize || prevSize.height !== offsetHeight) {
-      GAEvent('Zoom Window', 'Resized Height', dir, offsetHeight);
+      GAEvent('Zoom Window', 'Resized Height', gaType, offsetHeight);
     }
   };
 

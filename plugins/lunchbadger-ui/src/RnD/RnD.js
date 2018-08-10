@@ -118,6 +118,7 @@ export default class RnD extends PureComponent {
     this.deltaX += x - this.deltaXStart;
     this.deltaY += y - this.deltaYStart;
     this.dispatchDragEvent();
+    GAEvent('Zoom Window', 'Dragged', this.props.gaType);
   };
 
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));

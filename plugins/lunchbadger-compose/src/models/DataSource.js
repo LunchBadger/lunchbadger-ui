@@ -308,7 +308,7 @@ export default class DataSource extends BaseModel {
   }
 
   get zoomWindow() {
-    const width = 400;
+    const width = 470;
     const fields1 = {
       width,
       height: 310,

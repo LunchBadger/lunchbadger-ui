@@ -153,11 +153,6 @@ export default class RnD extends PureComponent {
               <div className="RnD__header__icon">
                 <IconSVG svg={entityIcons[type]} />
               </div>
-              <div className="RnD__header__name">
-                <div className="RnD__header__name__text">
-                  {name}
-                </div>
-              </div>
             </div>
             <div className="RnD__toolbox">
               <Toolbox config={toolbox} zoom />

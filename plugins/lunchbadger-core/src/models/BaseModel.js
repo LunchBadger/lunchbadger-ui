@@ -16,7 +16,7 @@ export default class BaseModel {
   loaded = true;
   slugifyName = false;
   zoomWindow = {
-    width: 420,
+    width: 470,
     height: 600,
   };
 

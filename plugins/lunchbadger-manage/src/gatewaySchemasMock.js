@@ -749,7 +749,8 @@ export default [
         },
         "ttl": {
           "type": "integer",
-          "default": 60
+          "default": 60,
+          "label": "TTL"
         },
         "passThrough": {
           "type": "boolean",

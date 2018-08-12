@@ -4027,7 +4027,7 @@
       "dev": true
     },
     "eventsource": {
-      "version": "git://github.com/lunchbadger/eventsource.git#9ed0e750c769c55fe371789d3665e49e61229ad3",
+      "version": "github:LunchBadger/eventsource#9ed0e750c769c55fe371789d3665e49e61229ad3",
       "requires": {
         "original": "1.0.0"
       }

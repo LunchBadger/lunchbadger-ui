@@ -23,6 +23,7 @@ import {
   IconButton,
   Sortable,
   scrollToElement,
+  CopyOnHover,
 } from '../../../../../lunchbadger-ui/src';
 import './GatewayDetails.scss';
 
@@ -446,6 +447,12 @@ class GatewayDetails extends PureComponent {
         placeholder="Enter pipeline name here"
         hiddenInputs={[{name: `pipelines[${idx}][id]`, value: pipeline.id}]}
       />
+      <div className="GatewayDetails__id">
+        ID:
+        <CopyOnHover copy={pipeline.id}>
+          {pipeline.id}
+        </CopyOnHover>
+      </div>
     </div>
   );
 

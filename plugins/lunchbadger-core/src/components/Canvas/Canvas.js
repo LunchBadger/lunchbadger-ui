@@ -256,7 +256,7 @@ class Canvas extends Component {
       const originalTargetGaType = originalTargetEndpoint.getAttribute('data-ga-type');
       const newSourceGaType = newSourceEndpoint.getAttribute('data-ga-type');
       const newTargetGaType = newTargetEndpoint.getAttribute('data-ga-type');
-      const gaLog = `${originalSourceGaType}-${originalTargetGaType} into ${newSourceGaType}-${newTargetGaType}`;
+      const gaLog = `${originalSourceGaType}-${originalTargetGaType} => ${newSourceGaType}-${newTargetGaType}`;
       GAEvent('Canvas', 'Reconnected Entities', gaLog);
     });
 

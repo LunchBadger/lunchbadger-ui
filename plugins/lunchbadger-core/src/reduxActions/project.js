@@ -53,8 +53,9 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   const options = Object.assign({
     showMessage: true, // relict since #774
     saveProject: true,
+    manualSave: false,
   }, opts);
-  const {saveProject} = options;
+  const {saveProject, manualSave} = options;
   const state = getState();
   const {onProjectSave, onBeforeProjectSave} = state.plugins;
   const currData = onProjectSave.reduce((map, item) => ({
@@ -85,7 +86,9 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     }
   }
   dispatch(actions.setLoadingProject(false));
-  GAEvent('Header Menu', 'Saved Project');
+  if (manualSave) {
+    GAEvent('Header Menu', 'Saved Project');
+  }
 };
 
 export const clearServer = () => async (dispatch, getState) => {

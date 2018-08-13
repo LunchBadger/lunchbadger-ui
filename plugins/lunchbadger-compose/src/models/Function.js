@@ -82,7 +82,7 @@ export default class Function_ extends BaseModel {
   }
 
   get gaType() {
-    return 'Function';
+    return `Function[${this.subtitle}]`;
   }
 
   validate(model) {

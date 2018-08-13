@@ -156,9 +156,9 @@ export default (ComposedComponent) => {
       this.setState({validations});
       if (!validations.isValid) return;
       dispatch(setCurrentEditElement(null));
-      await dispatch(entity.update(model));
+      const updatedEntity = await dispatch(entity.update(model));
       const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
-      GAEvent('Canvas', gaAction, entity.gaType);
+      GAEvent('Canvas', gaAction, updatedEntity.gaType);
       setTimeout(() => {
         if (this.entityRef && this.entityRef.getFormRef()) {
           this.setFlatModel();

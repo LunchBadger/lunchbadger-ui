@@ -131,6 +131,8 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
   };
   if (endpoint.constructor.type === 'Function_') {
     Object.assign(action, {ignorePath: true});
+  } else if (endpoint.constructor.type === 'Model') {
+    Object.assign(action, {stripPath: true});
   }
   if (!pipeline.policies.find(({name}) => name === 'proxy')) {
     pipeline.addPolicy(Policy.create({proxy: []}));

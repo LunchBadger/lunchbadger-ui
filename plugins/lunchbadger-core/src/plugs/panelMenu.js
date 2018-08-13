@@ -9,7 +9,7 @@ export default {
     name: 'projectSave',
     icon: 'fa-floppy-o',
     hidden: true,
-    action: saveToServer(),
+    action: saveToServer({manualSave: true}),
     tooltip: 'Save project',
   },
   1: {

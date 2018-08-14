@@ -79,7 +79,11 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
   let isSave = false;
   Object.keys(entries).forEach(async (slugId) => {
     const {status, entity, slug} = entries[slugId];
-    const {running: functionRunning, deleting: functionDeleting, name: functionName} = entity || {};
+    const {
+      running: functionRunning,
+      deleting: functionDeleting,
+      name: functionName,
+    } = entity || {};
     if (status === null) {
       if (functionDeleting) {
         dispatch(actions.removeFunction(entity));
@@ -101,6 +105,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
         dispatch(actions.updateFunction(updatedEntity));
       } else {
         if (running !== functionRunning) {
+          if (functionDeleting) return;
           if (functionRunning === null && !running) return;
           const isDeployed = functionRunning === null;
           if (isDeployed) {

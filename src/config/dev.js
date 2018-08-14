@@ -29,7 +29,6 @@ export default {
   loopbackGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
   serverlessGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/functions.git`,
   googleAnalyticsID: 'UA-82427970-1',
-  googleAnalyticsDebug: true,
   docsUrl: 'https://docs.lunchbadger.com',
   homepageUrl: 'https://www.lunchbadger.com',
   pingAmount: 72,

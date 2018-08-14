@@ -17,9 +17,7 @@ import './fonts/lunchbadger.css';
 
 console.info('LBAPP VERSION 0.1');
 
-ReactGA.initialize(Config.get('googleAnalyticsID'), {
-  debug: Config.get('googleAnalyticsDebug')
-});
+ReactGA.initialize(Config.get('googleAnalyticsID'));
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 // Needed for onTouchTap

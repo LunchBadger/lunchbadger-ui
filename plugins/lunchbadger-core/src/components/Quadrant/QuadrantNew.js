@@ -143,7 +143,12 @@ class Quadrant extends PureComponent {
       >
         <div className="quadrant__title" style={titleStyles}>
           {title}
-          {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
+          {resizable && (
+            <QuadrantResizeHandle
+              onDrag={this.recalculateQuadrantWidth}
+              onDragEnd={this.handleResizeEnd}
+            />
+          )}
         </div>
         <div className="quadrant__body">
           {orderedIds.map(({id, type}, idx) => {

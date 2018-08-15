@@ -14,18 +14,15 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.91', [
+console.info('LBAPP VERSION 0.92', [
+  '839',
   '833',
   '815',
   '811',
   '807',
   '805',
   '797',
-  '776 787 784 789 783 795',
-  '776 787 784 789 783',
-  '776 787',
-  '776',
-  '759 763 762'
+  '776 787 784 789 783 795'
 ]);
 
 GA.pageview(window.location.pathname + window.location.search);

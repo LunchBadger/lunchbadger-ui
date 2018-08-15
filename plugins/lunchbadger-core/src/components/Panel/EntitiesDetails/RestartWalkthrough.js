@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import userStorage from '../../../utils/userStorage';
 import {clearServer} from '../../../reduxActions/project';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
-import {EntityPropertyLabel, Button} from '../../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel, Button, GAEvent} from '../../../../../lunchbadger-ui/src';
 import './RestartWalkthrough.scss';
 
 export default class RestartWalkthrough extends PureComponent {
@@ -22,6 +22,7 @@ export default class RestartWalkthrough extends PureComponent {
     userStorage.remove('walkthroughShown');
     this.context.store.dispatch(clearServer());
     window.dispatchEvent(new Event('walkthroughRestarted'));
+    GAEvent('Walkthrough', 'Clicked Restart');
   };
 
   render() {

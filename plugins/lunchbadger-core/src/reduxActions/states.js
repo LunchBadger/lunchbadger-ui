@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {actions} from './actions';
+import {GAEvent} from '../../../lunchbadger-ui/src';
 
 export const createModelsFromJSON = response => (dispatch, getState) => {
   const {plugins: {models}} = getState();
@@ -72,8 +73,14 @@ export const setCurrentZoom = value => (dispatch, getState) => {
 };
 
 export const togglePanel = panel => (dispatch, getState) => {
-  const value = getState().states.currentlyOpenedPanel === panel ? null : panel;
+  const {currentlyOpenedPanel} = getState().states;
+  const value = currentlyOpenedPanel === panel ? null : panel;
   dispatch(actions.setState({key: 'currentlyOpenedPanel', value}));
+  const makeUpCase = str => str.replace(/_/g, ' ').toLowerCase();
+  const gaLog = value
+    ? `Opened ${makeUpCase(value)}`
+    : `Closed ${makeUpCase(currentlyOpenedPanel)}`;
+  GAEvent('Header Menu', gaLog);
 };
 
 export const changePanelStatus = (status, saveAction, discardAction) => dispatch =>

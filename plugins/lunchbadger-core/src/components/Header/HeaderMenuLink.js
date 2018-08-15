@@ -34,6 +34,7 @@ class HeaderMenuLink extends PureComponent {
       confirm,
       url,
       tooltip,
+      action,
     } = this.props;
     const linkClass = cs('header__menu__link', panel, name, {
       'header__menu__link--hidden': hidden,
@@ -47,7 +48,7 @@ class HeaderMenuLink extends PureComponent {
             tooltip={tooltip}
             direction="bottom"
           >
-            <a className={linkClass} href={url} target="_blank">
+            <a className={linkClass} href={url} target="_blank" onClick={action}>
               {icon && <i className={cs('fa', icon)} />}
               {!icon && url}
             </a>

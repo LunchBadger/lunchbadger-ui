@@ -7,9 +7,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
-import ReactGA from 'react-ga';
-import Config from './config';
 import thunk from 'redux-thunk';
+import {GA} from '../plugins/lunchbadger-ui/src';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/trench100free.css';
@@ -17,8 +16,7 @@ import './fonts/lunchbadger.css';
 
 console.info('LBAPP VERSION 0.1');
 
-ReactGA.initialize(Config.get('googleAnalyticsID'));
-ReactGA.pageview(window.location.pathname + window.location.search);
+GA.pageview(window.location.pathname + window.location.search);
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -41,7 +39,7 @@ const loginManager = LunchBadgerCore.utils.createLoginManager();
 loginManager.checkAuth().then(loggedIn => {
   if (!loggedIn) return;
   const {id_token, profile} = loginManager.user;
-  ReactGA.set({userId: profile.sub});
+  GA.set({userId: profile.sub});
   global.ID_TOKEN = id_token; // FIXME: quick and dirty fix for urgent demo
   let middleware = compose(applyMiddleware(thunk));
   if (window.__REDUX_DEVTOOLS_EXTENSION__) {

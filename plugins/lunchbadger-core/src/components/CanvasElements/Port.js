@@ -19,6 +19,7 @@ class Port extends PureComponent {
     middle: PropTypes.bool,
     className: PropTypes.string,
     disabled: PropTypes.bool,
+    gaType: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -190,6 +191,7 @@ class Port extends PureComponent {
       disabled,
       currentElement,
       currentlySelectedSubelements,
+      gaType,
     } = this.props;
     const isConnected = connectionsStore.isPortConnected(way, elementId);
     const portClass = classNames('canvas-element__port', 'port', {
@@ -217,7 +219,12 @@ class Port extends PureComponent {
           id={`port_${way}_${elementId}`}
           className={`port-${way} ${portClass} ${className || ''}`}
         >
-          <div className={portAnchorClass} ref="port" id={`port_${way}_${this.tempId}_${elementId}`}>
+          <div
+            ref="port"
+            id={`port_${way}_${this.tempId}_${elementId}`}
+            className={portAnchorClass}
+            data-ga-type={gaType}
+          >
             <div className="port__inside" />
           </div>
         </div>

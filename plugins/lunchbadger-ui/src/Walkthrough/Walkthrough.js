@@ -8,6 +8,7 @@ import series from 'async/series';
 import {cloneDeep} from 'lodash';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import OneOptionModal from '../../../lunchbadger-core/src/components/Generics/Modal/OneOptionModal';
+import {GAEvent} from '../';
 import './Walkthrough.scss';
 
 const locale = {
@@ -35,6 +36,7 @@ class Walkthrough extends PureComponent {
     this.state = this.initState(props);
     this.stepsExecuted = {};
     this.skipedLastStep = 1;
+    this.stepsOffset = userStorage.getNumber('walkthroughLastStep');
   }
 
   componentDidMount() {
@@ -51,6 +53,7 @@ class Walkthrough extends PureComponent {
     this.skipedLastStep = 1;
     this.setState(this.initState());
     this.restarted = true;
+    this.stepsOffset = 0;
   };
 
   initState = (props = this.props) => {
@@ -81,11 +84,21 @@ class Walkthrough extends PureComponent {
       if (this.onExit) {
         series(this.onExit(this.api));
       }
+      const lastStepTitle = this.steps[this.state.index].title;
+      const lastStepIdx = userStorage.getNumber('walkthroughLastStep');
+      if (this.steps.length - 1 === this.state.index) {
+        GAEvent('Walkthrough', 'Finished');
+      } else {
+        GAEvent('Walkthrough', 'Clicked Exit', lastStepTitle, lastStepIdx);
+      }
       this.exitWalkthrough();
       this.unblockEscapingKeys();
       this.joyride.reset(true);
     }
     this.setState({index});
+    if (type === 'step:after') {
+      GAEvent('Walkthrough', 'Clicked Next', step.title, index + this.stepsOffset);
+    }
     if (type === 'step:before') {
       this.onExit = step.onExit;
       this.setState({

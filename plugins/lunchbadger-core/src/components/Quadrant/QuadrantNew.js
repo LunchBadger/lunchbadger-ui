@@ -7,6 +7,7 @@ import {inject, observer} from 'mobx-react';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
+import {GAEvent} from '../../../../lunchbadger-ui/src';
 import './Quadrant.scss';
 
 const boxTarget = {
@@ -95,20 +96,27 @@ class Quadrant extends PureComponent {
   recalculateQuadrantWidth = (event) => {
     const {recalculateQuadrantsWidths, index} = this.props;
     recalculateQuadrantsWidths(index, event.clientX - this.quadrantDOM.getBoundingClientRect().left);
-  }
+  };
+
+  handleResizeEnd = () => {
+    const {title, width} = this.props;
+    GAEvent('Canvas', 'Resized Quadrant', title, Math.floor(width));
+  };
 
   moveEntity = (id, dragIndex, hoverIndex) => {
     const type = this.state.orderedIds.find(item => item.id === id).type;
     const orderedIds = this.state.orderedIds.filter(item => item.id !== id);
     orderedIds.splice(hoverIndex, 0, {id, type});
     this.updateOrderedIds(orderedIds, id);
-  }
+  };
 
   saveOrder = () => {
+    const {orderedIds} = this.state;
     const {store: {dispatch}} = this.context;
-    dispatch(saveOrder(this.state.orderedIds.map(item => item.id)));
+    dispatch(saveOrder(orderedIds.map(item => item.id)));
     this.setState({draggingId: ''});
-  }
+    GAEvent('Canvas', 'Reordered Entities in Quadrant', this.props.title, orderedIds.length);
+  };
 
   render() {
     const {
@@ -135,7 +143,12 @@ class Quadrant extends PureComponent {
       >
         <div className="quadrant__title" style={titleStyles}>
           {title}
-          {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
+          {resizable && (
+            <QuadrantResizeHandle
+              onDrag={this.recalculateQuadrantWidth}
+              onDragEnd={this.handleResizeEnd}
+            />
+          )}
         </div>
         <div className="quadrant__body">
           {orderedIds.map(({id, type}, idx) => {
@@ -158,7 +171,12 @@ class Quadrant extends PureComponent {
             );
           })}
         </div>
-        {resizable && <QuadrantResizeHandle onDrag={this.recalculateQuadrantWidth} />}
+        {resizable && (
+          <QuadrantResizeHandle
+            onDrag={this.recalculateQuadrantWidth}
+            onDragEnd={this.handleResizeEnd}
+          />
+        )}
       </div>
     );
   }

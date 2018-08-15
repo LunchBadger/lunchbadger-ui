@@ -121,13 +121,18 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
   const state = getState();
   const gateway = storeUtils.findGatewayByPipelineId(state, pipelineId).recreate();
   const pipeline = gateway.pipelines.find(({id}) => id === pipelineId);
+  const {entities: {gatewaySchemas: {policy: {proxy}}}} = state;
+  const requiredProxyFields = proxy.required
+    .map(field => ({field, value: proxy.properties[field].default}))
+    .reduce((map, {field, value}) => ({...map, [field]: value}), {});
   const action = {
+    ...requiredProxyFields,
     serviceEndpoint: endpoint.id,
-    changeOrigin: true, // FIXME: fill based on schemas required params
-    strategy: 'round-robin',
   };
   if (endpoint.constructor.type === 'Function_') {
     Object.assign(action, {ignorePath: true});
+  } else if (endpoint.constructor.type === 'Model') {
+    Object.assign(action, {stripPath: true});
   }
   if (!pipeline.policies.find(({name}) => name === 'proxy')) {
     pipeline.addPolicy(Policy.create({proxy: []}));

@@ -147,6 +147,45 @@ export default [
     "type": "config",
     "schema": {
       "$id": "http://express-gateway.io/models/gateway.config.json",
+      "definitions": {
+        "baseApiEndpoint": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "paths": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "pathRegex": {
+              "type": "string",
+              "format": "regex"
+            },
+            "scopes": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "methods": {
+              "type": [
+                "string",
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "type": "object",
       "properties": {
         "http": {
@@ -203,41 +242,17 @@ export default [
             "null"
           ],
           "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "host": {
-                "type": "string"
+            "anyOf": [
+              {
+                "$ref": "#/definitions/baseApiEndpoint"
               },
-              "paths": {
-                "type": [
-                  "string",
-                  "array"
-                ],
-                "items": {
-                  "type": "string"
-                }
-              },
-              "pathRegex": {
-                "type": "string",
-                "format": "regex"
-              },
-              "scopes": {
+              {
                 "type": "array",
-                "uniqueItems": true,
                 "items": {
-                  "type": "string"
-                }
-              },
-              "methods": {
-                "type": [
-                  "string",
-                  "array"
-                ],
-                "items": {
-                  "type": "array"
+                  "$ref": "#/definitions/baseApiEndpoint"
                 }
               }
-            }
+            ]
           }
         },
         "serviceEndpoints": {
@@ -552,6 +567,10 @@ export default [
         "optionsSuccessStatus": {
           "type": "integer",
           "default": 204
+        },
+        "preflightContinue": {
+          "type": "boolean",
+          "default": false
         }
       }
     }
@@ -719,6 +738,35 @@ export default [
   {
     "type": "policy",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/oauth2-introspect.json",
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "string"
+        },
+        "authorization_value": {
+          "type": "string"
+        },
+        "ttl": {
+          "type": "integer",
+          "default": 60,
+          "label": "TTL"
+        },
+        "passThrough": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": [
+        "endpoint",
+        "ttl",
+        "passThrough"
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
       "$id": "http://express-gateway.io/schemas/policies/proxy.json",
       "type": "object",
       "properties": {
@@ -732,6 +780,10 @@ export default [
         "proxyUrl": {
           "type": "string"
         },
+        "stripPath": {
+          "type": "boolean",
+          "default": false
+        },
         "strategy": {
           "type": "string",
           "enum": [
@@ -743,7 +795,8 @@ export default [
       "required": [
         "serviceEndpoint",
         "strategy",
-        "changeOrigin"
+        "changeOrigin",
+        "stripPath"
       ]
     }
   },

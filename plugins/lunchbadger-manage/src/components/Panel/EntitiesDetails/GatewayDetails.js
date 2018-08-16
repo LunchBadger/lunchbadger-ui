@@ -110,18 +110,20 @@ class GatewayDetails extends PureComponent {
           // restoring current serviceEndpoints connections
           (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
             // FIXME: crashes, when new pipelines with proxy are defined
-            const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');
-            const target = document.getElementById(`port_in_${id}`).querySelector('.port__anchor');
-            source.classList.add('discardAutoSave');
-            paper.connect({
-              source,
-              target,
-              parameters: {
-                forceDropped: true,
-              }
-            }, {
-              fireEvent: true,
-            });
+            if (serviceEndpoint) {
+              const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');
+              const target = document.getElementById(`port_in_${id}`).querySelector('.port__anchor');
+              source.classList.add('discardAutoSave');
+              paper.connect({
+                source,
+                target,
+                parameters: {
+                  forceDropped: true,
+                }
+              }, {
+                fireEvent: true,
+              });
+            }
           });
         }
       });
@@ -168,9 +170,9 @@ class GatewayDetails extends PureComponent {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
-    this.changeState({pipelines});
+    const policyIdx = pipelines[pipelineIdx].policies.length - 1;
+    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
     setTimeout(() => {
-      const policyIdx = pipelines[pipelineIdx].policies.length - 1;
       scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
   };
@@ -187,7 +189,7 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines});
+      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
     }
   };
 

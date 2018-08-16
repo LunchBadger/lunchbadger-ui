@@ -71,12 +71,12 @@ export default class GatewayPolicyAction extends PureComponent {
         default: def,
         enum: enum_,
         postfix,
-        label,
+        title,
       } = properties[name];
       parameters[name] = {
         id: uuid.v4(),
         name,
-        label,
+        title,
         type,
         types,
         value: action[name] || def || getDefaultValueByType(type),
@@ -95,7 +95,7 @@ export default class GatewayPolicyAction extends PureComponent {
         default: def,
         enum: enum_,
         postfix,
-        label,
+        title,
       } = (properties[name] || {
         description: '',
         types: customPropertyTypes,
@@ -110,7 +110,7 @@ export default class GatewayPolicyAction extends PureComponent {
       parameters[name] = {
         id: uuid.v4(),
         name,
-        label,
+        title,
         type: determineType(value),
         value,
         description,
@@ -222,7 +222,7 @@ export default class GatewayPolicyAction extends PureComponent {
       type,
       types,
       description,
-      label,
+      title,
       width,
       custom,
       postfix,
@@ -266,7 +266,7 @@ export default class GatewayPolicyAction extends PureComponent {
             type,
             name,
             value,
-            label: custom ? 'Parameter Value' : (label || name),
+            label: custom ? 'Parameter Value' : (title || name),
             width: `calc(100% - ${custom ? customFitWidth : 190}px)`,
             enum: item.enum,
             custom,
@@ -285,7 +285,7 @@ export default class GatewayPolicyAction extends PureComponent {
     if (handledPropertyTypes.includes(type)) {
       const props = {
         key: id,
-        title: label || name,
+        title: title || name,
         name: `${prefix}[${name}]`,
         value,
         onBlur: this.handlePropertyValueChange(id),

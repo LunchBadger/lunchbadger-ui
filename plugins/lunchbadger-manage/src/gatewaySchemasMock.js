@@ -184,6 +184,31 @@ export default [
               }
             }
           }
+        },
+        "conditionAction": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "action": {
+              "type": "object",
+              "default": {
+
+              }
+            },
+            "condition": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
         }
       },
       "type": "object",
@@ -304,6 +329,9 @@ export default [
           "additionalProperties": {
             "type": "object",
             "properties": {
+              "apiEndpoint": {
+                "type": "string"
+              },
               "apiEndpoints": {
                 "type": "array",
                 "items": {
@@ -315,31 +343,27 @@ export default [
                 "items": [
                   {
                     "type": "object",
-                    "properties": {
-                      "action": {
-                        "type": "object"
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "condition": {
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string"
-                          }
+                    "maxProperties": 1,
+                    "additionalProperties": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/definitions/conditionAction"
                         },
-                        "required": [
-                          "name"
-                        ]
-                      }
+                        {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/conditionAction"
+                          }
+                        }
+                      ]
                     }
                   }
                 ]
               }
-            }
+            },
+            "required": [
+              "policies"
+            ]
           }
         }
       }
@@ -741,20 +765,21 @@ export default [
       "$id": "http://express-gateway.io/schemas/policies/oauth2-introspect.json",
       "type": "object",
       "properties": {
+        "passThrough": {
+          "type": "boolean",
+          "default": false
+        },
         "endpoint": {
-          "type": "string"
+          "type": "string",
+          "format": "uri"
         },
         "authorization_value": {
           "type": "string"
         },
         "ttl": {
+          "title": "TTL",
           "type": "integer",
-          "default": 60,
-          "label": "TTL"
-        },
-        "passThrough": {
-          "type": "boolean",
-          "default": false
+          "default": 60
         }
       },
       "required": [
@@ -793,7 +818,6 @@ export default [
         }
       },
       "required": [
-        "serviceEndpoint",
         "strategy",
         "changeOrigin",
         "stripPath"

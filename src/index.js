@@ -14,7 +14,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.169', [
+console.info('LBAPP VERSION 0.170', [
+  [
+    'master Bugfix/835 need to suppress messages for non visible entities #839',
+    'Feature/819 add validations in policies for required parameters #843'
+  ],
   [
     'master Feature/722 admin api calls parallel with project api calls #765',
     'Feature/599 autosave apis #768',
@@ -54,16 +58,6 @@ console.info('LBAPP VERSION 0.169', [
   [
     'master Feature/399 fn types per environment #763',
     'Feature/722 admin api calls parallel with project api calls #765'
-  ],
-  [
-    'Feature/747 Adding node 8',
-    'master Feature/655 service endpoint first path cannot be removed #743',
-    'Feature/719 audit autosave model #748',
-    'Bugfix/733 re-connection fix #752',
-    'Feature/747 add new fn types #753',
-    'Feature/744 add logs to function #756',
-    'Bugfix/754 Connections ports alignment #759',
-    'Bugfix/761 cannot save model #762'
   ]
 ]);
 

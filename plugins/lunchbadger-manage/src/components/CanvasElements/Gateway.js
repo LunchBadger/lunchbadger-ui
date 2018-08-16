@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {arrayMove} from 'react-sortable-hoc';
 import Pipeline from '../../models/Pipeline';
 import Policy from '../../models/Policy';
+import ConditionAction from '../../models/ConditionAction';
 import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import PipelineComponent from './Subelements/Pipeline';
 import GatewayPolicyCondition from '../Panel/EntitiesDetails/Subelements/GatewayPolicyCondition';
@@ -108,7 +109,9 @@ class Gateway extends Component {
 
   // onPrefixChange = event => this.setState({dnsPrefix: event.target.value});
 
-  changeState = obj => this.setState(obj);
+  changeState = (obj, cb) => this.setState(obj, () => {
+    cb && cb();
+  });
 
   addPipeline = () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
@@ -127,12 +130,25 @@ class Gateway extends Component {
     this.changeState({pipelines});
   };
 
+  addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
+    const pipelines = _.cloneDeep(this.state.pipelines);
+    const pair = {
+      condition: {
+        name: 'always',
+      },
+      action: {},
+    };
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+    this.changeState({pipelines});
+  };
+
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].addPolicy(Policy.create({'': []}));
-    this.changeState({pipelines});
+    const defaultPolicy = Object.keys(this.policiesSchemas)[0];
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
+    const policyIdx = pipelines[pipelineIdx].policies.length - 1;
+    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
     setTimeout(() => {
-      const policyIdx = pipelines[pipelineIdx].policies.length - 1;
       const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
       input && input.focus();
     });
@@ -156,7 +172,7 @@ class Gateway extends Component {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines});
+      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
     }
   };
 

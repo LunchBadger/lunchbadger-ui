@@ -9,6 +9,7 @@ import {
   IconMenu,
   EntityPropertyLabel,
   CollapsibleProperties,
+  Input,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType, getDefaultValueByType} from '../../../../utils';
@@ -470,6 +471,10 @@ export default class GatewayPolicyAction extends PureComponent {
             )}
           </div>
         ))}
+        <Input
+          type="hidden"
+          name={`${prefix}[fake]`}
+        />
       </div>
     );
   }

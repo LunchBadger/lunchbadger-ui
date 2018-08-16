@@ -771,7 +771,8 @@ export default [
         },
         "endpoint": {
           "type": "string",
-          "format": "uri"
+          "format": "uri",
+          "example": "http://example.uri"
         },
         "authorization_value": {
           "type": "string"

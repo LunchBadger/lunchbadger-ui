@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import Rnd from 'react-rnd';
-import {IconSVG, entityIcons, Toolbox} from '../';
+import {IconSVG, entityIcons, Toolbox, GAEvent} from '../';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './RnD.scss';
 
@@ -79,6 +79,7 @@ export default class RnD extends PureComponent {
   handleResize = () => this.dispatchResizeEvent();
 
   handleResizeStop = (event, dir, refToElement, delta) => {
+    const {entityId, gaType} = this.props;
     const {width, height} = delta;
     let isNewDelta = false;
     if (['topLeft', 'left', 'bottomLeft'].includes(dir)) {
@@ -93,10 +94,17 @@ export default class RnD extends PureComponent {
       this.dispatchDragEvent();
     }
     const {offsetWidth, offsetHeight} = refToElement;
-    userStorage.setObjectKey('zoomWindow', this.props.entityId, {
+    const prevSize = userStorage.getObjectKey('zoomWindow', entityId);
+    userStorage.setObjectKey('zoomWindow', entityId, {
       width: offsetWidth,
       height: offsetHeight,
     });
+    if (!prevSize || prevSize.width !== offsetWidth) {
+      GAEvent('Zoom Window', 'Resized Width', gaType, offsetWidth);
+    }
+    if (!prevSize || prevSize.height !== offsetHeight) {
+      GAEvent('Zoom Window', 'Resized Height', gaType, offsetHeight);
+    }
   };
 
   handleDragStart = (event, data) => {
@@ -110,6 +118,7 @@ export default class RnD extends PureComponent {
     this.deltaX += x - this.deltaXStart;
     this.deltaY += y - this.deltaYStart;
     this.dispatchDragEvent();
+    GAEvent('Zoom Window', 'Dragged', this.props.gaType);
   };
 
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));

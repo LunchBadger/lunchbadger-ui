@@ -5,6 +5,7 @@ import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
 import userStorage from '../utils/userStorage';
 import {updateEntitiesStatues} from './';
+import {GAEvent} from '../../../lunchbadger-ui/src';
 
 let prevData;
 
@@ -52,8 +53,9 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
   const options = Object.assign({
     showMessage: true, // relict since #774
     saveProject: true,
+    manualSave: false,
   }, opts);
-  const {saveProject} = options;
+  const {saveProject, manualSave} = options;
   const state = getState();
   const {onProjectSave, onBeforeProjectSave} = state.plugins;
   const currData = onProjectSave.reduce((map, item) => ({
@@ -84,6 +86,9 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     }
   }
   dispatch(actions.setLoadingProject(false));
+  if (manualSave) {
+    GAEvent('Header Menu', 'Saved Project');
+  }
 };
 
 export const clearServer = () => async (dispatch, getState) => {
@@ -117,6 +122,7 @@ export const clearServer = () => async (dispatch, getState) => {
     message: 'All data removed from server',
   }));
   dispatch(actions.setLoadingProject(false));
+  GAEvent('Header Menu', 'Cleared Project');
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {
@@ -124,5 +130,6 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 };
 
 export const logout = () => () => {
+  GAEvent('Header Menu', 'Logged Out');
   LoginManager().logout();
 };

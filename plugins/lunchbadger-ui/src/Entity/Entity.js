@@ -4,7 +4,7 @@ import cs from 'classnames';
 import EntityHeader from './EntityHeader/EntityHeader';
 import EntityValidationErrors from './EntityValidationErrors/EntityValidationErrors';
 import EntityActionButtons from './EntityActionButtons/EntityActionButtons';
-import {SmoothCollapse, Toolbox, Form} from '../';
+import {SmoothCollapse, Toolbox, Form, GAEvent} from '../';
 import userStorage from '../../../../plugins/lunchbadger-core/src/utils/userStorage';
 import './Entity.scss';
 
@@ -35,6 +35,7 @@ class Entity extends PureComponent {
   getFormRef = () => this.refs.form;
 
   handleToggleExpand = (event) => {
+    const {onToggleCollapse, gaType} = this.props;
     let expanded = this.state.expanded;
     if (event) {
       expanded = !expanded;
@@ -50,8 +51,9 @@ class Entity extends PureComponent {
     });
     if (event) {
       this.setState({expanded});
-      this.props.onToggleCollapse(!expanded);
+      onToggleCollapse(!expanded);
       event && event.stopPropagation();
+      GAEvent('Canvas', `${expanded ? 'Unc' : 'C'}ollapsed Entity`, gaType);
     }
   }
 

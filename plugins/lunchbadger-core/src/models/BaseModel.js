@@ -101,6 +101,10 @@ export default class BaseModel {
     return this._ready;
   }
 
+  get gaType() {
+    return this.constructor.type;
+  }
+
   connectedPorts(selectedSubelementIds) {
     const ids = Object.keys(
       this.getHighlightedPorts(selectedSubelementIds)

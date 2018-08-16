@@ -6,7 +6,7 @@ import cs from 'classnames';
 import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
-import {RnD} from '../../../../lunchbadger-ui/src';
+import {RnD, GAEvent} from '../../../../lunchbadger-ui/src';
 import './DetailsPanel.scss';
 
 @inject('connectionsStore') @observer
@@ -21,8 +21,10 @@ class DetailsPanel extends Component {
   }
 
   handleTabChange = tab => () => {
-    const {dispatch, zoom} = this.props;
+    const {dispatch, zoom, currentElement} = this.props;
     dispatch(setCurrentZoom({...zoom, tab}));
+    const gaLabel = `${currentElement.gaType}: ${zoom.tab} => ${tab}`;
+    GAEvent('Zoom Window', 'Switched Tab', gaLabel);
   };
 
   handleRemove = () => {
@@ -41,6 +43,7 @@ class DetailsPanel extends Component {
     dispatch(actions.removeEntity(currentElement));
     dispatch(setCurrentZoom(undefined));
     dispatch(clearCurrentElement());
+    GAEvent('Zoom Window', 'Removed Entity', currentElement.gaType);
   };
 
   renderDetails() {
@@ -68,7 +71,7 @@ class DetailsPanel extends Component {
     const {zoom, currentElement} = this.props;
     if (!(zoom && currentElement)) return <div />;
     const {tab} = zoom;
-    const {name, id} = currentElement;
+    const {name, id, gaType} = currentElement;
     const {type} = currentElement.constructor;
     const tabs = currentElement.tabs || [];
     const toolboxConfig = [{
@@ -100,6 +103,7 @@ class DetailsPanel extends Component {
         type={type}
         toolbox={toolboxConfig}
         entityId={id}
+        gaType={gaType}
       >
         {this.renderDetails()}
       </RnD>

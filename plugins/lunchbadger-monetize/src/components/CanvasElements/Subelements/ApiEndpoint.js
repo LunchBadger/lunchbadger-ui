@@ -50,7 +50,8 @@ class SubApiEndpoint extends Component {
   };
 
   renderPorts() {
-    return this.props.entity.ports.map((port) => {
+    const {entity} = this.props;
+    return entity.ports.map((port) => {
       return (
         <Port
           key={`port-${port.portType}-${port.id}`}
@@ -58,6 +59,7 @@ class SubApiEndpoint extends Component {
           middle
           elementId={port.id}
           scope={port.portGroup}
+          gaType={`Api[${entity.gaType}]`}
         />
       );
     });

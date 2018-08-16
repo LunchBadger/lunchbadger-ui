@@ -10,6 +10,7 @@ import {
   EntityActionButtons,
   CopyOnHover,
   scrollToElement,
+  GAEvent,
 } from '../../../../../lunchbadger-ui/src';
 import {
   changePanelStatus,
@@ -111,6 +112,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
+      GAEvent('Zoom Window', 'Saved And Closed', this.props.entity.gaType);
     }
 
     checkPristine = (_model, changed) => {
@@ -142,11 +144,14 @@ export default (ComposedComponent) => {
       }
     }
 
-    closePopup = () => {
+    closePopup = (event) => {
       this.discardChanges();
       const {dispatch} = this.context.store;
       dispatch(setCurrentZoom({...this.props.rect, close: true}));
       setTimeout(() => dispatch(setCurrentZoom(undefined)), 1000);
+      if (event) {
+        GAEvent('Zoom Window', 'Closed', this.props.entity.gaType);
+      }
     }
 
     setOkEnabled = isOkEnabled => this.setState({isOkEnabled});

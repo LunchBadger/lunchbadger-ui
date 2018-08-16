@@ -7,6 +7,7 @@ import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
+import {GAEvent} from '../../../../lunchbadger-ui/src';
 import './Canvas.scss';
 
 const defaultCanvasHeight = 'calc(100vh - 52px)';
@@ -224,6 +225,11 @@ class Canvas extends Component {
       } else if (fulfilled === false) {
         this._disconnect(connection);
       }
+      if (dropped) {
+        const sourceGaType = connection.source.getAttribute('data-ga-type');
+        const targetGaType = connection.target.getAttribute('data-ga-type');
+        GAEvent('Canvas', 'Connected Entities', `${sourceGaType}-${targetGaType}`);
+      }
     });
 
     this.paper.bind('connectionMoved', (info) => {
@@ -240,6 +246,18 @@ class Canvas extends Component {
         // processing this event after this handler is done.
         setTimeout(this.discardReattachment(info));
       }
+      const {
+        originalSourceEndpoint: {element: originalSourceEndpoint},
+        originalTargetEndpoint: {element: originalTargetEndpoint},
+        newSourceEndpoint: {element: newSourceEndpoint},
+        newTargetEndpoint: {element: newTargetEndpoint},
+      } = info;
+      const originalSourceGaType = originalSourceEndpoint.getAttribute('data-ga-type');
+      const originalTargetGaType = originalTargetEndpoint.getAttribute('data-ga-type');
+      const newSourceGaType = newSourceEndpoint.getAttribute('data-ga-type');
+      const newTargetGaType = newTargetEndpoint.getAttribute('data-ga-type');
+      const gaLog = `${originalSourceGaType}-${originalTargetGaType} => ${newSourceGaType}-${newTargetGaType}`;
+      GAEvent('Canvas', 'Reconnected Entities', gaLog);
     });
 
     this.paper.bind('connectionDetached', (info) => {
@@ -253,6 +271,9 @@ class Canvas extends Component {
           fireEvent: false,
         });
       }
+      const sourceGaType = info.connection.source.getAttribute('data-ga-type');
+      const targetGaType = info.connection.target.getAttribute('data-ga-type');
+      GAEvent('Canvas', 'Disconnected Entities', `${sourceGaType}-${targetGaType}`);
     });
 
     this.paper.bind('beforeDrop', () => {

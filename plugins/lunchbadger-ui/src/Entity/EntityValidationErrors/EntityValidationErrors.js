@@ -23,7 +23,6 @@ class EntityValidationErrors extends Component {
     const closestCanvasElement = target.closest('form');
     const id = field.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
     const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${id}`);
-    console.log({field, id, closestInput, closestCanvasElement, target});
     closestInput && scrollToElement(closestInput);
   }
 

@@ -14,10 +14,11 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.170', [
+console.info('LBAPP VERSION 0.171', [
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
-    'Feature/819 add validations in policies for required parameters #843'
+    'Feature/819 add validations in policies for required parameters #843',
+    'Feature/842 adding a policy adds default ca pair with required fields #844'
   ],
   [
     'master Feature/722 admin api calls parallel with project api calls #765',

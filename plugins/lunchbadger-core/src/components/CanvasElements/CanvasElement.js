@@ -147,7 +147,7 @@ export default (ComposedComponent) => {
 
     update = async (props) => {
       const {entity, dispatch} = this.props;
-      let model = props;
+      let model = _.cloneDeep(props);
       const element = this.element.wrappedInstance || this.element;
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);
@@ -155,6 +155,9 @@ export default (ComposedComponent) => {
       const validations = dispatch(entity.validate(model));
       this.setState({validations});
       if (!validations.isValid) return;
+      if (typeof element.postProcessModel === 'function') {
+        element.postProcessModel(model);
+      }
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));
       const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
@@ -279,15 +282,6 @@ export default (ComposedComponent) => {
       }
       const isValid = Object.keys(data).length === 0;
       this.setState({validations: {isValid, data}});
-    }
-
-    handleValidationFieldClick = field => ({target}) => {
-      const closestCanvasElement = target.closest('.Entity');
-      const id = field.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-      const closestInput = closestCanvasElement && closestCanvasElement.querySelector(`#${id}`);
-      if (closestInput) {
-        closestInput.focus();
-      }
     }
 
     handleResetMultiEnvEntity = () => {
@@ -432,7 +426,6 @@ export default (ComposedComponent) => {
               onNameBlur={this.handleFieldUpdate}
               onCancel={this.handleCancel}
               validations={validations}
-              onFieldClick={this.handleValidationFieldClick}
               onValidSubmit={this.update}
               onClick={this.handleClick}
               onDoubleClick={this.handleEdit}

@@ -289,9 +289,8 @@
     },
     "ajv": {
       "version": "4.11.3",
-      "from": "ajv@>=4.7.0 <5.0.0",
-      "resolved": "https://registry.npmjs.org/ajv/-/ajv-4.11.3.tgz",
-      "dev": true
+      "from": "https://registry.npmjs.org/ajv/-/ajv-4.11.3.tgz",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-4.11.3.tgz"
     },
     "ajv-keywords": {
       "version": "1.5.1",
@@ -1762,8 +1761,7 @@
     "co": {
       "version": "4.6.0",
       "from": "co@>=4.6.0 <5.0.0",
-      "resolved": "https://registry.npmjs.org/co/-/co-4.6.0.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
     },
     "coa": {
       "version": "1.0.1",
@@ -3724,8 +3722,7 @@
     "json-stable-stringify": {
       "version": "1.0.1",
       "from": "json-stable-stringify@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz"
     },
     "json-stringify-safe": {
       "version": "5.0.1",
@@ -3752,8 +3749,7 @@
     "jsonify": {
       "version": "0.0.0",
       "from": "jsonify@>=0.0.0 <0.1.0",
-      "resolved": "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz",
-      "dev": true
+      "resolved": "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz"
     },
     "jsonpointer": {
       "version": "4.0.0",

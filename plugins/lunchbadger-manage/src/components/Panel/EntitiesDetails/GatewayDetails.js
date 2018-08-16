@@ -86,8 +86,9 @@ class GatewayDetails extends PureComponent {
     return false;
   };
 
-  processModel = model => {
-    const {entity} = this.props;
+  processModel = model => this.props.entity.processModel(model);
+
+  postProcessModel = model => {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
@@ -125,7 +126,6 @@ class GatewayDetails extends PureComponent {
         }
       });
     });
-    return entity.processModel(model);
   };
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
@@ -324,6 +324,7 @@ class GatewayDetails extends PureComponent {
       prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
       onChangeState={this.changeState}
       horizontal={horizontal}
+      validations={this.props.validations}
     />
   );
 

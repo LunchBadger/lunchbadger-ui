@@ -32,20 +32,7 @@
     }
   }
   &.fake {
-    opacity: 0.5;
     .GatewayPolicyCAPair__box {
-      pointer-events: none;
-      filter: grayscale(1);
-    }
-    &:after {
-      display: block;
-      content: '';
-      position: absolute;
-      top: 65px;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      z-index: 3;
     }
   }
   .EntityProperty {

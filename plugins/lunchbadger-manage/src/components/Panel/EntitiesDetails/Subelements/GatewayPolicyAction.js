@@ -136,7 +136,7 @@ export default class GatewayPolicyAction extends PureComponent {
 
   onPropsUpdate = (props = this.props) => this.setState(this.stateFromProps(props));
 
-  changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState({}, cb));
+  changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState(obj, cb));
 
   handleAddParameter = (name) => {
     const state = _.cloneDeep(this.state);

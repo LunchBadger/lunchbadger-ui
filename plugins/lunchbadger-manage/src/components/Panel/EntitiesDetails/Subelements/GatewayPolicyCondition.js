@@ -39,6 +39,7 @@ export default class GatewayPolicyCondition extends PureComponent {
   };
 
   static defaultProps = {
+    onChange: () => {},
     onChangeState: () => {},
     horizontal: true,
   };
@@ -100,8 +101,9 @@ export default class GatewayPolicyCondition extends PureComponent {
   onPropsUpdate = (props = this.props) => this.setState(this.stateFromStores(props));
 
   changeState = obj => this.setState(obj, () => {
-    this.props.onChange && this.props.onChange(obj);
-    this.props.onChangeState({});
+    const {onChange, onChangeState} = this.props;
+    onChange(obj);
+    onChangeState(obj);
   });
 
   onChange = (kind, propIdx, idx) => obj => {

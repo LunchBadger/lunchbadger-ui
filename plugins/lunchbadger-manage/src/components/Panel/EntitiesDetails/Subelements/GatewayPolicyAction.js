@@ -91,7 +91,11 @@ export default class GatewayPolicyAction extends PureComponent {
         parameters[name].value = def || example || getDefaultValueByType(type);
       }
     });
-    Object.keys(action).forEach((name) => {
+    const notRequired = [
+      ...Object.keys(action),
+      ...Object.keys(properties).filter(name => properties[name].hasOwnProperty('default')),
+    ];
+    notRequired.forEach((name) => {
       if (parameters[name]) return;
       const {
         description,

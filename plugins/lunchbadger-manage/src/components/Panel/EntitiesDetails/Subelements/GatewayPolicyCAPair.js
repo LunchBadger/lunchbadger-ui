@@ -21,7 +21,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
   }
 
   renderCA = () => {
-    const {renderCondition, renderAction} = this.props;
+    const {renderCondition, renderAction, fake} = this.props;
     const {horizontal} = this.state;
     return (
       <div className="GatewayPolicyCAPair__box">
@@ -48,15 +48,24 @@ export default class GatewayPolicyCAPair extends PureComponent {
       nr,
       onRemove,
       prefix,
+      fake,
     } = this.props;
     const {horizontal} = this.state;
+    let title = `C/A Pair ${nr}`;
+    if (fake) {
+      title = 'No Condition / Action Pairs defined - a Condition / Action Pair with default parameters is applied';
+    }
     const bar = (
       <EntityPropertyLabel plain className={`CAPairLabel CAPair${nr}Label`}>
-        C/A Pair {nr}
+        {title}
       </EntityPropertyLabel>
     );
     return (
-      <div className={cs('GatewayPolicyCAPair', `${prefix}CAPair`, {horizontal, vertical: !horizontal})}>
+      <div className={cs('GatewayPolicyCAPair', `${prefix}CAPair`, {
+        horizontal,
+        vertical: !horizontal,
+        fake,
+      })}>
         <CollapsibleProperties
           bar={bar}
           collapsible={this.renderCA()}

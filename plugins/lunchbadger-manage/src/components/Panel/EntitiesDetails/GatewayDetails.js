@@ -171,7 +171,7 @@ class GatewayDetails extends PureComponent {
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
+    this.changeState({pipelines});
     setTimeout(() => {
       scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
@@ -189,7 +189,7 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
+      this.changeState({pipelines});
     }
   };
 
@@ -373,7 +373,26 @@ class GatewayDetails extends PureComponent {
           inPanel
           handlerOffsetTop={10}
         />
+        {policy.conditionAction.length === 0 && this.renderDefaultCAPair(pipelineIdx, policyIdx, policy.name)}
       </div>
+    );
+  };
+
+  renderDefaultCAPair = (pipelineIdx, policyIdx, policyName) => {
+    const pair = ConditionAction.create({
+      condition: {
+        name: 'always',
+      },
+      action: {},
+    });
+    const key = `fake-${pipelineIdx}-${policyIdx}-${policyName}`;
+    return (
+      <GatewayPolicyCAPair
+        key={key}
+        renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, key)}
+        renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, key, policyName)}
+        fake
+      />
     );
   };
 

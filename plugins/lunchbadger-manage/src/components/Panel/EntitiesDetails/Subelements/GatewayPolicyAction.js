@@ -81,12 +81,15 @@ export default class GatewayPolicyAction extends PureComponent {
         title,
         type,
         types,
-        value: action[name] || def || example || getDefaultValueByType(type),
+        value: action[name],
         description,
         enum: enum_ || [],
         postfix,
         schemas: properties[name],
       };
+      if (action[name] === undefined) {
+        parameters[name].value = def || example || getDefaultValueByType(type);
+      }
     });
     Object.keys(action).forEach((name) => {
       if (parameters[name]) return;

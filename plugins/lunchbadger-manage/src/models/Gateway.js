@@ -466,9 +466,11 @@ export default class Gateway extends BaseModel {
           id,
           [name]: [],
         };
-        (pairs || []).forEach((pair) => {
-          policy[name].push(clearEmptyObjectPlaceholders(pair));
-        });
+        if (Array.isArray(pairs)) {
+          (pairs || []).forEach((pair) => {
+            policy[name].push(clearEmptyObjectPlaceholders(pair));
+          });
+        }
         pipeline.policies.push(policy);
       });
       data.pipelines.push(pipeline);

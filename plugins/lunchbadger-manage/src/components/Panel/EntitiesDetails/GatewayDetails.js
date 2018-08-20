@@ -86,8 +86,9 @@ class GatewayDetails extends PureComponent {
     return false;
   };
 
-  processModel = model => {
-    const {entity} = this.props;
+  processModel = model => this.props.entity.processModel(model);
+
+  postProcessModel = model => {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
@@ -109,23 +110,24 @@ class GatewayDetails extends PureComponent {
           // restoring current serviceEndpoints connections
           (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
             // FIXME: crashes, when new pipelines with proxy are defined
-            const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');
-            const target = document.getElementById(`port_in_${id}`).querySelector('.port__anchor');
-            source.classList.add('discardAutoSave');
-            paper.connect({
-              source,
-              target,
-              parameters: {
-                forceDropped: true,
-              }
-            }, {
-              fireEvent: true,
-            });
+            if (serviceEndpoint) {
+              const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');
+              const target = document.getElementById(`port_in_${id}`).querySelector('.port__anchor');
+              source.classList.add('discardAutoSave');
+              paper.connect({
+                source,
+                target,
+                parameters: {
+                  forceDropped: true,
+                }
+              }, {
+                fireEvent: true,
+              });
+            }
           });
         }
       });
     });
-    return entity.processModel(model);
   };
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
@@ -168,9 +170,9 @@ class GatewayDetails extends PureComponent {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
-    this.changeState({pipelines});
+    const policyIdx = pipelines[pipelineIdx].policies.length - 1;
+    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
     setTimeout(() => {
-      const policyIdx = pipelines[pipelineIdx].policies.length - 1;
       scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
   };
@@ -187,7 +189,7 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines});
+      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
     }
   };
 
@@ -324,6 +326,7 @@ class GatewayDetails extends PureComponent {
       prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
       onChangeState={this.changeState}
       horizontal={horizontal}
+      validations={this.props.validations}
     />
   );
 

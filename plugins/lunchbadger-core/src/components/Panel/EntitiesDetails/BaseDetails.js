@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {findDOMNode} from 'react-dom';
 import cs from 'classnames';
+import _ from 'lodash';
 import {
   Form,
   EntityProperty,
   EntityValidationErrors,
   EntityActionButtons,
   CopyOnHover,
+  scrollToElement,
   GAEvent,
 } from '../../../../../lunchbadger-ui/src';
 import {
@@ -90,17 +93,20 @@ export default (ComposedComponent) => {
       if (typeof element.tabProcessed === 'function') {
         if (element.tabProcessed(props)) return;
       }
-      let model = props;
+      let model = _.cloneDeep(props);
       if (typeof element.processModel === 'function') {
         model = element.processModel(model);
       }
       const validations = dispatch(entity.validate(model));
       this.setState({validations}, () => {
         if (!validations.isValid) {
-          document.querySelector('.DetailsPanel').scrollTop = 0;
+          scrollToElement(findDOMNode(this.validationErrorsRef));
         }
       });
       if (!validations.isValid) return;
+      if (typeof element.postProcessModel === 'function') {
+        element.postProcessModel(props);
+      }
       dispatch(setCurrentEditElement(null));
       this.closePopup();
       dispatch(setCurrentElement(entity));
@@ -186,6 +192,7 @@ export default (ComposedComponent) => {
             <div className="BaseDetails__content">
               {!validations.isValid && (
                 <EntityValidationErrors
+                  ref={r => this.validationErrorsRef = r}
                   validations={validations}
                   basic
                 />

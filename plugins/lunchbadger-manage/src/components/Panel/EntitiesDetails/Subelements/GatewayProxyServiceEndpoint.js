@@ -22,14 +22,18 @@ class GatewayProxyServiceEndpoint extends PureComponent {
       description,
       options,
     } = this.props;
+    const availableOptions = [
+      {label: '[None]', value: undefined},
+      ...options,
+    ];
     return (
       <EntityProperty
         title="ServiceEndpoint"
         name={name}
-        value={value || options[0].value}
+        value={value || availableOptions[0].value}
         onBlur={undefined}
         placeholder=" "
-        options={options}
+        options={availableOptions}
         description={description}
         onChange={this.handleChange}
         width="calc(100% - 50px)"

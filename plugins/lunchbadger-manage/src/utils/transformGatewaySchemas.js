@@ -20,10 +20,10 @@ export default schema => {
     const {properties} = data[item.type][item.name];
     Object.keys(properties || {}).forEach((key) => {
       if (item.name === 'proxy' && key === 'serviceEndpoint') {
-        properties[key].type = 'serviceEndpoint';
+        properties[key].lbType = 'serviceEndpoint';
       }
       if (item.name === 'expression' && key === 'jscode') {
-        properties[key].type = 'jscode';
+        properties[key].lbType = 'jscode';
       }
       if (properties[key].$ref) {
         if (properties[key].$ref === 'jwt.json') {

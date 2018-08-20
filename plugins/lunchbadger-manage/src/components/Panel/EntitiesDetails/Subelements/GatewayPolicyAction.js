@@ -9,6 +9,7 @@ import {
   IconMenu,
   EntityPropertyLabel,
   CollapsibleProperties,
+  Input,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType, getDefaultValueByType} from '../../../../utils';
@@ -71,15 +72,16 @@ export default class GatewayPolicyAction extends PureComponent {
         default: def,
         enum: enum_,
         postfix,
-        label,
+        title,
+        example,
       } = properties[name];
       parameters[name] = {
         id: uuid.v4(),
         name,
-        label,
+        title,
         type,
         types,
-        value: action[name] || def || getDefaultValueByType(type),
+        value: action[name] || def || example || getDefaultValueByType(type),
         description,
         enum: enum_ || [],
         postfix,
@@ -95,7 +97,7 @@ export default class GatewayPolicyAction extends PureComponent {
         default: def,
         enum: enum_,
         postfix,
-        label,
+        title,
       } = (properties[name] || {
         description: '',
         types: customPropertyTypes,
@@ -110,7 +112,7 @@ export default class GatewayPolicyAction extends PureComponent {
       parameters[name] = {
         id: uuid.v4(),
         name,
-        label,
+        title,
         type: determineType(value),
         value,
         description,
@@ -149,13 +151,21 @@ export default class GatewayPolicyAction extends PureComponent {
       });
     } else {
       const schemas = this.props.schemas.properties[name];
-      const {description, type, types, default: def, enum: enum_, postfix} = schemas;
+      const {
+        description,
+        type,
+        types,
+        default: def,
+        enum: enum_,
+        postfix,
+        example,
+      } = schemas;
       state.parameters.push({
         id,
         name,
         type,
         types,
-        value: def || getDefaultValueByType(type),
+        value: def || example || getDefaultValueByType(type),
         custom,
         enum: enum_ || [],
         description,
@@ -215,8 +225,19 @@ export default class GatewayPolicyAction extends PureComponent {
   handleNameChange = ({target: {value: name}}) => this.changeState(this.getState(name, {}));
 
   renderProperty = (item) => {
-    const {id, name, value, type, types, description, label, width, custom, postfix} = item;
-    const {prefix} = this.props;
+    const {
+      id,
+      name,
+      value,
+      type,
+      types,
+      description,
+      title,
+      width,
+      custom,
+      postfix,
+    } = item;
+    const {prefix, validations} = this.props;
     if (types) {
       let customFitWidth = 220;
       if (['number', 'integer', 'array'].includes(type)) {
@@ -255,7 +276,7 @@ export default class GatewayPolicyAction extends PureComponent {
             type,
             name,
             value,
-            label: custom ? 'Parameter Value' : (label || name),
+            label: custom ? 'Parameter Value' : (title || name),
             width: `calc(100% - ${custom ? customFitWidth : 190}px)`,
             enum: item.enum,
             custom,
@@ -263,10 +284,18 @@ export default class GatewayPolicyAction extends PureComponent {
         </div>
       );
     }
+    if (item.schemas && item.schemas.lbType === 'serviceEndpoint') return (
+      <GatewayProxyServiceEndpoint
+        name={`${prefix}[${name}]`}
+        value={value}
+        description={description}
+        onChange={this.handlePropertyValueChange(id)}
+      />
+    );
     if (handledPropertyTypes.includes(type)) {
       const props = {
         key: id,
-        title: label || name,
+        title: title || name,
         name: `${prefix}[${name}]`,
         value,
         onBlur: this.handlePropertyValueChange(id),
@@ -274,6 +303,7 @@ export default class GatewayPolicyAction extends PureComponent {
         description,
         placeholder: ' ',
         type,
+        invalid: validations.data[`${prefix}[${name}]`],
       };
       if (type === 'fake') {
         Object.assign(props, {
@@ -295,7 +325,7 @@ export default class GatewayPolicyAction extends PureComponent {
           postfix,
         });
       }
-      if ((type === 'string' && custom) || type === 'jscode') {
+      if ((type === 'string' && custom) || (item.schemas && item.schemas.lbType === 'jscode')) {
         Object.assign(props, {
           codeEditor: true,
           width: width || 'calc(100% - 50px)',
@@ -328,7 +358,7 @@ export default class GatewayPolicyAction extends PureComponent {
           tmpPrefix: this.tmpPrefix,
         });
         if (item.schemas) {
-          const {prefix, horizontal} = this.props;
+          const {prefix, horizontal, validations} = this.props;
           return (
             <div className="GatewayPolicyAction__object">
               <EntityPropertyLabel>{name}</EntityPropertyLabel>
@@ -338,6 +368,7 @@ export default class GatewayPolicyAction extends PureComponent {
                 prefix={`${prefix}[${name}]`}
                 onChangeState={this.changeState}
                 horizontal={horizontal}
+                validations={validations}
               />
             </div>
           );
@@ -345,14 +376,6 @@ export default class GatewayPolicyAction extends PureComponent {
       }
       return <EntityProperty {...props} />;
     }
-    if (type === 'serviceEndpoint') return (
-      <GatewayProxyServiceEndpoint
-        name={`${prefix}[${name}]`}
-        value={value}
-        description={description}
-        onChange={this.handlePropertyValueChange(id)}
-      />
-    );
     return null;
   };
 
@@ -432,6 +455,7 @@ export default class GatewayPolicyAction extends PureComponent {
     }
     return (
       <div className="GatewayPolicyAction">
+        <div id={prefix} />
         {addButton}
         {reorderedParameters.map((item, idx) => (
           <div key={item.id} className="GatewayPolicyAction__parameter">
@@ -447,6 +471,10 @@ export default class GatewayPolicyAction extends PureComponent {
             )}
           </div>
         ))}
+        <Input
+          type="hidden"
+          name={`${prefix}[fake]`}
+        />
       </div>
     );
   }

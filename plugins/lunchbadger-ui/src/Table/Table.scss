@@ -3,6 +3,11 @@
   tr {
     border-bottom: 1px solid rgb(224, 224, 224) !important;
   }
+  &Header {
+    &Column {
+      font-weight: 600 !important;
+    }
+  }
   &Row {
     &Column {
       &.string {

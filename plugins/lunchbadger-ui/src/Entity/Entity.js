@@ -74,7 +74,6 @@ class Entity extends PureComponent {
       name,
       onNameChange,
       validations,
-      onFieldClick,
       onCancel,
       onValidSubmit,
       onClick,
@@ -125,7 +124,6 @@ class Entity extends PureComponent {
                 <div className="Entity__extra" ref="data">
                   <EntityValidationErrors
                     validations={validations}
-                    onFieldClick={onFieldClick}
                   />
                   {children}
                   <SmoothCollapse expanded={editable} heightTransition="800ms ease">
@@ -153,7 +151,6 @@ Entity.propTypes = {
   onNameChange: PropTypes.func.isRequired,
   onNameBlur: PropTypes.func.isRequired,
   validations: PropTypes.object.isRequired,
-  onFieldClick: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onValidSubmit: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,

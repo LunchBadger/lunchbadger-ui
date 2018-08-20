@@ -82,8 +82,9 @@ class Gateway extends Component {
     this.onPropsUpdate(this.props, callback);
   };
 
-  processModel = model => {
-    const {entity} = this.props;
+  processModel = model => this.props.entity.processModel(model);
+
+  postProcessModel = model => {
     const {paper: paperRef} = this.context;
     const paper = paperRef.getInstance();
     (model.pipelines || []).forEach(({id, policies}) => {
@@ -95,7 +96,6 @@ class Gateway extends Component {
         });
       }
     });
-    return entity.processModel(model);
   };
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
@@ -209,6 +209,7 @@ class Gateway extends Component {
                     action={pair.action}
                     schemas={this.policiesSchemas[policy.name]}
                     prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
+                    validations={this.props.validations}
                   />
                 </div>
               ))}

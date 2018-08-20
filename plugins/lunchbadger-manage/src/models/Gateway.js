@@ -2,9 +2,10 @@ import _ from 'lodash';
 import slug from 'slug';
 import {update, remove} from '../reduxActions/gateways';
 import Pipeline from './Pipeline';
+import Policy from './Policy';
 import HttpsTlsDomain from './HttpsTlsDomain';
 import ExpressGatewayAdminService from '../services/ExpressGatewayAdminService';
-import {clearEmptyObjectPlaceholders} from '../utils';
+import {clearEmptyObjectPlaceholders, schemaValidator} from '../utils';
 import Config from '../../../../src/config';
 
 const {
@@ -385,7 +386,10 @@ export default class Gateway extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.gateways;
+      const {
+        gateways: entities,
+        gatewaySchemas,
+      } = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateName = Object.keys(entities)
@@ -398,6 +402,24 @@ export default class Gateway extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
+      (model.pipelines || []).forEach((pipeline, pipelineIdx) => {
+        (pipeline.policies || []).forEach((policy, policyIdx) => {
+          const policyObj = Policy.create(policy);
+          const {name: policyName} = policyObj;
+          const schema = gatewaySchemas.policy[policyName];
+          const policyData = policyObj.toApiJSON();
+          policyData[policyName].forEach(({action}, pairIdx) => {
+            const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`;
+            const {
+              isValid,
+              processPolicyActionValidations,
+            } = schemaValidator.register(schema)(action);
+            if (!isValid) {
+              processPolicyActionValidations(validations, prefix);
+            }
+          });
+        });
+      });
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

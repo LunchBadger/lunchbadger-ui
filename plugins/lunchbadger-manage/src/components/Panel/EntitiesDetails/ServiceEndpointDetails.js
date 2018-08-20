@@ -39,10 +39,7 @@ class ServiceEndpointDetails extends PureComponent {
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
-  processModel = model => {
-    const {entity} = this.props;
-    return entity.processModel(model);
-  };
+  processModel = model => this.props.entity.processModel(model);
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 

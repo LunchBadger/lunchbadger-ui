@@ -102,6 +102,11 @@ class ModelDetails extends PureComponent {
   }
 
   processModel = model => {
+    delete model.dataSource;
+    return this.props.entity.processModel(model, this.state.properties);
+  };
+
+  postProcessModel = model => {
     const {entity} = this.props;
     if (model.hasOwnProperty('dataSource')) {
       const dsId = model.dataSource === 'none' ? null : model.dataSource;
@@ -131,7 +136,6 @@ class ModelDetails extends PureComponent {
       }
       delete model.dataSource;
     }
-    return entity.processModel(model, this.state.properties);
   }
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());

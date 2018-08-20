@@ -437,10 +437,18 @@ export default class GatewayPolicyCondition extends PureComponent {
         </div>
       );
     }
+    const defaultValue = !nested && name === 'always';
+    const titleRemark = defaultValue ? '(default condition is used)' : undefined;
     return (
-      <div className={cs('GatewayPolicyCondition', {nested: !!nested, [nested]: true, nestedSingle})}>
+      <div className={cs('GatewayPolicyCondition', {
+        nested: !!nested,
+        [nested]: true,
+        nestedSingle,
+        defaultValue,
+      })}>
         <EntityProperty
           title="Name"
+          titleRemark={titleRemark}
           name={`${prefix}[name]`}
           value={name}
           options={otherOptions}

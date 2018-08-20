@@ -30,6 +30,7 @@
       color: #4190CE;
     }
     &.defaultValue {
+      // opacity: 0.5;
       & > .EntityProperty > .EntityPropertyLabel {
         color: #999;
       }

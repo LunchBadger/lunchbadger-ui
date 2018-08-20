@@ -9,6 +9,7 @@ import {
   IconMenu,
   EntityPropertyLabel,
   CollapsibleProperties,
+  Input,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType, getDefaultValueByType} from '../../../../utils';
@@ -72,6 +73,7 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_,
         postfix,
         title,
+        example,
       } = properties[name];
       parameters[name] = {
         id: uuid.v4(),
@@ -79,7 +81,7 @@ export default class GatewayPolicyAction extends PureComponent {
         title,
         type,
         types,
-        value: action[name] || def || getDefaultValueByType(type),
+        value: action[name] || def || example || getDefaultValueByType(type),
         description,
         enum: enum_ || [],
         postfix,
@@ -149,13 +151,21 @@ export default class GatewayPolicyAction extends PureComponent {
       });
     } else {
       const schemas = this.props.schemas.properties[name];
-      const {description, type, types, default: def, enum: enum_, postfix} = schemas;
+      const {
+        description,
+        type,
+        types,
+        default: def,
+        enum: enum_,
+        postfix,
+        example,
+      } = schemas;
       state.parameters.push({
         id,
         name,
         type,
         types,
-        value: def || getDefaultValueByType(type),
+        value: def || example || getDefaultValueByType(type),
         custom,
         enum: enum_ || [],
         description,
@@ -461,6 +471,10 @@ export default class GatewayPolicyAction extends PureComponent {
             )}
           </div>
         ))}
+        <Input
+          type="hidden"
+          name={`${prefix}[fake]`}
+        />
       </div>
     );
   }

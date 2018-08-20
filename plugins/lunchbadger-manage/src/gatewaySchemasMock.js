@@ -641,10 +641,8 @@ export default [
       "type": "object",
       "properties": {
         "secretOrPublicKey": {
-          "type": "string"
-        },
-        "secretOrPublicKeyFile": {
-          "type": "string"
+          "type": "string",
+          "example": "ENTER YOUR SECRET OR PUBLIC KEY HERE"
         },
         "jwtExtractor": {
           "type": "string",
@@ -672,19 +670,8 @@ export default [
       },
       "required": [
         "jwtExtractor",
-        "checkCredentialExistence"
-      ],
-      "oneOf": [
-        {
-          "required": [
-            "secretOrPublicKey"
-          ]
-        },
-        {
-          "required": [
-            "secretOrPublicKeyFile"
-          ]
-        }
+        "checkCredentialExistence",
+        "secretOrPublicKey"
       ]
     }
   },
@@ -771,7 +758,8 @@ export default [
         },
         "endpoint": {
           "type": "string",
-          "format": "uri"
+          "format": "uri",
+          "example": "http://example.uri"
         },
         "authorization_value": {
           "type": "string"

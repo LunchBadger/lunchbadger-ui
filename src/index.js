@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.173', [
+console.info('LBAPP VERSION 0.174', [
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
     'Feature/819 add validations in policies for required parameters #843',

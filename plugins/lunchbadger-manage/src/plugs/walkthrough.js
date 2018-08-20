@@ -455,7 +455,7 @@ Add the following path: <pre>/myfunction*</pre>
             </CopyOnHover>
             <br />
             <strong>
-              {'{"year":${(new Date()).getFullYear()},"id":1}'}
+              {`{"year":${(new Date()).getFullYear()},"id":1}`}
             </strong>
           </code>
         </div>

@@ -241,4 +241,10 @@
       text-indent: 20px;
     }
   }
+  &__titleRemark {
+    font-weight: 300;
+    display: inline-block;
+    margin-left: 5px;
+    text-transform: none;
+  }
 }

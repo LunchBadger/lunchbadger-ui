@@ -25,6 +25,14 @@
   &__parameter {
     position: relative;
     margin-top: 10px;
+    & > .EntityProperty > .EntityPropertyLabel {
+      color: #4190CE;
+    }
+    &.defaultValue {
+      & > .EntityProperty > .EntityPropertyLabel {
+        color: #999;
+      }
+    }
     & > .GatewayPolicyAction__button {
       display: none;
     }

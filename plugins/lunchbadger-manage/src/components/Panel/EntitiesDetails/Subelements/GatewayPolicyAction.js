@@ -45,12 +45,14 @@ export default class GatewayPolicyAction extends PureComponent {
     onChangeState: PropTypes.func,
     horizontal: PropTypes.bool,
     collapsibleTitle: PropTypes.string,
+    validations: PropTypes.object,
   };
 
   static defaultProps = {
     onChangeState: () => {},
     horizontal: true,
     collapsibleTitle: '',
+    validations: {data: {}},
   };
 
   constructor(props) {
@@ -378,7 +380,7 @@ export default class GatewayPolicyAction extends PureComponent {
           tmpPrefix: this.tmpPrefix,
         });
         if (item.schemas) {
-          const {prefix, horizontal, validations} = this.props;
+          const {prefix, horizontal, validations, onChangeState} = this.props;
           return (
             <div className="GatewayPolicyAction__object">
               <EntityPropertyLabel>{name}</EntityPropertyLabel>
@@ -386,7 +388,7 @@ export default class GatewayPolicyAction extends PureComponent {
                 action={value}
                 schemas={item.schemas}
                 prefix={`${prefix}[${name}]`}
-                onChangeState={this.changeState}
+                onChangeState={onChangeState}
                 horizontal={horizontal}
                 validations={validations}
               />

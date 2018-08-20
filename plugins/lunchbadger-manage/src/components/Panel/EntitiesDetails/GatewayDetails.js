@@ -138,6 +138,27 @@ class GatewayDetails extends PureComponent {
     cb && cb();
   });
 
+  handleConditionStateChange = (pipelineIdx, policyIdx, pairIdx) => ({name, properties}, cb) => {
+    let state = {};
+    if (typeof pairIdx === 'string') {
+      const condition = {
+        name,
+        ...properties.reduce((map, p) => ({...map, [p.name]: p.value}), {}),
+      };
+      this.addCAPair(pipelineIdx, policyIdx)({condition});
+    }
+    this.changeState(state, cb);
+  };
+
+  handleActionStateChange = (pipelineIdx, policyIdx, pairIdx, policyName) => ({parameters}, cb) => {
+    let state = {};
+    if (typeof pairIdx === 'string') {
+      const action = parameters.reduce((map, item) => ({...map, [item.name]: item.value}), {});
+      this.addCAPair(pipelineIdx, policyIdx, policyName)({action});
+    }
+    this.changeState(state, cb);
+  };
+
   updateGatewayPipelines = pipelines => window.dispatchEvent(
     new CustomEvent('updateGatewayPipelines', {detail: {
       gatewayId: this.props.entity.id,
@@ -171,7 +192,7 @@ class GatewayDetails extends PureComponent {
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-    this.changeState({pipelines});
+    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
     setTimeout(() => {
       scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
     });
@@ -189,18 +210,18 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines});
+      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
     }
   };
 
-  addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
-    const pipelines = _.cloneDeep(this.state.pipelines);
-    const pair = {
+  addCAPair = (pipelineIdx, policyIdx, policyName) => (opts) => {
+    const pair = Object.assign({
       condition: {
         name: 'always',
       },
       action: {},
-    };
+    }, opts);
+    const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
     setTimeout(() => {
@@ -312,7 +333,7 @@ class GatewayDetails extends PureComponent {
       condition={pair.condition}
       schemas={this.conditionSchemas}
       prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][condition]`}
-      onChangeState={this.changeState}
+      onChangeState={this.handleConditionStateChange(pipelineIdx, policyIdx, pairIdx)}
       root
       horizontal={horizontal}
     />
@@ -324,7 +345,7 @@ class GatewayDetails extends PureComponent {
       action={pair.action}
       schemas={this.policiesSchemas[policyName]}
       prefix={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}][action]`}
-      onChangeState={this.changeState}
+      onChangeState={this.handleActionStateChange(pipelineIdx, policyIdx, pairIdx, policyName)}
       horizontal={horizontal}
       validations={this.props.validations}
     />

@@ -26,6 +26,17 @@ const customPropertyTypes = [
 
 const handledPropertyTypes = customPropertyTypes.concat(['jscode', 'fake']);
 
+const propertyDefaultValue = (property) => {
+  const {schemas = {}, value} = property;
+  if (schemas.hasOwnProperty('default') && value === schemas.default) {
+    return 'default';
+  }
+  if (schemas.hasOwnProperty('example') && value === schemas.example) {
+    return 'example';
+  }
+  return false;
+};
+
 export default class GatewayPolicyAction extends PureComponent {
   static propTypes = {
     action: PropTypes.object,
@@ -34,12 +45,14 @@ export default class GatewayPolicyAction extends PureComponent {
     onChangeState: PropTypes.func,
     horizontal: PropTypes.bool,
     collapsibleTitle: PropTypes.string,
+    validations: PropTypes.object,
   };
 
   static defaultProps = {
     onChangeState: () => {},
     horizontal: true,
     collapsibleTitle: '',
+    validations: {data: {}},
   };
 
   constructor(props) {
@@ -136,7 +149,7 @@ export default class GatewayPolicyAction extends PureComponent {
 
   onPropsUpdate = (props = this.props) => this.setState(this.stateFromProps(props));
 
-  changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState({}, cb));
+  changeState = (obj, cb) => this.setState(obj, () => this.props.onChangeState(obj, cb));
 
   handleAddParameter = (name) => {
     const state = _.cloneDeep(this.state);
@@ -296,9 +309,15 @@ export default class GatewayPolicyAction extends PureComponent {
       />
     );
     if (handledPropertyTypes.includes(type)) {
+      let titleRemark;
+      const propDefValue = propertyDefaultValue(item);
+      if (propDefValue) {
+        titleRemark = `(${propDefValue} value is used)`;
+      }
       const props = {
         key: id,
         title: title || name,
+        titleRemark,
         name: `${prefix}[${name}]`,
         value,
         onBlur: this.handlePropertyValueChange(id),
@@ -361,7 +380,7 @@ export default class GatewayPolicyAction extends PureComponent {
           tmpPrefix: this.tmpPrefix,
         });
         if (item.schemas) {
-          const {prefix, horizontal, validations} = this.props;
+          const {prefix, horizontal, validations, onChangeState} = this.props;
           return (
             <div className="GatewayPolicyAction__object">
               <EntityPropertyLabel>{name}</EntityPropertyLabel>
@@ -369,7 +388,7 @@ export default class GatewayPolicyAction extends PureComponent {
                 action={value}
                 schemas={item.schemas}
                 prefix={`${prefix}[${name}]`}
-                onChangeState={this.changeState}
+                onChangeState={onChangeState}
                 horizontal={horizontal}
                 validations={validations}
               />
@@ -423,7 +442,7 @@ export default class GatewayPolicyAction extends PureComponent {
       const collapsible = (
         <div className="GatewayPolicyAction">
           {reorderedParameters.map((item, idx) => (
-            <div key={item.id} className="GatewayPolicyAction__parameter">
+            <div key={item.id} className={cs('GatewayPolicyAction__parameter', {defaultValue: propertyDefaultValue(item)})}>
               {this.renderProperty(item)}
               {this.isDeletePropertyButton(item) && (
                 <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>
@@ -461,7 +480,7 @@ export default class GatewayPolicyAction extends PureComponent {
         <div id={prefix} />
         {addButton}
         {reorderedParameters.map((item, idx) => (
-          <div key={item.id} className="GatewayPolicyAction__parameter">
+          <div key={item.id} className={cs('GatewayPolicyAction__parameter', {defaultValue: propertyDefaultValue(item)})}>
             {this.renderProperty(item)}
             {this.isDeletePropertyButton(item) && (
               <div className={cs('GatewayPolicyAction__button', {object: item.type === 'object'})}>

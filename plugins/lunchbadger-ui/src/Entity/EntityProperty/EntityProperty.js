@@ -34,6 +34,7 @@ class EntityProperty extends Component {
       PropTypes.object,
     ]),
     title: PropTypes.string,
+    titleRemark: PropTypes.string,
     placeholder: PropTypes.string,
     invalid: PropTypes.string,
     fake: PropTypes.bool,
@@ -331,6 +332,7 @@ class EntityProperty extends Component {
       modelName,
       value,
       title,
+      titleRemark,
       placeholder,
       fake,
       invalid,
@@ -425,6 +427,11 @@ class EntityProperty extends Component {
         {title !== '' && (
           <EntityPropertyLabel description={tooltipVisible ? description : ''}>
             {title}
+            {!!titleRemark && (
+              <span className="EntityProperty__titleRemark">
+                {titleRemark}
+              </span>
+            )}
           </EntityPropertyLabel>
         )}
         <div className={cs('EntityProperty__field', plainName, getPlainText(classes))}>

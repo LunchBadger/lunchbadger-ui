@@ -25,6 +25,16 @@
   &__parameter {
     position: relative;
     margin-top: 10px;
+    & > .EntityProperty > .EntityPropertyLabel,
+    & > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel {
+      color: #4190CE;
+    }
+    &.defaultValue {
+      // opacity: 0.5;
+      & > .EntityProperty > .EntityPropertyLabel {
+        color: #999;
+      }
+    }
     & > .GatewayPolicyAction__button {
       display: none;
     }
@@ -36,7 +46,7 @@
     padding-top: 3px;
     & > .EntityPropertyLabel {
       color: #999 !important;
-      font-weight: 300;
+      font-weight: 600;
       font-size: 12px;
       margin-left: 0;
     }

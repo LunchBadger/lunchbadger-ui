@@ -36,6 +36,9 @@
     .GatewayPolicyCAPair__box {
       filter: grayscale(1);
     }
+    .GatewayPolicyAction__parameter.implicite {
+      opacity: 1;
+    }
   }
   .EntityProperty {
     &.types,

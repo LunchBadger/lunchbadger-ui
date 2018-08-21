@@ -447,7 +447,7 @@ Add the following path: <pre>/myfunction*</pre>
               $ curl {api.getReplacement('ROOT_URL')}/myfunction
             </CopyOnHover>
             <br />
-            <strong>LunchBadger Node.JS 8</strong>
+            <strong>{'LunchBadger Node.js 8 function'}</strong>
             <br />
             <br />
             <CopyOnHover copy={`curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d "{\\"year\\":${(new Date()).getFullYear()}}" --header "Content-Type: application/json"`}>

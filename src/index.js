@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.180', [
+console.info('LBAPP VERSION 0.181', [
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
     'Feature/819 add validations in policies for required parameters #843',
@@ -25,7 +25,8 @@ console.info('LBAPP VERSION 0.180', [
     'Bugfix/854 walkthrough: copy clipboard for api endpoints needs fixes #858',
     'Feature/846 always render all ca properties #859',
     'Feature/841 ApiEndpoints only connected with one pipeline #860',
-    'Feature/847 remove auto adding ca pair #862'
+    'Feature/847 remove auto adding ca pair #862',
+    'Feature/863 Do not display error on function delete failure #864'
   ],
   [
     'master Feature/722 admin api calls parallel with project api calls #765',

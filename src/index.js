@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.177', [
+console.info('LBAPP VERSION 0.178', [
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
     'Feature/819 add validations in policies for required parameters #843',
@@ -23,7 +23,8 @@ console.info('LBAPP VERSION 0.177', [
     'Feature/845 visualize implicite ca pair #851',
     'Bugfix/834 Sometimes proxy policy is missing #857',
     'Bugfix/854 walkthrough: copy clipboard for api endpoints needs fixes #858',
-    'Feature/846 always render all ca properties #859'
+    'Feature/846 always render all ca properties #859',
+    'Feature/841 ApiEndpoints only connected with one pipeline #860'
   ],
   [
     'master Feature/722 admin api calls parallel with project api calls #765',

@@ -15,7 +15,7 @@ import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
 console.info('LBAPP VERSION 0.94', [
-  '850 856',
+  '850 851',
   '850',
   '839',
   '833',

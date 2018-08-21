@@ -1,14 +1,14 @@
 import {reattach} from '../reduxActions/connections';
 
 const Strategy = LunchBadgerCore.models.Strategy;
-const {storeUtils} = LunchBadgerCore.utils;
+const {storeUtils: {formatId, isInQuadrant, isInPublicQuadrant, findGatewayByPipelineId}} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 const checkMovedConnection = info => (_, getState) => {
   const state = getState();
   const {newSourceId, newTargetId} = info;
-  const isPrivate = storeUtils.isInQuadrant(state, 1, newSourceId);
-  const isGatewayIn = storeUtils.findGatewayByPipelineId(state, newTargetId);
+  const isPrivate = isInQuadrant(state, 1, newSourceId);
+  const isGatewayIn = findGatewayByPipelineId(state, newTargetId);
   if (isPrivate && isGatewayIn) {
     // const previousTargetConnections = Connections.search({toId: storeUtils.formatId(newTargetId)});
     // const previousSourceConnections = Connections.search({fromId: storeUtils.formatId(newSourceId)});
@@ -22,10 +22,11 @@ const checkMovedConnection = info => (_, getState) => {
     // return false;
     return !Connections.isFromTo(newSourceId, newTargetId);
   }
-  const isGatewayOut = storeUtils.findGatewayByPipelineId(state, newSourceId);
-  const isPublic = storeUtils.isInPublicQuadrant(state, newTargetId);
+  const isGatewayOut = findGatewayByPipelineId(state, newSourceId);
+  const isPublic = isInPublicQuadrant(state, newTargetId);
   if (isGatewayOut && isPublic) {
-    return !Connections.isFromTo(newSourceId, newTargetId);
+    const conns = Connections.search({toId: formatId(newTargetId)});
+    return !conns.length;
   }
   return null;
 };

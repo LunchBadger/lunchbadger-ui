@@ -1,21 +1,22 @@
 import {attach} from '../reduxActions/connections';
 
 const Strategy = LunchBadgerCore.models.Strategy;
-const {storeUtils} = LunchBadgerCore.utils;
+const {storeUtils: {formatId, isInQuadrant, isInPublicQuadrant, findGatewayByPipelineId}} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 const checkConnection = (info) => (_, getState) => {
   const {sourceId, targetId} = info;
   const state = getState();
-  const isPrivate = storeUtils.isInQuadrant(state, 1, sourceId);
-  const isGatewayIn = storeUtils.findGatewayByPipelineId(state, targetId);
+  const isPrivate = isInQuadrant(state, 1, sourceId);
+  const isGatewayIn = findGatewayByPipelineId(state, targetId);
   if (isPrivate && isGatewayIn) {
     return !Connections.isFromTo(sourceId, targetId);
   }
-  const isGatewayOut = storeUtils.findGatewayByPipelineId(state, sourceId);
-  const isPublic = storeUtils.isInPublicQuadrant(state, targetId);
+  const isGatewayOut = findGatewayByPipelineId(state, sourceId);
+  const isPublic = isInPublicQuadrant(state, targetId);
   if (isGatewayOut && isPublic) {
-    return !Connections.isFromTo(sourceId, targetId);
+    const conns = Connections.search({toId: formatId(targetId)});
+    return !conns.length;
   }
   return null;
 };

@@ -83,19 +83,21 @@ export const remove = (entity, cb) => async (dispatch) => {
   const slugId = `${entity.id}-${slug(entity.name, {lower: true})}`;
   userStorage.setObjectKey('function', slugId, updatedEntity.toJSON());
   dispatch(actions.updateFunction(updatedEntity));
-  try {
     if (entity.loaded) {
-      await SLSService.remove(entity.name);
-      if (cb) {
-        await dispatch(cb());
+      try {
+        SLSService.remove(entity.name);
+      } catch (error) {}
+      try {
+        if (cb) {
+          await dispatch(cb());
+        }
+        await dispatch(coreActions.saveToServer({saveProject: false}));
+      } catch (error) {
+        dispatch(coreActions.addSystemDefcon1({error}));
       }
-      await dispatch(coreActions.saveToServer({saveProject: false}));
     } else {
       dispatch(actions.removeFunction(entity));
     }
-  } catch (error) {
-    dispatch(coreActions.addSystemDefcon1({error}));
-  }
 };
 
 export const saveOrder = orderedIds => async (dispatch, getState) => {

@@ -443,19 +443,19 @@ Add the following path: <pre>/myfunction*</pre>
         <div>
           Now that you''ve created your first LunchBadger Project, try interacting with your new endpoints!
           <code>
-            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/myfunction`}>
+            <CopyOnHover copy={`curl ${api.getReplacement('ROOT_URL')}/myfunction`}>
               $ curl {api.getReplacement('ROOT_URL')}/myfunction
             </CopyOnHover>
             <br />
-            <strong>LunchBadger Function</strong>
+            <strong>LunchBadger Node.JS 8</strong>
             <br />
             <br />
-            <CopyOnHover copy={`$ curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}>
-              {`$ curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d '{"year":${(new Date()).getFullYear()}}' --header 'Content-Type: application/json'`}
+            <CopyOnHover copy={`curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d "{\\"year\\":${(new Date()).getFullYear()}}" --header "Content-Type: application/json"`}>
+              {`$ curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d "{\\"year\\":${(new Date()).getFullYear()}}" --header "Content-Type: application/json"`}
             </CopyOnHover>
             <br />
             <strong>
-              {'{"year":${(new Date()).getFullYear()},"id":1}'}
+              {`{"year":${(new Date()).getFullYear()},"id":1}`}
             </strong>
           </code>
         </div>

@@ -214,14 +214,12 @@ class GatewayDetails extends PureComponent {
     }
   };
 
-  addCAPair = (pipelineIdx, policyIdx, policyName) => (opts = {}) => {
-    const pair = Object.assign({
-      condition: {
-        name: 'always',
-      },
-      action: {},
-    }, opts);
+  addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
+    const pair = {
+      condition: condition || {name: 'always'},
+      action: action || {},
+    };
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
     setTimeout(() => {

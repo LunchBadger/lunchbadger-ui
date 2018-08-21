@@ -30,8 +30,8 @@
       color: #4190CE;
     }
     &.defaultValue {
-      // opacity: 0.5;
-      & > .EntityProperty > .EntityPropertyLabel {
+      & > .EntityProperty > .EntityPropertyLabel,
+      & > .GatewayPolicyAction > .EntityProperty:nth-child(2) > .EntityPropertyLabel {
         color: #999;
       }
     }
@@ -46,10 +46,14 @@
       display: block;
     }
   }
+  &.defaultType {
+    & > .EntityProperty.types > .EntityPropertyLabel {
+      color: #999;
+    }
+  }
   &__object {
     padding-top: 3px;
     & > .EntityPropertyLabel {
-      color: #999 !important;
       font-weight: 600;
       font-size: 12px;
       margin-left: 0;

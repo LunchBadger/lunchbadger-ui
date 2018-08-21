@@ -28,10 +28,10 @@ const handledPropertyTypes = customPropertyTypes.concat(['jscode', 'fake']);
 
 const propertyDefaultValue = (property) => {
   const {schemas = {}, value} = property;
-  if (schemas.hasOwnProperty('default') && value === schemas.default) {
+  if (schemas.hasOwnProperty('default') && _.isEqual(value, schemas.default)) {
     return 'default';
   }
-  if (schemas.hasOwnProperty('example') && value === schemas.example) {
+  if (schemas.hasOwnProperty('example') && _.isEqual(value, schemas.example)) {
     return 'example';
   }
   return false;
@@ -226,8 +226,11 @@ export default class GatewayPolicyAction extends PureComponent {
     const state = _.cloneDeep(this.state);
     const property = state.parameters.find(item => item.id === id);
     if (property.type === type) return;
-    property.type = type;
-    property.value = getDefaultValueByType(type);
+    Object.assign(property, {
+      type,
+      value: getDefaultValueByType(type),
+      implicite: false,
+    });
     this.changeState(state);
   };
 
@@ -238,6 +241,7 @@ export default class GatewayPolicyAction extends PureComponent {
       Object.assign(state.parameters.find(item => item.id === id), {
         implicite: true,
         value: schemas.default,
+        type: determineType(schemas.default),
       });
     } else {
       state.parameters = state.parameters.filter(item => item.id !== id);
@@ -247,8 +251,10 @@ export default class GatewayPolicyAction extends PureComponent {
 
   handleArrayChange = id => (values, cb) => {
     const state = _.cloneDeep(this.state);
-    const parameter = state.parameters.find(item => item.id === id);
-    parameter.value = values;
+    Object.assign(state.parameters.find(item => item.id === id), {
+      value: values,
+      implicite: false,
+    });
     this.changeState(state, cb);
   };
 
@@ -267,8 +273,14 @@ export default class GatewayPolicyAction extends PureComponent {
       custom,
       postfix,
       implicite,
+      schemas = {},
     } = item;
     const {prefix, validations} = this.props;
+    let titleRemark;
+    const propDefValue = propertyDefaultValue(item);
+    if (propDefValue) {
+      titleRemark = `(${propDefValue} value is used)`;
+    }
     if (types) {
       let customFitWidth = 220;
       if (['number', 'integer', 'array'].includes(type)) {
@@ -277,8 +289,9 @@ export default class GatewayPolicyAction extends PureComponent {
       if (type === 'object') {
         customFitWidth = 170;
       }
+      const defaultType = schemas.hasOwnProperty('default') && typeof value === typeof schemas.default;
       return (
-        <div key={id} className="GatewayPolicyAction">
+        <div key={id} className={cs('GatewayPolicyAction', {defaultType})}>
           {custom && (
             <EntityProperty
               title="Parameter Name"
@@ -311,6 +324,7 @@ export default class GatewayPolicyAction extends PureComponent {
             width: `calc(100% - ${custom ? customFitWidth : 190}px)`,
             enum: item.enum,
             custom,
+            schemas,
           })}
         </div>
       );
@@ -324,11 +338,6 @@ export default class GatewayPolicyAction extends PureComponent {
       />
     );
     if (handledPropertyTypes.includes(type)) {
-      let titleRemark;
-      const propDefValue = propertyDefaultValue(item);
-      if (propDefValue) {
-        titleRemark = `(${propDefValue} value is used)`;
-      }
       const props = {
         key: id,
         title: title || name,

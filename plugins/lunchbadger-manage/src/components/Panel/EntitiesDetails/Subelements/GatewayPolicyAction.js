@@ -297,7 +297,7 @@ export default class GatewayPolicyAction extends PureComponent {
               title="Parameter Name"
               name={`${this.tmpPrefix}[${id}][name]`}
               value={name}
-              onBlur={this.handleCustomParameterNameChange(id)}
+              onChange={this.handleCustomParameterNameChange(id)}
               width={150}
               placeholder=" "
               classes={`${this.tmpPrefix}[name][type][${type}]`}
@@ -344,7 +344,7 @@ export default class GatewayPolicyAction extends PureComponent {
         titleRemark,
         name: `${implicite ? 'implicite' : ''}${prefix}[${name}]`,
         value,
-        onBlur: this.handlePropertyValueChange(id),
+        onChange: this.handlePropertyValueChange(id),
         width: width || 'calc(100% - 20px)',
         description,
         placeholder: ' ',

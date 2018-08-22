@@ -49,6 +49,7 @@ class WorkspaceStatus extends Component {
     let status = JSON.parse(message.data).data;
     console.log('Status from server', status);
     if (this.state.instance && this.state.instance !== status.instance) {
+      console.log(`Instance changed: ${this.state.instance} => ${status.instance}`);
       this.setState({isShowingModal: true});
     }
     this.setState({

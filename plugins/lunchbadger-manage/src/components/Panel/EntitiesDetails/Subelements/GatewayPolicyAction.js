@@ -201,7 +201,11 @@ export default class GatewayPolicyAction extends PureComponent {
     }), 200);
   };
 
-  handlePropertyValueChange = id => ({target: {value, checked}}) => {
+  handlePropertyValueChange = (id, inputName) => ({target: {
+    value,
+    checked,
+    selectionStart,
+  }}) => {
     const state = _.cloneDeep(this.state);
     const property = state.parameters.find(item => item.id === id);
     property.implicite = false;
@@ -212,7 +216,17 @@ export default class GatewayPolicyAction extends PureComponent {
     } else {
       property.value = value;
     }
-    this.changeState(state);
+    this.changeState(state, () => {
+      if (!inputName) return;
+      const inputNameArr = inputName.split(']');
+      if (!inputNameArr[4].includes('fake')) return;
+      inputNameArr[4] = '[0'; // replacing name's implicite part with pair 0
+      const input = document.getElementById(inputNameArr.join(']'));
+      if (input && selectionStart) {
+        input.focus();
+        input.selectionStart = selectionStart;
+      }
+    });
   };
 
   handleCustomParameterNameChange = id => ({target: {value}}) => {
@@ -338,13 +352,14 @@ export default class GatewayPolicyAction extends PureComponent {
       />
     );
     if (handledPropertyTypes.includes(type)) {
+      const inputName = `${prefix}[${name}]`;
       const props = {
         key: id,
         title: title || name,
         titleRemark,
-        name: `${implicite ? 'implicite' : ''}${prefix}[${name}]`,
+        name: `${implicite ? 'implicite' : ''}${inputName}`,
         value,
-        onChange: this.handlePropertyValueChange(id),
+        onChange: this.handlePropertyValueChange(id, inputName),
         width: width || 'calc(100% - 20px)',
         description,
         placeholder: ' ',

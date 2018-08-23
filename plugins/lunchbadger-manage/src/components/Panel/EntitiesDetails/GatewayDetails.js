@@ -214,20 +214,20 @@ class GatewayDetails extends PureComponent {
     }
   };
 
-  addCAPair = (pipelineIdx, policyIdx, policyName) => (opts) => {
-    const pair = Object.assign({
-      condition: {
-        name: 'always',
-      },
-      action: {},
-    }, opts);
+  addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action} = {}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
+    const pair = {
+      condition: condition || {name: 'always'},
+      action: action || {},
+    };
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
-    setTimeout(() => {
-      const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
-      scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
-    });
+    if (!condition && !action) {
+      setTimeout(() => {
+        const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
+        scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
+      });
+    }
   };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {

@@ -214,7 +214,7 @@ class GatewayDetails extends PureComponent {
     }
   };
 
-  addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action}) => {
+  addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action} = {}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const pair = {
       condition: condition || {name: 'always'},
@@ -222,10 +222,12 @@ class GatewayDetails extends PureComponent {
     };
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
-    setTimeout(() => {
-      const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
-      scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
-    });
+    if (!condition && !action) {
+      setTimeout(() => {
+        const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
+        scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
+      });
+    }
   };
 
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {

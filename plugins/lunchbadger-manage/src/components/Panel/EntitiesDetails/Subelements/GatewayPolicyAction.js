@@ -396,6 +396,8 @@ export default class GatewayPolicyAction extends PureComponent {
         Object.assign(props, {
           options: item.enum.map(label => ({label, value: label})),
           autocomplete: true,
+          onChange: undefined,
+          onBlur: this.handlePropertyValueChange(id, inputName),
         });
       }
       if (type === 'array') {

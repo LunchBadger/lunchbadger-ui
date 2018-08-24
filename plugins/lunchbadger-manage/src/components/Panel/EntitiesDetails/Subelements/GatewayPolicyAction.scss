@@ -36,8 +36,7 @@
       }
     }
     &.implicite {
-      opacity: 0.5;
-      filter: grayscale(1);
+      font-style: italic;
     }
     & > .GatewayPolicyAction__button {
       display: none;

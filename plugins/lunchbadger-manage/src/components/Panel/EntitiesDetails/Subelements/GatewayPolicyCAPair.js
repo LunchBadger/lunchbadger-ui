@@ -53,7 +53,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
     const {horizontal} = this.state;
     let title = `C/A Pair ${nr}`;
     if (fake) {
-      title = 'No Condition / Action Pairs defined - a Condition / Action Pair with default parameters is applied';
+      title = 'Implicite C/A Pair';
     }
     const bar = (
       <EntityPropertyLabel plain className={`CAPairLabel CAPair${nr}Label`}>

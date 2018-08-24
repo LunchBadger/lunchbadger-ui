@@ -294,6 +294,9 @@ export default class GatewayPolicyAction extends PureComponent {
     const propDefValue = propertyDefaultValue(item);
     if (propDefValue) {
       titleRemark = `(${propDefValue} value is used)`;
+      if (implicite) {
+        titleRemark = `(implicite with ${propDefValue} value)`;
+      }
     }
     if (types) {
       let customFitWidth = 220;

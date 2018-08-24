@@ -89,11 +89,13 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
       if (gatewayDeleting) {
         dispatch(actions.removeGateway(entity));
         userStorage.removeObjectKey('gateway', slugId);
-      } else if (typeof entity.pipelinesLunchbadger === 'object') {
+      } else {
+        const hasPipelinesLunchbadger = typeof entity.pipelinesLunchbadger === 'object';
         updatedEntity = entity.recreate();
-        updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
-        updatedEntity.pipelinesLunchbadger = undefined;
-        updatedEntity.running = null;
+        updatedEntity.running = hasPipelinesLunchbadger ? null : false;
+        if (hasPipelinesLunchbadger) {
+          updatedEntity.pipelinesLunchbadger = entity.pipelinesLunchbadger;
+        }
         dispatch(actions.updateGateway(updatedEntity));
       }
     } else {
@@ -111,21 +113,30 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
         });
         dispatch(actions.updateGateway(updatedEntity));
       } else {
+        updatedEntity = entity.recreate();
+        updatedEntity.pipelinesLunchbadger = entity.pipelinesLunchbadger;
+        let message;
+        const hasPipelinesLunchbadger = typeof entity.pipelinesLunchbadger === 'object';
+        if (running && hasPipelinesLunchbadger) {
+          updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
+          updatedEntity.pipelinesLunchbadger = undefined;
+          updatedEntity.running = true;
+          isSave = true;
+          dispatch(actions.updateGateway(updatedEntity));
+          message = 'successfully deployed';
+        }
         if (running !== gatewayRunning) {
           if (gatewayDeleting) return;
-          if (gatewayRunning === null && !running) return;
-          const isDeployed = gatewayRunning === null;
-          if (isDeployed) {
-            isSave = true;
-          }
-          updatedEntity = entity.recreate();
+          if (!running && gatewayRunning === null) return;
           updatedEntity.running = running;
-          if (running && typeof entity.pipelinesLunchbadger === 'object') {
-            updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
-            updatedEntity.pipelinesLunchbadger = undefined;
+          if (!running && gatewayRunning && hasPipelinesLunchbadger) {
+            updatedEntity.running = null;
+          } else if (!message) {
+            message = `is ${running ? '' : 'not'} running`;
           }
           dispatch(actions.updateGateway(updatedEntity));
-          const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
+        }
+        if (message) {
           showGatewayStatusChangeMessage(dispatch, gatewayName, message);
         }
       }

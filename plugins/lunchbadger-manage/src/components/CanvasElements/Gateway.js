@@ -68,11 +68,14 @@ class Gateway extends Component {
   };
 
   stateFromStores = props => {
-    const {dnsPrefix, pipelines} = props.entity;
+    const {dnsPrefix, pipelines, pipelinesLunchbadger} = props.entity;
     const newState = {
       dnsPrefix,
       pipelines: pipelines.slice(),
     };
+    if (typeof pipelinesLunchbadger === 'object') {
+      newState.pipelines = pipelinesLunchbadger.map(p => Pipeline.create(p));
+    }
     return newState;
   };
 

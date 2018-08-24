@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.97', [
+console.info('LBAPP VERSION 0.98', [
+  '866',
   '866',
   '858 857',
   '850 851 857',
@@ -22,9 +23,7 @@ console.info('LBAPP VERSION 0.97', [
   '850',
   '839',
   '833',
-  '815',
-  '811',
-  '807'
+  '815'
 ]);
 
 GA.pageview(window.location.pathname + window.location.search);

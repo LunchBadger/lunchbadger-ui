@@ -68,11 +68,14 @@ class Gateway extends Component {
   };
 
   stateFromStores = props => {
-    const {dnsPrefix, pipelines} = props.entity;
+    const {dnsPrefix, pipelines, pipelinesLunchbadger} = props.entity;
     const newState = {
       dnsPrefix,
       pipelines: pipelines.slice(),
     };
+    if (typeof pipelinesLunchbadger === 'object') {
+      newState.pipelines = pipelinesLunchbadger.map(p => Pipeline.create(p));
+    }
     return newState;
   };
 
@@ -147,7 +150,7 @@ class Gateway extends Component {
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
-    this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, defaultPolicy));
+    this.changeState({pipelines});
     setTimeout(() => {
       const input = document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name button`);
       input && input.focus();
@@ -172,7 +175,7 @@ class Gateway extends Component {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      this.changeState({pipelines}, this.addCAPair(pipelineIdx, policyIdx, value));
+      this.changeState({pipelines});
     }
   };
 

@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.186', [
+console.info('LBAPP VERSION 0.187', [
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
     'Feature/819 add validations in policies for required parameters #843',
@@ -29,7 +29,8 @@ console.info('LBAPP VERSION 0.186', [
     'Feature/863 Do not display error on function delete failure #864',
     'Feature/834 gateway deployments resistant for kw anomalies #865',
     'Feature/861 add prev and current revision (instance) to debugger console #866',
-    'Feature/846 real time field change #867'
+    'Feature/846 real time field change #867',
+    'Feature/869 On function deploy failure constrain error within entity #871'
   ],
   [
     'master Feature/722 admin api calls parallel with project api calls #765',

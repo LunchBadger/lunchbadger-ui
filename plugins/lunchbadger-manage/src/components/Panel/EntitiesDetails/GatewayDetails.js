@@ -108,7 +108,7 @@ class GatewayDetails extends PureComponent {
             paper.detach(conn.info.connection);
           });
           // restoring current serviceEndpoints connections
-          (policy.pairs || []).forEach(({action: {serviceEndpoint}}) => {
+          (Array.isArray(policy.pairs) ? policy.pairs : []).forEach(({action: {serviceEndpoint}}) => {
             // FIXME: crashes, when new pipelines with proxy are defined
             if (serviceEndpoint) {
               const source = document.getElementById(`port_out_${serviceEndpoint}`).querySelector('.port__anchor');

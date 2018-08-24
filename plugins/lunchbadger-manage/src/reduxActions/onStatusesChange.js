@@ -120,15 +120,13 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           }
           updatedEntity = entity.recreate();
           updatedEntity.running = running;
+          if (running && typeof entity.pipelinesLunchbadger === 'object') {
+            updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
+            updatedEntity.pipelinesLunchbadger = undefined;
+          }
           dispatch(actions.updateGateway(updatedEntity));
           const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showGatewayStatusChangeMessage(dispatch, gatewayName, message);
-        } else if (running && typeof entity.pipelinesLunchbadger === 'object') {
-          updatedEntity = entity.recreate();
-          updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
-          updatedEntity.pipelinesLunchbadger = undefined;
-          dispatch(actions.updateGateway(updatedEntity));
-          isSave = true;
         }
       }
     }

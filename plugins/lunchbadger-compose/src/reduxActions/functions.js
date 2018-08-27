@@ -55,23 +55,29 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.running = true;
   } catch (error) {
     updatedEntity.running = false;
-    let errorMessage = 'Please check, if function will be deployed soon, or contact us.';
+    let errorMessage = (
+      <div>
+        <code>{updatedEntity.name}</code> {'failed to deploy.'}
+        {' '}
+        {'Another attempt will be made automatically. If it successful, this error will be resolved.'}
+      </div>
+    );
     if (
       error.request
       && error.request.url === '/deploy'
       && error.body
       && error.body.info === 'deploy failed'
     ) {
-      errorMessage = 'Please check, if function code, you provided, is correct and valid.';
+      errorMessage = (
+        <div>
+          {'Function deployment failed.'}
+          <br />
+          {'Please check if the function code you provided is valid and correct.'}
+        </div>
+      );
     }
-    error.friendlyTitle = <div>Function <code>{updatedEntity.name}</code> deploy failed</div>;
-    error.friendlyMessage = (
-      <div>
-        {'Function deployment failed.'}
-        <br />
-        {errorMessage}
-      </div>
-    );
+    error.friendlyTitle = <div>Function <code>{updatedEntity.name}</code> deployment failed</div>;
+    error.friendlyMessage = errorMessage;
     updatedEntity.error = error;
   }
   updatedEntity.ready = true;

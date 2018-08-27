@@ -13,7 +13,6 @@ module.exports = {
       .addElementFromTooltip('endpoint', 'apiendpoint')
       .waitForElementPresent('.endpoint.Tool.selected', 8000)
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {
@@ -36,7 +35,6 @@ module.exports = {
       .clickPresent(entitySelector + ' .button__add__PATHS')
       .setValueSlow(entitySelector + ' .input__paths1 input', '/buses')
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {
@@ -52,7 +50,6 @@ module.exports = {
       .editEntity(entitySelector)
       .clickVisibleOnHover(entitySelector + ' .paths0', entitySelector + ' .button__remove__paths0')
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {

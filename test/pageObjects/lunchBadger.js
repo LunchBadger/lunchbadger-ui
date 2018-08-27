@@ -557,14 +557,8 @@ var pageCommands = {
   },
 
   waitUntilDataSaved: function () {
-    return this
-      .closeSystemInformationMessage('All-data-has-been-synced-with-API');
-  },
-
-  saveProject: function () {
-    return this
-      .clickVisible('.header__menu .fa-floppy-o')
-      .waitUntilDataSaved();
+    return this;
+      // .closeSystemInformationMessage('All-data-has-been-synced-with-API');
   },
 
   clearProject: function () {

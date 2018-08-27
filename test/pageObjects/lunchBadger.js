@@ -579,8 +579,7 @@ var pageCommands = {
       .clearProject()
       .closeSystemInformationMessage('All-data-removed-from-server')
       .notPresent('.spinner__overlay', 120000)
-      .waitForGatewaysRemoved()
-      .saveProject();
+      .waitForGatewaysRemoved();
   },
 
   closeDemoWizard: function () {

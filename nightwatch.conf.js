@@ -18,7 +18,7 @@ var chromeCapabilities = {
   }
 };
 
-var testUrl = 'http://' + (process.env['LBSERVER_HOST'] || 'localhost') + ':8000';
+var testUrl = 'http://localhost:8000';
 var distUrl = 'http://lunchbadger.ntrc.eu';
 
 module.exports = {

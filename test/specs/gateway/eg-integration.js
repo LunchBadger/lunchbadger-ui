@@ -26,7 +26,7 @@ var form;
 var expectedModelJSON;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'EG integration: deploy gateway': function (browser) {
     page = browser.page.lunchBadger();
     memorySelector = page.getDataSourceSelector(1);

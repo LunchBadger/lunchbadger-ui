@@ -156,7 +156,7 @@ export default (ComposedComponent) => {
       this.setState({validations});
       if (!validations.isValid) return;
       if (typeof element.postProcessModel === 'function') {
-        element.postProcessModel(model);
+        element.postProcessModel(props);
       }
       dispatch(setCurrentEditElement(null));
       const updatedEntity = await dispatch(entity.update(model));

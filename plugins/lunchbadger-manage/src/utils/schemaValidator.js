@@ -1,4 +1,5 @@
 import Ajv from 'ajv';
+import _ from 'lodash';
 
 const ajv = new Ajv({
   schemas: [],
@@ -31,7 +32,7 @@ const register = (schema) => {
 }
 
 const validate = (id, data) => {
-  const isValid = ajv.validate(id, data);
+  const isValid = ajv.validate(id, _.cloneDeep(data));
   const errors = ajv.errors;
   const processPolicyActionValidations = (validations, prefix) => errors.forEach((error) => {
     const {path, message} = processError(error, ajv.getSchema(id));

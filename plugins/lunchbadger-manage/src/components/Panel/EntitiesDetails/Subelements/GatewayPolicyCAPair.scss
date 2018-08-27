@@ -32,10 +32,7 @@
     }
   }
   &.fake {
-    opacity: 0.5;
-    .GatewayPolicyCAPair__box {
-      filter: grayscale(1);
-    }
+    font-style: italic;
   }
   .EntityProperty {
     &.types,

@@ -14,7 +14,12 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.189', [
+console.info('LBAPP VERSION 0.190', [
+  [
+    'master Feature/846 real time field change #867',
+    'Feature/869 On function deploy failure constrain error within entity #871',
+    'Feature/823 Service endpoints in EG only when connected #873'
+  ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
     'Feature/819 add validations in policies for required parameters #843',
@@ -67,10 +72,6 @@ console.info('LBAPP VERSION 0.189', [
     'Feature/821 front end analytics events #830',
     'Feature/832 Adding stripPath: true by default when a Model connects to a Pipeline. #833',
     'Bugfix/835 need to suppress messages for non visible entities #839'
-  ],
-  [
-    'master Feature/399 fn types per environment #763',
-    'Feature/722 admin api calls parallel with project api calls #765'
   ]
 ]);
 

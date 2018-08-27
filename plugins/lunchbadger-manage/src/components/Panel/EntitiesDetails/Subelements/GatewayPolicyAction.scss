@@ -35,9 +35,8 @@
         color: #999;
       }
     }
-    &.implicite {
-      opacity: 0.5;
-      filter: grayscale(1);
+    &.implicit {
+      font-style: italic;
     }
     & > .GatewayPolicyAction__button {
       display: none;

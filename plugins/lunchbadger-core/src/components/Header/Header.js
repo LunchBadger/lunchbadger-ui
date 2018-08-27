@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import HeaderMenu from './HeaderMenu';
 // import CanvasOverlay from '../Canvas/CanvasOverlay';
-import Logo from './logo';
+import Logo from './Logo';
 import BrandingLogo from './brandingLogo.png';
 import Config from '../../../../../src/config';
 import './Header.scss';

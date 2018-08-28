@@ -13,7 +13,7 @@ module.exports = {
       ], [
         'url'
       ])
-      .closeWhenSystemDefcon1()
+      .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

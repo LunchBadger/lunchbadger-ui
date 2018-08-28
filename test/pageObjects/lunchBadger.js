@@ -24,7 +24,16 @@ var pageCommands = {
       .projectLoaded()
       .closeDemoWizard()
       .check({text: usernameText})
-      .emptyProject();
+      .emptyProject()
+      .hideDrift();
+  },
+
+  hideDrift: function () {
+    this.api.execute(function () {
+      window.document.getElementById('drift-widget-container').style.display = 'none';
+      return;
+    }, [], function () {});
+    return this;
   },
 
   close: function () {
@@ -48,7 +57,8 @@ var pageCommands = {
   reloadPage: function () {
     this.api.refresh();
     return this
-      .projectLoaded();
+      .projectLoaded()
+      .hideDrift();
   },
 
   pause: function (ms) {
@@ -118,7 +128,7 @@ var pageCommands = {
       });
   },
 
-  setValueSlow: function (selector, value) {
+  setValueSlow: function (selector, value, selectorAfterChange) {
     const self = this;
     return this
       .present(selector)
@@ -132,7 +142,7 @@ var pageCommands = {
       .setValue(selector, value)
       .check({
         value: {
-          [selector]: value
+          [selectorAfterChange || selector]: value
         }
       });
   },
@@ -142,13 +152,14 @@ var pageCommands = {
       .setInput(selector, `input__${field}`, value, type);
   },
 
-  setInput: function (selector, field, value, type = 'text') {
+  setInput: function (selector, field, value, type = 'text', fieldAfterChange = '') {
     const sel = `${selector} .${field} input[type=${type}]`;
+    const selAfterChange = fieldAfterChange ? `${selector} .${fieldAfterChange} input[type=${type}]` : sel;
     return this
       .check({
         present: [sel]
       })
-      .setValueSlow(sel, value);
+      .setValueSlow(sel, value, selAfterChange);
   },
 
   setCanvasEntityName: function (selector, name) {
@@ -603,6 +614,11 @@ var pageCommands = {
     return this.clickVisible('.SystemDefcon1 button', 120000);
   },
 
+  waitForEntityError: function (selector) {
+    return this
+      .waitForElementPresent(`${selector} .EntityError`, 120000);
+  },
+
   waitForDependencyFinish: function () {
     return this
       .present('.workspace-status .workspace-status__progress', 120000)
@@ -892,9 +908,10 @@ var pageCommands = {
       .check({present});
   },
 
-  setActionParameter: function (pipelineIdx, policyIdx, pairIdx, paramName, paramValue, type = 'text') {
+  setActionParameter: function (pipelineIdx, policyIdx, pairIdx, paramName, paramValue, type = 'text', prefix = '') {
+    const selector = `pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`;
     return this
-      .setInput('.DetailsPanel', `input__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}`, paramValue, type);
+      .setInput('.DetailsPanel', `input__${prefix}${selector}`, paramValue, type, `input__${selector}`);
   },
 
   clickActionParameterBoolean: function (pipelineIdx, policyIdx, pairIdx, paramName, expected = 'checked') {
@@ -938,18 +955,18 @@ var pageCommands = {
       .check({present});
   },
 
-  addActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, prefix = '') {
-    const present = [`.DetailsPanel .input__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}_`];
+  addActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, type, prefix = '') {
+    const present = [`.DetailsPanel .tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}actionnametype${type}`];
     return this
-      .clickPresent(`.DetailsPanel .button__add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${prefix}${paramName}Parameter`)
+      .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}Parameter`, type)
       .check({present});
   },
 
-  setActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, value) {
+  setActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, value, type, prefix) {
     const {TAB} = this.api.Keys;
-    const selector = `input__tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}_`;
+    const selector = `tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}nametype${type}`;
     return this
-      .setInput('.DetailsPanel', selector, value)
+      .setInput(`.DetailsPanel  ${prefix} `, selector, value)
       .setAutocomplete(`.DetailsPanel .${selector} input`, [TAB]);
   },
 
@@ -1205,18 +1222,12 @@ var pageCommands = {
   },
 
   removeGateway: function (selector, check = {}) {
-    Object.assign(check, {
-      present: [`${selector} .EntityStatus.deleting`]
-    });
     return this
       .removeEntity(selector, 300000, check)
       .waitForGatewaysRemoved();
   },
 
   removeFunction: function (selector, check = {}) {
-    Object.assign(check, {
-      present: [`${selector} .EntityStatus.deleting`]
-    });
     return this
       .removeEntity(selector, 300000, check)
       .waitForFunctionRemoved();

@@ -68,7 +68,7 @@ export default class FilesEditor extends Component {
     this.codeEditorRefs = {};
   }
 
-  transformFilesIntoTree = (obj, data, map) => {
+  transformFilesIntoTree = (obj, data = {}, map) => {
     Object.keys(data)
       .forEach((key) => {
         const id = uuid.v4();

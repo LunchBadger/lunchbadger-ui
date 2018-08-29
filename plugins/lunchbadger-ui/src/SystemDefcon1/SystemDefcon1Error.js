@@ -4,8 +4,8 @@ import './SystemDefcon1.scss';
 export default class SystemDefcon1Error extends PureComponent {
   state = {
     stackVisible: false,
-    requestDataVisible: true,
-    responseDataVisible: true,
+    requestDataVisible: false,
+    responseDataVisible: false,
   };
 
   toggleStackVisible = () => this.setState({stackVisible: !this.state.stackVisible});

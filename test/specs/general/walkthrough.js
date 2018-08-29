@@ -7,7 +7,7 @@ var carApiEndpointSelector;
 var myfunctionApiEndpointSelector;
 module.exports = {
   // '@disabled': true,
-  'Dependency installation: initial status success': function(browser) {
+  'Walkthrough: demo wizard process': function(browser) {
     page = browser.page.lunchBadger();
     memorySelector = page.getDataSourceSelector(1);
     modelSelector = page.getModelSelector(1);
@@ -25,17 +25,17 @@ module.exports = {
       .setModelPropertyOnCanvas(modelSelector, 0, 'year')
       .clickDemoWizardHole()
       .selectValueOptionSlow(modelSelector, 'properties0type', 'Number')
-      .pause(2000)
+      .pause(3000)
       .clickDemoWizardHole()
       .connectPorts(memorySelector, 'out', modelSelector, 'in')
       .clickDemoWizardHole(2)
       .waitForEntityDeployed(functionSelector)
-      .pause(2000)
+      .pause(3000)
       .clickDemoWizardHole()
       .visible('.DetailsPanel.visible .panel .BaseDetails.general', 15000)
-      .pause(2000)
+      .pause(5000)
       .clickDemoWizardNext()
-      .pause(2000)
+      .pause(3000)
       .clickDemoWizardHole()
       .pause(3000)
       .clickDemoWizardHole()
@@ -47,7 +47,7 @@ module.exports = {
       .waitForEntityDeployed(gatewaySelector)
       .clickDemoWizardNext()
       .connectPorts(modelSelector, 'out', gatewaySelector, 'in', 0)
-      .pause(2000)
+      .pause(3000)
       .clickDemoWizardNext()
       .clickDemoWizardHole()
       .setField(carApiEndpointSelector, 'paths0', '/cars*')
@@ -55,7 +55,7 @@ module.exports = {
       .present('.spinner__overlay')
       .autoSave()
       .connectPorts(functionSelector, 'out', gatewaySelector, 'in', 1)
-      .pause(2000)
+      .pause(3000)
       .clickDemoWizardHole()
       .setField(myfunctionApiEndpointSelector, 'paths0', '/myfunction*')
       .clickDemoWizardHole()

@@ -36,6 +36,7 @@ module.exports = {
       .visible('.DetailsPanel.visible .panel .BaseDetails.general', 15000)
       .pause(7000)
       .present('.joyride-tooltip[data-target=".DetailsPanel .FilesEditor"]')
+      .pause(7000)
       .clickDemoWizardNext()
       .pause(7000)
       .present('.joyride-tooltip[data-target=".DetailsPanel .cancel"]')

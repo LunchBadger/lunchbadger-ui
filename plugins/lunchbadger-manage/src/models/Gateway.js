@@ -178,6 +178,8 @@ export default class Gateway extends BaseModel {
           const isAdd = op === 'add' && path.length === 2;
           const isDelete = op === 'remove' && path.length === 2;
           const isRename = op === 'replace' && path.length === 3 && path[2] === 'name';
+          const isModelContextPathChanged = op === 'replace' && path.length === 4
+            && path[0] === 'models' && path[2] === 'http' && path[3] === 'path';
           const operation = `${isDelete ? 'delete' : 'put'}${kinds[kind]}`;
           const body = isDelete
             ? null
@@ -189,7 +191,7 @@ export default class Gateway extends BaseModel {
           let addOperation = true;
           if (kind === 'models' || kind === 'functions') {
             addOperation = false;
-            if (isAdd || isDelete || isRename) {
+            if (isAdd || isDelete || isRename || isModelContextPathChanged) {
               addOperation = true;
             }
           } else if (kind === 'apiEndpoints') {

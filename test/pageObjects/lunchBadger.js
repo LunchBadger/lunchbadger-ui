@@ -307,12 +307,16 @@ var pageCommands = {
   },
 
   expectUniqueNameError: function (selector, type) {
+    const {TAB} = this.api.Keys;
     const text = {
       [`${selector} .EntityHeader .EntityProperty__error`]: `${type} with that name already exists`
     };
     return this
       .submitCanvasEntityWithExpectedValidationErrors(selector, ['name'])
       .check({text})
+      .setCanvasEntityName(selector, this.getUniqueName('entity'))
+      .setAutocomplete(`${selector} .EntityHeader input`, [TAB])
+      .pause(3000)
       .discardCanvasEntityChanges(selector);
   },
 

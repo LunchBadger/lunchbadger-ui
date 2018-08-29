@@ -67,7 +67,7 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (amount = 1, delay = 1000) {
+  clickDemoWizardNext: function (amount = 1, delay = 2000) {
     let i = amount;
     while(i--) {
       this
@@ -77,12 +77,12 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardHole: function (amount = 1) {
+  clickDemoWizardHole: function (amount = 1, delay = 2000) {
     let i = amount;
     while(i--) {
       this
         .clickPresent('.joyride-hole')
-        .pause(500);
+        .pause(delay);
     }
     return this;
   },

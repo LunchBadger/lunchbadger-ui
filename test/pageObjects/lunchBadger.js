@@ -12,6 +12,13 @@ var pageCommands = {
   },
 
   open: function () {
+    return this
+      .openWithDemoWizard()
+      .closeDemoWizard()
+      .emptyProject();
+  },
+
+  openWithDemoWizard: function () {
     const username = this.getUniqueName(`CircleCI ${this.getUsername()} `);
     const usernameText = {
       '.breadcrumbs .breadcrumbs__element.username': username
@@ -22,15 +29,21 @@ var pageCommands = {
       .setValueSlow('.input__password input', username)
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
-      .closeDemoWizard()
       .check({text: usernameText})
-      .emptyProject()
-      .hideDrift();
+      .displayDrift();
   },
 
-  hideDrift: function () {
+  resetWalkthrough: function () {
+    return this
+      .clickPresent('@settings')
+      .clickPresent('.RestartWalkthrough button')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .autoSave();
+  },
+
+  displayDrift: function (display = 'none') {
     this.api.execute(function () {
-      window.document.getElementById('drift-widget-container').style.display = 'none';
+      window.document.getElementById('drift-widget-container').style.display = display;
       return;
     }, [], function () {});
     return this;
@@ -54,11 +67,31 @@ var pageCommands = {
     return this;
   },
 
+  clickDemoWizardNext: function (amount = 1) {
+    let i = amount;
+    while(i--) {
+      this
+        .clickPresent('.joyride-tooltip__button--primary')
+        .pause(500);
+    }
+    return this;
+  },
+
+  clickDemoWizardHole: function (amount = 1) {
+    let i = amount;
+    while(i--) {
+      this
+        .clickPresent('.joyride-hole')
+        .pause(500);
+    }
+    return this;
+  },
+
   reloadPage: function () {
     this.api.refresh();
     return this
       .projectLoaded()
-      .hideDrift();
+      .displayDrift();
   },
 
   pause: function (ms) {
@@ -93,6 +126,11 @@ var pageCommands = {
   addElementFromTooltip: function (entity, option = 'rest') {
     return this
       .clickPresent('.Tool.' + entity)
+      .addDatasourceFromTooltip(option);
+  },
+
+  addDatasourceFromTooltip: function (option = 'memory') {
+    return this
       .pause(3000)
       .clickPresent('.Tool__submenuItem.' + option);
   },
@@ -176,6 +214,11 @@ var pageCommands = {
   selectValueSlow: function (selector, select, value) {
     return this
       .clickPresent(selector + ` .select__${select}`)
+      .selectValueOptionSlow(selector, select, value);
+  },
+
+  selectValueOptionSlow: function (selector, select, value) {
+    return this
       .pause(3000)
       .clickPresent(`div[role=menu] .${select}__${value}`)
       .present(selector + ` .select__${select} .${select}__${value}`);
@@ -244,6 +287,11 @@ var pageCommands = {
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
       .check(check)
+      .waitForEntityDeployed(selector);
+  },
+
+  waitForEntityDeployed: function (selector) {
+    return this
       .notPresent(selector + '.wip', 120000)
       .notPresent('.Aside.disabled')
       .notPresent('.SystemDefcon1', 60000);

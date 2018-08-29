@@ -15,7 +15,8 @@ var pageCommands = {
     return this
       .openWithDemoWizard()
       .closeDemoWizard()
-      .emptyProject();
+      .emptyProject()
+      .hideDrift();
   },
 
   openWithDemoWizard: function () {
@@ -29,8 +30,7 @@ var pageCommands = {
       .setValueSlow('.input__password input', username)
       .submitForm('.FakeLogin__form form')
       .projectLoaded()
-      .check({text: usernameText})
-      .displayDrift();
+      .check({text: usernameText});
   },
 
   resetWalkthrough: function () {
@@ -41,9 +41,9 @@ var pageCommands = {
       .autoSave();
   },
 
-  displayDrift: function (display = 'none') {
+  hideDrift: function () {
     this.api.execute(function () {
-      window.document.getElementById('drift-widget-container').style.display = display;
+      window.document.getElementById('drift-widget-container').style.display = 'none';
       return;
     }, [], function () {});
     return this;
@@ -67,12 +67,12 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (amount = 1) {
+  clickDemoWizardNext: function (amount = 1, delay = 1000) {
     let i = amount;
     while(i--) {
       this
         .clickPresent('.joyride-tooltip__button--primary')
-        .pause(500);
+        .pause(delay);
     }
     return this;
   },
@@ -91,7 +91,7 @@ var pageCommands = {
     this.api.refresh();
     return this
       .projectLoaded()
-      .displayDrift();
+      .hideDrift();
   },
 
   pause: function (ms) {

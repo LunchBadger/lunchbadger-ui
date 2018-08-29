@@ -14,11 +14,12 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.190', [
+console.info('LBAPP VERSION 0.191', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
-    'Feature/823 Service endpoints in EG only when connected #873'
+    'Feature/823 Service endpoints in EG only when connected #873',
+    'model SE url hot-fix'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

@@ -113,6 +113,9 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
           }
           updatedEntity = entity.recreate();
           updatedEntity.running = running;
+          if (running) {
+            updatedEntity.error = null;
+          }
           dispatch(actions.updateFunction(updatedEntity));
           const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showFunctionStatusChangeMessage(dispatch, functionName, message);

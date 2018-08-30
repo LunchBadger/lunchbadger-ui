@@ -76,7 +76,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       }
     }
     if (deltaModel.length > 0) {
-      await new Promise(res => setTimeout(res, 100));
+      await new Promise(res => setTimeout(res, 300));
       await ModelService.upsert(updatedEntity.toJSON());
     }
     if (deltaProperties.length > 0) {

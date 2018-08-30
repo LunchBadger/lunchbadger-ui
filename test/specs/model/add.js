@@ -65,7 +65,7 @@ module.exports = {
   },
   'Model: remove': function () {
     page
-      .removeEntityWithoutAutoSave(entitySelector)
+      .removeEntity(entitySelector)
       .close();
   }
 };

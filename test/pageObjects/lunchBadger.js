@@ -137,6 +137,7 @@ var pageCommands = {
 
   addElement: function (entity) {
     return this
+      .notPresent('.Aside.disabled')
       .clickPresent('.Tool.' + entity);
   },
 

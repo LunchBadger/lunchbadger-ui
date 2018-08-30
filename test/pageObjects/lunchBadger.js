@@ -71,7 +71,7 @@ var pageCommands = {
     let i = amount;
     while(i--) {
       this
-        .clickPresent('.joyride-tooltip__button--primary')
+        .clickVisible('.joyride-tooltip__button--primary')
         .pause(delay);
     }
     return this;

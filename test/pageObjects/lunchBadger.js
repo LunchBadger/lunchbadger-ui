@@ -81,7 +81,7 @@ var pageCommands = {
     let i = amount;
     while(i--) {
       this
-        .clickPresent('.joyride-hole')
+        .clickVisible('.joyride-hole')
         .pause(delay);
     }
     return this;

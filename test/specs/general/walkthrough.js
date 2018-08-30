@@ -17,6 +17,7 @@ module.exports = {
     myfunctionApiEndpointSelector = page.getApiEndpointSelector(2);
     page
       .openWithDemoWizard()
+      .hideDrift()
       .clickDemoWizardNext(3)
       .clickDemoWizardHole(3)
       .setCanvasEntityName(modelSelector, 'Car')
@@ -40,8 +41,8 @@ module.exports = {
       .pause(7000)
       .clickDemoWizardNext()
       .pause(7000)
-      // .visible('.joyride-tooltip[data-target=".DetailsPanel .cancel"]')
-      // .pause(3000)
+      .visible('.joyride-tooltip[data-target=".DetailsPanel .cancel"]')
+      .pause(3000)
       .clickDemoWizardHole()
       .pause(3000)
       .clickDemoWizardHole()
@@ -69,6 +70,7 @@ module.exports = {
       .setField(myfunctionApiEndpointSelector, 'paths0', '/myfunction*')
       .pause(3000)
       .submitCanvasEntity(myfunctionApiEndpointSelector)
+      .showDrift()
       .clickDemoWizardNext(9, 2000)
       .present('.joyride-tooltip[data-target=".header__menu__link.SETTINGS_PANEL"]')
       .pause(3000)

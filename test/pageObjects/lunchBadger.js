@@ -49,6 +49,14 @@ var pageCommands = {
     return this;
   },
 
+  showDrift: function () {
+    this.api.execute(function () {
+      window.document.getElementById('drift-widget-container').style.display = 'block';
+      return;
+    }, [], function () {});
+    return this;
+  },
+
   close: function () {
     this.emptyProject();
     this.api.execute(function () {

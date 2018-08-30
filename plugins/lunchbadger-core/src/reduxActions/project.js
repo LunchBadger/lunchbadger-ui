@@ -85,6 +85,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
       dispatch(addSystemDefcon1({error}));
     }
   }
+  await new Promise(res => setTimeout(res, 300));
   dispatch(actions.setLoadingProject(false));
   if (manualSave) {
     GAEvent('Header Menu', 'Saved Project');

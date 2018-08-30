@@ -40,7 +40,7 @@ module.exports = {
       .pause(7000)
       .clickDemoWizardNext()
       .pause(7000)
-      .present('.joyride-tooltip[data-target=".DetailsPanel .cancel"]')
+      .visible('.joyride-tooltip[data-target=".DetailsPanel .cancel"]')
       .pause(3000)
       .clickDemoWizardHole()
       .pause(3000)

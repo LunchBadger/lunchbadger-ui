@@ -28,7 +28,7 @@ module.exports = {
       .pause(3000)
       .submitCanvasEntity(modelSelector)
       .waitForEntityDeployed(modelSelector)
-      .connectPorts(memorySelector, 'out', modelSelector, 'in')
+      .connectPortsWithoutAutoSave(memorySelector, 'out', modelSelector, 'in')
       .clickDemoWizardHole(2)
       .waitForEntityDeployed(functionSelector)
       .pause(3000)

@@ -277,7 +277,7 @@ C'mon, click it!
       api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
       api.setShowOverlay(false),
       api.setShowTooltip(false),
-      api.wait(1500),
+      api.wait(3000),
       api.setShowTooltip(true),
       api.setShowOverlay(true),
     ],

@@ -14,12 +14,13 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.192', [
+console.info('LBAPP VERSION 0.193', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
     'Feature/823 Service endpoints in EG only when connected #873',
-    'Feature/884 extend model service endpoint url #885'
+    'Feature/884 extend model service endpoint url #885',
+    'Bugfix/888 Code editor on models cannot resize horizontally, only vertically #889'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

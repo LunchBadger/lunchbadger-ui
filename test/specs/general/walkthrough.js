@@ -54,6 +54,7 @@ module.exports = {
       .setField(gatewaySelector, 'pipelines0name', 'CarPipeline')
       .pause(3000)
       .clickDemoWizardHole()
+      .pause(3000)
       .setField(gatewaySelector, 'pipelines1name', 'FunctionPipeline')
       .pause(3000)
       .clickDemoWizardHole()

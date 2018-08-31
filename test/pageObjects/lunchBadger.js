@@ -75,24 +75,16 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (amount = 1, delay = 2000) {
-    let i = amount;
-    while(i--) {
-      this
-        .clickPresent('.joyride-tooltip__button--primary')
-        .pause(delay);
-    }
-    return this;
+  clickDemoWizardNext: function (delay = 2000) {
+    return this
+      .clickPresent('.joyride-tooltip__button--primary')
+      .pause(delay);
   },
 
-  clickDemoWizardHole: function (amount = 1, delay = 2000) {
-    let i = amount;
-    while(i--) {
-      this
-        .clickPresent('.joyride-hole')
-        .pause(delay);
-    }
-    return this;
+  clickDemoWizardHole: function (delay = 2000) {
+    return this
+      .clickPresent('.joyride-hole')
+      .pause(delay);
   },
 
   reloadPage: function () {

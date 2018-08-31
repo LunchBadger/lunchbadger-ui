@@ -304,7 +304,7 @@ Function Entity's Built-in Editor
 Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
-    position: 'top-right',
+    position: 'top',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),

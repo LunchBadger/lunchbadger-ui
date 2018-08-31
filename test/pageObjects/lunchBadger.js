@@ -79,7 +79,7 @@ var pageCommands = {
     let i = amount;
     while(i--) {
       this
-        .clickVisible('.joyride-tooltip__button--primary')
+        .clickPresent('.joyride-tooltip__button--primary')
         .pause(delay);
     }
     return this;
@@ -89,7 +89,7 @@ var pageCommands = {
     let i = amount;
     while(i--) {
       this
-        .clickVisible('.joyride-hole')
+        .clickPresent('.joyride-hole')
         .pause(delay);
     }
     return this;

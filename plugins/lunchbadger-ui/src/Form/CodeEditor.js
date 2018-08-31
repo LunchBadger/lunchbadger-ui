@@ -85,7 +85,7 @@ export default class CodeEditor extends PureComponent {
   recalculateWidth = () => {
     const {width, maxWidth} = this.state;
     const rect = this.boxRef.getBoundingClientRect();
-    const max = Math.max(0, rect.width - 5);
+    const max = Math.max(0, Math.round(rect.width) - 5);
     const state = {maxWidth: max};
     if (width > max || width === maxWidth) {
       state.width = max;

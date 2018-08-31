@@ -529,11 +529,10 @@ class ModelDetails extends PureComponent {
     if (!workspaceFiles.files) return <div />;
     const file = workspaceFiles.files.server.models[entity.modelJsName];
     return (
-      <div>
+      <div className="ModelDetails__codeEditor">
         <CodeEditor
           name="files"
           value={file}
-          fullWidth={true}
           initialHeight={200}
           mode="editor"
           onChange={this.handleCodeEditorChange}

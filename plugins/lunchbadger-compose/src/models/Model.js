@@ -162,7 +162,7 @@ export default class Model extends BaseModel {
   toApiJSON() {
     return {
       friendlyName: this.name,
-      url: Config.get('customerUrl'),
+      url: `${Config.get('customerUrl')}/api/${this.contextPath}`,
     };
   }
 

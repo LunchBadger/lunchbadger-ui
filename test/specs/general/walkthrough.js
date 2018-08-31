@@ -67,6 +67,7 @@ module.exports = {
       .setField(carApiEndpointSelector, 'paths0', '/cars*')
       .pause(3000)
       .submitCanvasEntityWithoutAutoSave(carApiEndpointSelector)
+      .pause(7000)
       .connectPorts(functionSelector, 'out', gatewaySelector, 'in', 1)
       .pause(7000)
       .clickDemoWizardHole()

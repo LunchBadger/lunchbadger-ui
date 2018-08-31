@@ -8,6 +8,7 @@ import {
   EntityPropertyLabel,
   CollapsibleProperties,
   FilesEditor,
+  Input,
 } from '../../../../../lunchbadger-ui/src';
 import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
@@ -123,6 +124,7 @@ class FunctionDetails extends PureComponent {
   };
 
   render() {
+    const {name, service: {serverless: {provider: {runtime}}}} = this.props.entity;
     const sections = [
       {title: 'Details'},
       {title: 'Triggers'},
@@ -131,6 +133,16 @@ class FunctionDetails extends PureComponent {
     ];
     return (
       <div className="FunctionDetails">
+        <Input
+          type="hidden"
+          name="name"
+          value={name}
+        />
+        <Input
+          type="hidden"
+          name="runtime"
+          value={runtime}
+        />
         {sections.map(({title, render, renderButton}) => (
           <CollapsibleProperties
             key={title}

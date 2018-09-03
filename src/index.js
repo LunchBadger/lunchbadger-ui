@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.197', [
+console.info('LBAPP VERSION 0.198', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -23,7 +23,8 @@ console.info('LBAPP VERSION 0.197', [
     'Bugfix/888 Code editor on models cannot resize horizontally, only vertically #889',
     'Bugfix/890 sls PUT sends undefined instead of name #891',
     'Feature/872 app in disabled state when workspace not running #892',
-    'Bugfix/886 Unblock walkthrough after gateway deployed #897'
+    'Bugfix/886 Unblock walkthrough after gateway deployed #897',
+    'Bugfix/840 Mask overlay not covering connections #898'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

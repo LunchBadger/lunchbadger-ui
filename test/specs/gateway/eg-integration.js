@@ -26,7 +26,7 @@ var form;
 var expectedModelJSON;
 
 module.exports = {
-  '@disabled': true, // enable when proxy to model not returning [] will be solved
+  // '@disabled': true,
   'EG integration: deploy gateway': function (browser) {
     page = browser.page.lunchBadger();
     memorySelector = page.getDataSourceSelector(1);

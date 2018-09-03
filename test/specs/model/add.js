@@ -4,7 +4,7 @@ var entitySelector2;
 var MODEL_NAME = '_ThisIsA_Valid_Value';
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Model: add': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getModelSelector(1);

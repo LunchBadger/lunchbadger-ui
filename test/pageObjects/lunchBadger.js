@@ -277,6 +277,7 @@ var pageCommands = {
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
       .check(check)
+      .present('.spinner__overlay')
       .notPresent(selector + '.wip', 120000)
       .autoSave()
       .notPresent('.Aside.disabled')
@@ -392,7 +393,7 @@ var pageCommands = {
 
   autoSave: function () {
     return this
-      .present('.spinner__overlay')
+      // .present('.spinner__overlay')
       .notPresent('.spinner__overlay', 60000)
       .waitUntilDataSaved();
   },

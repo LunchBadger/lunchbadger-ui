@@ -6,7 +6,7 @@ var gatewaySelector;
 var carApiEndpointSelector;
 var myfunctionApiEndpointSelector;
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Walkthrough: demo wizard process': function(browser) {
     page = browser.page.lunchBadger();
     memorySelector = page.getDataSourceSelector(1);

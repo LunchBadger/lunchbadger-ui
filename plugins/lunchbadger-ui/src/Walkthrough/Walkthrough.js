@@ -127,7 +127,7 @@ class Walkthrough extends PureComponent {
       if (step.triggerNext) {
         const actions = step.triggerNext(this.api);
         await series(actions, () => {
-          if (!this.stepsExecuted[`${type}-${index}-next`]) {
+          if (this.joyride && !this.stepsExecuted[`${type}-${index}-next`]) {
             if (!step.unblockNext) {
               this.stepsExecuted[`${type}-${index}-next`] = true;
             }

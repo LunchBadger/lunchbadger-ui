@@ -15,7 +15,7 @@ var pageCommands = {
     return this
       .openWithDemoWizard()
       .closeDemoWizard()
-      .emptyProject()
+      // .emptyProject()
       .hideDrift();
   },
 
@@ -58,7 +58,7 @@ var pageCommands = {
   },
 
   close: function () {
-    this.emptyProject();
+    // this.emptyProject();
     this.api.execute(function () {
       return window.__coverage__;
     }, [], function (response) {
@@ -277,7 +277,7 @@ var pageCommands = {
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
       .check(check)
-      .present('.spinner__overlay')
+      // .present('.spinner__overlay')
       .notPresent(selector + '.wip', 120000)
       .autoSave()
       .notPresent('.Aside.disabled')

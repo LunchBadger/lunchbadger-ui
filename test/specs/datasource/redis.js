@@ -11,7 +11,7 @@ module.exports = {
       .testDatasource('redis', [
         ['HOST', 'dumpHost'],
         ['PORT', '8888'],
-        ['NAMESPACE', 'dumpNamespace'],
+        ['DATABASE', 'dumpDatabase'],
         ['USERNAME', 'dumpUsername'],
         ['PASSWORD', 'dumpPassword']
       ], [
@@ -20,7 +20,7 @@ module.exports = {
         'database',
         'username'
       ])
-      .closeWhenSystemDefcon1()
+      .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

@@ -50,6 +50,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
           });
         });
     }
+    await new Promise(res => setTimeout(res, 100));
     const {body} = await DataSourceService.upsert(updatedEntity.toJSON());
     if (body.hasOwnProperty('wsdl')) {
       body.soapOperations = body.operations || {};

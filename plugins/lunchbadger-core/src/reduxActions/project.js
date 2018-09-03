@@ -76,6 +76,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     await Promise.all([
       ...onSaves.map(item => item.onSave(state, delta, currData, prevData)),
       saveProject ? ProjectService.save(data) : undefined,
+      saveProject ? new Promise(res => setTimeout(res, 300)) : undefined,
     ]);
     prevData = currData;
   } catch (error) {
@@ -121,6 +122,7 @@ export const clearServer = () => async (dispatch, getState) => {
     type: 'success',
     message: 'All data removed from server',
   }));
+  await new Promise(res => setTimeout(res, 300));
   dispatch(actions.setLoadingProject(false));
   GAEvent('Header Menu', 'Cleared Project');
 };

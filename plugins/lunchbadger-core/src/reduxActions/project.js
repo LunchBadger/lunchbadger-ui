@@ -76,6 +76,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     await Promise.all([
       ...onSaves.map(item => item.onSave(state, delta, currData, prevData)),
       saveProject ? ProjectService.save(data) : undefined,
+      saveProject ? new Promise(res => setTimeout(res, 300)) : undefined,
     ]);
     prevData = currData;
   } catch (error) {
@@ -85,7 +86,6 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
       dispatch(addSystemDefcon1({error}));
     }
   }
-  await new Promise(res => setTimeout(res, 300));
   dispatch(actions.setLoadingProject(false));
   if (manualSave) {
     GAEvent('Header Menu', 'Saved Project');

@@ -145,6 +145,15 @@ class App extends Component {
             steps={walkthroughSteps}
             userId={userId}
           />
+          {blocked && (
+            <div className="app__wrapper__blocked">
+              {'Workspace became temporarily not running.'}
+              <br />
+              {'Recovery attempt will be made automatically.'}
+              <br />
+              {'If it successful, this error will be resolved.'}
+            </div>
+          )}
         </div>
       </Provider>
     );

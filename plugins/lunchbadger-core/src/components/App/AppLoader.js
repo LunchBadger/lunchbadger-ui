@@ -36,6 +36,7 @@ class AppLoader extends Component {
       error: null,
       workspaceError: false,
     };
+    this.kubeWatcherStarted = false;
   }
 
   componentWillMount() {
@@ -70,17 +71,13 @@ class AppLoader extends Component {
     const data = JSON.parse(message.data)[envId];
     let workspaceRunning = false;
     if (data.workspace) {
-      // workspaceRunning = Object.values(data.workspace)
-      //   .reduce((prev, {status: {running}}) => prev || running, false);
+      workspaceRunning = Object.values(data.workspace)
+        .reduce((prev, {status: {running}}) => prev || running, false);
     }
-    // if (!this.state.workspaceRunning && workspaceRunning) {
-    //   if (!this.triggered) {
-    //     this.triggered = true;
-    //   } else {
-    //     document.location.reload();
-    //   }
-    // }
     this.setState({workspaceRunning});
+    if (!this.kubeWatcherStarted && workspaceRunning) {
+      this.kubeWatcherStarted = true;
+    }
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;
       this.props.dispatch(actions.setEntitiesStatuses(data));
@@ -173,7 +170,7 @@ class AppLoader extends Component {
 
   render() {
     const {loaded, error} = this.state;
-    if (loaded) {
+    if (loaded && this.kubeWatcherStarted) {
       return this.renderApp();
     } else if (error) {
       return this.renderError();

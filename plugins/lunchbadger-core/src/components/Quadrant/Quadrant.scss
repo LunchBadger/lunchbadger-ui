@@ -3,7 +3,6 @@
 .quadrant {
   vertical-align: top;
   position: relative;
-  border-right: 1px solid $ui-base-border;
   flex: 0 0 auto;
   overflow-x: hidden;
   overflow-y: auto;
@@ -19,7 +18,6 @@
   font-size: 0.778em;
   text-align: center;
   position: fixed;
-  border-right: 1px solid $ui-base-border;
   z-index: $z-index-top;
 }
 
@@ -55,4 +53,14 @@
   background: transparent;
   cursor: ew-resize;
   z-index: 1;
+  &:after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 1px;
+    bottom: 0;
+    width: 1px;
+    background-color: $ui-base-border;
+  }
 }

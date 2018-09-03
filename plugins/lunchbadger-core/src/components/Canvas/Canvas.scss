@@ -148,3 +148,10 @@
   right: -68px;
   transform: rotate(-90deg);
 }
+
+.canvas__container--editing {
+  .jsplumb-endpoint,
+  .jsplumb-connector {
+    z-index: 9 !important;
+  }
+}

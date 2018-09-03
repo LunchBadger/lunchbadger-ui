@@ -40,6 +40,7 @@ class App extends Component {
     multiEnvDelta: PropTypes.bool,
     multiEnvAmount: PropTypes.number,
     paper: PropTypes.object,
+    blocked: PropTypes.bool,
   }
 
   getChildContext() {
@@ -97,6 +98,7 @@ class App extends Component {
       currentlyOpenedPanel,
       isEntityEditable,
       walkthrough,
+      blocked,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -114,7 +116,7 @@ class App extends Component {
     const userId = getUser().profile.sub;
     return (
       <Provider connectionsStore={Connections}>
-        <div>
+        <div className={cs('app__wrapper', {blocked})}>
           <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
           <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
             <Spinner />
@@ -143,6 +145,15 @@ class App extends Component {
             steps={walkthroughSteps}
             userId={userId}
           />
+          {blocked && (
+            <div className="app__wrapper__blocked">
+              {'Workspace became temporarily not running.'}
+              <br />
+              {'Recovery attempt will be made automatically.'}
+              <br />
+              {'If it successful, this error will be resolved.'}
+            </div>
+          )}
         </div>
       </Provider>
     );

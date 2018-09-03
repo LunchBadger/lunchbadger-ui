@@ -65,8 +65,9 @@ input {
     border: 2px solid #000;
     color: #000;
     font-size: 24pt;
-    padding: 50px;
+    padding: 50px 60px;
     text-align: center;
     z-index: 9999;
+    white-space: nowrap;
   }
 }

@@ -47,6 +47,7 @@ class AppLoader extends Component {
     if (isKubeWatcherEnabled) {
       this.initKubeWatcher();
     }
+    window.addEventListener('keydown', this.blockKeyPressWhenWorkspaceNotRunning);
   }
 
   componentWillUnmount() {
@@ -54,7 +55,14 @@ class AppLoader extends Component {
       this.kubeWatcherMonitor.close();
       this.kubeWatcherMonitor = null;
     }
+    window.removeEventListener('keydown', this.blockKeyPressWhenWorkspaceNotRunning);
   }
+
+  blockKeyPressWhenWorkspaceNotRunning = (event) => {
+    if (this.state.workspaceRunning) return;
+    event.stopPropagation();
+    event.preventDefault();
+  };
 
   initKubeWatcher = () => {
     if (this.kubeWatcherMonitor) {

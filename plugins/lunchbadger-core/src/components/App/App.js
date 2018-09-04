@@ -147,11 +147,13 @@ class App extends Component {
           />
           {blocked && (
             <div className="app__wrapper__blocked">
-              {'Workspace became temporarily not running.'}
-              <br />
-              {'Recovery attempt will be made automatically.'}
-              <br />
-              {'If it successful, this error will be resolved.'}
+              <div className="app__wrapper__blocked--message">
+                {'The Canvas workspace process is temporarily not running.'}
+                <br />
+                {'Recovery attempts will be made automatically.'}
+                <br />
+                {'If the attempts are successful, this will be resolved.'}
+              </div>
             </div>
           )}
         </div>

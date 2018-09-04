@@ -11,7 +11,7 @@ module.exports = {
       .testDatasource('mongodb', [
         ['HOST', 'dumpHost'],
         ['PORT', '8888'],
-        ['COLLECTION', 'dumpCollection'],
+        ['DATABASE', 'dumpDatabase'],
         ['USERNAME', 'dumpUsername'],
         ['PASSWORD', 'dumpPassword']
       ], [
@@ -20,7 +20,7 @@ module.exports = {
         'database',
         'username'
       ])
-      .closeWhenSystemDefcon1()
+      .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

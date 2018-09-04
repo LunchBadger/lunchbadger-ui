@@ -23,7 +23,7 @@ We're here to help you!
 Direct any questions via chat here or to your LunchBadger Support Team at <a href="mailto:support@lunchbadger.com" target="_blank">support@lunchbadger.com</a>.
 `,
     selector: '#drift-widget',
-    position: 'right',
+    position: 'top',
     allowClicksThruHole: false,
   },
   '903': {

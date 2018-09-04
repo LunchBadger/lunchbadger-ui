@@ -426,7 +426,7 @@ export default class GatewayPolicyAction extends PureComponent {
         if (item.schemas) {
           const {prefix, horizontal, validations, onChangeState} = this.props;
           return (
-            <div className="GatewayPolicyAction__object">
+            <div className={cs('GatewayPolicyAction__object', name)}>
               <EntityPropertyLabel>{name}</EntityPropertyLabel>
               <GatewayPolicyAction
                 action={value}

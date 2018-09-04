@@ -13,7 +13,6 @@ module.exports = {
       .addElementFromTooltip('endpoint', 'serviceendpoint')
       .waitForElementPresent('.endpoint.Tool.selected', 8000)
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {
@@ -39,7 +38,6 @@ module.exports = {
       .clickPresent(entitySelector + ' .button__add__URLS')
       .setValueSlow(entitySelector + ' .input__urls2 input', 'http://service/driver')
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {
@@ -59,7 +57,6 @@ module.exports = {
       .clickVisibleOnHover(entitySelector + ' .input__urls1', entitySelector + ' .button__remove__urls1')
       .waitForElementNotVisible(entitySelector + ' .button__remove__urls0', 5000)
       .submitCanvasEntity(entitySelector)
-      .saveProject()
       .reloadPage()
       .check({
         text: {

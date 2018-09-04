@@ -277,7 +277,7 @@ C'mon, click it!
       api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
       api.setShowOverlay(false),
       api.setShowTooltip(false),
-      api.wait(1500),
+      api.wait(3000),
       api.setShowTooltip(true),
       api.setShowOverlay(true),
     ],
@@ -304,7 +304,7 @@ Function Entity's Built-in Editor
 Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
-    position: 'top-right',
+    position: 'top',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),

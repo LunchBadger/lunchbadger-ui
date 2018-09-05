@@ -44,7 +44,7 @@ module.exports = {
     API_ENDPOINT_1_NAME = `${MODEL_NAME}ApiEndpoint`;
     API_ENDPOINT_2_NAME = `${SERVICE_ENDPOINT_NAME}ApiEndpoint`;
     const domain = `${username}-dev.staging.lunchbadger.io`;
-    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-${domain}/api/${MODEL_NAME}`;
+    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-${domain}/${MODEL_NAME}`;
     GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-${domain}/robots.txt`;
     url = `http://${domain}/api/${MODEL_NAME}`;
     model = page.getUniqueName('model');
@@ -109,12 +109,12 @@ Disallow: /deny
     page
       .addActionParameterCustom(0, 0, 0, 'object')
       .setActionParameterCustomName(0, 0, 0, '', 'object', 'myObj')
-      .addActionObjectParameterProperty(0, 0, 0, 'myObj')
-      .setActionObjectParameterProperty(0, 0, 0, '', 'param1')
+      .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'string')
+      .setActionObjectParameterProperty(0, 0, 0, '', 'param1', 'string', '.GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'myObjparam1', 'value1')
-      .addActionObjectParameterProperty(0, 0, 0, 'myObj')
-      .setActionObjectParameterProperty(0, 0, 0, '', 'param2')
-      .setActionParameter(0, 0, 0, 'myObjparam2', 'value2')
+      .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'number')
+      .setActionObjectParameterProperty(0, 0, 0, '', 'param2', 'number', '.GatewayPolicyAction__object.myObj')
+      .setActionParameter(0, 0, 0, 'myObjparam2', 678, 'number')
       .checkPipelines(expectActionCustomObject);
   },
   'EG integration: action schema parameter - array': function () {
@@ -161,12 +161,12 @@ Disallow: /deny
     page
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'object')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'object', 'myObj')
-      .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
-      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param1')
+      .addActionObjectParameterProperty(0, 0, 0, 'forwardHeadersmyObj', 'string')
+      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param1', 'string', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam1', 'value1')
-      .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'forwardHeaders')
-      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2')
-      .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 'value2')
+      .addActionObjectParameterProperty(0, 0, 0, 'forwardHeadersmyObj', 'number')
+      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2', 'number', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
+      .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 321, 'number')
       .checkPipelines(expectActionObjectObject);
   },
   'EG integration: action schema parameter - object array': function () {
@@ -191,8 +191,7 @@ Disallow: /deny
     page
       .setPolicyByDetails(0, 0, 'cors')
       .addPolicyCAPair(0, 0, 0)
-      .addActionParameter(0, 0, 0, 'optionsSuccessStatus')
-      .setActionParameter(0, 0, 0, 'optionsSuccessStatus', 403, 'number')
+      .setActionParameter(0, 0, 0, 'optionsSuccessStatus', 403, 'number', 'implicit')
       .checkPipelines(expectActionInteger);
   },
   'EG integration: action schema parameter - boolean': function () {
@@ -203,9 +202,8 @@ Disallow: /deny
   },
   'EG integration: action schema parameter - types / string': function () {
     page
-      .addActionParameter(0, 0, 0, 'origin')
       .setActionParameterType(0, 0, 0, 'origin', 'string')
-      .setActionParameter(0, 0, 0, 'origin', '*')
+      .setActionParameter(0, 0, 0, 'origin', '*', 'text')
       .checkPipelines(expectActionTypesString);
   },
   'EG integration: action schema parameter - types / boolean': function () {
@@ -450,7 +448,7 @@ Disallow: /deny
         }
       })
       .clickPresent(apiEndpointModelSelector + ' .button__add__PATHS')
-      .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/api/${MODEL_NAME}*`)
+      .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/${MODEL_NAME}*`)
       .submitCanvasEntity(apiEndpointModelSelector)
       .pause(10000)
       .apiCall('put', {url, form}, function (body) {
@@ -789,7 +787,7 @@ const expectActionCustomObject = [
               myNum: 456,
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -818,7 +816,7 @@ const expectActionCustomArray = [
               myNum: 456,
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               },
               myArr: ['a', 'b', 'c']
             }
@@ -849,7 +847,7 @@ const expectActionString = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -881,7 +879,7 @@ const expectActionObjectString = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -914,7 +912,7 @@ const expectActionObjectBoolean = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -948,7 +946,7 @@ const expectActionObjectInteger = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -983,7 +981,7 @@ const expectActionObjectNumber = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -1012,7 +1010,7 @@ const expectActionObjectObject = [
                 myNum: 234,
                 myObj: {
                   param1: 'value1',
-                  param2: 'value2'
+                  param2: 321
                 }
               },
               myString: 'txt',
@@ -1022,7 +1020,7 @@ const expectActionObjectObject = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }
@@ -1051,7 +1049,7 @@ const expectActionObjectArray = [
                 myNum: 234,
                 myObj: {
                   param1: 'value1',
-                  param2: 'value2'
+                  param2: 321
                 },
                 myArr: ['one', 'two', 'three']
               },
@@ -1062,7 +1060,7 @@ const expectActionObjectArray = [
               myArr: ['a', 'b', 'c'],
               myObj: {
                 param1: 'value1',
-                param2: 'value2'
+                param2: 678
               }
             }
           }

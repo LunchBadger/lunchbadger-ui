@@ -40,7 +40,7 @@ class AppLoader extends Component {
   }
 
   componentWillMount() {
-    this.load();
+    setTimeout(() => this.load(), 100);
   }
 
   componentDidMount() {

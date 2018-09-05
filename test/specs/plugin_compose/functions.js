@@ -10,7 +10,7 @@ var filesEditorHeight = 0;
 var filesEditorSelector = '.DetailsPanel .FilesEditor';
 
 module.exports = {
-  '@disabled': false,
+  // '@disabled': true,
   'Functions: create function': function (browser) {
     page = browser.page.lunchBadger();
     functionSelector = page.getFunctionSelector(1);

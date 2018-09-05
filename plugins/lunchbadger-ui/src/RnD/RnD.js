@@ -33,6 +33,7 @@ export default class RnD extends PureComponent {
       top: 0,
       width,
       height,
+      showContent: false,
     };
   }
 
@@ -44,9 +45,10 @@ export default class RnD extends PureComponent {
       y: 0,
       left: `calc(50% - ${x}px)`,
       top: `calc(50% - ${y}px)`,
+    }, () => {
+      setTimeout(this.dispatchResizeEvent, 1000);
+      setTimeout(this.dispatchDragEvent, 1500);
     }));
-    setTimeout(this.dispatchResizeEvent, 1000);
-    setTimeout(this.dispatchDragEvent, 1500);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -121,7 +123,12 @@ export default class RnD extends PureComponent {
     GAEvent('Zoom Window', 'Dragged', this.props.gaType);
   };
 
-  dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
+  dispatchResizeEvent = () => {
+    window.dispatchEvent(new Event('rndresized'));
+    if (!this.state.showContent) {
+      this.setState({showContent: true});
+    }
+  };
 
   dispatchDragEvent = () => window.dispatchEvent(new Event('rnddragged'));
 
@@ -134,7 +141,15 @@ export default class RnD extends PureComponent {
       rect,
     } = this.props;
     const {x, y, width: maxWidth, height: maxHeight} = rect;
-    const {opened, custom, left, top, width, height} = this.state;
+    const {
+      opened,
+      custom,
+      left,
+      top,
+      width,
+      height,
+      showContent,
+    } = this.state;
     return (
       <div
         ref={r => this.refWrap = r}
@@ -167,7 +182,7 @@ export default class RnD extends PureComponent {
               <Toolbox config={toolbox} zoom />
             </div>
             <div className="RnD__content">
-              {children}
+              {showContent ? children : null}
             </div>
           </div>
         </Rnd>

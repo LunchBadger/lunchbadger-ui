@@ -142,7 +142,7 @@
       }
     }
     &.ConfirmModal {
-      width: 540px;
+      width: 630px;
       .SystemDefcon1__box__title:before {
         display: none;
       }
@@ -153,7 +153,8 @@
           button {
             text-transform: uppercase;
             margin: 0 10px;
-            &:nth-child(2) {
+            &:nth-child(2),
+            &:nth-child(3) {
               background-color: #7a8399;
             }
           }

@@ -83,6 +83,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
       running: functionRunning,
       deleting: functionDeleting,
       name: functionName,
+      error: functionError,
     } = entity || {};
     if (status === null) {
       if (functionDeleting) {
@@ -90,7 +91,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
         userStorage.removeObjectKey('function', slugId);
       }
     } else {
-      const {running} = status;
+      const {running, failed} = status;
       if (entity === null) {
         const storageFunction = userStorage.getObjectKey('function', slugId) || {};
         const fake = !storageFunction.name;
@@ -104,6 +105,8 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
         });
         dispatch(actions.updateFunction(updatedEntity));
       } else {
+        updatedEntity = entity.recreate();
+        let isEntityUpdate = false;
         if (running !== functionRunning) {
           if (functionDeleting) return;
           if (functionRunning === null && !running) return;
@@ -111,7 +114,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
           if (isDeployed) {
             // isSave = true;
           }
-          updatedEntity = entity.recreate();
+          isEntityUpdate = true;
           updatedEntity.running = running;
           if (running) {
             updatedEntity.error = null;
@@ -119,6 +122,46 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
           dispatch(actions.updateFunction(updatedEntity));
           const message = isDeployed ? 'successfully deployed' : `is ${running ? '' : 'not'} running`;
           showFunctionStatusChangeMessage(dispatch, functionName, message);
+        }
+        if (failed && !functionError) {
+          isEntityUpdate = true;
+          const error = new Error();
+          error.friendlyTitle = (
+            <div>
+              {'Function'}
+              {' '}
+              <code>{updatedEntity.name}</code>
+              {' '}
+              {'failed to run'}
+            </div>
+          );
+          error.friendlyMessage = (
+            <div>
+              {'Please check if the function code you provided is valid and correct.'}
+              <br />
+              {'You can also find more details in function logs.'}
+            </div>
+          );
+          error.buttons = [
+            {
+              label: 'Close'
+            },
+            {
+              label: 'Edit function code',
+              onClick: () => updatedEntity.openDetailsPanel('general')('.FunctionCode')
+            },
+            {
+              label: 'Show function logs',
+              onClick: () => updatedEntity.openDetailsPanel('general')('.FunctionLogs')
+            }
+          ]
+          updatedEntity.error = error;
+        } else if (functionError && running) {
+          isEntityUpdate = true;
+          updatedEntity.error = undefined;
+        }
+        if (isEntityUpdate) {
+          dispatch(actions.updateFunction(updatedEntity));
         }
       }
     }

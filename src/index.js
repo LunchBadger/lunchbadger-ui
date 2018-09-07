@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.204', [
+console.info('LBAPP VERSION 0.205', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',

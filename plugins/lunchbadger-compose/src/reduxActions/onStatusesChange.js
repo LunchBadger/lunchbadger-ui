@@ -148,11 +148,11 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
             },
             {
               label: 'Edit function code',
-              onClick: () => updatedEntity.openDetailsPanel('general')('.FunctionCode')
+              onClick: () => entity.openDetailsPanel && entity.openDetailsPanel('general')('.FunctionCode')
             },
             {
               label: 'Show function logs',
-              onClick: () => updatedEntity.openDetailsPanel('general')('.FunctionLogs')
+              onClick: () => entity.openDetailsPanel && entity.openDetailsPanel('general')('.FunctionLogs')
             }
           ]
           updatedEntity.error = error;

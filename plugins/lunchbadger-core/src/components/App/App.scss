@@ -49,3 +49,34 @@ input {
     padding-top: 75px;
   }
 }
+
+.app__wrapper {
+  &.blocked {
+    .app,
+    .joyride-tooltip {
+      filter: grayscale(1);
+    }
+  }
+  &__blocked {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
+    &--message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 2px solid #000;
+      color: #000;
+      font-size: 24pt;
+      padding: 50px 60px;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+}

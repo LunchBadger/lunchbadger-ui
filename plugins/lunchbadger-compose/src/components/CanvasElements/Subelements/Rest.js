@@ -589,19 +589,22 @@ export default class Rest extends PureComponent {
     return (
       <div className={cs('Rest', {plain, notPlain: !plain})}>
         <div className="Rest__predefined">
-          <EntityProperty
-            name="mode"
-            title="Mode"
-            value={mode}
-            options={modeOptions}
-            onChange={this.handleResourceOperationsModeChanged}
-            width={widthPredefined}
-          />
+          <div>
+            <EntityProperty
+              name="mode"
+              title="Mode"
+              value={mode}
+              options={modeOptions}
+              onChange={this.handleResourceOperationsModeChanged}
+              width={widthPredefined}
+            />
+          </div>
           {isResourceOperationsMode && (
             <EntityProperty
               name="baseURL"
               title="Base URL"
               value={baseURL}
+              width="100%"
             />
           )}
           {!isResourceOperationsMode && (

@@ -83,11 +83,12 @@ export default class Rest extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {predefined, operations, options} = props.entity;
+    const {predefined, operations, options, baseURL} = props.entity;
     return {
       predefined,
       operations: transformOperations(operations),
       options: transformOptions(options),
+      isResourceOperationsMode: !!baseURL,
     };
   };
 
@@ -245,7 +246,10 @@ export default class Rest extends PureComponent {
     const operations = transformOperations(this.state.operations);
     operations[operationIdx].functions[functionIdx][param] = value;
     this.changeState({operations});
-  }
+  };
+
+  handleResourceOperationsModeChanged = mode =>
+    this.setState({isResourceOperationsMode: mode === 'crud'});
 
   renderOptionHeaders = (headers) => {
     return (
@@ -546,9 +550,10 @@ export default class Rest extends PureComponent {
   };
 
   render() {
-    const {plain} = this.props;
-    const {predefined, operations} = this.state;
+    const {plain, entity} = this.props;
+    const {predefined, operations, isResourceOperationsMode} = this.state;
     const predefinedOptions = Object.keys(predefinedRests).map(value => ({label: predefinedRests[value].label, value}));
+    const {baseURL} = entity;
     const operationsCollapsible = (
       <div>
         {operations.map((operation, idx) => (
@@ -576,36 +581,60 @@ export default class Rest extends PureComponent {
     if (!plain) {
       widthPredefined = 300;
     }
+    const modeOptions = [
+      {label: 'CRUD', value: 'crud'},
+      {label: 'Templates', value: 'templates'}
+    ];
+    const mode = isResourceOperationsMode ? 'crud' : 'templates';
     return (
       <div className={cs('Rest', {plain, notPlain: !plain})}>
         <div className="Rest__predefined">
           <EntityProperty
-            name="predefined"
-            title="Predefined properties"
-            value={predefined}
-            options={predefinedOptions}
-            onChange={this.handlePredefinedChanged}
+            name="mode"
+            title="Mode"
+            value={mode}
+            options={modeOptions}
+            onChange={this.handleResourceOperationsModeChanged}
             width={widthPredefined}
           />
-        </div>
-        <div className="Rest__plain">
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}
-            collapsible={this.renderOptions()}
-            defaultOpened
-            barToggable
-          />
-        </div>
-        <div className="Rest__operations">
-          <CollapsibleProperties
-            bar={<EntityPropertyLabel>Operations</EntityPropertyLabel>}
-            collapsible={operationsCollapsible}
-            button={<IconButton icon="iconPlus" name="add__operation" onClick={this.handleAddOperation} />}
-            defaultOpened
-            barToggable={!plain}
-            untoggable={plain}
-            noDividers={plain}
-          />
+          {isResourceOperationsMode && (
+            <EntityProperty
+              name="baseURL"
+              title="Base URL"
+              value={baseURL}
+            />
+          )}
+          {!isResourceOperationsMode && (
+            <div>
+              <EntityProperty
+                name="predefined"
+                title="Predefined templates"
+                value={predefined}
+                options={predefinedOptions}
+                onChange={this.handlePredefinedChanged}
+                width={widthPredefined}
+              />
+              <div className="Rest__plain">
+                <CollapsibleProperties
+                  bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}
+                  collapsible={this.renderOptions()}
+                  defaultOpened
+                  barToggable
+                />
+              </div>
+              <div className="Rest__operations">
+                <CollapsibleProperties
+                  bar={<EntityPropertyLabel>Operations</EntityPropertyLabel>}
+                  collapsible={operationsCollapsible}
+                  button={<IconButton icon="iconPlus" name="add__operation" onClick={this.handleAddOperation} />}
+                  defaultOpened
+                  barToggable={!plain}
+                  untoggable={plain}
+                  noDividers={plain}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );

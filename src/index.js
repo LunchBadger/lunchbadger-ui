@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.200', [
+console.info('LBAPP VERSION 0.201', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -25,7 +25,8 @@ console.info('LBAPP VERSION 0.200', [
     'Feature/872 app in disabled state when workspace not running #892',
     'Bugfix/886 Unblock walkthrough after gateway deployed #897',
     'Bugfix/840 Mask overlay not covering connections #898',
-    'Bugfix/870 Adding new policy doesnt auto-scroll down to new record #899'
+    'Bugfix/870 Adding new policy doesnt auto-scroll down to new record #899',
+    'Feature/903 Handle Function deploy failure #912'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

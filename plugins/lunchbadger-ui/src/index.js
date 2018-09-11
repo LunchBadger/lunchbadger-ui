@@ -39,7 +39,10 @@ import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
 import Walkthrough, {blockedEscapingKeys} from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
-import scrollToElement from './utils/scrollToElement';
+import {
+  scrollToElement,
+  openDetailsPanelWithAutoscroll,
+} from './utils';
 import Resizable from './Resizable/Resizable';
 import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
 import PasswordStrengthMeter from './PasswordStrengthMeter/PasswordStrengthMeter';
@@ -118,6 +121,7 @@ export {
   IconMenu,
   IconSVG,
   Input,
+  openDetailsPanelWithAutoscroll,
   PanelBar,
   PasswordStrengthMeter,
   Resizable,

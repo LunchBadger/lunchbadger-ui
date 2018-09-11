@@ -11,7 +11,7 @@ module.exports = {
       .addElementFromTooltip('dataSource', 'rest')
       .check({
         text: {
-          [`${entitySelector} .Rest__predefined .EntityPropertyLabel`]: 'PREDEFINED PROPERTIES',
+          [`${entitySelector} .RestPredefinedTemplates .EntityPropertyLabel`]: 'PREDEFINED TEMPLATES',
           [`${entitySelector} .Rest__method .EntityPropertyLabel`]: 'METHOD',
           [`${entitySelector} .Rest__url .EntityPropertyLabel`]: 'URL'
         }
@@ -23,7 +23,7 @@ module.exports = {
       .reloadPage()
       .check({
         text: {
-          [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - Location',
+          [`${entitySelector} .RestPredefinedTemplates .EntityProperty__field--textValue`]: 'Google Maps - Location',
           [`${entitySelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
           [`${entitySelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
         }
@@ -38,7 +38,7 @@ module.exports = {
       .reloadPage()
       .check({
         text: {
-          [`${entitySelector} .Rest__predefined .EntityProperty__field--textValue`]: 'Google Maps - GeoCode',
+          [`${entitySelector} .RestPredefinedTemplates .EntityProperty__field--textValue`]: 'Google Maps - GeoCode',
           [`${entitySelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
           [`${entitySelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
         }

@@ -3,6 +3,7 @@ import slug from 'slug';
 import Config from '../../../../src/config';
 import {actions} from './actions';
 import Function_ from '../models/Function';
+import {openDetailsPanelWithAutoscroll} from '../../../lunchbadger-ui/src';
 
 const envId = Config.get('envId');
 const {getUser} = LunchBadgerCore.utils;
@@ -70,6 +71,11 @@ const showFunctionStatusChangeMessage = (dispatch, name, message) => {
   }));
 };
 
+const openDetailsPanel = (dispatch, entity, autoscrollSelector) => {
+  dispatch(coreActions.setCurrentElement(entity));
+  openDetailsPanelWithAutoscroll(entity.id, 'general', autoscrollSelector);
+};
+
 export const onSlsStatusChange = () => async (dispatch, getState) => {
   const {entitiesStatuses, entities: {functions: entities}} = getState();
   const statuses = transformFunctionStatuses(entitiesStatuses['kubeless-fn'] || {});
@@ -89,6 +95,10 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
       if (functionDeleting) {
         dispatch(actions.removeFunction(entity));
         userStorage.removeObjectKey('function', slugId);
+      } else if (functionRunning){
+        updatedEntity = entity.recreate();
+        updatedEntity.running = null;
+        dispatch(actions.updateFunction(updatedEntity));
       }
     } else {
       const {running, failed} = status;
@@ -148,11 +158,11 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
             },
             {
               label: 'Edit function code',
-              onClick: () => entity.openDetailsPanel && entity.openDetailsPanel('general')('.FunctionCode')
+              onClick: () => openDetailsPanel(dispatch, entity, '.FunctionCode')
             },
             {
               label: 'Show function logs',
-              onClick: () => entity.openDetailsPanel && entity.openDetailsPanel('general')('.FunctionLogs')
+              onClick: () => openDetailsPanel(dispatch, entity, '.FunctionLogs')
             }
           ]
           updatedEntity.error = error;

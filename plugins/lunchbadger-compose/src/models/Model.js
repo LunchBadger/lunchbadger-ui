@@ -49,8 +49,7 @@ export default class Model extends BaseModel {
     'elementDOM',
     'slugifyName',
     'zoomWindow',
-    'models',
-    'openDetailsPanel'
+    'models'
   ];
 
   _ports = [];

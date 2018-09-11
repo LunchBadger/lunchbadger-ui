@@ -51,9 +51,10 @@ export const update = (entity, model) => async (dispatch, getState) => {
     const slsDeploy = await SLSService.update(name, updatedEntity.service);
     updatedEntity.service = slsDeploy.body;
     await dispatch(coreActions.saveToServer({saveProject: false}));
-    await SLSService.deploy(name);
-    updatedEntity.running = true;
+    SLSService.deploy(name); // 903: removed await here
+    updatedEntity.running = null;
   } catch (error) {
+    // in theory that should not happen, at least deploy call should be always 200
     updatedEntity.running = false;
     let errorMessage = (
       <div>

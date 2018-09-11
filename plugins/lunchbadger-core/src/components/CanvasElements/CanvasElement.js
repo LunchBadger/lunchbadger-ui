@@ -132,7 +132,11 @@ export default (ComposedComponent) => {
         inputName.focus();
         inputName.setSelectionRange(0, inputName.value.length);
       }
-      this.props.entity.openDetailsPanel = this.handleZoom;
+      window.addEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
     }
 
     setFlatModel = () => {
@@ -175,7 +179,13 @@ export default (ComposedComponent) => {
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
       }
-    }
+    };
+
+    openDetailsPanelWithAutoscroll = ({detail: {entityId, tab, autoscrollSelector}}) => {
+      if (this.props.entity.id === entityId) {
+        this.handleZoom(tab)(autoscrollSelector)
+      }
+    };
 
     triggerElementAutofocus() {
       if (!this.entityRef) return; // FIXME
@@ -416,6 +426,7 @@ export default (ComposedComponent) => {
           wip: processing,
           semitransparent,
           allowEditWhenCrashed: allowEditWhenCrashed,
+          withStatus: !!status,
         })}>
             <Entity
               ref={(r) => {this.entityRef = r}}

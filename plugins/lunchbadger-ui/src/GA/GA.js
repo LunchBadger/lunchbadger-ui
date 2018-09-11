@@ -1,20 +1,24 @@
-import ReactGA from 'react-ga';
-import Config from '../../../../src/config';
+class Tracker {
+  set = str => this.tracker = str;
+  fn = action => `${this.tracker}.${action}`;
+}
 
-ReactGA.initialize(Config.get('googleAnalyticsID'), {
-  debug: document.location.search === '?ga-debug'
-});
+const {ga} = window;
+const tracker = new Tracker();
+
+ga(() => tracker.set(ga.getAll()[0].a.data.values[':name']));
 
 export const GAEvent = (
-  category,
-  action,
-  label,
-  value,
-) => ReactGA.event({
-  category,
-  action,
-  label,
-  value
+  eventCategory,
+  eventAction,
+  eventLabel,
+  eventValue,
+) => ga(tracker.fn('send'), {
+  hitType: 'event',
+  eventCategory,
+  eventAction,
+  eventLabel,
+  eventValue
 });
 
-export default ReactGA;
+export const setGAUserId = userId => ga(tracker.fn('set'), {userId});

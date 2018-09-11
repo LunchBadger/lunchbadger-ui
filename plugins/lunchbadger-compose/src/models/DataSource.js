@@ -41,6 +41,7 @@ export default class DataSource extends BaseModel {
   };
   soapOperations = {};
   soapHeaders = [];
+  baseURL = '';
 
   constructor(id, name, connector) {
     super(id);
@@ -96,9 +97,13 @@ export default class DataSource extends BaseModel {
       delete json.database;
       delete json.username;
       delete json.password;
-      json.predefined = this.predefined;
-      json.options = this.options;
-      json.operations = this.operations;
+      if (this.baseURL) {
+        json.baseURL = this.baseURL;
+      } else {
+        json.predefined = this.predefined;
+        json.options = this.options;
+        json.operations = this.operations;
+      }
     }
     if (this.isSoap || this.isEthereum) {
       delete json.database;
@@ -362,7 +367,8 @@ export default class DataSource extends BaseModel {
         }
       }
       const withPort = model.hasOwnProperty('port');
-      const isRest = model.hasOwnProperty('operations');
+      const isRestTemplates = model.hasOwnProperty('operations');
+      const isRestCrud = model.hasOwnProperty('baseURL');
       let fields = ['name', 'url', 'database', 'username'];
       if (withPort) {
         fields = ['name', 'host', 'port', 'database', 'username'];
@@ -383,8 +389,11 @@ export default class DataSource extends BaseModel {
           model.port = model.port.toString();
         }
       }
-      if (isRest && model.operations[0].template.url === '') {
+      if (isRestTemplates && model.operations[0].template.url === '') {
         validations.data['baseUrl'] = messages.fieldCannotBeEmpty;
+      }
+      if (isRestCrud && model.baseURL === '') {
+        validations.data['baseURL'] = messages.fieldCannotBeEmpty;
       }
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
@@ -410,6 +419,8 @@ export default class DataSource extends BaseModel {
   processModel(model) {
     const data = _.merge({}, model);
     if (data.hasOwnProperty('predefined')) {
+      delete data.mode;
+      data.baseURL = undefined;
       const options = data.options;
       if (!options.enabled) {
         data.options = undefined;
@@ -482,6 +493,9 @@ export default class DataSource extends BaseModel {
           });
         }
       });
+    }
+    if (data.hasOwnProperty('baseURL')) {
+      delete data.mode;
     }
     return data;
   }

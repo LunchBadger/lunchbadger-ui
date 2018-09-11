@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.205', [
+console.info('LBAPP VERSION 0.206', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -27,7 +27,8 @@ console.info('LBAPP VERSION 0.205', [
     'Bugfix/840 Mask overlay not covering connections #898',
     'Bugfix/870 Adding new policy doesnt auto-scroll down to new record #899',
     'Feature/903 Handle Function deploy failure #912',
-    'Feature/902 rest connector in crud mode #914'
+    'Feature/902 rest connector in crud mode #914',
+    'Feature/903 removed await deploy #923'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

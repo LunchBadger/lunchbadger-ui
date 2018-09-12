@@ -6,14 +6,16 @@ class Tracker {
 const {ga} = window;
 const tracker = new Tracker();
 
-ga(() => tracker.set(ga.getAll()[0].a.data.values[':name']));
+if (ga) {
+  ga(() => tracker.set(window.ga.getAll()[0].a.data.values[':name']));
+}
 
 export const GAEvent = (
   eventCategory,
   eventAction,
   eventLabel,
   eventValue,
-) => ga(tracker.fn('send'), {
+) => ga && ga(tracker.fn('send'), {
   hitType: 'event',
   eventCategory,
   eventAction,
@@ -21,4 +23,4 @@ export const GAEvent = (
   eventValue
 });
 
-export const setGAUserId = userId => ga(tracker.fn('set'), {userId});
+export const setGAUserId = userId => ga && ga(tracker.fn('set'), {userId});

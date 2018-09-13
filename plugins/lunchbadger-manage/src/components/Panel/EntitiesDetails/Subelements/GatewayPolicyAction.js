@@ -342,6 +342,7 @@ export default class GatewayPolicyAction extends PureComponent {
             enum: item.enum,
             custom,
             schemas,
+            description,
           })}
         </div>
       );
@@ -427,7 +428,16 @@ export default class GatewayPolicyAction extends PureComponent {
           const {prefix, horizontal, validations, onChangeState} = this.props;
           return (
             <div className={cs('GatewayPolicyAction__object', name)}>
-              <EntityPropertyLabel>{name}</EntityPropertyLabel>
+              <EntityPropertyLabel
+                description={description}
+              >
+                {name}
+                {!!titleRemark && (
+                  <span className="EntityProperty__titleRemark">
+                    {titleRemark}
+                  </span>
+                )}
+              </EntityPropertyLabel>
               <GatewayPolicyAction
                 action={value}
                 schemas={item.schemas}

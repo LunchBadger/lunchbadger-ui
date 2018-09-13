@@ -548,7 +548,8 @@ export default [
           "items": {
             "type": "string"
           },
-          "default": "*"
+          "default": "*",
+          "description": "Configures the Access-Control-Allow-Origin CORS header."
         },
         "methods": {
           "type": [
@@ -565,7 +566,8 @@ export default [
             "PATCH",
             "POST",
             "DELETE"
-          ]
+          ],
+          "description": "Configures the Access-Control-Allow-Methods CORS header."
         },
         "allowedHeaders": {
           "type": [
@@ -574,27 +576,28 @@ export default [
           ],
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Configures the Access-Control-Allow-Headers CORS header."
         },
         "exposedHeaders": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "Configures the Access-Control-Expose-Headers CORS header."
         },
         "credentials": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": " Configures the Access-Control-Allow-Credentials CORS header. Set to true to pass the header, otherwise it is omitted."
         },
         "maxAge": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Configures the Access-Control-Max-Age CORS header. Set to an integer to pass the header, otherwise it is omitted."
         },
         "optionsSuccessStatus": {
           "type": "integer",
-          "default": 204
-        },
-        "preflightContinue": {
-          "type": "boolean",
-          "default": false
+          "default": 204,
+          "description": "Provides a status code to use for successful OPTIONS requests"
         }
       }
     }
@@ -606,7 +609,11 @@ export default [
       "type": "object",
       "properties": {
         "jscode": {
-          "type": "string"
+          "type": "string",
+          "description": "Javascript code to execute against the current egContext",
+          "examples": [
+            "req.testValue = 10"
+          ]
         }
       },
       "required": [
@@ -622,10 +629,17 @@ export default [
       "properties": {
         "headersPrefix": {
           "type": "string",
-          "default": ""
+          "default": "",
+          "description": "A prefix string to be attached to any sent headers"
         },
         "forwardHeaders": {
-          "type": "object"
+          "type": "object",
+          "description": "A key-value pair of headers/value to be added to the current http request",
+          "examples": [
+            {
+              "X-API-Gateway": "Express-Gateway"
+            }
+          ]
         }
       },
       "required": [
@@ -642,7 +656,11 @@ export default [
       "properties": {
         "secretOrPublicKey": {
           "type": "string",
-          "example": "ENTER YOUR SECRET OR PUBLIC KEY HERE"
+          "description": "The secret (symmetric) or PEM-encoded public key (asymmetric) for verifying the token's signature.",
+          "examples": [
+            "secretString",
+            "PEMCertificate"
+          ]
         },
         "jwtExtractor": {
           "type": "string",
@@ -652,20 +670,25 @@ export default [
             "authScheme",
             "authBearer"
           ],
-          "default": "authBearer"
+          "default": "authBearer",
+          "description": "The method to use to extract the JWT from the current HTTP Request"
         },
         "jwtExtractorField": {
-          "type": "string"
+          "type": "string",
+          "description": "An optional argument for the selected extractor"
         },
         "audience": {
-          "type": "string"
+          "type": "string",
+          "description": "If defined, the token audience (aud) will be verified against this value."
         },
         "issuer": {
-          "type": "string"
+          "type": "string",
+          "description": "If defined the token issuer (iss) will be verified against this value"
         },
         "checkCredentialExistence": {
           "type": "boolean",
-          "default": true
+          "default": true,
+          "description": "Value istructing the gateway whether verify the sub against the internal SOC"
         }
       },
       "required": [
@@ -683,15 +706,18 @@ export default [
       "properties": {
         "apiKeyHeader": {
           "type": "string",
-          "default": "Authorization"
+          "default": "Authorization",
+          "description": "HTTP Header to look for the apiScheme + apiKey string"
         },
         "apiKeyHeaderScheme": {
           "type": "string",
-          "default": "apiKey"
+          "default": "apiKey",
+          "description": "HTTP Authorization Scheme to verify before extracting the API Key"
         },
         "apiKeyField": {
           "type": "string",
-          "default": "apiKey"
+          "default": "apiKey",
+          "description": "Query String parameter name to look for to extract the apiKey"
         },
         "passThrough": {
           "type": "boolean",
@@ -699,15 +725,18 @@ export default [
         },
         "disableHeaders": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "Entirely disable lookup API Key from the header"
         },
         "disableHeadersScheme": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "Enable or disable apiScheme check"
         },
         "disableQueryParam": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "Entirely disable lookup API Key from the query string"
         }
       }
     }
@@ -719,7 +748,11 @@ export default [
       "type": "object",
       "properties": {
         "message": {
-          "type": "string"
+          "type": "string",
+          "description": "A template expression to print out on the log stream",
+          "examples": [
+            "This is a log message"
+          ]
         }
       },
       "required": [
@@ -759,15 +792,20 @@ export default [
         "endpoint": {
           "type": "string",
           "format": "uri",
-          "example": "http://example.uri"
+          "description": "Endpoint that will be used to validate the provided token",
+          "examples": [
+            "https://authorization.server/oauth2-introspect"
+          ]
         },
         "authorization_value": {
-          "type": "string"
+          "type": "string",
+          "description": "Value put as Authorization header that'll be sent as part of the HTTP request to the specified endpoint"
         },
         "ttl": {
           "title": "TTL",
           "type": "integer",
-          "default": 60
+          "default": 60,
+          "description": "Time, in seconds, in which the current token, if validated before, will be consider as valid without making a new request to the authorization endpoint"
         }
       },
       "required": [
@@ -783,32 +821,96 @@ export default [
       "$id": "http://express-gateway.io/schemas/policies/proxy.json",
       "type": "object",
       "properties": {
-        "serviceEndpoint": {
-          "type": "string"
+        "auth": {
+          "type": "string",
+          "description": " Basic authentication i.e. 'user:password' to compute an Authorization header."
+        },
+        "autoRewrite": {
+          "type": "boolean",
+          "default": false,
+          "description": "Rewrites the location host/port on (201/301/302/307/308) redirects based on requested host/port."
         },
         "changeOrigin": {
           "type": "boolean",
-          "default": true
+          "default": true,
+          "description": "Changes the origin of the host header to the target URL"
+        },
+        "followRedirects": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specify whether you want to follow redirects"
+        },
+        "hostRewrite": {
+          "type": "string",
+          "description": "Rewrites the location hostname on (201/301/302/307/308) redirects."
+        },
+        "ignorePath": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specify whether you want to ignore the proxy path of the incoming request"
+        },
+        "prependPath": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specify whether you want to prepend the target's path to the proxy path"
+        },
+        "preserveHeaderKeyCase": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specify whether you want to keep letter case of response header key"
+        },
+        "protocolRewrite": {
+          "type": "string",
+          "enum": [
+            "http",
+            "https"
+          ],
+          "description": "Forces the protocol on the proxied request"
         },
         "proxyUrl": {
-          "type": "string"
+          "type": "string",
+          "description": "An intermediate HTTP Proxy where send the requests to instead of the service endpoint directly"
+        },
+        "secure": {
+          "type": "boolean",
+          "default": true,
+          "description": "Flag specifying if you want to verify the SSL Certs"
+        },
+        "serviceEndpoint": {
+          "type": "string",
+          "description": "The serviceEndpoint reference where to proxy the requests to"
         },
         "stripPath": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "Specifies whether you want to strip the apiEndpoint path from the final URL."
         },
         "strategy": {
           "type": "string",
           "enum": [
             "round-robin"
           ],
-          "default": "round-robin"
+          "default": "round-robin",
+          "description": "Specifies how to balance the requests between multiple urls in the same service endpoint"
+        },
+        "toProxy": {
+          "type": "boolean",
+          "default": false,
+          "description": "Passes the absolute URL as the path"
+        },
+        "xfwd": {
+          "type": "boolean",
+          "default": false,
+          "description": "Adds x-forward headers to the proxied request"
         }
       },
       "required": [
         "strategy",
         "changeOrigin",
-        "stripPath"
+        "stripPath",
+        "ignorePath",
+        "prependPath",
+        "followRedirects"
       ]
     }
   },
@@ -823,27 +925,33 @@ export default [
         },
         "windowMs": {
           "type": "integer",
-          "default": 60000
+          "default": 60000,
+          "description": "How long to keep records of requests in memory."
         },
         "delayAfter": {
           "type": "integer",
-          "default": 1
+          "default": 1,
+          "description": "Max number of connections during windowMs before starting to delay responses."
         },
         "delayMs": {
           "type": "integer",
-          "default": 1000
+          "default": 1000,
+          "description": "How long to delay the response, in milliseconds."
         },
         "max": {
           "type": "integer",
-          "default": 5
+          "default": 5,
+          "description": "Max number of connections during windowMs milliseconds before sending a 429 response. Set to 0 to disable."
         },
         "message": {
           "type": "string",
-          "default": "Too many requests, please try again later."
+          "default": "Too many requests, please try again later.",
+          "description": "Error message returned when max is exceeded."
         },
         "statusCode": {
           "type": "integer",
-          "default": 429
+          "default": 429,
+          "description": "HTTP status code returned when max is exceeded."
         }
       }
     }
@@ -856,11 +964,13 @@ export default [
       "properties": {
         "statusCode": {
           "type": "number",
-          "default": 400
+          "default": 400,
+          "description": "HTTP Status Code to return for the request"
         },
         "message": {
           "type": "string",
-          "default": "Terminated"
+          "default": "Terminated",
+          "description": "text/plain message to return as a response"
         }
       },
       "required": [
@@ -940,7 +1050,8 @@ export default [
       "properties": {
         "pattern": {
           "type": "string",
-          "format": "regex"
+          "format": "regex",
+          "description": "RegExp to match against the req.url property"
         }
       },
       "required": [
@@ -955,7 +1066,8 @@ export default [
       "type": "object",
       "properties": {
         "path": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to match against the req.url property"
         }
       },
       "required": [
@@ -997,7 +1109,8 @@ export default [
       "type": "object",
       "properties": {
         "pattern": {
-          "type": "string"
+          "type": "string",
+          "description": "Pattern to match against the HOST header in the current HTTP Request"
         }
       },
       "required": [
@@ -1012,7 +1125,8 @@ export default [
       "type": "object",
       "properties": {
         "expression": {
-          "type": "string"
+          "type": "string",
+          "description": "Javascript Expression to execute with the current egContext object"
         }
       },
       "required": [

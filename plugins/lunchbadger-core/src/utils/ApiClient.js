@@ -4,6 +4,11 @@ import Bluebird from 'bluebird';
 import _ from 'lodash';
 import LoginManager from './auth';
 
+const statusCodesToRepeat = [
+  422,
+];
+const maxRepeatAmount = 5;
+
 class ApiClient {
   constructor(url, idToken) {
     this.url = url;
@@ -28,51 +33,58 @@ class ApiClient {
         json: true,
         headers: _.extend(this._getHeaders(), {})
       }, options);
-      request(req, (error, response, body) => {
-        const endpoint = [this.url, url.replace(/\//, '')].join('/');
-        if (error) {
-          return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
+      this.makeRequest(req, resolve, reject, url, method, options)
+    });
+  }
+
+  makeRequest = (req, resolve, reject, url, method, options, attempt = 0) => {
+    request(req, (error, response, body) => {
+      const endpoint = [this.url, url.replace(/\//, '')].join('/');
+      if (error) {
+        return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
+      }
+      if (response.statusCode >= 400) {
+        if (statusCodesToRepeat.includes(response.statusCode) && attempt < maxRepeatAmount) {
+          return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
         }
-        if (response.statusCode >= 400) {
-          let message = body;
-          let name;
-          if (body) {
-            if (typeof body === 'object') {
-              message = JSON.stringify(body);
-            }
-            if (body.err && typeof body.err === 'string') {
-              message = body.err;
-            }
-            if (body.message) {
-              message = body.message;
-            }
-            if (body.error) {
-              if (body.error.stack) {
-                message = body.error.stack;
-              }
-              if (typeof body.error === 'string') {
-                message = body.error;
-              }
-              if (body.error.message) {
-                message = body.error.message;
-              }
-              if (body.error.name) {
-                name = body.error.name;
-              }
-            }
-          } else {
-            message = response.statusMessage;
+        let message = body;
+        let name;
+        if (body) {
+          if (typeof body === 'object') {
+            message = JSON.stringify(body);
           }
-          if (response.status === 401 || response.statusCode === 401) {
-            LoginManager().refreshLogin();
+          if (body.err && typeof body.err === 'string') {
+            message = body.err;
           }
-          return reject(new ApiError(response.statusCode, message, endpoint, method, req, name, body));
+          if (body.message) {
+            message = body.message;
+          }
+          if (body.error) {
+            if (body.error.stack) {
+              message = body.error.stack;
+            }
+            if (typeof body.error === 'string') {
+              message = body.error;
+            }
+            if (body.error.message) {
+              message = body.error.message;
+            }
+            if (body.error.name) {
+              name = body.error.name;
+            }
+          }
+        } else {
+          message = response.statusMessage;
         }
-        if (response.statusCode === 0) {
-          return reject(new ApiError(0, 'Error communicating with API', endpoint, method, req));
+        if (response.status === 401 || response.statusCode === 401) {
+          LoginManager().refreshLogin();
         }
-        return resolve({response, body});
-      });
+        return reject(new ApiError(response.statusCode, message, endpoint, method, req, name, body));
+      }
+      if (response.statusCode === 0) {
+        return reject(new ApiError(0, 'Error communicating with API', endpoint, method, req));
+      }
+      return resolve({response, body});
     });
   }
 

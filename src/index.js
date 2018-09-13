@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.214', [
+console.info('LBAPP VERSION 0.215', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -33,7 +33,8 @@ console.info('LBAPP VERSION 0.214', [
     'Feature/837 GAevent: completed the walkthrough #926',
     'Feature/877 conversion goal exclude walkthrough #927',
     'Feature/903 icon repositioned #929',
-    'Feature/445 on 422 error repeat call max 5 times #928'
+    'Feature/445 on 422 error repeat call max 5 times #928',
+    'Bugifx/922 update schema #930'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',
@@ -51,42 +52,6 @@ console.info('LBAPP VERSION 0.214', [
     'Feature/861 add prev and current revision (instance) to debugger console #866',
     'Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871'
-  ],
-  [
-    'master Feature/722 admin api calls parallel with project api calls #765',
-    'Feature/599 autosave apis #768',
-    'Feature/600 autosave portals #769',
-    'Feature/595 autosave microservices #770',
-    'Bugfix/766 cannot add new connected pipelines via zoom window #776',
-    'Bugfix/773 Model and Function should only allow connection to correct pipelines #779',
-    'Feature/775 Add copy to clipboard icons in walkthrough #780',
-    'Bugfix/771 bundled entities #783',
-    'Feature/774 Redundant saved message #784',
-    'Bugfix/786 Basic auth / oauth2 custom password #787',
-    'Feature/785 Reorder policies icon #789',
-    'Feature/757 function logs resizable #791',
-    'Feature/730 Gateway deployment interrupted with page reload #793',
-    'Feature/758 auto refresh in function logs #794',
-    'Feature/790 APIs highlighted in portal #795',
-    'Feature/796 Default handlers selected in function code #797',
-    'Feature/798 walkthrough remove api from model endpoint #800',
-    'Feature/802 walkthrough: remove /api for function on API endpoint #803',
-    'Bugfix/801 remove clipboard icon from walkthrough #804',
-    'Feature/10 Walkthrough: tell user to wait till deployed #805',
-    'Feature/806 Dangling api endpoints in EG #807',
-    'Feature/788 Password strength meter for basic-auth and oauth2 #811',
-    'Feature/808 utilize new pod id for ui entity state comparision for gateways #812',
-    'Feature/809 Utilize new pod id for UI entity state comparision for functions #813',
-    'Feature/810 delete gateway and function entities right away but allow name to be reused immediately #814',
-    'Feature/781 Add runtime in collapsed functions #815',
-    'Feature/817 Sync UI with EG schemas #818',
-    'Feature/822 add entity id to zoom window #824',
-    'Feature/767 Add apiEndpoint unique name validations vs apis and portals #826',
-    'Feature/825 add possibility in schemas to set policy parameter label #827',
-    'Feature/828 Add url parameter for displaying GA logs #829',
-    'Feature/821 front end analytics events #830',
-    'Feature/832 Adding stripPath: true by default when a Model connects to a Pipeline. #833',
-    'Bugfix/835 need to suppress messages for non visible entities #839'
   ]
 ]);
 

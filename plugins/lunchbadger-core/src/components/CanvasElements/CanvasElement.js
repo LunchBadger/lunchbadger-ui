@@ -486,10 +486,12 @@ export default (ComposedComponent) => {
                 </span>
               </TwoOptionModal>
             )}
-            <EntityStatus
-              type={friendlyName || type}
-              status={status}
-            />
+            {!error && (
+              <EntityStatus
+                type={friendlyName || type}
+                status={status}
+              />
+            )}
             {error && <EntityError onClick={this.handleEntityErrorClicked} />}
             {this.state.showNotRunningModal && (
               <OneOptionModal

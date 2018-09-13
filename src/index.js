@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.213', [
+console.info('LBAPP VERSION 0.214', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -32,7 +32,8 @@ console.info('LBAPP VERSION 0.213', [
     'Feature/879 add GTM #924',
     'Feature/837 GAevent: completed the walkthrough #926',
     'Feature/877 conversion goal exclude walkthrough #927',
-    'Feature/903 icon repositioned #929'
+    'Feature/903 icon repositioned #929',
+    'Feature/445 on 422 error repeat call max 5 times #928'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

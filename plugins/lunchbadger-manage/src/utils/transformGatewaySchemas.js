@@ -1,4 +1,4 @@
-import {determineType, getDefaultValueByType} from './';
+import {determineType} from './';
 
 export default schema => {
   const data = {
@@ -54,6 +54,9 @@ export default schema => {
         } else {
           prop.type = prop.types[0];
         }
+      }
+      if (prop.hasOwnProperty('examples') && Array.isArray(prop.examples) && prop.examples.length > 0) {
+        prop.example = prop.examples[0];
       }
     });
   });

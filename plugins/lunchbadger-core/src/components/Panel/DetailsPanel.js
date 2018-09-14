@@ -68,18 +68,27 @@ class DetailsPanel extends Component {
   }
 
   renderDnD = () => {
-    const {zoom, currentElement} = this.props;
+    const {zoom, currentElement, dispatch} = this.props;
     if (!(zoom && currentElement)) return <div />;
     const {tab} = zoom;
     const {name, id, gaType} = currentElement;
     const {type} = currentElement.constructor;
     const tabs = currentElement.tabs || [];
+    const toolboxActions = currentElement.toolboxActions || [];
     const toolboxConfig = [{
       action: 'delete',
       icon: 'iconTrash',
       onClick: () => this.setState({showRemovingModal: true}),
       label: 'Remove',
     }];
+    toolboxActions.forEach(({name, icon, label, onClick}) => {
+      toolboxConfig.push({
+        action: name,
+        icon,
+        onClick: () => dispatch(onClick(currentElement)),
+        label,
+      });
+    });
     if (tabs.length > 0) {
       toolboxConfig.push({
         action: 'zoom',

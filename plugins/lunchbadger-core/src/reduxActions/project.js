@@ -6,6 +6,11 @@ import LoginManager from '../utils/auth';
 import userStorage from '../utils/userStorage';
 import {updateEntitiesStatues} from './';
 import {GAEvent} from '../../../lunchbadger-ui/src';
+import {
+  clearCurrentEditElement,
+  setCurrentZoom,
+  setSilentReloadAlertVisible,
+} from './states';
 
 let prevData;
 
@@ -134,4 +139,100 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 export const logout = () => () => {
   GAEvent('Header Menu', 'Logged Out');
   LoginManager().logout();
+};
+
+export const silentReload = () => async (dispatch, getState) => {
+  const state = getState();
+  const {
+    plugins: {
+      onAppLoad,
+    },
+    entities: {
+      // dataSources,
+      models,
+      // microservices,
+      // functions,
+      // gateways,
+      // serviceEndpoints,
+      // apiEndpoints,
+      // apis,
+      // portals,
+    },
+    states,
+  } = state;
+  try {
+    const currentEditElement = states.currentEditElement || {};
+    const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+    const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
+    const endpoints = {
+      // dataSources,
+      models,
+      // microservices,
+      // functions,
+      // gateways,
+      // serviceEndpoints,
+      // apiEndpoints,
+      // apis,
+      // portals,
+    };
+    const prevResponse = Object.keys(endpoints)
+      .reduce((map, key) => ({
+        ...map,
+        [key]: Object.values(endpoints[key]).reduce((arr, item) => {
+          const entity = item.toJSON({isForServer: true});
+          Object.keys(entity).forEach((prop) => {
+            if (entity[prop] === undefined) {
+              delete entity[prop];
+            }
+          });
+          return {
+            ...arr,
+            [item.lunchbadgerId || item.id]: entity,
+          }
+        }, {}),
+      }), {});
+    const responses = await Promise.all(onAppLoad.map(item => item.request()));
+    const currResponse = onAppLoad
+      .map((item, idx) => item.responses(responses[idx]))
+      .reduce((map, item) => ({...map, ...item}), {});
+    const delta = diff(prevResponse, currResponse);
+    // console.log({delta, prevResponse, currResponse});
+    const operations = {};
+    delta.forEach((item) => {
+      const [entityType, entityId] = item.path;
+      const operation = item.path.length === 2 && item.op === 'remove'
+          ? 'silentEntityRemove'
+          : 'silentEntityUpdate';
+      operations[entityId] = {
+        operation,
+        entityType,
+        entityId,
+        entityData: currResponse[entityType][entityId],
+      };
+    });
+    Object.values(operations).forEach((payload) => {
+      const {
+        operation,
+        entityType,
+        entityId,
+      } = payload;
+      console.log(operation, entityType, entityId);
+      dispatch(actions[operation](payload));
+      if (canvasEditedId === entityId || zoomEditedId === entityId) {
+        if (canvasEditedId === entityId) {
+          dispatch(clearCurrentEditElement());
+        }
+        if (zoomEditedId === entityId) {
+          dispatch(setCurrentZoom(undefined));
+        }
+        dispatch(setSilentReloadAlertVisible(true));
+      }
+    });
+  } catch (error) {
+    if (error.statusCode === 401) {
+      LoginManager().refreshLogin();
+    } else {
+      dispatch(addSystemDefcon1({error}));
+    }
+  }
 };

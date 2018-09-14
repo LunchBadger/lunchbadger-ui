@@ -12,7 +12,11 @@ import HeaderMultiEnv from '../Header/HeaderMultiEnv';
 import Spinner from './Spinner';
 import PanelContainer from '../Panel/PanelContainer';
 import DetailsPanel from '../Panel/DetailsPanel';
-import {loadFromServer} from '../../reduxActions';
+import OneOptionModal from '../Generics/Modal/OneOptionModal';
+import {
+  loadFromServer,
+  setSilentReloadAlertVisible,
+} from '../../reduxActions';
 import {
   Aside,
   SystemInformationMessages,
@@ -21,7 +25,6 @@ import {
   Walkthrough,
 } from '../../../../lunchbadger-ui/src';
 import {getUser} from '../../utils/auth';
-import userStorage from '../../utils/userStorage';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
 import './App.scss';
@@ -69,6 +72,8 @@ class App extends Component {
     }
   };
 
+  handleCloseSilentReloadAlert = () => this.props.dispatch(setSilentReloadAlertVisible(false));
+
   renderHeader = () => {
     const {isEntityEditable} = this.props;
     const username = getUser().profile.preferred_username;
@@ -99,6 +104,7 @@ class App extends Component {
       isEntityEditable,
       walkthrough,
       blocked,
+      isSilentReloadAlertVisible,
     } = this.props;
     const {isMultiEnv} = LunchBadgerCore;
     const multiEnvDeltaStyle = {
@@ -156,6 +162,14 @@ class App extends Component {
               </div>
             </div>
           )}
+          {isSilentReloadAlertVisible && (
+            <OneOptionModal
+              confirmText="Got it"
+              onClose={this.handleCloseSilentReloadAlert}
+            >
+              The Entity you were editing had changed.
+            </OneOptionModal>
+          )}
         </div>
       </Provider>
     );
@@ -172,6 +186,7 @@ const selector = createSelector(
   state => !!state.states.currentEditElement,
   state => state.plugins.walkthrough,
   state => !!state.states.zoom,
+  state => !!state.states.silentReloadAlertVisible,
   (
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -182,6 +197,7 @@ const selector = createSelector(
     isEntityEditable,
     walkthrough,
     isZoomWindowOpened,
+    isSilentReloadAlertVisible,
   ) => ({
     systemDefcon1Visible,
     systemDefcon1Errors,
@@ -192,6 +208,7 @@ const selector = createSelector(
     isEntityEditable,
     walkthrough,
     pendingEdit: isEntityEditable || isZoomWindowOpened,
+    isSilentReloadAlertVisible,
   }),
 );
 

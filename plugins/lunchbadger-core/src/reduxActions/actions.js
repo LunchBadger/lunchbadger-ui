@@ -10,6 +10,9 @@ const {actions, actionTypes} = actionsCreator(
     'changePanelStatus',
     'setEntitiesStatuses',
 
+    'silentEntityUpdate',
+    'silentEntityRemove',
+
     'addSystemDefcon1',
     'addEntityError',
     'toggleSystemDefcon1',

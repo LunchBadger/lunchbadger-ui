@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.217', [
+console.info('LBAPP VERSION 0.218', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -35,7 +35,8 @@ console.info('LBAPP VERSION 0.217', [
     'Feature/903 icon repositioned #929',
     'Feature/445 on 422 error repeat call max 5 times #928',
     'Bugifx/922 update schema #930',
-    'Feature/878 create ability to redeploy function #932'
+    'Feature/878 create ability to redeploy function #932',
+    'Feature/777 silent reload #933'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

@@ -1,3 +1,5 @@
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
+
 class Tracker {
   set = str => this.tracker = str;
   fn = action => `${this.tracker}.${action}`;
@@ -15,12 +17,17 @@ export const GAEvent = (
   eventAction,
   eventLabel,
   eventValue,
-) => ga && ga(tracker.fn('send'), {
-  hitType: 'event',
-  eventCategory,
-  eventAction,
-  eventLabel,
-  eventValue
-});
+) => {
+  if (!ga) return;
+  const walkthroughShown = !!userStorage.get('walkthroughShown');
+  if (!walkthroughShown && eventCategory !== 'Walkthrough') return;
+  ga(tracker.fn('send'), {
+    hitType: 'event',
+    eventCategory,
+    eventAction,
+    eventLabel,
+    eventValue
+  });
+}
 
 export const setGAUserId = userId => ga && ga(tracker.fn('set'), {userId});

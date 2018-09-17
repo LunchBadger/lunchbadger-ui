@@ -133,3 +133,20 @@ export const saveOrder = orderedIds => async (dispatch, getState) => {
 export const clearService = () => async () => {
   await SLSService.clear();
 };
+
+export const restart = entity => (dispatch) => {
+  const {name} = entity;
+  SLSService.deploy(name);
+  setTimeout(() => {
+    dispatch(actionsCore.addSystemInformationMessage({
+      type: 'success',
+      message: (
+        <span>
+          <strong>{name}</strong>
+          {' '}
+          {'was triggered to be restarted'}
+        </span>
+      ),
+    }));
+  }, 300);
+};

@@ -193,6 +193,10 @@ class Walkthrough extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
+    callGAEvent: (eventAction, eventLabel, eventValue) => cb => {
+      GAEvent('Walkthrough', eventAction, eventLabel, eventValue);
+      cb();
+    },
     waitUntilPresent: (selector, blockEscapingKeys = true) => async cb => {
       blockEscapingKeys && this.blockEscapingKeys();
       while (document.querySelector(selector) === null) {

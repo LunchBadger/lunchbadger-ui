@@ -43,7 +43,7 @@ import scrollToElement from './utils/scrollToElement';
 import Resizable from './Resizable/Resizable';
 import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
 import PasswordStrengthMeter from './PasswordStrengthMeter/PasswordStrengthMeter';
-import GA, {GAEvent} from './GA/GA';
+import {GAEvent, setGAUserId} from './GA/GA';
 
 import {
   iconApi,
@@ -112,7 +112,6 @@ export {
   EntityValidationErrors,
   FilesEditor,
   Form,
-  GA,
   GAEvent,
   IconButton,
   IconMenu,
@@ -125,6 +124,7 @@ export {
   RnD,
   scrollToElement,
   Select,
+  setGAUserId,
   SmoothCollapse,
   Sortable,
   SystemDefcon1,

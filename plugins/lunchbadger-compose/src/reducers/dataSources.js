@@ -5,18 +5,23 @@ import catchDatasourceErrors from '../utils/catchDatasourceErrors.js';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
+const processDataSource = item => {
+  if (!item.lunchbadgerId) {
+    item.lunchbadgerId = uuid.v4();
+  }
+  if (item.hasOwnProperty('wsdl')) {
+    item.soapOperations = item.operations || {};
+    delete item.operations;
+  }
+  return item;
+};
+
 export default (state = {}, action) => {
   const newState = {...state};
   switch (action.type) {
     case actionTypes.onLoadCompose:
       return action.payload[0].body.reduce((map, item) => {
-        if (!item.lunchbadgerId) {
-          item.lunchbadgerId = uuid.v4();
-        }
-        if (item.hasOwnProperty('wsdl')) {
-          item.soapOperations = item.operations || {};
-          delete item.operations;
-        }
+        processDataSource(item);
         map[item.lunchbadgerId] = DataSource.create(item);
         return map;
       }, {});
@@ -35,6 +40,16 @@ export default (state = {}, action) => {
       return {};
     case coreActionTypes.addEntityError:
       return catchDatasourceErrors(state, action.payload);
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'dataSources') {
+        newState[action.payload.entityId] = DataSource.create(processDataSource(action.payload.entityData));
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'dataSources') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

@@ -146,17 +146,18 @@ export const silentReload = () => async (dispatch, getState) => {
   const {
     plugins: {
       onAppLoad,
+      processProjectLoad,
     },
     entities: {
-      // dataSources,
+      dataSources,
       models,
       // microservices,
       // functions,
       // gateways,
-      // serviceEndpoints,
-      // apiEndpoints,
-      // apis,
-      // portals,
+      serviceEndpoints,
+      apiEndpoints,
+      apis,
+      portals,
     },
     states,
   } = state;
@@ -165,15 +166,15 @@ export const silentReload = () => async (dispatch, getState) => {
     const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
     const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
     const endpoints = {
-      // dataSources,
+      dataSources,
       models,
       // microservices,
       // functions,
       // gateways,
-      // serviceEndpoints,
-      // apiEndpoints,
-      // apis,
-      // portals,
+      serviceEndpoints,
+      apiEndpoints,
+      apis,
+      portals,
     };
     const prevResponse = Object.keys(endpoints)
       .reduce((map, key) => ({
@@ -184,6 +185,9 @@ export const silentReload = () => async (dispatch, getState) => {
             if (entity[prop] === undefined) {
               delete entity[prop];
             }
+            if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
+              delete entity.error;
+            }
           });
           return {
             ...arr,
@@ -192,9 +196,11 @@ export const silentReload = () => async (dispatch, getState) => {
         }, {}),
       }), {});
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
-    const currResponse = onAppLoad
-      .map((item, idx) => item.responses(responses[idx]))
-      .reduce((map, item) => ({...map, ...item}), {});
+    const currResponse = processProjectLoad
+      .reduce((map, item) => ({
+        ...map,
+        ...item(responses),
+        }), {});
     const delta = diff(prevResponse, currResponse);
     // console.log({delta, prevResponse, currResponse});
     const operations = {};
@@ -216,7 +222,7 @@ export const silentReload = () => async (dispatch, getState) => {
         entityType,
         entityId,
       } = payload;
-      console.log(operation, entityType, entityId);
+      // console.log(operation, entityType, entityId);
       dispatch(actions[operation](payload));
       if (canvasEditedId === entityId || zoomEditedId === entityId) {
         if (canvasEditedId === entityId) {

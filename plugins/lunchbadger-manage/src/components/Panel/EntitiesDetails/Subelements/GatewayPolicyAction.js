@@ -141,7 +141,7 @@ export default class GatewayPolicyAction extends PureComponent {
         types,
         postfix,
         schemas: properties[name],
-        implicite: !action.hasOwnProperty(name),
+        implicit: !action.hasOwnProperty(name),
       };
       if (type === 'fake') {
         parameters[name].type = type;
@@ -208,7 +208,7 @@ export default class GatewayPolicyAction extends PureComponent {
   }}) => {
     const state = _.cloneDeep(this.state);
     const property = state.parameters.find(item => item.id === id);
-    property.implicite = false;
+    property.implicit = false;
     if (property.type === 'boolean') {
       property.value = checked;
     } else if (property.type === 'integer' || property.type === 'number') {
@@ -220,7 +220,7 @@ export default class GatewayPolicyAction extends PureComponent {
       if (!inputName) return;
       const inputNameArr = inputName.split(']');
       if (!inputNameArr[4].includes('fake')) return;
-      inputNameArr[4] = '[0'; // replacing name's implicite part with pair 0
+      inputNameArr[4] = '[0'; // replacing name's implicit part with pair 0
       const input = document.getElementById(inputNameArr.join(']'));
       if (input && selectionStart) {
         input.focus();
@@ -243,7 +243,7 @@ export default class GatewayPolicyAction extends PureComponent {
     Object.assign(property, {
       type,
       value: getDefaultValueByType(type),
-      implicite: false,
+      implicit: false,
     });
     this.changeState(state);
   };
@@ -253,7 +253,7 @@ export default class GatewayPolicyAction extends PureComponent {
     const {id, schemas = {}} = param;
     if (schemas.hasOwnProperty('default')) {
       Object.assign(state.parameters.find(item => item.id === id), {
-        implicite: true,
+        implicit: true,
         value: schemas.default,
         type: determineType(schemas.default),
       });
@@ -267,7 +267,7 @@ export default class GatewayPolicyAction extends PureComponent {
     const state = _.cloneDeep(this.state);
     Object.assign(state.parameters.find(item => item.id === id), {
       value: values,
-      implicite: false,
+      implicit: false,
     });
     this.changeState(state, cb);
   };
@@ -286,7 +286,7 @@ export default class GatewayPolicyAction extends PureComponent {
       width,
       custom,
       postfix,
-      implicite,
+      implicit,
       schemas = {},
     } = item;
     const {prefix, validations} = this.props;
@@ -294,8 +294,8 @@ export default class GatewayPolicyAction extends PureComponent {
     const propDefValue = propertyDefaultValue(item);
     if (propDefValue) {
       titleRemark = `(${propDefValue} value is used)`;
-      if (implicite) {
-        titleRemark = `(implicite with ${propDefValue} value)`;
+      if (implicit) {
+        titleRemark = `(implicit with ${propDefValue} value)`;
       }
     }
     if (types) {
@@ -342,6 +342,7 @@ export default class GatewayPolicyAction extends PureComponent {
             enum: item.enum,
             custom,
             schemas,
+            description,
           })}
         </div>
       );
@@ -360,7 +361,7 @@ export default class GatewayPolicyAction extends PureComponent {
         key: id,
         title: title || name,
         titleRemark,
-        name: `${implicite ? 'implicite' : ''}${inputName}`,
+        name: `${implicit ? 'implicit' : ''}${inputName}`,
         value,
         onChange: this.handlePropertyValueChange(id, inputName),
         width: width || 'calc(100% - 20px)',
@@ -426,8 +427,17 @@ export default class GatewayPolicyAction extends PureComponent {
         if (item.schemas) {
           const {prefix, horizontal, validations, onChangeState} = this.props;
           return (
-            <div className="GatewayPolicyAction__object">
-              <EntityPropertyLabel>{name}</EntityPropertyLabel>
+            <div className={cs('GatewayPolicyAction__object', name)}>
+              <EntityPropertyLabel
+                description={description}
+              >
+                {name}
+                {!!titleRemark && (
+                  <span className="EntityProperty__titleRemark">
+                    {titleRemark}
+                  </span>
+                )}
+              </EntityPropertyLabel>
               <GatewayPolicyAction
                 action={value}
                 schemas={item.schemas}
@@ -526,7 +536,7 @@ export default class GatewayPolicyAction extends PureComponent {
         {reorderedParameters.map((item, idx) => (
           <div key={item.id} className={cs('GatewayPolicyAction__parameter', {
             defaultValue: propertyDefaultValue(item),
-            implicite: item.implicite,
+            implicit: item.implicit,
           })}>
             {this.renderProperty(item)}
             {this.isDeletePropertyButton(item) && (

@@ -43,6 +43,9 @@ $joyride-close-visible: false;
     &.bottom {
       &[data-target=".canvas"] {
         width: auto !important;
+        .joyride-tooltip__button--primary {
+          margin-right: 70px;
+        }
       }
     }
     &.bottom-left {

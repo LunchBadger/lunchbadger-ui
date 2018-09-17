@@ -317,6 +317,7 @@ export default (ComposedComponent) => {
         multiEnvEntity,
         nested,
         running,
+        dispatch,
       } = this.props;
       if (nested) return (
         <ComposedComponent
@@ -353,6 +354,7 @@ export default (ComposedComponent) => {
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
       const tabs = entity.tabs || [];
+      const toolboxActions = entity.toolboxActions || [];
       if (multiEnvDelta) {
         if (isDelta) {
           toolboxConfig.push({
@@ -372,6 +374,14 @@ export default (ComposedComponent) => {
           });
         }
         if (!isZoomDisabled && (running || (!running && allowEditWhenCrashed && !deploying))) {
+          toolboxActions.forEach(({name, icon, label, onClick}) => {
+            toolboxConfig.push({
+              action: name,
+              icon,
+              onClick: () => dispatch(onClick(entity)),
+              label,
+            });
+          });
           toolboxConfig.push({
             action: 'zoom',
             icon: 'iconBasics',

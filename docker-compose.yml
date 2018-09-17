@@ -6,19 +6,3 @@ services:
       dockerfile: containers/ui/Dockerfile
     ports:
       - "8000:8000"
-  loopback-workspace:
-    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/lunchbadger-workspace:0.0.7
-    ports:
-      - "4230:4230"
-      - "4231:4231"
-    depends_on:
-      - configstore
-    command: ["bin/wait-for-it.sh", "configstore:3002", "--", "npm", "start"]
-    environment:
-      GIT_URL: http://configstore:3002/git/demo.git
-      WATCH_URL: http://configstore:3002/api/producers/demo/change-stream
-  configstore:
-    image: 410240865662.dkr.ecr.us-west-2.amazonaws.com/configstore:0.0.10
-    ports:
-      - "3002:3002"
-    command: ["npm", "run", "start:test"]

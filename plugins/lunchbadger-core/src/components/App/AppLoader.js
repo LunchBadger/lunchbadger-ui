@@ -36,16 +36,18 @@ class AppLoader extends Component {
       error: null,
       workspaceError: false,
     };
+    this.kubeWatcherStarted = false;
   }
 
   componentWillMount() {
-    this.load();
+    setTimeout(() => this.load(), 100);
   }
 
   componentDidMount() {
     if (isKubeWatcherEnabled) {
       this.initKubeWatcher();
     }
+    window.addEventListener('keydown', this.blockKeyPressWhenWorkspaceNotRunning);
   }
 
   componentWillUnmount() {
@@ -53,7 +55,14 @@ class AppLoader extends Component {
       this.kubeWatcherMonitor.close();
       this.kubeWatcherMonitor = null;
     }
+    window.removeEventListener('keydown', this.blockKeyPressWhenWorkspaceNotRunning);
   }
+
+  blockKeyPressWhenWorkspaceNotRunning = (event) => {
+    if (this.state.workspaceRunning) return;
+    event.stopPropagation();
+    event.preventDefault();
+  };
 
   initKubeWatcher = () => {
     if (this.kubeWatcherMonitor) {
@@ -70,16 +79,13 @@ class AppLoader extends Component {
     const data = JSON.parse(message.data)[envId];
     let workspaceRunning = false;
     if (data.workspace) {
-      workspaceRunning = Object.values(data.workspace).reduce((prev, {status: {running}}) => prev || running, false);
-    }
-    if (!this.state.workspaceRunning && workspaceRunning) {
-      if (!this.triggered) {
-        this.triggered = true;
-      } else {
-        document.location.reload();
-      }
+      workspaceRunning = Object.values(data.workspace)
+        .reduce((prev, {status: {running}}) => prev || running, false);
     }
     this.setState({workspaceRunning});
+    if (!this.kubeWatcherStarted && workspaceRunning) {
+      this.kubeWatcherStarted = true;
+    }
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;
       this.props.dispatch(actions.setEntitiesStatuses(data));
@@ -161,12 +167,18 @@ class AppLoader extends Component {
   }
 
   renderApp() {
-    return <App paper={paper} />;
+    const {workspaceRunning} = this.state;
+    return (
+      <App
+        paper={paper}
+        blocked={!workspaceRunning}
+      />
+    );
   }
 
   render() {
-    const {loaded, workspaceRunning, error} = this.state;
-    if (loaded && workspaceRunning) {
+    const {loaded, error} = this.state;
+    if (loaded && this.kubeWatcherStarted) {
       return this.renderApp();
     } else if (error) {
       return this.renderError();

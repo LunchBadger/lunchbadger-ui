@@ -306,6 +306,7 @@ Add the following path: <pre>/myfunction*</pre>
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
+      api.callGAEvent('Completed'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .submit'),

@@ -170,7 +170,8 @@ class GatewayDetails extends PureComponent {
     const pipelines = _.cloneDeep(this.state.pipelines);
     pipelines.push(Pipeline.create({name: 'Pipeline', policies: initialPipelinePolicies}));
     this.changeState({pipelines});
-    setTimeout(() => scrollToElement(document.getElementById(`pipelines[${pipelines.length - 1}][name]`)));
+    const inputSelector = `.DetailsPanel .input__pipelines${pipelines.length - 1}name input`;
+    setTimeout(() => scrollToElement(document.querySelector(inputSelector).closest('.CollapsibleProperties')));
   };
 
   removePipeline = idx => () => {
@@ -193,9 +194,8 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
-    setTimeout(() => {
-      scrollToElement(document.querySelector(`.select__pipelines${pipelineIdx}policies${policyIdx}name input`));
-    });
+    const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
+    setTimeout(() => scrollToElement(document.querySelector(inputSelector).closest('.CollapsibleProperties'), 'start'));
   };
 
   removePipelinePolicy = (pipelineIdx, idx) => () => {
@@ -225,7 +225,8 @@ class GatewayDetails extends PureComponent {
     if (!condition && !action) {
       setTimeout(() => {
         const pairIdx = pipelines[pipelineIdx].policies[policyIdx].conditionAction.length - 1;
-        scrollToElement(document.querySelector(`.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`));
+        const pairSelector = `.pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}CAPair`;
+        scrollToElement(document.querySelector(pairSelector), 'start');
       });
     }
   };

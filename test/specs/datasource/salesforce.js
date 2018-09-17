@@ -14,7 +14,7 @@ module.exports = {
       ], [
         'username'
       ])
-      .closeWhenSystemDefcon1()
+      .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

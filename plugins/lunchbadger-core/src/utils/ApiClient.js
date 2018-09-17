@@ -33,7 +33,7 @@ class ApiClient {
         json: true,
         headers: _.extend(this._getHeaders(), {})
       }, options);
-      this.makeRequest(req, resolve, reject, url, method, options)
+      this.makeRequest(req, resolve, reject, url, method, options);
     });
   }
 
@@ -45,6 +45,7 @@ class ApiClient {
       }
       if (response.statusCode >= 400) {
         if (statusCodesToRepeat.includes(response.statusCode) && attempt < maxRepeatAmount) {
+          // retrying the same call up to 5 times: https://github.com/LunchBadger/general/issues/445
           return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
         }
         let message = body;

@@ -153,7 +153,7 @@ export const silentReload = () => async (dispatch, getState) => {
       models,
       // microservices,
       // functions,
-      // gateways,
+      gateways,
       serviceEndpoints,
       apiEndpoints,
       apis,
@@ -170,7 +170,7 @@ export const silentReload = () => async (dispatch, getState) => {
       models,
       // microservices,
       // functions,
-      // gateways,
+      gateways,
       serviceEndpoints,
       apiEndpoints,
       apis,
@@ -234,6 +234,7 @@ export const silentReload = () => async (dispatch, getState) => {
         dispatch(setSilentReloadAlertVisible(true));
       }
     });
+    // onAppLoad.map(item => item.onWsGitChange && dispatch(item.onWsGitChange()));
   } catch (error) {
     if (error.statusCode === 401) {
       LoginManager().refreshLogin();

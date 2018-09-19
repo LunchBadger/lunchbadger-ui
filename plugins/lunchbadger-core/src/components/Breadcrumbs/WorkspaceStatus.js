@@ -13,6 +13,10 @@ import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
 
 class WorkspaceStatus extends Component {
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor() {
     super();
     this.state = {
@@ -72,7 +76,7 @@ class WorkspaceStatus extends Component {
       if (wsGitChanged) {
         console.log(`ws_git changed: ${this.state.ws_git} => ${status.ws_git}`);
       }
-      dispatch(silentReload());
+      dispatch(silentReload(this.context.paper.getInstance()));
     }
     this.setState({
       connected: true,

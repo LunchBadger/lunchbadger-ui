@@ -13,6 +13,9 @@ export default [
             entity.pipelines = item.pipelinesLunchbadger;
             entity.pipelinesLunchbadger = item.pipelinesLunchbadger;
           }
+          if (entity.pipelinesLunchbadger === undefined) {
+            delete entity.pipelinesLunchbadger;
+          }
           return {
           ...map,
           [item.id]: entity,

@@ -24,6 +24,16 @@ export default (state = {}, action) => {
       return newState;
     case coreActionTypes.clearProject:
       return {};
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'microservices') {
+        newState[action.payload.entityId] = Microservice.create(action.payload.entityData);
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'microservices') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

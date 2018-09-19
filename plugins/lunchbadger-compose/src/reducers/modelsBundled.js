@@ -25,6 +25,16 @@ export default (state = {}, action) => {
       return newState;
     case coreActionTypes.clearProject:
       return {};
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'modelsBundled') {
+        newState[action.payload.entityId] = Model.create(action.payload.entityData);
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'modelsBundled') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

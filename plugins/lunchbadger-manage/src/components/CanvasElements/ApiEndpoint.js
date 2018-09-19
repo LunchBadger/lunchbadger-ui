@@ -96,9 +96,10 @@ class ApiEndpoint extends Component {
     const {id} = entity;
     const conn = connectionsStore.find({toId: id});
     if (!conn) return '';
-    return storeUtils
-      .findGatewayByPipelineId(this.context.store.getState(), conn.fromId)
-      .rootUrl;
+    const gateway = storeUtils
+      .findGatewayByPipelineId(this.context.store.getState(), conn.fromId);
+    if (!gateway) return '';
+    return gateway.rootUrl;
   };
 
   renderPorts = () => {

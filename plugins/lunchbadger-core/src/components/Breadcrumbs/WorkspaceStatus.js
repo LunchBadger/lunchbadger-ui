@@ -13,6 +13,10 @@ import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
 
 class WorkspaceStatus extends Component {
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor() {
     super();
     this.state = {
@@ -21,6 +25,7 @@ class WorkspaceStatus extends Component {
       output: '',
       instance: null,
       // isShowingModal: false,
+      fn_git: null,
       ws_git: null,
     };
   }
@@ -62,15 +67,23 @@ class WorkspaceStatus extends Component {
       console.log(`Instance changed: ${this.state.instance} => ${status.instance}`);
       // this.setState({isShowingModal: true});
     }
-    if (this.state.ws_git && this.state.ws_git !== status.ws_git) {
-      console.log(`ws_git changed: ${this.state.ws_git} => ${status.ws_git}`);
-      dispatch(silentReload());
+    const fnGitChanged = this.state.fn_git && this.state.fn_git !== status.fn_git;
+    const wsGitChanged = this.state.ws_git && this.state.ws_git !== status.ws_git;
+    if (fnGitChanged || wsGitChanged) {
+      if (fnGitChanged) {
+        console.log(`fn_git changed: ${this.state.fn_git} => ${status.fn_git}`);
+      }
+      if (wsGitChanged) {
+        console.log(`ws_git changed: ${this.state.ws_git} => ${status.ws_git}`);
+      }
+      dispatch(silentReload(this.context.paper.getInstance()));
     }
     this.setState({
       connected: true,
       status: status.status,
       output: status.output,
       instance: status.instance,
+      fn_git: status.fn_git,
       ws_git: status.ws_git,
     });
     if (status.status === 'running') {

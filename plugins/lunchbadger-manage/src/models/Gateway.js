@@ -233,9 +233,17 @@ export default class Gateway extends BaseModel {
           if (id === this.id) {
             const isDelete = op === 'remove';
             const serviceEndpointId = path[3];
-            const operation = `${isDelete ? 'delete' : 'put'}ServiceEndpoint`;
-            const body = isDelete ? null : isInPrivateQuadrant(state, serviceEndpointId).toApiJSON();
-            endpointOperations[serviceEndpointId] = {operation, body};
+            if (isDelete) {
+              endpointOperations[serviceEndpointId] = {operation: 'deleteServiceEndpoint'};
+            } else {
+              const seEntity = isInPrivateQuadrant(state, serviceEndpointId);
+              if (seEntity) {
+                endpointOperations[serviceEndpointId] = {
+                  operation: 'putServiceEndpoint',
+                  body: seEntity.toApiJSON(),
+                };
+              }
+            }
           }
         }
         if (kind === 'gateways' && path.length === 4 && path[2] === 'connectedApiEndpoints') {

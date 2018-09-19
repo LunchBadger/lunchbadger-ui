@@ -5,6 +5,7 @@ import models from './models';
 import panelDetailsElements from './panelDetailsElements';
 import onProjectSave from './onProjectSave';
 import onSaveOrder from './onSaveOrder';
+import processProjectLoad from './processProjectLoad';
 
 export default {
   tools,
@@ -14,4 +15,5 @@ export default {
   panelDetailsElements,
   onProjectSave,
   onSaveOrder,
+  processProjectLoad,
 };

@@ -44,6 +44,21 @@ export default (state = {}, action) => {
         Pipeline.create(),
       ];
       return newState;
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'gateways') {
+        const entity = action.payload.entityData;
+        const isDeploying = !!entity.pipelinesLunchbadger;
+        newState[action.payload.entityId] = Gateway.create(entity);
+        if (isDeploying) {
+          newState[action.payload.entityId].running = null;
+        }
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'gateways') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

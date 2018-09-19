@@ -90,23 +90,23 @@ export const remove = (entity, cb) => async (dispatch) => {
   updatedEntity.deleting = true;
   updatedEntity.error = null;
   const slugId = `${entity.id}-${slug(entity.name, {lower: true})}`;
-  userStorage.setObjectKey('function', slugId, updatedEntity.toJSON());
   dispatch(actions.updateFunction(updatedEntity));
-    if (entity.loaded) {
-      try {
-        SLSService.remove(entity.name);
-      } catch (error) {}
-      try {
-        if (cb) {
-          await dispatch(cb());
-        }
-        await dispatch(coreActions.saveToServer({saveProject: false}));
-      } catch (error) {
-        dispatch(coreActions.addSystemDefcon1({error}));
+  if (entity.loaded) {
+    userStorage.setObjectKey('function', slugId, updatedEntity.toJSON());
+    try {
+      SLSService.remove(entity.name);
+    } catch (error) {}
+    try {
+      if (cb) {
+        await dispatch(cb());
       }
-    } else {
-      dispatch(actions.removeFunction(entity));
+      await dispatch(coreActions.saveToServer({saveProject: false}));
+    } catch (error) {
+      dispatch(coreActions.addSystemDefcon1({error}));
     }
+  } else {
+    dispatch(actions.removeFunction(entity));
+  }
 };
 
 export const saveOrder = orderedIds => async (dispatch, getState) => {

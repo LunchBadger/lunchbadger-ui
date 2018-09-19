@@ -13,7 +13,6 @@ export default [
             entity.pipelines = item.pipelinesLunchbadger;
             entity.pipelinesLunchbadger = item.pipelinesLunchbadger;
           }
-          console.log({item, entity});
           return {
           ...map,
           [item.id]: entity,

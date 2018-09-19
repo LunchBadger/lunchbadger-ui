@@ -40,6 +40,18 @@ export default (state = {}, action) => {
         }
       });
       return newState;
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'functions') {
+        const entity = Function_.create(action.payload.entityData);
+        entity.running = null;
+        newState[action.payload.entityId] = entity;
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'functions') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

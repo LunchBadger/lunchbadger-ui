@@ -23,5 +23,6 @@ export default [
       removeNonExistentSubModels,
       workspaceFilesReload,
     ],
+    onWsGitChange: workspaceFilesReload,
   }
 ];

@@ -234,7 +234,7 @@ export const silentReload = () => async (dispatch, getState) => {
         dispatch(setSilentReloadAlertVisible(true));
       }
     });
-    // onAppLoad.map(item => item.onWsGitChange && dispatch(item.onWsGitChange()));
+    onAppLoad.map(item => item.onWsGitChange && dispatch(item.onWsGitChange()));
   } catch (error) {
     if (error.statusCode === 401) {
       LoginManager().refreshLogin();

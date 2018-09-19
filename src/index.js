@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.220', [
+console.info('LBAPP VERSION 0.221', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -38,7 +38,8 @@ console.info('LBAPP VERSION 0.220', [
     'Feature/878 create ability to redeploy function #932',
     'Feature/777 silent reload #933',
     'Feature/936 Improve onerror for change stream event #937',
-    'Feature/935 handle better entity delete error call #943'
+    'Feature/935 handle better entity delete error call #943',
+    'Feature/777 silent reload #933'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

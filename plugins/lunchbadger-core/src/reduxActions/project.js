@@ -151,7 +151,8 @@ export const silentReload = () => async (dispatch, getState) => {
     entities: {
       dataSources,
       models,
-      // microservices,
+      modelsBundled,
+      microservices,
       functions,
       gateways,
       serviceEndpoints,
@@ -164,11 +165,13 @@ export const silentReload = () => async (dispatch, getState) => {
   try {
     const currentEditElement = states.currentEditElement || {};
     const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+    const canvasEditedType = (currentEditElement.constructor || {}).type;
     const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
     const endpoints = {
       dataSources,
       models,
-      // microservices,
+      modelsBundled,
+      microservices,
       functions,
       gateways,
       serviceEndpoints,
@@ -179,21 +182,23 @@ export const silentReload = () => async (dispatch, getState) => {
     const prevResponse = Object.keys(endpoints)
       .reduce((map, key) => ({
         ...map,
-        [key]: Object.values(endpoints[key]).reduce((arr, item) => {
-          const entity = item.toJSON({isForServer: true});
-          Object.keys(entity).forEach((prop) => {
-            if (entity[prop] === undefined) {
-              delete entity[prop];
+        [key]: Object.values(endpoints[key])
+          .filter(({loaded}) => loaded)
+          .reduce((arr, item) => {
+            const entity = item.toJSON({isForServer: true});
+            Object.keys(entity).forEach((prop) => {
+              if (entity[prop] === undefined) {
+                delete entity[prop];
+              }
+              if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
+                delete entity.error;
+              }
+            });
+            return {
+              ...arr,
+              [item.lunchbadgerId || item.id]: entity,
             }
-            if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
-              delete entity.error;
-            }
-          });
-          return {
-            ...arr,
-            [item.lunchbadgerId || item.id]: entity,
-          }
-        }, {}),
+          }, {}),
       }), {});
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
     const currResponse = processProjectLoad
@@ -224,11 +229,19 @@ export const silentReload = () => async (dispatch, getState) => {
       } = payload;
       // console.log(operation, entityType, entityId);
       dispatch(actions[operation](payload));
-      if (canvasEditedId === entityId || zoomEditedId === entityId) {
-        if (canvasEditedId === entityId) {
+      let isCanvasEdited = canvasEditedId === entityId;
+      if (entityType === 'modelsBundled'
+        && canvasEditedType === 'Microservice'
+        && prevResponse.microservices[canvasEditedId].models.includes(entityId)
+      ) {
+        isCanvasEdited = true;
+      }
+      const isZoomEdited = zoomEditedId === entityId;
+      if (isCanvasEdited || isZoomEdited) {
+        if (isCanvasEdited) {
           dispatch(clearCurrentEditElement());
         }
-        if (zoomEditedId === entityId) {
+        if (isZoomEdited) {
           dispatch(setCurrentZoom(undefined));
         }
         dispatch(setSilentReloadAlertVisible(true));

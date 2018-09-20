@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {update, remove} from '../reduxActions/functions';
+import {update, remove, restart} from '../reduxActions/functions';
 import {validFunctionName, runtimeMapping} from '../utils';
 import Config from '../../../../src/config';
 
@@ -59,6 +59,18 @@ export default class Function_ extends BaseModel {
       friendlyName: this.name,
       url: Config.get('slsUrl').replace('{FN}', this.name),
     };
+  }
+
+  get toolboxActions() {
+    const tabs = [
+      {
+        name: 'redeploy',
+        label: 'Restart',
+        icon: 'iconReload',
+        onClick: restart,
+      },
+    ];
+    return tabs;
   }
 
   get status() {

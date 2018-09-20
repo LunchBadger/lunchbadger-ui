@@ -10,13 +10,13 @@ export const isInQuadrant = (state, quadrantIdx, entityId) =>
     id => id === formatId(entityId),
   );
 
-export const isInPrivateQuadrant = (state, entityId) => _.find(
-    state.plugins.quadrants[1].modelEntities
-      .map(type => ({type, ids: Object.keys(state.entities[type])}))
-      .map(({type, ids}) => ids.map(id => state.entities[type][id].models))
-      .reduce((arr, item) => arr.concat(...item), []),
-    ({id}) => id === formatId(entityId),
-  );
+export const isInPrivateQuadrant = (state, entityId) => {
+  const entities = state.plugins.quadrants[1].serviceEndpointEntities
+    .map(type => Object.values(state.entities[type]))
+    .reduce((map, items) => [...map, ...items], [])
+    .reduce((map, item) => ({...map, [item.id]: item}), {});
+  return entities[formatId(entityId)];
+};
 
 export const isInPublicQuadrant = (state, entityId) => _.find(
     state.plugins.quadrants[3].connectionEntities

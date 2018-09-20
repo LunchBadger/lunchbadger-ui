@@ -24,18 +24,25 @@ class WorkspaceStatus extends Component {
   }
 
   componentDidMount() {
-    this.es = ProjectService.monitorStatus();
-    this.es.addEventListener('data', this.onStatusReceived);
-    this.es.addEventListener('open', this.onConnected);
-    this.es.addEventListener('error', this.onDisconnected);
+    this.initChangeStream();
   }
 
   componentWillUnmount() {
-    if (this.es) {
-      this.es.close();
-      this.es = null;
+    if (this.changeStreamMonitor) {
+      this.changeStreamMonitor.close();
+      this.changeStreamMonitor = null;
     }
   }
+
+  initChangeStream = () => {
+    if (this.changeStreamMonitor) {
+      this.changeStreamMonitor.close();
+    }
+    this.changeStreamMonitor = ProjectService.monitorStatus();
+    this.changeStreamMonitor.addEventListener('data', this.onStatusReceived);
+    this.changeStreamMonitor.addEventListener('open', this.onConnected);
+    this.changeStreamMonitor.addEventListener('error', this.onDisconnected);
+  };
 
   onClick = () => {
     const {isSystemDefcon1, dispatch} = this.props;
@@ -82,6 +89,7 @@ class WorkspaceStatus extends Component {
     if (event && event.status === 401) {
       LoginManager().refreshLogin();
     }
+    setTimeout(() => this.initChangeStream(), 1000);
   }
 
   onModalClose = () => location.reload();

@@ -115,6 +115,14 @@ export default class Gateway extends BaseModel {
           map[pipeline.id] = pipeline.toApiJSON(options);
           return map;
         }, {});
+        json.connectedServiceEndpoints = Object
+          .values(json.pipelines)
+          .reduce((map, {policies}) => [...map, ...policies], [])
+          .filter(({proxy}) => proxy)
+          .reduce((map, {proxy}) => [...map, ...proxy], [])
+          .filter(({action: {serviceEndpoint}}) => serviceEndpoint)
+          .map(({action: {serviceEndpoint}}) => serviceEndpoint)
+          .reduce((map, item) => ({...map, [item]: true}), {});
         json.connectedApiEndpoints = Object.keys(json.pipelines)
           .reduce((map, item) => ({...map, ...json.pipelines[item].apiEndpoints}), {});
       } else {
@@ -170,7 +178,10 @@ export default class Gateway extends BaseModel {
         models: 'ServiceEndpoint',
         functions: 'ServiceEndpoint',
       };
-      const {connectedApiEndpoints} = this;
+      const {
+        connectedServiceEndpoints,
+        connectedApiEndpoints,
+      } = this;
       for (let i in delta) {
         const {op, path} = delta[i];
         const [kind, id] = path;
@@ -188,14 +199,18 @@ export default class Gateway extends BaseModel {
                 || isInPrivateQuadrant(state, id)
                 || isInPublicQuadrant(state, id)
               ).toApiJSON();
-          let addOperation = true;
-          if (kind === 'models' || kind === 'functions') {
-            addOperation = false;
-            if (isAdd || isDelete || isRename || isModelContextPathChanged) {
-              addOperation = true;
+          let addOperation = false;
+          if (kind === 'models' || kind === 'functions' || kind === 'serviceEndpoints') {
+            if (connectedServiceEndpoints.includes(id)) {
+              if (
+                kind === 'serviceEndpoints'
+                ||
+                (['models', 'functions'].includes(kind) && (isAdd || isDelete || isRename))
+              ) {
+                addOperation = true;
+              }
             }
           } else if (kind === 'apiEndpoints') {
-            addOperation = false;
             if (connectedApiEndpoints.includes(id)) {
               addOperation = true;
             }
@@ -212,6 +227,15 @@ export default class Gateway extends BaseModel {
             const pipelineIdx = entities.gateways[id].pipelines.findIndex(({id}) => id === idPipeline);
             const body = isDelete ? null : entities.gateways[id].pipelines[pipelineIdx].toApiJSON();
             pipelineOperations[idPipeline] = {operation, body};
+          }
+        }
+        if (kind === 'gateways' && path.length === 4 && path[2] === 'connectedServiceEndpoints') {
+          if (id === this.id) {
+            const isDelete = op === 'remove';
+            const serviceEndpointId = path[3];
+            const operation = `${isDelete ? 'delete' : 'put'}ServiceEndpoint`;
+            const body = isDelete ? null : isInPrivateQuadrant(state, serviceEndpointId).toApiJSON();
+            endpointOperations[serviceEndpointId] = {operation, body};
           }
         }
         if (kind === 'gateways' && path.length === 4 && path[2] === 'connectedApiEndpoints') {
@@ -356,6 +380,13 @@ export default class Gateway extends BaseModel {
     return this.pipelines
       .map(({id}) => id)
       .map(id => Connections.search({fromId: id}).map(({toId}) => toId))
+      .reduce((prevVal, currVal) => [...prevVal, ...currVal], []);
+  }
+
+  get connectedServiceEndpoints() {
+    return this.pipelines
+      .map(({id}) => id)
+      .map(id => Connections.search({toId: id}).map(({fromId}) => fromId))
       .reduce((prevVal, currVal) => [...prevVal, ...currVal], []);
   }
 

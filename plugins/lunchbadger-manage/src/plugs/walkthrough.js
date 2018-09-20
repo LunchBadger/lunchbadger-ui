@@ -306,6 +306,7 @@ Add the following path: <pre>/myfunction*</pre>
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
+      api.callGAEvent('Completed'),
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .submit'),
@@ -426,8 +427,8 @@ Add the following path: <pre>/myfunction*</pre>
     onBefore: () => [],
   },
   '0807': {
-    title: 'Flow to Connector',
-    text: 'Finally, if the request is routed to a Model Entity connected to a data source or service through a Connector, the connected data source or service will be queried or updated.',
+    title: 'Flow to Model Connector',
+    text: 'Finally, if the request is routed to a Model Entity connected to a data source or service through a Model Connector, the connected data source or service will be queried or updated.',
     waitForSelector: '.Entity.DataSource',
     position: 'bottom-left',
     allowClicksThruHole: false,

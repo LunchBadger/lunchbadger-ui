@@ -96,9 +96,9 @@ class Walkthrough extends PureComponent {
       this.joyride.reset(true);
     }
     this.setState({index});
-    if (type === 'step:after') {
-      GAEvent('Walkthrough', 'Clicked Next', step.title, index + this.stepsOffset);
-    }
+    // if (type === 'step:after') { // removed by 877
+    //   GAEvent('Walkthrough', 'Clicked Next', step.title, index + this.stepsOffset);
+    // }
     if (type === 'step:before') {
       this.onExit = step.onExit;
       this.setState({
@@ -193,6 +193,10 @@ class Walkthrough extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
+    callGAEvent: (eventAction, eventLabel, eventValue) => cb => {
+      GAEvent('Walkthrough', eventAction, eventLabel, eventValue);
+      cb();
+    },
     waitUntilPresent: (selector, blockEscapingKeys = true) => async cb => {
       blockEscapingKeys && this.blockEscapingKeys();
       while (document.querySelector(selector) === null) {

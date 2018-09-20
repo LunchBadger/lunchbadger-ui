@@ -69,7 +69,7 @@ class SettingsPanel extends Component {
             </EntityPropertyLabel>
             <div className={cs('data', {blocked: !gitAccess})}>
               <label className="details-panel__label">
-                Models and Connectors
+                Models and Model Connectors
               </label>
               <div className="details-panel__static-field">
                 <pre className="gitCloneCommand">

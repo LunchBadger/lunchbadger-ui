@@ -6,7 +6,7 @@ const {Connections} = LunchBadgerCore.stores;
 
 const checkMovedConnection = info => (_, getState) => {
   const state = getState();
-  const {newSourceId, newTargetId} = info;
+  const {newSourceId, originalTargetId, newTargetId} = info;
   const isPrivate = isInQuadrant(state, 1, newSourceId);
   const isGatewayIn = findGatewayByPipelineId(state, newTargetId);
   if (isPrivate && isGatewayIn) {
@@ -25,6 +25,7 @@ const checkMovedConnection = info => (_, getState) => {
   const isGatewayOut = findGatewayByPipelineId(state, newSourceId);
   const isPublic = isInPublicQuadrant(state, newTargetId);
   if (isGatewayOut && isPublic) {
+    if (originalTargetId === newTargetId) return true;
     const conns = Connections.search({toId: formatId(newTargetId)});
     return !conns.length;
   }

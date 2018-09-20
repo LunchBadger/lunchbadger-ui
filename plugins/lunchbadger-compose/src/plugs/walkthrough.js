@@ -191,8 +191,6 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.Model.editable'),
       api.setShowOverlay(false),
-      api.wait(1000),
-      api.setShowOverlay(true),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .submit'),
@@ -210,6 +208,11 @@ Please wait till the <pre>Car</pre> is saved and the walkthrough will continue a
       api.setWaitMethod('waitBySetTimeout'),
       api.waitUntilNotPresent('.CanvasElement.Model.wip'),
       api.setWaitMethod(),
+    ],
+    onBefore: api => [
+      api.click('.Entity.Model'),
+      api.wait(1000),
+      api.setShowOverlay(true),
     ],
   },
   '0271': {

@@ -550,6 +550,11 @@ export default class GatewayPolicyAction extends PureComponent {
             )}
           </div>
         ))}
+        {reorderedParameters.length === 0 && (
+          <div className="GatewayPolicyAction__emptyObject">
+            {'Empty Object'}
+          </div>
+        )}
         <Input
           type="hidden"
           name={`${prefix}[fake]`}

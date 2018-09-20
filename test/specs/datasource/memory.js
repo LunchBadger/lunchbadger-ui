@@ -15,7 +15,7 @@ module.exports = {
   'Memory: unique name check': function () {
     page
       .addElementFromTooltip('dataSource', 'memory')
-      .expectUniqueNameError(entitySelector2, 'A data source')
+      .expectUniqueNameError(entitySelector2, 'A model connector')
       .removeEntityWithoutAutoSave(entitySelector)
       .close();
   }

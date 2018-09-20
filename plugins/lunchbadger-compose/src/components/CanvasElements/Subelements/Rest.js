@@ -589,7 +589,7 @@ export default class Rest extends PureComponent {
     return (
       <div className={cs('Rest', {plain, notPlain: !plain})}>
         <div className="Rest__predefined">
-          <div>
+          <div className="RestMode">
             <EntityProperty
               name="mode"
               title="Mode"
@@ -600,23 +600,27 @@ export default class Rest extends PureComponent {
             />
           </div>
           {isResourceOperationsMode && (
-            <EntityProperty
-              name="baseURL"
-              title="Base URL"
-              value={baseURL}
-              width="100%"
-            />
+            <div className="RestCRUD">
+              <EntityProperty
+                name="baseURL"
+                title="Base URL"
+                value={baseURL}
+                width="100%"
+              />
+            </div>
           )}
           {!isResourceOperationsMode && (
             <div>
-              <EntityProperty
-                name="predefined"
-                title="Predefined templates"
-                value={predefined}
-                options={predefinedOptions}
-                onChange={this.handlePredefinedChanged}
-                width={widthPredefined}
-              />
+              <div className="RestPredefinedTemplates">
+                <EntityProperty
+                  name="predefined"
+                  title="Predefined templates"
+                  value={predefined}
+                  options={predefinedOptions}
+                  onChange={this.handlePredefinedChanged}
+                  width={widthPredefined}
+                />
+              </div>
               <div className="Rest__plain">
                 <CollapsibleProperties
                   bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}

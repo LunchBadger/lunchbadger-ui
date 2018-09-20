@@ -55,7 +55,13 @@ class SystemDefcon1Box extends Component {
     } else {
       dispatch(toggleSystemDefcon1());
     }
-  }
+  };
+
+  handleClick = onClick => (event) => {
+    const {onClose} = this.props;
+    onClose && onClose();
+    onClick && onClick(event);
+  };
 
   handleRemove = item => () => this.props.dispatch(removeSystemDefcon1(item));
 
@@ -76,6 +82,7 @@ class SystemDefcon1Box extends Component {
     const contentTxt = content || (server
       ? 'The system can\'t connect to the server. Please check that the server is running and reload the page.'
       : 'You\'ll need to fix the workspace crash cause');
+    const hasErrorDetails = errors.length > 0 && errors[0].error.error.message;
     return (
       <div
         onClick={this.handleBoxClick}
@@ -86,7 +93,7 @@ class SystemDefcon1Box extends Component {
         </div>
         <div className="SystemDefcon1__box__content">
           {contentTxt}
-          {errors.length > 0 && (
+          {hasErrorDetails && (
             <div className="SystemDefcon1__box__content__details">
               <div>
                 <span
@@ -137,7 +144,7 @@ class SystemDefcon1Box extends Component {
           {buttons && buttons.map(({label, onClick}, idx) => (
             <button
               key={label}
-              onClick={onClick}
+              onClick={this.handleClick(onClick)}
               className={cs({confirm: idx === 0, discard: idx === 1})}
             >
               {label}

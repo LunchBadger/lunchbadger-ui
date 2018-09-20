@@ -1,16 +1,16 @@
 export default {
   '010': {
-    title: 'Connectors Menu',
+    title: 'Model Connectors Menu',
     text: `
-Integrate your LunchBadger Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Connectors.
+Integrate your LunchBadger Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Model Connectors.
 `,
     selector: '.Tool.dataSource',
     position: 'right',
     allowClicksThruHole: false,
   },
   '011': {
-    title: 'Connector Entities Overview',
-    text: 'Each Connector Entity will come with its own set of properties specific for that connection type.',
+    title: 'Model Connector Entities Overview',
+    text: 'Each Model Connector Entity will come with its own set of properties specific for that connection type.',
     waitForSelector: 'div[role=presentation]',
     position: 'right',
     allowClicksThruHole: false,
@@ -24,9 +24,9 @@ Integrate your LunchBadger Project with existing data sources and services, such
     ],
   },
   '012': {
-    title: 'Memory Connector Selection',
+    title: 'Memory Model Connector Selection',
     text: `
-Let's get started! Select the Memory Connector.
+Let's get started! Select the Memory Model Connector.
 <br />
 <br />
 C'mon, click it!
@@ -47,9 +47,9 @@ C'mon, click it!
     ],
   },
   '013': {
-    title: 'Memory Connector Creation',
+    title: 'Memory Model Connector Creation',
     text: `
-Most Connector Entities will present configuration options for connecting to your data source or service, such as host, port, username, and password. We don't need these with the Memory Connector.
+Most Model Connector Entities will present configuration options for connecting to your data source or service, such as host, port, username, and password. We don't need these with the Memory Model Connector.
 <br />
 <br />
 Click <pre>OK</pre> to continue.
@@ -67,7 +67,7 @@ Click <pre>OK</pre> to continue.
   '020': {
     title: 'Model Entities Overview',
     text: `
-Models are objects with properties. A Model can be connected to a Connector to read and write data to a data source or service.  Custom logic can be created on a Model using JavaScript.
+Models are objects with properties. A Model can be connected to a Model Connector to read and write data to a data source or service. Custom logic can be created on a Model using JavaScript.
 <br />
 <br />
 C'mon, click it!
@@ -124,7 +124,7 @@ Let's name it <pre>cars</pre>.
   '023': {
     title: 'Model Properties Overview',
     text: `
-Select the plus icon to assign properties to the Model Entity. Properties map to fields to a data source connected through a Connector.
+Select the plus icon to assign properties to the Model Entity. Properties map to fields to a data source connected through a Model Connector.
 <br /><br />
 C'mon, click it!
 `,
@@ -292,9 +292,9 @@ Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
     ],
   },
   '028': {
-    title: 'Connect Connector to Model',
+    title: 'Connect Model Connector to Model',
     text: `
-Click on the <pre>Memory</pre> Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Connector.
+Click on the <pre>Memory</pre> Model Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Model Connector.
 `,
     selector: '.Entity.DataSource.memory .port-out',
     position: 'bottom-left',

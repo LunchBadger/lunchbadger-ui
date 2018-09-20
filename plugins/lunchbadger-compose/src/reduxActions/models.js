@@ -1,3 +1,4 @@
+import React from 'react';
 import {diff} from 'just-diff';
 import {actions} from './actions';
 import {ModelService} from '../services';
@@ -126,14 +127,15 @@ export const update = (entity, model) => async (dispatch, getState) => {
 };
 
 export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
+  const {loaded, wasBundled} = entity;
+  let updateAction = 'updateModel';
+  if (wasBundled) {
+    updateAction += 'Bundled';
+  }
+  let updatedEntity;
   try {
-    const {loaded, wasBundled} = entity;
     if (loaded) {
-      let updateAction = 'updateModel';
-      if (wasBundled) {
-        updateAction += 'Bundled';
-      }
-      const updatedEntity = entity.recreate();
+      updatedEntity = entity.recreate();
       updatedEntity.ready = false;
       updatedEntity.deleting = true;
       dispatch(actions[updateAction](updatedEntity));
@@ -148,7 +150,18 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
       await dispatch(coreActions.saveToServer({saveProject: false}));
     }
   } catch (error) {
-    dispatch(coreActions.addSystemDefcon1({error}));
+    updatedEntity.ready = true;
+    updatedEntity.deleting = false;
+    error.friendlyTitle = <div>Deleting model <code>{updatedEntity.name}</code> failed</div>;
+    error.friendlyMessage = (
+      <div>
+        <code>{updatedEntity.name}</code> {'failed to delete.'}
+        {' '}
+        {'You can find more details below.'}
+      </div>
+    );
+    updatedEntity.error = error;
+    dispatch(actions[updateAction](updatedEntity));
   }
 };
 

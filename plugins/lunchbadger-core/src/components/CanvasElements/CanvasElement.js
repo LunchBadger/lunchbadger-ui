@@ -132,6 +132,11 @@ export default (ComposedComponent) => {
         inputName.focus();
         inputName.setSelectionRange(0, inputName.value.length);
       }
+      window.addEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
     }
 
     setFlatModel = () => {
@@ -174,7 +179,13 @@ export default (ComposedComponent) => {
       if (typeof element.updateName === 'function') {
         element.updateName(evt);
       }
-    }
+    };
+
+    openDetailsPanelWithAutoscroll = ({detail: {entityId, tab, autoscrollSelector}}) => {
+      if (this.props.entity.id === entityId) {
+        this.handleZoom(tab)(autoscrollSelector)
+      }
+    };
 
     triggerElementAutofocus() {
       if (!this.entityRef) return; // FIXME
@@ -227,7 +238,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentEditElement(this.props.entity));
     }
 
-    handleZoom = tab => () => {
+    handleZoom = tab => (autoscrollSelector) => {
       const {zoomWindow, gaType} = this.props.entity;
       const elementDOMRect = findDOMNode(this.entityRef).getBoundingClientRect();
       const {x, y, width, height} = elementDOMRect;
@@ -238,6 +249,9 @@ export default (ComposedComponent) => {
         height: Math.round(height),
         tab,
         zoomWindow,
+        autoscrollSelector: typeof autoscrollSelector === 'string'
+          ? autoscrollSelector
+          : undefined,
       };
       this.props.dispatch(setCurrentZoom(rect));
       GAEvent('Zoom Window', 'Opened', `${gaType}: ${tab}`);
@@ -282,17 +296,17 @@ export default (ComposedComponent) => {
       }
       const isValid = Object.keys(data).length === 0;
       this.setState({validations: {isValid, data}});
-    }
+    };
 
     handleResetMultiEnvEntity = () => {
       const {multiEnvIndex: index, entity, dispatch} = this.props;
       dispatch(actions.multiEnvironmentsUpdateEntity({index, entity}));
-    }
+    };
 
     handleResetMultiEnvEntityField = field => () => {
       const {multiEnvIndex: index, entity: {id, [field]: value}, dispatch} = this.props;
       dispatch(actions.multiEnvironmentsResetEntityField({index, id, field, value}));
-    }
+    };
 
     handleClick = (event) => {
       const {entity, dispatch, running} = this.props;
@@ -300,7 +314,12 @@ export default (ComposedComponent) => {
       if (!ready || (!running && !allowEditWhenCrashed)) return;
       dispatch(setCurrentElement(entity));
       event.stopPropagation();
-    }
+    };
+
+    handleEntityErrorClicked = (event) => {
+      this.handleClick(event);
+      this.setState({showEntityError: true});
+    };
 
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
@@ -417,6 +436,7 @@ export default (ComposedComponent) => {
           wip: processing,
           semitransparent,
           allowEditWhenCrashed: allowEditWhenCrashed,
+          withStatus: !!status,
         })}>
             <Entity
               ref={(r) => {this.entityRef = r}}
@@ -476,11 +496,13 @@ export default (ComposedComponent) => {
                 </span>
               </TwoOptionModal>
             )}
-            <EntityStatus
-              type={friendlyName || type}
-              status={status}
-            />
-            {error && <EntityError onClick={() => this.setState({showEntityError: true})} />}
+            {!error && (
+              <EntityStatus
+                type={friendlyName || type}
+                status={status}
+              />
+            )}
+            {error && <EntityError onClick={this.handleEntityErrorClicked} />}
             {this.state.showNotRunningModal && (
               <OneOptionModal
                 confirmText="OK"
@@ -498,6 +520,7 @@ export default (ComposedComponent) => {
                 toggleErrorDetailsText='error details'
                 onClose={() => this.setState({showEntityError: false})}
                 hideRemoveButton
+                buttons={error.buttons}
               />
             )}
         </div>

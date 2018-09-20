@@ -10,6 +10,11 @@ $joyride-close-visible: false;
 @import '~react-joyride/lib/react-joyride';
 
 .Walkthrough {
+  .joyride-tooltip[data-target=".Entity.Model .Toolbox__button--edit"] {
+    .joyride-tooltip__button--primary {
+      display: inline-block !important;
+    }
+  }
   &.showNextButton {
     .joyride-tooltip__button--primary {
       display: inline-block;

@@ -273,6 +273,9 @@ export default class DataSource extends BaseModel {
     if (this.isPostgresql) {
       modules.push('pg');
     }
+    if (this.isTritonObjectStorage) {
+      modules.push('loopback-connector-manta');
+    }
     return modules;
   }
 

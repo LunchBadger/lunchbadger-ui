@@ -50,6 +50,9 @@ export default (state = {}, action) => {
         delete newState[action.payload.entityId];
       }
       return newState;
+    case coreActionTypes.clearSystemDefcon1:
+      Object.values(newState).forEach(entity => entity.error = null);
+      return newState;
     default:
       return state;
   }

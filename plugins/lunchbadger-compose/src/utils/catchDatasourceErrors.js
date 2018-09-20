@@ -71,6 +71,9 @@ const catchMap = [
           }
         }
       }
+      if (/3000\/explorer/.test(message) && Object.keys(newState).length === 1) {
+        return Object.keys(newState)[0];
+      }
       for (let id in newState) {
         const {nodeModules} = newState[id];
         for (let i in nodeModules) {

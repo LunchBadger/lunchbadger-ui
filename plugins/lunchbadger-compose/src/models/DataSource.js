@@ -366,7 +366,7 @@ export default class DataSource extends BaseModel {
           .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
         if (isDuplicateName) {
-          validations.data.name = messages.duplicatedEntityName('Data Source');
+          validations.data.name = messages.duplicatedEntityName('Model Connector');
         }
       }
       const withPort = model.hasOwnProperty('port');

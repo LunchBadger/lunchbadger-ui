@@ -25,7 +25,7 @@ module.exports = {
     page
       .addElementFromTooltip('dataSource', 'memory')
       .setCanvasEntityName(entitySelector2, 'tritonobjectstorage')
-      .expectUniqueNameError(entitySelector2, 'A data source')
+      .expectUniqueNameError(entitySelector2, 'A model connector')
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

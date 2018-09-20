@@ -44,6 +44,9 @@ export default (state = {}, action) => {
         Pipeline.create(),
       ];
       return newState;
+    case actionTypes.unlockGatewayAdminApi:
+      delete newState[action.payload].lockedAdminApi;
+      return newState;
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'gateways') {
         const entity = action.payload.entityData;
@@ -51,6 +54,7 @@ export default (state = {}, action) => {
         newState[action.payload.entityId] = Gateway.create(entity);
         if (isDeploying) {
           newState[action.payload.entityId].running = null;
+          newState[action.payload.entityId].lockedAdminApi = true;
         }
       }
       return newState;

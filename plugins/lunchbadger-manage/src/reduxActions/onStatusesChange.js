@@ -78,6 +78,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
   const entries = combineEntities(statuses, gateways);
   let updatedEntity;
   let isSave = false;
+  let unlockAdminApi = [];
   Object.keys(entries).forEach(async (slugId) => {
     const {status, entity, slug} = entries[slugId];
     const {
@@ -121,6 +122,9 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
           updatedEntity.pipelinesLunchbadger = undefined;
           updatedEntity.running = true;
+          if (updatedEntity.lockedAdminApi) {
+            unlockAdminApi.push(entity.id);
+          }
           isSave = true;
           dispatch(actions.updateGateway(updatedEntity));
           message = 'successfully deployed';
@@ -148,4 +152,5 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
   if (isSave) {
     await dispatch(coreActions.saveToServer({showMessage: false}));
   }
+  unlockAdminApi.forEach(id => dispatch(actions.unlockGatewayAdminApi(id)));
 };

@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.227', [
+console.info('LBAPP VERSION 0.228', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -43,7 +43,8 @@ console.info('LBAPP VERSION 0.227', [
     'Bugfix/946 reconnecting api endpoint between pipelines #948',
     'Feature/906 Rename data source to model connector #949',
     'Feature/907 Model connector renaming in walkthrough #950',
-    'Feature/904 walkthrough: quick edit vs full edit #951'
+    'Feature/904 walkthrough: quick edit vs full edit #951',
+    'Feature/940 IE warning #952'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

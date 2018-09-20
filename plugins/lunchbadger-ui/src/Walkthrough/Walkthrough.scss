@@ -77,6 +77,8 @@ $joyride-close-visible: false;
       &[data-target=".Tool__submenuItem.serviceendpoint"],
       &[data-target=".Tool__submenuItem.apiendpoint"],
       &[data-target=".Entity.Gateway .Toolbox__button--customerManagement"],
+      &[data-target=".Entity.Model .Toolbox__button--edit"],
+      &[data-target=".Entity.Model .Toolbox__button--zoom"],
       &[data-target=".Entity.Function_ .Toolbox__button--zoom"] {
         margin-top: -20px;
       }

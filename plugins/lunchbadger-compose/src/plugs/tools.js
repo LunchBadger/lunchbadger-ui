@@ -54,14 +54,14 @@ const tools = {
     {
       name: 'dataSource',
       icon: 'iconDataSource',
-      tooltip: 'Data Source',
+      tooltip: 'Model Connector',
       submenu: dataSources.map(label => ({
         label: getDataSourceLabel(label),
         name: label.toLowerCase(),
         icon: `iconDataSource${label}`,
         action: dataSourceAction(label),
         wizard: getWizardFunc(label),
-        wizardTooltip: 'Create and connect to a new data source',
+        wizardTooltip: 'Create and connect to a new model connector',
       })),
     },
     {

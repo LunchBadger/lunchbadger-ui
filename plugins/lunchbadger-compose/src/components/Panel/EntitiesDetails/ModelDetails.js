@@ -276,7 +276,7 @@ class ModelDetails extends PureComponent {
         width: 190,
       },
       {
-        title: 'Data Source',
+        title: 'Model Connector',
         name: 'dataSource',
         value: currentDsId,
         options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],

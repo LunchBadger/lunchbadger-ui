@@ -190,12 +190,105 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.Model.editable'),
+      api.setShowOverlay(false),
+      api.wait(1000),
+      api.setShowOverlay(true),
     ],
     onBefore: api => [
       api.focus('.Entity.Model.editable .submit'),
     ],
   },
-  '027': {
+  '0270': {
+    title: 'Model is creating',
+    text: `
+Please wait till the <pre>Car</pre> is saved and the walkthrough will continue automatically.
+`,
+    position: 'right',
+    selector: '.Entity.Model',
+    allowClicksThruHole: false,
+    triggerNext: api => [
+      api.setWaitMethod('waitBySetTimeout'),
+      api.waitUntilNotPresent('.CanvasElement.Model.wip'),
+      api.setWaitMethod(),
+    ],
+  },
+  '0271': {
+    title: 'Quick Edit',
+    text: `
+This icon allows you to quick edit entity on the canvas. Quick edit exposes only the bare minimum required properties to fill in.
+<br />
+<br />
+Keep in mind, it applies also to almost all other entity types.
+`,
+    selector: '.Entity.Model .Toolbox__button--edit',
+    position: 'right',
+    allowClicksThruHole: false,
+    onBefore: api => [
+      api.click('.Entity.Model'),
+      api.waitUntilPresent('.Entity.Model.highlighted .Toolbox__button--edit'),
+    ],
+  },
+  '0272': {
+    title: 'Full Edit',
+    text: `
+This icon opens up the Model details for full edit.
+<br />
+<br />
+C'mon, click it!
+`,
+    selector: '.Entity.Model .Toolbox__button--zoom',
+    position: 'right',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.wait(3000),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+    onBefore: api => [
+      api.click('.Entity.Model'),
+      api.waitUntilPresent('.Entity.Model.highlighted .Toolbox__button--zoom'),
+      api.focus('.Entity.Model .Toolbox__button--zoom'),
+    ],
+  },
+  '0273': {
+    title: 'Model Details Panel',
+    text: `
+Use full edit, when you want to add more than what is required in quick edit and get into more detailed information.
+<br />
+<br />
+Keep in mind, that almost all entities has details that are available in full edit.
+`,
+    selector: '.RnD__box',
+    position: 'top',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: () => [],
+  },
+  '0274': {
+    title: 'Return to Canvas from Model Details Panel',
+    text: `
+Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
+`,
+    waitForSelector: '.DetailsPanel .cancel',
+    position: 'top-right',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilNotPresent('.DetailsPanel.visible'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.wait(1500),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
+    ],
+    onBefore: api => [
+      api.focus('.DetailsPanel .cancel'),
+    ],
+  },
+  '028': {
     title: 'Connect Connector to Model',
     text: `
 Click on the <pre>Memory</pre> Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Connector.
@@ -299,12 +392,12 @@ Function Entity's Built-in Editor
     onBefore: () => [],
   },
   '035': {
-    title: 'Return to Canvas from Details Panel',
+    title: 'Return to Canvas from Function Details Panel',
     text: `
 Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
-    position: 'top',
+    position: 'top-right',
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),

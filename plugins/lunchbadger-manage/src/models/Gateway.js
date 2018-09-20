@@ -62,7 +62,10 @@ export default class Gateway extends BaseModel {
   }
 
   recreate() {
-    return Gateway.create(this.toJSON());
+    const {lockedAdminApi} = this;
+    const gateway = Gateway.create(this.toJSON());
+    gateway.lockedAdminApi = lockedAdminApi;
+    return gateway;
   }
 
   toJSON(opts) {
@@ -168,7 +171,7 @@ export default class Gateway extends BaseModel {
   }
 
   async onSave(state, delta, data, prevData) {
-    if (this.loaded && this.running) {
+    if (this.loaded && this.running && !this.lockedAdminApi) {
       const endpointOperations = {};
       const pipelineOperations = {};
       const {entities} = state;

@@ -1,4 +1,5 @@
 import React, {Component, PureComponent} from 'react';
+import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import FunctionLogs from './FunctionLogs';
@@ -9,6 +10,7 @@ import {
   CollapsibleProperties,
   FilesEditor,
   Input,
+  scrollToElement,
 } from '../../../../../lunchbadger-ui/src';
 import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
@@ -42,6 +44,16 @@ class FunctionDetails extends PureComponent {
       autorefreshLogs: userStorage.get('functionLogsAutorefresh') === 'on',
       autorefreshPeriod: +userStorage.get('functionLogsAutorefreshPeriod') || autorefreshDefaultPeriod,
     };
+  }
+
+  componentDidMount() {
+    const {rect: {autoscrollSelector}} = this.props;
+    if (autoscrollSelector) {
+      setTimeout(() => {
+        const autoscrollElement = findDOMNode(this.wrapperDOM).querySelector(autoscrollSelector);
+        scrollToElement(autoscrollElement);
+      });
+    }
   }
 
   processModel = model => this.props.entity.processModel(model);
@@ -128,11 +140,14 @@ class FunctionDetails extends PureComponent {
     const sections = [
       {title: 'Details'},
       {title: 'Triggers'},
-      {title: 'Function Code', render: 'FunctionCode'},
-      {title: 'Logs', renderButton: 'LogsRefresher'},
+      {title: 'Function Code', render: 'FunctionCode', classes: 'FunctionCode'},
+      {title: 'Logs', renderButton: 'LogsRefresher', classes: 'FunctionLogs'},
     ];
     return (
-      <div className="FunctionDetails">
+      <div
+        ref={r => this.wrapperDOM = r}
+        className="FunctionDetails"
+      >
         <Input
           type="hidden"
           name="name"
@@ -143,7 +158,7 @@ class FunctionDetails extends PureComponent {
           name="runtime"
           value={runtime}
         />
-        {sections.map(({title, render, renderButton}) => (
+        {sections.map(({title, render, renderButton, classes}) => (
           <CollapsibleProperties
             key={title}
             bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
@@ -151,6 +166,7 @@ class FunctionDetails extends PureComponent {
             button={renderButton && this[`render${renderButton}Section`]()}
             barToggable
             defaultOpened
+            classes={classes}
           />
         ))}
       </div>

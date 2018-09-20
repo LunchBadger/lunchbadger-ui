@@ -19,6 +19,7 @@ class CollapsibleProperties extends Component {
     space: PropTypes.string,
     noDividers: PropTypes.bool,
     buttonOnHover: PropTypes.bool,
+    classes: PropTypes.string,
   }
 
   static defaultProps = {
@@ -54,6 +55,7 @@ class CollapsibleProperties extends Component {
       space,
       noDividers,
       buttonOnHover,
+      classes,
     } = this.props;
     const {expanded} = this.state;
     const classNames = cs('CollapsibleProperties', {
@@ -71,7 +73,7 @@ class CollapsibleProperties extends Component {
       barRightStyle.padding = space;
     }
     return (
-      <div className={classNames}>
+      <div className={cs(classNames, classes)}>
         <div className="CollapsibleProperties__bar">
           {!untoggable && (
             <div

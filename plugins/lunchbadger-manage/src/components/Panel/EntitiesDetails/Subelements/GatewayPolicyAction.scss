@@ -64,6 +64,12 @@
       }
     }
   }
+  &__emptyObject {
+    font-family: monospace;
+    opacity: 0.5;
+    margin-top: 10px;
+    font-size: 14px;
+  }
 }
 
 .panel__details .GatewayPolicyAction .EntityProperty {

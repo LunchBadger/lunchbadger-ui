@@ -172,6 +172,7 @@ export default class CodeEditor extends PureComponent {
               value={code}
               onChange={this.handleEditorChange}
               setOptions={options}
+              wrapEnabled
             />
           </Resizable>
         </div>

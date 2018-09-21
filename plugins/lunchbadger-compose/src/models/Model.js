@@ -375,6 +375,15 @@ export default class Model extends BaseModel {
     propsToRemove.forEach(prop => delete this[prop]);
     delete model.dataSource;
     delete model.userFields;
+    if (model.files) {
+      if (model.files['model*js']) {
+        data.modelJs = model.files['model*js'];
+      }
+      if (model.files['package*json']) {
+        data.packageJson = model.files['package*json'];
+      }
+    }
+    delete model.files;
     return _.merge({}, model, data);
   }
 

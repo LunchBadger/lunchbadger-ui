@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.115', [
+console.info('LBAPP VERSION 0.119', [
+  '954',
   '953+SR',
   '953',
   '941',

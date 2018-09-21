@@ -34,10 +34,10 @@ export default {
     },
     signingKeys: [
       {
-        "kid": "main",
-        "kty":"RSA",
-        "n":"zfk-2xgiat95VgYmT1Y8LjHnVSwgo9qwQ9J7Y6YY1rx3yesZMV9azPz41qWociROqZNLnKZq1fSuDErmmHJwfTD5uPGYzOHSznM_sQpspzUbEDQ5zvj1nBAnIhczuEm9du5PfUBOFZw4e1rFG55qJfoO4tQg4pWKWj8upf0psk7jwhaK-b7YSHA8c5Fq8UwhvMGxPYqP6djy7mNlcQ11-tgEu7TlG6DxVCRGM1nr5bz855uhHZ4vFjOQL5cRG_hO5Z9tv2OJzy39Hc8IkYMVU527aiLysb-B1eU0Q_xHj8c2kHF6xY6h4jbUvaaRUI8TxhbVwCIMr4kJ2tTbxRq-wrfBOGwINuTJYuw3HHxH74BLBgk7OFd5ReR2IlKc6TFiQnaPTgsejmOad196MgAazrvSdKa-w8v52T3Z09V6KirZmrZw5-6ngLl_pKNVq-bqHmAE0xyX6Uwf-lpNOow7mjaHYXc5ISrREk4pGPhNEyYxvMOTECH9AzORDJM0hTLFhbcbgHrEp5MtsCm4fx_JwkuugLIPL_Z2kHXdVJkah9NoqlvyfLNoRLrjWU7V4RlDyEnVZzTGqcRKiyPeTcdnFlu4CHwI_tHvb4AMsfdbq8ZKAyWGeS7QvC8H5qjTTdeiQfX13kl4BlTQhwBXBz7MkeYIFZUqFWPH8goqvdoTtyM",
-        "e":"AQAB"
+        'kid': 'main',
+        'kty': 'RSA',
+        'n': 'zfk-2xgiat95VgYmT1Y8LjHnVSwgo9qwQ9J7Y6YY1rx3yesZMV9azPz41qWociROqZNLnKZq1fSuDErmmHJwfTD5uPGYzOHSznM_sQpspzUbEDQ5zvj1nBAnIhczuEm9du5PfUBOFZw4e1rFG55qJfoO4tQg4pWKWj8upf0psk7jwhaK-b7YSHA8c5Fq8UwhvMGxPYqP6djy7mNlcQ11-tgEu7TlG6DxVCRGM1nr5bz855uhHZ4vFjOQL5cRG_hO5Z9tv2OJzy39Hc8IkYMVU527aiLysb-B1eU0Q_xHj8c2kHF6xY6h4jbUvaaRUI8TxhbVwCIMr4kJ2tTbxRq-wrfBOGwINuTJYuw3HHxH74BLBgk7OFd5ReR2IlKc6TFiQnaPTgsejmOad196MgAazrvSdKa-w8v52T3Z09V6KirZmrZw5-6ngLl_pKNVq-bqHmAE0xyX6Uwf-lpNOow7mjaHYXc5ISrREk4pGPhNEyYxvMOTECH9AzORDJM0hTLFhbcbgHrEp5MtsCm4fx_JwkuugLIPL_Z2kHXdVJkah9NoqlvyfLNoRLrjWU7V4RlDyEnVZzTGqcRKiyPeTcdnFlu4CHwI_tHvb4AMsfdbq8ZKAyWGeS7QvC8H5qjTTdeiQfX13kl4BlTQhwBXBz7MkeYIFZUqFWPH8goqvdoTtyM',
+        'e': 'AQAB'
       }
     ]
   },

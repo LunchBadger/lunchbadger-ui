@@ -44,6 +44,25 @@ export default (state = {}, action) => {
         Pipeline.create(),
       ];
       return newState;
+    case actionTypes.unlockGatewayAdminApi:
+      delete newState[action.payload].lockedAdminApi;
+      return newState;
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'gateways') {
+        const entity = action.payload.entityData;
+        const isDeploying = !!entity.pipelinesLunchbadger;
+        newState[action.payload.entityId] = Gateway.create(entity);
+        if (isDeploying) {
+          newState[action.payload.entityId].running = null;
+          newState[action.payload.entityId].lockedAdminApi = true;
+        }
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'gateways') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

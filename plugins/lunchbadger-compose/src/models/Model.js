@@ -93,8 +93,10 @@ export default class Model extends BaseModel {
     ];
   }
 
-  static create(data) {
-    const properties = data.properties || [];
+  static create(data_) {
+    const data = _.cloneDeep(data_);
+    const properties = (data.properties || [])
+      .sort((a, b) => a.itemOrder > b.itemOrder);
     const relations = data.relations || [];
     delete data.properties;
     delete data.relations;

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default name => {
+export default (name = '') => {
   if (name === name.toUpperCase()) return name.toLowerCase();
   if (~name.indexOf('-')) return name.toLowerCase();
   const dashed = _.kebabCase(name);

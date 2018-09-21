@@ -5,7 +5,13 @@ import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
 import userStorage from '../utils/userStorage';
 import {updateEntitiesStatues} from './';
+import Connections from '../stores/Connections';
 import {GAEvent} from '../../../lunchbadger-ui/src';
+import {
+  clearCurrentEditElement,
+  setCurrentZoom,
+  setSilentReloadAlertVisible,
+} from './states';
 
 let prevData;
 
@@ -134,4 +140,190 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 export const logout = () => () => {
   GAEvent('Header Menu', 'Logged Out');
   LoginManager().logout();
+};
+
+export const silentReload = paper => async (dispatch, getState) => {
+  const state = getState();
+  const {
+    plugins: {
+      onAppLoad,
+      processProjectLoad,
+      onProjectSave,
+    },
+    entities: {
+      dataSources,
+      models,
+      modelsBundled,
+      microservices,
+      functions,
+      gateways,
+      serviceEndpoints,
+      apiEndpoints,
+      apis,
+      portals,
+    },
+    states,
+  } = state;
+  try {
+    const connections = Connections
+      .search({})
+      .filter(({info}) => {
+        try {
+          const wip = !info.connection || info.connection.hasType('wip');
+          return !wip;
+        } catch (e) {
+          return false;
+        }
+      })
+      .map(({fromId, toId}) => `${fromId}:${toId}`)
+      .reduce((map, item) => ({...map, [item]: true}), {});
+    const currentEditElement = states.currentEditElement || {};
+    const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+    const canvasEditedType = (currentEditElement.constructor || {}).type;
+    const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
+    const endpoints = {
+      dataSources,
+      models,
+      modelsBundled,
+      microservices,
+      functions,
+      gateways,
+      serviceEndpoints,
+      apiEndpoints,
+      apis,
+      portals,
+    };
+    const prevResponse = Object.keys(endpoints)
+      .reduce((map, key) => ({
+        ...map,
+        [key]: Object.values(endpoints[key])
+          .filter(({loaded}) => loaded)
+          .reduce((arr, item) => {
+            const entity = item.toJSON({isForServer: true});
+            Object.keys(entity).forEach((prop) => {
+              if (entity[prop] === undefined) {
+                delete entity[prop];
+              }
+              if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
+                delete entity.error;
+              }
+            });
+            return {
+              ...arr,
+              [item.lunchbadgerId || item.id]: entity,
+            }
+          }, {}),
+      }), {});
+    prevResponse.connections = connections;
+    const responses = await Promise.all(onAppLoad.map(item => item.request()));
+    const currResponse = processProjectLoad
+      .reduce((map, item) => ({
+        ...map,
+        ...item(responses),
+        }), {});
+    const delta = diff(prevResponse, currResponse);
+    // console.log({delta, prevResponse, currResponse});
+    const operations = {};
+    const connectionOperations = {
+      add: [],
+      remove: [],
+    };
+    delta.forEach((item) => {
+      const [entityType, entityId] = item.path;
+      if (entityType === 'connections') {
+        const [fromId, toId] = entityId.split(':');
+        connectionOperations[item.op].push({fromId, toId});
+      } else {
+        const operation = item.path.length === 2 && item.op === 'remove'
+          ? 'silentEntityRemove'
+          : 'silentEntityUpdate';
+        operations[entityId] = {
+          operation,
+          entityType,
+          entityId,
+          entityData: currResponse[entityType][entityId],
+        };
+      }
+    });
+    Object.values(operations).forEach((payload) => {
+      const {
+        operation,
+        entityType,
+        entityId,
+      } = payload;
+      // console.log(operation, entityType, entityId);
+      dispatch(actions[operation](payload));
+      let isCanvasEdited = canvasEditedId === entityId;
+      if (entityType === 'modelsBundled'
+        && canvasEditedType === 'Microservice'
+        && prevResponse.microservices[canvasEditedId].models.includes(entityId)
+      ) {
+        isCanvasEdited = true;
+      }
+      const isZoomEdited = zoomEditedId === entityId;
+      if (isCanvasEdited || isZoomEdited) {
+        if (isCanvasEdited) {
+          dispatch(clearCurrentEditElement());
+        }
+        if (isZoomEdited) {
+          dispatch(setCurrentZoom(undefined));
+        }
+        dispatch(setSilentReloadAlertVisible(true));
+      }
+    });
+    connectionOperations.add.forEach(({fromId, toId}) => {
+      const portOut = document.getElementById(`port_out_${fromId}`);
+      let portIn = document.getElementById(`port_in_${toId}`);
+      if (functions[fromId] && models[toId]) {
+        portIn = document.getElementById(`port_out_${toId}`);
+      }
+      if (portOut && portIn) {
+        paper.connect({
+          source: portOut.querySelector('.port__anchor'),
+          target: portIn.querySelector('.port__anchor'),
+          parameters: {
+            existing: 1,
+          },
+        },
+        );
+      }
+    });
+    connectionOperations.remove.forEach(({fromId, toId}) => {
+      const connToDetach = Connections.find({fromId, toId});
+      if (connToDetach) {
+        try {
+          paper.detach(connToDetach.info.connection, {
+            fireEvent: false,
+            forceDetach: false,
+          });
+        } catch (e) {}
+        Connections.removeConnection(fromId, toId);
+      }
+    });
+    onAppLoad.map(item => item.onWsGitChange && dispatch(item.onWsGitChange()));
+    const conns = responses[0].body.connections
+      .map(({fromId, toId}) => ({fromId, toId}))
+      .reduce((map, item) => {
+        if (!map[item.fromId]) {
+          map[item.fromId] = {};
+        }
+        if (!map[item.fromId][item.toId]) {
+          map[item.fromId][item.toId] = true;
+        }
+        return map;
+      }, {});
+    prevData = {
+      ...onProjectSave.reduce((map, item) => ({
+        ...map,
+        ...item(getState(), {isForDiff: true, connections: conns}),
+      }), {}),
+      connections: conns,
+    };
+  } catch (error) {
+    if (error.statusCode === 401) {
+      LoginManager().refreshLogin();
+    } else {
+      dispatch(addSystemDefcon1({error}));
+    }
+  }
 };

@@ -17,6 +17,7 @@ const arraysToRegister = [
   'onConnectionMovedStrategy',
   'onConnectionDeletedStrategy',
   'onEntitiesStatusesChange',
+  'processProjectLoad',
 ];
 
 const objectsToRegister = [

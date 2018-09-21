@@ -62,7 +62,10 @@ export default class Gateway extends BaseModel {
   }
 
   recreate() {
-    return Gateway.create(this.toJSON());
+    const {lockedAdminApi} = this;
+    const gateway = Gateway.create(this.toJSON());
+    gateway.lockedAdminApi = lockedAdminApi;
+    return gateway;
   }
 
   toJSON(opts) {
@@ -168,7 +171,7 @@ export default class Gateway extends BaseModel {
   }
 
   async onSave(state, delta, data, prevData) {
-    if (this.loaded && this.running) {
+    if (this.loaded && this.running && !this.lockedAdminApi) {
       const endpointOperations = {};
       const pipelineOperations = {};
       const {entities} = state;
@@ -233,9 +236,17 @@ export default class Gateway extends BaseModel {
           if (id === this.id) {
             const isDelete = op === 'remove';
             const serviceEndpointId = path[3];
-            const operation = `${isDelete ? 'delete' : 'put'}ServiceEndpoint`;
-            const body = isDelete ? null : isInPrivateQuadrant(state, serviceEndpointId).toApiJSON();
-            endpointOperations[serviceEndpointId] = {operation, body};
+            if (isDelete) {
+              endpointOperations[serviceEndpointId] = {operation: 'deleteServiceEndpoint'};
+            } else {
+              const seEntity = isInPrivateQuadrant(state, serviceEndpointId);
+              if (seEntity) {
+                endpointOperations[serviceEndpointId] = {
+                  operation: 'putServiceEndpoint',
+                  body: seEntity.toApiJSON(),
+                };
+              }
+            }
           }
         }
         if (kind === 'gateways' && path.length === 4 && path[2] === 'connectedApiEndpoints') {

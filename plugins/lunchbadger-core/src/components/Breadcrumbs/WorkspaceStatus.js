@@ -4,14 +4,19 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import classnames from 'classnames';
+import {silentReload} from '../../reduxActions';
 import LoginManager from '../../utils/auth';
-import OneOptionModal from '../Generics/Modal/OneOptionModal';
+// import OneOptionModal from '../Generics/Modal/OneOptionModal';
 import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
 import {addSystemDefcon1, toggleSystemDefcon1, clearSystemDefcon1} from '../../reduxActions/systemDefcon1';
 import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
 
 class WorkspaceStatus extends Component {
+  static contextTypes = {
+    paper: PropTypes.object,
+  };
+
   constructor() {
     super();
     this.state = {
@@ -19,7 +24,9 @@ class WorkspaceStatus extends Component {
       status: null,
       output: '',
       instance: null,
-      isShowingModal: false,
+      // isShowingModal: false,
+      fn_git: null,
+      ws_git: null,
     };
   }
 
@@ -53,20 +60,36 @@ class WorkspaceStatus extends Component {
   }
 
   onStatusReceived = (message) => {
+    const {dispatch} = this.props;
     let status = JSON.parse(message.data).data;
     console.log('Status from server', status);
     if (this.state.instance && this.state.instance !== status.instance) {
       console.log(`Instance changed: ${this.state.instance} => ${status.instance}`);
-      this.setState({isShowingModal: true});
+      // this.setState({isShowingModal: true});
+    }
+    const fn_git = status.fn_git || 'none';
+    const ws_git = status.ws_git || 'none';
+    const fnGitChanged = this.state.fn_git && this.state.fn_git !== fn_git;
+    const wsGitChanged = this.state.ws_git && this.state.ws_git !== ws_git;
+    if (fnGitChanged || wsGitChanged) {
+      if (fnGitChanged) {
+        console.log(`fn_git changed: ${this.state.fn_git} => ${fn_git}`);
+      }
+      if (wsGitChanged) {
+        console.log(`ws_git changed: ${this.state.ws_git} => ${ws_git}`);
+      }
+      dispatch(silentReload(this.context.paper.getInstance()));
     }
     this.setState({
       connected: true,
       status: status.status,
       output: status.output,
       instance: status.instance,
+      fn_git,
+      ws_git,
     });
     if (status.status === 'running') {
-      this.props.dispatch(clearSystemDefcon1());
+      dispatch(clearSystemDefcon1());
     } else if (status.status === 'crashed') {
       const error = {
         message: status.output,
@@ -75,7 +98,7 @@ class WorkspaceStatus extends Component {
         name: 'Workspace',
         statusCode: 'crashed',
       };
-      const entityErrorProcessed = this.props.dispatch(addSystemDefcon1({error}, 'workspace'));
+      const entityErrorProcessed = dispatch(addSystemDefcon1({error}, 'workspace'));
       if (entityErrorProcessed) {
         this.setState({status: 'running'});
       }
@@ -92,7 +115,7 @@ class WorkspaceStatus extends Component {
     setTimeout(() => this.initChangeStream(), 1000);
   }
 
-  onModalClose = () => location.reload();
+  // onModalClose = () => location.reload();
 
   render() {
     const {isSystemDefcon1} = this.props;
@@ -123,7 +146,7 @@ class WorkspaceStatus extends Component {
           >
           </span>
         </ContextualInformationMessage>
-        {this.state.isShowingModal && (
+        {/* this.state.isShowingModal && (
           <OneOptionModal
             confirmText="Reload"
             onClose={this.onModalClose}
@@ -131,7 +154,7 @@ class WorkspaceStatus extends Component {
             The workspace has changed since the Canvas was loaded. Please
             reload the page to refresh the Canvas contents.
           </OneOptionModal>
-        )}
+        ) */}
       </span>
     );
   }

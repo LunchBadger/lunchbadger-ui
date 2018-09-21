@@ -24,6 +24,16 @@ export default (state = {}, action) => {
       return newState;
     case coreActionTypes.clearProject:
       return {};
+    case coreActionTypes.silentEntityUpdate:
+      if (action.payload.entityType === 'apiEndpoints') {
+        newState[action.payload.entityId] = ApiEndpoint.create(action.payload.entityData);
+      }
+      return newState;
+    case coreActionTypes.silentEntityRemove:
+      if (action.payload.entityType === 'apiEndpoints') {
+        delete newState[action.payload.entityId];
+      }
+      return newState;
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import {
   loadFromServer,
   saveToServer,
   saveOrder,
+  silentReload,
 } from './project';
 import {
   setCurrentElement,
@@ -12,6 +13,7 @@ import {
   changePanelStatus,
   toggleSubelement,
   clearCurrentEditElement,
+  setSilentReloadAlertVisible,
 } from './states';
 import {
   addSystemDefcon1,
@@ -30,12 +32,14 @@ export {
   loadFromServer,
   saveToServer,
   saveOrder,
+  silentReload,
 
   setCurrentElement,
   clearCurrentElement,
   setCurrentEditElement,
   clearCurrentEditElement,
   setCurrentZoom,
+  setSilentReloadAlertVisible,
 
   addSystemDefcon1,
   toggleSystemDefcon1,

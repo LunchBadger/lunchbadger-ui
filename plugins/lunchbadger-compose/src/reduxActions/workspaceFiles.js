@@ -43,16 +43,19 @@ export const reload = () => async (dispatch, getState) => {
   }
 };
 
-export const update = (name, content) => async (dispatch, getState) => {
+export const update = (packageJson, modelJsFileName, modelJsFileContent = '') => async (dispatch, getState) => {
   const modelFile = {
     files: {
       server: {
         models: {
-          [name]: content
+          [modelJsFileName]: modelJsFileContent
         }
       }
     }
   };
+  if (packageJson) {
+    modelFile.files['package.json'] = packageJson;
+  }
   const workspaceFiles = _.merge(
     _.cloneDeep(getState().entities.workspaceFiles),
     modelFile

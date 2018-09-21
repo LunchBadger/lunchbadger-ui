@@ -10,6 +10,7 @@ import onConnectionCreatedStrategy from './onConnectionCreatedStrategy';
 import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
 import onEntitiesStatusesChange from './onEntitiesStatusesChange';
+import processProjectLoad from './processProjectLoad';
 import walkthrough from './walkthrough';
 
 export default {
@@ -25,5 +26,6 @@ export default {
   onConnectionDeletedStrategy,
   onConnectionMovedStrategy,
   onEntitiesStatusesChange,
+  processProjectLoad,
   walkthrough,
 };

@@ -64,8 +64,12 @@ export default class Pipeline extends BaseModel {
     const apiEndpoints = Connections
       .search({fromId: this.id})
       .filter(({info}) => {
-        const wip = !info.connection || info.connection.hasType('wip');
-        return !wip;
+        try {
+          const wip = !info.connection || info.connection.hasType('wip');
+          return !wip;
+        } catch (e) {
+          return false;
+        }
       })
       .map(conn => conn.toId);
     const json = {

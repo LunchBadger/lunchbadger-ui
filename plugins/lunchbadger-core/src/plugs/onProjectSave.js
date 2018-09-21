@@ -65,9 +65,16 @@ export default [
     const connections = Connections
       .search({})
       .filter(({fromId, toId, info}) => {
-        const wip = !info.connection || info.connection.hasType('wip');
-        return !wip
-          && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
+        try {
+          const wip = !info.connection || info.connection.hasType('wip');
+          return !wip
+            && (!isInQuadrant(state, 0, fromId) || findEntity(state, 1, toId).constructor.type === 'Function_');
+        } catch (e) {
+          /* FIXME: when model is bundled to microservice, there is race condition
+            between loopback workspace api and project api,
+            sometimes one of them change ws_git instantly and it fails here because of that */
+          return false;
+        }
       })
       .map(({fromId, toId}) => ({fromId, toId}));
     if (isForDiff) {

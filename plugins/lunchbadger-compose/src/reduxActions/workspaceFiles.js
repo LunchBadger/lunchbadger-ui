@@ -1,12 +1,42 @@
 import {actions} from './actions';
 import _ from 'lodash';
+import {diff} from 'just-diff';
 import {WorkspaceFilesService} from '../services';
+import {getModelJsFilename} from '../utils';
 
 const {coreActions} = LunchBadgerCore.utils;
 
-export const reload = () => async (dispatch) => {
+export const reload = () => async (dispatch, getState) => {
   try {
+    const {
+      entities,
+      states,
+    } = getState();
+    const {workspaceFiles} = entities;
     const {body} = await WorkspaceFilesService.load();
+    const delta = diff(workspaceFiles, body);
+    if (delta.length) {
+      const {currentElement, zoom} = states;
+      let zoomEditedSlug = '';
+      if (!!zoom && !!currentElement) {
+        const {id, type} = currentElement;
+        zoomEditedSlug = getModelJsFilename((entities[type][id] || {}).name);
+      }
+      delta.forEach(({path}) => {
+        if (path.length === 4
+          && path[0] === 'files'
+          && path[1] === 'server'
+          && path[2] === 'models'
+          && path[3].toLowerCase().endsWith('.js')
+        ) {
+          const entitySlug = path[3];
+          if (zoomEditedSlug === entitySlug) {
+            dispatch(coreActions.setCurrentZoom(undefined));
+            dispatch(coreActions.setSilentReloadAlertVisible(true));
+          }
+        }
+      });
+    }
     return dispatch(actions.updateWorkspaceFiles(body));
   } catch (error) {
     return dispatch(coreActions.addSystemDefcon1({error}));
@@ -23,7 +53,7 @@ export const update = (name, content) => async (dispatch, getState) => {
       }
     }
   };
-  const workspaceFiles = Object.assign(
+  const workspaceFiles = _.merge(
     _.cloneDeep(getState().entities.workspaceFiles),
     modelFile
   );

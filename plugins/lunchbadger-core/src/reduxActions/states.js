@@ -111,3 +111,9 @@ export const toggleSubelement = (parent, subelement) => (dispatch, getState) => 
   }
   dispatch(actions.setStates(newStates));
 };
+
+export const setSilentReloadAlertVisible = value => (dispatch, getState) => {
+  const {silentReloadAlertVisible} = getState().states;
+  if (silentReloadAlertVisible === value) return;
+  dispatch(actions.setState({key: 'silentReloadAlertVisible', value}));
+};

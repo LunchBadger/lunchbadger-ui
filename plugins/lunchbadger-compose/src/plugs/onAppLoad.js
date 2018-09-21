@@ -8,6 +8,7 @@ import {actions} from '../reduxActions/actions';
 import {addModelConfigsToConnections} from '../reduxActions/connections';
 import {removeNonExistentSubModels} from '../reduxActions/microservices';
 import {reload as workspaceFilesReload} from '../reduxActions/workspaceFiles';
+
 export default [
   {
     request: async () => await Promise.all([
@@ -22,5 +23,6 @@ export default [
       removeNonExistentSubModels,
       workspaceFilesReload,
     ],
+    onWsGitChange: workspaceFilesReload,
   }
 ];

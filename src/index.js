@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.234', [
+console.info('LBAPP VERSION 0.235', [
   [
     'master Feature/846 real time field change #867',
     'Feature/869 On function deploy failure constrain error within entity #871',
@@ -46,7 +46,8 @@ console.info('LBAPP VERSION 0.234', [
     'Feature/904 walkthrough: quick edit vs full edit #951',
     'Feature/940 IE warning #952',
     'Feature/887 re-enable manta connector on staging #953',
-    'Feature/853 Visualize empty object in policy parameters #954'
+    'Feature/853 Visualize empty object in policy parameters #954',
+    'Bugfix/957 received entity change notification #958'
   ],
   [
     'master Bugfix/835 need to suppress messages for non visible entities #839',

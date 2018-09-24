@@ -3,6 +3,10 @@ import EventSource from 'eventsource';
 import Bluebird from 'bluebird';
 import _ from 'lodash';
 import LoginManager from './auth';
+import recordedMocks from './recordedMocks';
+import Config from '../../../../src/config';
+
+const mocks = Config.get('mocks');
 
 const statusCodesToRepeat = [
   422,
@@ -25,6 +29,7 @@ class ApiClient {
   }
 
   _callAPI(method, url, options) {
+    if (mocks) return Promise.resolve({body: recordedMocks(method, this.url + url)});
     return new Bluebird((resolve, reject) => {
       const req = _.merge({
         method: method,

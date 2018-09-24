@@ -8,6 +8,7 @@ import ConfigStoreService from '../../services/ConfigStoreService';
 import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
 import paper from '../../utils/paper';
 import LoginManager from '../../utils/auth';
+import recordedMocks from '../../utils/recordedMocks';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
@@ -18,6 +19,7 @@ const envId = Config.get('envId');
 const pingAmount = Config.get('pingAmount');
 const pingIntervalMs = Config.get('pingIntervalMs');
 const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
+const mocks = Config.get('mocks');
 
 const allowedPingStatuses = [
   0,
@@ -45,7 +47,11 @@ class AppLoader extends Component {
 
   componentDidMount() {
     if (isKubeWatcherEnabled) {
-      this.initKubeWatcher();
+      if (mocks) {
+        this.onKubeWatcherData(recordedMocks('EventStream', 'KubeWatcher'));
+      } else {
+        this.initKubeWatcher();
+      }
     }
     window.addEventListener('keydown', this.blockKeyPressWhenWorkspaceNotRunning);
   }

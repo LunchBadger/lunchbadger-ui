@@ -67,7 +67,7 @@ class Quadrant extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const oldOrdering = this.getOrderedIds(this.props);
     const newOrdering = this.getOrderedIds(nextProps);
-    if (oldOrdering.join(',') !== newOrdering.join(',')) {
+    if (oldOrdering.map(item => item.id).join(',') !== newOrdering.map(item => item.id).join(',')) {
       this.updateOrderedIds(newOrdering);
     }
   }

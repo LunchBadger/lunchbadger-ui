@@ -194,26 +194,29 @@ export const silentReload = paper => async (dispatch, getState) => {
       portals,
     };
     const prevResponse = Object.keys(endpoints)
-      .reduce((map, key) => ({
-        ...map,
-        [key]: Object.values(endpoints[key])
-          .filter(({loaded}) => loaded)
-          .reduce((arr, item) => {
-            const entity = item.toJSON({isForServer: true});
-            Object.keys(entity).forEach((prop) => {
-              if (entity[prop] === undefined) {
-                delete entity[prop];
+      .reduce((map, key) => {
+        if (!endpoints[key]) return map;
+        return {
+          ...map,
+          [key]: Object.values(endpoints[key])
+            .filter(({loaded}) => loaded)
+            .reduce((arr, item) => {
+              const entity = item.toJSON({isForServer: true});
+              Object.keys(entity).forEach((prop) => {
+                if (entity[prop] === undefined) {
+                  delete entity[prop];
+                }
+                if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
+                  delete entity.error;
+                }
+              });
+              return {
+                ...arr,
+                [item.lunchbadgerId || item.id]: entity,
               }
-              if (key === 'dataSources') { // FIXME quick and dirty, error should not be in toJSON
-                delete entity.error;
-              }
-            });
-            return {
-              ...arr,
-              [item.lunchbadgerId || item.id]: entity,
-            }
-          }, {}),
-      }), {});
+            }, {}),
+        }
+      }, {});
     prevResponse.connections = connections;
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
     const currResponse = processProjectLoad
@@ -253,14 +256,14 @@ export const silentReload = paper => async (dispatch, getState) => {
       } = payload;
       // console.log(operation, entityType, entityId);
       dispatch(actions[operation](payload));
-      let isCanvasEdited = canvasEditedId === entityId;
+      let isCanvasEdited = !!entityId && canvasEditedId === entityId;
       if (entityType === 'modelsBundled'
         && canvasEditedType === 'Microservice'
         && prevResponse.microservices[canvasEditedId].models.includes(entityId)
       ) {
         isCanvasEdited = true;
       }
-      const isZoomEdited = zoomEditedId === entityId;
+      const isZoomEdited = !!entityId && zoomEditedId === entityId;
       if (isCanvasEdited || isZoomEdited) {
         if (isCanvasEdited) {
           dispatch(clearCurrentEditElement());

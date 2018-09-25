@@ -39,6 +39,7 @@ export default {
     preferred_username: 'User Userman'
   },
   envId: 'dev',
+  mocks: false,
   features: {
     tritonLogo,
     tritonObjectStorage: true,

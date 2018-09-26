@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import userStorage from '../../../utils/userStorage';
 import {clearServer} from '../../../reduxActions/project';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
-import {EntityPropertyLabel, Button, GAEvent} from '../../../../../lunchbadger-ui/src';
+import {
+  EntityPropertyLabel,
+  Button,
+  GAEvent,
+  DocsLink,
+} from '../../../../../lunchbadger-ui/src';
 import './RestartWalkthrough.scss';
 
 export default class RestartWalkthrough extends PureComponent {
@@ -32,6 +37,7 @@ export default class RestartWalkthrough extends PureComponent {
         <div className="details-panel__fieldset">
           <EntityPropertyLabel>
             Walkthrough
+            <DocsLink item="SETTINGS_WALKTHROUGH" />
           </EntityPropertyLabel>
           <div>
             <p>

@@ -210,7 +210,7 @@ class SshManager extends PureComponent {
     const bar = (
       <EntityPropertyLabel>
         Public Keys
-        <DocsLink item="SETTINGS_GIT_ACCESS" />
+        <DocsLink item="SETTINGS_PUBLIC_KEYS" />
       </EntityPropertyLabel>
     );
     return (

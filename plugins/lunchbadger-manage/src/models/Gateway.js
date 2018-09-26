@@ -451,17 +451,19 @@ export default class Gateway extends BaseModel {
           const policyObj = Policy.create(policy);
           const {name: policyName} = policyObj;
           const schema = gatewaySchemas.policy[policyName];
-          const policyData = policyObj.toApiJSON();
-          policyData[policyName].forEach(({action}, pairIdx) => {
-            const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`;
-            const {
-              isValid,
-              processPolicyActionValidations,
-            } = schemaValidator.register(schema)(action);
-            if (!isValid) {
-              processPolicyActionValidations(validations, prefix);
-            }
-          });
+          if (schema) {
+            const policyData = policyObj.toApiJSON();
+            policyData[policyName].forEach(({action}, pairIdx) => {
+              const prefix = `pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${pairIdx}]`;
+              const {
+                isValid,
+                processPolicyActionValidations,
+              } = schemaValidator.register(schema)(action);
+              if (!isValid) {
+                processPolicyActionValidations(validations, prefix);
+              }
+            });
+          }
         });
       });
       validations.isValid = Object.keys(validations.data).length === 0;

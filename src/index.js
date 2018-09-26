@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.243', [
+console.info('LBAPP VERSION 0.244', [
+  'Feature/960 ApiEndpoint inherits contextPath #973',
   'Feature/969 hubspot integration - walkthrough completed #972',
   'Feature/967 Docs Links #971',
   'Feature/959 array of objects in policy action #970',

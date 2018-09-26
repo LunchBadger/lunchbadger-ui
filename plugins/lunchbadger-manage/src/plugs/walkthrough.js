@@ -1,6 +1,8 @@
 import React from 'react';
 import {CopyOnHover} from '../../../lunchbadger-ui/src';
 
+const {getUser} = LunchBadgerCore.utils;
+
 export default {
   //   '050': {
   //     title: 'Endpoint Dropdown Menu',
@@ -307,6 +309,17 @@ Add the following path: <pre>/myfunction*</pre>
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.ApiEndpoint.editable'),
       api.callGAEvent('Completed'),
+      cb => {
+        try {
+          // HubSpot integration
+          var _hsq = window._hsq || [];
+          _hsq.push(['identify', {
+              email: getUser().profile.email,
+              completed_walkthrough: true,
+          }]);
+        } catch(e) {}
+        cb();
+      },
     ],
     onBefore: api => [
       api.focus('.Entity.ApiEndpoint.editable .submit'),

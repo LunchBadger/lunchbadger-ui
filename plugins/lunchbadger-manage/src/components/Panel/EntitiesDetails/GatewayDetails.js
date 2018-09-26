@@ -24,6 +24,7 @@ import {
   Sortable,
   scrollToElement,
   CopyOnHover,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import './GatewayDetails.scss';
 
@@ -652,7 +653,12 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="general" key="protocol">
         <CollapsibleProperties
-          bar={<EntityPropertyLabel>Protocol</EntityPropertyLabel>}
+          bar={
+            <EntityPropertyLabel>
+              Protocol
+              <DocsLink item="GATEWAY_DETAILS_PROTOCOL" />
+            </EntityPropertyLabel>
+          }
           collapsible={collapsible}
           barToggable
           defaultOpened
@@ -708,7 +714,12 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="general" key="admin">
         <CollapsibleProperties
-          bar={<EntityPropertyLabel>Admin</EntityPropertyLabel>}
+          bar={
+            <EntityPropertyLabel>
+              Admin
+              <DocsLink item="GATEWAY_DETAILS_ADMIN" />
+            </EntityPropertyLabel>
+          }
           collapsible={collapsible}
           barToggable
           defaultOpened
@@ -754,7 +765,12 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="pipelines" key="pipelines">
         <CollapsibleProperties
-          bar={<EntityPropertyLabel>Pipelines</EntityPropertyLabel>}
+          bar={
+            <EntityPropertyLabel>
+              Pipelines
+              <DocsLink item="GATEWAY_PIPELINES" />
+            </EntityPropertyLabel>
+          }
           collapsible={collapsible}
           button={
             <IconButton

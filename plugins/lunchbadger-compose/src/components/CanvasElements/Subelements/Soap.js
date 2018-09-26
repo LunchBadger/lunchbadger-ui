@@ -11,14 +11,15 @@ import {
   Input,
   Checkbox,
   Table,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 
 const sections = [
-  {label: 'Properties', render: 'Properties'},
-  {label: 'WSDL Options', render: 'WsdlOptions'},
-  {label: 'Operations', render: 'Operations'},
-  {label: 'Security', render: 'Security'},
-  {label: 'SOAP Headers', render: 'SoapHeaders'},
+  {label: 'Properties', render: 'Properties', docs: 'DATASOURCE_SOAP_PROPERTIES'},
+  {label: 'WSDL Options', render: 'WsdlOptions', docs: 'DATASOURCE_SOAP_WSDL_OPTIONS'},
+  {label: 'Operations', render: 'Operations', docs: 'DATASOURCE_SOAP_OPERATIONS'},
+  {label: 'Security', render: 'Security', docs: 'DATASOURCE_SOAP_SECURITY'},
+  {label: 'SOAP Headers', render: 'SoapHeaders', docs: 'DATASOURCE_SOAP_SOAP_HEADERS'},
 ];
 const widths = [200, 200, 200, undefined, 70];
 const paddings = [true, true, true, true, false];
@@ -341,10 +342,15 @@ export default class Soap extends PureComponent {
       <div className={cs('Soap', {plain, notPlain: !plain})}>
         {plain && <EntityProperties properties={properties} />}
         <div style={{display: plain ? 'none' : 'block'}}>
-          {sections.map(({label, render}) => (
+          {sections.map(({label, render, docs}) => (
             <CollapsibleProperties
               key={render}
-              bar={<EntityPropertyLabel>{label}</EntityPropertyLabel>}
+              bar={
+                <EntityPropertyLabel>
+                  {label}
+                  <DocsLink item={docs} />
+                </EntityPropertyLabel>
+              }
               collapsible={this[`render${render}`]()}
               defaultOpened
               barToggable

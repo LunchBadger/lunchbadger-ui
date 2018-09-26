@@ -8,7 +8,7 @@ import ProjectService from '../../services/ProjectService';
 import Config from '../../../../../src/config';
 import SshManager from './EntitiesDetails/SshManager';
 import RestartWalkthrough from './EntitiesDetails/RestartWalkthrough';
-import {EntityPropertyLabel} from '../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel, DocsLink} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
 const {gitAccess, appUrls} = Config.get('features');
@@ -49,6 +49,7 @@ class SettingsPanel extends Component {
             <div className="details-panel__fieldset">
               <EntityPropertyLabel>
                 Your application URLs
+                <DocsLink item="SETTINGS_YOUR_APPLICATION_URLS" />
               </EntityPropertyLabel>
               <div className="details-panel__static-field">
                 <a href={workspaceUrl} target="_blank">
@@ -66,6 +67,7 @@ class SettingsPanel extends Component {
           <div className="details-panel__fieldset">
             <EntityPropertyLabel>
               Access via Git
+              <DocsLink item="SETTINGS_ACCESS_VIA_GIT" />
             </EntityPropertyLabel>
             <div className={cs('data', {blocked: !gitAccess})}>
               <label className="details-panel__label">

@@ -12,6 +12,7 @@ import {
   Input,
   Table,
   IconButton,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import './ApiEndpointDetails.scss';
 
@@ -199,7 +200,12 @@ class ApiEndpointDetails extends Component {
     return (
       <CollapsibleProperties
         key="paths"
-        bar={<EntityPropertyLabel>Paths</EntityPropertyLabel>}
+        bar={
+          <EntityPropertyLabel>
+            Paths
+            <DocsLink item="API_ENDPOINT_PATHS" />
+          </EntityPropertyLabel>
+        }
         collapsible={table}
         defaultOpened
       />

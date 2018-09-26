@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.240', [
+console.info('LBAPP VERSION 0.241', [
+  'Feature/969 hubspot integration - walkthrough completed #972',
   'Feature/967 Docs Links #971',
   'Feature/959 array of objects in policy action #970',
   'Feature/945 Silent update: re-ordering #964',

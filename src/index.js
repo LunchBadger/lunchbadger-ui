@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.238', [
+console.info('LBAPP VERSION 0.239', [
+  'Feature/967 Docs Links #971',
   'Feature/959 array of objects in policy action #970',
   'Feature/945 Silent update: re-ordering #964',
   'Feature/915 Add package.json to editor #961',

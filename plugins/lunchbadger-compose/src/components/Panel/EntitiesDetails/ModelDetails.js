@@ -19,7 +19,7 @@ import {
   Select,
   Table,
   IconButton,
-  CodeEditor,
+  FilesEditor,
 } from '../../../../../lunchbadger-ui/src';
 import './ModelDetails.scss';
 
@@ -51,6 +51,9 @@ const relationTypeOptions = [
   {label: 'belongsTo', value: 'belongsTo'},
   {label: 'hasAndBelongsToMany', value: 'hasAndBelongsToMany'},
 ];
+
+const editorCodeLanguage = 'javascript';
+const defaultSelect = 'model.js';
 
 @inject('connectionsStore') @observer
 class ModelDetails extends PureComponent {
@@ -213,7 +216,7 @@ class ModelDetails extends PureComponent {
 
   onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
-  handleCodeEditorChange = () =>
+  handleFilesEditorChange = () =>
     this.setState({changed: true}, () => this.props.parent.checkPristine());
 
   handleChangePropertyType = id => (type) => {
@@ -527,15 +530,19 @@ class ModelDetails extends PureComponent {
   renderModelCodeSection = () => {
     const {entity, workspaceFiles} = this.props;
     if (!workspaceFiles.files) return <div />;
-    const file = workspaceFiles.files.server.models[entity.modelJsName];
+    const modelJs = workspaceFiles.files.server.models[entity.modelJsName];
+    const packageJson = workspaceFiles.files['package.json'];
+    const files = {
+      'model.js': modelJs,
+      'package.json': packageJson,
+    };
     return (
       <div className="ModelDetails__codeEditor">
-        <CodeEditor
-          name="files"
-          value={file}
-          initialHeight={200}
-          mode="editor"
-          onChange={this.handleCodeEditorChange}
+        <FilesEditor
+          lang={editorCodeLanguage}
+          files={files}
+          onChange={this.handleFilesEditorChange}
+          defaultSelect={defaultSelect}
         />
       </div>
     );

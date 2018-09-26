@@ -11,8 +11,20 @@ import {
   update as workspaceFilesUpdate,
 } from './workspaceFiles';
 
-const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
-const {Connections} = LunchBadgerCore.stores;
+const {
+  utils: {
+    storeUtils,
+    coreActions,
+    actions: actionsCore,
+  },
+  stores: {
+    Connections,
+  },
+  services: {
+    ProjectService,
+  },
+} = LunchBadgerCore;
+const PACKAGE_JSON = 'package.json';
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
@@ -28,9 +40,14 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
   const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
   const state = getState();
-  const prevFiles = (state.entities.workspaceFiles.files.server.models || {})[entity.modelJsName];
-  let {files} = model;
-  delete model.files;
+  const prevModelJs = (state.entities.workspaceFiles.files.server.models || {})[entity.modelJsName];
+  const prevPackageJson = (state.entities.workspaceFiles.files || {})[PACKAGE_JSON];
+  let {
+    modelJs,
+    packageJson,
+  } = model;
+  delete model.modelJs;
+  delete model.packageJson;
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   if (index > 0) {
@@ -72,8 +89,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
         dataSource: dataSource ? dataSource.name : null,
         public: updatedEntity.public,
       });
-      if (files === undefined) {
-        files = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
+      if (modelJs === undefined) {
+        modelJs = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
+      }
+      if (packageJson === undefined) {
+        packageJson = state.entities.workspaceFiles.files[PACKAGE_JSON];
       }
     }
     if (deltaModel.length > 0) {
@@ -110,8 +130,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
         });
       }
     }
-    if (isDifferent || (files && files !== prevFiles)) {
-      await dispatch(workspaceFilesUpdate(updatedEntity.modelJsName, files));
+    const isModelJsDiff = modelJs && modelJs !== prevModelJs;
+    const isPackageJsonDiff = packageJson && packageJson !== prevPackageJson;
+    if (isDifferent || isModelJsDiff || isPackageJsonDiff) {
+      await dispatch(workspaceFilesUpdate(packageJson, updatedEntity.modelJsName, modelJs));
+      if (isPackageJsonDiff) {
+        await ProjectService.reinstallDeps();
+      }
     } else if (!entity.loaded) {
       await dispatch(workspaceFilesReload());
     }

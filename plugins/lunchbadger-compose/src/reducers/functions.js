@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import slug from 'slug';
+import {diff} from 'just-diff';
 import Function_ from '../models/Function';
 import {actionTypes} from '../reduxActions/actions';
 
@@ -43,7 +44,28 @@ export default (state = {}, action) => {
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'functions') {
         const entity = Function_.create(action.payload.entityData);
-        entity.running = null;
+        let isDeploying = true;
+        const prevEntity = newState[action.payload.entityId];
+        if (prevEntity) {
+          const delta = diff(prevEntity.toJSON(), entity.toJSON());
+          if (delta.length === 0) return newState;
+          if (
+            delta.length === 2
+            &&
+            delta[0].op === 'replace'
+            &&
+            delta[0].path.join(',') === 'itemOrder'
+            &&
+            delta[1].op === 'replace'
+            &&
+            delta[1].path.join(',') === 'service,serverless,lunchbadger,itemOrder'
+          ) {
+            isDeploying = false;
+          }
+        }
+        if (isDeploying) {
+          entity.running = null;
+        }
         newState[action.payload.entityId] = entity;
       }
       return newState;

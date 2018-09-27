@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.248', [
+console.info('LBAPP VERSION 0.249', [
+  'Bugfix/938 Model array icon shown on canvas #979',
   'Feature/975 api endpoint inherits context path from connected function #978',
   'Feature/488 Policy input should be select, not autocomplete #977',
   'Feature/918 Code editor resize remembered #976',

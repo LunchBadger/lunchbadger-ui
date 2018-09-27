@@ -544,6 +544,7 @@ class ModelDetails extends PureComponent {
           files={files}
           onChange={this.handleFilesEditorChange}
           defaultSelect={defaultSelect}
+          entityId={entity.id}
         />
       </div>
     );

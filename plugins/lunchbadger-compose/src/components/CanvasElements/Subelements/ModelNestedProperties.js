@@ -33,6 +33,13 @@ class ModelNestedProperties extends Component {
     } = this.props;
     const filteredProperties = properties.filter(property => property.parentId === parentId);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
+    let emptyNested = <div />;
+    if (filteredProperties.length === 0) {
+      const parent = properties.find(property => property.id === parentId);
+      if (parent) {
+        emptyNested = <div className="ModelProperty__empty">Empty {parent.type}</div>;
+      }
+    }
     return (
       <CSSTransitionGroup
         transitionName="propertyTransition"
@@ -77,6 +84,7 @@ class ModelNestedProperties extends Component {
             </ModelPropertyCollapsed>
           )
         })}
+        {emptyNested}
       </CSSTransitionGroup>
     );
   }

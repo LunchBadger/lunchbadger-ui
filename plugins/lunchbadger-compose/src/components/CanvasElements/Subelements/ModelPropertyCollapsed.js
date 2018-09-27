@@ -22,15 +22,17 @@ class ModelPropertyCollapsed extends Component {
     const {collapsed} = this.state;
     return (
       <div className={cs('ModelPropertyCollapsed', {collapsed})}>
-        <div className={cs('ModelPropertyCollapsed__col', 'toggle')}>
-          {collapsable && (
-            <div onClick={this.toggleCollapse}>
-              <IconSVG svg={iconArrow} />
-            </div>
-          )}
-        </div>
-        <div className={cs('ModelPropertyCollapsed__col', 'content')}>
-          {children}
+        <div className="ModelPropertyCollapsed__row">
+          <div className={cs('ModelPropertyCollapsed__col', 'toggle')}>
+            {collapsable && (
+              <div onClick={this.toggleCollapse}>
+                <IconSVG svg={iconArrow} />
+              </div>
+            )}
+          </div>
+          <div className={cs('ModelPropertyCollapsed__col', 'content')}>
+            {children}
+          </div>
         </div>
         {!collapsed && nested}
       </div>

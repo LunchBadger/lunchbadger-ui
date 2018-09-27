@@ -14,7 +14,8 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.246', [
+console.info('LBAPP VERSION 0.247', [
+  'Feature/488 Policy input should be select, not autocomplete #977',
   'Feature/918 Code editor resize remembered #976',
   'Feature/820 allOf in schemas #974',
   'Feature/960 ApiEndpoint inherits contextPath #973',

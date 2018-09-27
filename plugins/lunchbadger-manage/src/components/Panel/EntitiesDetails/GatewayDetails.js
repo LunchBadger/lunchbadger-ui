@@ -431,7 +431,6 @@ class GatewayDetails extends PureComponent {
           options={options}
           hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
           onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
-          autocomplete
         />
       </div>
     );

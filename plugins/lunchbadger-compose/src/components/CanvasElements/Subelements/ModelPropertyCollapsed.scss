@@ -4,6 +4,7 @@
     display: inline-block;
     vertical-align: middle;
     &.toggle {
+      visibility: hidden;
       width: 10px;
       & > div {
         cursor: pointer;
@@ -21,6 +22,11 @@
     }
     &.content {
       width: calc(100% - 10px);
+    }
+  }
+  &__row:hover {
+    .ModelPropertyCollapsed__col.toggle {
+      visibility: visible;
     }
   }
 }

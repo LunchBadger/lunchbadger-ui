@@ -69,7 +69,7 @@ export const remove = entity => async (dispatch) => {
   }
 };
 
-export const saveOrder = orderedIds => (dispatch, getState) => {
+export const saveOrder = orderedIds => async (dispatch, getState) => {
   const entities = getState().entities.apiEndpoints;
   const reordered = [];
   orderedIds.forEach((id, idx) => {
@@ -81,5 +81,6 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   });
   if (reordered.length > 0) {
     dispatch(actions.updateApiEndpoints(reordered));
+    await dispatch(coreActions.saveToServer());
   }
 };

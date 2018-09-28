@@ -33,6 +33,18 @@ class ApiEndpoint extends Component {
     this.state = {...this.stateFromStores(props)};
   }
 
+  componentDidMount() {
+    const {loaded} = this.props.entity;
+    if (!loaded) {
+      const contextPath = this.getConnectedModelContextPath();
+      if (contextPath !== '') {
+        const paths = _.cloneDeep(this.state.paths);
+        paths.push(`/${contextPath}*`);
+        this.changeState({paths});
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.entity !== nextProps.entity) {
       this.onPropsUpdate(nextProps);
@@ -100,6 +112,15 @@ class ApiEndpoint extends Component {
       .findGatewayByPipelineId(this.context.store.getState(), conn.fromId);
     if (!gateway) return '';
     return gateway.rootUrl;
+  };
+
+  getConnectedModelContextPath = () => {
+    const {entity, connectionsStore} = this.props;
+    const {id} = entity;
+    const conn = connectionsStore.find({toId: id});
+    if (!conn) return '';
+    return storeUtils
+      .findConnectedContextPathByPipelineId(this.context.store.getState(), conn.fromId);
   };
 
   renderPorts = () => {

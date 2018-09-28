@@ -43,3 +43,23 @@ export const findEntityByName = (state, quadrantIdx, name) =>
     .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))
     .reduce((arr, item) => arr.concat(item), [])
     .find(item => item.name === name);
+
+export const findConnectedContextPathByPipelineId = (state, id) => {
+  const gateway = state.plugins.quadrants[2].connectionEntities
+    .map(type => Object.keys(state.entities[type]).map(key => state.entities[type][key]))
+    .reduce((arr, item) => arr.concat(item), [])
+    .find(item => item.pipelines.map(p => p.id).includes(formatId(id)))
+  if (!gateway) return '';
+  const connectedServiceEndpoints = Object.values(gateway.toJSON().pipelines)
+    .filter(p => p.id === formatId(id))
+    .reduce((map, {policies}) => [...map, ...policies], [])
+    .filter(({proxy}) => proxy)
+    .reduce((map, {proxy}) => [...map, ...proxy], [])
+    .filter(({action: {serviceEndpoint}}) => serviceEndpoint)
+    .map(({action: {serviceEndpoint}}) => serviceEndpoint);
+  if (connectedServiceEndpoints.length !== 1) return '';
+  const endpoint = findEntity(state, 1, connectedServiceEndpoints[0]);
+  if (!endpoint) return '';
+  if (endpoint.constructor.type !== 'Model') return '';
+  return endpoint.contextPath;
+};

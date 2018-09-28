@@ -47,7 +47,7 @@ export const remove = entity => async (dispatch) => {
   }
 };
 
-export const saveOrder = orderedIds => (dispatch, getState) => {
+export const saveOrder = orderedIds => async (dispatch, getState) => {
   const entities = getState().entities.portals;
   const reordered = [];
   orderedIds.forEach((id, idx) => {
@@ -59,6 +59,7 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
   });
   if (reordered.length > 0) {
     dispatch(actions.updatePortals(reordered));
+    await dispatch(coreActions.saveToServer());
   }
 };
 

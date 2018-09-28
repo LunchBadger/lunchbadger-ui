@@ -91,3 +91,12 @@ export const rebundle = (fromApi, toApi, endpoint) => async (dispatch) => {
   dispatch(actions.updateAPIs([updatedFromApi, updatedToApi]));
   await dispatch(coreActions.saveToServer());
 };
+
+export const rebundleMultiple = (fromApi, toApi, endpoints) => async (dispatch) => {
+  const updatedFromApi = fromApi.recreate();
+  updatedFromApi.removeEndpoints(endpoints);
+  const updatedToApi = toApi.recreate();
+  updatedToApi.addEndpoints(endpoints);
+  dispatch(actions.updateAPIs([updatedFromApi, updatedToApi]));
+  await dispatch(coreActions.saveToServer());
+};

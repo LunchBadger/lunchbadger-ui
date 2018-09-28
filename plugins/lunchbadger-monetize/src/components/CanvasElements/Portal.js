@@ -4,7 +4,12 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import classNames from 'classnames';
-import {bundle, unbundle, rebundle} from '../../reduxActions/portals';
+import {
+  bundle,
+  unbundle,
+  rebundle,
+  rebundleMultiple,
+} from '../../reduxActions/portals';
 import _ from 'lodash';
 import './API.scss';
 import API from './Subelements/API';
@@ -102,6 +107,11 @@ class Portal extends Component {
     dispatch(rebundle(fromPortal, toPortal, api));
   }
 
+  rebundleMultiple = (fromPortal, toPortal, apis) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundleMultiple(fromPortal, toPortal, apis));
+  }
+
   unbundle = () => {
     const item = this.state.bundledItem;
     const {store: {dispatch}} = this.context;
@@ -148,12 +158,13 @@ class Portal extends Component {
           <ElementsBundler
             {...this.props}
             canDropCheck={
-              (item) => _.includes(this.props.entity.accept, item.entity.constructor.type)
-              && !_.includes(this.props.entity.apis, item.entity)
+              (item) => _.includes(this.props.entity.accept, item.constructor.type)
+              && !_.includes(this.props.entity.apis, item)
             }
             onAddCheck={(item) => !_.includes(this.props.entity.apis, item.entity)}
             onAdd={this.bundle}
             onMove={this.rebundle}
+            onMoveMultiple={this.rebundleMultiple}
             dropText={'Drag APIs here'}
             parent={this.props.parent}
             entity={this.props.entity}

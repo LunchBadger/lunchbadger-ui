@@ -112,6 +112,20 @@ export const toggleSubelement = (parent, subelement) => (dispatch, getState) => 
   dispatch(actions.setStates(newStates));
 };
 
+export const setCurrentlySelectedParent = entity => (dispatch, getState) => {
+  const {currentlySelectedParent} = getState().states;
+  if (currentlySelectedParent && entity.id !== currentlySelectedParent.id) {
+    const currentElement = {
+      id: entity.id,
+      type: entity.constructor.entities,
+    };
+    dispatch(actions.setStates([
+      {key: 'currentElement', value: currentElement},
+      {key: 'currentlySelectedParent', value: entity},
+    ]));
+  }
+};
+
 export const setSilentReloadAlertVisible = value => (dispatch, getState) => {
   const {silentReloadAlertVisible} = getState().states;
   if (silentReloadAlertVisible === value) return;

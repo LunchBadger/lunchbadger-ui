@@ -5,7 +5,12 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelComponent from './Subelements/Model';
-import {bundle, unbundle, rebundle} from '../../reduxActions/models';
+import {
+  bundle,
+  unbundle,
+  rebundle,
+  rebundleMultiple,
+} from '../../reduxActions/models';
 import './Microservice.scss';
 
 const {
@@ -68,7 +73,11 @@ class Microservice extends Component {
 
   bundleModel = (microservice, model) => this.props.dispatch(bundle(microservice, model));
 
-  moveBetweenMicroservice = (from, to, model) => this.props.dispatch(rebundle(from, to, model));
+  moveBetweenMicroservice = (from, to, model) =>
+    this.props.dispatch(rebundle(from, to, model));
+
+  moveMultipleBetweenMicroservice = (from, to, models) =>
+    this.props.dispatch(rebundleMultiple(from, to, models));
 
   handleMultipleUnbundle = () => this.setState({
     isShowingModalMultiple: true,
@@ -85,8 +94,8 @@ class Microservice extends Component {
 
   handleDropCheck = (item) => {
     const {entity} = this.props;
-    const accept = _.includes(entity.accept, item.entity.constructor.type);
-    const bundled = _.includes(entity.models, item.entity.lunchbadgerId);
+    const accept = _.includes(entity.accept, item.constructor.type);
+    const bundled = _.includes(entity.models, item.lunchbadgerId);
     return accept && !bundled;
   };
 
@@ -168,6 +177,7 @@ class Microservice extends Component {
             onAddCheck={(item) => !_.includes(entity.models, item.entity.lunchbadgerId)}
             onAdd={this.bundleModel}
             onMove={this.moveBetweenMicroservice}
+            onMoveMultiple={this.moveMultipleBetweenMicroservice}
             dropText="Drag Models Here"
             modalTitle="Bundle Microservice"
             parent={parent}

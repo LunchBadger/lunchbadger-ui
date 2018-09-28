@@ -14,6 +14,7 @@ import {
   toggleSubelement,
   clearCurrentEditElement,
   setSilentReloadAlertVisible,
+  setCurrentlySelectedParent,
 } from './states';
 import {
   addSystemDefcon1,
@@ -40,6 +41,7 @@ export {
   clearCurrentEditElement,
   setCurrentZoom,
   setSilentReloadAlertVisible,
+  setCurrentlySelectedParent,
 
   addSystemDefcon1,
   toggleSystemDefcon1,

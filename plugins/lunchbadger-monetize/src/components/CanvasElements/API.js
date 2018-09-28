@@ -6,7 +6,12 @@ import _ from 'lodash';
 import Plan from './Subelements/Plan';
 import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ApiEndpointComponent from './Subelements/ApiEndpoint';
-import {bundle, unbundle, rebundle} from '../../reduxActions/apis';
+import {
+  bundle,
+  unbundle,
+  rebundle,
+  rebundleMultiple,
+} from '../../reduxActions/apis';
 import './API.scss';
 
 const {
@@ -129,25 +134,28 @@ class API extends Component {
     }
   }
 
-  handleClose = () => {
-    this.setState({isShowingModal: false});
-  }
+  handleClose = () => this.setState({isShowingModal: false});
 
   bundle = (api, endpoint) => {
     const {store: {dispatch}} = this.context;
     dispatch(bundle(api, endpoint));
-  }
+  };
 
   rebundle = (fromApi, toApi, endpoint) => {
     const {store: {dispatch}} = this.context;
     dispatch(rebundle(fromApi, toApi, endpoint));
-  }
+  };
+
+  rebundleMultiple = (fromApi, toApi, endpoints) => {
+    const {store: {dispatch}} = this.context;
+    dispatch(rebundleMultiple(fromApi, toApi, endpoints));
+  };
 
   unbundle = () => {
     const item = this.state.bundledItem;
     const {store: {dispatch}} = this.context;
     dispatch(unbundle(item.parent, item.entity));
-  }
+  };
 
   render() {
     const {entity, parent} = this.props;
@@ -183,12 +191,13 @@ class API extends Component {
             <ElementsBundler
               {...this.props}
               canDropCheck={
-                (item) => _.includes(entity.accept, item.entity.constructor.type)
-                && !_.includes(entity.apiEndpoints, item.entity)
+                (item) => _.includes(entity.accept, item.constructor.type)
+                && !_.includes(entity.apiEndpoints, item)
               }
               onAddCheck={(item) => !_.includes(entity.apiEndpoints, item.entity)}
               onAdd={this.bundle}
               onMove={this.rebundle}
+              onMoveMultiple={this.rebundleMultiple}
               parent={parent}
               entity={entity}
             />

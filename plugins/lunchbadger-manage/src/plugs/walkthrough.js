@@ -317,6 +317,8 @@ Add the following path: <pre>/myfunction*</pre>
               email: getUser().profile.email,
               completed_walkthrough: true,
           }]);
+          _hsq.push(['setPath', '/completed-walkthrough']);
+          _hsq.push(['trackPageView']);
         } catch(e) {}
         cb();
       },

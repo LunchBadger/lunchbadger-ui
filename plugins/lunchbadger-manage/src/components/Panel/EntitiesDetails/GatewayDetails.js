@@ -205,7 +205,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
-  handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
+  handlePolicyChange = (pipelineIdx, policyIdx) => (value) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const {name} = pipelines[pipelineIdx].policies[policyIdx];
     if (name !== value) {
@@ -431,7 +431,7 @@ class GatewayDetails extends PureComponent {
           value={policy.name || options[0].value}
           options={options}
           hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
-          onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
+          onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
         />
       </div>
     );

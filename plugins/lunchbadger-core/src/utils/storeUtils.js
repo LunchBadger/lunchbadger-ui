@@ -60,6 +60,7 @@ export const findConnectedContextPathByPipelineId = (state, id) => {
   if (connectedServiceEndpoints.length !== 1) return '';
   const endpoint = findEntity(state, 1, connectedServiceEndpoints[0]);
   if (!endpoint) return '';
-  if (endpoint.constructor.type !== 'Model') return '';
-  return endpoint.contextPath;
+  if (endpoint.constructor.type === 'Model') return endpoint.contextPath;
+  if (endpoint.constructor.type === 'Function_') return endpoint.name;
+  return '';
 };

@@ -29,4 +29,12 @@
       stroke: #4190CE;
     }
   }
+  &__empty {
+    color: #4b4b4b;
+    font-family: monospace;
+    opacity: 0.5;
+    font-size: 18px;
+    margin-left: 30px;
+    text-transform: capitalize;
+  }
 }

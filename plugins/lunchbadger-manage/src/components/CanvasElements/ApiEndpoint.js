@@ -36,7 +36,7 @@ class ApiEndpoint extends Component {
   componentDidMount() {
     const {loaded} = this.props.entity;
     if (!loaded) {
-      const contextPath = this.getConnectedModelContextPath();
+      const contextPath = this.getConnectedContextPath();
       if (contextPath !== '') {
         const paths = _.cloneDeep(this.state.paths);
         paths.push(`/${contextPath}*`);
@@ -114,7 +114,7 @@ class ApiEndpoint extends Component {
     return gateway.rootUrl;
   };
 
-  getConnectedModelContextPath = () => {
+  getConnectedContextPath = () => {
     const {entity, connectionsStore} = this.props;
     const {id} = entity;
     const conn = connectionsStore.find({toId: id});

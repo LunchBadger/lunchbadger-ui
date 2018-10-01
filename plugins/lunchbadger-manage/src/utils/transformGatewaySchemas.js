@@ -1,11 +1,41 @@
 import {determineType} from './';
 
+const parseRef = ref => ref.split('/').pop();
+
 export default schema => {
+  const defined = {};
   const data = {
     defs: {},
   };
   schema.forEach((item) => {
-    item.name = item.schema.$id.split('/').pop().replace('.json', '');
+    defined[item.schema.$id] = item;
+  });
+  schema.forEach((item) => {
+    item.name = parseRef(item.schema.$id).replace('.json', '');
+    if (item.schema.allOf) {
+      item.schema.allOf.forEach((allOf) => {
+        if (allOf.$ref) {
+          item.schema.properties = {
+            ...item.schema.properties || {},
+            ...defined[allOf.$ref].schema.properties || {},
+          };
+          item.schema.required = [
+            ...item.schema.required || [],
+            ...defined[allOf.$ref].schema.required || [],
+          ];
+        } else {
+          item.schema.properties = {
+            ...item.schema.properties || {},
+            ...allOf.properties || {},
+          };
+          item.schema.required = [
+            ...item.schema.required || [],
+            ...allOf.required || [],
+          ];
+        }
+      });
+      delete item.schema.allOf;
+    }
     if (!data[item.type]) {
       data[item.type] = {};
     }
@@ -29,11 +59,11 @@ export default schema => {
         if (properties[key].$ref === 'jwt.json') {
           properties[key] = data.policy.jwt;
         } else {
-          properties[key].type = properties[key].$ref.split('/').pop();
+          properties[key].type = parseRef(properties[key].$ref);
         }
       }
       if (properties[key].enum && properties[key].enum.$ref) {
-        properties[key].enum.$ref = properties[key].enum.$ref.split('/').pop();
+        properties[key].enum.$ref = parseRef(properties[key].enum.$ref);
       }
     });
   });

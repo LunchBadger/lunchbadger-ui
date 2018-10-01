@@ -521,16 +521,31 @@ export default [
     }
   },
   {
-    "type": "policy",
+    "type": "internal",
     "schema": {
-      "$id": "http://express-gateway.io/schemas/policies/basic-auth.json",
+      "$id": "http://express-gateway.io/schemas/base/auth.json",
       "type": "object",
       "properties": {
         "passThrough": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "Specify whether continue with pipeline processing in case the authentication fails"
         }
-      }
+      },
+      "required": [
+        "passThrough"
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/basic-auth.json",
+      "allOf": [
+        {
+          "$ref": "http://express-gateway.io/schemas/base/auth.json"
+        }
+      ]
     }
   },
   {
@@ -702,43 +717,46 @@ export default [
     "type": "policy",
     "schema": {
       "$id": "http://express-gateway.io/schemas/policies/key-auth.json",
-      "type": "object",
-      "properties": {
-        "apiKeyHeader": {
-          "type": "string",
-          "default": "Authorization",
-          "description": "HTTP Header to look for the apiScheme + apiKey string"
+      "allOf": [
+        {
+          "$ref": "http://express-gateway.io/schemas/base/auth.json"
         },
-        "apiKeyHeaderScheme": {
-          "type": "string",
-          "default": "apiKey",
-          "description": "HTTP Authorization Scheme to verify before extracting the API Key"
-        },
-        "apiKeyField": {
-          "type": "string",
-          "default": "apiKey",
-          "description": "Query String parameter name to look for to extract the apiKey"
-        },
-        "passThrough": {
-          "type": "boolean",
-          "default": false
-        },
-        "disableHeaders": {
-          "type": "boolean",
-          "default": false,
-          "description": "Entirely disable lookup API Key from the header"
-        },
-        "disableHeadersScheme": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable or disable apiScheme check"
-        },
-        "disableQueryParam": {
-          "type": "boolean",
-          "default": false,
-          "description": "Entirely disable lookup API Key from the query string"
+        {
+          "type": "object",
+          "properties": {
+            "apiKeyHeader": {
+              "type": "string",
+              "default": "Authorization",
+              "description": "HTTP Header to look for the apiScheme + apiKey string"
+            },
+            "apiKeyHeaderScheme": {
+              "type": "string",
+              "default": "apiKey",
+              "description": "HTTP Authorization Scheme to verify before extracting the API Key"
+            },
+            "apiKeyField": {
+              "type": "string",
+              "default": "apiKey",
+              "description": "Query String parameter name to look for to extract the apiKey"
+            },
+            "disableHeaders": {
+              "type": "boolean",
+              "default": false,
+              "description": "Entirely disable lookup API Key from the header"
+            },
+            "disableHeadersScheme": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable or disable apiScheme check"
+            },
+            "disableQueryParam": {
+              "type": "boolean",
+              "default": false,
+              "description": "Entirely disable lookup API Key from the query string"
+            }
+          }
         }
-      }
+      ]
     }
   },
   {
@@ -764,18 +782,18 @@ export default [
     "type": "policy",
     "schema": {
       "$id": "http://express-gateway.io/schemas/policies/oauth2.json",
-      "type": "object",
-      "properties": {
-        "passThrough": {
-          "type": "boolean",
-          "default": false
+      "allOf": [
+        {
+          "$ref": "http://express-gateway.io/schemas/base/auth.json"
         },
-        "jwt": {
-          "$ref": "jwt.json"
+        {
+          "type": "object",
+          "properties": {
+            "jwt": {
+              "$ref": "jwt.json"
+            }
+          }
         }
-      },
-      "required": [
-        "passThrough"
       ]
     }
   },
@@ -783,35 +801,37 @@ export default [
     "type": "policy",
     "schema": {
       "$id": "http://express-gateway.io/schemas/policies/oauth2-introspect.json",
-      "type": "object",
-      "properties": {
-        "passThrough": {
-          "type": "boolean",
-          "default": false
+      "allOf": [
+        {
+          "$ref": "http://express-gateway.io/schemas/base/auth.json"
         },
-        "endpoint": {
-          "type": "string",
-          "format": "uri",
-          "description": "Endpoint that will be used to validate the provided token",
-          "examples": [
-            "https://authorization.server/oauth2-introspect"
+        {
+          "type": "object",
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "description": "Endpoint that will be used to validate the provided token",
+              "examples": [
+                "https://authorization.server/oauth2-introspect"
+              ]
+            },
+            "authorization_value": {
+              "type": "string",
+              "description": "Value put as Authorization header that'll be sent as part of the HTTP request to the specified endpoint"
+            },
+            "ttl": {
+              "title": "TTL",
+              "type": "integer",
+              "default": 60,
+              "description": "Time, in seconds, in which the current token, if validated before, will be consider as valid without making a new request to the authorization endpoint"
+            }
+          },
+          "required": [
+            "endpoint",
+            "ttl"
           ]
-        },
-        "authorization_value": {
-          "type": "string",
-          "description": "Value put as Authorization header that'll be sent as part of the HTTP request to the specified endpoint"
-        },
-        "ttl": {
-          "title": "TTL",
-          "type": "integer",
-          "default": 60,
-          "description": "Time, in seconds, in which the current token, if validated before, will be consider as valid without making a new request to the authorization endpoint"
         }
-      },
-      "required": [
-        "endpoint",
-        "ttl",
-        "passThrough"
       ]
     }
   },
@@ -921,7 +941,8 @@ export default [
       "type": "object",
       "properties": {
         "rateLimitBy": {
-          "type": "string"
+          "type": "string",
+          "description": "The criteria that is used to limit the number of requests by. Can be a JS Expression"
         },
         "windowMs": {
           "type": "integer",

@@ -12,6 +12,7 @@ import {
   Input,
   Checkbox,
   Table,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 
 const {requestMethods} = LunchBadgerCore.utils;
@@ -623,7 +624,12 @@ export default class Rest extends PureComponent {
               </div>
               <div className="Rest__plain">
                 <CollapsibleProperties
-                  bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}
+                  bar={
+                    <EntityPropertyLabel>
+                      Options
+                      <DocsLink item="DATASOURCE_REST_OPTIONS" />
+                    </EntityPropertyLabel>
+                  }
                   collapsible={this.renderOptions()}
                   defaultOpened
                   barToggable
@@ -631,7 +637,12 @@ export default class Rest extends PureComponent {
               </div>
               <div className="Rest__operations">
                 <CollapsibleProperties
-                  bar={<EntityPropertyLabel>Operations</EntityPropertyLabel>}
+                  bar={
+                    <EntityPropertyLabel>
+                      Operations
+                      <DocsLink item="DATASOURCE_REST_OPERATIONS" />
+                    </EntityPropertyLabel>
+                  }
                   collapsible={operationsCollapsible}
                   button={<IconButton icon="iconPlus" name="add__operation" onClick={this.handleAddOperation} />}
                   defaultOpened

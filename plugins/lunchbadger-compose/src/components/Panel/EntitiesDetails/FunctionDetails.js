@@ -11,6 +11,7 @@ import {
   FilesEditor,
   Input,
   scrollToElement,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
@@ -142,10 +143,10 @@ class FunctionDetails extends PureComponent {
   render() {
     const {name, service: {serverless: {provider: {runtime}}}} = this.props.entity;
     const sections = [
-      {title: 'Details'},
-      {title: 'Triggers'},
-      {title: 'Function Code', render: 'FunctionCode', classes: 'FunctionCode'},
-      {title: 'Logs', renderButton: 'LogsRefresher', classes: 'FunctionLogs'},
+      {title: 'Details', docs: 'FUNCTION_DETAILS'},
+      {title: 'Triggers', docs: 'FUNCTION_TRIGGERS'},
+      {title: 'Function Code', render: 'FunctionCode', classes: 'FunctionCode', docs: 'FUNCTION_CODE'},
+      {title: 'Logs', renderButton: 'LogsRefresher', classes: 'FunctionLogs', docs: 'FUNCTION_LOGS'},
     ];
     return (
       <div
@@ -162,10 +163,15 @@ class FunctionDetails extends PureComponent {
           name="runtime"
           value={runtime}
         />
-        {sections.map(({title, render, renderButton, classes}) => (
+        {sections.map(({title, render, renderButton, classes, docs}) => (
           <CollapsibleProperties
             key={title}
-            bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
+            bar={
+              <EntityPropertyLabel>
+                {title}
+                <DocsLink item={docs} />
+              </EntityPropertyLabel>
+            }
             collapsible={this[`render${render || title}Section`]()}
             button={renderButton && this[`render${renderButton}Section`]()}
             barToggable

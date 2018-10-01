@@ -16,6 +16,7 @@ import {
   Table,
   IconButton,
   CopyOnHover,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import './SshManager.scss';
 
@@ -206,10 +207,16 @@ class SshManager extends PureComponent {
 
   render() {
     const {showRemovingModal} = this.state;
+    const bar = (
+      <EntityPropertyLabel>
+        Public Keys
+        <DocsLink item="SETTINGS_PUBLIC_KEYS" />
+      </EntityPropertyLabel>
+    );
     return (
       <div className="SshManager">
         <CollapsibleProperties
-          bar={<EntityPropertyLabel>Public Keys</EntityPropertyLabel>}
+          bar={bar}
           collapsible={this.renderPublicKeys()}
           barToggable
           defaultOpened

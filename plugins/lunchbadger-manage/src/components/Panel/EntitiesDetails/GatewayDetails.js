@@ -194,7 +194,7 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
-    const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
+    const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name button`;
     setTimeout(() => scrollToElement(document.querySelector(inputSelector).closest('.CollapsibleProperties'), 'start'));
   };
 

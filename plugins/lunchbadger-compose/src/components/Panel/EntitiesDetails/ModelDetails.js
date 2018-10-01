@@ -20,6 +20,7 @@ import {
   Table,
   IconButton,
   FilesEditor,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import './ModelDetails.scss';
 
@@ -551,18 +552,23 @@ class ModelDetails extends PureComponent {
 
   render() {
     const sections = [
-      {title: 'Details'},
-      {title: 'User-defined fields', render: 'UserDefinedFields'},
-      {title: 'Relations'},
-      {title: 'Properties'},
-      {title: 'Model.js', render: 'ModelCode'},
+      {title: 'Details', docs: 'MODEL_DETAILS'},
+      {title: 'User-defined fields', render: 'UserDefinedFields', docs: 'MODEL_USER_DEFINED_FIELDS'},
+      {title: 'Relations', docs: 'MODEL_RELATIONS'},
+      {title: 'Properties', docs: 'MODEL_PROPERTIES'},
+      {title: 'Model.js', render: 'ModelCode', docs: 'MODEL_CODE'},
     ];
     return (
       <div>
-        {sections.map(({title, render}) => (
+        {sections.map(({title, render, docs}) => (
           <CollapsibleProperties
             key={title}
-            bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
+            bar={
+              <EntityPropertyLabel>
+                {title}
+                <DocsLink item={docs} />
+              </EntityPropertyLabel>
+            }
             collapsible={this[`render${render || title}Section`]()}
             barToggable
             defaultOpened

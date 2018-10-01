@@ -6,6 +6,7 @@ import {
   Input,
   Table,
   IconButton,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -109,7 +110,12 @@ class ServiceEndpointDetails extends PureComponent {
     return (
       <CollapsibleProperties
         key="urls"
-        bar={<EntityPropertyLabel>{title}</EntityPropertyLabel>}
+        bar={
+          <EntityPropertyLabel>
+            {title}
+            <DocsLink item="SERVICE_ENDPOINT_URL" />
+          </EntityPropertyLabel>
+        }
         collapsible={collapsible}
         barToggable
         defaultOpened

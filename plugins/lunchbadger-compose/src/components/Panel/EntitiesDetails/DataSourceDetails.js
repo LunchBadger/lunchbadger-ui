@@ -7,6 +7,7 @@ import {
   EntityProperty,
   EntityPropertyLabel,
   CollapsibleProperties,
+  DocsLink,
 } from '../../../../../lunchbadger-ui/src';
 import './DataSourceDetails.scss';
 import './Rest.scss';
@@ -139,7 +140,12 @@ class DataSourceDetails extends Component {
   renderMainProperties = () => {
     return (
       <CollapsibleProperties
-        bar={<EntityPropertyLabel>Properties</EntityPropertyLabel>}
+        bar={
+          <EntityPropertyLabel>
+            Properties
+            <DocsLink item={`DATASOURCE_${this.props.entity.connector.toUpperCase()}_PROPERTIES`} />
+          </EntityPropertyLabel>
+        }
         collapsible={this.renderFields()}
         barToggable
         defaultOpened

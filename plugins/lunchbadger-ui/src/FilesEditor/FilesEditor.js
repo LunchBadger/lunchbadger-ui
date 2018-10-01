@@ -12,6 +12,7 @@ import {
   IconSVG,
 } from '../';
 import {iconFile, iconFolder} from '../../../../src/icons';
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './FilesEditor.scss';
 
 const OPERATIONS = {
@@ -64,6 +65,7 @@ export default class FilesEditor extends Component {
       map,
       active,
       newFile: false,
+      size: userStorage.getObjectKey('FilesEditorSize', this.props.entityId),
     };
     this.codeEditorRefs = {};
   }
@@ -285,7 +287,10 @@ export default class FilesEditor extends Component {
 
   dispatchResizeEvent = () => window.dispatchEvent(new Event('rndresized'));
 
-  handleResize = size => this.setState({size});
+  handleResize = size => {
+    userStorage.setObjectKey('FilesEditorSize', this.props.entityId, size);
+    this.setState({size});
+  };
 
   renderCodeEditors = (prefix, tree) => {
     const {lang, onChange} = this.props;

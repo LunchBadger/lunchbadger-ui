@@ -223,6 +223,8 @@ export default (ComposedComponent) => {
       if (typeof element.onRemove === 'function') {
         cb = element.onRemove();
       }
+      userStorage.removeObjectKey('FilesEditorSize', entity.id);
+      userStorage.removeObjectKey('ResizableWrapperSize', entity.id);
       dispatch(entity.remove(cb));
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());

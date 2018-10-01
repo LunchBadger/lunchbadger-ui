@@ -70,9 +70,11 @@ export default class FunctionLogs extends PureComponent {
       error,
       counter,
     } = this.state;
-    const {autorefresh} = this.props;
+    const {autorefresh, entityId} = this.props;
     return (
-      <ResizableWrapper>
+      <ResizableWrapper
+        entityId={entityId}
+      >
         <div className="FunctionLogs">
           <div
             ref={r => this.contentRef = r}

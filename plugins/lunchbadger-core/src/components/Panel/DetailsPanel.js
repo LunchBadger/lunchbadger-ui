@@ -7,6 +7,7 @@ import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {RnD, GAEvent} from '../../../../lunchbadger-ui/src';
+import userStorage from '../../utils/userStorage';
 import './DetailsPanel.scss';
 
 @inject('connectionsStore') @observer
@@ -39,6 +40,8 @@ class DetailsPanel extends Component {
         element.onRemove();
       }
     }
+    userStorage.removeObjectKey('FilesEditorSize', currentElement.id);
+    userStorage.removeObjectKey('ResizableWrapperSize', currentElement.id);
     dispatch(currentElement.remove());
     dispatch(actions.removeEntity(currentElement));
     dispatch(setCurrentZoom(undefined));

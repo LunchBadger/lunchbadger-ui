@@ -84,7 +84,8 @@ class FunctionDetails extends PureComponent {
     this.setState({changed: true}, () => this.props.parent.checkPristine());
 
   renderFunctionCodeSection = () => {
-    const {files, serverless: {provider: {runtime}}} = this.props.entity.service;
+    const {entity} = this.props;
+    const {files, serverless: {provider: {runtime}}} = entity.service;
     const {editorCodeLanguage, extension} = runtimeMapping(runtime);
     const defaultSelect = `handler.${extension}`;
     return (
@@ -93,18 +94,21 @@ class FunctionDetails extends PureComponent {
         files={files}
         onChange={this.handleFilesEditorChange}
         defaultSelect={defaultSelect}
+        entityId={entity.id}
       />
     );
   };
 
   renderLogsSection = () => {
     const {autorefreshLogs, autorefreshPeriod} = this.state;
+    const {id, name} = this.props.entity;
     return (
       <FunctionLogs
         ref={r => this.logsRef = r}
-        name={this.props.entity.name}
+        name={name}
         autorefresh={autorefreshLogs}
         period={autorefreshPeriod}
+        entityId={id}
       />
     );
   };

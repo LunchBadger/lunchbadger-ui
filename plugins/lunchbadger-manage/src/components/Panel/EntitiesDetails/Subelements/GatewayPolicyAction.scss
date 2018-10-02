@@ -26,12 +26,14 @@
     position: relative;
     margin-top: 10px;
     & > .EntityProperty > .EntityPropertyLabel,
-    & > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel {
+    & > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel,
+    & > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {
       color: #4190CE;
     }
     &.defaultValue {
       & > .EntityProperty > .EntityPropertyLabel,
-      & > .GatewayPolicyAction > .EntityProperty:nth-child(2) > .EntityPropertyLabel {
+      & > .GatewayPolicyAction > .EntityProperty:nth-child(2) > .EntityPropertyLabel,
+      & > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {
         color: #999;
       }
     }
@@ -69,6 +71,28 @@
     opacity: 0.5;
     margin-top: 10px;
     font-size: 14px;
+  }
+  &__arrayItem {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 15px;
+    &__remove {
+      position: absolute;
+      top: 5px;
+      right: 50px;
+      display: none;
+    }
+    &__add {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
+    &:hover {
+      .GatewayPolicyAction__arrayItem__remove {
+        display: block;
+      }
+    }
   }
 }
 

@@ -88,3 +88,12 @@ export const rebundle = (fromPortal, toPortal, api) => async (dispatch) => {
   dispatch(actions.updatePortals([updatedFromPortal, updatedToPortal]));
   await dispatch(coreActions.saveToServer());
 };
+
+export const rebundleMultiple = (fromPortal, toPortal, apis) => async (dispatch) => {
+  const updatedFromPortal = fromPortal.recreate();
+  updatedFromPortal.removeAPIs(apis);
+  const updatedToPortal = toPortal.recreate();
+  updatedToPortal.addAPIs(apis);
+  dispatch(actions.updatePortals([updatedFromPortal, updatedToPortal]));
+  await dispatch(coreActions.saveToServer());
+};

@@ -95,8 +95,16 @@ export default class API extends BaseModel {
     this._apiEndpoints.push(endpoint);
   }
 
+  addEndpoints(endpoints) {
+    endpoints.forEach(endpoint => this.addEndpoint(endpoint));
+  }
+
   removeEndpoint(endpoint) {
     this._apiEndpoints.splice(_.findIndex(this.apiEndpoints, {id: endpoint.id}), 1);
+  }
+
+  removeEndpoints(endpoints) {
+    endpoints.forEach(endpoint => this.removeEndpoint(endpoint));
   }
 
   /**

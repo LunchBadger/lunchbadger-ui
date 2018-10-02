@@ -195,7 +195,7 @@ class GatewayDetails extends PureComponent {
     pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
-    const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
+    const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name button`;
     setTimeout(() => scrollToElement(document.querySelector(inputSelector).closest('.CollapsibleProperties'), 'start'));
   };
 
@@ -205,7 +205,7 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
-  handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
+  handlePolicyChange = (pipelineIdx, policyIdx) => (value) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const {name} = pipelines[pipelineIdx].policies[policyIdx];
     if (name !== value) {
@@ -431,7 +431,7 @@ class GatewayDetails extends PureComponent {
           value={policy.name || options[0].value}
           options={options}
           hiddenInputs={[{name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`, value: policy.id}]}
-          onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
+          onChange={this.handlePolicyChange(pipelineIdx, policyIdx)}
         />
       </div>
     );

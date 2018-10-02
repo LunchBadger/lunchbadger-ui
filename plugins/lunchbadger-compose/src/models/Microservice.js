@@ -58,11 +58,19 @@ export default class Microservice extends BaseModel {
     this._models.push(model.lunchbadgerId || model.id);
   }
 
+  addModels(models) {
+    models.forEach(model => this.addModel(model));
+  }
+
   /**
    * @param model {Model}
    */
   removeModel(model) {
     _.remove(this.models, (modelId) => modelId === (model.lunchbadgerId || model.id));
+  }
+
+  removeModels(models) {
+    models.forEach(model => this.removeModel(model));
   }
 
   get accept() {

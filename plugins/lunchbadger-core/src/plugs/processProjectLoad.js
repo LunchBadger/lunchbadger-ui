@@ -30,11 +30,15 @@ export default [
         ...map,
         [item]: true,
       }), {});
+    const states = responses[0].body.states
+      .reduce((map, item) => ({...map, [item.key]: item.value}), {});
+    const {pendingEdit = {}} = states;
     return {
       connections: {
         ...projectConnections,
         ...loopbackConnections,
       },
+      pendingEdit,
     };
   }
 ];

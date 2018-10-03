@@ -9,6 +9,7 @@ const {actions, actionTypes} = actionsCreator(
     'onLoadProject',
     'changePanelStatus',
     'setEntitiesStatuses',
+    'toggleLockEntity',
 
     'silentEntityUpdate',
     'silentEntityRemove',

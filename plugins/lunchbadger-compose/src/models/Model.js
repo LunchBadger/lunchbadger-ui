@@ -50,7 +50,8 @@ export default class Model extends BaseModel {
     'slugifyName',
     'zoomWindow',
     'models',
-    'openDetailsPanel'
+    'openDetailsPanel',
+    '_locked'
   ];
 
   _ports = [];

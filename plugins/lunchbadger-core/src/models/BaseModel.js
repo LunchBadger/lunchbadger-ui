@@ -19,6 +19,7 @@ export default class BaseModel {
     width: 470,
     height: 600,
   };
+  _locked = false;
 
   static deserializers = {};
 
@@ -103,6 +104,14 @@ export default class BaseModel {
 
   get gaType() {
     return this.constructor.type;
+  }
+
+  set locked(locked) {
+    return this._locked = locked;
+  }
+
+  get locked() {
+    return this._locked;
   }
 
   connectedPorts(selectedSubelementIds) {

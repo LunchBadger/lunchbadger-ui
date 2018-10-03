@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {entityIcons, IconSVG, EntityProperty} from '../../';
+import {
+  entityIcons,
+  IconSVG,
+  EntityProperty,
+  ContextualInformationMessage,
+  labels,
+} from '../../';
 import './EntityHeader.scss';
 
 class EntityHeader extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     onToggleExpand: PropTypes.func.isRequired,
+    locked: PropTypes.bool,
   }
 
   getInputNameRef = () => this.inputNameRef.getInputRef();
@@ -23,6 +30,7 @@ class EntityHeader extends Component {
       invalid,
       slugifyName,
       subtitle,
+      locked,
     } = this.props;
     const underlineStyle = {
       borderColor: '#8dbde2',
@@ -50,6 +58,14 @@ class EntityHeader extends Component {
             </div>
           )}
         </div>
+        {locked && (
+          <ContextualInformationMessage
+            tooltip={labels.LOCKED_MESSAGE}
+            direction="bottom"
+          >
+            <i className="locked fa fa-lock" />
+          </ContextualInformationMessage>
+        )}
       </div>
     );
   }

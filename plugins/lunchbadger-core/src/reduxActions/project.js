@@ -1,5 +1,6 @@
 import {diff} from 'just-diff';
 import {actions} from './actions';
+import {setPendingEdit} from './states';
 import {addSystemDefcon1} from './systemDefcon1';
 import ProjectService from '../services/ProjectService';
 import LoginManager from '../utils/auth';
@@ -179,6 +180,7 @@ export const silentReload = paper => async (dispatch, getState) => {
       })
       .map(({fromId, toId}) => `${fromId}:${toId}`)
       .reduce((map, item) => ({...map, [item]: true}), {});
+    const pendingEdit = states.pendingEdit || {};
     const currentEditElement = states.currentEditElement || {};
     const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
     const canvasEditedType = (currentEditElement.constructor || {}).type;
@@ -220,6 +222,7 @@ export const silentReload = paper => async (dispatch, getState) => {
         }
       }, {});
     prevResponse.connections = connections;
+    prevResponse.pendingEdit = pendingEdit;
     const responses = await Promise.all(onAppLoad.map(item => item.request()));
     const currResponse = processProjectLoad
       .reduce((map, item) => ({
@@ -238,6 +241,8 @@ export const silentReload = paper => async (dispatch, getState) => {
       if (entityType === 'connections') {
         const [fromId, toId] = entityId.split(':');
         connectionOperations[item.op].push({fromId, toId});
+      } else if (entityType === 'pendingEdit') {
+        dispatch(setPendingEdit(item.op, entityId, true, false, currResponse.pendingEdit));
       } else {
         const operation = item.path.length === 2 && item.op === 'remove'
           ? 'silentEntityRemove'
@@ -331,4 +336,10 @@ export const silentReload = paper => async (dispatch, getState) => {
       dispatch(addSystemDefcon1({error}));
     }
   }
+};
+
+export const setSilentLocks = () => (dispatch, getState) => {
+  const {pendingEdit = {}} = getState().states;
+  Object.keys(pendingEdit)
+    .forEach(entityId => dispatch(setPendingEdit('add', entityId)));
 };

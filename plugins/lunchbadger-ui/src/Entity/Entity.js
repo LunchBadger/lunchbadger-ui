@@ -83,6 +83,7 @@ class Entity extends PureComponent {
       onNameBlur,
       slugifyName,
       subtitle,
+      locked,
     } = this.props;
     const opacity = dragging ? 0.2 : 1;
     const {expanded} = this.state;
@@ -97,6 +98,7 @@ class Entity extends PureComponent {
       gray,
       invalid,
       semitransparent,
+      locked,
     });
     return connectDragSource(connectDropTarget(
       <div
@@ -117,6 +119,7 @@ class Entity extends PureComponent {
             invalid={validations.data.name}
             slugifyName={slugifyName}
             subtitle={subtitle}
+            locked={locked}
           />
           {!fake && (
             <div className="Entity__data">

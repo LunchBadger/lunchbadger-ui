@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import {actions} from './actions';
+import {saveToServer} from './project';
 import {GAEvent} from '../../../lunchbadger-ui/src';
+
+const stringifyPendingEdit = obj => Object.keys(obj)
+  .sort()
+  .reduce((arr, key) => [...arr, `${key}|${obj[key]}`], [])
+  .join(',');
 
 export const createModelsFromJSON = response => (dispatch, getState) => {
   const {plugins: {models}} = getState();
@@ -55,22 +61,89 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
     {key: 'currentlySelectedParent', value: null},
     {key: 'currentlySelectedSubelements', value: []},
   ]));
+  if (value && value.id && value.loaded) {
+    dispatch(setPendingEdit('add', value.id, false));
+  } else if (currentEditElement && currentEditElement.id && currentEditElement.loaded) {
+    dispatch(setPendingEdit('remove', currentEditElement.id, false));
+  }
 };
 
-export const clearCurrentEditElement = () => (dispatch) => {
+export const clearCurrentEditElement = (silent = false) => (dispatch, getState) => {
   dispatch(actions.setStates([
     {key: 'currentElement', value: null},
     {key: 'currentEditElement', value: null},
     {key: 'currentlySelectedParent', value: null},
     {key: 'currentlySelectedSubelements', value: []},
   ]));
+  if (!silent) {
+    const {currentEditElement} = getState().states;
+    if (currentEditElement && currentEditElement.id && currentEditElement.loaded) {
+      dispatch(setPendingEdit('remove', currentEditElement.id, false));
+    }
+  }
 };
 
-export const setCurrentZoom = value => (dispatch, getState) => {
-  const {zoom} = getState().states;
+export const setCurrentZoom = (value, silent = false) => (dispatch, getState) => {
+  const {
+    states: {
+      zoom, currentElement = {}
+    },
+    entities,
+  } = getState();
   if (zoom === value) return;
   dispatch(actions.setState({key: 'zoom', value}));
+  if (!silent) {
+    const {id, type} = currentElement;
+    if (id && type && entities[type][id] && entities[type][id].locked) return;
+    dispatch(setPendingEdit(value && id ? 'add' : 'remove', id, false));
+  }
 };
+
+export const setPendingEdit = (operation, entityId, silent = true, inc = false, pendingEditNew) =>
+  (dispatch, getState) => {
+    const {states} = getState();
+    const {pendingEdit = {}} = states;
+    pendingEditNew = pendingEditNew || {...pendingEdit};
+    const locked = operation !== 'remove';
+    if (locked) {
+      pendingEditNew[entityId] = pendingEditNew[entityId] || 0;
+      if (inc) {
+        pendingEditNew[entityId] += 1;
+      }
+    } else {
+      delete pendingEditNew[entityId];
+    }
+    dispatch(actions.setState({key: 'pendingEdit', value: pendingEditNew}));
+    if (silent) {
+      dispatch(actions.toggleLockEntity({locked, entityId}));
+      if (operation === 'replace') {
+        const currentEditElement = states.currentEditElement || {};
+        const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+        // const canvasEditedType = (currentEditElement.constructor || {}).type;
+        const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
+        let isCanvasEdited = !!entityId && canvasEditedId === entityId;
+        // FIXME: bundled types
+        // if (entityType === 'modelsBundled'
+        //   && canvasEditedType === 'Microservice'
+        //   && prevResponse.microservices[canvasEditedId].models.includes(entityId)
+        // ) {
+        //   isCanvasEdited = true;
+        // }
+        const isZoomEdited = !!entityId && zoomEditedId === entityId;
+        if (isCanvasEdited || isZoomEdited) {
+          if (isCanvasEdited) {
+            dispatch(clearCurrentEditElement(true));
+          }
+          if (isZoomEdited) {
+            dispatch(setCurrentZoom(undefined, true));
+          }
+          dispatch(setSilentReloadAlertVisible(true));
+        }
+      }
+    } else if (stringifyPendingEdit(pendingEdit) !== stringifyPendingEdit(pendingEditNew)) {
+      dispatch(saveToServer());
+    }
+  };
 
 export const togglePanel = panel => (dispatch, getState) => {
   const {currentlyOpenedPanel} = getState().states;

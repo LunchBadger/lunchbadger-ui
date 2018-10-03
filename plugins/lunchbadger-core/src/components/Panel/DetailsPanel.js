@@ -3,7 +3,11 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
 import cs from 'classnames';
-import {setCurrentZoom, clearCurrentElement} from '../../reduxActions';
+import {
+  setCurrentZoom,
+  clearCurrentElement,
+  setPendingEdit,
+} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import {RnD, GAEvent} from '../../../../lunchbadger-ui/src';
@@ -18,6 +22,7 @@ class DetailsPanel extends Component {
     super(props);
     this.state = {
       showRemovingModal: false,
+      showUnlockModal: false,
     };
   }
 
@@ -49,6 +54,15 @@ class DetailsPanel extends Component {
     GAEvent('Zoom Window', 'Removed Entity', currentElement.gaType);
   };
 
+  handleUnlock = () => {
+    const {dispatch, currentElement} = this.props;
+    if (currentElement) {
+      const entityId = currentElement.id;
+      dispatch(setPendingEdit('add', entityId, false, true));
+      dispatch(actions.toggleLockEntity({locked: false, entityId}));
+    }
+  };
+
   renderDetails() {
     const {currentElement, panels, connectionsStore, zoom} = this.props;
     if (currentElement) {
@@ -63,6 +77,7 @@ class DetailsPanel extends Component {
               sourceConnections={connectionsStore.getConnectionsForTarget(currentElement.id)}
               targetConnections={connectionsStore.getConnectionsForSource(currentElement.id)}
               rect={zoom}
+              onUnlock={() => this.setState({showUnlockModal: true})}
             />
           </div>
         );
@@ -124,11 +139,12 @@ class DetailsPanel extends Component {
 
   render() {
     const {zoom, currentElement} = this.props;
+    const {showRemovingModal, showUnlockModal} = this.state;
     const visible = !!currentElement && !!zoom && !zoom.close;
     return (
       <div className={cs('DetailsPanel', {visible})}>
         {this.renderDnD()}
-        {this.state.showRemovingModal && (
+        {showRemovingModal && (
           <TwoOptionModal
             onClose={() => this.setState({showRemovingModal: false})}
             onSave={this.handleRemove}
@@ -137,9 +153,21 @@ class DetailsPanel extends Component {
             confirmText="Remove"
             discardText="Cancel"
           >
-            <span>
-              Do you really want to remove that entity?
-            </span>
+            Do you really want to remove that entity?
+          </TwoOptionModal>
+        )}
+        {showUnlockModal && (
+          <TwoOptionModal
+            onClose={() => this.setState({showUnlockModal: false})}
+            onSave={this.handleUnlock}
+            onCancel={() => this.setState({showUnlockModal: false})}
+            title="Unlock entity"
+            confirmText="Unlock"
+            discardText="Cancel"
+          >
+            {'Are you sure, you want to unlock this entity?'}
+            <br />
+            {'You may overwritte pending edit in another session.'}
           </TwoOptionModal>
         )}
       </div>

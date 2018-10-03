@@ -14,6 +14,7 @@ import {
   setCurrentEditElement,
   clearCurrentEditElement,
   setCurrentZoom,
+  setPendingEdit,
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
@@ -99,6 +100,7 @@ export default (ComposedComponent) => {
         showRemovingModal: false,
         showNotRunningModal: false,
         showEntityError: false,
+        showUnlockModal: false,
         validations: {
           isValid: true,
           data: {}
@@ -232,7 +234,19 @@ export default (ComposedComponent) => {
     }
 
     handleEdit = () => {
-      const {dispatch, multiEnvIndex, multiEnvDelta, entity: {isCanvasEditDisabled}} = this.props;
+      const {
+        dispatch,
+        multiEnvIndex,
+        multiEnvDelta,
+        entity: {
+          isCanvasEditDisabled,
+          locked,
+        },
+      } = this.props;
+      if (locked) {
+        this.setState({showUnlockModal: true});
+        return;
+      }
       if (isCanvasEditDisabled || (multiEnvDelta && multiEnvIndex > 0)) {
         event.stopPropagation();
         return;
@@ -325,6 +339,13 @@ export default (ComposedComponent) => {
 
     propertiesMapping = key => ['_pipelines'].includes(key) ? key.replace(/_/, '') : key;
 
+    handleUnlock = () => {
+      const {dispatch, entity: {id: entityId}} = this.props;
+      dispatch(setPendingEdit('add', entityId, false, true));
+      dispatch(actions.toggleLockEntity({locked: false, entityId}));
+      this.handleEdit();
+    };
+
     render() {
       const {
         entity,
@@ -367,11 +388,18 @@ export default (ComposedComponent) => {
         error,
         subtitle,
         gaType,
+        locked,
       } = entity;
       const deploying = status === 'deploying';
       const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
       const semitransparent = !ready || !running;
-      const {validations, showEntityError} = this.state;
+      const {
+        validations,
+        showRemovingModal,
+        showEntityError,
+        showNotRunningModal,
+        showUnlockModal,
+      } = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
       const tabs = entity.tabs || [];
@@ -469,6 +497,7 @@ export default (ComposedComponent) => {
               defaultExpanded={defaultExpanded}
               subtitle={subtitle}
               gaType={gaType}
+              locked={locked}
             >
               {!fake && (
                 <ComposedComponent
@@ -484,7 +513,7 @@ export default (ComposedComponent) => {
                 />
               )}
             </Entity>
-            {this.state.showRemovingModal && (
+            {showRemovingModal && (
               <TwoOptionModal
                 onClose={() => this.setState({showRemovingModal: false})}
                 onSave={this.handleRemove}
@@ -493,9 +522,7 @@ export default (ComposedComponent) => {
                 confirmText="Remove"
                 discardText="Cancel"
               >
-                <span>
-                  Do you really want to remove that entity?
-                </span>
+                Do you really want to remove that entity?
               </TwoOptionModal>
             )}
             {!error && (
@@ -505,7 +532,7 @@ export default (ComposedComponent) => {
               />
             )}
             {error && <EntityError onClick={this.handleEntityErrorClicked} />}
-            {this.state.showNotRunningModal && (
+            {showNotRunningModal && (
               <OneOptionModal
                 confirmText="OK"
                 onClose={() => this.setState({showNotRunningModal: false})}
@@ -524,6 +551,20 @@ export default (ComposedComponent) => {
                 hideRemoveButton
                 buttons={error.buttons}
               />
+            )}
+            {showUnlockModal && (
+              <TwoOptionModal
+                onClose={() => this.setState({showUnlockModal: false})}
+                onSave={this.handleUnlock}
+                onCancel={() => this.setState({showUnlockModal: false})}
+                title="Unlock entity"
+                confirmText="Unlock"
+                discardText="Cancel"
+              >
+                {'Are you sure, you want to unlock this entity?'}
+                <br />
+                {'You may overwritte pending edit in another session.'}
+              </TwoOptionModal>
             )}
         </div>
       );

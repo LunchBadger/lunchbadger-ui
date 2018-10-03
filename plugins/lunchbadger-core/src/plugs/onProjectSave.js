@@ -52,6 +52,10 @@ const setStatesToSave = (state) => {
     key: 'multiEnvironments',
     value: multiEnvironments,
   });
+  states.push({
+    key: 'pendingEdit',
+    value: state.states.pendingEdit || {},
+  });
   return states;
 }
 

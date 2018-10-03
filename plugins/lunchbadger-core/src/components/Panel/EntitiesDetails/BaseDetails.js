@@ -11,6 +11,8 @@ import {
   CopyOnHover,
   scrollToElement,
   GAEvent,
+  ContextualInformationMessage,
+  labels,
 } from '../../../../../lunchbadger-ui/src';
 import {
   changePanelStatus,
@@ -157,16 +159,18 @@ export default (ComposedComponent) => {
     setOkEnabled = isOkEnabled => this.setState({isOkEnabled});
 
     render() {
-      const {entity, rect} = this.props;
-      const {id} = entity;
-      const {isCanvasEditDisabled, name} = entity;
+      const {entity, rect, onUnlock} = this.props;
+      const {id, isCanvasEditDisabled, name, locked} = entity;
       const {validations, isPristine, formValid, isOkEnabled} = this.state;
       const underlineStyle = {
         borderColor: '#8dbde2',
       }
       const okDisabled = (isPristine || !formValid) && !isOkEnabled;
       return (
-        <div className={cs('BaseDetails', 'details-panel__element', rect.tab, {isCanvasEditDisabled})}>
+        <div className={cs('BaseDetails', 'details-panel__element', rect.tab, {
+          isCanvasEditDisabled,
+          locked,
+        })}>
           <Form
             name="panelForm"
             ref="form"
@@ -188,6 +192,14 @@ export default (ComposedComponent) => {
                 Entity ID:
                 <CopyOnHover copy={id}>{id}</CopyOnHover>
               </div>
+              {locked && (
+                <ContextualInformationMessage
+                  tooltip={labels.LOCKED_MESSAGE}
+                  direction="bottom"
+                >
+                  <i className="locked fa fa-lock" />
+                </ContextualInformationMessage>
+              )}
             </div>
             <div className="BaseDetails__content">
               {!validations.isValid && (
@@ -208,8 +220,10 @@ export default (ComposedComponent) => {
               <EntityActionButtons
                 zoom
                 onCancel={this.closePopup}
-                onOk={this.update}
-                okDisabled={okDisabled}
+                onOk={locked ? onUnlock : this.update}
+                okLabel={locked ? 'UNLOCK' : 'OK'}
+                okDisabled={locked ? false : okDisabled}
+                submit={!locked}
               />
             </div>
           </Form>

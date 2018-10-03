@@ -8,7 +8,7 @@ export default {
   '901': {
     title: 'Wrap-up',
     text: `
-Now that you\'re armed with the basics of how to use LunchBadger, have fun!
+Now that you\'re armed with the basics of how to use Express Serverless Platform, have fun!
 Feel free to play around with Entities on the Canvas and check Documentation site under this icon.
 `,
     selector: '.header__menu__link.documentation',
@@ -20,7 +20,7 @@ Feel free to play around with Entities on the Canvas and check Documentation sit
 We're here to help you!
 `,
     text: `
-Direct any questions via chat here or to your LunchBadger Support Team at <a href="mailto:support@lunchbadger.com" target="_blank">support@lunchbadger.com</a>.
+Direct any questions via chat here or to your Express Serverless Platform Support Team at <a href="mailto:support@lunchbadger.com" target="_blank">support@lunchbadger.com</a>.
 `,
     selector: '#drift-widget',
     position: 'top',

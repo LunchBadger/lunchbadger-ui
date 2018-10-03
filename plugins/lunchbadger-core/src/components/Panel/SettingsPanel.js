@@ -95,7 +95,7 @@ class SettingsPanel extends Component {
             </div>
             {!gitAccess && (
               <div className="accessInfo">
-                git access is not part of the trial - please contact LunchBadger support to learn more
+                git access is not part of the trial - please contact Express Serverless Platform support to learn more
               </div>
             )}
           </div>

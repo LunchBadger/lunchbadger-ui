@@ -14,7 +14,7 @@ import 'jsplumb';
 import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.255', [
+console.info('LBAPP VERSION 0.256', [
   'Feature/981 Entity in lock state #992',
   'Bugfix/984 CA pairs are not updated on policy change #985',
   'Feature/946 Cannot rebundle highlighted api endpoints between apis #982',

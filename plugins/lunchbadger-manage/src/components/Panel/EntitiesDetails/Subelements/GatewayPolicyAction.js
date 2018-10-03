@@ -24,6 +24,11 @@ const customPropertyTypes = [
   'object',
 ];
 
+const customArrayTypes = [
+  'string',
+  'object',
+];
+
 const handledPropertyTypes = customPropertyTypes.concat(['jscode', 'fake']);
 
 const propertyDefaultValue = (property) => {
@@ -87,6 +92,7 @@ export default class GatewayPolicyAction extends PureComponent {
         postfix,
         title,
         example,
+        items = {types: customArrayTypes},
       } = properties[name];
       parameters[name] = {
         id: uuid.v4(),
@@ -99,6 +105,8 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_ || [],
         postfix,
         schemas: properties[name],
+        items: items.type ? [items.type] : items.types,
+        arrayItem: items && items[0],
       };
       if (action[name] === undefined) {
         parameters[name].value = def || example || getDefaultValueByType(type);
@@ -118,12 +126,14 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_,
         postfix,
         title,
+        items = {types: customArrayTypes},
       } = (properties[name] || {
         description: '',
         types: customPropertyTypes,
         value: action[name],
         default: getDefaultValueByType(determineType(action[name])),
         enum: [],
+        items: {types: customArrayTypes},
       });
       let value = action[name];
       if (typeof value === 'undefined') {
@@ -142,10 +152,14 @@ export default class GatewayPolicyAction extends PureComponent {
         postfix,
         schemas: properties[name],
         implicit: !action.hasOwnProperty(name),
+        items: items.type ? [items.type] : items.types,
       };
       if (type === 'fake') {
         parameters[name].type = type;
       }
+      parameters[name].arrayItem = (Array.isArray(value) && value.length > 0)
+        ? determineType(value[0])
+        : customArrayTypes[0];
     });
     return {parameters: Object.values(parameters)};
   };
@@ -169,6 +183,8 @@ export default class GatewayPolicyAction extends PureComponent {
         value: getDefaultValueByType(name),
         custom,
         enum: [],
+        items: customArrayTypes,
+        arrayItem: customArrayTypes[0],
       });
     } else {
       const schemas = this.props.schemas.properties[name];
@@ -248,6 +264,18 @@ export default class GatewayPolicyAction extends PureComponent {
     this.changeState(state);
   };
 
+  handleArrayTypeChange = id => (arrayItem) => {
+    const state = _.cloneDeep(this.state);
+    const property = state.parameters.find(item => item.id === id);
+    if (property.arrayItem === arrayItem) return;
+    Object.assign(property, {
+      arrayItem,
+      value: [],
+      implicit: false,
+    });
+    this.changeState(state);
+  };
+
   handleParameterRemove = param => () => {
     const state = _.cloneDeep(this.state);
     const {id, schemas = {}} = param;
@@ -274,6 +302,20 @@ export default class GatewayPolicyAction extends PureComponent {
 
   handleNameChange = ({target: {value: name}}) => this.changeState(this.getState(name, {}));
 
+  handleParameterRemoveArrayItem = (id, index) => () => {
+    const state = _.cloneDeep(this.state);
+    const property = state.parameters.find(item => item.id === id);
+    property.value = property.value.filter((_, idx) => idx !== index);
+    this.changeState(state);
+  };
+
+  handleParameterAddArrayItem = id => () => {
+    const state = _.cloneDeep(this.state);
+    const property = state.parameters.find(item => item.id === id);
+    property.value = [...property.value, {}];
+    this.changeState(state);
+  };
+
   renderProperty = (item) => {
     const {
       id,
@@ -287,6 +329,8 @@ export default class GatewayPolicyAction extends PureComponent {
       custom,
       postfix,
       implicit,
+      items,
+      arrayItem,
       schemas = {},
     } = item;
     const {prefix, validations} = this.props;
@@ -332,7 +376,7 @@ export default class GatewayPolicyAction extends PureComponent {
               type="types"
             />
           )}
-          {this.renderProperty({
+          {!!name && this.renderProperty({
             id,
             type,
             name,
@@ -343,6 +387,11 @@ export default class GatewayPolicyAction extends PureComponent {
             custom,
             schemas,
             description,
+            items,
+            arrayItem,
+            implicit,
+            postfix,
+            title,
           })}
         </div>
       );
@@ -405,17 +454,73 @@ export default class GatewayPolicyAction extends PureComponent {
         });
       }
       if (type === 'array') {
-        const options = item.enum
-          ? item.enum.map(label => ({label, value: label}))
-          : undefined;
-        const autocomplete = !!item.enum;
-        Object.assign(props, {
-          chips: true,
-          onBlur: undefined,
-          onChange: this.handleArrayChange(id),
-          options,
-          autocomplete,
-        });
+        if (arrayItem === 'string') {
+          const options = item.enum
+            ? item.enum.map(label => ({label, value: label}))
+            : undefined;
+          const autocomplete = !!item.enum;
+          Object.assign(props, {
+            chips: true,
+            onBlur: undefined,
+            onChange: this.handleArrayChange(id),
+            options,
+            autocomplete,
+          });
+        }
+        return (
+          <span>
+            {item.items.length > 1 && (
+              <EntityProperty
+                title="Items type"
+                name={`${this.tmpPrefix}[${id}][type]`}
+                value={arrayItem}
+                onChange={this.handleArrayTypeChange(id)}
+                placeholder=" "
+                options={item.items.map(label => ({label, value: label}))}
+                classes={`${this.tmpPrefix}[type][${name}]`}
+                type="types"
+              />
+            )}
+            {arrayItem === 'string' && <EntityProperty {...props} />}
+            {arrayItem === 'object' && (
+              <div>
+                <div className="GatewayPolicyAction__arrayItem__add">
+                  <IconButton
+                    icon="iconPlus"
+                    onClick={this.handleParameterAddArrayItem(id)}
+                  />
+                </div>
+                {value.map((valueItem, idx) => {
+                  return (
+                    <div
+                      key={idx + JSON.stringify(valueItem)}
+                      className="GatewayPolicyAction__arrayItem"
+                    >
+                      <EntityPropertyLabel>
+                        Item {idx}
+                      </EntityPropertyLabel>
+                      <div className="GatewayPolicyAction__arrayItem__remove">
+                        <IconButton
+                          icon="iconDelete"
+                          onClick={this.handleParameterRemoveArrayItem(id, idx)}
+                        />
+                      </div>
+                      <GatewayPolicyAction
+                        action={valueItem}
+                        // schemas={item.schemas}
+                        prefix={`${prefix}[${name}][${idx}]`}
+                        onChangeState={this.props.onChangeState}
+                        horizontal={this.props.horizontal}
+                        validations={validations}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </span>
+        );
+
       }
       if (type === 'object') {
         Object.assign(props, {

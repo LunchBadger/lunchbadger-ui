@@ -256,3 +256,12 @@ export const rebundle = (fromMicroservice, toMicroservice, model) => async (disp
   dispatch(actions.updateMicroservices([updatedMicroserviceFrom, updatedMicroserviceTo]));
   await dispatch(coreActions.saveToServer());
 }
+
+export const rebundleMultiple = (fromMicroservice, toMicroservice, models) => async (dispatch) => {
+  const updatedMicroserviceFrom = fromMicroservice.recreate();
+  updatedMicroserviceFrom.removeModels(models);
+  const updatedMicroserviceTo = toMicroservice.recreate();
+  updatedMicroserviceTo.addModels(models);
+  dispatch(actions.updateMicroservices([updatedMicroserviceFrom, updatedMicroserviceTo]));
+  await dispatch(coreActions.saveToServer());
+}

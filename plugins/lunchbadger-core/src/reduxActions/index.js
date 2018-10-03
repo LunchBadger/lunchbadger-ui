@@ -15,6 +15,7 @@ import {
   clearCurrentEditElement,
   setSilentReloadAlertVisible,
   setPendingEdit,
+  setCurrentlySelectedParent,
 } from './states';
 import {
   addSystemDefcon1,
@@ -42,6 +43,7 @@ export {
   setCurrentZoom,
   setSilentReloadAlertVisible,
   setPendingEdit,
+  setCurrentlySelectedParent,
 
   addSystemDefcon1,
   toggleSystemDefcon1,

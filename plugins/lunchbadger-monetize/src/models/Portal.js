@@ -72,8 +72,16 @@ export default class Portal extends BaseModel {
     this._apis.push(api);
   }
 
+  addAPIs(apis) {
+    apis.forEach(api => this.addAPI(api));
+  }
+
   removeAPI(api) {
     this._apis.splice(_.findIndex(this.apis, {id: api.id}), 1);
+  }
+
+  removeAPIs(apis) {
+    apis.forEach(api => this.removeAPI(api));
   }
 
   get accept() {

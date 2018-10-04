@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.258', [
+console.info('LBAPP VERSION 0.259', [
+  'Feature/987 Policy drop down restrict autocomplete #995',
   'Feature/991 Remove references to LB product #994',
   'Feature/990 Swap LB logo to Express Serverless Platform #993',
   'Feature/981 Entity in lock state #992',

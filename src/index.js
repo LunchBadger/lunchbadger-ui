@@ -11,7 +11,6 @@ import thunk from 'redux-thunk';
 import {setGAUserId} from '../plugins/lunchbadger-ui/src';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
-import './fonts/trench100free.css';
 import './fonts/lunchbadger.css';
 
 console.info('LBAPP VERSION 0.128', [

@@ -273,7 +273,7 @@ Keep in mind, that almost all entities has details that are available in full ed
   },
   '0274': {
     title: 'Code editor',
-    text: 'Custom code for the Car model can be entered in the code editor',
+    text: 'The <pre>Car</pre> model is a Node.js function. Custom code for the <pre>Car</pre> model can be entered into the code editor.',
     waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
     position: 'top',
     allowClicksThruHole: false,

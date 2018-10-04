@@ -27,10 +27,12 @@ class Select extends Component {
     secondaryOptions: PropTypes.array,
     hideUnderline: PropTypes.bool,
     autocomplete: PropTypes.bool,
+    restrict: PropTypes.bool,
   };
 
   static defaultProps = {
     autocomplete: false,
+    restrict: false,
     secondaryOptions: [],
   };
 
@@ -80,14 +82,18 @@ class Select extends Component {
   };
 
   _handleAutoCompleteChange = (value) => {
+    const {setValue, handleBlur, restrict} = this.props;
     let val = value;
-    if (typeof value === 'object') {
+    const isFromEnum = typeof value === 'object';
+    if (isFromEnum) {
       val = value.text;
     }
-    this.props.setValue(val);
-    this.setState({focused: false, val});
-    if (typeof this.props.handleBlur === 'function') {
-      this.props.handleBlur({target: {value: val}});
+    if (!restrict || (restrict && isFromEnum)) {
+      setValue(val);
+      this.setState({focused: false, val});
+      if (typeof handleBlur === 'function') {
+        handleBlur({target: {value: val}});
+      }
     }
     if (this.autocompleteRef) {
       this.autocompleteRef.refs.searchTextField.input.blur();

@@ -20,7 +20,7 @@ Feel free to play around with Entities on the Canvas and check Documentation sit
 We're here to help you!
 `,
     text: `
-Direct any questions via chat here or to your Express Serverless Platform Support Team at <a href="mailto:support@lunchbadger.com" target="_blank">support@lunchbadger.com</a>.
+Direct any questions via chat here or to your LunchBadger Support Team at <a href="mailto:support@lunchbadger.com" target="_blank">support@lunchbadger.com</a>.
 `,
     selector: '#drift-widget',
     position: 'top',

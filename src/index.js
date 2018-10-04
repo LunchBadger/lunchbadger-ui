@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.260', [
+console.info('LBAPP VERSION 0.261', [
+  'Feature/905 Ellipsis icon change #997',
   'Feature/986 Walkthrough: Show editor in the model #996',
   'Feature/987 Policy drop down restrict autocomplete #995',
   'Feature/991 Remove references to LB product #994',

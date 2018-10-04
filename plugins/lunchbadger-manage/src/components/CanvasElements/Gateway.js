@@ -203,6 +203,7 @@ class Gateway extends Component {
               onDelete={this.deletePipelinePolicy(pipelineIdx, policyIdx)}
               onBlur={this.handlePolicyChange(pipelineIdx, policyIdx)}
               autocomplete
+              restrict
               hiddenInputs={[{
                 name: `pipelines[${pipelineIdx}][policies][${policyIdx}][id]`,
                 value: policy.id,

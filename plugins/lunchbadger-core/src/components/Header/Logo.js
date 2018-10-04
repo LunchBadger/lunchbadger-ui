@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import BadgerLogo from './badger-logo.svg';
+import AppLogo from './app-logo.svg';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import Config from '../../../../../src/config';
 import {GAEvent} from '../../../../lunchbadger-ui/src';
@@ -29,8 +29,7 @@ export default class Logo extends PureComponent {
     return (
       <span>
         <a href={homepageUrl} onClick={this.handleClick}>
-          <img src={BadgerLogo} className="Logo" alt="LunchBadger logo - a smiling badger" />
-          <p className="logotype" >LunchBadger</p>
+          <img src={AppLogo} className="Logo" alt="Express Serverless Platform" />
         </a>
         {showConfirmModal && (
           <TwoOptionModal

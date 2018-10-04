@@ -163,7 +163,7 @@ class SshManager extends PureComponent {
       <div>
         {adding && !uploadPublicKeys && (
           <div className="accessInfo">
-            Public keys upload is not part of the trial - please contact Express Serverless Platform support to learn more
+            Public keys upload is not part of the trial - please contact LunchBadger support to learn more
           </div>
         )}
         {adding && uploadPublicKeys && (

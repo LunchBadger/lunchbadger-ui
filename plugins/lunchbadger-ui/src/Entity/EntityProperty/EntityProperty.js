@@ -73,6 +73,7 @@ class EntityProperty extends Component {
     icon: PropTypes.string,
     textarea: PropTypes.bool,
     link: PropTypes.bool,
+    restrict: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -102,6 +103,7 @@ class EntityProperty extends Component {
     icon: '',
     textarea: false,
     link: false,
+    restrict: false,
   };
 
   constructor(props) {
@@ -206,6 +208,7 @@ class EntityProperty extends Component {
       invalidUnderlineColor,
       slugify,
       textarea,
+      restrict,
     } = this.props;
     if (object) {
       const columns = [
@@ -290,6 +293,7 @@ class EntityProperty extends Component {
           handleBlur={this.handleBlur}
           handleKeyDown={this.handleTab}
           autocomplete={autocomplete}
+          restrict={restrict}
           multiple={chips}
           placeholder={filler}
         />

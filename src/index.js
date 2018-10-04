@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.259', [
+console.info('LBAPP VERSION 0.260', [
+  'Feature/986 Walkthrough: Show editor in the model #996',
   'Feature/987 Policy drop down restrict autocomplete #995',
   'Feature/991 Remove references to LB product #994',
   'Feature/990 Swap LB logo to Express Serverless Platform #993',
@@ -29,9 +30,7 @@ console.info('LBAPP VERSION 0.259', [
   'Feature/969 hubspot integration - walkthrough completed #972',
   'Feature/967 Docs Links #971',
   'Feature/959 array of objects in policy action #970',
-  'Feature/945 Silent update: re-ordering #964',
-  'Feature/915 Add package.json to editor #961',
-  'Bugfix/957 received entity change notification #958'
+  'Feature/945 Silent update: re-ordering #964'
 ]);
 
 // Needed for onTouchTap

@@ -272,6 +272,17 @@ Keep in mind, that almost all entities has details that are available in full ed
     onBefore: () => [],
   },
   '0274': {
+    title: 'Code editor',
+    text: 'Custom code for the Car model can be entered in the code editor',
+    waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
+    position: 'top',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.autoscroll('.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child'),
+    ],
+  },
+  '0275': {
     title: 'Return to Canvas from Model Details Panel',
     text: `
 Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.

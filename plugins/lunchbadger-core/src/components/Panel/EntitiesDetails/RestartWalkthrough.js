@@ -45,7 +45,7 @@ export default class RestartWalkthrough extends PureComponent {
             </p>
             <p>
             <strong>
-              Warning! Restarting the walkthrough will clear your project and the canvas.
+              Warning! Restarting the walkthrough will clear your Project and the Canvas.
             </strong>
             </p>
             <Button name="submit" onClick={() => this.setState({showConfirmModal: true})}>
@@ -62,7 +62,7 @@ export default class RestartWalkthrough extends PureComponent {
             confirmText="Confirm"
             discardText="Cancel"
           >
-            You are going to clear the project
+            You are going to clear the Project
             <br />
             and restart the walkthrough process.
             <br />

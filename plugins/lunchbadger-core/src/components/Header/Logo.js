@@ -36,11 +36,11 @@ export default class Logo extends PureComponent {
             onClose={() => this.setState({showConfirmModal: false})}
             onSave={this.handleRedirect}
             onCancel={() => this.setState({showConfirmModal: false})}
-            title="Exit LunchBadger Application"
+            title="Exit Express Serverless Platform Application"
             confirmText="Exit"
             discardText="Cancel"
           >
-            You are going to exit LunchBadger application.
+            You are going to exit Express Serverless Platform application.
             <br />
             Are you sure?
           </TwoOptionModal>

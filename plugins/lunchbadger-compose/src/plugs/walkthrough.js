@@ -2,7 +2,7 @@ export default {
   '010': {
     title: 'Model Connectors Menu',
     text: `
-Integrate your LunchBadger Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Model Connectors.
+Manage within your Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Model Connectors.
 `,
     selector: '.Tool.dataSource',
     position: 'right',
@@ -272,9 +272,20 @@ Keep in mind, that almost all entities has details that are available in full ed
     onBefore: () => [],
   },
   '0274': {
+    title: 'Code editor',
+    text: 'The <pre>Car</pre> model is a Node.js function. Custom code for the <pre>Car</pre> model can be entered into the code editor.',
+    waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
+    position: 'top',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.autoscroll('.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child'),
+    ],
+  },
+  '0275': {
     title: 'Return to Canvas from Model Details Panel',
     text: `
-Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
+Click <pre>Cancel</pre> to return to the Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
     position: 'top-right',
@@ -307,7 +318,7 @@ Click on the <pre>Memory</pre> Model Connector circular connection port and drag
   '030': {
     title: 'Function Entities Overview',
     text: `
-A Function Entity represents a serverless function that's managed by your LunchBadger Project.
+A Function Entity represents a serverless function that's managed within your Project.
 <br /><br />
 C'mon, click it!
 `,
@@ -387,7 +398,7 @@ C'mon, click it!
     title: `
 Function Entity's Built-in Editor
 `,
-    text: 'Edit LunchBadger Functions with the built-in editor.',
+    text: 'Edit serverless Functions with the built-in editor.',
     waitForSelector: '.DetailsPanel .FilesEditor',
     position: 'top',
     allowClicksThruHole: false,
@@ -397,7 +408,7 @@ Function Entity's Built-in Editor
   '035': {
     title: 'Return to Canvas from Function Details Panel',
     text: `
-Click <pre>Cancel</pre> to return to the LunchBadger Canvas view.
+Click <pre>Cancel</pre> to return to the Canvas view.
 `,
     waitForSelector: '.DetailsPanel .cancel',
     position: 'top-right',

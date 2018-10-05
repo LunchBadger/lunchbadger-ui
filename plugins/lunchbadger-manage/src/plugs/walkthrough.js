@@ -411,7 +411,7 @@ Add the following path: <pre>/myfunction*</pre>
   },
   '0803': {
     title: 'API Request Flow',
-    text: 'When an API request is received, it flows through the LunchBadger Entities defined on the Canvas.',
+    text: 'When an API request is received, it flows through the Entities defined on the Canvas.',
     waitForSelector: '.Entity.ApiEndpoint',
     position: 'top',
     allowClicksThruHole: false,
@@ -457,13 +457,13 @@ Add the following path: <pre>/myfunction*</pre>
     onBefore: api => [
       api.setStepText(
         <div>
-          Now that you''ve created your first LunchBadger Project, try interacting with your new endpoints!
+          Now that you''ve created your first Project, try interacting with your new endpoints!
           <code>
             <CopyOnHover copy={`curl ${api.getReplacement('ROOT_URL')}/myfunction`}>
               $ curl {api.getReplacement('ROOT_URL')}/myfunction
             </CopyOnHover>
             <br />
-            <strong>{'LunchBadger Node.js 8 function'}</strong>
+            <strong>{'Express Serverless Platform Node.js 8 function'}</strong>
             <br />
             <br />
             <CopyOnHover copy={`curl ${api.getReplacement('ROOT_URL')}/cars -X POST -d "{\\"year\\":${(new Date()).getFullYear()}}" --header "Content-Type: application/json"`}>

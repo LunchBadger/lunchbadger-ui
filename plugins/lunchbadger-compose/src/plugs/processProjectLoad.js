@@ -12,6 +12,11 @@ export default [
           .create(item)
           .toJSON({isForServer: true});
         delete entity.error;
+        Object.keys(entity).forEach((prop) => {
+          if (entity[prop] === undefined) {
+            delete entity[prop];
+          }
+        });
         return {
           ...map,
           [item.lunchbadgerId]: entity,

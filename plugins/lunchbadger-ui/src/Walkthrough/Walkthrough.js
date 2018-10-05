@@ -8,7 +8,7 @@ import series from 'async/series';
 import {cloneDeep} from 'lodash';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import OneOptionModal from '../../../lunchbadger-core/src/components/Generics/Modal/OneOptionModal';
-import {GAEvent} from '../';
+import {GAEvent, scrollToElement} from '../';
 import './Walkthrough.scss';
 
 const locale = {
@@ -193,6 +193,10 @@ class Walkthrough extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
+    autoscroll: (selector) => cb => {
+      scrollToElement(document.querySelector(selector));
+      setTimeout(cb, 500);
+    },
     callGAEvent: (eventAction, eventLabel, eventValue) => cb => {
       GAEvent('Walkthrough', eventAction, eventLabel, eventValue);
       cb();

@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.264', [
+console.info('LBAPP VERSION 0.265', [
+  'Feature/998 Add CA pair to pass required params validation #1000',
   'Feature/908 reorder model properties #999',
   'Feature/905 Ellipsis icon change #997',
   'Feature/986 Walkthrough: Show editor in the model #996',

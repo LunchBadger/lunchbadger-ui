@@ -50,7 +50,9 @@ export default class ModelNestedProperties extends Component {
       index,
       onReorder,
     } = this.props;
-    const filteredProperties = properties.filter(property => property.parentId === parentId);
+    const filteredProperties = properties
+      .filter(property => property.parentId === parentId)
+      .sort((a, b) => a.itemOrder > b.itemOrder);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     let emptyNested = <div />;
     if (filteredProperties.length === 0) {
@@ -107,7 +109,7 @@ export default class ModelNestedProperties extends Component {
             );
           }}
           onSortEnd={onReorder(parentId)}
-          offset={7}
+          offset={[-7, 7]}
         />
         {emptyNested}
       </CSSTransitionGroup>

@@ -140,22 +140,11 @@ class Model extends Component {
   };
 
   onReorder = parentId => ({oldIndex, newIndex}) => {
-    if (oldIndex === newIndex) return;
-    const properties = [...this.state.properties];
-    const childrenProperties = properties.filter(prop => prop.parentId === parentId);
-    const {itemOrder} = childrenProperties[newIndex];
-    childrenProperties[oldIndex].itemOrder = itemOrder;
-    if (newIndex > oldIndex) {
-      for (let i = oldIndex + 1; i < newIndex + 1; i++) {
-        childrenProperties[i].itemOrder -= 1;
-      }
-    } else {
-      for (let i = newIndex; i < oldIndex; i++) {
-        childrenProperties[i].itemOrder += 1;
-      }
+    const {entity} = this.props;
+    const properties = entity.reorderProperties(this.state.properties, oldIndex, newIndex, parentId);
+    if (properties) {
+      this.setState({properties});
     }
-    properties.sort((a, b) => a.itemOrder > b.itemOrder);
-    this.setState({properties});
   };
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});

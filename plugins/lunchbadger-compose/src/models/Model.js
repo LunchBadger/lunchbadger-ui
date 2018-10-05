@@ -96,7 +96,7 @@ export default class Model extends BaseModel {
   static create(data_) {
     const data = _.cloneDeep(data_);
     const properties = (data.properties || [])
-      .sort((a, b) => a.itemOrder > b.itemOrder);
+      .sort(this.sortByItemOrder);
     const relations = data.relations || [];
     delete data.properties;
     delete data.relations;
@@ -385,6 +385,31 @@ export default class Model extends BaseModel {
     }
     delete model.files;
     return _.merge({}, model, data);
+  }
+
+  reorderProperties(props, oldIndex, newIndex, parentId) {
+    if (oldIndex === newIndex) return false;
+    const properties = [...props];
+    const childrenProperties = properties
+      .filter(prop => prop.parentId === parentId)
+      .sort(this.sortByItemOrder);
+    const {itemOrder} = childrenProperties[newIndex];
+    childrenProperties[oldIndex].itemOrder = itemOrder;
+    if (newIndex > oldIndex) {
+      for (let i = oldIndex + 1; i < newIndex + 1; i++) {
+        childrenProperties[i].itemOrder -= 1;
+      }
+    } else {
+      for (let i = newIndex; i < oldIndex; i++) {
+        childrenProperties[i].itemOrder += 1;
+      }
+    }
+    properties.sort(this.sortByItemOrder);
+    return properties
+  }
+
+  sortByItemOrder(a, b) {
+    return a.itemOrder > b.itemOrder;
   }
 
 }

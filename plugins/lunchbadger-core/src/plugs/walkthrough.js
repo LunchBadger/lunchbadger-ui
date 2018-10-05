@@ -8,7 +8,7 @@ export default {
   '901': {
     title: 'Wrap-up',
     text: `
-Now that you\'re armed with the basics of how to use LunchBadger, have fun!
+Now that you\'re armed with the basics of how to use Express Serverless Platform, have fun!
 Feel free to play around with Entities on the Canvas and check Documentation site under this icon.
 `,
     selector: '.header__menu__link.documentation',

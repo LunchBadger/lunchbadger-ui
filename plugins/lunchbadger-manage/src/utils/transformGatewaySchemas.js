@@ -69,6 +69,7 @@ export default schema => {
   });
   Object.keys(data.policy).forEach((key) => {
     const policy = data.policy[key];
+    policy.allowEmptyCAPairs = true;
     if (!policy.required) {
       policy.required = [];
     }
@@ -87,6 +88,9 @@ export default schema => {
       }
       if (prop.hasOwnProperty('examples') && Array.isArray(prop.examples) && prop.examples.length > 0) {
         prop.example = prop.examples[0];
+      }
+      if (policy.required.includes(k) && !prop.hasOwnProperty('default')) {
+        policy.allowEmptyCAPairs = false;
       }
     });
   });

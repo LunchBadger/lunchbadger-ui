@@ -167,7 +167,9 @@ class App extends Component {
               confirmText="Got it"
               onClose={this.handleCloseSilentReloadAlert}
             >
-              The Entity you were editing had changed.
+              The Entity you were editing was unlocked
+              <br />
+              or changed on another session.
             </OneOptionModal>
           )}
         </div>

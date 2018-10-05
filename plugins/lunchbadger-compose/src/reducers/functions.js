@@ -74,6 +74,10 @@ export default (state = {}, action) => {
         delete newState[action.payload.entityId];
       }
       return newState;
+    case coreActionTypes.toggleLockEntity:
+      if (!newState[action.payload.entityId]) return state;
+      newState[action.payload.entityId].locked = action.payload.locked;
+      return newState;
     default:
       return state;
   }

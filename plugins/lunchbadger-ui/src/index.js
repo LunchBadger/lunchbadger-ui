@@ -42,6 +42,7 @@ import {Form} from './utils/Formsy/main';
 import {
   scrollToElement,
   openDetailsPanelWithAutoscroll,
+  labels,
 } from './utils';
 import Resizable from './Resizable/Resizable';
 import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
@@ -122,6 +123,7 @@ export {
   IconMenu,
   IconSVG,
   Input,
+  labels,
   openDetailsPanelWithAutoscroll,
   PanelBar,
   PasswordStrengthMeter,

@@ -88,6 +88,32 @@
       }
     }
   }
+  .locked {
+    position: absolute;
+    top: 7px;
+    left: -8px;
+    color: #FFF;
+    font-size: 18px;
+    z-index: 3;
+  }
+  &.locked {
+    .BaseDetails__name,
+    .BaseDetails__content {
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1006;
+      }
+    }
+    .BaseDetails__content:after {
+      bottom: 90px;
+    }
+  }
 }
 
 .details-panel__element {

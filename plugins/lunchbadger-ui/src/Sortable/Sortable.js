@@ -20,10 +20,14 @@ const DragHandle = SortableHandle(({
   />
 ));
 
-const SortableItem = SortableElement(({children, inPanel = false, ...props}) => {
+const SortableItem = SortableElement(({children, inPanel = false, offset = [-20, 20], ...props}) => {
   const classNames = inPanel ? 'editable panel panel__details' : '';
+  const style = {
+    marginLeft: offset[0],
+    paddingLeft: offset[1],
+  };
   return (
-    <div className={`Sortable__draggable ${classNames}`}>
+    <div className={`Sortable__draggable ${classNames}`} style={style}>
       <DragHandle {...props} />
       {children}
     </div>
@@ -32,11 +36,17 @@ const SortableItem = SortableElement(({children, inPanel = false, ...props}) => 
 
 class SortableList extends PureComponent {
   render() {
-    const {items, renderItem, inPanel, ...props} = this.props;
+    const {items, renderItem, inPanel, offset, ...props} = this.props;
     return (
       <div className={cs('Sortable', {onCanvas: !inPanel})}>
         {items.map((item, idx) => (
-          <SortableItem key={item.id} index={idx} inPanel={inPanel} {...props}>
+          <SortableItem
+            key={item.id || idx}
+            index={idx}
+            inPanel={inPanel}
+            offset={offset}
+            {...props}
+          >
             {renderItem(item, idx)}
           </SortableItem>
         ))}
@@ -55,6 +65,7 @@ class Sortable extends PureComponent {
     handlerOffsetTop: PropTypes.number,
     handlerOffsetLeft: PropTypes.number,
     inPanel: PropTypes.bool,
+    offset: PropTypes.array,
   };
 
   getContainer = () => document
@@ -70,6 +81,7 @@ class Sortable extends PureComponent {
       handlerOffsetTop,
       handlerOffsetLeft,
       inPanel,
+      offset,
     } = this.props;
     return (
       <SortableListComponent
@@ -83,6 +95,7 @@ class Sortable extends PureComponent {
         handlerOffsetTop={handlerOffsetTop}
         handlerOffsetLeft={handlerOffsetLeft}
         inPanel={inPanel}
+        offset={offset}
       />
     );
   }

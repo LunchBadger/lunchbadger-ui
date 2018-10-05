@@ -1,8 +1,5 @@
 .Table {
   font-weight: 400;
-  tr {
-    border-bottom: 1px solid rgb(224, 224, 224) !important;
-  }
   &Header {
     &Column {
       font-weight: 600 !important;
@@ -21,5 +18,9 @@
     &:hover .IconButton {
       display: block;
     }
+  }
+  &.sortable {
+    margin-left: 20px;
+    width: calc(100% - 20px) !important;
   }
 }

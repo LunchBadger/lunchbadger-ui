@@ -50,6 +50,7 @@ class ModelPropertyDetails extends Component {
     const nameDefault = nested ? `models[${index}][properties][${idx}][default_]` : `properties[${idx}][default_]`;
     const nameName = nested ? `models[${index}][properties][${idx}][name]` : `properties[${idx}][name]`;
     const nameType = nested ? `models[${index}][properties][${idx}][type]` : `properties[${idx}][type]`;
+    const nameItemOrder = nested ? `models[${index}][properties][${idx}][itemOrder]` : `properties[${idx}][itemOrder]`;
     return (
       <div className="ModelProperty">
         <Input
@@ -71,6 +72,11 @@ class ModelPropertyDetails extends Component {
           type="hidden"
           value={property.description}
           name={nameDescription}
+        />
+        <Input
+          type="hidden"
+          value={property.itemOrder}
+          name={nameItemOrder}
         />
         {!isNested && (
           <Input

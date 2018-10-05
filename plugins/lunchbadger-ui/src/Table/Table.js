@@ -9,6 +9,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import {Sortable} from '../';
 import './Table.scss';
 
 export default class TableComponent extends PureComponent {
@@ -20,14 +21,21 @@ export default class TableComponent extends PureComponent {
     centers: PropTypes.array,
     tableLayout: PropTypes.string,
     verticalAlign: PropTypes.string,
+    sortable: PropTypes.bool,
+    renderRowAfter: PropTypes.array,
+    noHeader: PropTypes.bool,
   };
 
   static defaultProps = {
+    data: [],
     widths: [],
     paddings: [],
     centers: [],
     tableLayout: 'auto',
     verticalAlign: 'bottom',
+    sortable: false,
+    renderRowAfter: [],
+    noHeader: false,
   };
 
   getColumnStyles = (idx, isHeader = false) => {
@@ -40,52 +48,93 @@ export default class TableComponent extends PureComponent {
     };
   };
 
+  getTableStyle = () => {
+    const {tableLayout} = this.props;
+    return {tableLayout};
+  };
+
+  renderRow = (row, idxRow) => (
+    <Table
+      key={idxRow}
+      className="Table"
+      selectable={false}
+      style={this.getTableStyle()}
+    >
+      <TableBody
+        displayRowCheckbox={false}
+      >
+        <TableRow className="TableRow" displayBorder>
+          {row.map((column, idxColumn) => (
+            <TableRowColumn
+              key={idxColumn}
+              className={cs('TableRowColumn', typeof column)}
+              style={this.getColumnStyles(idxColumn)}
+            >
+              {column}
+            </TableRowColumn>
+          ))}
+        </TableRow>
+        {this.props.renderRowAfter[idxRow] && (
+          <TableRow className="TableRow" displayBorder>
+            <TableRowColumn
+              colSpan={row.length}
+              style={{padding: 0}}
+            >
+              {this.props.renderRowAfter[idxRow]}
+            </TableRowColumn>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+
   render() {
-    const {columns, data, widths, tableLayout} = this.props;
+    const {
+      columns,
+      data,
+      widths,
+      sortable,
+      onReorder,
+      noHeader,
+    } = this.props;
     const minWidth = widths.reduce((size, item) => size += item || 100, 0);
-    const style = {tableLayout};
     return (
       <div style={{overflowX: 'auto'}}>
         <div style={{minWidth}}>
-          <Table
-            className="Table"
-            selectable={false}
-            style={style}
-          >
-            <TableHeader
-              adjustForCheckbox={false}
-              displaySelectAll={false}
+          {!noHeader && (
+            <Table
+              className={cs('Table', {sortable})}
+              selectable={false}
+              style={this.getTableStyle()}
             >
-              <TableRow>
-                {columns.map((item, idx) => (
-                  <TableHeaderColumn
-                    key={idx}
-                    className="TableHeaderColumn"
-                    style={this.getColumnStyles(idx, true)}
-                  >
-                    {item}
-                  </TableHeaderColumn>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody
-              displayRowCheckbox={false}
-            >
-              {data.map((row, idxRow) => (
-                <TableRow key={idxRow} className="TableRow" displayBorder>
-                  {row.map((column, idxColumn) => (
-                    <TableRowColumn
-                      key={idxColumn}
-                      className={cs('TableRowColumn', typeof column)}
-                      style={this.getColumnStyles(idxColumn)}
+              <TableHeader
+                adjustForCheckbox={false}
+                displaySelectAll={false}
+              >
+                <TableRow>
+                  {columns.map((item, idx) => (
+                    <TableHeaderColumn
+                      key={idx}
+                      className="TableHeaderColumn"
+                      style={this.getColumnStyles(idx, true)}
                     >
-                      {column}
-                    </TableRowColumn>
+                      {item}
+                    </TableHeaderColumn>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+            </Table>
+          )}
+          {sortable && (
+            <Sortable
+              items={data}
+              renderItem={this.renderRow}
+              onSortEnd={onReorder}
+              offset={[0, 20]}
+              inPanel
+            />
+          )}
+          {!sortable && data.map(this.renderRow)}
         </div>
       </div>
     );

@@ -3,10 +3,28 @@ import PropTypes from 'prop-types';
 import {CSSTransitionGroup} from 'react-transition-group';
 import ModelProperty from './ModelProperty';
 import ModelPropertyCollapsed from './ModelPropertyCollapsed';
+import {Sortable} from '../../../../../lunchbadger-ui/src';
 
-const CollapsableDetails = LunchBadgerCore.components.CollapsableDetails;
+export default class ModelNestedProperties extends Component {
+  static propTypes = {
+    parentId: PropTypes.string,
+    title: PropTypes.string,
+    path: PropTypes.string,
+    properties: PropTypes.array,
+    onAddProperty: PropTypes.func,
+    onRemoveProperty: PropTypes.func,
+    onPropertyTypeChange: PropTypes.func,
+    collapsed: PropTypes.bool,
+    level: PropTypes.number,
+    onReorder: PropTypes.func,
+  };
 
-class ModelNestedProperties extends Component {
+  static defaultProps = {
+    parentId: '',
+    collapsed: false,
+    level: 0,
+  };
+
   constructor(props) {
     super(props);
     this.nestedDOM = {};
@@ -30,8 +48,11 @@ class ModelNestedProperties extends Component {
       level,
       nested,
       index,
+      onReorder,
     } = this.props;
-    const filteredProperties = properties.filter(property => property.parentId === parentId);
+    const filteredProperties = properties
+      .filter(property => property.parentId === parentId)
+      .sort((a, b) => a.itemOrder > b.itemOrder);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     let emptyNested = <div />;
     if (filteredProperties.length === 0) {
@@ -46,66 +67,52 @@ class ModelNestedProperties extends Component {
         transitionEnterTimeout={800}
         transitionLeaveTimeout={800}
       >
-        {filteredProperties.map((property, idx) => {
-          const isNested = ['array', 'object'].includes(property.type);
-          return (
-            <ModelPropertyCollapsed
-              ref={(r) => {this.nestedDOM[property.id] = r;}}
-              key={property.id}
-              level={level}
-              collapsable={isNested}
-              nested={isNested ?
-                <ModelNestedProperties
-                  title="Nested properties"
-                  path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
-                  collapsed
-                  properties={properties}
-                  onAddProperty={onAddProperty}
-                  onRemoveProperty={onRemoveProperty}
+        <Sortable
+          items={filteredProperties}
+          renderItem={(property, idx) => {
+            const isNested = ['array', 'object'].includes(property.type);
+            return (
+              <ModelPropertyCollapsed
+                ref={(r) => {this.nestedDOM[property.id] = r;}}
+                key={property.id}
+                level={level}
+                collapsable={isNested}
+                nested={isNested ?
+                  <ModelNestedProperties
+                    title="Nested properties"
+                    path={`${path !== '' ? `${path} ⇨` : ''} ${property.name}`}
+                    collapsed
+                    properties={properties}
+                    onAddProperty={onAddProperty}
+                    onRemoveProperty={onRemoveProperty}
+                    onPropertyTypeChange={onPropertyTypeChange}
+                    parentId={property.id}
+                    level={level + 1}
+                    nested={nested}
+                    index={index}
+                    onReorder={onReorder}
+                  /> : null
+                }
+              >
+                <ModelProperty
+                  idx={idx}
+                  addAction={this.onAddProperty}
+                  propertiesCount={filteredProperties.length}
+                  onRemove={onRemoveProperty}
+                  property={property}
                   onPropertyTypeChange={onPropertyTypeChange}
-                  parentId={property.id}
-                  level={level + 1}
+                  parentId={parentId}
                   nested={nested}
                   index={index}
-                /> : null
-              }
-            >
-              <ModelProperty
-                idx={idx}
-                addAction={this.onAddProperty}
-                propertiesCount={filteredProperties.length}
-                onRemove={onRemoveProperty}
-                property={property}
-                onPropertyTypeChange={onPropertyTypeChange}
-                parentId={parentId}
-                nested={nested}
-                index={index}
-              />
-            </ModelPropertyCollapsed>
-          )
-        })}
+                />
+              </ModelPropertyCollapsed>
+            );
+          }}
+          onSortEnd={onReorder(parentId)}
+          offset={[-7, 7]}
+        />
         {emptyNested}
       </CSSTransitionGroup>
     );
   }
 }
-
-ModelNestedProperties.propTypes = {
-  parentId: PropTypes.string,
-  title: PropTypes.string,
-  path: PropTypes.string,
-  properties: PropTypes.array,
-  onAddProperty: PropTypes.func,
-  onRemoveProperty: PropTypes.func,
-  onPropertyTypeChange: PropTypes.func,
-  collapsed: PropTypes.bool,
-  level: PropTypes.number,
-};
-
-ModelNestedProperties.defaultProps = {
-  parentId: '',
-  collapsed: false,
-  level: 0,
-};
-
-export default ModelNestedProperties;

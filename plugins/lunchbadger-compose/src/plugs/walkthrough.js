@@ -2,7 +2,7 @@ export default {
   '010': {
     title: 'Model Connectors Menu',
     text: `
-Manage within your Project with existing data sources and services, such as MySQL, MongoDB, or a SOAP service with Model Connectors.
+No need to start from scratch. Leverage your existing data and services to build microservices with pre-built microservice integrations such as MySQL, MongoDB, SOAP, REST, and 42+ other Model Connectors.
 `,
     selector: '.Tool.dataSource',
     position: 'right',
@@ -67,7 +67,7 @@ Click <pre>OK</pre> to continue.
   '020': {
     title: 'Model Entities Overview',
     text: `
-Models are objects with properties. A Model can be connected to a Model Connector to read and write data to a data source or service. Custom logic can be created on a Model using JavaScript.
+Models are functions with built in features such as CRUD (through Model Connectors), object properties, auto REST dynamic scaffolding, and other features that developers commonly need and use.
 <br />
 <br />
 C'mon, click it!
@@ -234,7 +234,7 @@ Keep in mind, it applies also to almost all other entity types.
   '0272': {
     title: 'Full Edit',
     text: `
-This icon opens up the Model details for full edit.
+This icon opens up the Model details for full edit. Full edit zooms in on an Entity to allow you to access advanced details and features beyond the bare minimum required fields displayed in the Canvas.
 <br />
 <br />
 C'mon, click it!

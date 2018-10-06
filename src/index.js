@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.265', [
+console.info('LBAPP VERSION 0.266', [
+  'Feature/1001 walkthrough text changes #1002',
   'Feature/998 Add CA pair to pass required params validation #1000',
   'Feature/908 reorder model properties #999',
   'Feature/905 Ellipsis icon change #997',
@@ -30,8 +31,7 @@ console.info('LBAPP VERSION 0.265', [
   'Feature/918 Code editor resize remembered #976',
   'Feature/820 allOf in schemas #974',
   'Feature/960 ApiEndpoint inherits contextPath #973',
-  'Feature/969 hubspot integration - walkthrough completed #972',
-  'Feature/967 Docs Links #971'
+  'Feature/969 hubspot integration - walkthrough completed #972'
 ]);
 
 // Needed for onTouchTap

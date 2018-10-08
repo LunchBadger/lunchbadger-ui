@@ -49,7 +49,7 @@ Click this icon to open Settings.
     text: `
 You can restart the walkthrough process here.
 <br />
-All entities will be removed from the canvas.
+All Entities will be removed from the Canvas.
 `,
     waitForSelector: '.RestartWalkthrough',
     position: 'bottom-left',

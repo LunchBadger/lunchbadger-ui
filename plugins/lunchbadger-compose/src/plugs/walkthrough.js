@@ -2,7 +2,7 @@ export default {
   '010': {
     title: 'Model Connectors Menu',
     text: `
-No need to start from scratch. Leverage your existing data and services to build microservices with pre-built microservice integrations such as MySQL, MongoDB, SOAP, REST, and 42+ other Model Connectors.
+No need to start from scratch when building microservices. Leverage your existing data and services with pre-built microservice integrations such as MySQL, MongoDB, SOAP, REST, and 42+ other Model Connectors.
 `,
     selector: '.Tool.dataSource',
     position: 'right',
@@ -10,7 +10,7 @@ No need to start from scratch. Leverage your existing data and services to build
   },
   '011': {
     title: 'Model Connector Entities Overview',
-    text: 'Each Model Connector Entity will come with its own set of properties specific for that connection type.',
+    text: 'Each Model Connector Entity will come with its own set of properties specific for that connection type. A subset of available Model Connectors are available in the menu.',
     waitForSelector: 'div[role=presentation]',
     position: 'right',
     allowClicksThruHole: false,
@@ -67,7 +67,7 @@ Click <pre>OK</pre> to continue.
   '020': {
     title: 'Model Entities Overview',
     text: `
-Models are functions with built in features such as CRUD (through Model Connectors), object properties, auto REST dynamic scaffolding, and other features that developers commonly need and use.
+Models are Node.js functions with built in features such as CRUD (through Model Connectors), object properties, auto REST dynamic scaffolding, and other features that developers commonly need and use.
 <br />
 <br />
 C'mon, click it!
@@ -218,10 +218,10 @@ Please wait till the <pre>Car</pre> is saved and the walkthrough will continue a
   '0271': {
     title: 'Quick Edit',
     text: `
-This icon allows you to quick edit entity on the canvas. Quick edit exposes only the bare minimum required properties to fill in.
+This icon allows you to quick edit an Entity on the Canvas. Quick edit exposes only the bare minimum required properties to fill in.
 <br />
 <br />
-Keep in mind, it applies also to almost all other entity types.
+Keep in mind, it applies also to almost all other Entities.
 `,
     selector: '.Entity.Model .Toolbox__button--edit',
     position: 'right',
@@ -263,7 +263,7 @@ C'mon, click it!
 Use full edit, when you want to add more than what is required in quick edit and get into more detailed information.
 <br />
 <br />
-Keep in mind, that almost all entities has details that are available in full edit.
+Keep in mind, that almost all Entities have details that are available in full edit.
 `,
     selector: '.RnD__box',
     position: 'top',
@@ -272,8 +272,8 @@ Keep in mind, that almost all entities has details that are available in full ed
     onBefore: () => [],
   },
   '0274': {
-    title: 'Code editor',
-    text: 'The <pre>Car</pre> model is a Node.js function. Custom code for the <pre>Car</pre> model can be entered into the code editor.',
+    title: 'Code Editor',
+    text: 'All Models are Node.js functions. Custom code for the <pre>Car</pre> model can be entered into the Code Editor.',
     waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
     position: 'top',
     allowClicksThruHole: false,
@@ -305,7 +305,7 @@ Click <pre>Cancel</pre> to return to the Canvas view.
   '028': {
     title: 'Connect Model Connector to Model',
     text: `
-Click on the <pre>Memory</pre> Model Connector circular connection port and drag your cursor to the <pre>Car</pre> Model Entity's circular connection port. This links a Model to a Model Connector.
+The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
     selector: '.Entity.DataSource.memory .port-out',
     position: 'bottom-left',
@@ -396,9 +396,11 @@ C'mon, click it!
   },
   '034': {
     title: `
-Function Entity's Built-in Editor
+Function Entity's Code Editor
 `,
-    text: 'Edit serverless Functions with the built-in editor.',
+    text: `
+Functions are barebone functions that can be written in multiple languages and ran in your public cloud serverless infrastructure like AWS Lambda or ran natively in your Kubernetes cluster in Kubeless, a serverless engine that comes built-in.
+`,
     waitForSelector: '.DetailsPanel .FilesEditor',
     position: 'top',
     allowClicksThruHole: false,

@@ -13,7 +13,8 @@ body {
   color: rgb(75, 75, 75);
 }
 
-input {
+input,
+textarea {
   user-select: text;
 }
 

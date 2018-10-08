@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.269', [
+console.info('LBAPP VERSION 0.270', [
+  'Bugfix/893 connecting model to model makes browser hanging #1006',
   'Bugfix/894 textarea not working in safari #1005',
   'Feature/1001 walkthrough text changes #1002',
   'Feature/998 Add CA pair to pass required params validation #1000',
@@ -29,10 +30,7 @@ console.info('LBAPP VERSION 0.269', [
   'Bugfix/938 Model array icon shown on canvas #979',
   'Feature/975 api endpoint inherits context path from connected function #978',
   'Feature/488 Policy input should be select, not autocomplete #977',
-  'Feature/918 Code editor resize remembered #976',
-  'Feature/820 allOf in schemas #974',
-  'Feature/960 ApiEndpoint inherits contextPath #973',
-  'Feature/969 hubspot integration - walkthrough completed #972'
+  'Feature/918 Code editor resize remembered #976'
 ]);
 
 // Needed for onTouchTap

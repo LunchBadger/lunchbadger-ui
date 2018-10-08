@@ -3,8 +3,6 @@
     z-index: 1005;
     background-color: #FFF;
     position: relative;
-    margin-left: -20px;
-    padding-left: 20px;
     &:hover > .Sortable__handler {
       display: block;
       .Entity:not(.editable) .Sortable.onCanvas & {

@@ -1,12 +1,11 @@
 .Model {
   .EntitySubElements {
-    margin-left: -10px;
     margin-top: -10px;
     &__elements {
-      margin-left: 5px;
+      margin-left: 10px;
     }
     &__title {
-      margin-right: 15px;
+      margin-left: 16px;
     }
   }
   &.nested {

@@ -60,7 +60,7 @@ class Model extends Component {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
     };
-  }
+  };
 
   discardChanges = callback => this.onPropsUpdate(this.props, callback);
 
@@ -77,19 +77,19 @@ class Model extends Component {
       name,
       contextPath,
     };
-  }
+  };
 
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
     }
-  }
+  };
 
   updateName = event => {
     if (!this.state.contextPathDirty) {
       this.setState({contextPath: slug(event.target.value, {lower: true})});
     }
-  }
+  };
 
   onAddItem = (collection, item) => {
     const items = this.state[collection];
@@ -97,7 +97,7 @@ class Model extends Component {
     this.setState({
       [collection]: items
     });
-  }
+  };
 
   onRemoveItem = (collection, item) => {
     const items = this.state[collection];
@@ -110,14 +110,18 @@ class Model extends Component {
     this.setState({
       [collection]: items
     });
-  }
+  };
 
   onAddProperty = (parentId) => () => {
+    const itemOrder = 1 + Math.max(-1, ...this.state.properties
+      .filter(p => p.parentId === parentId)
+      .map(p => p.itemOrder));
     this.onAddItem('properties', ModelProperty.create({
       parentId,
       type: 'string',
+      itemOrder,
     }));
-  }
+  };
 
   onAddRootProperty = () => {
     this.onAddProperty('')();
@@ -125,17 +129,23 @@ class Model extends Component {
       const input = Array.from(this.refs.properties.querySelectorAll('.EntityProperty__field--input input')).slice(-1)[0];
       input && input.focus();
     });
-  }
+  };
 
-  onRemoveProperty = (property) => {
-    this.onRemoveItem('properties', property);
-  }
+  onRemoveProperty = (property) => this.onRemoveItem('properties', property);
 
   onPropertyTypeChange = (id, type) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
     this.setState({properties});
-  }
+  };
+
+  onReorder = parentId => ({oldIndex, newIndex}) => {
+    const {entity} = this.props;
+    const properties = entity.reorderProperties(this.state.properties, oldIndex, newIndex, parentId);
+    if (properties) {
+      this.setState({properties});
+    }
+  };
 
   updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
 
@@ -151,7 +161,7 @@ class Model extends Component {
         gaType={entity.gaType}
       />
     ));
-  }
+  };
 
   renderProperties = () => {
     const {nested, index} = this.props;
@@ -163,11 +173,12 @@ class Model extends Component {
         onAddProperty={this.onAddProperty}
         onRemoveProperty={this.onRemoveProperty}
         onPropertyTypeChange={this.onPropertyTypeChange}
+        onReorder={this.onReorder}
         nested={nested}
         index={index}
       />
     );
-  }
+  };
 
   renderMainProperties = () => {
     const {validations, validationsForced, entity, entityDevelopment, onResetField, nested, index} = this.props;
@@ -188,7 +199,7 @@ class Model extends Component {
     mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;
     mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
-  }
+  };
 
   render() {
     const {multiEnvIndex, nested} = this.props;

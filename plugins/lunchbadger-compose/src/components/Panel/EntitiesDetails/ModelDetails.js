@@ -103,7 +103,7 @@ class ModelDetails extends PureComponent {
       contextPath,
       contextPathDirty: slug(name, {lower: true}) !== contextPath,
     };
-  }
+  };
 
   processModel = model => {
     delete model.dataSource;
@@ -140,7 +140,7 @@ class ModelDetails extends PureComponent {
       }
       delete model.dataSource;
     }
-  }
+  };
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
@@ -151,7 +151,7 @@ class ModelDetails extends PureComponent {
     const property = properties.find(item => item.id === id);
     property.expanded = !property.expanded;
     this.setState({properties});
-  }
+  };
 
   onAddItem = (collection, item) => {
     const newCollection = [...this.state[collection], item];
@@ -165,7 +165,7 @@ class ModelDetails extends PureComponent {
       [collection]: newCollection,
       changed: true,
     }, () => this.props.parent.checkPristine());
-  }
+  };
 
   onRemoveItem = (collection, item) => {
     const items = [...this.state[collection]];
@@ -177,9 +177,12 @@ class ModelDetails extends PureComponent {
     this.setState({
       changed: !_.isEqual(items, this.props.entity[collection]),
     }, () => this.props.parent.checkPristine());
-  }
+  };
 
   onAddProperty = parentId => () => {
+    const itemOrder = 1 + Math.max(-1, ...this.state.properties
+      .filter(p => p.parentId === parentId)
+      .map(p => p.itemOrder));
     const property = ModelProperty.create({
       parentId,
       default_: '',
@@ -187,13 +190,14 @@ class ModelDetails extends PureComponent {
       description: '',
       required: false,
       index: false,
+      itemOrder,
     });
     this.onAddItem('properties', property);
     setTimeout(() => {
       const input = document.getElementById(`properties[${property.idx}][name]`);
       input && input.focus();
     });
-  }
+  };
 
   onRemoveProperty = property => () => this.onRemoveItem('properties', property);
 
@@ -203,7 +207,7 @@ class ModelDetails extends PureComponent {
       const input = document.getElementById(`relations[${this.state.relations.length - 1}][name]`);
       input && input.focus();
     });
-  }
+  };
 
   onRemoveRelation = relation => () => this.onRemoveItem('relations', relation);
 
@@ -213,7 +217,7 @@ class ModelDetails extends PureComponent {
       const input = document.getElementById(`userFields[${this.state.userFields.length - 1}][name]`);
       input && input.focus();
     });
-  }
+  };
 
   onRemoveUserField = field => () => this.onRemoveItem('userFields', field);
 
@@ -224,7 +228,7 @@ class ModelDetails extends PureComponent {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
-  }
+  };
 
   handleChangeUserDefinedFieldType = idx => (type) => {
     const userFields = [...this.state.userFields];
@@ -232,7 +236,7 @@ class ModelDetails extends PureComponent {
     userFields[idx].type = type;
     userFields[idx].value = userFieldsTypeEmptyValues[type];
     this.setState({userFields});
-  }
+  };
 
   handleTab = (collection, idx) => (event) => {
     if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
@@ -244,7 +248,7 @@ class ModelDetails extends PureComponent {
     if (collectionSize - 1 === idx) {
       this[addFunc[collection]]();
     }
-  }
+  };
 
   handleTabProperties = property => (event) => {
     if (!((event.which === 9 || event.keyCode === 9) && !event.shiftKey)) return;
@@ -253,7 +257,7 @@ class ModelDetails extends PureComponent {
     if (size === idx) {
       this.onAddProperty(property.parentId)();
     }
-  }
+  };
 
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
@@ -313,7 +317,15 @@ class ModelDetails extends PureComponent {
         ))}
       </div>
     );
-  }
+  };
+
+  handleReorder = parentId => ({oldIndex, newIndex}) => {
+    const {entity, parent} = this.props;
+    const properties = entity.reorderProperties(this.state.properties, oldIndex, newIndex, parentId);
+    if (properties) {
+      this.setState({properties, changed: true}, () => parent.checkPristine());
+    }
+  };
 
   getProperties = (properties, parentId, level = 0) => {
     let idx = 0;
@@ -330,7 +342,8 @@ class ModelDetails extends PureComponent {
     });
   };
 
-  renderPropertiesSection = () => {
+  renderPropertiesSection = (parentId = '') => {
+    const isNested = parentId !== '';
     const columns = [
       <div style={{marginLeft: 10}}>Name</div>,
       'Type',
@@ -340,13 +353,18 @@ class ModelDetails extends PureComponent {
       'Is Index',
       <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
     ];
-    const widths = [300, 120, 200, undefined, 100, 100, 70];
     const paddings = [true, true, true, true, false, false, false];
     const centers = [false, false, false, false, true, true, false];
     const properties = [];
     this.getProperties(properties, '');
-    const data = properties.map((property) => [
-      <div style={{marginLeft: property.level * 10}}>
+    const filteredProperties = properties
+      .filter(prop => prop.parentId === parentId)
+      .sort(this.props.entity.sortByItemOrder);
+    const {level} = filteredProperties[0] || {level: 0};
+    const nameWidth = 300 - level * 20;
+    const widths = [nameWidth, 120, 200, undefined, 100, 100, 70];
+    const data = filteredProperties.map((property) => [
+      <div>
         <div className={cs('ModelDetails__arrow', {expanded: property.expanded})}>
           {subTypes.includes(property.type) && (
             <IconButton
@@ -359,6 +377,11 @@ class ModelDetails extends PureComponent {
           <Input
             name={`properties[${property.idx}][id]`}
             value={property.id}
+            type="hidden"
+          />
+          <Input
+            name={`properties[${property.idx}][itemOrder]`}
+            value={property.itemOrder}
             type="hidden"
           />
           <Input
@@ -407,12 +430,17 @@ class ModelDetails extends PureComponent {
         {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
       </div>,
     ]);
+    if (isNested && data.length === 0) return null;
     return <Table
       columns={columns}
       data={data}
       widths={widths}
       paddings={paddings}
       centers={centers}
+      sortable
+      onReorder={this.handleReorder(parentId)}
+      noHeader={isNested}
+      renderRowAfter={filteredProperties.map(prop => this.renderPropertiesSection(prop.id))}
     />;
   };
 

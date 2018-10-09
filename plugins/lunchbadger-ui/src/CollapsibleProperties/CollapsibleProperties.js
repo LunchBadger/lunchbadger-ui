@@ -4,6 +4,7 @@ import cs from 'classnames';
 import {SmoothCollapse} from '../';
 import {IconSVG} from '../';
 import iconArrow from '../../../../src/icons/icon-arrow.svg';
+import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './CollapsibleProperties.scss';
 
 class CollapsibleProperties extends Component {
@@ -37,11 +38,18 @@ class CollapsibleProperties extends Component {
     this.state = {
       expanded: props.defaultOpened,
     };
+    const expanded = userStorage.getObjectKey('CollapsibleExpanded', props.id);
+    if (expanded !== undefined) {
+      this.state.expanded = expanded;
+    }
   }
 
-  handleToggleCollapse = (expanded) => {
-    this.setState({expanded: typeof expanded === 'boolean' ? expanded : !this.state.expanded});
-    this.props.onToggleCollapse();
+  handleToggleCollapse = (val) => {
+    const {id, onToggleCollapse} = this.props;
+    const expanded = typeof val === 'boolean' ? val : !this.state.expanded
+    this.setState({expanded});
+    userStorage.setObjectKey('CollapsibleExpanded', id, expanded);
+    onToggleCollapse();
   }
 
   render() {

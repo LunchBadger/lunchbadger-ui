@@ -590,6 +590,7 @@ class ModelDetails extends PureComponent {
       <div>
         {sections.map(({title, render, docs}) => (
           <CollapsibleProperties
+            id={`${this.props.entity.id}/${docs}`}
             key={title}
             bar={
               <EntityPropertyLabel>

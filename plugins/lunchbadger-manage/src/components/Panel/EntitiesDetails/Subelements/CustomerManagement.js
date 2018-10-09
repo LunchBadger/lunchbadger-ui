@@ -491,6 +491,7 @@ class CustomerManagement extends PureComponent {
         </div>
         {(activeTab === 'Users' && entry !== 0) && (
           <CollapsibleProperties
+            id={`${user.id}/APPS`}
             bar={<EntityPropertyLabel>Apps</EntityPropertyLabel>}
             collapsible={this.renderAppsList(user.id)}
             barToggable
@@ -499,6 +500,7 @@ class CustomerManagement extends PureComponent {
         )}
         {entry !== 0 && (
           <CollapsibleProperties
+            id={`${user.id}/CREDENTIALS`}
             bar={<EntityPropertyLabel>Credentials</EntityPropertyLabel>}
             collapsible={this.renderCredentialsList(entry)}
             barToggable
@@ -594,6 +596,7 @@ class CustomerManagement extends PureComponent {
         </div>
         {entry !== 0 && (
           <CollapsibleProperties
+            id={`${entry}/CREDENTIALS`}
             bar={<EntityPropertyLabel>Credentials</EntityPropertyLabel>}
             collapsible={this.renderCredentialsList(entry)}
             barToggable
@@ -625,6 +628,7 @@ class CustomerManagement extends PureComponent {
     <div>
       {credentialsTypes.map(type => (
         <CollapsibleProperties
+          id={`${consumerId || 'ROOT'}/CREDENTIALS/${type}`}
           key={type}
           bar={<EntityPropertyLabel>{type}</EntityPropertyLabel>}
           collapsible={this.renderCredentialsListByType(consumerId, type)}

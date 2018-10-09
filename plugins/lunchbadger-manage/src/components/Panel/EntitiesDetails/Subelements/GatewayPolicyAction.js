@@ -626,6 +626,7 @@ export default class GatewayPolicyAction extends PureComponent {
       );
       return (
         <CollapsibleProperties
+          id={`${this.props.entry}/${collapsibleTitle}`}
           bar={<EntityPropertyLabel>{collapsibleTitle}</EntityPropertyLabel>}
           collapsible={collapsible}
           barToggable

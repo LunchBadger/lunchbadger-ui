@@ -61,7 +61,7 @@ C'mon, click it!`,
   '0701': {
     title: 'Pipeline Overview',
     text: `
-Each Gateway Entity exposes microservices built from models, functions, and service endpoints for public consumption as an API.  A Gateway consists of one or more Pipelines.
+Each Gateway Entity exposes microservices built from Models, Functions, and Service Endpoints for public consumption as an API.
 <br /><br />
 A Pipeline is a set of policies that is executed on each API request.
 `,
@@ -118,7 +118,7 @@ Let's name the second pipeline <pre>FunctionPipeline</pre>.
   '0705': {
     title: 'Deploy Gateway',
     text: `
-Click <pre>OK</pre> to deploy a gateway.
+Click <pre>OK</pre> to deploy a Gateway.
 `,
     waitForSelector: '.Entity.Gateway.editable .submit',
     position: 'left',
@@ -186,7 +186,7 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
   },
   '0709': {
     title: 'API Endpoint Explanation',
-    text: 'When connecting a microservice entity such as a model, function or service-endpoint, for the first time a new API Endpoint Entity is created automatically. API Endpoint Entities define what will be exposed by a Gateway.',
+    text: 'When connecting a microservice such as a Model, Function, or Service Endpoint, for the first time a new API Endpoint Entity is created automatically. API Endpoint Entities define what will be exposed by a Gateway.',
     selector: '.quadrant.Public .quadrant__body',
     position: 'left',
     allowClicksThruHole: false,
@@ -398,7 +398,7 @@ Add the following path: <pre>/myfunction*</pre>
     onBefore: api => [
       api.setStepText(
         <div>
-          All gateways will be accessible via the following domain name pattern:
+          All Gateways will be accessible via the following domain name pattern:
           <code>{'http://{gateway-name}'}-{api.getReplacement('USER_ID')}-dev.lunchbadger.io</code>
           <br />
           Your Gateway will be accessible at:
@@ -435,7 +435,7 @@ Add the following path: <pre>/myfunction*</pre>
   },
   '0806': {
     title: 'Flow through Private Quadrant',
-    text: 'The API request then makes its way to an Entity in the Private quadrant (Model, Service Endpoint, or Function). In this example, the request is routed to <pre>Car</pre> Model Entity.',
+    text: 'The API request then makes its way to an Entity in the Private Quadrant (Model, Service Endpoint, or Function). In this example, the request is routed to <pre>Car</pre> Model Entity.',
     waitForSelector: '.Entity.Model',
     position: 'bottom-left',
     allowClicksThruHole: false,

@@ -148,7 +148,14 @@ class Gateway extends Component {
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
-    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
+    const caPairs = [];
+    if (!this.policiesSchemas[defaultPolicy].allowEmptyCAPairs) {
+      caPairs.push({
+        condition: {name: 'always'},
+        action: {},
+      });
+    }
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: caPairs}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
     setTimeout(() => {
@@ -175,6 +182,13 @@ class Gateway extends Component {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+      if (!this.policiesSchemas[value].allowEmptyCAPairs) {
+        const pair = {
+          condition: {name: 'always'},
+          action: {},
+        };
+        pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+      }
       this.changeState({pipelines});
     }
   };

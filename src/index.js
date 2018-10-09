@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.273', [
+console.info('LBAPP VERSION 0.274', [
+  'Feature/921 JWT secretOrPublicKey should be textarea #1014',
   'Feature/1007 Deprecate implicite ca pairs #1013',
   'Bugfix/1008 Quadrants headers issue on safari #1012',
   'Feature/1004 Expanded sections remembered #1009',

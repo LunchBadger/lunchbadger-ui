@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.271', [
+console.info('LBAPP VERSION 0.272', [
+  'Bugfix/1008 Quadrants headers issue on safari #1012',
   'Feature/1004 Expanded sections remembered #1009',
   'Bugfix/893 connecting model to model makes browser hanging #1006',
   'Bugfix/894 textarea not working in safari #1005',

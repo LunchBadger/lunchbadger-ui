@@ -192,7 +192,14 @@ class GatewayDetails extends PureComponent {
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
-    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: []}));
+    const caPairs = [];
+    if (!this.policiesSchemas[defaultPolicy].allowEmptyCAPairs) {
+      caPairs.push({
+        condition: {name: 'always'},
+        action: {},
+      });
+    }
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: caPairs}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
     const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
@@ -211,6 +218,13 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
+      if (!this.policiesSchemas[value].allowEmptyCAPairs) {
+        const pair = {
+          condition: {name: 'always'},
+          action: {},
+        };
+        pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+      }
       this.changeState({pipelines});
     }
   };
@@ -232,9 +246,18 @@ class GatewayDetails extends PureComponent {
     }
   };
 
+  isCAPairRemoveDisabled = (pipelineIdx, policyIdx) => {
+    const policy = this.state.pipelines[pipelineIdx].policies[policyIdx];
+    const {allowEmptyCAPairs} = this.policiesSchemas[policy.name];
+    if (!allowEmptyCAPairs && policy.conditionAction.length === 1) return true;
+    return false;
+  };
+
   removeCAPair = (pipelineIdx, policyIdx, idx) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    pipelines[pipelineIdx].policies[policyIdx].conditionAction.splice(idx, 1);
+    const policy = pipelines[pipelineIdx].policies[policyIdx];
+    if (this.isCAPairRemoveDisabled(pipelineIdx, policyIdx)) return;
+    policy.conditionAction.splice(idx, 1);
     this.changeState({pipelines});
   };
 
@@ -389,6 +412,7 @@ class GatewayDetails extends PureComponent {
                 renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
                 onRemove={this.removeCAPair(pipelineIdx, policyIdx, idx)}
                 prefix={`pipelines${pipelineIdx}policies${policyIdx}pairs${idx}`}
+                removeDisabled={this.isCAPairRemoveDisabled(pipelineIdx, policyIdx)}
               />
             </div>
           )}
@@ -396,12 +420,12 @@ class GatewayDetails extends PureComponent {
           inPanel
           handlerOffsetTop={10}
         />
-        {policy.conditionAction.length === 0 && this.renderDefaultCAPair(pipelineIdx, policyIdx, policy.name)}
+        {policy.conditionAction.length === 0 && this.renderImplicitCAPair(pipelineIdx, policyIdx, policy.name)}
       </div>
     );
   };
 
-  renderDefaultCAPair = (pipelineIdx, policyIdx, policyName) => {
+  renderImplicitCAPair = (pipelineIdx, policyIdx, policyName) => {
     const pair = ConditionAction.create({
       condition: {
         name: 'always',
@@ -415,6 +439,7 @@ class GatewayDetails extends PureComponent {
         renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, key)}
         renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, key, policyName)}
         fake
+        removeDisabled
       />
     );
   };

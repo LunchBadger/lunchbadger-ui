@@ -192,14 +192,10 @@ class GatewayDetails extends PureComponent {
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
-    const caPairs = [];
-    if (!this.policiesSchemas[defaultPolicy].allowEmptyCAPairs) {
-      caPairs.push({
-        condition: {name: 'always'},
-        action: {},
-      });
-    }
-    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: caPairs}));
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: [{
+      condition: {name: 'always'},
+      action: {},
+    }]}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
     const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
@@ -218,24 +214,20 @@ class GatewayDetails extends PureComponent {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      if (!this.policiesSchemas[value].allowEmptyCAPairs) {
-        const pair = {
-          condition: {name: 'always'},
-          action: {},
-        };
-        pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
-      }
+      pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({
+        condition: {name: 'always'},
+        action: {},
+      }));
       this.changeState({pipelines});
     }
   };
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action} = {}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    const pair = {
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({
       condition: condition || {name: 'always'},
       action: action || {},
-    };
-    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+    }));
     this.changeState({pipelines});
     if (!condition && !action) {
       setTimeout(() => {
@@ -248,8 +240,7 @@ class GatewayDetails extends PureComponent {
 
   isCAPairRemoveDisabled = (pipelineIdx, policyIdx) => {
     const policy = this.state.pipelines[pipelineIdx].policies[policyIdx];
-    const {allowEmptyCAPairs} = this.policiesSchemas[policy.name];
-    if (!allowEmptyCAPairs && policy.conditionAction.length === 1) return true;
+    if (policy.conditionAction.length === 1) return true;
     return false;
   };
 
@@ -428,9 +419,7 @@ class GatewayDetails extends PureComponent {
 
   renderImplicitCAPair = (pipelineIdx, policyIdx, policyName) => {
     const pair = ConditionAction.create({
-      condition: {
-        name: 'always',
-      },
+      condition: {name: 'always'},
       action: {},
     });
     const key = `fake-${pipelineIdx}-${policyIdx}-${policyName}`;

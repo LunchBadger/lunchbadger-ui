@@ -185,7 +185,7 @@ class Canvas extends Component {
         connection,
       } = info;
       let fulfilled = null;
-      if (source.contains('port-in')) {
+      if (source.contains('port-in') && target.contains('port-out')) {
         if (!(source.contains('port-Function_') && target.contains('port-Model'))) {
           this._flipConnection(info);
           this._disconnect(connection);

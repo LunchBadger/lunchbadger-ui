@@ -1,7 +1,7 @@
 export default {
   '000': {
     title: 'Navigating the Entity Palette',
-    text: 'On the left-hand side of the Canvas, you\'ll see the Entity Palette Menu. Clicking any one of these icons will create an Entity in its associated quadrant.',
+    text: 'On the left-hand side of the Canvas, you\'ll see the Entity Palette Menu. Clicking any one of these icons will create an Entity in its associated Quadrant.',
     selector: '.Aside',
     position: 'right',
   },
@@ -49,7 +49,7 @@ Click this icon to open Settings.
     text: `
 You can restart the walkthrough process here.
 <br />
-All entities will be removed from the canvas.
+All Entities will be removed from the Canvas.
 `,
     waitForSelector: '.RestartWalkthrough',
     position: 'bottom-left',

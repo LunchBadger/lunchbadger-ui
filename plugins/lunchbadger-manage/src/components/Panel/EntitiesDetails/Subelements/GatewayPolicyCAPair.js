@@ -11,6 +11,11 @@ export default class GatewayPolicyCAPair extends PureComponent {
     nr: PropTypes.number,
     onRemove: PropTypes.func,
     prefix: PropTypes.string,
+    removeDisabled: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    removeDisabled: false,
   };
 
   constructor(props) {
@@ -50,6 +55,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
       prefix,
       fake,
       entityId,
+      removeDisabled,
     } = this.props;
     const {horizontal} = this.state;
     let title = `C/A Pair ${nr}`;
@@ -77,6 +83,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
                 icon="iconDelete"
                 name={`remove__${prefix}`}
                 onClick={onRemove}
+                disabled={removeDisabled}
               />
               <IconButton
                 icon="iconModeHorizontal"

@@ -135,27 +135,20 @@ class Gateway extends Component {
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    const pair = {
-      condition: {
-        name: 'always',
-      },
+    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({
+      condition: {name: 'always'},
       action: {},
-    };
-    pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
+    }));
     this.changeState({pipelines});
   };
 
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
-    const caPairs = [];
-    if (!this.policiesSchemas[defaultPolicy].allowEmptyCAPairs) {
-      caPairs.push({
-        condition: {name: 'always'},
-        action: {},
-      });
-    }
-    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: caPairs}));
+    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: [{
+      condition: {name: 'always'},
+      action: {},
+    }]}));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
     setTimeout(() => {
@@ -182,13 +175,10 @@ class Gateway extends Component {
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      if (!this.policiesSchemas[value].allowEmptyCAPairs) {
-        const pair = {
-          condition: {name: 'always'},
-          action: {},
-        };
-        pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
-      }
+      pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create({
+        condition: {name: 'always'},
+        action: {},
+      }));
       this.changeState({pipelines});
     }
   };

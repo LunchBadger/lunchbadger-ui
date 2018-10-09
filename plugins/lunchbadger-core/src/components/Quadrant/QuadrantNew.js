@@ -128,18 +128,26 @@ class Quadrant extends PureComponent {
       components,
       connectionsStore,
       style,
+      canvasHeight,
     } = this.props;
     const styles = {width};
     const titleStyles = {
       ...styles,
-      transform: `translateX(-${scrollLeft}px)`,
+    }
+    const bodyStyles = {
+      ...style,
+    }
+    if (canvasHeight > 0) {
+      Object.assign(bodyStyles, {
+        height: canvasHeight - 82,
+      });
     }
     const {orderedIds, draggingId} = this.state;
     return connectDropTarget(
       <div
         className={cs('quadrant', title)}
         ref={(ref) => this.quadrantDOM = ref}
-        style={{...styles, ...style}}
+        style={{...styles}}
       >
         <div className="quadrant__title" style={titleStyles}>
           {title}
@@ -150,26 +158,28 @@ class Quadrant extends PureComponent {
             />
           )}
         </div>
-        <div className="quadrant__body">
-          {orderedIds.map(({id, type}, idx) => {
-            const entity = this.props[type][id];
-            if (!entity || !entity.constructor || !entity.constructor.type) return null;
-            const Component = components[entity.constructor.type];
-            return (
-              <Component
-                id={id}
-                key={entity.id}
-                entity={entity}
-                hideSourceOnDrag={true}
-                itemOrder={idx}
-                moveEntity={this.moveEntity}
-                saveOrder={this.saveOrder}
-                dragging={draggingId === id}
-                sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
-                targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
-              />
-            );
-          })}
+        <div className="quadrant__body" style={bodyStyles}>
+          <div className="quadrant__body__wrap">
+            {orderedIds.map(({id, type}, idx) => {
+              const entity = this.props[type][id];
+              if (!entity || !entity.constructor || !entity.constructor.type) return null;
+              const Component = components[entity.constructor.type];
+              return (
+                <Component
+                  id={id}
+                  key={entity.id}
+                  entity={entity}
+                  hideSourceOnDrag={true}
+                  itemOrder={idx}
+                  moveEntity={this.moveEntity}
+                  saveOrder={this.saveOrder}
+                  dragging={draggingId === id}
+                  sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
+                  targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
+                />
+              );
+            })}
+          </div>
         </div>
         {resizable && (
           <QuadrantResizeHandle
@@ -186,10 +196,12 @@ const selector = createSelector(
   state => state.entities,
   (_, props) => props.types,
   state => state.plugins.canvasElements,
-  (entities, types, components) => {
+  state => state.canvasHeight,
+  (entities, types, components, canvasHeight) => {
     const result = {
       types,
       components,
+      canvasHeight,
     };
     types.forEach((type) => {
       result[type] = entities[type];

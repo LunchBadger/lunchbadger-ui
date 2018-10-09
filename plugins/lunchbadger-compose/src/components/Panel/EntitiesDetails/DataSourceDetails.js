@@ -140,6 +140,7 @@ class DataSourceDetails extends Component {
   renderMainProperties = () => {
     return (
       <CollapsibleProperties
+        id={`${this.props.entity.id}/PROPERTIES`}
         bar={
           <EntityPropertyLabel>
             Properties

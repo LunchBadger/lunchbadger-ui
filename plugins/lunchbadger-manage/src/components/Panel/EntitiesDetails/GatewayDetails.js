@@ -384,6 +384,7 @@ class GatewayDetails extends PureComponent {
                 name={`pipelines[${pipelineIdx}][policies][${policyIdx}][pairs][${idx}][id]`}
               />
               <GatewayPolicyCAPair
+                entityId={this.props.entity.id}
                 nr={idx + 1}
                 renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, idx)}
                 renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, idx, policy.name)}
@@ -411,10 +412,12 @@ class GatewayDetails extends PureComponent {
     const key = `fake-${pipelineIdx}-${policyIdx}-${policyName}`;
     return (
       <GatewayPolicyCAPair
+        entityId={this.props.entity.id}
         key={key}
         renderCondition={this.renderPolicyCondition(pair, pipelineIdx, policyIdx, key)}
         renderAction={this.renderPolicyAction(pair, pipelineIdx, policyIdx, key, policyName)}
         fake
+        prefix={`pipelines${pipelineIdx}policies${policyIdx}pairsFAKE`}
       />
     );
   };
@@ -445,6 +448,7 @@ class GatewayDetails extends PureComponent {
         items={pipeline.policies}
         renderItem={(policy, idx) => (
           <CollapsibleProperties
+            id={`${this.props.entity.id}/PIPELINES/${pipeline.id}/POLICIES/${policy.id}`}
             key={policy.id}
             bar={this.renderPolicyInput(pipelineIdx, idx, policy)}
             collapsible={this.renderPolicy(policy, pipelineIdx, idx)}
@@ -654,6 +658,7 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="general" key="protocol">
         <CollapsibleProperties
+          id={`${this.props.entity.id}/PROTOCOL`}
           bar={
             <EntityPropertyLabel>
               Protocol
@@ -715,6 +720,7 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="general" key="admin">
         <CollapsibleProperties
+          id={`${this.props.entity.id}/ADMIN`}
           bar={
             <EntityPropertyLabel>
               Admin
@@ -730,9 +736,11 @@ class GatewayDetails extends PureComponent {
   };
 
   renderPipelinesSection = () => {
+    const {id} = this.props.entity;
     const {pipelines} = this.state;
     const collapsible = pipelines.map((pipeline, idx) => (
       <CollapsibleProperties
+        id={`${id}/PIPELINES/${pipeline.id}`}
         key={pipeline.id}
         bar={this.renderPipelineInput(idx, pipeline)}
         collapsible={this.renderPipeline(pipeline, idx)}
@@ -766,6 +774,7 @@ class GatewayDetails extends PureComponent {
     return (
       <div className="pipelines" key="pipelines">
         <CollapsibleProperties
+          id={`${id}/PIPELINES`}
           bar={
             <EntityPropertyLabel>
               Pipelines

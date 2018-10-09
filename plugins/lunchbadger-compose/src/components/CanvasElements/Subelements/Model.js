@@ -92,6 +92,7 @@ class SubModel extends PureComponent {
       <div className="SubModel">
         {this.renderPorts()}
         <CollapsibleProperties
+          id={`${this.props.parent.id}/MODELS/${id}`}
           ref={(r) => {this.collapsiblePropertiesDOM = r;}}
           bar={
             <EntityProperty

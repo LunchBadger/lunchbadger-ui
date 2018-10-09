@@ -80,11 +80,13 @@ class SubApiEndpoint extends Component {
       id,
       validations,
       handleDeleteApiEndpoint,
+      parent,
     } = this.props;
     return connectDragSource(
       <div className="SubApiEndpoint">
         {this.renderPorts()}
         <CollapsibleProperties
+          id={`${parent.id}/APIENDPOINT/${id}`}
           ref={(r) => {this.collapsiblePropertiesDOM = r;}}
           bar={
             <EntityProperty

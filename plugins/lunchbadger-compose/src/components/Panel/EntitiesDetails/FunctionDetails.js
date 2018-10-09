@@ -141,7 +141,11 @@ class FunctionDetails extends PureComponent {
   };
 
   render() {
-    const {name, service: {serverless: {provider: {runtime}}}} = this.props.entity;
+    const {
+      id,
+      name,
+      service: {serverless: {provider: {runtime}}},
+    } = this.props.entity;
     const sections = [
       {title: 'Details', docs: 'FUNCTION_DETAILS'},
       {title: 'Triggers', docs: 'FUNCTION_TRIGGERS'},
@@ -165,6 +169,7 @@ class FunctionDetails extends PureComponent {
         />
         {sections.map(({title, render, renderButton, classes, docs}) => (
           <CollapsibleProperties
+            id={`${id}/${render || title}`}
             key={title}
             bar={
               <EntityPropertyLabel>

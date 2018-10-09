@@ -49,6 +49,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
       onRemove,
       prefix,
       fake,
+      entityId,
     } = this.props;
     const {horizontal} = this.state;
     let title = `C/A Pair ${nr}`;
@@ -67,6 +68,7 @@ export default class GatewayPolicyCAPair extends PureComponent {
         fake,
       })}>
         <CollapsibleProperties
+          id={`${entityId}/${prefix}`}
           bar={bar}
           collapsible={this.renderCA()}
           button={(

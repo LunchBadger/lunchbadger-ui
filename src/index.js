@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.275', [
+console.info('LBAPP VERSION 0.276', [
+  'Feature/980 ContextPath logic as in loopback #1016',
   'Feature/909 Function to model connection as dashed line #1015',
   'Feature/921 JWT secretOrPublicKey should be textarea #1014',
   'Feature/1007 Deprecate implicite ca pairs #1013',

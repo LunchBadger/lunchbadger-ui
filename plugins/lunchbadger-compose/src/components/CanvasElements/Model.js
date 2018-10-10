@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
+import inflection from 'inflection';
 import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import addNestedProperties from '../addNestedProperties';
@@ -55,10 +56,10 @@ class Model extends Component {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name} = props.entity;
+    const {contextPath, name, pluralized} = props.entity;
     return {
       contextPath,
-      contextPathDirty: slug(name, {lower: true}) !== contextPath,
+      contextPathDirty: pluralized(name) !== contextPath,
     };
   };
 
@@ -87,7 +88,7 @@ class Model extends Component {
 
   updateName = event => {
     if (!this.state.contextPathDirty) {
-      this.setState({contextPath: slug(event.target.value, {lower: true})});
+      this.setState({contextPath: this.props.entity.pluralized(event.target.value)});
     }
   };
 

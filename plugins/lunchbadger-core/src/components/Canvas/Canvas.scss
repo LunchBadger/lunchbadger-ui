@@ -57,7 +57,7 @@
           fill: #4190CE;
         }
       }
-      & > path {
+      & > path[stroke-width="5"] {
         stroke: #4190CE;
       }
     }
@@ -68,7 +68,7 @@
           fill: #b10000;
         }
       }
-      & > path {
+      & > path[stroke-width="5"] {
         stroke: #b10000;
       }
     }
@@ -76,6 +76,11 @@
       opacity: 0.4;
       & + .remove-button {
         display: none !important;
+      }
+    }
+    &.dashed {
+      & > path[stroke-width="5"] {
+        stroke-dasharray: 12 12;
       }
     }
   }

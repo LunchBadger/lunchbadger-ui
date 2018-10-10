@@ -102,16 +102,16 @@ Let's name it <pre>Car</pre>.
       api.focus('.Entity.Model.editable .EntityHeader input'),
     ],
   },
-//   '022': {
-//     title: 'Model Entity Context Path',
-//     text: `
-// The Context Path assigns a URL path for the Model Entity's built in RESTFul endpoint.
-// `,
-//     selector: '.Entity.Model.editable .EntityProperties .EntityProperty',
-//     position: 'right',
-//     allowClicksThruHole: false,
-//     skipLastStep: true,
-//   },
+  '022': {
+    title: 'Model Entity Context Path',
+    text: `
+The Context Path of the API Endpoint is assigned a URL path from the Model Entity.
+`,
+    selector: '.Entity.Model.editable .EntityProperties .EntityProperty',
+    position: 'right',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+  },
   '023': {
     title: 'Model Properties Overview',
     text: `

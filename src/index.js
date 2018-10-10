@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.274', [
+console.info('LBAPP VERSION 0.275', [
+  'Feature/909 Function to model connection as dashed line #1015',
   'Feature/921 JWT secretOrPublicKey should be textarea #1014',
   'Feature/1007 Deprecate implicite ca pairs #1013',
   'Bugfix/1008 Quadrants headers issue on safari #1012',
@@ -29,12 +30,7 @@ console.info('LBAPP VERSION 0.274', [
   'Feature/991 Remove references to LB product #994',
   'Feature/990 Swap LB logo to Express Serverless Platform #993',
   'Feature/981 Entity in lock state #992',
-  'Bugfix/984 CA pairs are not updated on policy change #985',
-  'Feature/946 Cannot rebundle highlighted api endpoints between apis #982',
-  'Bugfix/938 Model array icon shown on canvas #979',
-  'Feature/975 api endpoint inherits context path from connected function #978',
-  'Feature/488 Policy input should be select, not autocomplete #977',
-  'Feature/918 Code editor resize remembered #976'
+  'Bugfix/984 CA pairs are not updated on policy change #985'
 ]);
 
 // Needed for onTouchTap

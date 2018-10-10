@@ -4,8 +4,7 @@
   vertical-align: top;
   position: relative;
   flex: 0 0 auto;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: visible;
 }
 
 .quadrant__title {
@@ -17,29 +16,38 @@
   font-weight: 300;
   font-size: 0.778em;
   text-align: center;
-  position: fixed;
+  position: absolute;
   z-index: $z-index-top;
+  top: 0;
+  left: 0;
 }
 
 .quadrant__body {
-  padding: 50px 20px 20px;
-  min-height: calc(100% - 30px);
+  padding: 20px 20px 40px;
+  margin-top: 30px;
   position: relative;
-  &:before {
-    content: '';
-    opacity: 0;
-    height: 100%;
-    left: 0;
-    top: 30px;
-    transition: all 0.3s ease;
-    position: absolute;
-    width: calc(100% + 1px);
-    background: #000;
-  }
-  .canvas__container--editing & {
+  overflow-x: hidden;
+  overflow-y: auto;
+  &__wrap {
+    position: relative;
+    min-height: calc(100% - 40px);
     &:before {
-      z-index: 10;
-      opacity: 0.34;
+      display: block;
+      content: '';
+      opacity: 0;
+      top: -40px;
+      left: -20px;
+      right: -20px;
+      bottom: -50px;
+      transition: all 0.3s ease;
+      position: absolute;
+      background: #000;
+    }
+    .canvas__container--editing & {
+      &:before {
+        z-index: 10;
+        opacity: 0.34;
+      }
     }
   }
 }

@@ -230,6 +230,14 @@ class Canvas extends Component {
         const targetGaType = connection.target.getAttribute('data-ga-type');
         GAEvent('Canvas', 'Connected Entities', `${sourceGaType}-${targetGaType}`);
       }
+      const isFunctionModelConn = true
+        && source.contains('port-out')
+        && source.contains('port-Function_')
+        && target.contains('port-out')
+        && target.contains('port-Model');
+      if (isFunctionModelConn) {
+        connection.addType('dashed');
+      }
     });
 
     this.paper.bind('connectionMoved', (info) => {
@@ -258,6 +266,20 @@ class Canvas extends Component {
       const newTargetGaType = newTargetEndpoint.getAttribute('data-ga-type');
       const gaLog = `${originalSourceGaType}-${originalTargetGaType} => ${newSourceGaType}-${newTargetGaType}`;
       GAEvent('Canvas', 'Reconnected Entities', gaLog);
+      const source = newSourceEndpoint.parentElement.classList;
+      const target = newTargetEndpoint.parentElement.classList;
+      const isFunctionModelConn = true
+        && source.contains('port-out')
+        && target.contains('port-out')
+        && (
+          (source.contains('port-Function_') && target.contains('port-Model'))
+          ||
+          (source.contains('port-Model') && target.contains('port-Function_'))
+        );
+      info.connection.removeType('dashed');
+      if (isFunctionModelConn) {
+        info.connection.addType('dashed');
+      }
     });
 
     this.paper.bind('connectionDetached', (info) => {

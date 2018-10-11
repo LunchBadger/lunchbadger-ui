@@ -105,7 +105,7 @@ Let's name it <pre>Car</pre>.
   '022': {
     title: 'Model Entity Context Path',
     text: `
-The Context Path of the API Endpoint is assigned a URL path from the Model Entity.
+The Context Path assigns a URL path for the Model Entity's built in RESTFul endpoint.
 `,
     selector: '.Entity.Model.editable .EntityProperties .EntityProperty',
     position: 'right',

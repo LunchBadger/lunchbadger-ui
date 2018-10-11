@@ -60,7 +60,10 @@ class EntityProperty extends Component {
     autocomplete: PropTypes.bool,
     codeEditor: PropTypes.bool,
     chips: PropTypes.bool,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+    ]),
     button: PropTypes.node,
     alignRight: PropTypes.bool,
     postfix: PropTypes.string,

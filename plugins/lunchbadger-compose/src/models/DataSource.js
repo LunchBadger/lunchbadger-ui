@@ -43,6 +43,27 @@ export default class DataSource extends BaseModel {
   soapHeaders = [];
   baseURL = '';
 
+  // mongodb
+  authSource = 'admin';
+  allowExtendedOperators = false;
+  enableGeoIndexing = false;
+  lazyConnect = false;
+  disableDefaultSort = false;
+  reconnect = true;
+  reconnectTries = 30;
+  reconnectInterval = 1000;
+  emitError = false;
+  size = 5;
+  keepAlive = true;
+  keepAliveInitialDelay = 0;
+  noDelay = true;
+  connectionTimeout = 0;
+  socketTimeout = 0;
+  singleBufferSerializtion = true;
+  ssl = false;
+  rejectUnauthorized = true;
+  promoteLongs = true;
+
   constructor(id, name, connector) {
     super(id);
     this.name = name;
@@ -139,6 +160,50 @@ export default class DataSource extends BaseModel {
         security,
         operations,
         soapHeaders,
+      });
+    }
+    if (this.isMongoDB) {
+      const {
+        authSource,
+        allowExtendedOperators,
+        enableGeoIndexing,
+        lazyConnect,
+        disableDefaultSort,
+        reconnect,
+        reconnectTries,
+        reconnectInterval,
+        emitError,
+        size,
+        keepAlive,
+        keepAliveInitialDelay,
+        noDelay,
+        connectionTimeout,
+        socketTimeout,
+        singleBufferSerializtion,
+        ssl,
+        rejectUnauthorized,
+        promoteLongs,
+      } = this;
+      Object.assign(json, {
+          authSource,
+          allowExtendedOperators,
+          enableGeoIndexing,
+          lazyConnect,
+          disableDefaultSort,
+          reconnect,
+          reconnectTries,
+          reconnectInterval,
+          emitError,
+          size,
+          keepAlive,
+          keepAliveInitialDelay,
+          noDelay,
+          connectionTimeout,
+          socketTimeout,
+          singleBufferSerializtion,
+          ssl,
+          rejectUnauthorized,
+          promoteLongs,
       });
     }
     return json;

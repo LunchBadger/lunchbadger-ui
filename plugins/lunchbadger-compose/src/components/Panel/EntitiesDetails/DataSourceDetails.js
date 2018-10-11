@@ -57,6 +57,25 @@ class DataSourceDetails extends Component {
       keyId,
       privateKeyPath,
       password,
+      authSource,
+      allowExtendedOperators,
+      enableGeoIndexing,
+      lazyConnect,
+      disableDefaultSort,
+      reconnect,
+      reconnectTries,
+      reconnectInterval,
+      emitError,
+      size,
+      keepAlive,
+      keepAliveInitialDelay,
+      noDelay,
+      connectionTimeout,
+      socketTimeout,
+      singleBufferSerializtion,
+      ssl,
+      rejectUnauthorized,
+      promoteLongs,
       isWithPort,
       isSoap,
       isEthereum,
@@ -78,16 +97,19 @@ class DataSourceDetails extends Component {
         title: 'Host',
         name: 'host',
         value: host,
+        description: 'Database host name',
       });
       fields.push({
         title: 'Port',
         name: 'port',
         value: port,
+        description: 'Database TCP port',
       });
       fields.push({
         title: 'Database',
         name: 'database',
         value: database,
+        description: 'Database name',
       });
     }
     if (isWithPort || isSalesforce) {
@@ -95,12 +117,14 @@ class DataSourceDetails extends Component {
         title: 'Username',
         name: 'username',
         value: username,
+        description: 'Username to connect to database',
       });
       fields.push({
         title: 'Password',
         name: 'password',
         value: password,
         password: true,
+        description: 'Password to connect to database',
       });
     }
     if (isTritonObjectStorage) {
@@ -128,6 +152,156 @@ class DataSourceDetails extends Component {
         title: 'Private Key Path',
         name: 'privateKeyPath',
         value: privateKeyPath
+      });
+    }
+    if (isMongoDB) {
+      fields.push({
+        title: 'Auth Source',
+        name: 'authSource',
+        value: authSource,
+        description: (
+          <div>
+            Authentification database name. The default value is usually <code>admin</code>, like in the official docker image.
+          </div>
+        ),
+      });
+      fields.push({
+        title: 'Allow Extended Operators',
+        name: 'allowExtendedOperators',
+        value: allowExtendedOperators,
+        bool: true,
+        description: (
+          <div>
+            Enable using MongoDB operators such as <code>$currentDate</code>, <code>$inc</code>, <code>$max</code>, <code>$min</code>, <code>$mul</code>, <code>$rename</code>, <code>$setOnInsert</code>, <code>$set</code>, <code>$unset</code>, <code>$addToSet</code>, <code>$pop</code>, <code>$pullAll</code>, <code>$pull</code>, <code>$pushAll</code>, <code>$push</code>, and <code>$bit</code>.
+          </div>
+        ),
+      });
+      fields.push({
+        title: 'Enable Geo Indexing',
+        name: 'enableGeoIndexing',
+        value: enableGeoIndexing,
+        bool: true,
+        description: (
+          <div>
+            Enable 2dsphere indexing for model properties of type <code>GeoPoint</code>.
+            This allows for indexed <code>near</code> queries.
+          </div>
+        ),
+      });
+      fields.push({
+        title: 'Lazy Connect',
+        name: 'lazyConnect',
+        value: lazyConnect,
+        bool: true,
+        description: 'Enable, so the database instance will not be attached to the datasource and the connection is deferred. It will try to establish the connection automatically once users hit the endpoint. If the mongodb server is offline, the app will start, however, the endpoints will not work.',
+      });
+      fields.push({
+        title: 'Disable Default Sort',
+        name: 'disableDefaultSort',
+        value: disableDefaultSort,
+        bool: true,
+        description: (
+          <div>
+            Disable the default sorting behavior on <code>id</code> column, this will help performance using indexed columns available in mongodb.
+          </div>
+        ),
+      });
+      fields.push({
+        title: 'Reconnect',
+        name: 'reconnect',
+        value: reconnect,
+        bool: true,
+        description: 'Server will attempt to reconnect on loss of connection.',
+      });
+      fields.push({
+        title: 'Reconnect Tries',
+        name: 'reconnectTries',
+        value: reconnectTries,
+        number: true,
+        description: <div>Server attempt to reconnect <code>#</code> times.</div>,
+      });
+      fields.push({
+        title: 'Reconnect Interval',
+        name: 'reconnectInterval',
+        value: reconnectInterval,
+        number: true,
+        description: <div>Server will wait <code>#</code> milliseconds between retries.</div>,
+      });
+      fields.push({
+        title: 'Emit Error',
+        name: 'emitError',
+        value: emitError,
+        bool: true,
+        description: 'Server will emit errors events.',
+      });
+      fields.push({
+        title: 'Size',
+        name: 'size',
+        value: size,
+        number: true,
+        description: 'Server connection pool size.',
+      });
+      fields.push({
+        title: 'Keep Alive',
+        name: 'keepAlive',
+        value: keepAlive,
+        bool: true,
+        description: 'TCP Connection keep alive enabled.',
+      });
+      fields.push({
+        title: 'Keep Alive Initial Delay',
+        name: 'keepAliveInitialDelay',
+        value: keepAliveInitialDelay,
+        number: true,
+        description: 'Initial delay before TCP keep alive enabled.',
+      });
+      fields.push({
+        title: 'No Delay',
+        name: 'noDelay',
+        value: noDelay,
+        bool: true,
+        description: 'TCP Connection no delay.',
+      });
+      fields.push({
+        title: 'Connection Timeout',
+        name: 'connectionTimeout',
+        value: connectionTimeout,
+        number: true,
+        description: 'TCP Connection timeout setting.',
+      });
+      fields.push({
+        title: 'Socket Timeout',
+        name: 'socketTimeout',
+        value: socketTimeout,
+        number: true,
+        description: 'TCP Socket timeout setting.',
+      });fields.push({
+        title: 'Single Buffer Serializtion',
+        name: 'singleBufferSerializtion',
+        value: singleBufferSerializtion,
+        bool: true,
+        description: 'Serialize into single buffer, trade of peak memory for serialization speed.',
+      });
+      fields.push({
+        title: 'SSL',
+        name: 'ssl',
+        value: ssl,
+        bool: true,
+        description: 'Use SSL for connection.',
+      });
+      fields.push({
+        title: 'Reject Unauthorized',
+        name: 'rejectUnauthorized',
+        value: rejectUnauthorized,
+        bool: true,
+        description: 'Reject unauthorized server certificates.',
+      });
+      fields.push({
+        title: 'Promote Longs',
+        name: 'promoteLongs',
+        value: promoteLongs,
+        bool: true,
+        description: 'Convert Long values from the db into Numbers if they fit into 53 bits.',
       });
     }
     return (

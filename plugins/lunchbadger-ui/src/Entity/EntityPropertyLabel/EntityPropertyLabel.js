@@ -26,7 +26,7 @@ const helpIconStyle = {
 const EntityPropertyLabel = ({children, className, plain, description = '', noMargin}) => (
   <div className={cs('EntityPropertyLabel', className, {plain, noMargin})}>
     {children}
-    {description !== '' && (
+    {!!description && (
       <ContextualInformationMessage
         tooltip={description}
         direction="top"

@@ -675,7 +675,8 @@ export default [
           "examples": [
             "secretString",
             "PEMCertificate"
-          ]
+          ],
+          "multiline": true
         },
         "jwtExtractor": {
           "type": "string",

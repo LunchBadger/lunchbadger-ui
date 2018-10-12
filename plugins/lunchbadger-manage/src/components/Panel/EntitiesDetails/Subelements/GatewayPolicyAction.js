@@ -333,6 +333,7 @@ export default class GatewayPolicyAction extends PureComponent {
       arrayItem,
       schemas = {},
     } = item;
+    const textarea = !!schemas.multiline;
     const {prefix, validations} = this.props;
     let titleRemark;
     const propDefValue = propertyDefaultValue(item);
@@ -418,6 +419,7 @@ export default class GatewayPolicyAction extends PureComponent {
         placeholder: ' ',
         type,
         invalid: validations.data[`${prefix}[${name}]`],
+        textarea,
       };
       if (type === 'fake') {
         Object.assign(props, {

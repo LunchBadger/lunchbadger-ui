@@ -57,8 +57,8 @@ export const findConnectedContextPathByPipelineId = (state, id) => {
     .reduce((map, {proxy}) => [...map, ...proxy], [])
     .filter(({action: {serviceEndpoint}}) => serviceEndpoint)
     .map(({action: {serviceEndpoint}}) => serviceEndpoint);
-  if (connectedServiceEndpoints.length !== 1) return '';
-  const endpoint = findEntity(state, 1, connectedServiceEndpoints[0]);
+  if (connectedServiceEndpoints.length === 0) return '';
+  const endpoint = findEntity(state, 1, connectedServiceEndpoints.pop());
   if (!endpoint) return '';
   if (endpoint.constructor.type === 'Model') return endpoint.contextPath;
   if (endpoint.constructor.type === 'Function_') return endpoint.name;

@@ -4,7 +4,6 @@ import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
-import slug from 'slug';
 import _ from 'lodash';
 import uuid from 'uuid';
 import addNestedProperties from '../../addNestedProperties';
@@ -97,11 +96,11 @@ class ModelDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name} = props.entity;
+    const {contextPath, name, pluralized} = props.entity;
     return {
       changed: false,
       contextPath,
-      contextPathDirty: slug(name, {lower: true}) !== contextPath,
+      contextPathDirty: pluralized(name) !== contextPath,
     };
   };
 

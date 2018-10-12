@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import uuid from 'uuid';
+import slug from 'slug';
+import inflection from 'inflection';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
@@ -57,7 +59,7 @@ export default class Model extends BaseModel {
   _ports = [];
   _properties = [];
   _relations = [];
-  contextPath = defaultEntityNames.Model.toLowerCase();
+  contextPath = this.pluralized(defaultEntityNames.Model);
   base = 'PersistedModel';
   plural = '';
   readonly = false;
@@ -411,6 +413,10 @@ export default class Model extends BaseModel {
 
   sortByItemOrder(a, b) {
     return a.itemOrder > b.itemOrder;
+  }
+
+  pluralized(str) {
+    return str === '' ? '' : inflection.pluralize(slug(str, {lower: true}));
   }
 
 }

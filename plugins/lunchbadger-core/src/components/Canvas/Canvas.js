@@ -235,7 +235,12 @@ class Canvas extends Component {
         && source.contains('port-Function_')
         && target.contains('port-out')
         && target.contains('port-Model');
-      if (isFunctionModelConn) {
+      const isDatasourceFunctionConn = true
+        && source.contains('port-out')
+        && source.contains('port-DataSource')
+        && target.contains('port-in')
+        && target.contains('port-Function_');
+      if (isFunctionModelConn || isDatasourceFunctionConn) {
         connection.addType('dashed');
       }
     });
@@ -276,8 +281,13 @@ class Canvas extends Component {
           ||
           (source.contains('port-Model') && target.contains('port-Function_'))
         );
+      const isDatasourceFunctionConn = true
+        && source.contains('port-out')
+        && target.contains('port-in')
+        && source.contains('port-DataSource')
+        && target.contains('port-Function_');
       info.connection.removeType('dashed');
-      if (isFunctionModelConn) {
+      if (isFunctionModelConn || isDatasourceFunctionConn) {
         info.connection.addType('dashed');
       }
     });

@@ -3318,6 +3318,11 @@
       "resolved": "https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz",
       "dev": true
     },
+    "inflection": {
+      "version": "1.12.0",
+      "from": "inflection@latest",
+      "resolved": "https://registry.npmjs.org/inflection/-/inflection-1.12.0.tgz"
+    },
     "inflight": {
       "version": "1.0.6",
       "from": "inflight@>=1.0.4 <2.0.0",

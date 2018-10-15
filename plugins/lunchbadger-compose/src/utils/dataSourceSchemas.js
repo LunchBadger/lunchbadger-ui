@@ -46,13 +46,24 @@ const canvas = [
   'port',
   'database',
   'username',
-  'password'
+  'password',
+  'url',
 ];
 
 export default {
   mongodb: {
     properties: {
       ...commonProperties,
+      url: {
+        type: 'string',
+        description: (
+          <div>
+            Connection URL of form <code>{'mongodb://user:password@host/db'}</code>.
+            Overrides other connection settings.
+            In order to leverage the DNS seedlist, use a connection string prefix of <code>mongodb+srv:</code>.
+          </div>
+        ),
+      },
       authSource: {
         type: 'string',
         description: 'Authentification database name',
@@ -140,6 +151,15 @@ export default {
   redis: {
     properties: {
       ...commonProperties,
+      url: {
+        type: 'string',
+        description: (
+          <div>
+            Connection URL of form <code>{'redis://user:password@host/db'}</code>.
+            Overrides other connection settings.
+          </div>
+        ),
+      },
     },
     required,
     canvas,
@@ -147,6 +167,15 @@ export default {
   mysql: {
     properties: {
       ...commonProperties,
+      url: {
+        type: 'string',
+        description: (
+          <div>
+            Connection URL of form <code>{'mysql://user:password@host/db'}</code>.
+            Overrides other connection settings.
+          </div>
+        ),
+      },
     },
     required,
     canvas,
@@ -154,6 +183,15 @@ export default {
   postgresql: {
     properties: {
       ...commonProperties,
+      url: {
+        type: 'string',
+        description: (
+          <div>
+            Connection URL of form <code>{'postgres://user:password@host/db'}</code>.
+            Overrides other connection settings.
+          </div>
+        ),
+      },
     },
     required,
     canvas,

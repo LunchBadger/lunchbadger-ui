@@ -9,6 +9,7 @@ export default class Mysql extends DataSource {
   database = '';
   username = '';
   password = '';
+  url = '';
 
   recreate() {
     return Mysql.create(this);
@@ -35,30 +36,7 @@ export default class Mysql extends DataSource {
   }
 
   validate(model) {
-    return (_, getState) => {
-      const validations = super.validate(model)(_, getState);
-      const {required} = schemas.mysql;
-      checkFields(required, model, validations.data);
-      if (model.port !== '') {
-        if (isNaN(+model.port)) {
-          validations.data.port = 'Port format is invalid';
-        } else {
-          model.port = Math.floor(+model.port);
-          if (model.port < 0 || model.port >= 65536) {
-            validations.data.port = 'Port should be >= 0 and < 65536';
-          }
-          model.port = model.port.toString();
-        }
-      }
-      required.forEach((key) => {
-        if (validations.data.hasOwnProperty(key)) {
-          validations.data[`LunchBadger[${key}]`] = validations.data[key];
-          delete validations.data[key];
-        }
-      });
-      validations.isValid = Object.keys(validations.data).length === 0;
-      return validations;
-    }
+    return super.validateConnectionSettings(model, 'mysql');
   }
 
 }

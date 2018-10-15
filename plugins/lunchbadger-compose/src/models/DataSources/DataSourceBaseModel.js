@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import schemas from '../../utils/dataSourceSchemas';
 import {update, remove} from '../../reduxActions/dataSources';
 
 const {
@@ -91,6 +92,10 @@ export default class DataSource extends BaseModel {
   }
 
   validate(model) {
+    return this.validateName(model);
+  }
+
+  validateName(model) {
     return (_, getState) => {
       const validations = {data: {}};
       const entities = getState().entities.dataSources;
@@ -104,6 +109,38 @@ export default class DataSource extends BaseModel {
         }
       }
       checkFields(['name'], model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
+    }
+  }
+
+  validateConnectionSettings(model, connector) {
+    return (_, getState) => {
+      const validations = this.validateName(model)(_, getState);
+      const isUrl = model.url !== '';
+      const required = isUrl ? ['url'] : schemas[connector].required;
+      checkFields(required, model, validations.data);
+      if (isUrl) {
+        // TODO: possibility to valid connection url here
+      } else {
+        if (model.port !== '') {
+          if (isNaN(+model.port)) {
+            validations.data.port = 'Port format is invalid';
+          } else {
+            model.port = Math.floor(+model.port);
+            if (model.port < 0 || model.port >= 65536) {
+              validations.data.port = 'Port should be >= 0 and < 65536';
+            }
+            model.port = model.port.toString();
+          }
+        }
+      }
+      required.forEach((key) => {
+        if (validations.data.hasOwnProperty(key)) {
+          validations.data[`LunchBadger[${key}]`] = validations.data[key];
+          delete validations.data[key];
+        }
+      });
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }

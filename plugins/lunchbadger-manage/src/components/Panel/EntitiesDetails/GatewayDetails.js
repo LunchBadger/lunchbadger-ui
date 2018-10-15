@@ -192,14 +192,9 @@ class GatewayDetails extends PureComponent {
   addPipelinePolicy = pipelineIdx => () => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const defaultPolicy = Object.keys(this.policiesSchemas)[0];
-    const caPairs = [];
-    if (!this.policiesSchemas[defaultPolicy].allowEmptyCAPairs) {
-      caPairs.push({
-        condition: {name: 'always'},
-        action: {},
-      });
-    }
-    pipelines[pipelineIdx].addPolicy(Policy.create({[defaultPolicy]: caPairs}));
+    pipelines[pipelineIdx].addPolicy(Policy.create({
+      [defaultPolicy]: [this.getPolicyCAPair(defaultPolicy)],
+    }));
     const policyIdx = pipelines[pipelineIdx].policies.length - 1;
     this.changeState({pipelines});
     const inputSelector = `.DetailsPanel .select__pipelines${pipelineIdx}policies${policyIdx}name input`;
@@ -212,29 +207,31 @@ class GatewayDetails extends PureComponent {
     this.changeState({pipelines});
   };
 
+  getPolicyCAPair = (policyName, condition, action) => {
+    const {properties} = this.policiesSchemas[policyName];
+    return {
+      condition: condition || {name: 'always'},
+      action: action || Object.keys(properties)
+        .filter(key => properties[key].hasOwnProperty('default'))
+        .reduce((map, key) => ({...map, [key]: properties[key].default}), {}),
+    };
+  };
+
   handlePolicyChange = (pipelineIdx, policyIdx) => ({target: {value}}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
     const {name} = pipelines[pipelineIdx].policies[policyIdx];
     if (name !== value) {
       pipelines[pipelineIdx].policies[policyIdx].name = value;
       pipelines[pipelineIdx].policies[policyIdx].conditionAction = [];
-      if (!this.policiesSchemas[value].allowEmptyCAPairs) {
-        const pair = {
-          condition: {name: 'always'},
-          action: {},
-        };
-        pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
-      }
+      const pair = this.getPolicyCAPair(value);
+      pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
       this.changeState({pipelines});
     }
   };
 
   addCAPair = (pipelineIdx, policyIdx, policyName) => ({condition, action} = {}) => {
     const pipelines = _.cloneDeep(this.state.pipelines);
-    const pair = {
-      condition: condition || {name: 'always'},
-      action: action || {},
-    };
+    const pair = this.getPolicyCAPair(policyName, condition, action);
     pipelines[pipelineIdx].policies[policyIdx].addConditionAction(ConditionAction.create(pair));
     this.changeState({pipelines});
     if (!condition && !action) {
@@ -248,8 +245,7 @@ class GatewayDetails extends PureComponent {
 
   isCAPairRemoveDisabled = (pipelineIdx, policyIdx) => {
     const policy = this.state.pipelines[pipelineIdx].policies[policyIdx];
-    const {allowEmptyCAPairs} = this.policiesSchemas[policy.name];
-    if (!allowEmptyCAPairs && policy.conditionAction.length === 1) return true;
+    if (policy.conditionAction.length === 1) return true;
     return false;
   };
 
@@ -427,12 +423,7 @@ class GatewayDetails extends PureComponent {
   };
 
   renderImplicitCAPair = (pipelineIdx, policyIdx, policyName) => {
-    const pair = ConditionAction.create({
-      condition: {
-        name: 'always',
-      },
-      action: {},
-    });
+    const pair = ConditionAction.create(this.getPolicyCAPair(policyName));
     const key = `fake-${pipelineIdx}-${policyIdx}-${policyName}`;
     return (
       <GatewayPolicyCAPair

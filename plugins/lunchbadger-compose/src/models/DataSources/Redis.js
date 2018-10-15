@@ -18,21 +18,8 @@ export default class Redis extends DataSource {
   toJSON() {
     return {
       ...super.toJSON(),
-      ...this.connectorProperties(),
+      ...super.connectorProperties(this),
     };
-  }
-
-  connectorProperties() {
-    const generalProps = Object.keys(super.toJSON());
-    const properties = {};
-    Object.keys(this).forEach(key => {
-      if (!this.hasOwnProperty(key)) return;
-      if (this[key] === undefined) return;
-      if (generalProps.includes(key)) return;
-      if (this.constructor.forbiddenFields.includes(key)) return;
-      properties[key] = this[key];
-    });
-    return properties;
   }
 
   validate(model) {

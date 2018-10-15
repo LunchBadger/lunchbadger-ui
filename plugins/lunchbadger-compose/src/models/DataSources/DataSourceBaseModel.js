@@ -57,6 +57,19 @@ export default class DataSource extends BaseModel {
     return json;
   }
 
+  connectorProperties(obj) {
+    const generalProps = Object.keys(super.toJSON());
+    const properties = {};
+    Object.keys(obj).forEach(key => {
+      if (!obj.hasOwnProperty(key)) return;
+      if (obj[key] === undefined) return;
+      if (generalProps.includes(key)) return;
+      if (obj.constructor.forbiddenFields.includes(key)) return;
+      properties[key] = obj[key];
+    });
+    return properties;
+  }
+
   get status() {
     if (this.deleting) return 'deleting';
     return '';

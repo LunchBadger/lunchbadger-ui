@@ -348,6 +348,7 @@ export default class Rest extends PureComponent {
         <div>
           {!!options && (
             <CollapsibleProperties
+              id={`${this.props.entity.id}/OPTIONS/HEADERS`}
               bar={<EntityPropertyLabel>Headers</EntityPropertyLabel>}
               collapsible={this.renderOptionHeaders(options.headers)}
               defaultOpened
@@ -487,7 +488,8 @@ export default class Rest extends PureComponent {
   }
 
   renderOperation = (operation, idx) => {
-    const {plain} = this.props;
+    const {plain, entity} = this.props;
+    const {id} = entity;
     const methodOptions = requestMethods.map(label => ({label, value: label}));
     let widthMethod;
     let widthTemplate;
@@ -522,24 +524,28 @@ export default class Rest extends PureComponent {
             width={widthTemplate}
           />
           <CollapsibleProperties
+            id={`${id}/OPERATIONS/${idx}/OPTIONS`}
             bar={<EntityPropertyLabel>Options</EntityPropertyLabel>}
             collapsible={this.renderTemplateOptions(operation.template.options, idx)}
             defaultOpened
             barToggable
           />
           <CollapsibleProperties
+            id={`${id}/OPERATIONS/${idx}/HEADERS`}
             bar={<EntityPropertyLabel>Headers</EntityPropertyLabel>}
             collapsible={this.renderParameters('headers', operation.template.headers, idx)}
             defaultOpened
             barToggable
           />
           <CollapsibleProperties
+            id={`${id}/OPERATIONS/${idx}/QUERY`}
             bar={<EntityPropertyLabel>Query</EntityPropertyLabel>}
             collapsible={this.renderParameters('query', operation.template.query, idx)}
             defaultOpened
             barToggable
           />
           <CollapsibleProperties
+            id={`${id}/OPERATIONS/${idx}/FUNCTIONS`}
             bar={<EntityPropertyLabel>Functions</EntityPropertyLabel>}
             collapsible={this.renderFunctions(operation.functions, idx)}
             defaultOpened
@@ -552,6 +558,7 @@ export default class Rest extends PureComponent {
 
   render() {
     const {plain, entity} = this.props;
+    const {id} = entity;
     const {predefined, operations, isResourceOperationsMode} = this.state;
     const predefinedOptions = Object.keys(predefinedRests).map(value => ({label: predefinedRests[value].label, value}));
     const {baseURL} = entity;
@@ -560,6 +567,7 @@ export default class Rest extends PureComponent {
         {operations.map((operation, idx) => (
           <div className="Rest__operations__collapsible" key={operation.id}>
             <CollapsibleProperties
+              id={`${id}/${plain ? 'CANVAS' : 'DETAILS'}/OPERATIONS/${idx}`}
               bar={<EntityPropertyLabel plain>Operation {idx + 1}</EntityPropertyLabel>}
               collapsible={this.renderOperation(operation, idx)}
               button={idx === 0
@@ -624,6 +632,7 @@ export default class Rest extends PureComponent {
               </div>
               <div className="Rest__plain">
                 <CollapsibleProperties
+                  id={`${id}/OPTIONS`}
                   bar={
                     <EntityPropertyLabel>
                       Options
@@ -637,6 +646,7 @@ export default class Rest extends PureComponent {
               </div>
               <div className="Rest__operations">
                 <CollapsibleProperties
+                  id={`${id}/OPERATIONS`}
                   bar={
                     <EntityPropertyLabel>
                       Operations

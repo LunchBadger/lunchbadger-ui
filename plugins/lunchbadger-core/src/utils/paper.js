@@ -42,6 +42,9 @@ const connectionTypes = {
   },
   highlighted: {
     cssClass: 'highlighted',
+  },
+  dashed: {
+    cssClass: 'dashed',
   }
 };
 

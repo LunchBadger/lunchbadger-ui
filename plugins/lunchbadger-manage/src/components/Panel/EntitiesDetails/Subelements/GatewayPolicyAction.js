@@ -443,6 +443,7 @@ export default class GatewayPolicyAction extends PureComponent {
         textarea,
         password: schemas.password || false,
         contextual,
+        ...(schemas.props || {}),
       };
       if (type === 'fake') {
         Object.assign(props, {

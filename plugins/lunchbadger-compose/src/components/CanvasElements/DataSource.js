@@ -19,7 +19,7 @@ class DataSource extends Component {
     : callback();
 
   render() {
-    const {entity, validations} = this.props;
+    const {entity, validations, onFieldUpdate} = this.props;
     const {ports, connector, gaType, connector: {type}} = entity;
     const DataSourceComponent = dataSources[connector];
     return (
@@ -39,6 +39,7 @@ class DataSource extends Component {
           entity={entity}
           plain
           validations={validations}
+          onFieldUpdate={onFieldUpdate}
         />
       </div>
     );

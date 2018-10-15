@@ -7,11 +7,28 @@ import './styles.scss';
 const {components: {GatewayPolicyAction}} = LunchBadgerManage;
 
 export default class FlexibleProperties extends PureComponent {
+
+  handleFieldChange = field => (event) => {
+    const {onFieldUpdate} = this.props;
+    if (typeof onFieldUpdate === 'function') {
+      onFieldUpdate(field, event.target.value, event);
+    }
+  };
+
+  transformSchema = (schema) => {
+    const data = {...schema};
+    const {properties, required} = data;
+    required.forEach((key) => {
+      properties[key].props = {onBlur: this.handleFieldChange(`LunchBadger[${key}]`)};
+    });
+    return data;
+  };
+
   render() {
     const {entity, plain, onStateChange, validations} = this.props;
     const {connector} = entity;
     const properties = entity.connectorProperties();
-    const schema = schemas[connector];
+    const schema = this.transformSchema(schemas[connector]);
     const {canvas} = schema;
     const prefix = 'LunchBadger';
     return (

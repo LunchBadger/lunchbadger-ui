@@ -107,6 +107,7 @@ export const clearServer = () => async (dispatch, getState) => {
   userStorage.remove('entityCollapsed');
   userStorage.remove('FilesEditorSize');
   userStorage.remove('ResizableWrapperSize');
+  userStorage.remove('CollapsibleExpanded');
   try {
     await ProjectService.clearProject();
     if (onProjectClear.length > 0) {

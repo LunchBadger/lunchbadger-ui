@@ -65,6 +65,7 @@ class Pipeline extends PureComponent {
       connectDragSource,
       connectDragPreview,
       entity,
+      parent,
       idx,
       renderPipelinePorts,
       renderPipeline,
@@ -74,6 +75,7 @@ class Pipeline extends PureComponent {
       <div className={`Gateway__pipeline${idx}`}>
         {renderPipelinePorts(entity)}
         <CollapsibleProperties
+          id={`${parent.id}/CANVAS/PIPELINES/${entity.id}`}
           bar={this.renderPipelineInput(idx, entity)}
           collapsible={renderPipeline(entity, idx)}
           button={(

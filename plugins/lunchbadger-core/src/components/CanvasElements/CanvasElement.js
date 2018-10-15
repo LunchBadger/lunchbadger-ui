@@ -226,12 +226,14 @@ export default (ComposedComponent) => {
       if (typeof element.onRemove === 'function') {
         cb = element.onRemove();
       }
-      userStorage.removeObjectKey('FilesEditorSize', entity.id);
-      userStorage.removeObjectKey('ResizableWrapperSize', entity.id);
+      const {id, gaType} = entity;
+      userStorage.removeObjectKey('FilesEditorSize', id);
+      userStorage.removeObjectKey('ResizableWrapperSize', id);
+      userStorage.removeObjectKeyStartingWith('CollapsibleExpanded', id);
       dispatch(entity.remove(cb));
       dispatch(actions.removeEntity(entity));
       dispatch(clearCurrentElement());
-      GAEvent('Canvas', 'Removed Entity', entity.gaType);
+      GAEvent('Canvas', 'Removed Entity', gaType);
     }
 
     handleEdit = () => {

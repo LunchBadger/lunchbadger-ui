@@ -96,11 +96,13 @@ class API extends Component {
       entity,
       currentlySelectedSubelements,
       id,
+      parent,
     } = this.props;
     return connectDragSource(
       <div className="Portal__APIs">
         <div ref="api">
           <CollapsibleProperties
+            id={`${parent.id}/API/${id}`}
             bar={
               <EntityProperty
                 name="tmp"

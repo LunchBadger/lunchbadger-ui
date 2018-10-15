@@ -22,6 +22,15 @@ Object.assign(userStorage, {
     delete items[key];
     userStorage.set(name, JSON.stringify(items));
   },
+  removeObjectKeyStartingWith: (name, startingWith) => {
+    const items = JSON.parse(userStorage.get(name) || '{}');
+    Object.keys(items).forEach((key) => {
+      if (key.startsWith(startingWith)) {
+        delete items[key];
+      }
+    });
+    userStorage.set(name, JSON.stringify(items));
+  },
 });
 
 export default userStorage;

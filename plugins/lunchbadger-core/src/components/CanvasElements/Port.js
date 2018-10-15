@@ -50,14 +50,11 @@ class Port extends PureComponent {
         fillStyle: '#DF5F37'
       },
       connectorStyle: {
-        lineWidth: 3,
+        lineWidth: 5,
         strokeStyle: '#DF5F37',
         joinstyle: 'round',
-        outlineColor: '#DF5F37',
+        outlineColor: '#0000',
         outlineWidth: 1
-      },
-      connectorHoverStyle: {
-        outlineColor: '#FFFFFF'
       },
       anchor: [
         // [0.5, 0, 0, -1, 0, 0, 'top'],

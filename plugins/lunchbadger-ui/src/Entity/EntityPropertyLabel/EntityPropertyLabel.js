@@ -27,18 +27,20 @@ const EntityPropertyLabel = ({children, className, plain, description = '', noMa
   <div className={cs('EntityPropertyLabel', className, {plain, noMargin})}>
     {children}
     {!!description && (
-      <ContextualInformationMessage
-        tooltip={description}
-        direction="top"
-      >
-        <IconButton
-          className="EntityPropertyLabel__help"
-          style={helpRootStyle}
-          iconStyle={helpIconStyle}
+      <span className="EntityPropertyLabel__tooltip">
+        <ContextualInformationMessage
+          tooltip={description}
+          direction="top"
         >
-          <ActionHelp />
-        </IconButton>
-      </ContextualInformationMessage>
+          <IconButton
+            className="EntityPropertyLabel__help"
+            style={helpRootStyle}
+            iconStyle={helpIconStyle}
+          >
+            <ActionHelp />
+          </IconButton>
+        </ContextualInformationMessage>
+      </span>
     )}
   </div>
 );

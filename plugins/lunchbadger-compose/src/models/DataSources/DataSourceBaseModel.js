@@ -1,0 +1,138 @@
+import _ from 'lodash';
+import {update, remove} from '../../reduxActions/dataSources';
+
+const {
+  models: {BaseModel, Port},
+  constants: {portGroups},
+  stores: {Connections},
+  utils: {messages, checkFields},
+} = LunchBadgerCore;
+
+export default class DataSource extends BaseModel {
+  static type = 'DataSource';
+  static entities = 'dataSources';
+  static forbiddenFields = [
+    '_id',
+    '_ready',
+    'left',
+    'top',
+    'ports',
+    'loaded',
+    'slugifyName',
+    '_locked',
+    'configFile',
+  ];
+
+  ports = [];
+  connector = '';
+
+  constructor(id, name, connector) {
+    super(id);
+    this.name = name;
+    this.connector = connector;
+    this.ports = [
+      Port.create({
+        id: this.id,
+        portGroup: portGroups.PRIVATE,
+        portType: 'out'
+      })
+    ];
+  }
+
+  static get idField() {
+    return 'lunchbadgerId';
+  }
+
+  toJSON() {
+    const json = {
+      id: this.workspaceId,
+      facetName: 'server',
+      name: this.name,
+      connector: this.connector,
+      itemOrder: this.itemOrder,
+      lunchbadgerId: this.id,
+      error: this.error,
+    };
+    return json;
+  }
+
+  get status() {
+    if (this.deleting) return 'deleting';
+    return '';
+  }
+
+  get isZoomDisabled() {
+    return false;
+  }
+
+  get workspaceId() {
+    return `server.${this.name}`;
+  }
+
+  get nodeModules() {
+    return [this.connector];
+  }
+
+  get zoomWindow() {
+    return {
+      width: 470,
+      height: 630,
+    }
+  }
+
+  set zoomWindow(_) {}
+
+  get gaType() {
+    return `${this.constructor.type}[${this.connector}]`;
+  }
+
+  connectorProperties() {
+    return {};
+  }
+
+  validate(model) {
+    return (_, getState) => {
+      const validations = {data: {}};
+      const entities = getState().entities.dataSources;
+      if (model.name !== '') {
+        const isDuplicateName = Object.keys(entities)
+          .filter(id => id !== this.id)
+          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateName) {
+          validations.data.name = messages.duplicatedEntityName('Model Connector');
+        }
+      }
+      checkFields(['name'], model, validations.data);
+      validations.isValid = Object.keys(validations.data).length === 0;
+      return validations;
+    }
+  }
+
+  update(model) {
+    return async dispatch => await dispatch(update(this, model));
+  }
+
+  remove() {
+    return async dispatch => await dispatch(remove(this));
+  }
+
+  beforeRemove(paper) {
+    const connectionsFrom = Connections.search({fromId: this.id});
+    connectionsFrom.map((conn) => {
+      conn.info.source.classList.add('discardAutoSave');
+      paper.detach(conn.info.connection);
+    });
+  }
+
+  processModel(model) {
+    const data = _.merge({}, model);
+    if (data.hasOwnProperty('LunchBadger')) {
+      Object.assign(data, data.LunchBadger);
+      delete data.LunchBadger;
+    }
+    delete data.tmp;
+    return data;
+  }
+
+}

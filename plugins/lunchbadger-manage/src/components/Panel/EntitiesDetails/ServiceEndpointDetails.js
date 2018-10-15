@@ -109,6 +109,7 @@ class ServiceEndpointDetails extends PureComponent {
     const title = `URL${urls.length === 1 ? '' : 'S'}`;
     return (
       <CollapsibleProperties
+        id={`${this.props.entity.id}/URLS`}
         key="urls"
         bar={
           <EntityPropertyLabel>

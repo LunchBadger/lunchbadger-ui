@@ -216,6 +216,7 @@ class SshManager extends PureComponent {
     return (
       <div className="SshManager">
         <CollapsibleProperties
+          id="PUBLIC_KEYS"
           bar={bar}
           collapsible={this.renderPublicKeys()}
           barToggable

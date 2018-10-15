@@ -199,6 +199,7 @@ class ApiEndpointDetails extends Component {
     />;
     return (
       <CollapsibleProperties
+        id={`${this.props.entity.id}/PATHS`}
         key="paths"
         bar={
           <EntityPropertyLabel>

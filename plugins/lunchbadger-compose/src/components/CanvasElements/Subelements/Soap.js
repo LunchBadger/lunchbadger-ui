@@ -336,7 +336,7 @@ export default class Soap extends PureComponent {
   };
 
   render() {
-    const {entity: {url}, plain} = this.props;
+    const {entity: {url, id}, plain} = this.props;
     const properties = [{title: 'Url', name: 'url', value: url}];
     return (
       <div className={cs('Soap', {plain, notPlain: !plain})}>
@@ -344,6 +344,7 @@ export default class Soap extends PureComponent {
         <div style={{display: plain ? 'none' : 'block'}}>
           {sections.map(({label, render, docs}) => (
             <CollapsibleProperties
+              id={`${id}/${render}`}
               key={render}
               bar={
                 <EntityPropertyLabel>

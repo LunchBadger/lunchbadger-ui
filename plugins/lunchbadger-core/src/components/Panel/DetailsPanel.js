@@ -45,13 +45,15 @@ class DetailsPanel extends Component {
         element.onRemove();
       }
     }
-    userStorage.removeObjectKey('FilesEditorSize', currentElement.id);
-    userStorage.removeObjectKey('ResizableWrapperSize', currentElement.id);
+    const {id, gaType} = currentElement;
+    userStorage.removeObjectKey('FilesEditorSize', id);
+    userStorage.removeObjectKey('ResizableWrapperSize', id);
+    userStorage.removeObjectKeyStartingWith('CollapsibleExpanded', id);
     dispatch(currentElement.remove());
     dispatch(actions.removeEntity(currentElement));
     dispatch(setCurrentZoom(undefined));
     dispatch(clearCurrentElement());
-    GAEvent('Zoom Window', 'Removed Entity', currentElement.gaType);
+    GAEvent('Zoom Window', 'Removed Entity', gaType);
   };
 
   handleUnlock = () => {

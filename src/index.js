@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.283', [
+console.info('LBAPP VERSION 0.284', [
+  'Feature/911 mongodb connector needs more flexibility #1021',
   'Feature/983 ApiEndpoint should inherit context path part 2 #1017',
   'Feature/980 ContextPath logic as in loopback #1016',
   'Feature/909 Function to model connection as dashed line #1015',
@@ -28,9 +29,7 @@ console.info('LBAPP VERSION 0.283', [
   'Feature/908 reorder model properties #999',
   'Feature/905 Ellipsis icon change #997',
   'Feature/986 Walkthrough: Show editor in the model #996',
-  'Feature/987 Policy drop down restrict autocomplete #995',
-  'Feature/991 Remove references to LB product #994',
-  'Feature/990 Swap LB logo to Express Serverless Platform #993'
+  'Feature/987 Policy drop down restrict autocomplete #995'
 ]);
 
 // Needed for onTouchTap

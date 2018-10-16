@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.284', [
+console.info('LBAPP VERSION 0.285', [
+  'Feature/1019 Handle KubeWatcher v2 #1022',
   'Feature/911 mongodb connector needs more flexibility #1021',
   'Feature/983 ApiEndpoint should inherit context path part 2 #1017',
   'Feature/980 ContextPath logic as in loopback #1016',

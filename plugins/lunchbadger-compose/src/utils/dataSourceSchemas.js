@@ -176,6 +176,71 @@ export default {
           </div>
         ),
       },
+      collation: {
+        type: 'string',
+        description: 'Determines the charset for the connection.',
+      },
+      connectionLimit: {
+        type: 'number',
+        description: 'The maximum number of connections to create at once.',
+      },
+      debug: {
+        type: 'boolean',
+        description: 'Turn on verbose mode to debug database queries and lifecycle.',
+      },
+      socketPath: {
+        type: 'string',
+        description: <div>The path to a unix domain socket to connect to. When used <code>host</code> and <code>port</code> are ignored.</div>,
+      },
+      supportBigNumbers: {
+        type: 'boolean',
+        description: <div>Enable this option to deal with big numbers (<code>BIGINT</code> and <code>DECIMAL</code> columns) in the database.</div>,
+      },
+      timezone: {
+        type: 'string',
+        description: 'The timezone used to store local dates.',
+      },
+      localAddress: {
+        type: 'string',
+        description: 'The source IP address to use for TCP connection.',
+      },
+      connectTimeout: {
+        type: 'number',
+        description: 'The milliseconds before a timeout occurs during the initial connection to the MySQL server.',
+      },
+      stringifyObjects: {
+        type: 'boolean',
+        description: 'Stringify objects instead of converting to values.',
+      },
+      insecureAuth: {
+        type: 'boolean',
+        description: 'Allow connecting to MySQL instances that ask for the old (insecure) authentication method.',
+      },
+      typeCast: {
+        type: 'boolean',
+        description: 'Determines if column values should be converted to native JavaScript types.',
+      },
+      bigNumberStrings: {
+        type: 'boolean',
+        description: (
+          <div>
+            Enabling both supportBigNumbers and bigNumberStrings forces big numbers (<code>BIGINT</code> and <code>DECIMAL</code> columns) to be always returned as JavaScript String objects. Enabling <code>supportBigNumbers</code> but leaving <code>bigNumberStrings</code> disabled will return big numbers as String objects only when they cannot be accurately represented with [JavaScript Number objects] (which happens when they exceed the [-2^53, +2^53] range), otherwise they will be returned as Number objects. This option is ignored if <code>supportBigNumbers</code> is disabled.
+          </div>
+        ),
+      },
+      dateStrings: {
+        types: ['boolean', 'array'],
+        items: {type: 'string'},
+        description: 'Force date types (TIMESTAMP, DATETIME, DATE) to be returned as strings rather then inflated into JavaScript Date objects. Can be <code>true</code>/<code>false</code> or an array of type names to keep as strings.',
+      },
+      trace: {
+        type: 'boolean',
+        description: <div>Generates stack traces on <code>Error</code> to include call site of library entrance ("long stack traces"). Slight performance penalty for most calls.</div>,
+      },
+      multipleStatements: {
+        type: 'boolean',
+        description: 'Allow multiple mysql statements per query. Be careful with this, it could increase the scope of SQL injection attacks.',
+      },
     },
     required,
     canvas,

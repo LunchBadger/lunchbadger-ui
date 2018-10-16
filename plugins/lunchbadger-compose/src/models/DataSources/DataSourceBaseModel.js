@@ -45,6 +45,23 @@ export default class DataSource extends BaseModel {
   }
 
   toJSON() {
+    return this.baseProperties();
+  }
+
+  connectorProperties(obj = this) {
+    const generalProps = Object.keys(this.baseProperties());
+    const properties = {};
+    Object.keys(obj).forEach(key => {
+      if (!obj.hasOwnProperty(key)) return;
+      if (obj[key] === undefined) return;
+      if (generalProps.includes(key)) return;
+      if (obj.constructor.forbiddenFields.includes(key)) return;
+      properties[key] = obj[key];
+    });
+    return properties;
+  }
+
+  baseProperties() {
     const json = {
       id: this.workspaceId,
       facetName: 'server',
@@ -55,19 +72,6 @@ export default class DataSource extends BaseModel {
       error: this.error,
     };
     return json;
-  }
-
-  connectorProperties(obj) {
-    const generalProps = Object.keys(super.toJSON());
-    const properties = {};
-    Object.keys(obj).forEach(key => {
-      if (!obj.hasOwnProperty(key)) return;
-      if (obj[key] === undefined) return;
-      if (generalProps.includes(key)) return;
-      if (obj.constructor.forbiddenFields.includes(key)) return;
-      properties[key] = obj[key];
-    });
-    return properties;
   }
 
   get status() {
@@ -98,10 +102,6 @@ export default class DataSource extends BaseModel {
 
   get gaType() {
     return `${this.constructor.type}[${this.connector}]`;
-  }
-
-  connectorProperties() {
-    return {};
   }
 
   validate(model) {

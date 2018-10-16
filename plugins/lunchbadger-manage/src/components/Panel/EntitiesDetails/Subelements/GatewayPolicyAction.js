@@ -206,8 +206,9 @@ export default class GatewayPolicyAction extends PureComponent {
         enum: enum_,
         postfix,
         example,
+        items = {types: []},
       } = schemas;
-      state.parameters.push({
+      const param = {
         id,
         name,
         type,
@@ -218,7 +219,12 @@ export default class GatewayPolicyAction extends PureComponent {
         description,
         postfix,
         schemas,
-      });
+        items: items.type ? [items.type] : items.types,
+      };
+      param.arrayItem = (Array.isArray(param.value) && param.value.length > 0)
+        ? determineType(param.value[0])
+        : param.items[0];
+      state.parameters.push(param);
     }
     this.changeState(state, () => setTimeout(() => {
       const elementId = custom ? `${this.tmpPrefix}[${id}][name]` : `${this.props.prefix}[${name}]`;

@@ -11,14 +11,15 @@ module.exports = {
     page
       .open()
       .testDatasource('tritonobjectstorage', [
-        ['URL', 'http://test.com'],
-        ['USER', 'dumpUser'],
-        ['SUBUSER', 'dumpSubUser'],
-        ['KEY ID', 'dumpKeyId']
+        ['LunchBadgerurl', 'http://test.com'],
+        ['LunchBadgeruser', 'dumpUser'],
+        ['LunchBadgersubuser', 'dumpSubUser'],
+        ['LunchBadgerkeyId', 'dumpKeyId']
       ], [
-        'url',
-        'user',
-        'keyId'
+        'LunchBadger\\[url\\]',
+        'LunchBadger\\[user\\]',
+        'LunchBadger\\[database\\]',
+        'LunchBadger\\[username\\]'
       ]);
   },
   'Tritonobjectstorage: unique name check': function () {

@@ -9,18 +9,17 @@ module.exports = {
     page
       .open()
       .testDatasource('redis', [
-        ['HOST', 'dumpHost'],
-        ['PORT', '8888'],
-        ['DATABASE', 'dumpDatabase'],
-        ['USERNAME', 'dumpUsername'],
-        ['PASSWORD', 'dumpPassword']
+        ['LunchBadgerhost', 'dumpHost'],
+        ['LunchBadgerport', '8888'],
+        ['LunchBadgerdatabase', 'dumpDatabase'],
+        ['LunchBadgerusername', 'dumpUsername'],
+        ['LunchBadgerpassword', 'dumpPassword']
       ], [
-        'host',
-        'port',
-        'database',
-        'username'
+        'LunchBadger\\[host\\]',
+        'LunchBadger\\[port\\]',
+        'LunchBadger\\[database\\]',
+        'LunchBadger\\[username\\]'
       ])
-      .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

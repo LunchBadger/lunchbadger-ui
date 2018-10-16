@@ -257,6 +257,26 @@ export default {
           </div>
         ),
       },
+      debug: {
+        type: 'boolean',
+        description: 'Turn on verbose mode to debug database queries and lifecycle.',
+      },
+      min: {
+        type: 'integer',
+        description: 'Minimum number of clients in the connection pool.',
+      },
+      max: {
+        type: 'integer',
+        description: 'Maximum number of clients in the connection pool.',
+      },
+      idleTimeoutMillis: {
+        type: 'integer',
+        description: 'Maximum time a client in the pool has to stay idle before closing it.',
+      },
+      ssl: {
+        type: 'boolean',
+        description: 'Whether to try SSL/TLS to connect to server',
+      },
     },
     required,
     canvas,
@@ -296,6 +316,9 @@ export default {
         type: 'string',
       },
       privateKeyPath: {
+        type: 'string',
+      },
+      rootDirectory: {
         type: 'string',
       },
     },

@@ -16,6 +16,7 @@ var pageCommands = {
       .openWithDemoWizard()
       .closeDemoWizard()
       // .emptyProject()
+      .hideCookieConfirmation()
       .hideDrift();
   },
 
@@ -39,6 +40,14 @@ var pageCommands = {
       .clickPresent('.RestartWalkthrough button')
       .clickVisible('.SystemDefcon1 .confirm')
       .autoSave();
+  },
+
+  hideCookieConfirmation: function () {
+    this.api.execute(function () {
+      window.document.getElementById('hs-eu-cookie-confirmation').style.display = 'none';
+      return;
+    }, [], function () {});
+    return this;
   },
 
   hideDrift: function () {
@@ -91,6 +100,7 @@ var pageCommands = {
     this.api.refresh();
     return this
       .projectLoaded()
+      .hideCookieConfirmation()
       .hideDrift();
   },
 
@@ -242,6 +252,8 @@ var pageCommands = {
     return this
       .clickVisible(selector + ' .EntityHeader__name')
       .clickVisible(selector + '.highlighted .Toolbox__button--edit')
+      .present('.spinner__overlay')
+      .notPresent('.spinner__overlay', 60000)
       .present(selector + '.editable')
       .present(selector + ' .input__name input');
   },
@@ -249,6 +261,14 @@ var pageCommands = {
   discardCanvasEntityChanges: function (selector) {
     return this
       .clickVisible(selector + ' .cancel')
+      .notPresent(selector + '.editable');
+  },
+
+  discardCanvasEntityChangesWithAutoSave: function (selector) {
+    return this
+      .clickVisible(selector + ' .cancel')
+      .present('.spinner__overlay')
+      .notPresent('.spinner__overlay', 60000)
       .notPresent(selector + '.editable');
   },
 
@@ -276,12 +296,13 @@ var pageCommands = {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
-      .check(check)
-      // .present('.spinner__overlay')
       .notPresent(selector + '.wip', 120000)
-      .autoSave()
+      // .present('.spinner__overlay')
+      .notPresent('.spinner__overlay', 60000)
+      // .autoSave()
       .notPresent('.Aside.disabled')
-      .notPresent('.SystemDefcon1', 60000);
+      .notPresent('.SystemDefcon1', 60000)
+      .check(check);
   },
 
   submitCanvasEntityWithoutAutoSave: function (selector, check = {}) {
@@ -315,6 +336,7 @@ var pageCommands = {
     };
     return this
       .submitCanvasEntityWithExpectedValidationErrors(selector, ['name'])
+      .pause(3000)
       .check({text})
       .setCanvasEntityName(selector, this.getUniqueName('entity'))
       .setAutocomplete(`${selector} .EntityHeader input`, [TAB])
@@ -324,8 +346,8 @@ var pageCommands = {
 
   submitDetailsPanel: function (selector) {
     return this
-      .submitDetailsPanelWithoutAutoSave(selector)
-      .autoSave();
+      .submitDetailsPanelWithoutAutoSave(selector);
+      // .autoSave();
   },
 
   submitDetailsPanelWithoutAutoSave: function (selector) {
@@ -334,7 +356,9 @@ var pageCommands = {
       .present('.DetailsPanel.visible .wrap.opened')
       .submitForm('.DetailsPanel .BaseDetails form')
       .present(selector + '.wip')
-      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      // .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .present('.spinner__overlay')
+      .notPresent('.spinner__overlay', 60000)
       .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000);
   },
@@ -386,7 +410,9 @@ var pageCommands = {
     return this
       .present('.DetailsPanel.visible .wrap.opened')
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
-      .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
+      .present('.spinner__overlay')
+      .notPresent('.spinner__overlay', 60000)
+      // .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
       .notPresent('.DetailsPanel.visible', 15000)
       .pause(3000);
   },
@@ -586,10 +612,6 @@ var pageCommands = {
     return '.canvas__container .quadrant:first-child .quadrant__body .CanvasElement.DataSource:nth-child(' + nth + ')';
   },
 
-  getDataSourceFieldSelector: function (nthEntity, nthProperty) {
-    return this.getDataSourceSelector(nthEntity) + ' .EntityProperties .EntityProperty:nth-child(' + nthProperty + ') .EntityProperty__field--input input';
-  },
-
   getModelSelector: function (nth) {
     return '.canvas__container .quadrant:nth-child(2) .quadrant__body .CanvasElement.Model:nth-child(' + nth + ')';
   },
@@ -690,25 +712,17 @@ var pageCommands = {
       this
         .submitCanvasEntityWithExpectedValidationErrors(selector, required);
     }
-    if (config.length === 0) {
-      this.notPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)');
-    } else {
-      config.forEach((option, idx) => {
-        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
-        this.setValueSlow(this.getDataSourceFieldSelector(1, idx + 1), option[1]);
+    if (config.length > 0) {
+      config.forEach((option) => {
+        this.setValueSlow(`${selector} .${option[0]} input`, option[1]);
       });
-      this.notPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`);
     }
     this.submitCanvasEntityWithoutAutoSave(selector);
-    if (config.length === 0) {
-      this.notPresent(selector + ' .EntityProperties .EntityProperty:nth-child(1)');
-    } else {
-      config.forEach((option, idx) => {
-        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityPropertyLabel`).text.to.equal(option[0]);
-        this.api.expect.element(selector + ` .EntityProperties .EntityProperty:nth-child(${idx + 1}) .EntityProperty__field--text`).text.to.equal(option[0] === 'PASSWORD' ? '••••••••••••' : option[1]);
-        this.api.expect.element(this.getDataSourceFieldSelector(1, idx + 1)).value.to.equal(option[1]);
+    if (config.length > 0) {
+      config.forEach((option) => {
+        this.api.expect.element(`${selector} .${option[0]} .EntityProperty__field--text`).text.to.equal(option[0] === 'LunchBadgerpassword' ? '••••••••••••' : option[1]);
+        this.api.expect.element(`${selector} .${option[0]} input`).value.to.equal(option[1]);
       });
-      this.notPresent(selector + ` .EntityProperties .EntityProperty:nth-child(${config.length + 1})`);
     }
     return this;
   },
@@ -906,8 +920,8 @@ var pageCommands = {
   },
 
   setAutocompleteValue: function (selector, value) {
-    const {ENTER} = this.api.Keys;
-    const keys = [...value.split(''), ENTER];
+    const {ENTER, ARROW_DOWN} = this.api.Keys;
+    const keys = [...value.split(''), ARROW_DOWN, ARROW_DOWN, ENTER];
     return this
       .setAutocomplete(selector, keys);
   },

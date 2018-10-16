@@ -19,7 +19,7 @@ module.exports = {
         },
         value: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--input input`]: 'NewModel',
-          [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'newmodel'
+          [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'newmodels'
         }
       });
   },
@@ -28,7 +28,7 @@ module.exports = {
       .setCanvasEntityName(entitySelector, 'Model test')
       .check({
         value: {
-          [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'model-test'
+          [`${entitySelector} .EntityProperties .EntityProperty:first-child .EntityProperty__field--input input`]: 'model-tests'
         }
       });
   },

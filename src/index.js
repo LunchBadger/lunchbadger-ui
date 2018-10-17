@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.286', [
+console.info('LBAPP VERSION 0.287', [
+  'Bugfix/1020 OK button disabled when custom property value is changed #1025',
   'Feature/1023 add connector specific parameters #1024',
   'Feature/1019 Handle KubeWatcher v2 #1022',
   'Feature/911 mongodb connector needs more flexibility #1021',

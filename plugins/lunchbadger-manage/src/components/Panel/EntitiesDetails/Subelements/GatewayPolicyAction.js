@@ -236,7 +236,7 @@ export default class GatewayPolicyAction extends PureComponent {
   handlePropertyValueChange = (id, inputName) => ({target: {
     value,
     checked,
-    selectionStart,
+    // selectionStart, // relict since #1007
   }}) => {
     const state = _.cloneDeep(this.state);
     const property = state.parameters.find(item => item.id === id);
@@ -255,9 +255,9 @@ export default class GatewayPolicyAction extends PureComponent {
         inputNameArr[4] = '[0'; // replacing name's implicit part with pair 0
       }
       const input = document.getElementById(inputNameArr.join(']'));
-      if (input && selectionStart) {
+      if (input) { // && selectionStart) { // #1007
         input.focus();
-        input.selectionStart = selectionStart;
+        // input.selectionStart = selectionStart; // #1007
       }
     });
   };

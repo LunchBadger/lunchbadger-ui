@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.288', [
+console.info('LBAPP VERSION 0.289', [
+  'Feature/955 Silent update walkthrough #1029',
   'Bugfix/1026 Error Cannot read property toLowerCase of undefined in GatewayProxyServiceEndpoint #1027',
   'Bugfix/1020 OK button disabled when custom property value is changed #1025',
   'Feature/1023 add connector specific parameters #1024',

@@ -99,7 +99,7 @@ class ForecastsPanel extends Component {
         {entities.length === 0 && (
           <div className={panelClass}>
             <div className="panel__forecast-drop__inside">
-              Drag objects here to forecast them
+              Drag API entities here to forecast them
             </div>
           </div>
         )}

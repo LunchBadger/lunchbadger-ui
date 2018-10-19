@@ -53,6 +53,7 @@ const selector = createSelector(
         value
       })))
       .reduce((arr, i) => arr = arr.concat(i), [])
+      .filter(item => !!item.label)
       .sort((a, b) => a.label.toLowerCase() > b.label.toLowerCase())
   }),
 );

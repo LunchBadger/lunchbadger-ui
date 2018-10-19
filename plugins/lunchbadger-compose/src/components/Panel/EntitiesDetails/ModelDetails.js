@@ -20,6 +20,7 @@ import {
   IconButton,
   FilesEditor,
   DocsLink,
+  getDefaultValueByType,
 } from '../../../../../lunchbadger-ui/src';
 import './ModelDetails.scss';
 
@@ -225,7 +226,12 @@ class ModelDetails extends PureComponent {
 
   handleChangePropertyType = id => (type) => {
     const properties = [...this.state.properties];
-    properties.find(prop => prop.id === id).type = type;
+    const prop = properties.find(prop => prop.id === id);
+    const newProps = {type};
+    if (prop.withDefault) {
+      newProps.default_ = getDefaultValueByType(type);
+    }
+    Object.assign(prop, newProps);
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   };
 
@@ -347,13 +353,46 @@ class ModelDetails extends PureComponent {
     });
   };
 
+  renderPropertyDefaultValue = ({type, default_, idx}) => {
+    if (type === 'boolean') return (
+      <div className="ModelDetails__default--checkbox">
+        <Checkbox
+          name={`properties[${idx}][default_]`}
+          value={default_ || false}
+        />
+      </div>
+    );
+    let defaultValue = default_ || getDefaultValueByType(type);
+    if ([...subTypes, 'geopoint'].includes(type)) {
+      defaultValue = JSON.stringify(defaultValue);
+    }
+    let inputType = 'string';
+    if (type === 'number') {
+      inputType = 'number';
+    }
+    if (type === 'date') {
+      inputType = 'datetime-local';
+    }
+    return (
+      <Input
+        name={`properties[${idx}][default_]`}
+        value={defaultValue}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        type={inputType}
+        textarea={subTypes.includes(type)}
+      />
+    );
+  }
+
   renderPropertiesSection = (parentId = '') => {
     const isNested = parentId !== '';
     const columns = [
       <div style={{marginLeft: 10}}>Name</div>,
       'Type',
       'Default Value',
-      'Notes',
+      'Description',
       'Required',
       'Is Index',
       <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
@@ -406,27 +445,20 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleChange={this.handleChangePropertyType(property.id)}
       />,
-      <div className="ModelDetails__default">
-        <div className="ModelDetails__default--chbx">
-          {!subTypes.includes(property.type) && (
+      property.type === 'buffer'
+        ? null
+        : <div className="ModelDetails__default">
+          <div className="ModelDetails__default--chbx">
             <Checkbox
               name={`properties[${property.idx}][withDefault]`}
               value={property.withDefault}
               handleChange={this.handleDefaultChange(property.id)}
             />
-          )}
-        </div>
-        <div className="ModelDetails__default--input">
-          {(!property.withDefault || subTypes.includes(property.type)) ? null :
-            <Input
-              name={`properties[${property.idx}][default_]`}
-              value={property.default_ || ''}
-              underlineStyle={{bottom: 0}}
-              fullWidth
-              hideUnderline
-            />}
-        </div>
-      </div>,
+          </div>
+          <div className="ModelDetails__default--input">
+            {property.withDefault && this.renderPropertyDefaultValue(property)}
+          </div>
+        </div>,
       <Input
         name={`properties[${property.idx}][description]`}
         value={property.description}

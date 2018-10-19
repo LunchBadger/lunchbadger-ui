@@ -43,10 +43,14 @@
     }
     &--chbx {
       width: 24px;
+      overflow: hidden;
     }
     &--input {
       width: calc(100% - 24px);
       min-height: 48px;
+    }
+    &--checkbox {
+      padding-top: 10px;
     }
   }
 }

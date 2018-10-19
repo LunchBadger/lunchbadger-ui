@@ -10,9 +10,10 @@ import {
   EntityPropertyLabel,
   CollapsibleProperties,
   Input,
+  getDefaultValueByType,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
-import {determineType, getDefaultValueByType} from '../../../../utils';
+import {determineType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
 
 const customPropertyTypes = [

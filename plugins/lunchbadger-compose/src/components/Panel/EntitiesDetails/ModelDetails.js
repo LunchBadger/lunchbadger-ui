@@ -184,7 +184,7 @@ class ModelDetails extends PureComponent {
       .map(p => p.itemOrder));
     const property = ModelProperty.create({
       parentId,
-      default_: '',
+      default_: undefined,
       type: 'string',
       description: '',
       required: false,
@@ -400,14 +400,26 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleChange={this.handleChangePropertyType(property.id)}
       />,
-      subTypes.includes(property.type) ? null :
-        <Input
-          name={`properties[${property.idx}][default_]`}
-          value={property.default_}
-          underlineStyle={{bottom: 0}}
-          fullWidth
-          hideUnderline
-        />,
+      <div>
+        <div className="ModelDetails__chbx">
+          {!subTypes.includes(property.type) && (
+            <Checkbox
+              name={`tmp[properties][${property.idx}][withDefault]`}
+              value={property.default_ !== undefined} // onchange save in state and use it here and below..
+            />
+          )}
+        </div>
+        <div className="ModelDetails__default">
+          {subTypes.includes(property.type) ? null :
+            <Input
+              name={`properties[${property.idx}][default_]`}
+              value={property.default_}
+              underlineStyle={{bottom: 0}}
+              fullWidth
+              hideUnderline
+            />}
+        </div>
+      </div>,
       <Input
         name={`properties[${property.idx}][description]`}
         value={property.description}

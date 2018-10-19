@@ -35,4 +35,15 @@
   &__codeEditor {
     margin-bottom: 5px;
   }
+  &__chbx,
+  &__default {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &__chbx {
+    width: 24px;
+  }
+  &__default {
+      width: calc(100% - 24px);
+  }
 }

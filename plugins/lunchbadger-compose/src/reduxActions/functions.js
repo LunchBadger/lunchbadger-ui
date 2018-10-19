@@ -5,13 +5,14 @@ import {SLSService} from '../services';
 import Function_ from '../models/Function';
 import {runtimeMapping} from '../utils';
 
-const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Function_.create({name: 'myfunction', itemOrder, loaded: false});
+  const name = storeUtils.uniqueName('myfunction', entities.functions);
+  const entity = Function_.create({name, itemOrder, loaded: false});
   dispatch(actions.updateFunction(entity));
   return entity;
 }

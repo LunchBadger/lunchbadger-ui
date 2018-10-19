@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {actions} from './actions';
 import API from '../models/API';
 
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {actions: manageActions} = LunchBadgerManage.utils;
 const {Connections} = LunchBadgerCore.stores;
 
@@ -10,7 +10,8 @@ export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = API.create({name: 'API', itemOrder, loaded: false});
+  const name = storeUtils.uniqueName('API', entities.apis);
+  const entity = API.create({name, itemOrder, loaded: false});
   dispatch(actions.updateAPI(entity));
   return entity;
 }

@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.294', [
+console.info('LBAPP VERSION 0.295', [
+  'Feature/1032 model property default value must match its type #1038',
   'Feature/1036 get rid of $blockScrolling error',
   'Feature/548 Forecaster launch rethink #1034',
   'Feature/450 all lb models have default empty value #1033',
@@ -30,11 +31,7 @@ console.info('LBAPP VERSION 0.294', [
   'Feature/909 Function to model connection as dashed line #1015',
   'Feature/921 JWT secretOrPublicKey should be textarea #1014',
   'Feature/1007 Deprecate implicite ca pairs #1013',
-  'Bugfix/1008 Quadrants headers issue on safari #1012',
-  'Feature/1004 Expanded sections remembered #1009',
-  'Bugfix/893 connecting model to model makes browser hanging #1006',
-  'Bugfix/894 textarea not working in safari #1005',
-  'Feature/1001 walkthrough text changes #1002'
+  'Bugfix/1008 Quadrants headers issue on safari #1012'
 ]);
 
 // Needed for onTouchTap

@@ -114,7 +114,7 @@
     "rc-slider": "^8.5.0",
     "rc-tooltip": "https://registry.npmjs.org/rc-tooltip/-/rc-tooltip-3.7.0.tgz",
     "react": "^15.0.0",
-    "react-ace": "^5.8.0",
+    "react-ace": "^6.2.0",
     "react-addons-shallow-compare": "^15.5.2",
     "react-addons-update": "^15.2.1",
     "react-copy-to-clipboard": "^5.0.1",

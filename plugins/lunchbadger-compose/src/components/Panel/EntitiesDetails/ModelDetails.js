@@ -229,6 +229,12 @@ class ModelDetails extends PureComponent {
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   };
 
+  handleDefaultChange = id => ({target: {checked}}) => {
+    const properties = [...this.state.properties];
+    properties.find(prop => prop.id === id).withDefault = checked;
+    this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
+  };
+
   handleChangeUserDefinedFieldType = idx => (type) => {
     const userFields = [...this.state.userFields];
     userFields[idx] = {...userFields[idx]};
@@ -400,20 +406,21 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleChange={this.handleChangePropertyType(property.id)}
       />,
-      <div>
-        <div className="ModelDetails__chbx">
+      <div className="ModelDetails__default">
+        <div className="ModelDetails__default--chbx">
           {!subTypes.includes(property.type) && (
             <Checkbox
-              name={`tmp[properties][${property.idx}][withDefault]`}
-              value={property.default_ !== undefined} // onchange save in state and use it here and below..
+              name={`properties[${property.idx}][withDefault]`}
+              value={property.withDefault}
+              handleChange={this.handleDefaultChange(property.id)}
             />
           )}
         </div>
-        <div className="ModelDetails__default">
-          {subTypes.includes(property.type) ? null :
+        <div className="ModelDetails__default--input">
+          {(!property.withDefault || subTypes.includes(property.type)) ? null :
             <Input
               name={`properties[${property.idx}][default_]`}
-              value={property.default_}
+              value={property.default_ || ''}
               underlineStyle={{bottom: 0}}
               fullWidth
               hideUnderline

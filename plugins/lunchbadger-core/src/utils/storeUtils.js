@@ -64,3 +64,18 @@ export const findConnectedContextPathByPipelineId = (state, id) => {
   if (endpoint.constructor.type === 'Function_') return endpoint.name;
   return '';
 };
+
+export const uniqueName = (name, entities) => {
+  const alreadyUsedNames = Object.values(entities)
+    .map(item => item.name)
+    .filter(item => item.startsWith(name))
+    .sort();
+  if (alreadyUsedNames.includes(name)) {
+    const lastName = +(alreadyUsedNames.pop() || '')
+      .split(/[^0-9]/g)
+      .filter(item => item !== '')
+      .pop() || 0;
+    return `${name}${lastName + 1}`;
+  }
+  return name;
+};

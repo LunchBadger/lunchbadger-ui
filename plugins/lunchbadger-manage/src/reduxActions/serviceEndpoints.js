@@ -1,13 +1,15 @@
 import {actions} from './actions';
 import ServiceEndpoint from '../models/ServiceEndpoint';
 import initialServiceEndpointUrls from '../utils/initialServiceEndpointUrls';
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = ServiceEndpoint.create({name: 'ServiceEndpoint', itemOrder, loaded: false, urls: initialServiceEndpointUrls});
+  const name = storeUtils.uniqueName('ServiceEndpoint', entities.serviceEndpoints);
+  const entity = ServiceEndpoint.create({name, itemOrder, loaded: false, urls: initialServiceEndpointUrls});
   dispatch(actions.updateServiceEndpoint(entity));
   return entity;
 }

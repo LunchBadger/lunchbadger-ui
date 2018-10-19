@@ -15,7 +15,10 @@ export default (model, entity, properties, stateProperties) => {
     idMapping[prop.id] = property.id;
     props[property.id] = prop;
     const [parentId] = key.split('/');
-    if (['array', 'object'].includes(prop.type)) {
+    if (['array', 'object', 'geopoint'].includes(prop.type)) {
+      if (prop.default_ !== undefined) {
+        prop.default_ = JSON.parse(prop.default_);
+      }
       prop.isNull = true;
       prop.type = prop.type === 'object' ? {} : [];
     }

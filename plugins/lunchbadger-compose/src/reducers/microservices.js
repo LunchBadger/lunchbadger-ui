@@ -26,7 +26,11 @@ export default (state = {}, action) => {
       return {};
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'microservices') {
-        newState[action.payload.entityId] = Microservice.create(action.payload.entityData);
+        const entity = Microservice.create(action.payload.entityData);
+        if (newState[action.payload.entityId]) {
+          entity.locked = newState[action.payload.entityId].locked;
+        }
+        newState[action.payload.entityId] = entity;
       }
       return newState;
     case coreActionTypes.silentEntityRemove:

@@ -11,6 +11,7 @@ export default class EntityActionButtons extends PureComponent {
     zoom: PropTypes.bool,
     okDisabled: PropTypes.bool,
     okLabel: PropTypes.string,
+    cancelLabel: PropTypes.string,
     submit: PropTypes.bool,
     skipCancel: PropTypes.bool,
   };
@@ -20,6 +21,7 @@ export default class EntityActionButtons extends PureComponent {
     zoom: false,
     okDisabled: false,
     okLabel: 'OK',
+    cancelLabel: 'Cancel',
     submit: true,
     skipCancel: false,
   };
@@ -33,11 +35,12 @@ export default class EntityActionButtons extends PureComponent {
       okLabel,
       submit,
       skipCancel,
+      cancelLabel,
     } = this.props;
     return (
       <div className={cs('EntityActionButtons', {zoom})}>
         <div className="EntityActionButtons__inner">
-          {!skipCancel && <Button name="cancel" onClick={onCancel}>Cancel</Button>}
+          {!skipCancel && <Button name="cancel" onClick={onCancel}>{cancelLabel}</Button>}
           <Button
             name="submit"
             type={submit ? 'submit' : undefined}

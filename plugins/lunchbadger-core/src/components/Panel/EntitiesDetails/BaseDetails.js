@@ -109,8 +109,11 @@ export default (ComposedComponent) => {
       if (typeof element.postProcessModel === 'function') {
         element.postProcessModel(props);
       }
-      dispatch(setCurrentEditElement(null));
-      this.closePopup();
+      if (!this.submitByEnter) {
+        dispatch(setCurrentEditElement(null));
+        this.closePopup();
+      }
+      this.submitByEnter = false;
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
@@ -133,6 +136,12 @@ export default (ComposedComponent) => {
         this.setState({isPristine});
       }
     }
+
+    handleFormKeyPress = (event) => {
+      if ((event.which === 13 || event.keyCode === 13) && event.target.type !== 'textarea') {
+        this.submitByEnter = true;
+      }
+    };
 
     _handleValid = () => {
       if (!this.state.formValid) {
@@ -178,6 +187,7 @@ export default (ComposedComponent) => {
             onInvalid={this._handleInvalid}
             onChange={this.checkPristine}
             onValidSubmit={this.update}
+            onKeyPress={this.handleFormKeyPress}
             className="BaseDetails__form"
           >
             <div className="BaseDetails__name">

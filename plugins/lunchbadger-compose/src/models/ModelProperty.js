@@ -67,13 +67,26 @@ export default class ModelProperty extends BaseModel {
   }
 
   toJSON() {
+    let type = this.type;
+    if (typeof type === 'object') {
+      if (Array.isArray(type) && type.length > 0 && type[0].constructor.type === 'ModelProperty') {
+        type = type
+          .map(item => item.toJSON())
+          .sort((a, b) => a.id > b.id);
+      } else if (Object.values(type).length > 0 && Object.values(type)[0].constructor.type === 'ModelProperty') {
+        type = Object
+          .values(type).map(item => item.toJSON())
+          .sort((a, b) => a.id > b.id)
+          .reduce((map, item) => ({...map, [item.name]: item}), {});
+      }
+    }
     return {
       id: this.workspaceId,
       modelId: this._model.workspaceId,
       facetName: 'server',
       name: this.name,
       'default': this.default_,
-      type: this.type,
+      type,
       required: this.required,
       index: this.index,
       description: this.description,

@@ -69,18 +69,20 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
 };
 
 export const clearCurrentEditElement = (silent = false) => (dispatch, getState) => {
+  if (!silent) {
+    const {currentEditElement, currentElement} = getState().states;
+    if (currentEditElement && currentEditElement.id && currentEditElement.loaded) {
+      dispatch(setPendingEdit('remove', currentEditElement.id, false));
+    } else if (currentElement && currentElement.id) {
+      dispatch(setPendingEdit('remove', currentElement.id, false));
+    }
+  }
   dispatch(actions.setStates([
     {key: 'currentElement', value: null},
     {key: 'currentEditElement', value: null},
     {key: 'currentlySelectedParent', value: null},
     {key: 'currentlySelectedSubelements', value: []},
   ]));
-  if (!silent) {
-    const {currentEditElement} = getState().states;
-    if (currentEditElement && currentEditElement.id && currentEditElement.loaded) {
-      dispatch(setPendingEdit('remove', currentEditElement.id, false));
-    }
-  }
 };
 
 export const setCurrentZoom = (value, silent = false) => (dispatch, getState) => {
@@ -92,7 +94,7 @@ export const setCurrentZoom = (value, silent = false) => (dispatch, getState) =>
   } = getState();
   if (zoom === value) return;
   dispatch(actions.setState({key: 'zoom', value}));
-  if (!silent) {
+  if (!silent && currentElement) {
     const {id, type} = currentElement;
     if (id && type && entities[type][id] && entities[type][id].locked) return;
     dispatch(setPendingEdit(value && id ? 'add' : 'remove', id, false));

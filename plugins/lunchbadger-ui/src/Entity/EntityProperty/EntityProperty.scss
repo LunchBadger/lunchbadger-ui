@@ -2,6 +2,9 @@
   padding-bottom: 16px;
   position: relative;
   margin-right: 20px;
+  &.hidden {
+    display: none;
+  }
   &.EntityProperty__fake {
     .EntityProperty__field {
       border-color: transparent;

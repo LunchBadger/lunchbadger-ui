@@ -15,7 +15,6 @@ import {actions} from '../../reduxActions/actions';
 import {updateEntitiesStatues} from '../../reduxActions';
 import './AppLoader.scss';
 
-const envId = Config.get('envId');
 const pingAmount = Config.get('pingAmount');
 const pingIntervalMs = Config.get('pingIntervalMs');
 const isKubeWatcherEnabled = Config.get('features').kubeWatcher;
@@ -82,11 +81,10 @@ class AppLoader extends Component {
   };
 
   onKubeWatcherData = (message) => {
-    const data = JSON.parse(message.data)[envId];
+    const data = JSON.parse(message.data);
     let workspaceRunning = false;
-    if (data.workspace) {
-      workspaceRunning = Object.values(data.workspace)
-        .reduce((prev, {status: {running}}) => prev || running, false);
+    if (data.workspace && data.workspace.default) {
+      workspaceRunning = data.workspace.default.status.running;
     }
     this.setState({workspaceRunning});
     if (!this.kubeWatcherStarted && workspaceRunning) {

@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.295', [
+console.info('LBAPP VERSION 0.296', [
   'Feature/1032 model property default value must match its type #1038',
   'Feature/1036 get rid of $blockScrolling error',
   'Feature/548 Forecaster launch rethink #1034',

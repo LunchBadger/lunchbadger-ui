@@ -9,10 +9,10 @@ module.exports = {
     page
       .open()
       .testDatasource('salesforce', [
-        ['USERNAME', 'dumpUsername'],
-        ['PASSWORD', 'dumpPassword']
+        ['LunchBadgerusername', 'dumpUsername'],
+        ['LunchBadgerpassword', 'dumpPassword']
       ], [
-        'username'
+        'LunchBadger\\[username\\]'
       ])
       .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)

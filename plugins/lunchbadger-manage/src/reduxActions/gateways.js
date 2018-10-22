@@ -16,8 +16,9 @@ export const add = () => (dispatch, getState) => {
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
   const pipelines = {Pipeline: {policies: initialPipelinePolicies}};
   const policies = Object.keys(entities.gatewaySchemas.policy);
+  const name = storeUtils.uniqueName('Gateway', entities.gateways);
   const entity = Gateway.create({
-    name: 'Gateway',
+    name,
     itemOrder,
     loaded: false,
     pipelines,

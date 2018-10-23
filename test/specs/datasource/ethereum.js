@@ -9,9 +9,9 @@ module.exports = {
     page
       .open()
       .testDatasource('ethereum', [
-        ['URL', 'dumpUrl']
+        ['LunchBadgerurl', 'dumpUrl']
       ], [
-        'url'
+        'LunchBadger\\[url\\]'
       ])
       .waitForEntityError(entitySelector)
       .removeEntityWithDependencyUninstall(entitySelector)

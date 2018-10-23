@@ -25,6 +25,9 @@
   &__parameter {
     position: relative;
     margin-top: 10px;
+    &.hidden {
+      display: none;
+    }
     & > .EntityProperty > .EntityPropertyLabel,
     & > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel,
     & > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {

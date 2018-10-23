@@ -10,9 +10,9 @@ module.exports = {
     page
       .open()
       .testDatasource('soap', [
-        ['URL', TEST_WSDL]
+        ['LunchBadgerurl', TEST_WSDL]
       ], [
-        'url'
+        'LunchBadger\\[url\\]'
       ])
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainSoap);

@@ -30,6 +30,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;
   updatedEntity = DataSource.create({
     ...entity.toJSON(),
+    ...Object.keys(entity.connectorProperties())
+      .reduce((map, item) => ({...map, [item]: undefined}), {}),
     ...model,
     ready: false,
     error: null,

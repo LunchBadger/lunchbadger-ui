@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.298', [
+console.info('LBAPP VERSION 0.299', [
+  'Bugfix/1039 Unable connect model-datasource on walkthrough #1043',
   'Feature/441 Get rid of react-ace editor warnings part 2 #1042',
   'Feature/1035 zoom window buttons #1041',
   'Feature/1032 model property default value must match its type #1038',

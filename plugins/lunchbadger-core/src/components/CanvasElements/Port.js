@@ -211,7 +211,10 @@ class Port extends PureComponent {
       'port__anchor--highlighted': highlighted,
     });
     return (
-      <div ref="port__wrap">
+      <div
+        ref="port__wrap"
+        className={`port__wrap__${way}`}
+      >
         <div
           id={`port_${way}_${elementId}`}
           className={`port-${way} ${portClass} ${className || ''}`}

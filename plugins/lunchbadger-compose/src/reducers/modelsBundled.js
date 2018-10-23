@@ -27,7 +27,11 @@ export default (state = {}, action) => {
       return {};
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'modelsBundled') {
-        newState[action.payload.entityId] = Model.create(action.payload.entityData);
+        const entity = Model.create(action.payload.entityData);
+        if (newState[action.payload.entityId]) {
+          entity.locked = newState[action.payload.entityId].locked;
+        }
+        newState[action.payload.entityId] = entity;
       }
       return newState;
     case coreActionTypes.silentEntityRemove:

@@ -51,7 +51,14 @@ export default (state = {}, action) => {
       if (action.payload.entityType === 'gateways') {
         const entity = action.payload.entityData;
         const isDeploying = !!entity.pipelinesLunchbadger;
+        let locked;
+        if (newState[action.payload.entityId]) {
+          locked = newState[action.payload.entityId].locked;
+        }
         newState[action.payload.entityId] = Gateway.create(entity);
+        if (locked !== undefined) {
+          newState[action.payload.entityId].locked = locked;
+        }
         if (isDeploying) {
           newState[action.payload.entityId].running = null;
           newState[action.payload.entityId].lockedAdminApi = true;

@@ -202,6 +202,10 @@ class WalkthroughInner extends PureComponent {
       GAEvent('Walkthrough', eventAction, eventLabel, eventValue);
       cb();
     },
+    togglePortWrapper: (portSelector, action, className) => cb => {
+      document.querySelector(portSelector).classList[action](className);
+      cb();
+    },
     waitUntilPresent: (selector, blockEscapingKeys = true) => async cb => {
       blockEscapingKeys && this.blockEscapingKeys();
       while (document.querySelector(selector) === null) {

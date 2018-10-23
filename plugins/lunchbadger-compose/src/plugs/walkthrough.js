@@ -315,13 +315,19 @@ Click <pre>Cancel</pre> to return to the Canvas view.
     text: `
 The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
-    selector: '.Entity.DataSource.memory .port-out',
+    waitForSelector: '.Entity.DataSource.memory .port__wrap__out',
     position: 'bottom-left',
     allowClicksThruHole: true,
     skipLastStep: false,
     triggerNext: api => [
-      api.setHole({width: '69px'}),
       api.waitUntilPresent('.Entity.DataSource.memory .port-out .port__anchor--connected'),
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
+    ],
+    onBefore: api => [
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'add', 'walkthroughDatasouceModelStep'),
+    ],
+    onExit: api => [
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
     ],
   },
   '030': {

@@ -4,14 +4,20 @@ import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
 import {SortableContainer, SortableElement, SortableHandle, arrayMove} from 'react-sortable-hoc';
-import {EntityProperty, IconButton, IconMenu, IconSVG} from '../../../../../../lunchbadger-ui/src';
+import {
+  EntityProperty,
+  IconButton,
+  IconMenu,
+  IconSVG,
+  getDefaultValueByType,
+} from '../../../../../../lunchbadger-ui/src';
 import {
   iconConditionAllOf,
   iconConditionNot,
   iconConditionOneOf,
   iconReorder,
 } from '../../../../../../../src/icons';
-import {determineType, getDefaultValueByType} from '../../../../utils';
+import {determineType} from '../../../../utils';
 import './GatewayPolicyCondition.scss';
 
 const iconCondition = {

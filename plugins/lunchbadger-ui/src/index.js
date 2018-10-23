@@ -40,6 +40,7 @@ import Transitioning from './Transitioning/Transitioning';
 import Walkthrough, {blockedEscapingKeys} from './Walkthrough/Walkthrough';
 import {Form} from './utils/Formsy/main';
 import {
+  getDefaultValueByType,
   scrollToElement,
   openDetailsPanelWithAutoscroll,
   labels,
@@ -118,6 +119,7 @@ export {
   EntityValidationErrors,
   FilesEditor,
   Form,
+  getDefaultValueByType,
   GAEvent,
   IconButton,
   IconMenu,

@@ -38,15 +38,15 @@ module.exports = {
     apiEndpointServiceEndpointSelector = page.getApiEndpointSelector(2);
     const username = page.getUsername();
     MEMORY_NAME = page.getUniqueName('memory');
-    MODEL_NAME = page.getUniqueName('car');
+    MODEL_NAME = page.getUniqueName('car') + 'aa';
     GATEWAY_NAME = page.getUniqueName('gateway');
     SERVICE_ENDPOINT_NAME = page.getUniqueName('endpoint');
     API_ENDPOINT_1_NAME = `${MODEL_NAME}ApiEndpoint`;
     API_ENDPOINT_2_NAME = `${SERVICE_ENDPOINT_NAME}ApiEndpoint`;
     const domain = `${username}-dev.staging.lunchbadger.io`;
-    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-${domain}/${MODEL_NAME}`;
+    GATEWAY_MODEL_URL = `http://${GATEWAY_NAME}-${domain}/${MODEL_NAME}s`;
     GATEWAY_SERVICE_ENDPOINT_URL = `http://${GATEWAY_NAME}-${domain}/robots.txt`;
-    url = `http://${domain}/api/${MODEL_NAME}`;
+    url = `http://${domain}/api/${MODEL_NAME}s`;
     model = page.getUniqueName('model');
     color = page.getUniqueName('color');
     form = {model, color};
@@ -74,7 +74,6 @@ Disallow: /deny
   'EG integration: action schema parameter - required': function () {
     page
       .setPolicyByDetails(0, 0, 'headers')
-      .addPolicyCAPair(0, 0, 0)
       .checkPipelines(expectActionRequired);
   },
   'EG integration: action schema parameter - custom string': function () {
@@ -110,10 +109,10 @@ Disallow: /deny
       .addActionParameterCustom(0, 0, 0, 'object')
       .setActionParameterCustomName(0, 0, 0, '', 'object', 'myObj')
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'string')
-      .setActionObjectParameterProperty(0, 0, 0, '', 'param1', 'string', '.GatewayPolicyAction__object.myObj')
+      .setActionObjectParameterProperty(0, 0, 0, 'm', 'param1', 'string', '.GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'myObjparam1', 'value1')
       .addActionObjectParameterProperty(0, 0, 0, 'myObj', 'number')
-      .setActionObjectParameterProperty(0, 0, 0, '', 'param2', 'number', '.GatewayPolicyAction__object.myObj')
+      .setActionObjectParameterProperty(0, 0, 0, 'm', 'param2', 'number', '.GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'myObjparam2', 678, 'number')
       .checkPipelines(expectActionCustomObject);
   },
@@ -162,10 +161,10 @@ Disallow: /deny
       .addActionObjectParameter(0, 0, 0, 'forwardHeaders', 'object')
       .setActionParameterCustomName(0, 0, 0, 'forwardHeaders', 'object', 'myObj')
       .addActionObjectParameterProperty(0, 0, 0, 'forwardHeadersmyObj', 'string')
-      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param1', 'string', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
+      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeadersm', 'param1', 'string', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam1', 'value1')
       .addActionObjectParameterProperty(0, 0, 0, 'forwardHeadersmyObj', 'number')
-      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeaders', 'param2', 'number', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
+      .setActionObjectParameterProperty(0, 0, 0, 'forwardHeadersm', 'param2', 'number', '.GatewayPolicyAction__object.forwardHeaders .GatewayPolicyAction__object.myObj')
       .setActionParameter(0, 0, 0, 'forwardHeadersmyObjparam2', 321, 'number')
       .checkPipelines(expectActionObjectObject);
   },
@@ -179,7 +178,6 @@ Disallow: /deny
   'EG integration: ca pairs clear after policy change': function () {
     page
       .setPolicyByDetails(0, 0, 'terminate')
-      .addPolicyCAPair(0, 0, 0)
       .checkPipelines(expectActionPolicyChange);
   },
   'EG integration: action schema parameter - number': function () {
@@ -190,8 +188,7 @@ Disallow: /deny
   'EG integration: action schema parameter - integer': function () {
     page
       .setPolicyByDetails(0, 0, 'cors')
-      .addPolicyCAPair(0, 0, 0)
-      .setActionParameter(0, 0, 0, 'optionsSuccessStatus', 403, 'number', 'implicit')
+      .setActionParameter(0, 0, 0, 'optionsSuccessStatus', 403, 'number')
       .checkPipelines(expectActionInteger);
   },
   'EG integration: action schema parameter - boolean': function () {
@@ -233,7 +230,6 @@ Disallow: /deny
   },
   'EG integration: condition schema parameters': function () {
     page
-      .addPolicyCAPair(0, 1, 0)
       .addPolicyCAPair(0, 1, 1)
       .setConditionName(0, 1, 1, 'n', 0, 'never')
       .addPolicyCAPair(0, 1, 2)
@@ -407,8 +403,6 @@ Disallow: /deny
       .editEntity(gatewaySelector)
       .addPipeline(gatewaySelector, 0, 'ModelProxy')
       .addPipeline(gatewaySelector, 1, 'ServiceEndpointProxy')
-      .addPolicy(gatewaySelector, 0, 0, 'proxy')
-      .addPolicy(gatewaySelector, 1, 0, 'proxy')
       .submitCanvasEntity(gatewaySelector);
   },
   'EG integration: add datasource': function () {
@@ -447,8 +441,6 @@ Disallow: /deny
           [`${apiEndpointModelSelector} .EntityHeader .EntityProperty__field--input input`]: API_ENDPOINT_1_NAME
         }
       })
-      .clickPresent(apiEndpointModelSelector + ' .button__add__PATHS')
-      .setValueSlow(apiEndpointModelSelector + ' .input__paths0 input', `/${MODEL_NAME}*`)
       .submitCanvasEntity(apiEndpointModelSelector)
       .pause(10000)
       .apiCall('put', {url, form}, function (body) {

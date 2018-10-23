@@ -7,7 +7,8 @@ import './EntityValidationErrors.scss';
 const formatKey = key => key
   .replace(/([A-Z])/g, ' $1')
   .replace(/\[/g, ' / ')
-  .replace(/\]/g, '');
+  .replace(/\]/g, '')
+  .replace(/Lunch Badger \/ /g, '');
 
 class EntityValidationErrors extends Component {
   static propTypes = {

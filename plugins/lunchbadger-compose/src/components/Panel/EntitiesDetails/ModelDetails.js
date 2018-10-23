@@ -184,7 +184,7 @@ class ModelDetails extends PureComponent {
       .map(p => p.itemOrder));
     const property = ModelProperty.create({
       parentId,
-      default_: '',
+      default_: undefined,
       type: 'string',
       description: '',
       required: false,
@@ -226,6 +226,12 @@ class ModelDetails extends PureComponent {
   handleChangePropertyType = id => (type) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).type = type;
+    this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
+  };
+
+  handleDefaultChange = id => ({target: {checked}}) => {
+    const properties = [...this.state.properties];
+    properties.find(prop => prop.id === id).withDefault = checked;
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   };
 
@@ -400,14 +406,27 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleChange={this.handleChangePropertyType(property.id)}
       />,
-      subTypes.includes(property.type) ? null :
-        <Input
-          name={`properties[${property.idx}][default_]`}
-          value={property.default_}
-          underlineStyle={{bottom: 0}}
-          fullWidth
-          hideUnderline
-        />,
+      <div className="ModelDetails__default">
+        <div className="ModelDetails__default--chbx">
+          {!subTypes.includes(property.type) && (
+            <Checkbox
+              name={`properties[${property.idx}][withDefault]`}
+              value={property.withDefault}
+              handleChange={this.handleDefaultChange(property.id)}
+            />
+          )}
+        </div>
+        <div className="ModelDetails__default--input">
+          {(!property.withDefault || subTypes.includes(property.type)) ? null :
+            <Input
+              name={`properties[${property.idx}][default_]`}
+              value={property.default_ || ''}
+              underlineStyle={{bottom: 0}}
+              fullWidth
+              hideUnderline
+            />}
+        </div>
+      </div>,
       <Input
         name={`properties[${property.idx}][description]`}
         value={property.description}

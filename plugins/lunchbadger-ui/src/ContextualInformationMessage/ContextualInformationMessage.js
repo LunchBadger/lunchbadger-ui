@@ -9,7 +9,10 @@ import './ContextualInformationMessage.scss';
 export default class ContextualInformationMessage extends PureComponent {
   static propTypes = {
     children: PropTypes.node,
-    tooltip: PropTypes.string,
+    tooltip: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+    ]),
     direction: PropTypes.string,
   };
 

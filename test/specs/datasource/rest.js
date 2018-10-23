@@ -34,7 +34,7 @@ module.exports = {
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsLocation)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanelWithoutAutoSave(entitySelector)
+      .submitDetailsPanel(entitySelector)
       .reloadPage()
       .check({
         text: {

@@ -94,8 +94,8 @@ export const setCurrentZoom = (value, silent = false) => (dispatch, getState) =>
   } = getState();
   if (zoom === value) return;
   dispatch(actions.setState({key: 'zoom', value}));
-  if (!silent && currentElement) {
-    const {id, type} = currentElement;
+  if (!silent) {
+    const {id, type} = currentElement || {};
     if (id && type && entities[type][id] && entities[type][id].locked) return;
     dispatch(setPendingEdit(value && id ? 'add' : 'remove', id, false));
   }

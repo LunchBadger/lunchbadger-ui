@@ -6,46 +6,22 @@ export default class ModelProperty extends BaseModel {
   static deserializers = {
     'default': (obj, val) => {
       obj.default_ = val;
+      obj.withDefault = val !== undefined;
     }
   }
 
-  /**
-   * @type {string}
-   */
   name = '';
-
-  /**
-   * @type {string}
-   */
-  default_ = '';
-
-  /**
-   * @type {string}
-   */
+  default_ = undefined;
+  withDefault = false;
   type = '';
-
-  /**
-   * @type {boolean}
-   */
   required = false;
-
-  /**
-   * @type {boolean}
-   */
   index = false;
-
-  /**
-   * @type {string}
-   */
   description = '';
-
   modelWorkspaceId = '<unattached>';
-
   itemOrder = 0;
 
-  constructor(id, name = '', default_ = '', type = '', required = false, index = false, description = '') {
+  constructor(id, name = '', default_, type = '', required = false, index = false, description = '') {
     super(id);
-
     this.name = name;
     this.default_ = default_;
     this.type = type;

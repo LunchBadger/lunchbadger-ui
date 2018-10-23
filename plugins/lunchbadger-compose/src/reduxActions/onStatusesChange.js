@@ -1,36 +1,16 @@
 import React from 'react';
-import slug from 'slug';
-import Config from '../../../../src/config';
 import {actions} from './actions';
 import Function_ from '../models/Function';
 import {openDetailsPanelWithAutoscroll} from '../../../lunchbadger-ui/src';
 
-const envId = Config.get('envId');
-const {getUser} = LunchBadgerCore.utils;
 const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
-
-const transformFunctionStatuses = (functionStatuses) => {
-  const statuses = {};
-  const projectSlug = `${getUser().profile.sub}-${envId}-`;
-  Object.keys(functionStatuses).forEach((key) => {
-    const slugArr = key.replace(`fn-${projectSlug}`, '').split('-');
-    const slug = slugArr.slice(0, slugArr.length - 2).join('-');
-    const {id} = functionStatuses[key];
-    const slugId = `${id}-${slug}`;
-    if (statuses[slugId] && statuses[slugId].status.running) return;
-    statuses[slugId] = functionStatuses[key];
-    statuses[slugId].slug = slug;
-  });
-  return statuses;
-};
 
 const transformFunctions = (entities) => {
   const functions = {};
   Object.values(entities)
     .filter(({loaded}) => loaded)
     .forEach((function_) => {
-      const slugId = `${function_.id}-${slug(function_.name, {lower: true})}`;
-      functions[slugId] = function_;
+      functions[function_.id] = function_;
     });
   return functions;
 };
@@ -78,7 +58,7 @@ const openDetailsPanel = (dispatch, entity, autoscrollSelector) => {
 
 export const onSlsStatusChange = () => async (dispatch, getState) => {
   const {entitiesStatuses, entities: {functions: entities}} = getState();
-  const statuses = transformFunctionStatuses(entitiesStatuses['kubeless-fn'] || {});
+  const statuses = entitiesStatuses['kubeless-fn'] || {};
   const functions = transformFunctions(entities);
   const entries = combineEntities(statuses, functions);
   let updatedEntity;

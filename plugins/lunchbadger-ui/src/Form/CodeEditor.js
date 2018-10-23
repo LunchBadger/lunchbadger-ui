@@ -173,6 +173,9 @@ export default class CodeEditor extends PureComponent {
               onChange={this.handleEditorChange}
               setOptions={options}
               wrapEnabled
+              editorProps={{
+                $blockScrolling: Infinity
+              }}
             />
           </Resizable>
         </div>

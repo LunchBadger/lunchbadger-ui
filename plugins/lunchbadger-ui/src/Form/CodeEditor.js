@@ -11,13 +11,14 @@ import 'brace/mode/php';
 import 'brace/mode/python';
 import 'brace/mode/ruby';
 import 'brace/theme/monokai';
+import 'brace/ext/language_tools';
+import 'brace/ext/searchbox';
 import './CodeEditor.scss';
 import {EntityProperty, IconButton, Resizable} from '../';
 
 const options = {
   enableBasicAutocompletion: true,
   enableLiveAutocompletion: true,
-  enableSnippets: true,
   showLineNumbers: true,
   tabSize: 2,
 };

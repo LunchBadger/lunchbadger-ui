@@ -1,14 +1,22 @@
 import {actions} from './actions';
 import ApiEndpoint from '../models/ApiEndpoint';
 
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
+
+const uniqueApiEndpointName = (str, entities) => storeUtils.uniqueName(str, {
+  ...entities.apiEndpoints,
+  ...Object.values({...entities.apis, ...entities.portals})
+    .reduce((map, {apiEndpointsNames}) => [...map, ...apiEndpointsNames], [])
+    .reduce((map, {id, name}) => ({...map, [id]: {name}}), {}),
+})
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = ApiEndpoint.create({name: 'ApiEndpoint', itemOrder, loaded: false});
+  const name = uniqueApiEndpointName('ApiEndpoint', entities);
+  const entity = ApiEndpoint.create({name, itemOrder, loaded: false});
   dispatch(actions.updateApiEndpoint(entity));
   return entity;
 }
@@ -21,8 +29,9 @@ export const addAndConnect = (endpoint, fromId, outPort) => (dispatch, getState)
     setTimeout(async () => {
       const types = quadrants[3].entities;
       const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+      const name = uniqueApiEndpointName(endpoint.name + 'ApiEndpoint', entities);
       const entity = ApiEndpoint.create({
-        name: endpoint.name + 'ApiEndpoint',
+        name,
         path: endpoint.contextPath,
         itemOrder,
         loaded: false,

@@ -60,7 +60,10 @@ class EntityProperty extends Component {
     autocomplete: PropTypes.bool,
     codeEditor: PropTypes.bool,
     chips: PropTypes.bool,
-    description: PropTypes.string,
+    description: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+    ]),
     button: PropTypes.node,
     alignRight: PropTypes.bool,
     postfix: PropTypes.string,
@@ -74,6 +77,7 @@ class EntityProperty extends Component {
     textarea: PropTypes.bool,
     link: PropTypes.bool,
     restrict: PropTypes.bool,
+    hidden: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -104,6 +108,7 @@ class EntityProperty extends Component {
     textarea: false,
     link: false,
     restrict: false,
+    hidden: false,
   };
 
   constructor(props) {
@@ -183,7 +188,7 @@ class EntityProperty extends Component {
     this.handleObjectAddKey(key);
   }
 
-  handleCodeEditorChange = value => this.props.onBlur({target: {value}});
+  handleCodeEditorChange = value => this.props.onChange({target: {value}});
 
   renderField = () => {
     const {
@@ -364,6 +369,7 @@ class EntityProperty extends Component {
       noMarginRight,
       icon,
       link,
+      hidden,
     } = this.props;
     if (name === undefined) return (
       <div>
@@ -384,6 +390,7 @@ class EntityProperty extends Component {
       ['EntityProperty__codeEditor']: codeEditor,
       ['EntityProperty__withIcon']: icon !== '',
       noMarginRight,
+      hidden,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;

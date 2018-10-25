@@ -1,0 +1,43 @@
+.DS {
+  .EntityProperty.integer,
+  .EntityProperty.number,
+  .EntityProperty.string,
+  .EntityProperty.array,
+  .EntityProperty.select {
+    min-width: 100px;
+  }
+  &.plain {
+    padding: 16px 16px 0;
+    .GatewayPolicyAction .EntityPropertyLabel {
+      text-transform: uppercase !important;
+    }
+    .GatewayPolicyAction__button,
+    .EntityPropertyLabel__tooltip {
+      display: none;
+    }
+    .GatewayPolicyAction__parameter > .EntityProperty > .EntityPropertyLabel,
+    .GatewayPolicyAction__parameter > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel,
+    .GatewayPolicyAction__parameter > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {
+      color: inherit;
+    }
+  }
+  input[type="number"] {
+    text-align: left !important;
+  }
+}
+
+.port__wrap {
+  &__out {
+    &.walkthroughDatasouceModelStep {
+      position: absolute;
+      top: 12px;
+      right: -48px;
+      width: 60px;
+      height: 22px;
+      .port {
+        margin-right: 50px;
+        top: -14px !important;
+      }
+    }
+  }
+}

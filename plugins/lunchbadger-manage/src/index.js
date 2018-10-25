@@ -1,6 +1,7 @@
 import {actions} from './reduxActions/actions';
 import ApiEndpoint from './models/ApiEndpoint';
 import ApiEndpointComponent from './components/CanvasElements/ApiEndpoint';
+import GatewayPolicyAction from './components/Panel/EntitiesDetails/Subelements/GatewayPolicyAction';
 import reducers from './reducers';
 import plugs from './plugs';
 import {removeServiceEndpointFromProxies} from './reduxActions/gateways';
@@ -14,6 +15,7 @@ const LunchBadgerManage = {
   },
   components: {
     ApiEndpointComponent,
+    GatewayPolicyAction,
   },
   utils: {
     actions,

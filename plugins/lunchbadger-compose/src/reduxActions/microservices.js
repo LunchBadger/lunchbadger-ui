@@ -3,14 +3,15 @@ import {actions} from './actions';
 import Microservice from '../models/Microservice';
 import {update as updateModel, remove as removeModel} from './models';
 
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Microservice.create({name: 'Microservice', itemOrder, loaded: false});
+  const name = storeUtils.uniqueName('Microservice', entities.microservices);
+  const entity = Microservice.create({name, itemOrder, loaded: false});
   dispatch(actions.updateMicroservice(entity));
   return entity;
 };

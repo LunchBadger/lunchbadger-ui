@@ -3,20 +3,37 @@ export default {
     title: 'Model Connectors Menu',
     text: `
 No need to start from scratch when building microservices. Leverage your existing data and services with pre-built microservice integrations such as MySQL, MongoDB, SOAP, REST, and 42+ other Model Connectors.
+<br />
+<br />
+C'mon, click it!
 `,
     selector: '.Tool.dataSource',
     position: 'right',
-    allowClicksThruHole: false,
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('div[role=presentation]', false),
+      api.setShowOverlay(false),
+    ],
+    onBefore: api => [
+      api.focus('.Tool.dataSource .Tool__box button'),
+    ],
   },
   '011': {
     title: 'Model Connector Entities Overview',
-    text: 'Each Model Connector Entity will come with its own set of properties specific for that connection type. A subset of available Model Connectors are available in the menu.',
+    text: `
+Each Model Connector Entity will come with its own set of properties specific for that connection type. A subset of available Model Connectors are available in the menu.
+<br />
+<br />
+C'mon, click it!
+`,
     waitForSelector: 'div[role=presentation]',
     position: 'right',
-    allowClicksThruHole: false,
+    allowClicksThruHole: true,
     skipLastStep: true,
     onBefore: api => [
-      api.openEntitySubmenu('dataSource'),
+      api.wait(500),
+      api.setShowOverlay(true),
       api.blockClicks(),
     ],
     onAfter: api => [
@@ -298,12 +315,19 @@ Click <pre>Cancel</pre> to return to the Canvas view.
     text: `
 The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
-    selector: '.Entity.DataSource.memory .port-out',
+    waitForSelector: '.Entity.DataSource.memory .port__wrap__out',
     position: 'bottom-left',
     allowClicksThruHole: true,
+    skipLastStep: false,
     triggerNext: api => [
-      api.setHole({width: '69px'}),
       api.waitUntilPresent('.Entity.DataSource.memory .port-out .port__anchor--connected'),
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
+    ],
+    onBefore: api => [
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'add', 'walkthroughDatasouceModelStep'),
+    ],
+    onExit: api => [
+      api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
     ],
   },
   '030': {
@@ -332,6 +356,7 @@ Click <pre>OK</pre> to deploy function.
     waitForSelector: '.Entity.Function_.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
+    skipLastStep: false,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.Function_.editable'),
       api.setShowOverlay(false),

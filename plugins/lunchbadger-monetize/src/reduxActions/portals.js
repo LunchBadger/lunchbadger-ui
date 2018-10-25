@@ -2,13 +2,14 @@ import {actions} from './actions';
 import Portal from '../models/Portal';
 
 const {Connections} = LunchBadgerCore.stores;
-const {coreActions, actions: actionsCore} = LunchBadgerCore.utils;
+const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
-  const entity = Portal.create({name: 'Portal', itemOrder, loaded: false});
+  const name = storeUtils.uniqueName('Portal', entities.portals);
+  const entity = Portal.create({name, itemOrder, loaded: false});
   dispatch(actions.updatePortal(entity));
   return entity;
 }

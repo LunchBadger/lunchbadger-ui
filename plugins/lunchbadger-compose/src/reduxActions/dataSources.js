@@ -6,10 +6,11 @@ import Model from '../models/Model';
 const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
 
-export const add = (name, connector) => (dispatch, getState) => {
+export const add = (label, connector) => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[0].entities;
   const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  const name = storeUtils.uniqueName(label, entities.dataSources);
   const json = {name, connector, itemOrder, loaded: false};
   const entity = DataSource.create(json);
   dispatch(actions.updateDataSource(entity));
@@ -29,6 +30,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const isDifferent = entity.loaded && model.name !== state.entities.dataSources[entity.id].name;
   updatedEntity = DataSource.create({
     ...entity.toJSON(),
+    ...Object.keys(entity.connectorProperties())
+      .reduce((map, item) => ({...map, [item]: undefined}), {}),
     ...model,
     ready: false,
     error: null,

@@ -150,7 +150,7 @@ Click <pre>OK</pre> to deploy a Gateway.
   '0707': {
     title: 'Private Quadrant Overview',
     text: 'Model, Service Endpoint, and Function Entities can all be connected to the left-hand side of a Pipeline.',
-    waitForSelector: '.quadrant.Private .quadrant__body',
+    waitForSelector: '.quadrant.Private .quadrant__body__wrap',
     position: 'right',
     allowClicksThruHole: false,
     onBefore: () => [],
@@ -160,7 +160,7 @@ Click <pre>OK</pre> to deploy a Gateway.
     text: `
 Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
-    selector: '.Entity.Model .port-out',
+    waitForSelector: '.Entity.Model .port__wrap__out',
     position: 'left',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -168,13 +168,13 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
     triggerNext: api => [
       api.addClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.addClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
-      api.setHole({
-        width: '69px',
-        height: '114px',
-      }),
       api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
+      api.togglePortWrapper('.Entity.Model .port__wrap__out', 'remove', 'walkthroughModelPipelineStep'),
       api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
+    ],
+    onBefore: api => [
+      api.togglePortWrapper('.Entity.Model .port__wrap__out', 'add', 'walkthroughModelPipelineStep'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Model .port-out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
@@ -182,12 +182,13 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
     onExit: api => [
       api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
+      api.togglePortWrapper('.Entity.Model .port__wrap__out', 'remove', 'walkthroughModelPipelineStep'),
     ],
   },
   '0709': {
     title: 'API Endpoint Explanation',
     text: 'When connecting a microservice such as a Model, Function, or Service Endpoint, for the first time a new API Endpoint Entity is created automatically. API Endpoint Entities define what will be exposed by a Gateway.',
-    selector: '.quadrant.Public .quadrant__body',
+    selector: '.Entity.ApiEndpoint',
     position: 'left',
     allowClicksThruHole: false,
     skipLastStep: true,
@@ -243,7 +244,7 @@ Add the following path: <pre>/cars*</pre>
     text: `
 Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
-    selector: '.Entity.Function_ .port-out',
+    waitForSelector: '.Entity.Function_ .port__wrap__out',
     position: 'left',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -251,14 +252,13 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
     triggerNext: api => [
       api.addClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.addClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
-      api.setHole({
-        top: -60,
-        width: '69px',
-        height: '92px',
-      }),
       api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
+      api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'remove', 'walkthroughFunctionPipelineStep'),
       api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
+    ],
+    onBefore: api => [
+      api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'add', 'walkthroughFunctionPipelineStep'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Function_ .port-out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
@@ -266,6 +266,7 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
     onExit: api => [
       api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
+      api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'remove', 'walkthroughFunctionPipelineStep'),
     ],
   },
   '0714': {

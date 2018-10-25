@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.143', [
+console.info('LBAPP VERSION 0.144', [
+  '1043',
   '1042',
   '1038',
   '1037',

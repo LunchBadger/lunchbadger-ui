@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.300', [
+console.info('LBAPP VERSION 0.301', [
+  'Feature/901 ignorePath option in EG for functions is no longer required #1028',
   'Feature/708 Autoscroll quadrant on making connection #1044',
   'Bugfix/1039 Unable connect model-datasource on walkthrough #1043',
   'Feature/441 Get rid of react-ace editor warnings part 2 #1042',
@@ -32,10 +33,7 @@ console.info('LBAPP VERSION 0.300', [
   'Feature/911 mongodb connector needs more flexibility #1021',
   'Feature/983 ApiEndpoint should inherit context path part 2 #1017',
   'Feature/980 ContextPath logic as in loopback #1016',
-  'Feature/909 Function to model connection as dashed line #1015',
-  'Feature/921 JWT secretOrPublicKey should be textarea #1014',
-  'Feature/1007 Deprecate implicite ca pairs #1013',
-  'Bugfix/1008 Quadrants headers issue on safari #1012'
+  'Feature/909 Function to model connection as dashed line #1015'
 ]);
 
 // Needed for onTouchTap

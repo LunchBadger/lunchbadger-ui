@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import classNames from 'classnames';
-import QuadrantNew from './QuadrantNew';
+import Quadrant from './Quadrant';
 
 class QuadrantContainer extends PureComponent {
   static propTypes = {
@@ -31,6 +31,7 @@ class QuadrantContainer extends PureComponent {
       this.state.quadrantWidths[idx] = 0;
       this.quadrantsMinWidths.push(this.canvasMinWidth * item);
     });
+    this.quadrantRefs = {};
   }
 
   componentDidMount() {
@@ -80,7 +81,16 @@ class QuadrantContainer extends PureComponent {
       }
     }
     this.setState({quadrantWidths});
-  }
+  };
+
+  handleMouseMove = event => Object
+    .values(this.quadrantRefs)
+    .forEach(ref => ref
+      .getWrappedInstance()
+      .getDecoratedComponentInstance()
+      .wrappedInstance
+      .handleMouseMove(event)
+    );
 
   render() {
     const {
@@ -100,9 +110,11 @@ class QuadrantContainer extends PureComponent {
         className={`${className} ${containerClass}`}
         style={style}
         id={id}
+        onMouseMove={this.handleMouseMove}
       >
         {quadrants.map(({name, entities}, idx) => (
-          <QuadrantNew
+          <Quadrant
+            ref={r => this.quadrantRefs[name] = r}
             key={idx}
             title={name}
             resizable={idx < quadrants.length - 1}

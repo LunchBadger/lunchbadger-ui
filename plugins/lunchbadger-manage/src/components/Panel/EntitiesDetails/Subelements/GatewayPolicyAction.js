@@ -10,8 +10,8 @@ import {
   EntityPropertyLabel,
   CollapsibleProperties,
   Input,
-  DocsLink,
   getDefaultValueByType,
+  DocsLink,
 } from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType} from '../../../../utils';

@@ -134,6 +134,13 @@ export default (ComposedComponent) => {
       }
     }
 
+    handleFormKeyPress = (event) => {
+      if ((event.which === 13 || event.keyCode === 13) && event.target.type !== 'textarea') {
+        event.preventDefault();
+        event.target.blur && event.target.blur();
+      }
+    };
+
     _handleValid = () => {
       if (!this.state.formValid) {
         this.setState({formValid: true});
@@ -178,6 +185,7 @@ export default (ComposedComponent) => {
             onInvalid={this._handleInvalid}
             onChange={this.checkPristine}
             onValidSubmit={this.update}
+            onKeyPress={this.handleFormKeyPress}
             className="BaseDetails__form"
           >
             <div className="BaseDetails__name">

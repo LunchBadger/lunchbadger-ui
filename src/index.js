@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.302', [
+console.info('LBAPP VERSION 0.303', [
+  'Feature/351 Suggested improvements to Settings Panel #1046',
   'Feature/1040 Show validation message for model property #1045',
   'Feature/901 ignorePath option in EG for functions is no longer required #1028',
   'Feature/708 Autoscroll quadrant on making connection #1044',
@@ -31,10 +32,7 @@ console.info('LBAPP VERSION 0.302', [
   'Bugfix/1020 OK button disabled when custom property value is changed #1025',
   'Feature/1023 add connector specific parameters #1024',
   'Feature/1019 Handle KubeWatcher v2 #1022',
-  'Feature/911 mongodb connector needs more flexibility #1021',
-  'Feature/983 ApiEndpoint should inherit context path part 2 #1017',
-  'Feature/980 ContextPath logic as in loopback #1016',
-  'Feature/909 Function to model connection as dashed line #1015'
+  'Feature/911 mongodb connector needs more flexibility #1021'
 ]);
 
 // Needed for onTouchTap

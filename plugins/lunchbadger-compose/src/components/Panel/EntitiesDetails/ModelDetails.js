@@ -22,6 +22,7 @@ import {
   DocsLink,
   getDefaultValueByType,
 } from '../../../../../lunchbadger-ui/src';
+import ModelDefaultValue from './ModelDefaultValue';
 import './ModelDetails.scss';
 
 const BaseDetails = LunchBadgerCore.components.BaseDetails;
@@ -374,14 +375,12 @@ class ModelDetails extends PureComponent {
       inputType = 'datetime-local';
     }
     return (
-      <Input
+      <ModelDefaultValue
         name={`properties[${idx}][default_]`}
         value={defaultValue}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        type={inputType}
+        type={type}
         textarea={subTypes.includes(type)}
+        inputType={inputType}
       />
     );
   }
@@ -397,7 +396,7 @@ class ModelDetails extends PureComponent {
       'Is Index',
       <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
     ];
-    const paddings = [true, true, true, true, false, false, false];
+    const paddings = [true, true, true, true, true, true, true];
     const centers = [false, false, false, false, true, true, false];
     const properties = [];
     this.getProperties(properties, '');
@@ -475,7 +474,7 @@ class ModelDetails extends PureComponent {
         value={property.index}
         handleKeyDown={this.handleTabProperties(property)}
       />,
-      <div>
+      <div style={{marginTop: 15}}>
         <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />
         {subTypes.includes(property.type) && <IconButton icon="iconPlus" onClick={this.onAddProperty(property.id)} />}
       </div>,
@@ -491,6 +490,7 @@ class ModelDetails extends PureComponent {
       onReorder={this.handleReorder(parentId)}
       noHeader={isNested}
       renderRowAfter={filteredProperties.map(prop => this.renderPropertiesSection(prop.id))}
+      verticalAlign="top"
     />;
   };
 

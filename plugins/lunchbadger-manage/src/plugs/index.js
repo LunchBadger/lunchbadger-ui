@@ -11,6 +11,7 @@ import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onConnectionMovedStrategy from './onConnectionMovedStrategy';
 import onEntitiesStatusesChange from './onEntitiesStatusesChange';
 import processProjectLoad from './processProjectLoad';
+import settingsPanelSections from './settingsPanelSections';
 import walkthrough from './walkthrough';
 
 export default {
@@ -27,5 +28,6 @@ export default {
   onConnectionMovedStrategy,
   onEntitiesStatusesChange,
   processProjectLoad,
+  settingsPanelSections,
   walkthrough,
 };

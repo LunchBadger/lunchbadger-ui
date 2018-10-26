@@ -30,6 +30,7 @@ const objectsToRegister = [
   'panelMenu',
   'models',
   'walkthrough',
+  'settingsPanelSections',
 ];
 
 const registerArrays = (plugins, plugs) => {

@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.307', [
+console.info('LBAPP VERSION 0.308', [
   'Feature/570 Animate swapping of entities in canvas #1047',
   'Feature/351 Suggested improvements to Settings Panel #1046',
   'Feature/1040 Show validation message for model property #1045',

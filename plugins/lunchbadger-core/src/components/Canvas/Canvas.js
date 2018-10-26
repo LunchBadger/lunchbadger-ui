@@ -176,6 +176,9 @@ class Canvas extends Component {
     this.paper.connect({source, target}, {fireEvent: false});
   }
 
+  toggleConnectionDragging = dragging => window
+    .dispatchEvent(new CustomEvent('connectionDragging', {detail: {dragging}}));
+
   _attachPaperEvents = () => {
     const {store: {getState}} = this.context;
     this.paper.bind('connection', (info) => {
@@ -313,13 +316,20 @@ class Canvas extends Component {
       // 'connect' event handler. This is the only way for it to know that
       // the connection was created by the user, vs programmatically, e.g. when
       // loading from the server.
+      this.toggleConnectionDragging(false);
       this.dropped = true;
       return true;
     });
 
-    this.paper.bind('beforeDrag', () => true);
+    this.paper.bind('beforeDrag', () => {
+      this.toggleConnectionDragging(true);
+      return true;
+    });
 
-    this.paper.bind('connectionAborted', () => true);
+    this.paper.bind('connectionAborted', () => {
+      this.toggleConnectionDragging(false);
+      return true;
+    });
 
     this.paper.bind('click', (connection, event) => {
       if (event.target.classList.contains('remove-button')) {

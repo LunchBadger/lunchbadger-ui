@@ -52,7 +52,7 @@ export default {
     consumerManagement: isStaging,
     gitAccess: true,
     uploadPublicKeys: true,
-    appUrls: true,
+    appUrls: false,
     fnTypes: [
       {
         label: '.Net Core 2.0',

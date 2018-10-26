@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.301', [
+console.info('LBAPP VERSION 0.302', [
+  'Feature/1040 Show validation message for model property #1045',
   'Feature/901 ignorePath option in EG for functions is no longer required #1028',
   'Feature/708 Autoscroll quadrant on making connection #1044',
   'Bugfix/1039 Unable connect model-datasource on walkthrough #1043',

@@ -9,7 +9,7 @@ class SettingsPanelSections extends PureComponent {
       <div>
         {Object.keys(settingsPanelSections).map((key) => {
           const Component = settingsPanelSections[key];
-          return <Component />;
+          return <Component key={key} />;
         })}
       </div>
     );

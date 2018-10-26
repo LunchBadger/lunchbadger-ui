@@ -4,6 +4,7 @@ import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
+import FlipMove from 'react-flip-move';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
@@ -216,25 +217,33 @@ class Quadrant extends PureComponent {
           style={bodyStyles}
         >
           <div className="quadrant__body__wrap">
-            {orderedIds.map(({id, type}, idx) => {
-              const entity = this.props[type][id];
-              if (!entity || !entity.constructor || !entity.constructor.type) return null;
-              const Component = components[entity.constructor.type];
-              return (
-                <Component
-                  id={id}
-                  key={entity.id}
-                  entity={entity}
-                  hideSourceOnDrag={true}
-                  itemOrder={idx}
-                  moveEntity={this.moveEntity}
-                  saveOrder={this.saveOrder}
-                  dragging={draggingId === id}
-                  sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
-                  targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
-                />
-              );
-            })}
+            <FlipMove
+              staggerDurationBy="30"
+              duration={300}
+              enterAnimation="accordianVertical"
+              leaveAnimation="accordianVertical"
+              typeName="div"
+            >
+              {orderedIds.map(({id, type}, idx) => {
+                const entity = this.props[type][id];
+                if (!entity || !entity.constructor || !entity.constructor.type) return null;
+                const Component = components[entity.constructor.type];
+                return (
+                  <Component
+                    id={id}
+                    key={entity.id}
+                    entity={entity}
+                    hideSourceOnDrag={true}
+                    itemOrder={idx}
+                    moveEntity={this.moveEntity}
+                    saveOrder={this.saveOrder}
+                    dragging={draggingId === id}
+                    sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
+                    targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
+                  />
+                );
+              })}
+            </FlipMove>
           </div>
         </div>
         {resizable && (

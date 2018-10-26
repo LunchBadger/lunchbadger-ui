@@ -65,6 +65,7 @@ export default class Model extends BaseModel {
   readonly = false;
   public = true;
   strict = false;
+  idInjection = true;
   wasBundled = false;
   zoomWindow = {
     width: 1090,
@@ -147,6 +148,7 @@ export default class Model extends BaseModel {
       readonly: this.readonly,
       public: this.public,
       strict: this.strict,
+      idInjection: this.idInjection,
       lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
       ...this.userFields

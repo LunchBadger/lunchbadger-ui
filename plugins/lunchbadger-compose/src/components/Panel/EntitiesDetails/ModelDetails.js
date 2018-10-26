@@ -317,6 +317,11 @@ class ModelDetails extends PureComponent {
         label: 'Exposed as REST',
         value: entity.public,
       },
+      {
+        name: 'idInjection',
+        label: 'ID Injection',
+        value: entity.idInjection,
+      },
     ];
     return (
       <div className="panel__details">

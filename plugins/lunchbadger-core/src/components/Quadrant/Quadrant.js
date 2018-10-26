@@ -220,8 +220,8 @@ class Quadrant extends PureComponent {
             <FlipMove
               staggerDurationBy="30"
               duration={300}
-              enterAnimation="accordianVertical"
-              leaveAnimation="accordianVertical"
+              enterAnimation="accordionVertical"
+              leaveAnimation="accordionVertical"
               typeName="div"
             >
               {orderedIds.map(({id, type}, idx) => {

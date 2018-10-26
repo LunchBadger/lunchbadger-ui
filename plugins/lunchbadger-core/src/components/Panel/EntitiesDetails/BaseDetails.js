@@ -109,11 +109,8 @@ export default (ComposedComponent) => {
       if (typeof element.postProcessModel === 'function') {
         element.postProcessModel(props);
       }
-      if (!this.submitByEnter) {
-        dispatch(setCurrentEditElement(null));
-        this.closePopup();
-      }
-      this.submitByEnter = false;
+      dispatch(setCurrentEditElement(null));
+      this.closePopup();
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
@@ -139,7 +136,8 @@ export default (ComposedComponent) => {
 
     handleFormKeyPress = (event) => {
       if ((event.which === 13 || event.keyCode === 13) && event.target.type !== 'textarea') {
-        this.submitByEnter = true;
+        event.preventDefault();
+        event.target.blur && event.target.blur();
       }
     };
 

@@ -132,7 +132,7 @@ export const addServiceEndpointIntoProxy = (endpoint, pipelineId) => (dispatch, 
     serviceEndpoint: endpoint.id,
   };
   if (endpoint.constructor.type === 'Function_') {
-    Object.assign(action, {ignorePath: true});
+    // Object.assign(action, {ignorePath: true}); #901
   } else if (endpoint.constructor.type === 'Model') {
     Object.assign(action, {stripPath: true});
   }

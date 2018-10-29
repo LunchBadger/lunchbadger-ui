@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.310', [
+console.info('LBAPP VERSION 0.311', [
+  'Feature/653 Tab keypress put focus on Cancel button #1051',
   'Bugfix/1048 UDF should not allow blank names #1050',
   'Feature/570 Animate swapping of entities in canvas #1047',
   'Feature/351 Suggested improvements to Settings Panel #1046',

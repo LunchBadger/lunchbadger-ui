@@ -40,7 +40,6 @@ export default class EntityActionButtons extends PureComponent {
     return (
       <div className={cs('EntityActionButtons', {zoom})}>
         <div className="EntityActionButtons__inner">
-          {!skipCancel && <Button name="cancel" onClick={onCancel}>{cancelLabel}</Button>}
           <Button
             name="submit"
             type={submit ? 'submit' : undefined}
@@ -49,6 +48,7 @@ export default class EntityActionButtons extends PureComponent {
           >
             {okLabel}
           </Button>
+          {!skipCancel && <Button name="cancel" onClick={onCancel}>{cancelLabel}</Button>}
         </div>
       </div>
     );

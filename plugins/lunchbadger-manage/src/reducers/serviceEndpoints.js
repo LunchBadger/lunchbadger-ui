@@ -26,7 +26,11 @@ export default (state = {}, action) => {
       return {};
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'serviceEndpoints') {
-        newState[action.payload.entityId] = ServiceEndpoint.create(action.payload.entityData);
+        const entity = ServiceEndpoint.create(action.payload.entityData);
+        if (newState[action.payload.entityId]) {
+          entity.locked = newState[action.payload.entityId].locked;
+        }
+        newState[action.payload.entityId] = entity;
       }
       return newState;
     case coreActionTypes.silentEntityRemove:

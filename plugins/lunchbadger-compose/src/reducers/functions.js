@@ -44,6 +44,9 @@ export default (state = {}, action) => {
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'functions') {
         const entity = Function_.create(action.payload.entityData);
+        if (newState[action.payload.entityId]) {
+          entity.locked = newState[action.payload.entityId].locked;
+        }
         let isDeploying = true;
         const prevEntity = newState[action.payload.entityId];
         if (prevEntity) {

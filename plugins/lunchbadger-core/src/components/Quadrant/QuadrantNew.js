@@ -10,6 +10,8 @@ import {saveOrder} from '../../reduxActions';
 import {GAEvent} from '../../../../lunchbadger-ui/src';
 import './Quadrant.scss';
 
+const AUTOSCROLL_INCREASE = 50;
+
 const boxTarget = {
   drop(_, monitor, component) {
     const hasDroppedOnChild = monitor.didDrop();
@@ -42,7 +44,6 @@ class Quadrant extends PureComponent {
     title: PropTypes.string.isRequired,
     sortableInstance: PropTypes.object,
     resizable: PropTypes.bool,
-    paper: PropTypes.object,
     width: PropTypes.number,
     index: PropTypes.number,
     scrollLeft: PropTypes.number,
@@ -62,6 +63,11 @@ class Quadrant extends PureComponent {
       orderedIds: this.getOrderedIds(props),
       draggingId: '',
     };
+    this.autoScrollOffset = 0;
+  }
+
+  componentDidMount() {
+    window.addEventListener('connectionDragging', this.handleConnectionDragging);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,6 +76,10 @@ class Quadrant extends PureComponent {
     if (oldOrdering.map(item => item.id).join(',') !== newOrdering.map(item => item.id).join(',')) {
       this.updateOrderedIds(newOrdering);
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('connectionDragging', this.handleConnectionDragging);
   }
 
   updateOrderedIds = (orderedIds, draggingId) => {
@@ -118,6 +128,48 @@ class Quadrant extends PureComponent {
     GAEvent('Canvas', 'Reordered Entities in Quadrant', this.props.title, orderedIds.length);
   };
 
+  handleMouseMove = ({clientX, clientY}) => {
+    if (!this.autoScrollInterval) return;
+    const {left, top, width, height} = this.quadrantDOM.getBoundingClientRect();
+    if ((clientX < left) || (clientX > left + width)) {
+      this.autoScrollOffset = 0;
+      return;
+    }
+    if (clientY < top + 99) {
+      let factor = 1;
+      if (clientY < top + 33) {
+        factor = 4;
+      } else if (clientY < top + 66) {
+        factor = 2;
+      }
+      this.autoScrollOffset = - factor * AUTOSCROLL_INCREASE;
+    } else if (clientY > top + height - 99) {
+      let factor = 1;
+      if (clientY > top + height - 33) {
+        factor = 4;
+      } else if (clientY > top + height - 66) {
+        factor = 2;
+      }
+      this.autoScrollOffset = factor * AUTOSCROLL_INCREASE;
+    } else {
+      this.autoScrollOffset = 0;
+    }
+  };
+
+  handleConnectionDragging = ({detail: {dragging}}) => {
+    if (dragging) {
+      this.autoScrollInterval = setInterval(this.autoScrollOnDragging, 100);
+    } else if (this.autoScrollInterval) {
+      clearInterval(this.autoScrollInterval);
+      this.autoScrollInterval = undefined;
+    }
+  };
+
+  autoScrollOnDragging = () => this.quadrantBodyDOM.scrollBy({
+    top: this.autoScrollOffset,
+    behavior: 'smooth',
+  });
+
   render() {
     const {
       title,
@@ -158,7 +210,11 @@ class Quadrant extends PureComponent {
             />
           )}
         </div>
-        <div className="quadrant__body" style={bodyStyles}>
+        <div
+          ref={(ref) => this.quadrantBodyDOM = ref}
+          className="quadrant__body"
+          style={bodyStyles}
+        >
           <div className="quadrant__body__wrap">
             {orderedIds.map(({id, type}, idx) => {
               const entity = this.props[type][id];
@@ -210,4 +266,4 @@ const selector = createSelector(
   },
 );
 
-export default connect(selector)(Quadrant);
+export default connect(selector, null, null, {withRef: true})(Quadrant);

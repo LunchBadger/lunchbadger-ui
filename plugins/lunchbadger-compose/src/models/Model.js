@@ -139,7 +139,9 @@ export default class Model extends BaseModel {
       http: {
         path: this.contextPath
       },
-      properties: this.properties.map(property => property.toJSON()),
+      properties: this.properties
+        .map(property => property.toJSON())
+        .sort((a, b) => a.id > b.id),
       relations: this.relations.map(relation => relation.toJSON()),
       itemOrder: this.itemOrder,
       base: this.base,

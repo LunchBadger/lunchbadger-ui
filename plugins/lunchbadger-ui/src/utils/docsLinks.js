@@ -1,6 +1,7 @@
 export default {
   SETTINGS_WALKTHROUGH: 'http://docs.lunchbadger.com/',
   SETTINGS_YOUR_APPLICATION_URLS: 'http://docs.lunchbadger.com/',
+  SETTINGS_GATEWAY_URLS: 'http://docs.lunchbadger.com/',
   SETTINGS_ACCESS_VIA_GIT: 'http://docs.lunchbadger.com/',
   SETTINGS_PUBLIC_KEYS: 'http://docs.lunchbadger.com/',
 

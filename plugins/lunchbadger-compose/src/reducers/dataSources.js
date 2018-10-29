@@ -42,7 +42,11 @@ export default (state = {}, action) => {
       return catchDatasourceErrors(state, action.payload);
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'dataSources') {
-        newState[action.payload.entityId] = DataSource.create(processDataSource(action.payload.entityData));
+        const entity = DataSource.create(processDataSource(action.payload.entityData));
+        if (newState[action.payload.entityId]) {
+          entity.locked = newState[action.payload.entityId].locked;
+        }
+        newState[action.payload.entityId] = entity;
       }
       return newState;
     case coreActionTypes.silentEntityRemove:

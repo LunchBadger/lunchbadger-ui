@@ -52,10 +52,6 @@ class Quadrant extends PureComponent {
     style: PropTypes.object,
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -101,7 +97,7 @@ class Quadrant extends PureComponent {
           itemOrder: props[type][id].itemOrder,
         })),
       ]), [])
-    .sort((a, b) => a.itemOrder > b.itemOrder)
+    .sort((a, b) => a.itemOrder - b.itemOrder)
     .map(({id, type}) => ({id, type}));
 
   recalculateQuadrantWidth = (event) => {
@@ -123,10 +119,10 @@ class Quadrant extends PureComponent {
 
   saveOrder = () => {
     const {orderedIds} = this.state;
-    const {store: {dispatch}} = this.context;
+    const {dispatch, title} = this.props;
     dispatch(saveOrder(orderedIds.map(item => item.id)));
     this.setState({draggingId: ''});
-    GAEvent('Canvas', 'Reordered Entities in Quadrant', this.props.title, orderedIds.length);
+    GAEvent('Canvas', 'Reordered Entities in Quadrant', title, orderedIds.length);
   };
 
   handleMouseMove = ({clientX, clientY}) => {

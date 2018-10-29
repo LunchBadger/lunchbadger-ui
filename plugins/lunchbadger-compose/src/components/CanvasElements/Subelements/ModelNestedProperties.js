@@ -52,7 +52,7 @@ export default class ModelNestedProperties extends Component {
     } = this.props;
     const filteredProperties = properties
       .filter(property => property.parentId === parentId)
-      .sort((a, b) => a.itemOrder > b.itemOrder);
+      .sort((a, b) => a.itemOrder - b.itemOrder);
     const titleLabel = `${title} ${path !== '' ? ' for ' : ''} ${path} (${filteredProperties.length})`;
     let emptyNested = <div />;
     if (filteredProperties.length === 0) {

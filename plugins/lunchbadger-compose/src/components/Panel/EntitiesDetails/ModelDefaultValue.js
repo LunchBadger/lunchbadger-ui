@@ -59,6 +59,7 @@ export default class ModelDefaultValue extends PureComponent {
           textarea={textarea}
           handleFocus={() => this.setState({invalid: false})}
           handleBlur={this.handleBlur}
+          validations={textarea ? 'isJSON' : undefined}
         />
         {invalid && (
           <div className="EntityProperty__error">

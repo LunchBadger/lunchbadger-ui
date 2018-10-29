@@ -79,8 +79,11 @@ const reservedWords = [
   ...reservedJavascriptWords,
 ].map(item => item.toLowerCase());
 
+const INVALID_MODEL_NAME = 'Model name is invalid';
+
 export default (name) => {
   if (reservedWords.includes(name.toLowerCase())) return 'Model name cannot be reserved word';
-  if (!(/^[\-_a-zA-Z0-9]+$/).test(name)) return 'Model name is invalid';
+  if (!(/^[\-_a-zA-Z0-9]+$/).test(name)) return INVALID_MODEL_NAME;
+  if (/[\-0-9]/.test(name[0])) return INVALID_MODEL_NAME;
   return '';
 }

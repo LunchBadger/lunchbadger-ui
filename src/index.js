@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.309', [
+console.info('LBAPP VERSION 0.310', [
+  'Bugfix/1048 UDF should not allow blank names #1050',
   'Feature/570 Animate swapping of entities in canvas #1047',
   'Feature/351 Suggested improvements to Settings Panel #1046',
   'Feature/1040 Show validation message for model property #1045',
@@ -31,9 +32,7 @@ console.info('LBAPP VERSION 0.309', [
   'Feature/955 Silent update walkthrough #1029',
   'Bugfix/1026 Error Cannot read property toLowerCase of undefined in GatewayProxyServiceEndpoint #1027',
   'Bugfix/1020 OK button disabled when custom property value is changed #1025',
-  'Feature/1023 add connector specific parameters #1024',
-  'Feature/1019 Handle KubeWatcher v2 #1022',
-  'Feature/911 mongodb connector needs more flexibility #1021'
+  'Feature/1023 add connector specific parameters #1024'
 ]);
 
 // Needed for onTouchTap

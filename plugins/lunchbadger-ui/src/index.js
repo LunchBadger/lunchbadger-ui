@@ -37,13 +37,15 @@ import CopyOnHover from './CopyOnHover/CopyOnHover';
 import SmoothCollapse from './utils/SmoothCollapse/SmoothCollapse';
 import Sortable from './Sortable/Sortable';
 import Transitioning from './Transitioning/Transitioning';
-import Walkthrough, {blockedEscapingKeys} from './Walkthrough/Walkthrough';
+import Walkthrough from './Walkthrough/Walkthrough';
+import {blockedEscapingKeys} from './Walkthrough/WalkthroughInner';
 import {Form} from './utils/Formsy/main';
 import {
   getDefaultValueByType,
   scrollToElement,
   openDetailsPanelWithAutoscroll,
   labels,
+  sortStrings,
 } from './utils';
 import Resizable from './Resizable/Resizable';
 import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
@@ -148,6 +150,7 @@ export {
   Walkthrough,
   entityIcons,
   dataSourceIcons,
+  sortStrings,
 };
 
 // if (!global.exports && !global.module && (!global.define || !global.define.amd)) {

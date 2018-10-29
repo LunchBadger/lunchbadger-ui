@@ -8,7 +8,7 @@ class GatewayUrls extends PureComponent {
     const {gateways} = this.props;
     const gatewayUrls = Object.values(gateways)
       .filter(({loaded, deleting}) => loaded && !deleting)
-      .sort((a, b) => a.itemOrder > b.itemOrder)
+      .sort((a, b) => a.itemOrder - b.itemOrder)
       .map(({rootUrl}) => rootUrl);
     return (
       <div className="details-panel__element">

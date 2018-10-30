@@ -7,7 +7,7 @@ import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
 import Config from '../../../../src/config';
-import {getModelJsFilename} from '../utils';
+import {getModelJsFilename, validModelName} from '../utils';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
 const Port = LunchBadgerCore.models.Port;
@@ -310,8 +310,10 @@ export default class Model extends BaseModel {
       }
       const fields = ['name'];
       checkFields(fields, model, validations.data);
-      if (model.name.toLowerCase() === 'model') validations.data.name = 'Model name cannot be "Model"';
-      if ((/\s/g).test(model.name)) validations.data.name = 'Model name cannot have spaces';
+      const nameValidator = validModelName(model.name);
+      if (nameValidator !== '') {
+        validations.data.name = nameValidator;
+      }
       if (model.http.path === '') {
         validations.data.contextPath = messages.fieldCannotBeEmpty;
       }

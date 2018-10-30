@@ -368,7 +368,9 @@ export default class Model extends BaseModel {
         } else if (field.type === 'number') {
           output = Number(value);
         }
-        data[field.name] = output;
+        if (field.name.trim() !== '') {
+          data[field.name.trim()] = output;
+        }
       });
     } else {
       model.userFields = [];

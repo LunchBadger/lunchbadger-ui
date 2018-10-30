@@ -14,8 +14,9 @@ const DragHandle = SortableHandle(({
     className="Sortable__handler"
     svg={iconReorder}
     styles={{
-      top: 15 + top,
+      top: typeof top === 'string' ? top : (15 + top),
       left,
+      transform: typeof top === 'string' ? 'translateY(-50%)' : undefined,
     }}
   />
 ));
@@ -62,7 +63,10 @@ class Sortable extends PureComponent {
     items: PropTypes.array,
     renderItem: PropTypes.func,
     onSortEnd: PropTypes.func,
-    handlerOffsetTop: PropTypes.number,
+    handlerOffsetTop: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
     handlerOffsetLeft: PropTypes.number,
     inPanel: PropTypes.bool,
     offset: PropTypes.array,

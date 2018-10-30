@@ -22,6 +22,7 @@ export default class TableComponent extends PureComponent {
     tableLayout: PropTypes.string,
     verticalAlign: PropTypes.string,
     sortable: PropTypes.bool,
+    sortableHandlerOffsetTop: PropTypes.string,
     renderRowAfter: PropTypes.array,
     noHeader: PropTypes.bool,
   };
@@ -94,6 +95,7 @@ export default class TableComponent extends PureComponent {
       data,
       widths,
       sortable,
+      sortableHandlerOffsetTop,
       onReorder,
       noHeader,
     } = this.props;
@@ -132,6 +134,7 @@ export default class TableComponent extends PureComponent {
               onSortEnd={onReorder}
               offset={[0, 20]}
               inPanel
+              handlerOffsetTop={sortableHandlerOffsetTop}
             />
           )}
           {!sortable && data.map(this.renderRow)}

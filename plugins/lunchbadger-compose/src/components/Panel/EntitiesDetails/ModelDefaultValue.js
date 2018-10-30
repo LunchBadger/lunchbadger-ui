@@ -47,6 +47,12 @@ export default class ModelDefaultValue extends PureComponent {
   render() {
     const {name, value, type, inputType, textarea} = this.props;
     const {invalid} = this.state;
+    let validations = undefined;
+    if (textarea) {
+      validations = 'isJSON';
+    } else if (type === 'geopoint') {
+      validations = 'isGeoPoint';
+    }
     return (
       <div>
         <Input
@@ -59,7 +65,7 @@ export default class ModelDefaultValue extends PureComponent {
           textarea={textarea}
           handleFocus={() => this.setState({invalid: false})}
           handleBlur={this.handleBlur}
-          validations={textarea ? 'isJSON' : undefined}
+          validations={validations}
         />
         {invalid && (
           <div className="EntityProperty__error">

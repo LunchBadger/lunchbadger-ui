@@ -16,7 +16,7 @@ export default (model, entity, properties, stateProperties) => {
     props[property.id] = prop;
     const [parentId] = key.split('/');
     if (['array', 'object', 'geopoint'].includes(prop.type)) {
-      if (prop.default_ !== undefined) {
+      if (prop.default_ !== undefined && typeof prop.default_ !== 'object') {
         prop.default_ = JSON.parse(prop.default_);
       }
       prop.isNull = true;

@@ -4,7 +4,11 @@ import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
 import inflection from 'inflection';
-import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
+import {
+  EntityProperties,
+  EntitySubElements,
+  getDefaultValueByType,
+} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import addNestedProperties from '../addNestedProperties';
 import ModelProperty from '../../models/ModelProperty';
@@ -136,7 +140,12 @@ class Model extends Component {
 
   onPropertyTypeChange = (id, type) => {
     const properties = [...this.state.properties];
-    properties.find(prop => prop.id === id).type = type;
+    const prop = properties.find(prop => prop.id === id);
+    const newProps = {type};
+    if (prop.withDefault) {
+      newProps.default_ = getDefaultValueByType(type);
+    }
+    Object.assign(prop, newProps);
     this.setState({properties});
   };
 

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-// const {Input, Select, Textarea} = LunchBadgerCore.components;
 const {propertyTypes} = LunchBadgerCore.utils;
 import {
   Input,
@@ -9,6 +8,7 @@ import {
   Checkbox,
   IconSVG,
   blockedEscapingKeys,
+  getDefaultValueByType,
 } from '../../../../../lunchbadger-ui/src';
 import {iconDelete, iconPlus} from '../../../../../../src/icons';
 import './ModelProperty.scss';
@@ -51,6 +51,11 @@ class ModelPropertyDetails extends Component {
     const nameName = nested ? `models[${index}][properties][${idx}][name]` : `properties[${idx}][name]`;
     const nameType = nested ? `models[${index}][properties][${idx}][type]` : `properties[${idx}][type]`;
     const nameItemOrder = nested ? `models[${index}][properties][${idx}][itemOrder]` : `properties[${idx}][itemOrder]`;
+    const nameWithDefault = nested ? `models[${index}][properties][${idx}][withDefault]` : `properties[${idx}][withDefault]`;
+    let defaultValue = property.default_ || getDefaultValueByType(type);
+    if (isNested || type === 'geopoint') {
+      defaultValue = JSON.stringify(defaultValue);
+    }
     return (
       <div className="ModelProperty">
         <Input
@@ -78,13 +83,17 @@ class ModelPropertyDetails extends Component {
           value={property.itemOrder}
           name={nameItemOrder}
         />
-        {!isNested && (
-          <Input
-            type="hidden"
-            value={property.default_}
-            name={nameDefault}
-          />
-        )}
+        <Checkbox
+          value={property.withDefault}
+          hidden
+          name={nameWithDefault}
+        />
+        <Input
+          type="hidden"
+          textarea={isNested}
+          value={defaultValue}
+          name={nameDefault}
+        />
         <div className={cs('ModelProperty__col', 'name')}>
           <div className="EntityProperty__field">
             <div className="EntityProperty__field--text">

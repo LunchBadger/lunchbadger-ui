@@ -299,7 +299,7 @@ var pageCommands = {
       .notPresent(selector + '.wip', 120000)
       // .present('.spinner__overlay')
       .notPresent('.spinner__overlay', 60000)
-      // .autoSave()
+      .autoSave()
       .notPresent('.Aside.disabled')
       .notPresent('.SystemDefcon1', 60000)
       .check(check);

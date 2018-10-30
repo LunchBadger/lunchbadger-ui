@@ -39,7 +39,7 @@
     &--chbx,
     &--input {
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: top;
     }
     &--chbx {
       width: 24px;
@@ -50,7 +50,6 @@
       min-height: 48px;
     }
     &--checkbox {
-      padding-top: 10px;
       margin-left: 15px;
     }
   }

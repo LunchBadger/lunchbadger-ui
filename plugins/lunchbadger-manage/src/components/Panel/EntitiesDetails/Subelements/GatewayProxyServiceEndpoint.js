@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {EntityProperty} from '../../../../../../lunchbadger-ui/src';
+import {EntityProperty, sortStrings} from '../../../../../../lunchbadger-ui/src';
 import './GatewayProxyServiceEndpoint.scss';
 
 class GatewayProxyServiceEndpoint extends PureComponent {
@@ -54,7 +54,7 @@ const selector = createSelector(
       })))
       .reduce((arr, i) => arr = arr.concat(i), [])
       .filter(item => !!item.label)
-      .sort((a, b) => a.label.toLowerCase() > b.label.toLowerCase())
+      .sort(sortStrings('label'))
   }),
 );
 

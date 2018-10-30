@@ -4,6 +4,7 @@ import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
+import FlipMove from 'react-flip-move';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
@@ -51,10 +52,6 @@ class Quadrant extends PureComponent {
     style: PropTypes.object,
   };
 
-  static contextTypes = {
-    store: PropTypes.object,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -100,7 +97,7 @@ class Quadrant extends PureComponent {
           itemOrder: props[type][id].itemOrder,
         })),
       ]), [])
-    .sort((a, b) => a.itemOrder > b.itemOrder)
+    .sort((a, b) => a.itemOrder - b.itemOrder)
     .map(({id, type}) => ({id, type}));
 
   recalculateQuadrantWidth = (event) => {
@@ -122,10 +119,10 @@ class Quadrant extends PureComponent {
 
   saveOrder = () => {
     const {orderedIds} = this.state;
-    const {store: {dispatch}} = this.context;
+    const {dispatch, title} = this.props;
     dispatch(saveOrder(orderedIds.map(item => item.id)));
     this.setState({draggingId: ''});
-    GAEvent('Canvas', 'Reordered Entities in Quadrant', this.props.title, orderedIds.length);
+    GAEvent('Canvas', 'Reordered Entities in Quadrant', title, orderedIds.length);
   };
 
   handleMouseMove = ({clientX, clientY}) => {
@@ -216,25 +213,33 @@ class Quadrant extends PureComponent {
           style={bodyStyles}
         >
           <div className="quadrant__body__wrap">
-            {orderedIds.map(({id, type}, idx) => {
-              const entity = this.props[type][id];
-              if (!entity || !entity.constructor || !entity.constructor.type) return null;
-              const Component = components[entity.constructor.type];
-              return (
-                <Component
-                  id={id}
-                  key={entity.id}
-                  entity={entity}
-                  hideSourceOnDrag={true}
-                  itemOrder={idx}
-                  moveEntity={this.moveEntity}
-                  saveOrder={this.saveOrder}
-                  dragging={draggingId === id}
-                  sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
-                  targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
-                />
-              );
-            })}
+            <FlipMove
+              staggerDurationBy="30"
+              duration={300}
+              enterAnimation="accordionVertical"
+              leaveAnimation="accordionVertical"
+              typeName="div"
+            >
+              {orderedIds.map(({id, type}, idx) => {
+                const entity = this.props[type][id];
+                if (!entity || !entity.constructor || !entity.constructor.type) return null;
+                const Component = components[entity.constructor.type];
+                return (
+                  <Component
+                    id={id}
+                    key={entity.id}
+                    entity={entity}
+                    hideSourceOnDrag={true}
+                    itemOrder={idx}
+                    moveEntity={this.moveEntity}
+                    saveOrder={this.saveOrder}
+                    dragging={draggingId === id}
+                    sourceConnections={connectionsStore.getConnectionsForTarget(entity.id)}
+                    targetConnections={connectionsStore.getConnectionsForSource(entity.id)}
+                  />
+                );
+              })}
+            </FlipMove>
           </div>
         </div>
         {resizable && (

@@ -3,6 +3,7 @@ import jsReservedWords from './jsReservedWords';
 import runtimeMapping from './runtimeMapping';
 import runtimeOptions from './runtimeOptions';
 import validFunctionName from './validFunctionName';
+import validModelName from './validModelName';
 
 export {
   getModelJsFilename,
@@ -10,4 +11,5 @@ export {
   runtimeMapping,
   runtimeOptions,
   validFunctionName,
+  validModelName,
 };

@@ -4,6 +4,7 @@ import getPlainText from './getPlainText';
 import labels from './labels';
 import openDetailsPanelWithAutoscroll from './openDetailsPanelWithAutoscroll';
 import scrollToElement from './scrollToElement';
+import sortStrings from './sortStrings';
 
 export {
   docsLinks,
@@ -12,4 +13,5 @@ export {
   labels,
   openDetailsPanelWithAutoscroll,
   scrollToElement,
+  sortStrings,
 };

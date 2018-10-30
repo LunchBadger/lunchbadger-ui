@@ -13,6 +13,7 @@ import {
 } from '../';
 import {iconFile, iconFolder} from '../../../../src/icons';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
+import {sortStrings} from '../utils';
 import './FilesEditor.scss';
 
 const OPERATIONS = {
@@ -178,7 +179,7 @@ export default class FilesEditor extends Component {
           editedNode.module = value;
           editedNode.editing = false;
           editedNode.pending = false;
-          parentNode.children.sort((a, b) => a.module > b.module);
+          parentNode.children.sort(sortStrings('module'));
           callbacks.push(() => {
             const input = findDOMNode(this.filesRef).querySelector(`.node.id${node.id}`);
             input && input.scrollIntoViewIfNeeded();

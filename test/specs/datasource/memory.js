@@ -15,6 +15,8 @@ module.exports = {
   'Memory: unique name check': function () {
     page
       .addElementFromTooltip('dataSource', 'memory')
+      .check({value: {[`${entitySelector2} .input__name input`]: 'Memory1'}})
+      .setCanvasEntityName(entitySelector2, 'Memory')
       .expectUniqueNameError(entitySelector2, 'A model connector')
       .removeEntityWithoutAutoSave(entitySelector)
       .close();

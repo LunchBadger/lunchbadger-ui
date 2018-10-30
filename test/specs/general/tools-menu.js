@@ -3,7 +3,7 @@ var microserviceSelector;
 var microserviceSelector2;
 
 module.exports = {
-  '@disabled': true, // microservices are turned off for now
+  // '@disabled': true, // microservices are turned off for now
   'Microservice: aside tools menu selected': function (browser) {
     page = browser.page.lunchBadger();
     microserviceSelector = page.getMicroserviceSelector(1);
@@ -17,6 +17,8 @@ module.exports = {
   'Microservice: unique name check': function () {
     page
       .addElement('microservice')
+      .check({value: {[`${microserviceSelector2} .input__name input`]: 'Microservice1'}})
+      .setCanvasEntityName(microserviceSelector2, 'Microservice')
       .expectUniqueNameError(microserviceSelector2, 'A microservice')
       .waitForElementNotPresent('.Aside.disabled', 8000)
       .close();

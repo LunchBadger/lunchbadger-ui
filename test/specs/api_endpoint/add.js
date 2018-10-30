@@ -24,6 +24,8 @@ module.exports = {
   'Api Endpoint: unique name check': function () {
     page
       .addElementFromTooltip('endpoint', 'apiendpoint')
+      .check({value: {[`${entitySelector2} .input__name input`]: 'ApiEndpoint1'}})
+      .setCanvasEntityName(entitySelector2, 'ApiEndpoint')
       .expectUniqueNameError(entitySelector2, 'An api endpoint');
   },
   'Api Endpoint: add paths': function () {

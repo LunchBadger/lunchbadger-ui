@@ -27,12 +27,14 @@ module.exports = {
   'Service Endpoint: unique name check': function () {
     page
       .addElementFromTooltip('endpoint', 'serviceendpoint')
+      .check({value: {[`${entitySelector2} .input__name input`]: 'ServiceEndpoint1'}})
+      .setCanvasEntityName(entitySelector2, 'ServiceEndpoint')
       .expectUniqueNameError(entitySelector2, 'A service endpoint');
   },
   'Service Endpoint: add urls': function () {
     page
       .editEntity(entitySelector)
-      .setValueSlow(entitySelector + ' .input__name input', 'Cars')
+      .setCanvasEntityName(entitySelector, 'Cars')
       .clickPresent(entitySelector + ' .button__add__URL')
       .setValueSlow(entitySelector + ' .input__urls1 input', 'http://service/car')
       .clickPresent(entitySelector + ' .button__add__URLS')

@@ -57,6 +57,8 @@ module.exports = {
   'Functions: unique name': function () {
     page
       .addElement('function')
+      .check({value: {[`${functionSelector2} .input__name input`]: 'myfunction1'}})
+      .setCanvasEntityName(functionSelector2, 'myfunction')
       .expectUniqueNameError(functionSelector2, 'A function');
   },
   'Functions: api gateway trigger': function () {

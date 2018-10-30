@@ -3,7 +3,7 @@ var entitySelector;
 var entitySelector2;
 
 module.exports = {
-  '@disabled': true,
+  // '@disabled': true,
   'Tritonobjectstorage': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);
@@ -13,13 +13,12 @@ module.exports = {
       .testDatasource('tritonobjectstorage', [
         ['LunchBadgerurl', 'http://test.com'],
         ['LunchBadgeruser', 'dumpUser'],
-        ['LunchBadgersubuser', 'dumpSubUser'],
-        ['LunchBadgerkeyId', 'dumpKeyId']
+        ['LunchBadgerkeyId', 'dumpKeyId'],
+        ['LunchBadgersubuser', 'dumpSubUser']
       ], [
         'LunchBadger\\[url\\]',
         'LunchBadger\\[user\\]',
-        'LunchBadger\\[database\\]',
-        'LunchBadger\\[username\\]'
+        'LunchBadger\\[keyId\\]'
       ]);
   },
   'Tritonobjectstorage: unique name check': function () {

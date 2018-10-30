@@ -5707,6 +5707,11 @@
         }
       }
     },
+    "react-flip-move": {
+      "version": "3.0.3",
+      "from": "react-flip-move@latest",
+      "resolved": "https://registry.npmjs.org/react-flip-move/-/react-flip-move-3.0.3.tgz"
+    },
     "react-fuzzy": {
       "version": "0.3.3",
       "from": "react-fuzzy@>=0.3.3 <0.4.0",

@@ -414,7 +414,7 @@ export default class Model extends BaseModel {
   }
 
   sortByItemOrder(a, b) {
-    return a.itemOrder > b.itemOrder;
+    return a.itemOrder - b.itemOrder;
   }
 
   pluralized(str) {

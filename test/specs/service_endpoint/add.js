@@ -13,7 +13,6 @@ module.exports = {
       .addElementFromTooltip('endpoint', 'serviceendpoint')
       .waitForElementPresent('.endpoint.Tool.selected', 8000)
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'ServiceEndpoint',
@@ -40,7 +39,6 @@ module.exports = {
       .clickPresent(entitySelector + ' .button__add__URLS')
       .setValueSlow(entitySelector + ' .input__urls2 input', 'http://service/driver')
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
@@ -59,7 +57,6 @@ module.exports = {
       .clickVisibleOnHover(entitySelector + ' .input__urls1', entitySelector + ' .button__remove__urls1')
       .waitForElementNotVisible(entitySelector + ' .button__remove__urls0', 5000)
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',

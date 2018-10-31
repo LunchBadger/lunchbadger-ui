@@ -424,7 +424,7 @@ Disallow: /deny
   },
   'EG integration: connect datasource and model': function () {
     page
-      .connectPorts(memorySelector, 'out', modelSelector, 'in');
+      .connectPortsWithoutAutoSave(memorySelector, 'out', modelSelector, 'in');
   },
   'EG integration: add service endpoint': function () {
     page

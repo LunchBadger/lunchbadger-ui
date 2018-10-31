@@ -13,7 +13,7 @@ module.exports = {
       .addElementFromTooltip('endpoint', 'apiendpoint')
       .waitForElementPresent('.endpoint.Tool.selected', 8000)
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
+      // .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'ApiEndpoint'
@@ -37,7 +37,7 @@ module.exports = {
       .clickPresent(entitySelector + ' .button__add__PATHS')
       .setValueSlow(entitySelector + ' .input__paths1 input', '/buses')
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
+      // .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',
@@ -51,8 +51,13 @@ module.exports = {
     page
       .editEntity(entitySelector)
       .clickVisibleOnHover(entitySelector + ' .paths0', entitySelector + ' .button__remove__paths0')
+      .check({
+        notPresent: [
+          `${entitySelector} .input__paths1`
+        ]
+      })
       .submitCanvasEntity(entitySelector)
-      .reloadPage()
+      // .reloadPage()
       .check({
         text: {
           [`${entitySelector} .EntityHeader .EntityProperty__field--text`]: 'Cars',

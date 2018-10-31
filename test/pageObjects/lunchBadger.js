@@ -1041,7 +1041,8 @@ var pageCommands = {
     const present = [`.DetailsPanel .tmppipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}nametype${type}`];
     return this
       .selectIconMenu('.DetailsPanel', `add__pipelines${pipelineIdx}policies${policyIdx}pairs${pairIdx}action${paramName}Parameter`, type)
-      .check({present});
+      .check({present})
+      .pause(1000);
   },
 
   addActionObjectParameterProperty: function (pipelineIdx, policyIdx, pairIdx, paramName, type, prefix = '') {

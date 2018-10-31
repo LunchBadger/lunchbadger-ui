@@ -56,6 +56,11 @@ module.exports = {
       .editEntity(entitySelector)
       .clickVisibleOnHover(entitySelector + ' .input__urls1', entitySelector + ' .button__remove__urls1')
       .waitForElementNotVisible(entitySelector + ' .button__remove__urls0', 5000)
+      .check({
+        notPresent: [
+          `${entitySelector} .input__urls2`
+        ]
+      })
       .submitCanvasEntity(entitySelector)
       .check({
         text: {

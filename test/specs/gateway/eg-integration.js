@@ -66,9 +66,9 @@ Disallow: /deny
   },
   'EG integration: unique name check': function () {
     page
-      .addElement('gateway')
-      .setCanvasEntityName(gatewaySelector2, GATEWAY_NAME)
-      .expectUniqueNameError(gatewaySelector2, 'A gateway')
+      // .addElement('gateway')
+      // .setCanvasEntityName(gatewaySelector2, GATEWAY_NAME)
+      // .expectUniqueNameError(gatewaySelector2, 'A gateway')
       .openPipelinesInDetailsPanel(gatewaySelector);
   },
   'EG integration: action schema parameter - required': function () {
@@ -293,6 +293,7 @@ Disallow: /deny
   'EG integration: custom params into allOf': function () {
     page
       .setConditionName(0, 1, 12, 'a', 7, 'ALL OF', 'conditions0name')
+      .pause(1000)
       .checkPipelines(expectCustomConditions)
   },
   'EG integration: remove C/A pair': function () {

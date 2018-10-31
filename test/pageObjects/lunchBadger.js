@@ -282,8 +282,8 @@ var pageCommands = {
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')
-      .check(check)
       .autoSave()
+      .check(check)
       .notPresent(selector + '.wip', 120000)
       .notPresent('.Aside.disabled')
       .notPresent('.SystemDefcon1', 60000)
@@ -410,8 +410,9 @@ var pageCommands = {
     return this
       .present('.DetailsPanel.visible .wrap.opened')
       .clickPresent('.DetailsPanel .BaseDetails__buttons .cancel')
-      .present('.spinner__overlay')
-      .notPresent('.spinner__overlay', 60000)
+      .autoSave()
+      // .present('.spinner__overlay')
+      // .notPresent('.spinner__overlay', 60000)
       // .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
       .notPresent('.DetailsPanel.visible', 15000)
       .pause(3000);

@@ -272,6 +272,25 @@ var pageCommands = {
       .notPresent(selector + '.editable');
   },
 
+  submitFunctionDeploy: function (selector, functionName) {
+    const check = {
+      present: [`${selector} .EntityStatus.deploying`]
+    };
+    const text = {
+      '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': functionName + ' successfully deployed'
+    };
+    return this
+      .present(selector + ' form', 10000)
+      .submitForm(selector + ' form')
+      .check(check)
+      .notPresent(selector + '.wip', 120000)
+      .notPresent('.Aside.disabled')
+      .notPresent('.SystemDefcon1', 60000)
+      .visible('.SystemInformationMessages', 180000)
+      .check({text})
+      .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
+  },
+
   submitGatewayDeploy: function (selector, gatewayName) {
     const check = {
       present: [`${selector} .EntityStatus.deploying`]
@@ -430,8 +449,8 @@ var pageCommands = {
       .clickVisible(selector)
       .clickVisible(selector + ' .Entity > .Toolbox .Toolbox__button--delete')
       .clickVisible('.SystemDefcon1 .confirm')
-      .check(check)
       .autoSave()
+      .check(check)
       .notPresent(selector, timeout);
   },
 

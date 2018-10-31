@@ -83,17 +83,18 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
     } else {
       const {running, failed} = status;
       if (entity === null) {
-        const storageFunction = userStorage.getObjectKey('function', slugId) || {};
-        const fake = !storageFunction.name;
-        updatedEntity = Function_.create({
-          ...storageFunction,
-          name: slug,
-          fake,
-          deleting: true,
-          running,
-          itemOrder: 1000,
-        });
-        dispatch(actions.updateFunction(updatedEntity));
+        /* relict since deleting functions are not rendered */
+        // const storageFunction = userStorage.getObjectKey('function', slugId) || {};
+        // const fake = !storageFunction.name;
+        // updatedEntity = Function_.create({
+        //   ...storageFunction,
+        //   name: slug,
+        //   fake,
+        //   deleting: true,
+        //   running,
+        //   itemOrder: 1000,
+        // });
+        // dispatch(actions.updateFunction(updatedEntity));
       } else {
         updatedEntity = entity.recreate();
         let isEntityUpdate = false;

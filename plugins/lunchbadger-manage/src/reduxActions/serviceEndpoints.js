@@ -7,7 +7,7 @@ const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
-  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  const itemOrder = storeUtils.getNextItemOrder(types, entities);
   const name = storeUtils.uniqueName('ServiceEndpoint', entities.serviceEndpoints);
   const entity = ServiceEndpoint.create({name, itemOrder, loaded: false, urls: initialServiceEndpointUrls});
   dispatch(actions.updateServiceEndpoint(entity));

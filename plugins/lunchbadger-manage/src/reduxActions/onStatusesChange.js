@@ -82,17 +82,18 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
     } else {
       const {running} = status;
       if (entity === null) {
-        const storageGateway = userStorage.getObjectKey('gateway', slugId) || {};
-        const fake = !storageGateway.name;
-        updatedEntity = Gateway.create({
-          ...storageGateway,
-          name: slug,
-          fake,
-          deleting: true,
-          running,
-          itemOrder: 1000,
-        });
-        dispatch(actions.updateGateway(updatedEntity));
+        /* relict since deleting functions are not rendered */
+        // const storageGateway = userStorage.getObjectKey('gateway', slugId) || {};
+        // const fake = !storageGateway.name;
+        // updatedEntity = Gateway.create({
+        //   ...storageGateway,
+        //   name: slug,
+        //   fake,
+        //   deleting: true,
+        //   running,
+        //   itemOrder: 1000,
+        // });
+        // dispatch(actions.updateGateway(updatedEntity));
       } else {
         updatedEntity = entity.recreate();
         updatedEntity.pipelinesLunchbadger = entity.pipelinesLunchbadger;

@@ -79,3 +79,10 @@ export const uniqueName = (name, entities) => {
   }
   return name;
 };
+
+export const getNextItemOrder = (types, entities) => 1 + Math.max(
+  -1,
+  ...types
+    .reduce((map, type) => [...map, ...Object.values(entities[type])], [])
+    .map(({itemOrder}) => itemOrder),
+);

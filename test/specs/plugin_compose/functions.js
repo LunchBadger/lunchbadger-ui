@@ -23,7 +23,7 @@ module.exports = {
     page
       .open()
       .addElement('function')
-      .submitCanvasEntityWithoutAutoSave(functionSelector)
+      .submitFunctionDeploy(functionSelector, 'myfunction')
       .checkFunctionTriggers(functionSelector, {});
   },
   // 'Functions: code editor resize': function () { // FIXME enable after #557 will be fixed

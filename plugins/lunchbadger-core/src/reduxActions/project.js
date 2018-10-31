@@ -21,7 +21,10 @@ export const loadFromServer = () => async (dispatch, getState) => {
   dispatch(actions.setLoadedProject(false));
   const {onAppLoad, onProjectSave} = getState().plugins;
   try {
-    const responses = await Promise.all(onAppLoad.map(item => item.request()));
+    const responses = await Promise.all([
+      ...onAppLoad.map(item => item.request()),
+      new Promise(res => setTimeout(res, 300)),
+    ]);
     onAppLoad.map((item, idx) => dispatch(item.callback(responses[idx])));
     onAppLoad.map((item, idx) => {
       item.action && dispatch(item.action(responses[idx]));
@@ -224,7 +227,10 @@ export const silentReload = paper => async (dispatch, getState) => {
       }, {});
     prevResponse.connections = connections;
     prevResponse.pendingEdit = pendingEdit;
-    const responses = await Promise.all(onAppLoad.map(item => item.request()));
+    const responses = await Promise.all([
+      ...onAppLoad.map(item => item.request()),
+      new Promise(res => setTimeout(res, 300)),
+    ]);
     const currResponse = processProjectLoad
       .reduce((map, item) => ({
         ...map,

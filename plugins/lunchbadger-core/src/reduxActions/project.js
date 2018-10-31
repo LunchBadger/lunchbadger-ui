@@ -83,7 +83,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     await Promise.all([
       ...onSaves.map(item => item.onSave(state, delta, currData, prevData)),
       saveProject ? ProjectService.save(data) : undefined,
-      saveProject ? new Promise(res => setTimeout(res, 300)) : undefined,
+      new Promise(res => setTimeout(res, 300)),
     ]);
     prevData = currData;
   } catch (error) {

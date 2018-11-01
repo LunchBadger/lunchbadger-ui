@@ -3,7 +3,7 @@ var entitySelector;
 var entitySelector2;
 
 module.exports = {
-  // '@disabled': true,
+  '@disabled': true,
   'Memory': function (browser) {
     page = browser.page.lunchBadger();
     entitySelector = page.getDataSourceSelector(1);

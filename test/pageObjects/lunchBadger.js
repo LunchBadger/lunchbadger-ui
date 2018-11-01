@@ -439,7 +439,7 @@ var pageCommands = {
 
   autoSave: function () {
     return this
-      .present('.spinner__overlay')
+      .present('.spinner__overlay', 30000)
       .notPresent('.spinner__overlay', 60000)
       .waitUntilDataSaved();
   },

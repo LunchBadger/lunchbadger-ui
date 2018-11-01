@@ -20,7 +20,6 @@ module.exports = {
       .selectValueSlow(entitySelector, 'predefined', 'Google-Maps-Location')
       .submitCanvasEntityWithoutAutoSave(entitySelector)
       // .waitForDependencyFinish()
-      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .RestPredefinedTemplates .EntityProperty__field--textValue`]: 'Google Maps - Location',
@@ -35,7 +34,6 @@ module.exports = {
       .checkEntityDetails(expectPlainGoogleMapsLocation)
       .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
       .submitDetailsPanel(entitySelector)
-      .reloadPage()
       .check({
         text: {
           [`${entitySelector} .RestPredefinedTemplates .EntityProperty__field--textValue`]: 'Google Maps - GeoCode',
@@ -137,7 +135,6 @@ module.exports = {
   },
   'Rest: remove': function () {
     page
-      .reloadPage()
       .removeEntityWithDependencyUninstall(entitySelector)
       .close();
   }

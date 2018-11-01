@@ -84,7 +84,7 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (delay = 2000) {
+  clickDemoWizardNext: function (delay = 5000) {
     return this
       .clickPresent('.joyride-tooltip__button--primary')
       .pause(delay);

@@ -376,7 +376,7 @@ var pageCommands = {
       .submitForm('.DetailsPanel .BaseDetails form')
       .present(selector + '.wip')
       // .present('.DetailsPanel:not(.visible) .wrap:not(.opened)')
-      .present('.spinner__overlay')
+      .present('.spinner__overlay', 30000)
       .notPresent('.spinner__overlay', 60000)
       .notPresent('.DetailsPanel.visible', 15000)
       .notPresent(selector + '.wip', 60000);

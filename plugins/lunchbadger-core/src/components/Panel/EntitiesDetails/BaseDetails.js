@@ -110,7 +110,7 @@ export default (ComposedComponent) => {
         element.postProcessModel(props);
       }
       dispatch(setCurrentEditElement(null, true));
-      this.closePopup(null, true);
+      this.closePopup(null, false);
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);

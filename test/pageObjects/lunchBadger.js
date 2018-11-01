@@ -232,7 +232,8 @@ var pageCommands = {
     return this
       .pause(3000)
       .clickPresent(`div[role=menu] .${select}__${value}`)
-      .present(selector + ` .select__${select} .${select}__${value}`);
+      .present(selector + ` .select__${select} .${select}__${value}`)
+      .pause(1500);
   },
 
   setAutocomplete: function (selector, keys) {

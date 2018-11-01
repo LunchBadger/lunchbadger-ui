@@ -32,19 +32,10 @@ module.exports = {
     page
       .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsLocation)
-      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode')
-      .submitDetailsPanel(entitySelector)
-      .check({
-        text: {
-          [`${entitySelector} .RestPredefinedTemplates .EntityProperty__field--textValue`]: 'Google Maps - GeoCode',
-          [`${entitySelector} .Rest__method .EntityProperty__field--textValue`]: 'GET',
-          [`${entitySelector} .Rest__url .EntityProperty__field--textValue`]: 'https://maps.googleapis.com/maps/api/geocode/json'
-        }
-      });
+      .selectValueSlow('.DetailsPanel', 'predefined', 'Google-Maps-GeoCode');
   },
   'Rest: options': function () {
     page
-      .openEntityInDetailsPanel(entitySelector)
       .checkEntityDetails(expectPlainGoogleMapsGeoCode)
       .clickPresent('.DetailsPanel .checkbox__optionsenabled')
       .checkEntityDetails(expectGoogleMapsGeoCodeWithOptionsEnabled)

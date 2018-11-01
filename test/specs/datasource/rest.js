@@ -130,12 +130,11 @@ module.exports = {
     page
       .clickVisibleOnHover('.DetailsPanel .input__operations0templatequery1key', '.DetailsPanel .button__remove__operation0queryParameter1')
       .clickVisibleOnHover('.DetailsPanel .input__operations0templatequery0key', '.DetailsPanel .button__remove__operation0queryParameter0')
-      .checkEntityDetails(expectOperations0QueryAllParameterRemoved)
-      .closeDetailsPanel();
+      .checkEntityDetails(expectOperations0QueryAllParameterRemoved);
   },
   'Rest: remove': function () {
     page
-      .removeEntityWithDependencyUninstall(entitySelector)
+      .removeEntityViaDetailsPanel(entitySelector)
       .close();
   }
 };

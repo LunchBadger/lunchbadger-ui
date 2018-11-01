@@ -444,6 +444,15 @@ var pageCommands = {
       .waitUntilDataSaved();
   },
 
+  removeEntityViaDetailsPanel: function (selector, timeout, check = {}) {
+    return this
+      .clickVisible('.DetailsPanel .Toolbox .Toolbox__button--delete')
+      .clickVisible('.SystemDefcon1 .confirm')
+      .autoSave()
+      .check(check)
+      .notPresent(selector, timeout);
+  },
+
   removeEntity: function (selector, timeout, check = {}) {
     return this
       .clickVisible(selector)

@@ -90,7 +90,7 @@ var pageCommands = {
       .pause(delay);
   },
 
-  clickDemoWizardHole: function (delay = 2000) {
+  clickDemoWizardHole: function (delay = 5000) {
     return this
       .clickPresent('.joyride-hole')
       .pause(delay);

@@ -37,11 +37,7 @@ Click this icon to open Settings.
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.SettingsPanel[style="height: 0px;"]'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(1500),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(1500),
     ],
   },
   '904': {
@@ -67,11 +63,7 @@ Let's end the walkthrough by closing Settings.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilPresent('.SettingsPanel[style="height: 0px;"]'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(1500),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(1500),
     ],
     onBefore: () => [],
   }

@@ -340,6 +340,17 @@ var pageCommands = {
       .notPresent('.SystemDefcon1', 60000);
   },
 
+  waitForEntityDeployedWithMessage: function (selector, name) {
+    const text = {
+      '.SystemInformationMessages .SystemInformationMessages__item:first-child .SystemInformationMessages__item__message': name + ' successfully deployed'
+    };
+    return this
+      .waitForEntityDeployed(selector)
+      .visible('.SystemInformationMessages', 180000)
+      .check({text})
+      .notPresent('.SystemInformationMessages .SystemInformationMessages__item:first-child', 15000);
+  },
+
   submitCanvasEntityWithExpectedValidationErrors: function (selector, validationErrors = []) {
     const present = validationErrors.map(key => `${selector} .EntityValidationErrors__fields__field.validationError__${key}`)
     return this

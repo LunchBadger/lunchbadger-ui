@@ -392,16 +392,11 @@ Disallow: /deny
       .removeSubCondition(0, 1, 0, 1, 'conditions1')
       .checkPipelines(expectRemovedAllOf)
   },
-  'EG integration: remove pipeline on canvas': function () {
+  'EG integration: add proxy pipelines': function () {
     page
       .closeDetailsPanel()
       .editEntity(gatewaySelector)
       .removePipeline(gatewaySelector, 0)
-      .submitCanvasEntity(gatewaySelector)
-  },
-  'EG integration: add proxy pipelines': function () {
-    page
-      .editEntity(gatewaySelector)
       .addPipeline(gatewaySelector, 0, 'ModelProxy')
       .addPipeline(gatewaySelector, 1, 'ServiceEndpointProxy')
       .submitCanvasEntity(gatewaySelector);

@@ -87,14 +87,14 @@ var pageCommands = {
   clickDemoWizardNext: function (delayBefore = 10, delayAfter = 2000) {
     return this
       .pause(delayBefore)
-      .clickPresent('.joyride-tooltip__button--primary')
+      .clickVisible('.joyride-tooltip__button--primary')
       .pause(delayAfter);
   },
 
   clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
     return this
       .pause(delayBefore)
-      .clickPresent('.joyride-hole')
+      .clickVisible('.joyride-hole')
       .pause(delayAfter);
   },
 

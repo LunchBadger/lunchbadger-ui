@@ -27,7 +27,7 @@ module.exports = {
       .clickDemoWizardHole(2000, 5000) // model menu
       .setCanvasEntityName(modelSelector, 'Car')
       .clickDemoWizardNext()
-      .clickDemoWizardHole()
+      .clickDemoWizardHole(2000, 5000)
       .setModelPropertyOnCanvas(modelSelector, 0, 'year')
       .clickDemoWizardHole()
       .selectValueOptionSlow(modelSelector, 'properties0type', 'Number')

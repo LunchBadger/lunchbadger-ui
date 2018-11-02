@@ -84,13 +84,13 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (delay = 5000) {
+  clickDemoWizardNext: function (delay = 2000) {
     return this
       .clickPresent('.joyride-tooltip__button--primary')
       .pause(delay);
   },
 
-  clickDemoWizardHole: function (delay = 5000) {
+  clickDemoWizardHole: function (delay = 2000) {
     return this
       .clickPresent('.joyride-hole')
       .pause(delay);
@@ -159,15 +159,13 @@ var pageCommands = {
   clickPresent: function (selector, timeout = 15000) {
     return this
       .present(selector, timeout)
-      .click(selector)
-      .click(selector);
+      .angryClick(selector);
   },
 
   clickVisible: function (selector, timeout = 15000) {
     return this
       .visible(selector, timeout)
-      .click(selector)
-      .click(selector);
+      .angryClick(selector);
   },
 
   clickVisibleOnHover: function (hoverSelector, selector) {

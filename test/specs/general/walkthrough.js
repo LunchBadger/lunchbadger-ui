@@ -19,12 +19,12 @@ module.exports = {
       .openWithDemoWizard()
       .hideCookieConfirmation()
       .hideDrift()
-      .clickDemoWizardNext()
-      .clickDemoWizardHole()
-      .clickDemoWizardNext()
-      .clickDemoWizardHole(5000)
-      .clickDemoWizardHole()
-      .clickDemoWizardHole(5000)
+      .clickDemoWizardNext() // aside menu
+      .clickDemoWizardHole() // datasources open list
+      .clickDemoWizardNext() // info
+      .clickDemoWizardHole(2000, 7000) // memory option
+      .clickDemoWizardHole() // memory ok submit
+      .clickDemoWizardHole(2000, 5000) // model menu
       .setCanvasEntityName(modelSelector, 'Car')
       .clickDemoWizardNext()
       .clickDemoWizardHole()

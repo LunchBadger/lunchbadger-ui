@@ -195,7 +195,6 @@ class EntityProperty extends Component {
     onChange(val)
   };
 
-
   renderField = () => {
     const {
       name,

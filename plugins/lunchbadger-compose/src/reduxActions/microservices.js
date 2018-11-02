@@ -9,7 +9,7 @@ const {Connections} = LunchBadgerCore.stores;
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[1].entities;
-  const itemOrder = storeUtils.getNextItemOrder(types,  entities);
+  const itemOrder = storeUtils.getNextItemOrder(types, entities);
   const name = storeUtils.uniqueName('Microservice', entities.microservices);
   const entity = Microservice.create({name, itemOrder, loaded: false});
   dispatch(actions.updateMicroservice(entity));

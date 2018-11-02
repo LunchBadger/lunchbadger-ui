@@ -109,8 +109,8 @@ export default (ComposedComponent) => {
       if (typeof element.postProcessModel === 'function') {
         element.postProcessModel(props);
       }
-      dispatch(setCurrentEditElement(null));
-      this.closePopup();
+      dispatch(setCurrentEditElement(null, true));
+      this.closePopup(null, false);
       dispatch(setCurrentElement(entity));
       await dispatch(entity.update(model));
       setTimeout(this.setFlatModel);
@@ -153,11 +153,11 @@ export default (ComposedComponent) => {
       }
     }
 
-    closePopup = (event) => {
+    closePopup = (event, silent = false) => {
       this.discardChanges();
       const {dispatch} = this.context.store;
       dispatch(setCurrentZoom({...this.props.rect, close: true}));
-      setTimeout(() => dispatch(setCurrentZoom(undefined)), 1000);
+      setTimeout(() => dispatch(setCurrentZoom(undefined, false, silent)), 1000);
       if (event) {
         GAEvent('Zoom Window', 'Closed', this.props.entity.gaType);
       }

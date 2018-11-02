@@ -166,7 +166,7 @@ export default (ComposedComponent) => {
       if (typeof element.postProcessModel === 'function') {
         element.postProcessModel(props);
       }
-      dispatch(setCurrentEditElement(null));
+      dispatch(setCurrentEditElement(null, true));
       const updatedEntity = await dispatch(entity.update(model));
       const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
       GAEvent('Canvas', gaAction, updatedEntity.gaType);

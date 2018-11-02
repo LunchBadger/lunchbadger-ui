@@ -23,7 +23,7 @@ module.exports = {
       .clickDemoWizardHole() // datasources open list
       .clickDemoWizardNext() // info
       .clickDemoWizardHole(2000, 7000) // memory option
-      .clickDemoWizardHole() // memory ok submit
+      .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
       .clickDemoWizardHole(2000, 5000) // model menu
       .setCanvasEntityName(modelSelector, 'Car')
       .clickDemoWizardNext()
@@ -32,7 +32,7 @@ module.exports = {
       .clickDemoWizardHole()
       .selectValueOptionSlow(modelSelector, 'properties0type', 'Number')
       .pause(3000)
-      .submitCanvasEntity(modelSelector)
+      .submitCanvasEntityWithoutAutoSave(modelSelector)
       // .waitForEntityDeployed(modelSelector)
       // .autoSave()
       .pause(3000)

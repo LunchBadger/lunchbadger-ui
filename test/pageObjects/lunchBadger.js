@@ -161,13 +161,13 @@ var pageCommands = {
   clickPresent: function (selector, timeout = 15000) {
     return this
       .present(selector, timeout)
-      .angryClick(selector);
+      .click(selector);
   },
 
   clickVisible: function (selector, timeout = 15000) {
     return this
       .visible(selector, timeout)
-      .angryClick(selector);
+      .click(selector);
   },
 
   clickVisibleOnHover: function (hoverSelector, selector) {

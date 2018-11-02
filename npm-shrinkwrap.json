@@ -464,9 +464,9 @@
       "dev": true
     },
     "ast-types": {
-      "version": "0.10.1",
+      "version": "0.11.6",
       "from": "ast-types@>=0.0.0 <1.0.0",
-      "resolved": "https://registry.npmjs.org/ast-types/-/ast-types-0.10.1.tgz",
+      "resolved": "https://registry.npmjs.org/ast-types/-/ast-types-0.11.6.tgz",
       "dev": true
     },
     "async": {
@@ -2989,9 +2989,9 @@
       "dev": true
     },
     "get-uri": {
-      "version": "2.0.1",
+      "version": "2.0.2",
       "from": "get-uri@>=2.0.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/get-uri/-/get-uri-2.0.1.tgz",
+      "resolved": "https://registry.npmjs.org/get-uri/-/get-uri-2.0.2.tgz",
       "dev": true
     },
     "getpass": {
@@ -4464,9 +4464,9 @@
       "dev": true
     },
     "nightwatch": {
-      "version": "0.9.19",
+      "version": "0.9.21",
       "from": "nightwatch@latest",
-      "resolved": "https://registry.npmjs.org/nightwatch/-/nightwatch-0.9.19.tgz",
+      "resolved": "https://registry.npmjs.org/nightwatch/-/nightwatch-0.9.21.tgz",
       "dev": true
     },
     "node-dir": {
@@ -5364,9 +5364,9 @@
       "dev": true
     },
     "raw-body": {
-      "version": "2.3.2",
+      "version": "2.3.3",
       "from": "raw-body@>=2.0.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/raw-body/-/raw-body-2.3.2.tgz",
+      "resolved": "https://registry.npmjs.org/raw-body/-/raw-body-2.3.3.tgz",
       "dev": true,
       "dependencies": {
         "bytes": {
@@ -5376,27 +5376,33 @@
           "dev": true
         },
         "depd": {
-          "version": "1.1.1",
-          "from": "depd@1.1.1",
-          "resolved": "https://registry.npmjs.org/depd/-/depd-1.1.1.tgz",
+          "version": "1.1.2",
+          "from": "depd@>=1.1.2 <1.2.0",
+          "resolved": "https://registry.npmjs.org/depd/-/depd-1.1.2.tgz",
           "dev": true
         },
         "http-errors": {
-          "version": "1.6.2",
-          "from": "http-errors@1.6.2",
-          "resolved": "https://registry.npmjs.org/http-errors/-/http-errors-1.6.2.tgz",
+          "version": "1.6.3",
+          "from": "http-errors@1.6.3",
+          "resolved": "https://registry.npmjs.org/http-errors/-/http-errors-1.6.3.tgz",
           "dev": true
         },
         "iconv-lite": {
-          "version": "0.4.19",
-          "from": "iconv-lite@0.4.19",
-          "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.19.tgz",
+          "version": "0.4.23",
+          "from": "iconv-lite@0.4.23",
+          "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.23.tgz",
           "dev": true
         },
         "setprototypeof": {
-          "version": "1.0.3",
-          "from": "setprototypeof@1.0.3",
-          "resolved": "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.0.3.tgz",
+          "version": "1.1.0",
+          "from": "setprototypeof@1.1.0",
+          "resolved": "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.1.0.tgz",
+          "dev": true
+        },
+        "statuses": {
+          "version": "1.5.0",
+          "from": "statuses@>=1.4.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.5.0.tgz",
           "dev": true
         }
       }
@@ -6167,6 +6173,12 @@
       "version": "5.0.1",
       "from": "safe-buffer@>=5.0.1 <6.0.0",
       "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.0.1.tgz",
+      "dev": true
+    },
+    "safer-buffer": {
+      "version": "2.1.2",
+      "from": "safer-buffer@>=2.1.2 <3.0.0",
+      "resolved": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz",
       "dev": true
     },
     "sass-graph": {

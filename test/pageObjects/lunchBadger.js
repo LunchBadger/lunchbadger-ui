@@ -84,16 +84,18 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (delay = 2000) {
+  clickDemoWizardNext: function (delayBefore = 10, delayAfter = 2000) {
     return this
+      .pause(delayBefore)
       .clickPresent('.joyride-tooltip__button--primary')
-      .pause(delay);
+      .pause(delayAfter);
   },
 
-  clickDemoWizardHole: function (delay = 2000) {
+  clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
     return this
+      .pause(delayBefore)
       .clickPresent('.joyride-hole')
-      .pause(delay);
+      .pause(delayAfter);
   },
 
   reloadPage: function () {

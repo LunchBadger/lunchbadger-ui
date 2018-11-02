@@ -53,6 +53,7 @@ C'mon, click it!`,
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Gateway.editable', false),
+      api.delayOverlay(500),
     ],
     onBefore: api => [
       api.focus('.Tool.gateway button'),
@@ -125,9 +126,7 @@ Click <pre>OK</pre> to deploy a Gateway.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.Gateway.editable'),
-      api.setShowOverlay(false),
-      api.wait(1000),
-      api.setShowOverlay(true),
+      api.delayOverlay(1000),
     ],
     onBefore: api => [
       api.focus('.Entity.Gateway.editable .submit'),
@@ -169,11 +168,18 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
       api.addClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.addClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
       api.waitUntilPresent('.Entity.Model .port-out .port__anchor--connected'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.waitUntilPresent('.Entity.ApiEndpoint'),
+      api.wait(500),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
       api.togglePortWrapper('.Entity.Model .port__wrap__out', 'remove', 'walkthroughModelPipelineStep'),
       api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
     ],
     onBefore: api => [
+      api.delayOverlay(500),
       api.togglePortWrapper('.Entity.Model .port__wrap__out', 'add', 'walkthroughModelPipelineStep'),
     ],
     onPageReload: api => [
@@ -253,11 +259,18 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
       api.addClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.addClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
       api.waitUntilPresent('.Entity.Function_ .port-out .port__anchor--connected'),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.waitUntilPresent('.Entity.ApiEndpoint.editable'),
+      api.wait(500),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
       api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'remove', 'walkthroughFunctionPipelineStep'),
       api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
     ],
     onBefore: api => [
+      api.delayOverlay(500),
       api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'add', 'walkthroughFunctionPipelineStep'),
     ],
     onPageReload: api => [
@@ -335,11 +348,7 @@ Add the following path: <pre>/myfunction*</pre>
   //   allowClicksThruHole: true,
   //   triggerNext: api => [
   //     api.waitUntilPresent('.DetailsPanel.visible .BaseDetails.pipelines', false),
-  //     api.setShowOverlay(false),
-  //     api.setShowTooltip(false),
-  //     api.wait(2000),
-  //     api.setShowTooltip(true),
-  //     api.setShowOverlay(true),
+  //     api.delayOverlay(2000),
   //   ],
   //   onBefore: api => [
   //     api.click('.Entity.Gateway .EntityHeader'),
@@ -381,11 +390,7 @@ Add the following path: <pre>/myfunction*</pre>
   //   allowClicksThruHole: true,
   //   triggerNext: api => [
   //     api.waitUntilNotPresent('.DetailsPanel.visible'),
-  //     api.setShowOverlay(false),
-  //     api.setShowTooltip(false),
-  //     api.wait(2000),
-  //     api.setShowTooltip(true),
-  //     api.setShowOverlay(true),
+  //     api.delayOverlay(2000),
   //   ],
   //   onBefore: api => [
   //     api.focus('.DetailsPanel .cancel'),

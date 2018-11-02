@@ -13,7 +13,7 @@ const {coreActions, actions: actionsCore, storeUtils, userStorage} = LunchBadger
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[2].entities;
-  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  const itemOrder = storeUtils.getNextItemOrder(types, entities);
   const pipelines = {Pipeline: {policies: initialPipelinePolicies}};
   const policies = Object.keys(entities.gatewaySchemas.policy);
   const name = storeUtils.uniqueName('Gateway', entities.gateways);

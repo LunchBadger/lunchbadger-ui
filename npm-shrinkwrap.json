@@ -6239,9 +6239,9 @@
       "resolved": "https://registry.npmjs.org/scroll/-/scroll-2.0.3.tgz"
     },
     "selenium-server-standalone-jar": {
-      "version": "2.53.1",
-      "from": "selenium-server-standalone-jar@2.53.1",
-      "resolved": "https://registry.npmjs.org/selenium-server-standalone-jar/-/selenium-server-standalone-jar-2.53.1.tgz",
+      "version": "3.14.0",
+      "from": "selenium-server-standalone-jar@latest",
+      "resolved": "https://registry.npmjs.org/selenium-server-standalone-jar/-/selenium-server-standalone-jar-3.14.0.tgz",
       "dev": true
     },
     "semver": {

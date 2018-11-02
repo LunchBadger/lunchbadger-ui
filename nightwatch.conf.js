@@ -32,7 +32,7 @@ module.exports = {
   "globals_path": "test/globals",
   "selenium": {
     "start_process": true,
-    "server_path": "./node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.53.1.jar",
+    "server_path": "./node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.14.0.jar",
     "log_path": "",
     "host": "127.0.0.1",
     "port": 4444,

@@ -28,7 +28,7 @@ module.exports = {
       .expectDemoWizardTitle('Memory Model Connector Selection')
       .clickDemoWizardHoleWithEntityFlipping(20, 20, '.CanvasElement.DataSource') // memory option
       .expectDemoWizardTitle('Memory Model Connector Creation')
-      .clickDemoWizardHole()
+      .clickDemoWizardHole(5000, 5000)
       // .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
       // .check({present:['.Entity.DataSource.memory:not(.wip)']})
       .expectDemoWizardTitle('Model Entities Overview')

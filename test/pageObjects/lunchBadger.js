@@ -94,7 +94,7 @@ var pageCommands = {
   clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
     return this
       .pause(delayBefore)
-      .clickVisible('.joyride-hole')
+      .clickPresent('.joyride-hole')
       .pause(delayAfter);
   },
 

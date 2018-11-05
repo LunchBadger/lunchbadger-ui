@@ -14,7 +14,7 @@ const uniqueApiEndpointName = (str, entities) => storeUtils.uniqueName(str, {
 export const add = () => (dispatch, getState) => {
   const {entities, plugins: {quadrants}} = getState();
   const types = quadrants[3].entities;
-  const itemOrder = types.reduce((map, type) => map + Object.keys(entities[type]).length, 0);
+  const itemOrder = storeUtils.getNextItemOrder(types, entities);
   const name = uniqueApiEndpointName('ApiEndpoint', entities);
   const entity = ApiEndpoint.create({name, itemOrder, loaded: false});
   dispatch(actions.updateApiEndpoint(entity));

@@ -23,13 +23,10 @@ C'mon, click it!
     title: 'Model Connector Entities Overview',
     text: `
 Each Model Connector Entity will come with its own set of properties specific for that connection type. A subset of available Model Connectors are available in the menu.
-<br />
-<br />
-C'mon, click it!
 `,
     waitForSelector: 'div[role=presentation]',
     position: 'right',
-    allowClicksThruHole: true,
+    allowClicksThruHole: false,
     skipLastStep: true,
     onBefore: api => [
       api.wait(500),
@@ -54,6 +51,7 @@ C'mon, click it!
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.DataSource.memory', false),
+      api.delayOverlay(500),
     ],
     onBefore: api => [
       api.blockClicks(),
@@ -95,6 +93,7 @@ C'mon, click it!
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Model.editable .EntityHeader', false),
+      api.delayOverlay(500),
     ],
     onBefore: api => [
       api.focus('.Tool.model button'),
@@ -235,6 +234,7 @@ Keep in mind, it applies also to almost all other Entities.
     position: 'right',
     allowClicksThruHole: false,
     onBefore: api => [
+      api.delayOverlay(500),
       api.click('.Entity.Model'),
       api.waitUntilPresent('.Entity.Model.highlighted .Toolbox__button--edit'),
     ],
@@ -253,13 +253,10 @@ C'mon, click it!
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(3000),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(3000),
     ],
     onBefore: api => [
+      api.delayOverlay(500),
       api.click('.Entity.Model'),
       api.waitUntilPresent('.Entity.Model.highlighted .Toolbox__button--zoom'),
       api.focus('.Entity.Model .Toolbox__button--zoom'),
@@ -299,12 +296,9 @@ Click <pre>Cancel</pre> to return to the Canvas view.
     position: 'top-right',
     allowClicksThruHole: true,
     triggerNext: api => [
+      api.focus('.DetailsPanel .cancel'),
       api.waitUntilNotPresent('.DetailsPanel.visible'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(1500),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(1500),
     ],
     onBefore: api => [
       api.focus('.DetailsPanel .cancel'),
@@ -343,6 +337,7 @@ C'mon, click it!
     position: 'right',
     triggerNext: api => [
       api.waitUntilPresent('.Entity.Function_.editable', false),
+      api.delayOverlay(500),
     ],
     onBefore: api => [
       api.focus('.Tool.function button'),
@@ -359,9 +354,7 @@ Click <pre>OK</pre> to deploy function.
     skipLastStep: false,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.Function_.editable'),
-      api.setShowOverlay(false),
-      api.wait(1000),
-      api.setShowOverlay(true),
+      api.delayOverlay(1000),
     ],
     onBefore: api => [
       api.focus('.Entity.Function_.editable .submit'),
@@ -398,13 +391,10 @@ C'mon, click it!
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('.DetailsPanel.visible .RnD__content', false),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(3000),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(3000),
     ],
     onBefore: api => [
+      api.delayOverlay(500),
       api.click('.Entity.Function_'),
       api.waitUntilPresent('.Entity.Function_.highlighted .Toolbox__button--zoom'),
       api.focus('.Entity.Function_ .Toolbox__button--zoom'),
@@ -433,11 +423,7 @@ Click <pre>Cancel</pre> to return to the Canvas view.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.DetailsPanel.visible'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
-      api.wait(1500),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
+      api.delayOverlay(1500),
     ],
     onBefore: api => [
       api.focus('.DetailsPanel .cancel'),

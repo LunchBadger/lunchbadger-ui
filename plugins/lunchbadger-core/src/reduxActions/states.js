@@ -52,7 +52,7 @@ export const clearCurrentElement = () => (dispatch, getState) => {
   ]));
 };
 
-export const setCurrentEditElement = value => (dispatch, getState) => {
+export const setCurrentEditElement = (value, silent = false) => (dispatch, getState) => {
   const {currentEditElement} = getState().states;
   if (currentEditElement && value && currentEditElement.id === value.id) return;
   if (currentEditElement === null && currentEditElement === value) return;
@@ -62,9 +62,9 @@ export const setCurrentEditElement = value => (dispatch, getState) => {
     {key: 'currentlySelectedSubelements', value: []},
   ]));
   if (value && value.id && value.loaded) {
-    dispatch(setPendingEdit('add', value.id, false));
+    dispatch(setPendingEdit('add', value.id, silent));
   } else if (currentEditElement && currentEditElement.id && currentEditElement.loaded) {
-    dispatch(setPendingEdit('remove', currentEditElement.id, false));
+    dispatch(setPendingEdit('remove', currentEditElement.id, silent));
   }
 };
 
@@ -85,7 +85,7 @@ export const clearCurrentEditElement = (silent = false) => (dispatch, getState) 
   ]));
 };
 
-export const setCurrentZoom = (value, silent = false) => (dispatch, getState) => {
+export const setCurrentZoom = (value, silent = false, silentPendingEdit = false) => (dispatch, getState) => {
   const {
     states: {
       zoom, currentElement = {}
@@ -97,7 +97,7 @@ export const setCurrentZoom = (value, silent = false) => (dispatch, getState) =>
   if (!silent) {
     const {id, type} = currentElement || {};
     if (id && type && entities[type][id] && entities[type][id].locked) return;
-    dispatch(setPendingEdit(value && id ? 'add' : 'remove', id, false));
+    dispatch(setPendingEdit(value && id ? 'add' : 'remove', id, silentPendingEdit));
   }
 };
 

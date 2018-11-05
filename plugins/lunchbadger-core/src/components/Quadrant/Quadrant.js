@@ -167,6 +167,9 @@ class Quadrant extends PureComponent {
     behavior: 'smooth',
   });
 
+  toggleFlipping = flipping => (_, element) =>
+    element.classList.toggle('flipping', flipping);
+
   render() {
     const {
       title,
@@ -219,6 +222,8 @@ class Quadrant extends PureComponent {
               enterAnimation="accordionVertical"
               leaveAnimation="accordionVertical"
               typeName="div"
+              onStart={this.toggleFlipping(true)}
+              onFinish={this.toggleFlipping(false)}
             >
               {orderedIds.map(({id, type}, idx) => {
                 const entity = this.props[type][id];

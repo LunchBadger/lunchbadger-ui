@@ -98,6 +98,14 @@ var pageCommands = {
       .pause(delayAfter);
   },
 
+  clickDemoWizardHoleWithEntityFlipping: function (delayBefore = 10, delayAfter = 2000, selector) {
+    return this
+      .pause(delayBefore)
+      .clickPresent('.joyride-hole')
+      .expectFlipping(selector)
+      .pause(delayAfter);
+  },
+
   expectDemoWizardTitle: function (title) {
     return this
       .check({text: {'.joyride-tooltip__header': title}});
@@ -339,6 +347,12 @@ var pageCommands = {
       .submitForm(selector + ' form')
       .check(check)
       .waitForEntityDeployed(selector);
+  },
+
+  expectFlipping: function (selector) {
+    return this
+      .checkWithoutPause({present: [`${selector}.flipping`]})
+      .checkWithoutPause({present: [`${selector}:not(.flipping)`]})
   },
 
   waitForEntityDeployed: function (selector) {
@@ -794,7 +808,7 @@ var pageCommands = {
       });
   },
 
-  check: function ({
+  checkWithoutPause: function({
     text = {},
     textContain = {},
     value = {},
@@ -808,8 +822,6 @@ var pageCommands = {
     connected = {},
     notConnected = {}
   }) {
-    this
-      .pause(500);
     Object.keys(text).forEach((key) => {
       this.api.expect.element(key).text.to.equal(text[key]).before(45000);
     });
@@ -851,6 +863,12 @@ var pageCommands = {
       });
     });
     return this;
+  },
+
+  check: function (check) {
+    return this
+      .pause(500)
+      .checkWithoutPause(check)
   },
 
   expectAutocompleteValue: function (selector, values) {

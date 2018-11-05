@@ -50,8 +50,9 @@ C'mon, click it!
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.DataSource.memory', false),
+      api.waitUntilPresent('.CanvasElement.DataSource.flipping .Entity.DataSource.memory', false),
       api.delayOverlay(500),
+      api.waitUntilPresent('.CanvasElement.DataSource:not(.flipping) .Entity.DataSource.memory', false),
     ],
     onBefore: api => [
       api.blockClicks(),
@@ -92,8 +93,12 @@ C'mon, click it!
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Model.editable .EntityHeader', false),
-      api.delayOverlay(500),
+      api.waitUntilPresent('.CanvasElement.Model.flipping .Entity.Model', false),
+      api.setShowOverlay(false),
+      api.setShowTooltip(false),
+      api.waitUntilPresent('.CanvasElement.Model:not(.flipping) .Entity.Model', false),
+      api.setShowTooltip(true),
+      api.setShowOverlay(true),
     ],
     onBefore: api => [
       api.focus('.Tool.model button'),

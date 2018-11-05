@@ -332,7 +332,8 @@ var pageCommands = {
       .check(check);
   },
 
-  submitCanvasEntityWithoutAutoSave: function (selector, check = {}) {
+  submitCanvasEntityWithoutAutoSave: function (selector) {
+    const check = {present: [`${selector}.wip`]};
     return this
       .present(selector + ' form', 10000)
       .submitForm(selector + ' form')

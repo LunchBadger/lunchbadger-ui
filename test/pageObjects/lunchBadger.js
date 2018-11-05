@@ -87,6 +87,7 @@ var pageCommands = {
   clickDemoWizardNext: function (delayBefore = 10, delayAfter = 2000) {
     return this
       .pause(delayBefore)
+      .notPresent('.app__wrapper__blocked--message')
       .clickVisible('.joyride-tooltip__button--primary')
       .pause(delayAfter);
   },
@@ -94,6 +95,7 @@ var pageCommands = {
   clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
     return this
       .pause(delayBefore)
+      .notPresent('.app__wrapper__blocked--message')
       .clickPresent('.joyride-hole')
       .pause(delayAfter);
   },
@@ -101,6 +103,7 @@ var pageCommands = {
   clickDemoWizardHoleWithEntityFlipping: function (delayBefore = 10, delayAfter = 2000, selector) {
     return this
       .pause(delayBefore)
+      .notPresent('.app__wrapper__blocked--message')
       .clickPresent('.joyride-hole')
       .expectFlipping(selector)
       .pause(delayAfter);

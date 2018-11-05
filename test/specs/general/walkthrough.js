@@ -19,6 +19,7 @@ module.exports = {
       .openWithDemoWizard()
       .hideCookieConfirmation()
       .hideDrift()
+      .unblockWalkthroughOverlay()
       .expectDemoWizardTitle('Navigating the Entity Palette')
       .clickDemoWizardNext() // aside menu
       .expectDemoWizardTitle('Model Connectors Menu')

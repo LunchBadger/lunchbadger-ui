@@ -50,6 +50,15 @@ var pageCommands = {
     return this;
   },
 
+  unblockWalkthroughOverlay: function () {
+    this.api.execute(function () {
+      window.document.querySelector('.Walkthrough .joyride-overlay').style.pointerEvents = 'none !important';
+      return;
+    }, [], function () {});
+    return this;
+  },
+
+
   hideDrift: function () {
     this.api.execute(function () {
       window.document.getElementById('drift-widget-container').style.display = 'none';

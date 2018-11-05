@@ -220,6 +220,14 @@ class WalkthroughInner extends PureComponent {
       }
       cb();
     },
+    delayOverlay: timeout => cb => series([
+      this.api.setShowOverlay(false),
+      this.api.setShowTooltip(false),
+      this.api.wait(timeout),
+      this.api.setShowTooltip(true),
+      this.api.setShowOverlay(true),
+      () => cb(),
+    ]),
     setWaitMethod: (waitMethod = 'waitByAnimationFrame') => cb => {
       this.waitMethod = waitMethod;
       cb();

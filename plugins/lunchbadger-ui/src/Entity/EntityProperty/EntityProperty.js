@@ -188,7 +188,12 @@ class EntityProperty extends Component {
     this.handleObjectAddKey(key);
   }
 
-  handleCodeEditorChange = value => this.props.onChange({target: {value}});
+  handleCodeEditorChange = value => {
+    const {onBlur, onChange} = this.props;
+    const val = {target: {value}};
+    onBlur(val);
+    onChange(val)
+  };
 
   renderField = () => {
     const {

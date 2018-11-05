@@ -249,18 +249,18 @@ export default class GatewayPolicyAction extends PureComponent {
     } else {
       property.value = value;
     }
-    this.changeState(state, () => {
-      if (!inputName) return;
-      const inputNameArr = inputName.split(']');
-      if (inputNameArr[4] && inputNameArr[4].includes('fake')) {
-        inputNameArr[4] = '[0'; // replacing name's implicit part with pair 0
-      }
-      const input = document.getElementById(inputNameArr.join(']'));
-      if (input) { // && selectionStart) { // #1007
-        input.focus();
-        // input.selectionStart = selectionStart; // #1007
-      }
-    });
+    this.changeState(state); //, () => { /* relict since #1007 */
+    //   if (!inputName) return;
+    //   const inputNameArr = inputName.split(']');
+    //   if (inputNameArr[4] && inputNameArr[4].includes('fake')) {
+    //     inputNameArr[4] = '[0'; // replacing name's implicit part with pair 0
+    //   }
+    //   const input = document.getElementById(inputNameArr.join(']'));
+    //   if (input) { // && selectionStart) { // #1007
+    //     input.focus();
+    //     // input.selectionStart = selectionStart; // #1007
+    //   }
+    // });
   };
 
   handleCustomParameterNameChange = id => ({target: {value}}) => {

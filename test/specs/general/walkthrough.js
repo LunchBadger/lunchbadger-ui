@@ -19,15 +19,25 @@ module.exports = {
       .openWithDemoWizard()
       .hideCookieConfirmation()
       .hideDrift()
+      .expectDemoWizardTitle('Navigating the Entity Palette')
       .clickDemoWizardNext() // aside menu
+      .expectDemoWizardTitle('Model Connectors Menu')
       .clickDemoWizardHole() // datasources open list
+      .expectDemoWizardTitle('Model Connector Entities Overview')
       .clickDemoWizardNext() // info
+      .expectDemoWizardTitle('Memory Model Connector Selection')
       .clickDemoWizardHole(2000, 7000) // memory option
+      .expectDemoWizardTitle('Memory Model Connector Creation')
       .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
+      .expectDemoWizardTitle('Model Entities Overview')
       .clickDemoWizardHole(5000, 5000) // model menu
+      .expectDemoWizardTitle('Name the Model Entity')
       .setCanvasEntityName(modelSelector, 'Car')
+      .expectDemoWizardTitle('Model Entity Context Path')
       .clickDemoWizardNext()
+      .expectDemoWizardTitle('Model Properties Overview')
       .clickDemoWizardHole(5000, 5000)
+      .expectDemoWizardTitle('Add a Property')
       .setModelPropertyOnCanvas(modelSelector, 0, 'year')
       .clickDemoWizardHole()
       .selectValueOptionSlow(modelSelector, 'properties0type', 'Number')

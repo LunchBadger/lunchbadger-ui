@@ -98,6 +98,11 @@ var pageCommands = {
       .pause(delayAfter);
   },
 
+  expectDemoWizardTitle: function (title) {
+    return this
+      .check({text: {'.joyride-tooltip__header': title}});
+  },
+
   reloadPage: function () {
     this.api.refresh();
     return this

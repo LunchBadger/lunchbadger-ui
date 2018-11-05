@@ -87,7 +87,7 @@ Models are Node.js functions with built in features such as CRUD (through Model 
 <br />
 C'mon, click it!
 `,
-    waitForSelector: '.Tool.model',
+    selector: '.Tool.model',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -135,7 +135,7 @@ Select the plus icon to assign properties to the Model Entity. Properties map to
 <br /><br />
 C'mon, click it!
 `,
-    waitForSelector: '.Entity.Model.editable .button__add__Properties',
+    selector: '.Entity.Model.editable .button__add__Properties',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -151,7 +151,7 @@ C'mon, click it!
     text: `
 Let's set <pre>year</pre> as the property name.
 `,
-    waitForSelector: '.Entity.Model.editable .input__properties0name',
+    selector: '.Entity.Model.editable .input__properties0name',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -169,7 +169,7 @@ Let's set the Property type.
 <br /><br />
 Select <pre>Number</pre> from the dropdown list.
 `,
-    waitForSelector: '.Entity.Model.editable .select__properties0type',
+    selector: '.Entity.Model.editable .select__properties0type',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -192,7 +192,7 @@ Select <pre>Number</pre> from the dropdown list.
     text: `
 Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
 `,
-    waitForSelector: '.Entity.Model.editable .submit',
+    selector: '.Entity.Model.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     triggerNext: api => [
@@ -279,7 +279,7 @@ Keep in mind, that almost all Entities have details that are available in full e
   '0274': {
     title: 'Code Editor',
     text: 'All Models are Node.js functions. Custom code for the <pre>Car</pre> model can be entered into the Code Editor.',
-    waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
+    selector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
     position: 'top',
     allowClicksThruHole: false,
     skipLastStep: true,
@@ -292,7 +292,7 @@ Keep in mind, that almost all Entities have details that are available in full e
     text: `
 Click <pre>Cancel</pre> to return to the Canvas view.
 `,
-    waitForSelector: '.DetailsPanel .cancel',
+    selector: '.DetailsPanel .cancel',
     position: 'top-right',
     allowClicksThruHole: true,
     triggerNext: api => [
@@ -309,7 +309,7 @@ Click <pre>Cancel</pre> to return to the Canvas view.
     text: `
 The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
-    waitForSelector: '.Entity.DataSource.memory .port__wrap__out',
+    selector: '.Entity.DataSource.memory .port__wrap__out',
     position: 'bottom-left',
     allowClicksThruHole: true,
     skipLastStep: false,
@@ -331,7 +331,7 @@ A Function Entity represents a serverless function that's managed within your Pr
 <br /><br />
 C'mon, click it!
 `,
-    waitForSelector: '.Tool.function',
+    selector: '.Tool.function',
     allowClicksThruHole: true,
     skipLastStep: true,
     position: 'right',
@@ -348,7 +348,7 @@ C'mon, click it!
     text: `
 Click <pre>OK</pre> to deploy function.
 `,
-    waitForSelector: '.Entity.Function_.editable .submit',
+    selector: '.Entity.Function_.editable .submit',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: false,
@@ -386,7 +386,7 @@ The ellipses icon will open a Details Panel.
 C'mon, click it!
 `,
     position: 'right',
-    waitForSelector: '.Entity.Function_ .Toolbox__button--zoom',
+    selector: '.Entity.Function_ .Toolbox__button--zoom',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
@@ -407,7 +407,7 @@ Function Entity's Code Editor
     text: `
 Functions are barebone functions that can be written in multiple languages and ran in your public cloud serverless infrastructure like AWS Lambda or ran natively in your Kubernetes cluster in Kubeless, a serverless engine that comes built-in.
 `,
-    waitForSelector: '.DetailsPanel .FilesEditor',
+    selector: '.DetailsPanel .FilesEditor',
     position: 'top',
     allowClicksThruHole: false,
     skipLastStep: true,
@@ -418,7 +418,7 @@ Functions are barebone functions that can be written in multiple languages and r
     text: `
 Click <pre>Cancel</pre> to return to the Canvas view.
 `,
-    waitForSelector: '.DetailsPanel .cancel',
+    selector: '.DetailsPanel .cancel',
     position: 'top-right',
     allowClicksThruHole: true,
     triggerNext: api => [

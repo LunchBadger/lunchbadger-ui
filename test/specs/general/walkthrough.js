@@ -21,28 +21,28 @@ module.exports = {
       .hideCookieConfirmation()
       .hideDrift()
       .unblockWalkthroughOverlay()
-      .expectDemoWizardTitle('Navigating the Entity Palette')
+      // .expectDemoWizardTitle('Navigating the Entity Palette')
       .clickDemoWizardNext('Navigating the Entity Palette') // aside menu
-      .expectDemoWizardTitle('Model Connectors Menu')
+      // .expectDemoWizardTitle('Model Connectors Menu')
       .clickDemoWizardHole('Model Connectors Menu') // datasources open list
-      .expectDemoWizardTitle('Model Connector Entities Overview')
+      // .expectDemoWizardTitle('Model Connector Entities Overview')
       .clickDemoWizardNext('Model Connector Entities Overview') // info
-      .expectDemoWizardTitle('Memory Model Connector Selection')
+      // .expectDemoWizardTitle('Memory Model Connector Selection')
       .clickDemoWizardHoleWithEntityFlipping('.CanvasElement.DataSource') // memory option
-      .expectDemoWizardTitle('Memory Model Connector Creation')
+      // .expectDemoWizardTitle('Memory Model Connector Creation')
       .clickDemoWizardHole('Memory Model Connector Creation')
       // .pause(5000)
       // .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
       // .check({present:['.Entity.DataSource.memory:not(.wip)']})
-      .expectDemoWizardTitle('Model Entities Overview')
+      // .expectDemoWizardTitle('Model Entities Overview')
       .clickDemoWizardHole('Model Entities Overview') // model menu
-      .expectDemoWizardTitle('Name the Model Entity')
+      // .expectDemoWizardTitle('Name the Model Entity')
       .setCanvasEntityName(modelSelector, 'Car')
-      .expectDemoWizardTitle('Model Entity Context Path')
+      // .expectDemoWizardTitle('Model Entity Context Path')
       .clickDemoWizardNext('Model Entity Context Path')
-      .expectDemoWizardTitle('Model Properties Overview')
+      // .expectDemoWizardTitle('Model Properties Overview')
       .clickDemoWizardHole('Model Properties Overview')
-      .expectDemoWizardTitle('Add a Property')
+      // .expectDemoWizardTitle('Add a Property')
       .setModelPropertyOnCanvas(modelSelector, 0, 'year')
       .clickDemoWizardHole('Add a Property')
       .selectValueOptionSlow(modelSelector, 'properties0type', 'Number')

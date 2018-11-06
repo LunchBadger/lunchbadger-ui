@@ -1,5 +1,5 @@
 const fs = require('fs');
-const login = 'test';
+const login = 'sk';
 
 let notifiedCoverage = false;
 const RND = Math.floor(Math.random() * 1000);
@@ -94,37 +94,44 @@ var pageCommands = {
     return this;
   },
 
-  clickDemoWizardNext: function (delayBefore = 10, delayAfter = 2000) {
-    return this
-      .saveScreenshot('demowizard')
-      .pause(delayBefore)
-      .notPresent('.app__wrapper__blocked--message')
-      .clickVisible('.joyride-tooltip__button--primary')
-      .saveScreenshot('demowizard')
-      .pause(delayAfter);
+  clickWhileDemoWizardTitle: function (selector, title, retry = 0) {
+    const self = this;
+    this.api.getText('.joyride-tooltip__header', function (result) {
+      if (result.value === title && retry < 20) {
+        self.saveScreenshot('demowizard');
+        self.clickPresent(selector);
+        self.pause(1000);
+        self.clickWhileDemoWizardTitle(selector, title, retry + 1);
+      }
+    });
+    return this;
   },
 
-  clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
+  clickDemoWizardNext: function (title) {
     return this
       .saveScreenshot('demowizard')
-      .pause(delayBefore)
       .notPresent('.app__wrapper__blocked--message')
-      .clickPresent('.joyride-hole')
+      .clickWhileDemoWizardTitle('.joyride-tooltip__button--primary', title)
+      // .clickVisible('.joyride-tooltip__button--primary')
       .saveScreenshot('demowizard')
-      .pause(delayAfter);
   },
 
-  clickDemoWizardHoleWithEntityFlipping: function (delayBefore = 10, delayAfter = 2000, selector) {
+  clickDemoWizardHole: function (title) {
     return this
       .saveScreenshot('demowizard')
-      .pause(delayBefore)
+      .notPresent('.app__wrapper__blocked--message')
+      .clickWhileDemoWizardTitle('.joyride-hole', title)
+      .saveScreenshot('demowizard');
+  },
+
+  clickDemoWizardHoleWithEntityFlipping: function (selector) {
+    return this
+      .saveScreenshot('demowizard')
       .notPresent('.app__wrapper__blocked--message')
       .saveScreenshot('demowizard')
       .clickPresent('.joyride-hole')
-      // .saveScreenshot('demowizard')
       .expectFlipping(selector)
-      .saveScreenshot('demowizard')
-      .pause(delayAfter);
+      .saveScreenshot('demowizard');
   },
 
   expectDemoWizardTitle: function (title) {
@@ -191,6 +198,15 @@ var pageCommands = {
   dragDropElement: function (dragTarget, dropTarget) {
     return this
       .drag(dragTarget, dropTarget);
+  },
+
+  doubleClick: function (selector) {
+    const self = this;
+    return this
+      .moveToElement(selector, 5, 5, function () {
+        self.api.doubleClick();
+        return self;
+      });
   },
 
   clickPresent: function (selector, timeout = 15000) {

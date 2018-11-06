@@ -1,7 +1,9 @@
+const user = 'sk';
+
 const request = require('request');
 
-const CLEAR_PROJECT_URL = 'http://internal-test-dev.staging.lunchbadger.io/project-api/api/Projects/test-dev/clear';
-const CLEAR_SLS_URL = 'http://sls-test-dev.staging.lunchbadger.io/service';
+const CLEAR_PROJECT_URL = `http://internal-${user}-dev.staging.lunchbadger.io/project-api/api/Projects/test-dev/clear`;
+const CLEAR_SLS_URL = `http://sls-${user}-dev.staging.lunchbadger.io/service`;
 
 module.exports = {
   beforeEach: function(browser, cb) {

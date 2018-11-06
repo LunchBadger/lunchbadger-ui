@@ -2,6 +2,7 @@ const fs = require('fs');
 const login = 'test';
 
 let notifiedCoverage = false;
+const RND = Math.floor(Math.random() * 1000);
 
 var pageCommands = {
   openWithoutLogin: function () {
@@ -95,31 +96,40 @@ var pageCommands = {
 
   clickDemoWizardNext: function (delayBefore = 10, delayAfter = 2000) {
     return this
+      .saveScreenshot('demowizard')
       .pause(delayBefore)
       .notPresent('.app__wrapper__blocked--message')
       .clickVisible('.joyride-tooltip__button--primary')
+      .saveScreenshot('demowizard')
       .pause(delayAfter);
   },
 
   clickDemoWizardHole: function (delayBefore = 10, delayAfter = 2000) {
     return this
+      .saveScreenshot('demowizard')
       .pause(delayBefore)
       .notPresent('.app__wrapper__blocked--message')
       .clickPresent('.joyride-hole')
+      .saveScreenshot('demowizard')
       .pause(delayAfter);
   },
 
   clickDemoWizardHoleWithEntityFlipping: function (delayBefore = 10, delayAfter = 2000, selector) {
     return this
+      .saveScreenshot('demowizard')
       .pause(delayBefore)
       .notPresent('.app__wrapper__blocked--message')
+      .saveScreenshot('demowizard')
       .clickPresent('.joyride-hole')
+      // .saveScreenshot('demowizard')
       .expectFlipping(selector)
+      .saveScreenshot('demowizard')
       .pause(delayAfter);
   },
 
   expectDemoWizardTitle: function (title) {
     return this
+      .saveScreenshot('demowizard')
       .check({text: {'.joyride-tooltip__header': title}});
   },
 
@@ -352,13 +362,25 @@ var pageCommands = {
       .check(check);
   },
 
+  saveScreenshot: function (folder) {
+    const now = new Date();
+    const timemark = now.toISOString().replace(/:/g, '.');
+    this.api.saveScreenshot(`test/reports/screenshots/${folder}/${RND}-${timemark}.png`);
+    return this;
+  },
+
   submitCanvasEntityWithoutAutoSave: function (selector) {
     const check = {present: [`${selector}.wip`]};
     return this
+      .saveScreenshot('demowizard')
       .present(selector + ' form', 10000)
+      .saveScreenshot('demowizard')
       .submitForm(selector + ' form')
+      .saveScreenshot('demowizard')
       .check(check)
-      .waitForEntityDeployed(selector);
+      .saveScreenshot('demowizard')
+      .waitForEntityDeployed(selector)
+      .saveScreenshot('demowizard');
   },
 
   expectFlipping: function (selector) {

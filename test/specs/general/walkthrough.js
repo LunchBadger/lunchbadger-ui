@@ -17,6 +17,7 @@ module.exports = {
     myfunctionApiEndpointSelector = page.getApiEndpointSelector(2);
     page
       .openWithDemoWizard()
+      .saveScreenshot('demowizard')
       .hideCookieConfirmation()
       .hideDrift()
       .unblockWalkthroughOverlay()
@@ -29,9 +30,9 @@ module.exports = {
       .expectDemoWizardTitle('Memory Model Connector Selection')
       .clickDemoWizardHoleWithEntityFlipping(20, 20, '.CanvasElement.DataSource') // memory option
       .expectDemoWizardTitle('Memory Model Connector Creation')
-      // .clickDemoWizardHole(5000, 5000)
-      .pause(5000)
-      .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
+      .clickDemoWizardHole()
+      // .pause(5000)
+      // .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
       // .check({present:['.Entity.DataSource.memory:not(.wip)']})
       .expectDemoWizardTitle('Model Entities Overview')
       .clickDemoWizardHole(5000, 5000) // model menu

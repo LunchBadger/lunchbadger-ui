@@ -33,7 +33,8 @@ module.exports = {
       .clickDemoWizardHole('Memory Model Connector Creation')
       // .pause(5000)
       // .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
-      // .check({present:['.Entity.DataSource.memory:not(.wip)']})
+      .present('.Entity.DataSource.memory:not(.wip)', 60000)
+      .notPresent('.Aside.disabled')
       // .expectDemoWizardTitle('Model Entities Overview')
       .clickDemoWizardHoleWithEntityFlipping('.CanvasElement.Model') // 'Model Entities Overview') // model menu
       // .expectDemoWizardTitle('Name the Model Entity')

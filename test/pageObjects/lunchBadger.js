@@ -96,15 +96,18 @@ var pageCommands = {
 
   clickWhileDemoWizardTitle: function (selector, title, retry = 0) {
     const self = this;
-    this.api.element('css selector', '.joyride-tooltip__header', function () {
-      self.api.getText('.joyride-tooltip__header', function (result) {
-        if (result.value === title && retry < 20) {
-          self.saveScreenshot('demowizard');
-          self.clickPresent(selector);
-          self.pause(1000);
-          self.clickWhileDemoWizardTitle(selector, title, retry + 1);
-        }
-      });
+    this.api.element('css selector', '.joyride-tooltip__header', function (res) {
+      if (res.value && res.value.ELEMENT) {
+        self.api.getText('.joyride-tooltip__header', function (result) {
+          console.log(11, retry, title, result.value);
+          if (result.value === title && retry < 20) {
+            self.saveScreenshot('demowizard');
+            self.clickPresent(selector);
+            self.pause(1000);
+            self.clickWhileDemoWizardTitle(selector, title, retry + 1);
+          }
+        });
+      }
     });
     return this;
   },

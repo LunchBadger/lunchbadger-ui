@@ -263,6 +263,7 @@ var pageCommands = {
     const sel = `${selector} .${field} input[type=${type}]`;
     const selAfterChange = fieldAfterChange ? `${selector} .${fieldAfterChange} input[type=${type}]` : sel;
     return this
+      .present(sel)
       .check({
         present: [sel]
       })

@@ -35,7 +35,7 @@ module.exports = {
       // .submitCanvasEntityWithoutAutoSave(memorySelector) // memory ok submit
       // .check({present:['.Entity.DataSource.memory:not(.wip)']})
       // .expectDemoWizardTitle('Model Entities Overview')
-      .clickDemoWizardHole('Model Entities Overview') // model menu
+      .clickDemoWizardHoleWithEntityFlipping('.CanvasElement.Model') // 'Model Entities Overview') // model menu
       // .expectDemoWizardTitle('Name the Model Entity')
       .setCanvasEntityName(modelSelector, 'Car')
       // .expectDemoWizardTitle('Model Entity Context Path')

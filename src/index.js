@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.317', [
+console.info('LBAPP VERSION 0.318', [
+  'Feature/1054 Freeform GUI - shrink feature on current canvas #1062',
   'Bugfix/1057 walkthrough blocked #1058',
   'Feature/617 Add validation for model name #1052',
   'Feature/653 Tab keypress put focus on Cancel button #1051',

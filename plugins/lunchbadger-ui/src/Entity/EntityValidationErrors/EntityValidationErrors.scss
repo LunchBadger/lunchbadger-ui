@@ -7,6 +7,12 @@
   font-size: 14px;
   font-weight: normal;
   position: relative;
+  .canvas & {
+    margin: 16rem 16rem 0;
+    border-radius: 3rem;
+    padding: 8rem 16rem 16rem 48rem;
+    font-size: 14rem;
+  }
   &:before {
     display: block;
     content: '!';
@@ -20,9 +26,21 @@
     font-size: 16px;
     line-height: 16px;
     text-align: center;
+    .canvas & {
+      width: 20rem;
+      height: 20rem;
+      border-width: 2rem;
+      top: 8rem;
+      left: 8rem;
+      font-size: 16rem;
+      line-height: 16rem;
+    }
   }
   &.basic {
     margin: 16px 0;
+    .canvas & {
+      margin: 16rem 0;
+    }
     .EntityValidationErrors__fields__field {
       text-decoration: none;
       cursor: default;
@@ -33,6 +51,9 @@
   }
   &__fields {
     margin-top: 8px;
+    .canvas & {
+      margin-top: 8rem;
+    }
     &__field {
       display: inline-block;
       text-transform: uppercase;

@@ -2,6 +2,10 @@
   padding-bottom: 16px;
   position: relative;
   margin-right: 20px;
+  .canvas & {
+    padding-bottom: 16rem;
+    margin-right: 20rem;
+  }
   &.hidden {
     display: none;
   }
@@ -58,6 +62,11 @@
       z-index: 99999;
       position: relative;
       background-color: #FFF;
+      .canvas & {
+        margin: -2rem;
+        border-width: 2rem;
+        border-radius: 10rem;
+      }
       &:hover .Toolbox {
         display: block;
         opacity: 1;
@@ -76,6 +85,10 @@
       white-space: nowrap;
       line-height: 48px;
       padding: 0 8px;
+      .canvas & {
+        line-height: 48rem;
+        padding: 0 8rem;
+      }
       .editable & {
         display: none;
       }
@@ -116,6 +129,10 @@
         padding-top: 8px;
         font-size: 14px;
         font-weight: 300;
+        .canvas & {
+          height: 48rem;
+          font-size: 14rem;
+        }
       }
     }
   }
@@ -127,10 +144,18 @@
     width: 20px;
     height: 30px;
     cursor: pointer;
+    .canvas & {
+      top: 8rem;
+      width: 20rem;
+      height: 30rem;
+    }
     svg {
       stroke: #3F8FCD;
       display: block;
       margin-top: 5px;
+      .canvas & {
+        margin-top: 5rem;
+      }
     }
   }
   .editable &:hover {
@@ -146,6 +171,12 @@
     padding-left: 4px;
     position: relative;
     font-weight: normal;
+    .canvas & {
+      margin-top: 6rem;
+      font-size: 12rem;
+      line-height: 20rem;
+      padding-left: 4rem;
+    }
   }
   &__error {
     margin: 8px 0;
@@ -155,6 +186,12 @@
     padding-left: 28px;
     position: relative;
     font-weight: normal;
+    .canvas & {
+      margin: 8rem 0;
+      font-size: 12rem;
+      line-height: 20rem;
+      padding-left: 28rem;
+    }
     &:before {
       display: block;
       content: '!';
@@ -168,6 +205,13 @@
       font-size: 16px;
       line-height: 16px;
       text-align: center;
+      .canvas & {
+        width: 20rem;
+        height: 20rem;
+        border-width: 2rem;
+        font-size: 16rem;
+        line-height: 16rem;
+      }
     }
   }
   &__selected {
@@ -181,6 +225,9 @@
       }
     }
     text-indent: 10px;
+    .canvas & {
+      text-indent: 10rem;
+    }
     .EntityProperty__field {
       color: #FFF;
       position: relative;
@@ -195,12 +242,22 @@
       right: 0;
       bottom: 5px;
       border-radius: 5px;
+      .canvas & {
+        top: 5rem;
+        left: 10rem;
+        bottom: 5rem;
+        border-radius: 5rem;
+      }
     }
   }
   &__button {
     position: absolute;
     top: 30px;
     right: -30px;
+    .canvas & {
+      top: 30rem;
+      right: -30rem;
+    }
   }
   &__postfix {
     position: absolute;
@@ -209,10 +266,18 @@
     color: #999;
     font-size: 12px;
     font-weight: 300;
+    .canvas & {
+      bottom: 18rem;
+      left: calc(100% + 5rem);
+      font-size: 12rem;
+    }
   }
   &.boolean,
   &.types {
     min-width: 120px;
+    .canvas & {
+      min-width: 120rem;
+    }
   }
   &.integer,
   &.number,
@@ -220,13 +285,22 @@
   &.array,
   &.select {
     min-width: 250px;
+    .canvas & {
+      min-width: 250rem;
+    }
   }
   &.object {
     min-width: 290px;
     margin-right: 0;
+    .canvas & {
+      min-width: 290rem;
+    }
   }
   &__codeEditor {
     margin-right: 50px;
+    .canvas & {
+      margin-right: 50rem;
+    }
   }
   &.noMarginRight {
     margin-right: 0;
@@ -238,10 +312,18 @@
     width: 20px;
     height: 20px;
     stroke: #ccc;
+    .canvas & {
+      top: 14rem;
+      width: 20rem;
+      height: 20rem;
+    }
   }
   &__withIcon {
     & > .EntityProperty__field > .EntityProperty__field--input > div > input {
       text-indent: 20px;
+      .canvas & {
+        text-indent: 20rem;
+      }
     }
   }
   &__titleRemark {
@@ -249,5 +331,33 @@
     display: inline-block;
     margin-left: 5px;
     text-transform: none;
+    .canvas & {
+      margin-left: 5rem;
+    }
+  }
+}
+
+.ModelProperty,
+.EntityProperty:not(.EntityProperty__codeEditor) {
+  .EntityProperty__field {
+    line-height: 24px;
+    height: 48px;
+    .canvas & {
+      font-size: 18rem;
+      line-height: 24rem;
+      height: 48rem;
+    }
+    input {
+      padding: 0 8px;
+      .canvas & {
+        padding: 0 8rem;
+      }
+    }
+    hr {
+      bottom: 8px;
+      .canvas & {
+        bottom: 8rem;
+      }
+    }
   }
 }

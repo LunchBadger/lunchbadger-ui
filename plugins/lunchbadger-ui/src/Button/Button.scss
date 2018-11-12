@@ -18,6 +18,15 @@
   padding: 0;
   outline: none;
   transition: opacity 300ms;
+  .canvas & {
+    width: calc(50% - 30rem);
+    height: 40rem;
+    border-width: 1rem;
+    border-radius: 3rem;
+    font-size: 15rem;
+    line-height: 38rem;
+    margin-right: 20rem;
+  }
   &:hover {
     background-color: rgb(242, 242, 242);
   }

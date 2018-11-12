@@ -416,7 +416,7 @@ class ModelDetails extends PureComponent {
             />
           )}
         </div>
-        <div className="ModelDetails__field">
+        <div className="TableInput ModelDetails__field">
           <Input
             name={`properties[${property.idx}][id]`}
             value={property.id}
@@ -458,13 +458,15 @@ class ModelDetails extends PureComponent {
             {property.withDefault && this.renderPropertyDefaultValue(property)}
           </div>
         </div>,
-      <Input
-        name={`properties[${property.idx}][description]`}
-        value={property.description}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-      />,
+      <div className="TableInput">
+        <Input
+          name={`properties[${property.idx}][description]`}
+          value={property.description}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />
+      </div>,
       <Checkbox
         name={`properties[${property.idx}][required]`}
         value={property.required}
@@ -506,7 +508,7 @@ class ModelDetails extends PureComponent {
     const widths = [300, 220, 300, undefined, 70];
     const paddings = [true, true, true, true, false];
     const data = this.state.relations.map((relation, idx) => [
-      <div>
+      <div className="TableInput">
         <Input
           value={relation.id}
           type="hidden"
@@ -534,14 +536,16 @@ class ModelDetails extends PureComponent {
         fullWidth
         hideUnderline
       />,
-      <Input
-        name={`relations[${idx}][foreignKey]`}
-        value={relation.foreignKey}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleKeyDown={this.handleTab('relations', idx)}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`relations[${idx}][foreignKey]`}
+          value={relation.foreignKey}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleKeyDown={this.handleTab('relations', idx)}
+        />
+      </div>,
       <IconButton name={`remove__relation${idx}`} icon="iconDelete" onClick={this.onRemoveRelation(relation)} />,
     ]);
     return <Table
@@ -549,6 +553,7 @@ class ModelDetails extends PureComponent {
       data={data}
       widths={widths}
       paddings={paddings}
+      verticalAlign="top"
     />;
   };
 
@@ -561,14 +566,17 @@ class ModelDetails extends PureComponent {
     ];
     const widths = [300, 120, undefined, 70];
     const paddings = [true, true, true, false];
+    const centers = [false, false, true, false];
     const data = this.state.userFields.map((field, idx) => [
-      <Input
-        name={`userFields[${idx}][name]`}
-        value={field.name}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-      />,
+      <div className="TableInput">
+        <Input
+          name={`userFields[${idx}][name]`}
+          value={field.name}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />
+      </div>,
       <Select
         name={`userFields[${idx}][type]`}
         value={field.type}
@@ -587,15 +595,17 @@ class ModelDetails extends PureComponent {
           textarea
           handleKeyDown={this.handleTab('userFields', idx)}
         />
-      : <Input
-          name={`userFields[${idx}][value]`}
-          value={field.value.toString()}
-          underlineStyle={{bottom: 0}}
-          fullWidth
-          hideUnderline
-          type={field.type === 'number' ? 'number' : 'text'}
-          handleKeyDown={this.handleTab('userFields', idx)}
-        />,
+      : <div className="TableInput">
+          <Input
+            name={`userFields[${idx}][value]`}
+            value={field.value.toString()}
+            underlineStyle={{bottom: 0}}
+            fullWidth
+            hideUnderline
+            type={field.type === 'number' ? 'number' : 'text'}
+            handleKeyDown={this.handleTab('userFields', idx)}
+          />
+        </div>,
       <IconButton name={`remove__udf${idx}`} icon="iconDelete" onClick={this.onRemoveUserField(field)} />,
     ]);
     return <Table
@@ -603,6 +613,8 @@ class ModelDetails extends PureComponent {
       data={data}
       widths={widths}
       paddings={paddings}
+      centers={centers}
+      verticalAlign="top"
     />;
   };
 

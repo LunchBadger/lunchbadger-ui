@@ -318,6 +318,7 @@ The <pre>Car</pre> model can now persist data to the built in memory database th
       api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
     ],
     onBefore: api => [
+      api.delayOverlay(500),
       api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'add', 'walkthroughDatasouceModelStep'),
     ],
     onExit: api => [

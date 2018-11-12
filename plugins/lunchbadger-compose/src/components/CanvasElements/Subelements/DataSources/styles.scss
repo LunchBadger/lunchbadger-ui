@@ -5,9 +5,15 @@
   .EntityProperty.array,
   .EntityProperty.select {
     min-width: 100px;
+    .canvas & {
+      min-width: 100rem;
+    }
   }
   &.plain {
     padding: 16px 16px 0;
+    .canvas & {
+      padding: 16rem 16rem 0;
+    }
     .GatewayPolicyAction .EntityPropertyLabel {
       text-transform: uppercase !important;
     }
@@ -30,13 +36,14 @@
   &__out {
     &.walkthroughDatasouceModelStep {
       position: absolute;
-      top: 12px;
+      top: calc(24rem - 11px);
       right: -48px;
       width: 60px;
       height: 22px;
       .port {
         margin-right: 50px;
-        top: -14px !important;
+        margin-top: 0 !important;
+        top: 0 !important;
       }
     }
   }

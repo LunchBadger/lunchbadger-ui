@@ -1,11 +1,19 @@
 .ModelPropertyCollapsed {
   padding-left: 10px;
+  font-size: 18px;
+  .canvas & {
+    padding-left: 10rem;
+    font-size: 18rem;
+  }
   &__col {
     display: inline-block;
     vertical-align: middle;
     &.toggle {
       visibility: hidden;
       width: 10px;
+      .canvas & {
+        width: 10rem;
+      }
       & > div {
         cursor: pointer;
       }
@@ -22,6 +30,9 @@
     }
     &.content {
       width: calc(100% - 10px);
+      .canvas & {
+        width: calc(100% - 10rem);
+      }
     }
   }
   &__row:hover {

@@ -226,15 +226,17 @@ export default class Soap extends PureComponent {
   };
 
   renderOperationsInput = (idx, name, value, handleKeyDown) => (
-    <Input
-      name={`soapOperations[${idx}][${name}]`}
-      value={value}
-      underlineStyle={{bottom: 0}}
-      fullWidth
-      hideUnderline
-      handleBlur={this.handleOperationUpdate(idx, name)}
-      handleKeyDown={handleKeyDown}
-    />
+    <div className="TableInput">
+      <Input
+        name={`soapOperations[${idx}][${name}]`}
+        value={value}
+        underlineStyle={{bottom: 0}}
+        fullWidth
+        hideUnderline
+        handleBlur={this.handleOperationUpdate(idx, name)}
+        handleKeyDown={handleKeyDown}
+      />
+    </div>
   );
 
   renderOperations = () => {
@@ -260,6 +262,7 @@ export default class Soap extends PureComponent {
       widths={widths}
       paddings={paddings}
       centers={centers}
+      verticalAlign="top"
     />;
   };
 

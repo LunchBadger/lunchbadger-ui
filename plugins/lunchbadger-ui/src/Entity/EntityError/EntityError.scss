@@ -11,6 +11,16 @@
   border: 2px solid #FFF;
   line-height: 21px;
   cursor: pointer;
+  font-size: 18px;
+  .canvas & {
+    top: 12rem;
+    right: 21rem;
+    width: 25rem;
+    height: 25rem;
+    border: 2rem solid #FFF;
+    line-height: 21rem;
+    font-size: 18rem;
+  }
   &:before {
     content: '!';
   }

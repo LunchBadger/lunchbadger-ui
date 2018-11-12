@@ -1,9 +1,15 @@
 .CollapsibleProperties {
   padding: 0 24px;
+  .canvas & {
+    padding: 0 24rem;
+  }
   &.plain {
     padding: 0;
     .CollapsibleProperties__collapsible {
       margin: 0;
+      .canvas & {
+        margin: 0;
+      }
     }
     .CollapsibleProperties__bar:before {
       display: none;
@@ -11,7 +17,12 @@
   }
   &__bar {
     margin-left: -20px;
+    font-size: 18px;
     position: relative;
+    .canvas & {
+      margin-left: -20rem;
+      font-size: 18rem;
+    }
     &:before {
       display: block;
       content: '';
@@ -21,6 +32,10 @@
       top: 0;
       left: 20px;
       right: 0;
+      .canvas & {
+        height: 1rem;
+        left: 20rem;
+      }
     }
     .EntitySubElements__elements > div > .CollapsibleProperties:first-child &:before {
       display: none;
@@ -35,6 +50,10 @@
       transform: translateX(8px);
       transition: transform 800ms ease;
       z-index: 1;
+      .canvas & {
+        width: 20rem;
+        height: 20rem;
+      }
       .multiEnvDelta & {
         filter: grayscale(100%);
       }
@@ -43,6 +62,9 @@
       }
       .editable .CollapsibleProperties.nonEditable & {
         transform: translateX(8px);
+        .canvas & {
+          transform: translateX(8rem);
+        }
       }
       &--arrow {
         height: 100%;
@@ -55,6 +77,9 @@
           width: 10px;
           height: auto;
           transition: transform 800ms ease;
+          .canvas & {
+            width: 10rem;
+          }
           .highlighted & {
             fill: rgb(65, 144, 206);
           }
@@ -65,9 +90,16 @@
       display: inline-block;
       vertical-align: middle;
       width: calc(100% - 20px);
+      .canvas & {
+        width: calc(100% - 20rem);
+      }
       .CollapsibleProperties.nonEditable & {
         width: calc(100% - 35px);
         margin-left: 15px;
+        .canvas & {
+          width: calc(100% - 35rem);
+          margin-left: 15rem;
+        }
       }
       &--button {
         position: absolute;
@@ -79,6 +111,9 @@
   }
   &__collapsible {
     margin: 4px 0 0 16px;
+    .canvas & {
+      margin: 4rem 0 0 16rem;
+    }
   }
   &.expanded > &__bar {
     .CollapsibleProperties__bar__left--arrow svg {
@@ -93,12 +128,21 @@
   }
   &.untoggable > .CollapsibleProperties__bar {
     margin-left: -8px;
+    .canvas & {
+      margin-left: -8rem;
+    }
   }
   &.untoggable > .CollapsibleProperties__bar > .CollapsibleProperties__bar__right {
     width: 100%;
+    .canvas & {
+      width: 100%;
+    }
   }
   &.untoggable > .CollapsibleProperties__collapsible {
     margin: 0;
+    .canvas & {
+      margin: 0;
+    }
   }
   &.noDividers {
     .CollapsibleProperties__bar:before {

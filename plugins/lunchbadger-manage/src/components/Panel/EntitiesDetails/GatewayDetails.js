@@ -592,28 +592,34 @@ class GatewayDetails extends PureComponent {
     const widths = [250, 300, undefined, 70];
     const paddings = [true, true, true, false];
     const data = https.tls.map((item, idx) => [
-      <Input
-        name={`https[tls][${idx}][domain]`}
-        value={item.domain}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-      />,
-      <Input
-        name={`https[tls][${idx}][key]`}
-        value={item.key}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-      />,
-      <Input
-        name={`https[tls][${idx}][cert]`}
-        value={item.cert}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleKeyDown={this.handleHttpsTlsTab(idx)}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`https[tls][${idx}][domain]`}
+          value={item.domain}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />
+      </div>,
+      <div className="TableInput">
+        <Input
+          name={`https[tls][${idx}][key]`}
+          value={item.key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+        />
+      </div>,
+      <div className="TableInput">
+        <Input
+          name={`https[tls][${idx}][cert]`}
+          value={item.cert}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleKeyDown={this.handleHttpsTlsTab(idx)}
+        />
+      </div>,
       <IconButton
         icon="iconDelete"
         name={`remove__gatewayHttpsTlsDomain${idx}`}
@@ -625,6 +631,7 @@ class GatewayDetails extends PureComponent {
       data={data}
       widths={widths}
       paddings={paddings}
+      verticalAlign="top"
     />;
     const collapsible = (
       <div className="panel__details__enableable">

@@ -13,6 +13,10 @@
   // transition: all .3s ease;
   transform: translateZ(0);
   font-weight: normal;
+  .canvas & {
+    border-radius: 3rem;
+    margin: 20rem 0;
+  }
   .multiEnvNotDev & {
     transform: none;
   }
@@ -67,6 +71,9 @@
         border: 2px solid #d24a7c;
         z-index: -1;
         pointer-events: none;
+        .canvas & {
+          border-width: 2rem;
+        }
       }
     }
   }
@@ -76,6 +83,9 @@
   }
   &__extra {
     padding-bottom: 20px;
+    .canvas & {
+      padding-bottom: 20rem;
+    }
     .Entity.DataSource.memory:not(.editable) & {
       padding-bottom: 0;
     }

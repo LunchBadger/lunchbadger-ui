@@ -241,6 +241,7 @@ class Gateway extends Component {
           </div>
         )}
         onSortEnd={this.handleReorderPolicies(pipelineIdx)}
+        onCanvas
       />
     );
     return (
@@ -250,7 +251,7 @@ class Gateway extends Component {
         button={<IconButton name={`add__pipelines${pipelineIdx}policy`} icon="iconPlus" onClick={this.addPipelinePolicy(pipelineIdx)} />}
         defaultOpened
         untoggable
-        space="15px 0 5px"
+        space="15rem 0 5rem"
       />
     );
   };

@@ -5,10 +5,12 @@ import {IconSVG, ContextualInformationMessage} from '../';
 import * as icons from '../../../../src/icons';
 import './Toolbox.scss';
 
-const Toolbox = ({config, zoom}) => {
+const Toolbox = ({config, zoom, onCanvas = false}) => {
   if (config.length === 0) return null;
   return (
-    <div className={cs('Toolbox', {zoom})} style={{width: config.length * 50}}>
+    <div className={cs('Toolbox', {zoom})} style={{
+      width: `${config.length * 50}${onCanvas ? 'rem' : 'px'}`,
+    }}>
       {config.map(({action, icon, onClick, selected, label}, idx) => (
         <ContextualInformationMessage
           key={idx}

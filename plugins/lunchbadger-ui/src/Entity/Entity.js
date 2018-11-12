@@ -44,7 +44,7 @@ class Entity extends PureComponent {
       if (!expanded) {
         const marginTop = +window.getComputedStyle(portRef).marginTop.replace('px', '');
         this.state.marginTopPorts[portRef.id] = marginTop;
-        portRef.style.marginTop = `${-portRef.offsetTop + marginTop + 13}px`;
+        portRef.style.marginTop = `calc(${-portRef.offsetTop + marginTop - 13}px + 26rem)`;
       } else {
         portRef.style.marginTop = `${this.state.marginTopPorts[portRef.id]}px`;
       }
@@ -107,7 +107,7 @@ class Entity extends PureComponent {
         onDoubleClick={onDoubleClick}
         style={{opacity}}
       >
-        <Toolbox config={toolboxConfig} />
+        <Toolbox config={toolboxConfig} onCanvas />
         <Form name="elementForm" ref="form" onValidSubmit={onValidSubmit}>
           <EntityHeader
             ref={(r) => {this.entityHeaderRef = r;}}

@@ -18,12 +18,21 @@
   .CollapsibleProperties__bar__right--button {
     transform: none;
     top: 14px;
+    .canvas & {
+      top: 14rem;
+    }
   }
   .CollapsibleProperties__bar__right > span {
     width: calc(100% - 22px);
+    .canvas & {
+      width: calc(100% - 22rem);
+    }
   }
   .CollapsibleProperties__collapsible {
     margin: -10px 0 0 20px;
+    .canvas & {
+      margin: -10rem 0 0 20rem;
+    }
   }
   .CollapsibleProperties.untoggable {
     padding-right: 0;
@@ -39,8 +48,14 @@
   }
   .EntitySubElements {
     margin-top: -10px;
+    .canvas & {
+      margin-top: -10rem;
+    }
     &__title {
       margin-left: 16px;
+      .canvas & {
+        margin-left: 16rem;
+      }
     }
   }
 }

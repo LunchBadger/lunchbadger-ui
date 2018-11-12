@@ -8,20 +8,36 @@
     }
     &__predefined {
       padding: 16px 16px 0;
+      .canvas & {
+        padding: 16rem 16rem 0;
+      }
     }
     &__operations {
       padding-left: 24px;
       margin-top: -12px;
+      .canvas & {
+        padding-left: 24rem;
+        margin-top: -12rem;
+      }
       &__collapsible {
         margin: 15px -23px 0 -17px;
+        .canvas & {
+          margin: 15rem -23rem 0 -17rem;
+        }
         &__operation {
           margin: 20px 0 -22px -15px;
+          .canvas & {
+            margin: 20rem 0 -22rem -15rem;
+          }
         }
       }
     }
     &__url {
       display: block;
       margin-top: -10px;
+      .canvas & {
+        margin-top: -10rem;
+      }
     }
   }
   .IconButton {
@@ -33,6 +49,9 @@
   .Rest.plain {
     .CollapsibleProperties__bar__left {
       transform: translateX(8px) !important;
+      .canvas & {
+        transform: translateX(8rem) !important;
+      }
     }
     .IconButton {
       display: inline-block;
@@ -42,4 +61,7 @@
 
 .panel__details.rest .EntityProperty {
   margin-right: 10px;
+  .canvas & {
+    margin-right: 10rem;
+  }
 }

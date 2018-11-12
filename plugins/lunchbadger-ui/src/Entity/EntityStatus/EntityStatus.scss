@@ -15,6 +15,12 @@
   top: 4px;
   right: 13px;
   z-index: 16;
+  .canvas & {
+    width: 40rem;
+    height: 40rem;
+    top: 4rem;
+    right: 13rem;
+  }
   .canvas__container--editing & {
     z-index: 9;
   }
@@ -31,6 +37,9 @@
     border-style: solid;
     border-radius: 50%;
     animation: rotating 1s linear infinite;
+    .canvas & {
+      border-width: 2rem;
+    }
   }
   &.deploying,
   &.deleting {
@@ -46,13 +55,23 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    .canvas & {
+      width: 23rem;
+    }
   }
   &.deleting svg {
     width: 38px;
     stroke: #d24a27;
     stroke-width: 2px;
+    .canvas & {
+      width: 38rem;
+      stroke-width: 2rem;
+    }
   }
   &.crashed svg {
     width: 32px;
+    .canvas & {
+      width: 32rem;
+    }
   }
 }

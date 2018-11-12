@@ -1,9 +1,16 @@
 .EntitySubElements {
   padding-top: 16px;
   border-top: 1px solid rgb(248, 248, 248);
+  .canvas & {
+    padding-top: 16rem;
+    border-top: 1rem solid rgb(248, 248, 248);
+  }
   &__title {
     margin: 0 24px 6px 26px;
     position: relative;
+    .canvas & {
+      margin: 0 24rem 6rem 26rem;
+    }
     &__add {
       position: absolute;
       top: 0;
@@ -18,6 +25,10 @@
       padding: 0;
       outline: none;
       background: transparent;
+      .canvas & {
+        width: 20rem;
+        height: 20rem;
+      }
       &:hover svg {
         stroke: #3B85BF;
       }

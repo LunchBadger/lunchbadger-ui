@@ -24,7 +24,7 @@
   .ServiceEndpoint &,
   .ApiEndpoint &,
   .Function & {
-    top: -2px !important;
+    top: 0 !important;
   }
 }
 
@@ -37,7 +37,6 @@
   background: #fff;
   z-index: $z-index-medium;
   border-radius: 50%;
-
   .expanded.Portal .has-connection .subapi--closed &,
   .collapsed .has-connection-in .port-in &,
   .collapsed .has-connection-out .port-out &,

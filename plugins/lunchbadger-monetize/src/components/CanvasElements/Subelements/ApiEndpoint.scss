@@ -6,6 +6,9 @@
   // padding: 4px 0;
   .canvas-element__port {
     margin-top: 3px;
+    .canvas & {
+      margin-top: 3rem;
+    }
   }
 }
 
@@ -13,6 +16,10 @@
 .api-endpoint--bundled {
   padding-left: 30px;
   padding-right: 30px;
+  .canvas & {
+    padding-left: 30rem;
+    padding-right: 30rem;
+  }
 }
 
 .api-endpoint--selected {
@@ -23,6 +30,11 @@
 .api-endpoint__info {
   cursor: pointer;
   padding-left: 18px;
+  font-size: 18px;
+  .canvas & {
+    padding-left: 18rem;
+    font-size: 18rem;
+  }
 }
 
 .api-endpoint__name {
@@ -33,10 +45,18 @@
   text-overflow: ellipsis;
   text-transform: uppercase;
   color: #000;
+  font-size: 18px;
+  .canvas & {
+    width: calc(100% - 43rem);
+    font-size: 18rem;
+  }
 }
 
 .api-endpoint__icon {
   display: inline-block;
   margin-right: 7px;
   vertical-align: middle;
+  .canvas & {
+    margin-right: 7rem;
+  }
 }

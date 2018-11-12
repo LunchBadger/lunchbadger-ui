@@ -3,6 +3,9 @@
     padding: 0;
     &__bar {
       padding: 0 37px 0 24px;
+      .canvas & {
+        padding: 0 37rem 0 24rem;
+      }
       &:before {
         display: none;
       }
@@ -10,6 +13,9 @@
   }
   .SubModel {
     border-top: 1px solid #f8f8f8;
+    .canvas & {
+      border-top: 1rem solid #f8f8f8;
+    }
     &:first-child {
       border-top: none;
     }

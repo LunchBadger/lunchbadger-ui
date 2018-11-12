@@ -89,15 +89,17 @@ class ServiceEndpointDetails extends PureComponent {
     const widths = [undefined, 70];
     const paddings = [true, false];
     const data = urls.map((url, idx) => [
-      <Input
-        name={`urls[${idx}]`}
-        value={url}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleKeyDown={this.handleUrlTab(idx)}
-        handleBlur={this.handleUrlChanged(idx)}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`urls[${idx}]`}
+          value={url}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleKeyDown={this.handleUrlTab(idx)}
+          handleBlur={this.handleUrlChanged(idx)}
+        />
+      </div>,
       idx === 0 ? null : <IconButton icon="iconDelete" onClick={this.removeUrl(idx)} />,
     ]);
     const collapsible = <Table
@@ -105,6 +107,7 @@ class ServiceEndpointDetails extends PureComponent {
       data={data}
       widths={widths}
       paddings={paddings}
+      verticalAlign="top"
     />;
     const title = `URL${urls.length === 1 ? '' : 'S'}`;
     return (

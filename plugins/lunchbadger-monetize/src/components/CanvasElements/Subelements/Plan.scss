@@ -3,12 +3,18 @@
 .plan {
   position: relative;
   font-size: 16px;
+  .canvas & {
+    font-size: 16rem;
+  }
   color: #000;
   text-transform: uppercase;
 }
 
 .plan__info {
   padding-left: 18px;
+  .canvas & {
+    padding-left: 18rem;
+  }
 }
 
 .plan__name {
@@ -18,4 +24,7 @@
 .plan__icon {
   display: inline-block;
   margin-right: 7px;
+  .canvas & {
+    margin-right: 7rem;
+  }
 }

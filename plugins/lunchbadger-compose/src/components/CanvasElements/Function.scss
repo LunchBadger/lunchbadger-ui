@@ -2,22 +2,43 @@
   .EntitySubElements {
     margin-left: -10px;
     margin-top: -10px;
+    .canvas & {
+      margin-left: -10rem;
+      margin-top: -10rem;
+    }
     &__elements {
       margin-left: 5px;
+      .canvas & {
+        margin-left: 5rem;
+      }
     }
   }
   &.nested {
     margin-top: -15px;
+    .canvas & {
+      margin-top: -15rem;
+    }
     .EntitySubElements {
       border-top: none;
       margin-top: -20px;
+      .canvas & {
+        margin-top: -20rem;
+      }
     }
   }
   &__triggers {
     color: #000;
     margin: 0 10px 0 30px;
+    font-size: 18px;
+    .canvas & {
+      margin: 0 10rem 0 30rem;
+      font-size: 18rem;
+    }
     & > div {
       margin-top: 10px;
+      .canvas & {
+        margin-top: 10rem;
+      }
       & > span {
         display: inline-block;
         vertical-align: top;
@@ -26,9 +47,15 @@
         text-overflow: ellipsis;
         &:first-child {
           width: 120px;
+          .canvas & {
+            width: 120rem;
+          }
         }
         &:last-child {
           width: calc(100% - 120px);
+          .canvas & {
+            width: calc(100% - 120rem);
+          }
         }
       }
     }
@@ -39,13 +66,15 @@
   &__out {
     &.walkthroughFunctionPipelineStep {
       position: absolute;
-      top: -48px;
+      top: calc(-37rem - 11px);
       right: -48px;
       width: 60px;
-      height: 84px;
+      height: calc(64rem + 20px);
       .port {
         margin-right: 50px;
-        top: 47px !important;
+        margin-top: 0 !important;
+        top: auto !important;
+        bottom: 0px;
       }
     }
   }

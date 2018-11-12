@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {setCurrentElement, setCurrentEditElement} from '../../../lunchbadger-core/src/reduxActions';
 import Tool from './Tool/Tool';
+import CanvasZoom from './CanvasZoom/CanvasZoom';
 import cs from 'classnames';
 import './Aside.scss';
 
@@ -44,6 +45,7 @@ class Aside extends Component {
             ))}
           </div>
         ))}
+        <CanvasZoom />
       </aside>
     );
   }

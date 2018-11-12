@@ -1,5 +1,73 @@
 .SelectComp {
   height: 48px;
+  .canvas & {
+    height: 48rem;
+  }
+  & > div {
+    line-height: 24px !important;
+    height: 48px !important;
+    .canvas & {
+      line-height: 24rem !important;
+      height: 48rem !important;
+    }
+    & > div:first-child {
+      bottom: 12px !important;
+      .canvas & {
+        bottom: 12rem !important;
+      }
+    }
+    & > div:nth-child(2) {
+      & > div:first-child {
+        & > div:nth-child(2) {
+          height: 56px !important;
+          line-height: 56px !important;
+          padding: 0px 48px 0px 8px !important;
+          top: -4px !important;
+          .canvas & {
+            height: 56rem !important;
+            line-height: 56rem !important;
+            padding: 0rem 48rem 0rem 8rem !important;
+            top: -4rem !important;
+          }
+        }
+        & > button {
+          padding: 10px 0px 0px !important;
+          width: 24px !important;
+          height: 38px !important;
+          .canvas & {
+            padding: 10rem 0rem 0rem !important;
+            width: 24rem !important;
+            height: 38rem !important;
+          }
+          & svg {
+            height: 24px !important;
+            width: 24px !important;
+            .canvas & {
+              height: 24rem !important;
+              width: 24rem !important;
+            }
+          }
+        }
+        & > div:nth-child(4) {
+          bottom: 1px !important;
+          margin: -1px 24px !important;
+          .canvas & {
+            bottom: 1rem !important;
+            margin: -1rem 24rem !important;
+          }
+        }
+      }
+      & > div:last-child {
+
+      }
+    }
+    & > div:last-child > hr {
+      bottom: 8px !important;
+      .canvas & {
+        bottom: 8rem !important;
+      }
+    }
+  }
   &__autocomplete {
     position: relative;
     svg {
@@ -9,9 +77,31 @@
       right: auto !important;
       stroke: #4190CE !important;
       fill: #4190CE !important;
+      .canvas & {
+        top: 1rem !important;
+      }
     }
-    input {
-      padding: 0 8px !important;
+    & > div {
+      & > div:first-child {
+        line-height: 24px !important;
+        height: 48px !important;
+        .canvas & {
+          line-height: 24rem !important;
+          height: 48rem !important;
+        }
+        & > input {
+          padding: 0 8px !important;
+          .canvas & {
+            padding: 0 8rem !important;
+          }
+        }
+        & hr {
+          bottom: 8px !important;
+          .canvas {
+            bottom: 8rem !important;
+          }
+        }
+      }
     }
   }
 }

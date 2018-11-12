@@ -12,6 +12,14 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 1;
+  .canvas & {
+    top: -15rem;
+    right: 15rem;
+    width: 100rem;
+    height: 30rem;
+    border-radius: 15rem;
+    box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.3);
+  }
   &.zoom {
     pointer-events: auto;
     opacity: 1;
@@ -38,6 +46,9 @@
     outline: none;
     border: none;
     padding: 0;
+    .canvas & {
+      width: 50rem;
+    }
     &:hover {
       background-color: hsl(0, 0%, 95%);
     }
@@ -60,6 +71,9 @@
     &__icon {
       margin-top: -2px;
       display: inline-block;
+      .canvas & {
+        margin-top: -2rem;
+      }
       .multiEnvDelta & {
         margin-top: 7px;
         svg {
@@ -67,14 +81,21 @@
         }
       }
       svg {
-        width: auto;
+        width: 35px;
         height: 35px;
         stroke: #07677E;
         fill: #07677E;
+        .canvas & {
+          width: 35rem;
+          height: 35rem;
+        }
       }
     }
   }
   .CanvasElement.withStatus & {
     right: 50px;
+    .canvas & {
+      right: 50rem;
+    }
   }
 }

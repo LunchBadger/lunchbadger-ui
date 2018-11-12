@@ -1,0 +1,36 @@
+.CanvasZoom {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  text-align: center;
+  font-size: 19px;
+  color: #01667D;
+  .fa {
+    cursor: pointer;
+    margin: 15px 0 20px;
+    &:hover {
+      color: #4190CE;
+    }
+    &.disabled,
+    &.disabled:hover {
+      color: #CCC;
+      cursor: auto;
+    }
+  }
+  .slider {
+    & > div > div > div {
+      & > div {
+        background-color: rgb(189, 189, 189) !important;
+        &[tabindex="0"] {
+          background-color: #01667D !important;
+          border: none !important;
+          & > div {
+            top: 0 !important;
+            left: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

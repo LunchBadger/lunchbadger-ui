@@ -22,5 +22,9 @@
     height: 16px;
     cursor: ns-resize;
     display: none;
+    .canvas & {
+      width: 16rem;
+      height: 16rem;
+    }
   }
 }

@@ -1,5 +1,9 @@
 @import '../../config';
 
+html {
+  font-size: 1px;
+}
+
 *, *:before, *:after {
   box-sizing: border-box;
   padding: 0;
@@ -9,13 +13,32 @@
 
 body {
   overflow: hidden;
-  font: 300 1.125em/1.38 'Open Sans';
+  font-family: 'Open Sans';
+  line-height: 1.38;
+  font-size: 18em;
+  font-weight: 300;
   color: rgb(75, 75, 75);
 }
 
 input,
 textarea {
   user-select: text;
+}
+
+button {
+  font-size: 11px;
+  .canvas & {
+    font-size: 11rem;
+  }
+}
+
+.fa {
+  font-size: 18px;
+  line-height: 18px;
+  .canvas & {
+    font-size: 14rem;
+    line-height: 18rem;
+  }
 }
 
 .apla {

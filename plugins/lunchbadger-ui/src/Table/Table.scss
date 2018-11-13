@@ -23,4 +23,11 @@
     margin-left: 20px;
     width: calc(100% - 20px) !important;
   }
+  &Input {
+    height: 24px;
+    line-height: 48px;
+    input {
+      padding: 0 8px;
+    }
+  }
 }

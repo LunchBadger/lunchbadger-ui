@@ -119,15 +119,18 @@ class Input extends Component {
       fontWeight: 'inherit',
       fontSize: 'inherit',
       color: 'inherit',
+      lineHeight: 'inherit',
+      height: 'inherit',
     }
     const inputStyle = {
       ...rootStyle,
-      padding: '0 8px',
+      padding: undefined,
     };
     if (alignRight) {
       inputStyle.textAlign = 'right';
     }
     const underlineStyles = {
+      bottom: undefined,
       ...underlineStyle,
     };
     if (isInvalid) {

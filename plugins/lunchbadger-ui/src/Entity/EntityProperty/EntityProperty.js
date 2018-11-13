@@ -466,7 +466,7 @@ class EntityProperty extends Component {
           {!fake && this.renderField()}
           {postfix !== '' && <span className="EntityProperty__postfix">{postfix}</span>}
           {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
-          <Toolbox config={toolboxConfig} />
+          <Toolbox config={toolboxConfig} onCanvas />
         </div>
         {onDelete && (
           <div className={cs('EntityProperty__delete', `button__remove__${plainName}`)} onClick={onDelete}>

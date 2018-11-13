@@ -110,6 +110,7 @@ export default class ModelNestedProperties extends Component {
           }}
           onSortEnd={onReorder(parentId)}
           offset={[-7, 7]}
+          onCanvas
         />
         {emptyNested}
       </CSSTransitionGroup>

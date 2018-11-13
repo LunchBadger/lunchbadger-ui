@@ -1,18 +1,33 @@
 .Model {
   .EntitySubElements {
     margin-top: -10px;
+    .canvas & {
+      margin-top: -10rem;
+    }
     &__elements {
       margin-left: 10px;
+      .canvas & {
+        margin-left: 10rem;
+      }
     }
     &__title {
       margin-left: 16px;
+      .canvas & {
+        margin-left: 16rem;
+      }
     }
   }
   &.nested {
     margin-top: -15px;
+    .canvas & {
+      margin-top: -15rem;
+    }
     .EntitySubElements {
       border-top: none;
       margin-top: -20px;
+      .canvas & {
+        margin-top: -20rem;
+      }
     }
   }
 }
@@ -43,11 +58,17 @@
   opacity: 1;
   height: 48px;
   transition: opacity 400ms ease 400ms, height 400ms ease;
+  .canvas & {
+    height: 48rem;
+  }
 }
 
 .propertyTransition-leave {
   opacity: 1;
   height: 48px;
+  .canvas & {
+    height: 48rem;
+  }
 }
 
 .propertyTransition-leave.propertyTransition-leave-active {
@@ -60,13 +81,14 @@
   &__out {
     &.walkthroughModelPipelineStep {
       position: absolute;
-      top: 12px;
+      top: calc(24rem - 11px);
       right: -48px;
       width: 60px;
-      height: 107px;
+      height: calc(96rem + 11px);
       .port {
         margin-right: 50px;
-        top: -14px !important;
+        margin-top: 0 !important;
+        top: 0 !important;
       }
     }
   }

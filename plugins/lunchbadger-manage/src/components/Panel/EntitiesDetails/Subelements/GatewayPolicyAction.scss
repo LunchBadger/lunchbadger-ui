@@ -1,8 +1,14 @@
 .GatewayPolicyAction {
   position: relative;
   min-width: 90px;
+  .canvas & {
+    min-width: 90rem;
+  }
   .EntityProperty {
     padding-bottom: 5px;
+    .canvas & {
+      padding-bottom: 5rem;
+    }
     &Label {
       text-transform: capitalize !important;
     }
@@ -11,20 +17,36 @@
     position: absolute;
     top: 30px;
     right: 0;
+    .canvas & {
+      top: 30rem;
+    }
     &.object {
       top: -5px;
+      .canvas & {
+        top: -5rem;
+      }
     }
     &.add {
       top: -34px;
+      .canvas & {
+        top: -34rem;
+      }
       &.menu {
         top: -48px;
         right: -12px;
+        .canvas & {
+          top: -48rem;
+          right: -12rem;
+        }
       }
     }
   }
   &__parameter {
     position: relative;
     margin-top: 10px;
+    .canvas & {
+      margin-top: 10rem;
+    }
     &.hidden {
       display: none;
     }
@@ -57,15 +79,27 @@
   }
   &__object {
     padding-top: 3px;
+    .canvas & {
+      padding-top: 3rem;
+    }
     & > .EntityPropertyLabel {
       font-weight: 600;
       font-size: 12px;
       margin-left: 0;
+      .canvas & {
+        font-size: 12rem;
+      }
     }
     & > .GatewayPolicyAction {
       margin-left: 15px;
+      .canvas & {
+        margin-left: 15rem;
+      }
       & > .GatewayPolicyAction__button.add.menu {
         margin-right: 30px;
+        .canvas & {
+          margin-right: 30rem;
+        }
       }
     }
   }
@@ -74,22 +108,39 @@
     opacity: 0.5;
     margin-top: 10px;
     font-size: 14px;
+    .canvas & {
+      margin-top: 10rem;
+      font-size: 14rem;
+    }
   }
   &__arrayItem {
     border: 1px solid #e0e0e0;
     padding: 10px;
     position: relative;
     margin-bottom: 15px;
+    .canvas & {
+      border: 1rem solid #e0e0e0;
+      padding: 10rem;
+      margin-bottom: 15rem;
+    }
     &__remove {
       position: absolute;
       top: 5px;
       right: 50px;
       display: none;
+      .canvas & {
+        top: 5rem;
+        right: 50rem;
+      }
     }
     &__add {
       position: absolute;
       top: 30px;
       right: 30px;
+      .canvas & {
+        top: 30rem;
+        right: 30rem;
+      }
     }
     &:hover {
       .GatewayPolicyAction__arrayItem__remove {

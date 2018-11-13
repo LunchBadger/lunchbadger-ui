@@ -2,21 +2,40 @@
   .EntitySubElements {
     margin-left: -10px;
     margin-top: -10px;
+    .canvas & {
+      margin-left: -10rem;
+      margin-top: -10rem;
+    }
     &__elements {
       margin: 0 15px 0 25px;
+      .canvas & {
+        margin: 0 15rem 0 25rem;
+      }
     }
     &__title {
       margin-right: 15px;
+      .canvas & {
+        margin-right: 15rem;
+      }
     }
     .EntityProperty {
       margin-left: 3px;
+      .canvas & {
+        margin-left: 3rem;
+      }
     }
   }
   &.nested {
     margin-top: -15px;
+    .canvas & {
+      margin-top: -15rem;
+    }
     .EntitySubElements {
       border-top: none;
       margin-top: -20px;
+      .canvas & {
+        margin-top: -20rem;
+      }
     }
   }
 }

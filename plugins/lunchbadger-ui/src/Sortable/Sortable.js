@@ -9,27 +9,34 @@ import './Sortable.scss';
 const DragHandle = SortableHandle(({
   handlerOffsetTop: top = 0,
   handlerOffsetLeft: left = 0,
+  onCanvas = false,
 }) => (
   <IconSVG
     className="Sortable__handler"
     svg={iconReorder}
     styles={{
-      top: typeof top === 'string' ? top : (15 + top),
+      top: typeof top === 'string' ? top : `${15 + top}${onCanvas ? 'rem' : 'px'}`,
       left,
       transform: typeof top === 'string' ? 'translateY(-50%)' : undefined,
     }}
   />
 ));
 
-const SortableItem = SortableElement(({children, inPanel = false, offset = [-20, 20], ...props}) => {
+const SortableItem = SortableElement(({
+  children,
+  inPanel = false,
+  offset = [-20, 20],
+  onCanvas = false,
+  ...props,
+}) => {
   const classNames = inPanel ? 'editable panel panel__details' : '';
   const style = {
-    marginLeft: offset[0],
-    paddingLeft: offset[1],
+    marginLeft: `${offset[0]}${onCanvas ? 'rem' : 'px'}`,
+    paddingLeft: `${offset[1]}${onCanvas ? 'rem' : 'px'}`,
   };
   return (
     <div className={`Sortable__draggable ${classNames}`} style={style}>
-      <DragHandle {...props} />
+      <DragHandle onCanvas={onCanvas} {...props} />
       {children}
     </div>
   );
@@ -70,6 +77,7 @@ class Sortable extends PureComponent {
     handlerOffsetLeft: PropTypes.number,
     inPanel: PropTypes.bool,
     offset: PropTypes.array,
+    onCanvas: PropTypes.bool,
   };
 
   getContainer = () => document
@@ -86,6 +94,7 @@ class Sortable extends PureComponent {
       handlerOffsetLeft,
       inPanel,
       offset,
+      onCanvas,
     } = this.props;
     return (
       <SortableListComponent
@@ -100,6 +109,7 @@ class Sortable extends PureComponent {
         handlerOffsetLeft={handlerOffsetLeft}
         inPanel={inPanel}
         offset={offset}
+        onCanvas={onCanvas}
       />
     );
   }

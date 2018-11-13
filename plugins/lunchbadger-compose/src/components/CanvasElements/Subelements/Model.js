@@ -7,7 +7,6 @@ import _ from 'lodash';
 import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import {EntityProperty, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
 import Model from '../Model';
-import './Model.scss';
 
 const Port = LunchBadgerCore.components.Port;
 

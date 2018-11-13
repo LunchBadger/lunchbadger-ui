@@ -8,6 +8,13 @@
     font-size: 16px;
     text-align: center;
     color: #c1c1c1;
+    .canvas & {
+      margin-top: 10rem;
+      padding: 16rem;
+      border-width: 1rem;
+      border-radius: 5rem;
+      font-size: 16rem;
+    }
     &--over,
     &:hover {
       border-color: #00abff;
@@ -20,6 +27,10 @@
     transition: opacity 800ms, height 800ms ease;
     height: 66px;
     overflow: hidden;
+    .canvas & {
+      margin: 0 20rem 20rem;
+      height: 66rem;
+    }
   }
 }
 

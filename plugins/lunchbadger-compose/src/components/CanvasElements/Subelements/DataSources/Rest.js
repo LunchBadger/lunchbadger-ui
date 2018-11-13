@@ -283,23 +283,27 @@ export default class Rest extends PureComponent {
     const centers = [false, false, false];
     const paramsSize = headers.length - 1;
     const data = headers.map(({key, value}, idx) => ([
-      <Input
-        name={`options[headers][params][${idx}][key]`}
-        value={key}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'key')}
-      />,
-      <Input
-        name={`options[headers][params][${idx}][value]`}
-        value={value}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'value')}
-        handleKeyDown={idx === paramsSize ? this.checkOptionHeadersParameterTabButton : undefined}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`options[headers][params][${idx}][key]`}
+          value={key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'key')}
+        />
+      </div>,
+      <div className="TableInput">
+        <Input
+          name={`options[headers][params][${idx}][value]`}
+          value={value}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateOptionsHeadersParameter(idx, 'value')}
+          handleKeyDown={idx === paramsSize ? this.checkOptionHeadersParameterTabButton : undefined}
+        />
+      </div>,
       <IconButton
         icon="iconDelete"
         name={`remove__optionsHeadersParameter${idx}`}
@@ -312,6 +316,7 @@ export default class Rest extends PureComponent {
       widths={widths}
       paddings={paddings}
       centers={centers}
+      verticalAlign="top"
     />;
   };
 
@@ -375,23 +380,27 @@ export default class Rest extends PureComponent {
     const centers = [false, false, false];
     const paramsSize = params.length - 1;
     const data = params.map(({key, value}, idx) => ([
-      <Input
-        name={`operations[${operationIdx}][template][${kind}][${idx}][key]`}
-        value={key}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'key')}
-      />,
-      <Input
-        name={`operations[${operationIdx}][template][${kind}][${idx}][value]`}
-        value={value}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'value')}
-        handleKeyDown={idx === paramsSize ? this.checkParameterTabButton(kind, operationIdx) : undefined}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`operations[${operationIdx}][template][${kind}][${idx}][key]`}
+          value={key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'key')}
+        />
+      </div>,
+      <div className="TableInput">
+        <Input
+          name={`operations[${operationIdx}][template][${kind}][${idx}][value]`}
+          value={value}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateParameter(kind, operationIdx, idx, 'value')}
+          handleKeyDown={idx === paramsSize ? this.checkParameterTabButton(kind, operationIdx) : undefined}
+        />
+      </div>,
       <IconButton
         icon="iconDelete"
         name={`remove__operation${operationIdx}${kind}Parameter${idx}`}
@@ -404,6 +413,7 @@ export default class Rest extends PureComponent {
       widths={widths}
       paddings={paddings}
       centers={centers}
+      verticalAlign="top"
     />;
   };
 
@@ -422,23 +432,27 @@ export default class Rest extends PureComponent {
     const centers = [false, false, false];
     const paramsSize = functions.length - 1;
     const data = functions.map(({key, value}, idx) => ([
-      <Input
-        name={`operations[${operationIdx}][functions][${idx}][key]`}
-        value={key}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'key')}
-      />,
-      <Input
-        name={`operations[${operationIdx}][functions][${idx}][value]`}
-        value={value}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'value')}
-        handleKeyDown={idx === paramsSize ? this.checkFunctionsTabButton(operationIdx) : undefined}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`operations[${operationIdx}][functions][${idx}][key]`}
+          value={key}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'key')}
+        />
+      </div>,
+      <div className="TableInput">
+        <Input
+          name={`operations[${operationIdx}][functions][${idx}][value]`}
+          value={value}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleBlur={this.handleUpdateFunctionParameter(operationIdx, idx, 'value')}
+          handleKeyDown={idx === paramsSize ? this.checkFunctionsTabButton(operationIdx) : undefined}
+        />
+      </div>,
       <IconButton
         icon="iconDelete"
         name={`remove__operation${operationIdx}function${idx}`}
@@ -451,6 +465,7 @@ export default class Rest extends PureComponent {
       widths={widths}
       paddings={paddings}
       centers={centers}
+      verticalAlign="top"
     />;
   };
 

@@ -55,18 +55,20 @@ export default class ModelDefaultValue extends PureComponent {
     }
     return (
       <div>
-        <Input
-          name={name}
-          value={value}
-          underlineStyle={{bottom: 0}}
-          fullWidth
-          hideUnderline
-          type={inputType}
-          textarea={textarea}
-          handleFocus={() => this.setState({invalid: false})}
-          handleBlur={this.handleBlur}
-          validations={validations}
-        />
+        <div className={textarea ? '' : 'TableInput'}>
+          <Input
+            name={name}
+            value={value}
+            underlineStyle={{bottom: 0}}
+            fullWidth
+            hideUnderline
+            type={inputType}
+            textarea={textarea}
+            handleFocus={() => this.setState({invalid: false})}
+            handleBlur={this.handleBlur}
+            validations={validations}
+          />
+        </div>
         {invalid && (
           <div className="EntityProperty__error">
             This is not a valid {type}.

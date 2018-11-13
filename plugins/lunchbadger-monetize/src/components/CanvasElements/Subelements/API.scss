@@ -2,8 +2,15 @@
   &__title {
     line-height: 40px;
     margin-left: 15px;
+    .canvas & {
+      line-height: 40rem;
+      margin-left: 15rem;
+    }
   }
   .canvas-element__port {
     margin-top: 3px;
+    .canvas & {
+      margin-top: 3rem;
+    }
   }
 }

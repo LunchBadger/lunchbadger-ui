@@ -3,6 +3,10 @@
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 600;
+  .canvas & {
+    margin-left: 8rem;
+    font-size: 14rem;
+  }
   .multiEnvDelta & {
     filter: grayscale(100%);
   }
@@ -11,10 +15,16 @@
     font-size: 18px;
     font-weight: 400;
     text-transform: none;
+    .canvas & {
+      font-size: 18rem;
+    }
   }
   &.noMargin {
     margin-left: 0;
     margin-bottom: 15px;
+    .canvas & {
+      margin-bottom: 15rem;
+    }
   }
   &__help {
     & > div > div > span {

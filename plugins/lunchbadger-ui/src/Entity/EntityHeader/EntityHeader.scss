@@ -3,6 +3,9 @@
   color: #FFF;
   padding: 0 35px 0 60px;
   position: relative;
+  .canvas & {
+    padding: 0 35rem 0 60rem;
+  }
   .multiEnvDelta & {
     filter: grayscale(100%);
   }
@@ -22,6 +25,10 @@
     font-size: 38px;
     text-align: center;
     cursor: pointer;
+    .canvas & {
+      width: 58rem;
+      font-size: 38rem;
+    }
     .editable & {
       pointer-events: none;
     }
@@ -35,6 +42,12 @@
       top: 7px;
       left: 12px;
       stroke: #FFF;
+      .canvas & {
+        width: 34rem;
+        height: 34rem;
+        top: 7rem;
+        left: 12rem;
+      }
     }
   }
   &__name {
@@ -42,6 +55,9 @@
       color: #FFF;
       &--text {
         line-height: 48px;
+        .canvas & {
+          line-height: 48rem;
+        }
       }
       .editable & {
         input {
@@ -79,6 +95,10 @@
     font-size: 13px;
     opacity: 0;
     transition: all 300ms ease;
+    .canvas & {
+      left: 68rem;
+      font-size: 13rem;
+    }
   }
   .name .EntityProperty__field--textValue {
     position: relative;
@@ -88,15 +108,27 @@
   .collapsed &.subtitle {
     .name .EntityProperty__field--textValue {
       top: -10px;
+      .canvas & {
+        top: -10rem;
+      }
     }
     .EntityHeader__subtitle {
       bottom: 5px;
       opacity: 1;
+      .canvas & {
+        bottom: 5rem;
+      }
     }
   }
   .locked {
     position: absolute;
     top: 17px;
     left: 50px;
+    font-size: 18px;
+    .canvas & {
+      top: 17rem;
+      left: 50rem;
+      font-size: 18rem;
+    }
   }
 }

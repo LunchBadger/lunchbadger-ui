@@ -15,7 +15,7 @@
 
 .canvas-element__port {
   position: absolute;
-  margin-top: 15px;
+  margin-top: calc(24rem - 11px);
   transition: margin-top 800ms ease, left 800ms ease, right 800ms ease;
 }
 

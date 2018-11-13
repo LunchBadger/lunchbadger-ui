@@ -1,11 +1,20 @@
 .ServiceEndpoint {
   .EntitySubElements {
     margin: 0 -10px;
+    .canvas & {
+      margin: 0 -10rem;
+    }
     .EntityProperty {
       margin-left: 3px;
+      .canvas & {
+        margin-left: 3rem;
+      }
     }
   }
   .EntitySubElements__elements {
     padding: 0 24px;
+    .canvas & {
+      padding: 0 24rem;
+    }
   }
 }

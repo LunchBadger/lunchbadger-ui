@@ -180,15 +180,17 @@ class ApiEndpointDetails extends Component {
     const widths = [undefined, 70];
     const paddings = [true, false];
     const data = paths.map((path, idx) => [
-      <Input
-        name={`paths[${idx}]`}
-        value={path}
-        underlineStyle={{bottom: 0}}
-        fullWidth
-        hideUnderline
-        handleKeyDown={this.handlePathTab(idx)}
-        handleBlur={this.handlePathChange(idx)}
-      />,
+      <div className="TableInput">
+        <Input
+          name={`paths[${idx}]`}
+          value={path}
+          underlineStyle={{bottom: 0}}
+          fullWidth
+          hideUnderline
+          handleKeyDown={this.handlePathTab(idx)}
+          handleBlur={this.handlePathChange(idx)}
+        />
+      </div>,
       <IconButton icon="iconDelete" onClick={this.removePath(idx)} />,
     ]);
     const table = <Table
@@ -196,6 +198,7 @@ class ApiEndpointDetails extends Component {
       data={data}
       widths={widths}
       paddings={paddings}
+      verticalAlign="top"
     />;
     return (
       <CollapsibleProperties

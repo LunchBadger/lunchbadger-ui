@@ -5,14 +5,25 @@
     &.name {
       width: calc(100% - 130px);
       padding-right: 10px;
+      .canvas & {
+        width: calc(100% - 130rem);
+        padding-right: 10rem;
+      }
     }
     &.type {
       width: 110px;
+      .canvas & {
+        width: 110rem;
+      }
     }
     &.actions {
       width: 20px;
       padding-left: 3px;
       display: none;
+      .canvas & {
+        width: 20rem;
+        padding-left: 3rem;
+      }
       .editable & {
         display: inline-block;
       }
@@ -23,10 +34,18 @@
     width: 13px;
     height: 13px;
     line-height: 13px;
+    .canvas & {
+      width: 13rem;
+      height: 13rem;
+      line-height: 13rem;
+    }
     svg {
       width: 13px;
       height: auto;
       stroke: #4190CE;
+      .canvas & {
+        width: 13rem;
+      }
     }
   }
   &__empty {
@@ -36,5 +55,9 @@
     font-size: 18px;
     margin-left: 30px;
     text-transform: capitalize;
+    .canvas & {
+      font-size: 18rem;
+      margin-left: 30rem;
+    }
   }
 }

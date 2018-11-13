@@ -10,6 +10,7 @@ import {
   IconMenu,
   IconSVG,
   getDefaultValueByType,
+  CollapsibleProperties,
 } from '../../../../../../lunchbadger-ui/src';
 import {
   iconConditionAllOf,
@@ -445,6 +446,26 @@ export default class GatewayPolicyCondition extends PureComponent {
     }
     const defaultValue = !nested && name === 'always';
     const titleRemark = defaultValue ? '(default condition is used)' : undefined;
+    const bar = (
+      <EntityProperty
+        title="Name"
+        titleRemark={titleRemark}
+        name={`${prefix}[name]`}
+        value={name}
+        options={otherOptions}
+        secondaryOptions={groupingOptions}
+        onBlur={this.handleNameChange}
+        width={140}
+        autocomplete
+        button={button}
+        noMarginRight
+      />
+    );
+    const collapsible = properties.map((item, idx) => {
+      if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
+      return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
+    });
+    const isGrouping = ['oneOf', 'allOf'].includes(name);
     return (
       <div className={cs('GatewayPolicyCondition', {
         nested: !!nested,
@@ -452,23 +473,16 @@ export default class GatewayPolicyCondition extends PureComponent {
         nestedSingle,
         defaultValue,
       })}>
-        <EntityProperty
-          title="Name"
-          titleRemark={titleRemark}
-          name={`${prefix}[name]`}
-          value={name}
-          options={otherOptions}
-          secondaryOptions={groupingOptions}
-          onBlur={this.handleNameChange}
-          width={140}
-          autocomplete
-          button={button}
-          noMarginRight
-        />
-        {properties.map((item, idx) => {
-          if (custom) return <div key={item.id}>{this.renderProperty(item, idx)}</div>;
-          return <span key={item.id}>{this.renderProperty(item, idx)}</span>;
-        })}
+        {isGrouping && (
+          <CollapsibleProperties
+            bar={bar}
+            collapsible={collapsible}
+            defaultOpened
+            space="0"
+          />
+        )}
+        {!isGrouping && bar}
+        {!isGrouping && collapsible}
       </div>
     );
   }

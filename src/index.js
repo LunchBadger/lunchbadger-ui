@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.319', [
+console.info('LBAPP VERSION 0.320', [
+  'Feature/313 Make condition grouping parameters collapsible #1065',
   'Feature/1060 New ESP logo #1063',
   'Feature/1054 Freeform GUI - shrink feature on current canvas #1062',
   'Bugfix/1057 walkthrough blocked #1058',

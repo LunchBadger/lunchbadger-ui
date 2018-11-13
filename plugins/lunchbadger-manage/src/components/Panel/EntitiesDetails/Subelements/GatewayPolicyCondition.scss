@@ -90,13 +90,35 @@
     left: -7px;
     display: none;
   }
-  & > .EntityProperty > .EntityPropertyLabel {
+  & > .EntityProperty > .EntityPropertyLabel,
+  & > .CollapsibleProperties > .CollapsibleProperties__bar > .CollapsibleProperties__bar--right > div > .EntityProperty > .EntityPropertyLabel {
     color: #4190CE;
   }
   &.defaultValue {
     // opacity: 0.5;
     & > .EntityProperty > .EntityPropertyLabel {
       color: #999;
+    }
+  }
+  .CollapsibleProperties__bar {
+    margin-left: -36px;
+    &:after {
+      display: block;
+      content: '';
+      background-color: #e0e0e0;
+      width: 1px;
+      height: 14px;
+      position: absolute;
+      bottom: 0;
+      left: 68px;
+    }
+    &__left {
+      width: 12px;
+      &--arrow svg {
+        width: 8px;
+        left: 65%;
+        top: 77%;
+      }
     }
   }
 }

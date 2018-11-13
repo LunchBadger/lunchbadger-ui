@@ -39,7 +39,7 @@ class CollapsibleProperties extends Component {
       expanded: props.defaultOpened,
     };
     const expanded = userStorage.getObjectKey('CollapsibleExpanded', props.id);
-    if (expanded !== undefined) {
+    if (props.id && expanded !== undefined) {
       this.state.expanded = expanded;
     }
   }
@@ -48,7 +48,9 @@ class CollapsibleProperties extends Component {
     const {id, onToggleCollapse} = this.props;
     const expanded = typeof val === 'boolean' ? val : !this.state.expanded
     this.setState({expanded});
-    userStorage.setObjectKey('CollapsibleExpanded', id, expanded);
+    if (id) {
+      userStorage.setObjectKey('CollapsibleExpanded', id, expanded);
+    }
     onToggleCollapse();
   }
 

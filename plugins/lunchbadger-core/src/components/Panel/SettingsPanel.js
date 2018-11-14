@@ -103,7 +103,7 @@ class SettingsPanel extends Component {
           </div>
         </div>
         {workspaceButtons && (
-          <div className="details-panel__element">
+          <div className="details-panel__element WorkspaceButtons">
             <div className="details-panel__fieldset">
               <EntityPropertyLabel>
                 Workspace actions

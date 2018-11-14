@@ -202,6 +202,27 @@ class WalkthroughInner extends PureComponent {
       GAEvent('Walkthrough', eventAction, eventLabel, eventValue);
       cb();
     },
+    setHoleWidth: (portOutSelector, portInSelector) => cb => {
+      const portOut = document.querySelector(portOutSelector);
+      const {left} = portOut.getBoundingClientRect();
+      const {right} = document.querySelector(portInSelector).getBoundingClientRect();
+      portOut.style.width = `${Math.round(right - left)}px`;
+      cb();
+    },
+    setHoleSize: (portOutSelector, portInSelector) => cb => {
+      const portOut = document.querySelector(portOutSelector);
+      const {left, bottom} = portOut.getBoundingClientRect();
+      const {right, top} = document.querySelector(portInSelector).getBoundingClientRect();
+      portOut.style.width = `${Math.round(right - left)}px`;
+      portOut.style.height = `${Math.round(bottom - top)}px`;
+      cb();
+    },
+    clearHoleSize: (portOutSelector) => cb => {
+      const portOut = document.querySelector(portOutSelector)
+      portOut.style.width = 'auto';
+      portOut.style.height = 'auto';
+      cb();
+    },
     togglePortWrapper: (portSelector, action, className) => cb => {
       document.querySelector(portSelector).classList[action](className);
       cb();

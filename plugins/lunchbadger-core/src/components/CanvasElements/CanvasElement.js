@@ -105,6 +105,7 @@ export default (ComposedComponent) => {
           isValid: true,
           data: {}
         },
+        zoomFactor: userStorage.getNumber('zoomLevel') || 1,
       };
     }
 
@@ -136,11 +137,15 @@ export default (ComposedComponent) => {
         inputName.setSelectionRange(0, inputName.value.length);
       }
       window.addEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
+      window.addEventListener('zoomFactorChanged', this.handleZoomFactorChanged);
     }
 
     componentWillUnmount() {
       window.removeEventListener('openDetailsPanelWithAutoscroll', this.openDetailsPanelWithAutoscroll);
+      window.removeEventListener('zoomFactorChanged', this.handleZoomFactorChanged);
     }
+
+    handleZoomFactorChanged = ({detail: {zoomFactor}}) => this.setState({zoomFactor});
 
     setFlatModel = () => {
       if (this.entityRef) {
@@ -402,6 +407,7 @@ export default (ComposedComponent) => {
         showEntityError,
         showNotRunningModal,
         showUnlockModal,
+        zoomFactor,
       } = this.state;
       let isDelta = entity !== multiEnvEntity;
       const toolboxConfig = [];
@@ -463,14 +469,17 @@ export default (ComposedComponent) => {
       const defaultExpanded = !userStorage.getObjectKey('entityCollapsed', id);
       if (deleting) return null;
       return (
-        <div className={cs('CanvasElement', type, status, {
-          highlighted,
-          editable,
-          wip: processing,
-          semitransparent,
-          allowEditWhenCrashed: allowEditWhenCrashed,
-          withStatus: !!status,
-        })}>
+        <div
+          className={cs('CanvasElement', type, status, {
+            highlighted,
+            editable,
+            wip: processing,
+            semitransparent,
+            allowEditWhenCrashed: allowEditWhenCrashed,
+            withStatus: !!status,
+          })}
+          style={{width: `${zoomFactor * 100}%`}}
+        >
             <Entity
               ref={(r) => {this.entityRef = r}}
               type={type}

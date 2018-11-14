@@ -66,12 +66,12 @@
   &__out {
     &.walkthroughFunctionPipelineStep {
       position: absolute;
-      top: calc(-37rem - 11px);
-      right: -48px;
+      bottom: calc(100% - 25rem - 11px);
+      left: calc(100% - 11px);
       width: 60px;
       height: calc(64rem + 20px);
       .port {
-        margin-right: 50px;
+        margin-right: calc(100% - 11px);
         margin-top: 0 !important;
         top: auto !important;
         bottom: 0px;

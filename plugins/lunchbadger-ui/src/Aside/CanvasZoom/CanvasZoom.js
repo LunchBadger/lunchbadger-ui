@@ -36,8 +36,10 @@ export default class CanvasZoom extends PureComponent {
 
   handleSliderChanged = (_, value) => this.setLevel(value);
 
-  setHtmlFontSize = size =>
-    document.querySelector('html').style.fontSize = `${size}px`;
+  setHtmlFontSize = zoomFactor => {
+    document.querySelector('html').style.fontSize = `${zoomFactor}px`;
+    window.dispatchEvent(new CustomEvent('zoomFactorChanged', {detail: {zoomFactor}}));
+  };
 
   render() {
     const {level} = this.state;

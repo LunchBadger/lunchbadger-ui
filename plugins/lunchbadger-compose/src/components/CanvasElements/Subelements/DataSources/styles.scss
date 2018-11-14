@@ -37,11 +37,11 @@
     &.walkthroughDatasouceModelStep {
       position: absolute;
       top: calc(24rem - 11px);
-      right: -48px;
+      left: calc(100% - 11px);
       width: 60px;
       height: 22px;
       .port {
-        margin-right: 50px;
+        margin-right: calc(100% - 11px);
         margin-top: 0 !important;
         top: 0 !important;
       }

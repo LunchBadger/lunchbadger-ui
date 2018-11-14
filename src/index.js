@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.322', [
+console.info('LBAPP VERSION 0.323', [
+  'Feature/1069 Resizing: adjust widths of entities in proportion #1072',
   'Feature/1070 Resurface reinstall dependencies #1071',
   'Feature/313 Make condition grouping parameters collapsible #1065',
   'Feature/1060 New ESP logo #1063',

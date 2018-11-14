@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.320', [
+console.info('LBAPP VERSION 0.321', [
+  'Feature/1070 Resurface reinstall dependencies #1071',
   'Feature/313 Make condition grouping parameters collapsible #1065',
   'Feature/1060 New ESP logo #1063',
   'Feature/1054 Freeform GUI - shrink feature on current canvas #1062',
@@ -30,9 +31,7 @@ console.info('LBAPP VERSION 0.320', [
   'Feature/441 Get rid of react-ace editor warnings part 2 #1042',
   'Feature/1035 zoom window buttons #1041',
   'Feature/1032 model property default value must match its type #1038',
-  'Feature/1036 get rid of $blockScrolling error',
-  'Feature/548 Forecaster launch rethink #1034',
-  'Feature/450 all lb models have default empty value #1033'
+  'Feature/1036 get rid of $blockScrolling error'
 ]);
 
 // Needed for onTouchTap

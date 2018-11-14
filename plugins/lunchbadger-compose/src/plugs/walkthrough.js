@@ -316,13 +316,16 @@ The <pre>Car</pre> model can now persist data to the built in memory database th
     triggerNext: api => [
       api.waitUntilPresent('.Entity.DataSource.memory .port-out .port__anchor--connected'),
       api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
+      api.clearHoleSize('.Entity.DataSource.memory .port__wrap__out'),
     ],
     onBefore: api => [
       api.delayOverlay(500),
       api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'add', 'walkthroughDatasouceModelStep'),
+      api.setHoleWidth('.Entity.DataSource.memory .port__wrap__out', '.Entity.Model .port-in'),
     ],
     onExit: api => [
       api.togglePortWrapper('.Entity.DataSource.memory .port__wrap__out', 'remove', 'walkthroughDatasouceModelStep'),
+      api.clearHoleSize('.Entity.DataSource.memory .port__wrap__out'),
     ],
   },
   '030': {

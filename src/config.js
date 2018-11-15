@@ -6,6 +6,7 @@ const mkUrl = (url, user, env) => url.replace(userRegExp, user).replace(envRegEx
 
 const serviceUrls = [
   'workspaceUrl',
+  'apiExplorerUrl',
   'projectApiUrl',
   'workspaceApiUrl',
   'forecastApiUrl',

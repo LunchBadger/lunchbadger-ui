@@ -1,0 +1,14 @@
+.panel__body.ApiExplorerPanel {
+  height: calc(100% - 7px);
+  margin: 2px;
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+.header__menu__link.API_EXPLORER_PANEL svg {
+  width: 33px;
+  height: 33px;
+}

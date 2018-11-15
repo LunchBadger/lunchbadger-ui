@@ -19,6 +19,7 @@ export default {
   workspaceApiUrl: isPrefix ? `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/workspace-api/api` : 'http://localhost:4231/api',
   forecastApiUrl: isPrefix ? `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/project-api/api` : 'http://localhost:4230/api',
   workspaceUrl: isPrefix ? `http://{USER}-{ENV}.${subdomain}lunchbadger.io` : 'http://localhost:3000',
+  apiExplorerUrl: `http://{USER}-{ENV}.${subdomain}lunchbadger.io/explorer`,
   expressGatewayAdminApiUrl: `http://admin-{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   expressGatewayAccessApiUrl: `http://{NAME}-{USER}-{ENV}.${subdomain}lunchbadger.io`,
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
@@ -54,6 +55,7 @@ export default {
     uploadPublicKeys: true,
     appUrls: false,
     workspaceButtons: true,
+    apiExplorer: true,
     fnTypes: [
       {
         label: '.Net Core 2.0',

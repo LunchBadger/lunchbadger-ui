@@ -2,6 +2,8 @@
 
 .CanvasElement {
   position: relative;
+  text-align: left;
+  display: inline-block;
   &.deploying:hover,
   &.crashed:not(.allowEditWhenCrashed):hover {
     .Toolbox {

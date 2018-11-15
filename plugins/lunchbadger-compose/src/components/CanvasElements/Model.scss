@@ -81,12 +81,12 @@
   &__out {
     &.walkthroughModelPipelineStep {
       position: absolute;
-      top: calc(24rem - 11px);
-      left: calc(100% - 11px);
+      top: 13rem;
+      left: calc(100% - 11rem);
       width: 60px;
-      height: calc(96rem + 11px);
+      height: 107rem;
       .port {
-        margin-right: calc(100% - 11px);
+        margin-right: calc(100% - 11rem);
         margin-top: 0 !important;
         top: 0 !important;
       }

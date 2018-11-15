@@ -6,7 +6,6 @@
   position: relative;
   overflow: hidden;
   transition: height 500ms;
-
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -158,5 +157,34 @@
   .jsplumb-endpoint,
   .jsplumb-connector {
     z-index: 9 !important;
+  }
+}
+
+.jsplumb-connector path {
+  &:first-child {
+    stroke-width: 7rem;
+  }
+  &:last-child {
+    stroke-width: 5rem;
+  }
+}
+
+.jsplumb-endpoint {
+  width: 12rem !important;
+  height: 12rem !important;
+  &-anchor-left.jsplumb-droppable {
+    transform: translate(calc(5rem - 3px), calc(3px - 3rem));
+  }
+  &-anchor-right.jsplumb-droppable {
+    transform: translate(calc(10px - 10rem), calc(3px - 3rem));
+  }
+  svg {
+    width: 12rem;
+    height: 12rem;
+    circle {
+      cx: 6rem;
+      cy: 6rem;
+      r: 6rem;
+    }
   }
 }

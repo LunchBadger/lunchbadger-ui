@@ -1,6 +1,6 @@
 .EntityError {
   position: absolute;
-  top: 12px;
+  top: 32px;
   right: 21px;
   background-color: #e85742;
   width: 25px;
@@ -13,7 +13,7 @@
   cursor: pointer;
   font-size: 18px;
   .canvas & {
-    top: 12rem;
+    top: 32rem;
     right: 21rem;
     width: 25rem;
     height: 25rem;

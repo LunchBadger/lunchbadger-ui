@@ -44,7 +44,7 @@ class Entity extends PureComponent {
       if (!expanded) {
         const marginTop = +window.getComputedStyle(portRef).marginTop.replace('px', '');
         this.state.marginTopPorts[portRef.id] = marginTop;
-        portRef.style.marginTop = `calc(${-portRef.offsetTop + marginTop - 13}px + 26rem)`;
+        portRef.style.marginTop = `calc(${-portRef.offsetTop + marginTop}px + 13rem)`;
       } else {
         portRef.style.marginTop = `${this.state.marginTopPorts[portRef.id]}px`;
       }

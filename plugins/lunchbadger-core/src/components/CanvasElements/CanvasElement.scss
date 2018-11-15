@@ -17,21 +17,21 @@
 
 .canvas-element__port {
   position: absolute;
-  margin-top: calc(24rem - 11px);
+  margin-top: 13rem;
   transition: margin-top 800ms ease, left 800ms ease, right 800ms ease;
 }
 
 .canvas-element__port--in {
-  left: -12px;
+  left: -12rem;
   .editable & {
-    left: -20px;
+    left: -20rem;
   }
 }
 
 .canvas-element__port--out {
-  right: -12px;
+  right: -12rem;
   .editable & {
-    right: -20px;
+    right: -20rem;
   }
 }
 

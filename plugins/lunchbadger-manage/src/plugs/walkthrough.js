@@ -175,12 +175,14 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
       api.setShowTooltip(true),
       api.setShowOverlay(true),
       api.togglePortWrapper('.Entity.Model .port__wrap__out', 'remove', 'walkthroughModelPipelineStep'),
+      api.clearHoleSize('.Entity.Model .port__wrap__out'),
       api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
     ],
     onBefore: api => [
       api.delayOverlay(500),
       api.togglePortWrapper('.Entity.Model .port__wrap__out', 'add', 'walkthroughModelPipelineStep'),
+      api.setHoleWidth('.Entity.Model .port__wrap__out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Model .port-out', '.Entity.Gateway .Gateway__pipeline0 .port-in'),
@@ -189,6 +191,7 @@ Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by click
       api.removeClass('.CanvasElement.Function_ .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline1 .port-in', 'port__disabled'),
       api.togglePortWrapper('.Entity.Model .port__wrap__out', 'remove', 'walkthroughModelPipelineStep'),
+      api.clearHoleSize('.Entity.Model .port__wrap__out'),
     ],
   },
   '0709': {
@@ -266,12 +269,14 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
       api.setShowTooltip(true),
       api.setShowOverlay(true),
       api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'remove', 'walkthroughFunctionPipelineStep'),
+      api.clearHoleSize('.Entity.Function_ .port__wrap__out'),
       api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
     ],
     onBefore: api => [
-      api.delayOverlay(500),
+      api.delayOverlay(1500),
       api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'add', 'walkthroughFunctionPipelineStep'),
+      api.setHoleSize('.Entity.Function_ .port__wrap__out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
     ],
     onPageReload: api => [
       api.disconnectPorts('.Entity.Function_ .port-out', '.Entity.Gateway .Gateway__pipeline1 .port-in'),
@@ -280,6 +285,7 @@ Connect the <pre>myfunction</pre> Function Entity with the <pre>FunctionPipeline
       api.removeClass('.CanvasElement.Model .port-out', 'port__disabled'),
       api.removeClass('.Entity.Gateway .Gateway__pipeline0 .port-in', 'port__disabled'),
       api.togglePortWrapper('.Entity.Function_ .port__wrap__out', 'remove', 'walkthroughFunctionPipelineStep'),
+      api.clearHoleSize('.Entity.Function_ .port__wrap__out'),
     ],
   },
   '0714': {

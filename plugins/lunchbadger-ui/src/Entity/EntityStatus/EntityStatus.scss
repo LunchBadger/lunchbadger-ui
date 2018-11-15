@@ -12,14 +12,14 @@
   height: 40px;
   border-radius: 50%;
   position: absolute;
-  top: 4px;
+  top: 24px;
   right: 13px;
   z-index: 16;
   .canvas & {
     width: 40rem;
     height: 40rem;
-    top: 4rem;
-    right: 13rem;
+    top: 24rem;
+    right: calc(2rem + 11px);
   }
   .canvas__container--editing & {
     z-index: 9;

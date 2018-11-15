@@ -14,6 +14,8 @@ import onConnectionDeletedStrategy from './onConnectionDeletedStrategy';
 import onEntitiesStatusesChange from './onEntitiesStatusesChange';
 import processProjectLoad from './processProjectLoad';
 import walkthrough from './walkthrough';
+import panelMenu from './panelMenu';
+import panels from './panels';
 
 export default {
   tools,
@@ -32,4 +34,6 @@ export default {
   onEntitiesStatusesChange,
   processProjectLoad,
   walkthrough,
+  panelMenu,
+  panels,
 };

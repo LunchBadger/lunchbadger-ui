@@ -6,6 +6,7 @@ export default {
   workspaceApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/workspace-api/api',
   forecastApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',
   workspaceUrl: 'https://{USER}-{ENV}.lunchbadger.io',
+  apiExplorerUrl: 'https://{USER}-{ENV}.lunchbadger.io/explorer',
   expressGatewayAdminApiUrl: 'https://admin-{NAME}-{USER}-{ENV}.lunchbadger.io',
   expressGatewayAccessApiUrl: 'https://{NAME}-{USER}-{ENV}.lunchbadger.io',
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
@@ -55,6 +56,7 @@ export default {
     gitAccess: false,
     uploadPublicKeys: false,
     appUrls: false,
+    apiExplorer: false,
     fnTypes: [
       {
         label: 'Node 6',

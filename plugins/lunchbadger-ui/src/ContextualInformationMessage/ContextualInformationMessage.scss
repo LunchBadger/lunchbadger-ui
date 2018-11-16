@@ -14,6 +14,10 @@
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
     color: #FFF;
     text-align: left;
+    &,
+    & * {
+      user-select: text;
+    }
   }
   &.rc-tooltip-placement-top .rc-tooltip-arrow,
   &.rc-tooltip-placement-topLeft .rc-tooltip-arrow,

@@ -115,7 +115,7 @@ class EntityProperty extends Component {
     super(props);
     this.state = {
       contextualVisible: false,
-      tooltipVisible: false,
+      labelTooltipVisible: false,
     }
   }
 
@@ -147,10 +147,6 @@ class EntityProperty extends Component {
     }
     onKeyDown(event);
   }
-
-  handleMouseEnter = () => this.setState({tooltipVisible: true});
-
-  handleMouseLeave = () => this.setState({tooltipVisible: false});
 
   handleObjectAddKey = () => {
     const {value, onChange, tmpPrefix} = this.props;
@@ -381,7 +377,7 @@ class EntityProperty extends Component {
         {hiddenInputs.map((item, idx) => <Input key={idx} type="hidden" value={item.value} name={item.name} />)}
       </div>
     );
-    const {contextualVisible, tooltipVisible} = this.state;
+    const {contextualVisible, labelTooltipVisible} = this.state;
     const isInvalid = invalid !== '';
     const classNames = cs('EntityProperty', type,
     {
@@ -396,6 +392,7 @@ class EntityProperty extends Component {
       ['EntityProperty__withIcon']: icon !== '',
       noMarginRight,
       hidden,
+      labelTooltipVisible,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;
@@ -437,11 +434,12 @@ class EntityProperty extends Component {
       <div
         className={classNames}
         style={style}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
       >
         {title !== '' && (
-          <EntityPropertyLabel description={tooltipVisible ? description : ''}>
+          <EntityPropertyLabel
+            description={description}
+            onLabelTooltipVisibleChange={labelTooltipVisible => this.setState({labelTooltipVisible})}
+          >
             {title}
             {!!titleRemark && (
               <span className="EntityProperty__titleRemark">

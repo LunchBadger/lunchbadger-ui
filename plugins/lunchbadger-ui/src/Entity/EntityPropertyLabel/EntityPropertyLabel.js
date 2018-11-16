@@ -23,7 +23,14 @@ const helpIconStyle = {
   color: '#aaa',
 };
 
-const EntityPropertyLabel = ({children, className, plain, description = '', noMargin}) => (
+const EntityPropertyLabel = ({
+  children,
+  className,
+  plain,
+  description = '',
+  noMargin,
+  onLabelTooltipVisibleChange,
+}) => (
   <div className={cs('EntityPropertyLabel', className, {plain, noMargin})}>
     {children}
     {!!description && (
@@ -31,6 +38,8 @@ const EntityPropertyLabel = ({children, className, plain, description = '', noMa
         <ContextualInformationMessage
           tooltip={description}
           direction="top"
+          clickable
+          onTooltipVisibleChange={onLabelTooltipVisibleChange}
         >
           <IconButton
             className="EntityPropertyLabel__help"

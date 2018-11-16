@@ -53,6 +53,7 @@ export default {
     gitAccess: true,
     uploadPublicKeys: true,
     appUrls: false,
+    workspaceButtons: true,
     fnTypes: [
       {
         label: '.Net Core 2.0',

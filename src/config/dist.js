@@ -55,6 +55,7 @@ export default {
     gitAccess: false,
     uploadPublicKeys: false,
     appUrls: false,
+    workspaceButtons: false,
     fnTypes: [
       {
         label: 'Node 6',

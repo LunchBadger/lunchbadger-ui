@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.326', [
+console.info('LBAPP VERSION 0.327', [
+  'Feature/852 Pretty up path in validation error #1077',
   'Feature/1075 Api Explorer in panel #1076',
   'Feature/1068 resizing ports and connection lines #1074',
   'Feature/1069 Resizing: adjust widths of entities in proportion #1072',

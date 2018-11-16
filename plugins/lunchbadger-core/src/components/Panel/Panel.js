@@ -40,6 +40,8 @@ export default (ComposedComponent) => {
       if (currentlyOpenedPanel !== this.props.currentlyOpenedPanel) {
         if (this.storageKey === currentlyOpenedPanel && !this.state.opened) {
           this.setState({opened: true});
+          const panel = this.getPanelNode();
+          panel && panel.onPanelOpen && panel.onPanelOpen();
         } else if (this.storageKey !== currentlyOpenedPanel) {
           this.setState({opened: false});
         }
@@ -61,6 +63,11 @@ export default (ComposedComponent) => {
         this.setCanvasHeight(null);
       }
     }
+
+    getPanelNode = () => {
+      if (!this.panel) return null;
+      return this.panel.wrappedInstance || this.panel.decoratedComponentInstance || this.panel;
+    };
 
     updateCanvasHeight = () => {
       const containerHeight = getContainerHeight();
@@ -105,7 +112,7 @@ export default (ComposedComponent) => {
       }
       let type = '';
       if (this.panel) {
-        type = (this.panel.wrappedInstance || this.panel.decoratedComponentInstance || this.panel).constructor.type;
+        type = this.getPanelNode().constructor.type;
       }
       const containerClass = classNames(type, 'panel__container', {
         'panel__container--dragging': this.state.dragging,

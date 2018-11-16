@@ -6,9 +6,9 @@ import './EntityValidationErrors.scss';
 
 const formatKey = key => key
   .replace(/([A-Z])/g, ' $1')
-  .replace(/\[/g, ' / ')
+  .replace(/\[/g, '^')
   .replace(/\]/g, '')
-  .replace(/Lunch Badger \/ /g, '');
+  .replace(/Lunch Badger\^/g, '');
 
 class EntityValidationErrors extends Component {
   static propTypes = {
@@ -43,9 +43,15 @@ class EntityValidationErrors extends Component {
                   className={cs('EntityValidationErrors__fields__field', `validationError__${key}`)}
                   onClick={this.handleFieldClick(key)}
                 >
-                  {formatKey(key)}
+                  <span>
+                    {formatKey(key).split('^').map((item, idx) => (
+                      <span key={idx} className="EntityValidationErrors__fields__item">
+                        {item}
+                      </span>
+                    ))}
+                  </span>
                   {basic && (
-                    <span>
+                    <span className="basic">
                       {' '} - {validations.data[key]}
                     </span>
                   )}

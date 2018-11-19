@@ -335,6 +335,15 @@
       margin-left: 5rem;
     }
   }
+  &:hover,
+  &.labelTooltipVisible {
+    & > .EntityPropertyLabel > .EntityPropertyLabel__tooltip {
+      display: inline;
+    }
+  }
+  & > .EntityPropertyLabel > .EntityPropertyLabel__tooltip {
+    display: none;
+  }
 }
 
 .ModelProperty,

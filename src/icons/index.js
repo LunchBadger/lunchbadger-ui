@@ -1,3 +1,4 @@
+import iconApiExplorer from './icon-api-explorer.svg';
 import iconApi from './icon-api.svg';
 import iconArrow from './icon-arrow.svg';
 import iconArrowBack from './icon-arrow-back.svg';
@@ -54,6 +55,7 @@ import iconUser from './icon-user.svg';
 import iconWand from './icon-wand.svg';
 
 export {
+  iconApiExplorer,
   iconApi,
   iconArrow,
   iconArrowBack,

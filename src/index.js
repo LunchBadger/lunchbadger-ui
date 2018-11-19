@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.328', [
+console.info('LBAPP VERSION 0.329', [
+  'Feature/535 ApiExplorer improvements #1084',
   'Feature/328 Tooltips onclick mode #1078',
   'Feature/852 Pretty up path in validation error #1077',
   'Feature/1075 Api Explorer in panel #1076',
@@ -31,9 +32,7 @@ console.info('LBAPP VERSION 0.328', [
   'Feature/351 Suggested improvements to Settings Panel #1046',
   'Feature/1040 Show validation message for model property #1045',
   'Feature/901 ignorePath option in EG for functions is no longer required #1028',
-  'Feature/708 Autoscroll quadrant on making connection #1044',
-  'Bugfix/1039 Unable connect model-datasource on walkthrough #1043',
-  'Feature/441 Get rid of react-ace editor warnings part 2 #1042'
+  'Feature/708 Autoscroll quadrant on making connection #1044'
 ]);
 
 // Needed for onTouchTap

@@ -77,6 +77,7 @@ class WorkspaceStatus extends Component {
       }
       if (wsGitChanged) {
         console.log(`ws_git changed: ${this.state.ws_git} => ${ws_git}`);
+        window.dispatchEvent(new Event('WorkspaceGitChanged'));
       }
       dispatch(silentReload(this.context.paper.getInstance()));
     }

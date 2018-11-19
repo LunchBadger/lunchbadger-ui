@@ -57,6 +57,7 @@ export default {
     uploadPublicKeys: false,
     appUrls: false,
     apiExplorer: false,
+    workspaceButtons: false,
     fnTypes: [
       {
         label: 'Node 6',

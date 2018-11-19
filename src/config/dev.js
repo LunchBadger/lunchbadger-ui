@@ -55,6 +55,7 @@ export default {
     uploadPublicKeys: true,
     appUrls: false,
     apiExplorer: true,
+    workspaceButtons: true,
     fnTypes: [
       {
         label: '.Net Core 2.0',

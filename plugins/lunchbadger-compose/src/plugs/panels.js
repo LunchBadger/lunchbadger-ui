@@ -1,5 +1,9 @@
 import ApiExplorerPanel from '../components/Panel/ApiExplorerPanel';
+import Config from '../../../../src/config';
 
-export default [
-  ApiExplorerPanel,
-];
+const panels = [];
+if (Config.get('features').apiExplorer) {
+  panels.push(ApiExplorerPanel);
+}
+
+export default panels;

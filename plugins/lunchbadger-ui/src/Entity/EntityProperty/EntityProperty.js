@@ -36,7 +36,10 @@ class EntityProperty extends Component {
     title: PropTypes.string,
     titleRemark: PropTypes.string,
     placeholder: PropTypes.string,
-    invalid: PropTypes.string,
+    invalid: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
     fake: PropTypes.bool,
     editableOnly: PropTypes.bool,
     password: PropTypes.bool,
@@ -284,7 +287,7 @@ class EntityProperty extends Component {
         </span>
       );
     }
-    const isInvalid = invalid !== '';
+    const isInvalid = (invalid.message || invalid) !== '';
     const filler = placeholder || `Enter ${title} here`;
     if (options) {
       return (
@@ -378,7 +381,7 @@ class EntityProperty extends Component {
       </div>
     );
     const {contextualVisible, labelTooltipVisible} = this.state;
-    const isInvalid = invalid !== '';
+    const isInvalid = (invalid.message || invalid) !== '';
     const classNames = cs('EntityProperty', type,
     {
       ['EntityProperty__fake']: fake,
@@ -477,7 +480,9 @@ class EntityProperty extends Component {
           </SmoothCollapse>
         )}
         <SmoothCollapse expanded={isInvalid} heightTransition="800ms ease">
-          <div className="EntityProperty__error">{invalid}</div>
+          <div className="EntityProperty__error">
+            {invalid.message || invalid}
+          </div>
         </SmoothCollapse>
         {button && (
           <div className="EntityProperty__button">{button}</div>

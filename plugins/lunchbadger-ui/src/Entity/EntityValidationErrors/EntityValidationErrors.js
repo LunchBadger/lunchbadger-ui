@@ -37,27 +37,37 @@ class EntityValidationErrors extends Component {
         >
           The following items require your attention:
           <div className="EntityValidationErrors__fields">
-            {validations.data && Object.keys(validations.data).map(key => (
-              <div key={key}>
-                <div
-                  className={cs('EntityValidationErrors__fields__field', `validationError__${key}`)}
-                  onClick={this.handleFieldClick(key)}
-                >
-                  <span>
-                    {formatKey(key).split('^').map((item, idx) => (
-                      <span key={idx} className="EntityValidationErrors__fields__item">
-                        {item}
-                      </span>
-                    ))}
-                  </span>
-                  {basic && (
-                    <span className="basic">
-                      {' '} - {validations.data[key]}
+            {validations.data && Object.keys(validations.data).map(key => {
+              const validationItem = validations.data[key];
+              const custom = typeof validationItem === 'object';
+              const path = custom ? validationItem.customPath : formatKey(key);
+              const message = custom ? validationItem.message : validationItem;
+              return (
+                <div key={key}>
+                  <div
+                    className={cs(
+                      'EntityValidationErrors__fields__field',
+                      `validationError__${key}`,
+                      {custom}
+                    )}
+                    onClick={this.handleFieldClick(key)}
+                  >
+                    <span>
+                      {path.split('^').map((item, idx) => (
+                        <span key={idx} className="EntityValidationErrors__fields__item">
+                          {item}
+                        </span>
+                      ))}
                     </span>
-                  )}
+                    {basic && (
+                      <span className="basic">
+                        {' '} - {message}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </SmoothCollapse>

@@ -21,6 +21,76 @@ const {
 } = LunchBadgerCore;
 const {consumerManagement} = Config.get('features');
 
+const transformGatewayValidations = (validations, model) => {
+  const {data} = validations;
+  validations.data = {};
+  Object.keys(data).forEach((key) => {
+    const keyArr = key.replace(/\[/g, '^').replace(/\]/g, '').split('^');
+    let newKey = [];
+    let trailingsAdded = false;
+    if (keyArr[0] === 'pipelines'
+      && Number.isInteger(+keyArr[1])
+      && keyArr[2] === 'policies'
+      && Number.isInteger(+keyArr[3])
+      && keyArr[4] === 'pairs'
+      && Number.isInteger(+keyArr[5])
+    ) {
+      newKey = keyArr.slice(6);
+      trailingsAdded = true;
+      const name = 'C/A Pair';
+      newKey.unshift(`${name} ${+keyArr[5] + 1}`);
+    }
+    if (keyArr[0] === 'pipelines'
+      && Number.isInteger(+keyArr[1])
+      && keyArr[2] === 'policies'
+      && Number.isInteger(+keyArr[3])
+    ) {
+      if (!trailingsAdded) {
+        newKey = keyArr.slice(4);
+        trailingsAdded = true;
+      }
+      const pipelineIdx = +keyArr[1];
+      const policyIdx = +keyArr[3];
+      const name = Object.keys(model.pipelines[pipelineIdx].policies[policyIdx])
+        .filter(k => k !== 'id')[0];
+      let idx = '';
+      const policies = model.pipelines[pipelineIdx].policies
+        .map(p => Object.keys(p).filter(k => k !== 'id')[0]);
+      const policyCounts = policies.filter(p => p === name).length;
+      const policyUniqueCounts = policies
+        .map(p => policies.filter((i, ix) => ix <= policyIdx && i === p).length);
+      if (policyCounts > 1) {
+        idx = ` #${policyUniqueCounts[policyIdx]}`;
+      }
+      newKey.unshift(`${name}${idx}`);
+    }
+    if (keyArr[0] === 'pipelines'
+      && Number.isInteger(+keyArr[1])
+    ) {
+      if (!trailingsAdded) {
+        newKey = keyArr.slice(2);
+        trailingsAdded = true;
+      }
+      const pipelineIdx = +keyArr[1];
+      const name = model.pipelines[pipelineIdx].name;
+      let idx = '';
+      const pipelines = model.pipelines.map(p => p.name);
+      const pipelineCounts = pipelines.filter(p => p === name).length;
+      const pipelineUniqueCounts = pipelines
+        .map(p => pipelines.filter((i, ix) => ix <= pipelineIdx && i === p).length);
+      if (pipelineCounts > 1) {
+        idx = ` #${pipelineUniqueCounts[pipelineIdx]}`;
+      }
+      newKey.unshift(`${name}${idx}`);
+    }
+    validations.data[key] = {
+      customPath: newKey.join('^'),
+      message: data[key],
+    }
+  });
+  return validations;
+};
+
 export default class Gateway extends BaseModel {
   static type = 'Gateway';
   static entities = 'gateways';
@@ -467,6 +537,7 @@ export default class Gateway extends BaseModel {
         });
       });
       validations.isValid = Object.keys(validations.data).length === 0;
+      transformGatewayValidations(validations, model);
       return validations;
     }
   }

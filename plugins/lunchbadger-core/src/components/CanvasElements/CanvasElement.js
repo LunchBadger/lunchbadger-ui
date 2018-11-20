@@ -27,6 +27,7 @@ import {
   scrollToElement,
   SystemDefcon1,
   GAEvent,
+  UIDefaults,
 } from '../../../../lunchbadger-ui/src';
 import getFlatModel from '../../utils/getFlatModel';
 
@@ -105,7 +106,7 @@ export default (ComposedComponent) => {
           isValid: true,
           data: {}
         },
-        zoomFactor: userStorage.getNumber('zoomLevel') || 1,
+        zoomFactor: userStorage.getNumber('zoomLevel') || UIDefaults.zoomFactor,
       };
     }
 

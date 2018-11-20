@@ -52,6 +52,7 @@ import ResizableWrapper from './ResizableWrapper/ResizableWrapper';
 import PasswordStrengthMeter from './PasswordStrengthMeter/PasswordStrengthMeter';
 import {GAEvent, setGAUserId} from './GA/GA';
 import DocsLink from './DocsLink/DocsLink';
+import UIDefaults from './utils/UIDefaults';
 
 import {
   iconApi,
@@ -109,6 +110,7 @@ export {
   ContextualInformationMessage,
   ContextualMenu,
   CopyOnHover,
+  UIDefaults,
   DocsLink,
   Entity,
   EntityActionButtons,

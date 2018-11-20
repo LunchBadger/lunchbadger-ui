@@ -11,38 +11,38 @@
     right: 66px;
     background-color: #4190CE;
     max-width: 340px;
-    .EntityProperty {
+    .EntityProperty:not(.EntityProperty__codeEditor) {
       margin-right: 0;
-    }
-    .EntityProperty__field {
-      color: #FFF;
-      height: 27px;
-      &--input,
-      &--input > div {
-        height: 100% !important;
-        hr {
-          bottom: 0 !important;
+      .EntityProperty__field {
+        color: #FFF;
+        height: 27px;
+        &--input,
+        &--input > div {
+          height: 100% !important;
+          hr {
+            bottom: 0 !important;
+          }
         }
-      }
-      &--text {
-        line-height: 27px;
-      }
-      input {
-        &::-webkit-input-placeholder {
-          color: inherit;
-          opacity: 0.5;
+        &--text {
+          line-height: 27px;
         }
-        &:-ms-input-placeholder {
-          color: inherit;
-          opacity: 0.5;
-        }
-        &::-moz-placeholder {
-          color: inherit;
-          opacity: 0.5;
-        }
-        &:-moz-placeholder {
-          color: inherit;
-          opacity: 0.5;
+        input {
+          &::-webkit-input-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &:-ms-input-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &::-moz-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
+          &:-moz-placeholder {
+            color: inherit;
+            opacity: 0.5;
+          }
         }
       }
     }

@@ -8,9 +8,11 @@ import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import {GAEvent} from '../../../../lunchbadger-ui/src';
+import Config from '../../../../../src/config';
 import './Canvas.scss';
 
 const defaultCanvasHeight = 'calc(100vh - 52px)';
+const {slsModelConnectorsTriggers} = Config.get('features');
 
 class Canvas extends Component {
   static contextTypes = {
@@ -143,12 +145,14 @@ class Canvas extends Component {
     if (target.parentElement.classList.contains('port__disabled')) return false;
     if ((source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) ||
       (source.parentElement.classList.contains('port-out') && target.parentElement.classList.contains('port-out'))) {
-      if ((source.parentElement.classList.contains('port-Function_') && target.parentElement.classList.contains('port-Model')) ||
-        (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function_'))) {
-        if (source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) {
-          return false;
+      if (slsModelConnectorsTriggers) {
+        if ((source.parentElement.classList.contains('port-Function_') && target.parentElement.classList.contains('port-Model')) ||
+          (source.parentElement.classList.contains('port-Model') && target.parentElement.classList.contains('port-Function_'))) {
+          if (source.parentElement.classList.contains('port-in') && target.parentElement.classList.contains('port-in')) {
+            return false;
+          }
+          return true;
         }
-        return true;
       }
       return false;
     }

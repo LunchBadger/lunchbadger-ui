@@ -56,6 +56,8 @@ export default {
     appUrls: false,
     workspaceButtons: true,
     apiExplorer: true,
+    slsModelConnectorsTriggers: false,
+    slsModelsTriggers: false,
     fnTypes: [
       {
         label: '.Net Core 2.0',

@@ -12,7 +12,7 @@ import SettingsPanelSections from './EntitiesDetails/SettingsPanelSections';
 import {EntityPropertyLabel, DocsLink} from '../../../../lunchbadger-ui/src';
 import './SettingsPanel.scss';
 
-const {gitAccess, appUrls} = Config.get('features');
+const {gitAccess, appUrls, workspaceButtons} = Config.get('features');
 
 const dummyLoopbackGitCloneCommand = 'git clone git@xxxxxxxxx.xxxxxxxxx.xxx:xxxxxxxxx-xxxxxxxxx/xxxxxxxxx.xxx';
 const dummyServerlessGitCloneCommand = 'git clone git@xxxxxxxxxx.xxxxxxxxxx.xxx:xxxxxxxxxx-xxxxxxxxxx/xxxxxxxxxx.xxx';
@@ -102,6 +102,28 @@ class SettingsPanel extends Component {
             )}
           </div>
         </div>
+        {workspaceButtons && (
+          <div className="details-panel__element WorkspaceButtons">
+            <div className="details-panel__fieldset">
+              <EntityPropertyLabel>
+                Workspace actions
+              </EntityPropertyLabel>
+              <div className="details-panel__static-field">
+                <button onClick={this.onReinstall}>
+                  Reinstall Dependencies
+                </button>
+                {' '}
+                <button onClick={this.onResetWorkspace}>
+                  Reset Workspace
+                </button>
+                {' '}
+                <button onClick={this.onRestartWorkspace}>
+                  Restart Workspace
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <SshManager />
       </div>
     );

@@ -14,11 +14,15 @@ export default class ContextualInformationMessage extends PureComponent {
       PropTypes.node,
     ]),
     direction: PropTypes.string,
+    clickable: PropTypes.bool,
+    onTooltipVisibleChange: PropTypes.func,
   };
 
   static defaultProps = {
     tooltip: '',
     direction: 'right',
+    clickable: false,
+    onTooltipVisibleChange: () => {},
   };
 
   constructor(props) {
@@ -28,12 +32,15 @@ export default class ContextualInformationMessage extends PureComponent {
     };
   }
 
-  setVisible = () => this.setState({visible: true});
+  setVisible = () => this.onVisibleChange(true);
 
-  setInvisible = () => this.setState({visible: false});
+  setInvisible = () => this.onVisibleChange(false);
+
+  onVisibleChange = (visible) => this.setState({visible}, () =>
+    this.props.onTooltipVisibleChange(visible));
 
   render() {
-    const {children, direction, tooltip} = this.props;
+    const {children, direction, tooltip, clickable} = this.props;
     const {visible} = this.state;
     if (tooltip === '') return <span>{children}</span>;
     const overlayStyle = {};
@@ -42,7 +49,7 @@ export default class ContextualInformationMessage extends PureComponent {
     }
     return (
       <span
-        onClick={this.setInvisible}
+        onClick={clickable ? this.setVisible : this.setInvisible}
         onMouseEnter={this.setVisible}
       >
         <Tooltip
@@ -53,6 +60,7 @@ export default class ContextualInformationMessage extends PureComponent {
           overlayStyle={overlayStyle}
           overlayClassName={cs('ContextualInformationMessage', slug(tooltip))}
           destroyTooltipOnHide
+          onVisibleChange={this.onVisibleChange}
         >
           {children}
         </Tooltip>

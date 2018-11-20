@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import cs from 'classnames';
 import Slider from 'material-ui/Slider';
-import {ContextualInformationMessage} from '../../';
+import {ContextualInformationMessage, UIDefaults} from '../../';
 import userStorage from '../../../../lunchbadger-core/src/utils/userStorage';
 import './CanvasZoom.scss';
 
@@ -12,7 +12,7 @@ const LEVEL_MAX = 1;
 export default class CanvasZoom extends PureComponent {
   constructor(props) {
     super(props);
-    const level = userStorage.getNumber('zoomLevel') || 1;
+    const level = userStorage.getNumber('zoomLevel') || UIDefaults.zoomFactor;
     this.state = {
       level,
     };

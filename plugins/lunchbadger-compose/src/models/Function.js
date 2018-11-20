@@ -3,10 +3,14 @@ import {update, remove, restart} from '../reduxActions/functions';
 import {validFunctionName, runtimeMapping} from '../utils';
 import Config from '../../../../src/config';
 
-const {BaseModel, Port} = LunchBadgerCore.models;
-const portGroups = LunchBadgerCore.constants.portGroups;
-const {Connections} = LunchBadgerCore.stores;
-const {coreActions} = LunchBadgerCore.utils;
+const {
+  models: {BaseModel, Port},
+  stores: {Connections},
+  utils: {coreActions},
+  constants: {portGroups},
+} = LunchBadgerCore;
+
+const {slsModelConnectorsTriggers} = Config.get('features');
 
 export default class Function_ extends BaseModel {
   static type = 'Function_';
@@ -27,18 +31,19 @@ export default class Function_ extends BaseModel {
   constructor(id, name) {
     super(id);
     this.name = name;
-    this.ports = [
-      Port.create({
+    this.ports = [];
+    if (slsModelConnectorsTriggers) {
+      this.ports.push(Port.create({
         id: this.id,
         portGroup: portGroups.PRIVATE,
         portType: 'in'
-      }),
-      Port.create({
-        id: this.id,
-        portGroup: portGroups.GATEWAYS,
-        portType: 'out'
-      })
-    ];
+      }));
+    }
+    this.ports.push(Port.create({
+      id: this.id,
+      portGroup: portGroups.GATEWAYS,
+      portType: 'out'
+    }));
   }
 
   recreate() {

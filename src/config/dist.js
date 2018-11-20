@@ -58,6 +58,8 @@ export default {
     appUrls: false,
     apiExplorer: false,
     workspaceButtons: false,
+    slsModelConnectorsTriggers: false,
+    slsModelsTriggers: false,
     fnTypes: [
       {
         label: 'Node 6',

@@ -25,7 +25,7 @@ export default {
   customerUrl: 'http://workspace-{USER}-{ENV}.customer:3000',
   slsUrl: 'http://fn-{USER}-{ENV}-{FN}:8080',
   kubeWatcherApiUrl: isPrefix ? `http://${prefix}kube-watcher.lunchbadger.com` : 'http://localhost:7788',
-  slsApiUrl: `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io`,
+  slsApiUrl: isPrefix ? `http://sls-{USER}-{ENV}.${subdomain}lunchbadger.io` : 'http://localhost:4444',
   sshManagerUrl: `http://${prefix}api.lunchbadger.com/users/customer/{USER}`,
   loopbackGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/{ENV}.git`,
   serverlessGitCloneCommand: `git clone git@${prefix}git.lunchbadger.com:customer-{USER}/functions.git`,

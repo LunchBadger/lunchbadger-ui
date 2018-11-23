@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.333', [
+console.info('LBAPP VERSION 0.334', [
+  'adding local version of sls api on port 4444 #1088',
   'Feature/1082 Disable function triggers on prod to model connectors and models #1086',
   'Feature/1083 Zoom level default #1085',
   'Feature/535 ApiExplorer improvements #1084',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.333', [
   'Feature/653 Tab keypress put focus on Cancel button #1051',
   'Bugfix/1048 UDF should not allow blank names #1050',
   'Feature/570 Animate swapping of entities in canvas #1047',
-  'Feature/351 Suggested improvements to Settings Panel #1046',
-  'Feature/1040 Show validation message for model property #1045'
+  'Feature/351 Suggested improvements to Settings Panel #1046'
 ]);
 
 // Needed for onTouchTap

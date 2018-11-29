@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.335', [
+console.info('LBAPP VERSION 0.336', [
   'adding local version of sls api on port 4444 #1088',
   'Feature/1082 Disable function triggers on prod to model connectors and models #1086',
   'Feature/1083 Zoom level default #1085',

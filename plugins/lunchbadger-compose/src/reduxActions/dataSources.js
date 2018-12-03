@@ -21,7 +21,6 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
-  let isAutoSave = false;
   if (index > 0) {
     updatedEntity = DataSource.create({...entity.toJSON(), ...model});
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
@@ -61,9 +60,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     }
     updatedEntity = DataSource.create(body);
     dispatch(actions.updateDataSource(updatedEntity));
-    if (isAutoSave) {
-      await dispatch(coreActions.saveToServer());
-    }
+    await dispatch(coreActions.saveToServer());
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));

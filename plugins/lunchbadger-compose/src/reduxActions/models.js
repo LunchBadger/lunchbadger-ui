@@ -147,7 +147,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.ready = true;
     dispatch(actions[updateAction](updatedEntity));
     if (!wasBundled) {
-      await dispatch(coreActions.saveToServer({saveProject: false}));
+      await dispatch(coreActions.saveToServer());
     }
     return updatedEntity;
   } catch (error) {

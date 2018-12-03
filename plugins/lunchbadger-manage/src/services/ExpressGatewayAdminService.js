@@ -1,10 +1,10 @@
-import slug from 'slug';
 import Config from '../../../../src/config';
 
 const {ApiClient, getUser} = LunchBadgerCore.utils;
 
 class ExpressGatewayAdminService {
-  initialize = name => this.api = new ApiClient(Config.get('expressGatewayAdminApiUrl').replace('{NAME}', slug(name, {lower: true})), getUser().id_token);
+  initialize = name => this.api = new ApiClient(Config.get('expressGatewayAdminApiUrl')
+    .replace('{NAME}', name), getUser().id_token);
 
   getServiceEndpoints = () => this.api.get('/service-endpoints');
 

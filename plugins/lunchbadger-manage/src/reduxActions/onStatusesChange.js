@@ -60,7 +60,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
   let isSave = false;
   let unlockAdminApi = [];
   Object.keys(entries).forEach(async (slugId) => {
-    const {status, entity, slug} = entries[slugId];
+    const {status, entity, slug, pods} = entries[slugId];
     const {
       running: gatewayRunning,
       deleting: gatewayDeleting,
@@ -80,7 +80,8 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
         dispatch(actions.updateGateway(updatedEntity));
       }
     } else {
-      const {running} = status;
+      const {running: statusRunning, deployment: {inProgress}} = status;
+      const running = statusRunning && !inProgress;
       if (entity === null) {
         /* relict since deleting functions are not rendered */
         // const storageGateway = userStorage.getObjectKey('gateway', slugId) || {};
@@ -97,7 +98,16 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
       } else {
         updatedEntity = entity.recreate();
         updatedEntity.pipelinesLunchbadger = entity.pipelinesLunchbadger;
+        const pod = Object.keys(pods).find(key => pods[key].servesRequests);
+        if (pod) {
+          const podArr = pod.split('-');
+          const podName = podArr[podArr.length - 3];
+          if (updatedEntity.podName !== podName) {
+            updatedEntity.podName = podName;
+          }
+        }
         let message;
+        let gatewayUpdated = false;
         const hasPipelinesLunchbadger = typeof entity.pipelinesLunchbadger === 'object';
         if (running && hasPipelinesLunchbadger) {
           updatedEntity.pipelines = entity.pipelinesLunchbadger.map(p => Pipeline.create(p));
@@ -108,6 +118,7 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           }
           isSave = true;
           dispatch(actions.updateGateway(updatedEntity));
+          gatewayUpdated = true;
           message = 'successfully deployed';
         }
         if (running !== gatewayRunning) {
@@ -119,6 +130,10 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
           } else if (!message) {
             message = `is ${running ? '' : 'not'} running`;
           }
+          dispatch(actions.updateGateway(updatedEntity));
+          gatewayUpdated = true;
+        }
+        if (!gatewayUpdated) {
           dispatch(actions.updateGateway(updatedEntity));
         }
         if (message) {

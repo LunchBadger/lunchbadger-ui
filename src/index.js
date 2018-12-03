@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.338', [
+console.info('LBAPP VERSION 0.339', [
+  'Bugfix/1091 Model and ds are locking after quick edit #1100',
   'Bugfix/1093 While deploying function you can attach to gateway #1097',
   'Use gateway name from pod name in admin api calls #1096',
   'adding local version of sls api on port 4444 #1088',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.338', [
   'Feature/1054 Freeform GUI - shrink feature on current canvas #1062',
   'Bugfix/1057 walkthrough blocked #1058',
   'Feature/617 Add validation for model name #1052',
-  'Feature/653 Tab keypress put focus on Cancel button #1051',
-  'Bugfix/1048 UDF should not allow blank names #1050'
+  'Feature/653 Tab keypress put focus on Cancel button #1051'
 ]);
 
 // Needed for onTouchTap

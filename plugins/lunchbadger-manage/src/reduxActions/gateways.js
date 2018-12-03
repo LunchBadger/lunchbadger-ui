@@ -176,3 +176,17 @@ export const removeServiceEndpointFromProxies = serviceEndpoint => (dispatch, ge
     dispatch(actions.updateGateway(gateway));
   });
 };
+
+export const renameServiceEndpointInProxies = (oldServiceEndpoint, newServiceEndpoint) => (dispatch, getState) => {
+  const state = getState();
+  const {entities: {gateways}} = state;
+  Object.values(gateways).forEach((entity) => {
+    const gateway = entity.recreate();
+    gateway.pipelines.forEach((pipeline) => {
+      pipeline.policies
+        .filter(({name}) => name === 'proxy')
+        .forEach(policy => policy.renameServiceEndpointInConditionAction(oldServiceEndpoint, newServiceEndpoint));
+    });
+    dispatch(actions.updateGateway(gateway));
+  });
+};

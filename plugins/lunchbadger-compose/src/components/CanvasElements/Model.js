@@ -161,14 +161,15 @@ class Model extends Component {
 
   renderPorts = () => {
     const {entity} = this.props;
-    return entity.ports.map((port) => (
+    const {id, ports, gaType} = entity;
+    return ports.map(({portType, portGroup}) => (
       <Port
-        key={`port-${port.portType}-${port.id}`}
-        way={port.portType}
-        elementId={port.id}
-        className={`port-${entity.constructor.type} port-${port.portGroup}`}
-        scope={port.portGroup}
-        gaType={entity.gaType}
+        key={`port-${portType}-${id}`}
+        way={portType}
+        elementId={id}
+        className={`port-${entity.constructor.type} port-${portGroup}`}
+        scope={portGroup}
+        gaType={gaType}
       />
     ));
   };

@@ -95,7 +95,7 @@ class Microservice extends Component {
   handleDropCheck = (item) => {
     const {entity} = this.props;
     const accept = _.includes(entity.accept, item.constructor.type);
-    const bundled = _.includes(entity.models, item.lunchbadgerId);
+    const bundled = _.includes(entity.models, item.id);
     return accept && !bundled;
   };
 
@@ -111,8 +111,8 @@ class Microservice extends Component {
 
   processModel = model => {
     if (!model.models) model.models = [];
-    model.models.forEach(({lunchbadgerId}, idx) => {
-      model.models[idx] = this.getSubModel(lunchbadgerId).processModel(model.models[idx]);
+    model.models.forEach(({id}, idx) => {
+      model.models[idx] = this.getSubModel(id).processModel(model.models[idx]);
     });
     return model;
   }
@@ -122,7 +122,7 @@ class Microservice extends Component {
   handleDeleteModel = id => () => this.setState({models: this.state.models.filter((model) => model.id !== id)});
 
   discardChanges = callback => this.onPropsUpdate(this.props, () => {
-    this.state.models.forEach(({lunchbadgerId}) => this.getSubModel(lunchbadgerId).discardChanges());
+    this.state.models.forEach(({id}) => this.getSubModel(id).discardChanges());
     callback && callback();
   });
 
@@ -174,7 +174,7 @@ class Microservice extends Component {
           <ElementsBundler
             {...this.props}
             canDropCheck={this.handleDropCheck}
-            onAddCheck={(item) => !_.includes(entity.models, item.entity.lunchbadgerId)}
+            onAddCheck={(item) => !_.includes(entity.models, item.entity.id)}
             onAdd={this.bundleModel}
             onMove={this.moveBetweenMicroservice}
             onMoveMultiple={this.moveMultipleBetweenMicroservice}

@@ -26,6 +26,7 @@ export default class DataSource extends BaseModel {
 
   ports = [];
   connector = '';
+  tmpId = '';
 
   constructor(id, name, connector) {
     super(id);
@@ -33,15 +34,11 @@ export default class DataSource extends BaseModel {
     this.connector = connector;
     this.ports = [
       Port.create({
-        id: this.id,
+        id,
         portGroup: portGroups.PRIVATE,
         portType: 'out'
       })
     ];
-  }
-
-  static get idField() {
-    return 'lunchbadgerId';
   }
 
   toJSON() {
@@ -63,15 +60,22 @@ export default class DataSource extends BaseModel {
 
   baseProperties() {
     const json = {
-      id: this.workspaceId,
+      id: this.id,
       facetName: 'server',
       name: this.name,
       connector: this.connector,
       itemOrder: this.itemOrder,
-      lunchbadgerId: this.id,
       error: this.error,
     };
     return json;
+  }
+
+  set id(id) {
+    this._id = id;
+  }
+
+  get id() {
+    return this.workspaceId;
   }
 
   get status() {
@@ -111,14 +115,25 @@ export default class DataSource extends BaseModel {
   validateName(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const entities = getState().entities.dataSources;
+      const {dataSources, models, modelsBundled} = getState().entities;
       if (model.name !== '') {
-        const isDuplicateName = Object.keys(entities)
+        const isDuplicateModelConnectorName = Object.keys(dataSources)
           .filter(id => id !== this.id)
-          .filter(id => entities[id].name.toLowerCase() === model.name.toLowerCase())
+          .filter(id => dataSources[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
-        if (isDuplicateName) {
+        const isDuplicateModelName = Object.keys(models)
+          .filter(id => id !== this.id)
+          .filter(id => models[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        const isDuplicateModelBundledName = Object.keys(modelsBundled)
+          .filter(id => id !== this.id)
+          .filter(id => modelsBundled[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
+        if (isDuplicateModelConnectorName) {
           validations.data.name = messages.duplicatedEntityName('Model Connector');
+        }
+        if (isDuplicateModelName || isDuplicateModelBundledName) {
+          validations.data.name = messages.duplicatedEntityName('Model');
         }
       }
       checkFields(['name'], model, validations.data);

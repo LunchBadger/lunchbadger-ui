@@ -47,13 +47,13 @@ export default class Model extends BaseModel {
     'idInjection',
     'options',
     'configFile',
-    'lunchbadgerId',
     'elementDOM',
     'slugifyName',
     'zoomWindow',
     'models',
     'openDetailsPanel',
-    '_locked'
+    '_locked',
+    'tmpId'
   ];
 
   _ports = [];
@@ -70,6 +70,7 @@ export default class Model extends BaseModel {
     width: 1090,
     height: 750,
   };
+  tmpId = '';
 
   static deserializers = {
     http: (obj, val) => {
@@ -84,12 +85,12 @@ export default class Model extends BaseModel {
     this.name = name;
     this.ports = [
       Port.create({
-        id: this.id,
+        id,
         portGroup: portGroups.PRIVATE,
         portType: 'in'
       }),
       Port.create({
-        id: this.id,
+        id,
         portGroup: portGroups.GATEWAYS,
         portType: 'out'
       })
@@ -113,14 +114,6 @@ export default class Model extends BaseModel {
     return Model.create(this);
   }
 
-  static get idField() {
-    // The loopback-workspace API ties the name of an entity to its ID. This
-    // means that renaming a Model would change its ID. So we store the actual
-    // Lunchbadger ID in a separate variable to allow for stable connections
-    // to items outside the workspace API.
-    return 'lunchbadgerId';
-  }
-
   toJSON(opts) {
     const options = Object.assign({
       isModelForDiff: false,
@@ -133,7 +126,7 @@ export default class Model extends BaseModel {
       isRelationsForDiff,
     } = options;
     const json = {
-      id: this.workspaceId,
+      id: this.id,
       facetName: 'server',
       name: this.name,
       http: {
@@ -149,7 +142,6 @@ export default class Model extends BaseModel {
       readonly: this.readonly,
       public: this.public,
       strict: this.strict,
-      lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
       ...this.userFields
     };
@@ -174,6 +166,14 @@ export default class Model extends BaseModel {
     };
   }
 
+  set id(id) {
+    this._id = id;
+  }
+
+  get id() {
+    return this.workspaceId;
+  }
+
   get status() {
     if (this.deleting) return 'deleting';
     return '';
@@ -183,62 +183,38 @@ export default class Model extends BaseModel {
     return `server.${this.name}`;
   }
 
-  /**
-   * @param properties {Properties[]}
-   */
   set properties(properties) {
     this._properties = properties;
   }
 
-  /**
-   * @returns {Properties[]}
-   */
   get properties() {
     return this._properties;
   }
 
-  /**
-   * @param property {Property}
-   */
   addProperty(property) {
     this._properties.push(property);
     property.attach(this);
   }
 
-  /**
-   * @param property {Property}
-   */
   removeProperty(property) {
     _.remove(this._properties, function (prop) {
       return prop.id === property.id
     });
   }
 
-  /**
-   * @param relations {Relations[]}
-   */
   set relations(relations) {
     this._relations = relations;
   }
 
-  /**
-   * @returns {Relations[]}
-   */
   get relations() {
     return this._relations;
   }
 
-  /**
-   * @param relation {Relation}
-   */
   addRelation(relation) {
     this._relations.push(relation);
     relation.attach(this);
   }
 
-  /**
-   * @param relation {Relation}
-   */
   removeRelation(relation) {
     _.remove(this._relations, {id: relation.id});
   }
@@ -293,7 +269,7 @@ export default class Model extends BaseModel {
   validate(model) {
     return (_, getState) => {
       const validations = {data: {}};
-      const {models, modelsBundled} = getState().entities;
+      const {models, modelsBundled, dataSources} = getState().entities;
       const {messages, checkFields} = LunchBadgerCore.utils;
       if (model.name !== '') {
         const isDuplicateModelName = Object.keys(models)
@@ -304,8 +280,15 @@ export default class Model extends BaseModel {
           .filter(id => id !== this.id)
           .filter(id => modelsBundled[id].name.toLowerCase() === model.name.toLowerCase())
           .length > 0;
+        const isDuplicateModelConnectorName = Object.keys(dataSources)
+          .filter(id => id !== this.id)
+          .filter(id => dataSources[id].name.toLowerCase() === model.name.toLowerCase())
+          .length > 0;
         if (isDuplicateModelName || isDuplicateModelBundledName) {
           validations.data.name = messages.duplicatedEntityName('Model');
+        }
+        if (isDuplicateModelConnectorName) {
+          validations.data.name = messages.duplicatedEntityName('Model Connector');
         }
       }
       const fields = ['name'];
@@ -322,8 +305,8 @@ export default class Model extends BaseModel {
     }
   }
 
-  update(model) {
-    return async dispatch => await dispatch(update(this, model));
+  update(model, paper) {
+    return async dispatch => await dispatch(update(this, model, paper));
   }
 
   remove(cb) {

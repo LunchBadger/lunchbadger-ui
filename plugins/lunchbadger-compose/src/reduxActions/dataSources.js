@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import {actions} from './actions';
 import {DataSourceService, ModelService} from '../services';
 import DataSource from '../models/DataSource';
@@ -13,17 +14,20 @@ export const add = (label, connector) => (dispatch, getState) => {
   const name = storeUtils.uniqueName(label, entities.dataSources);
   const json = {name, connector, itemOrder, loaded: false};
   const entity = DataSource.create(json);
+  entity.tmpId = uuid.v4();
   dispatch(actions.updateDataSource(entity));
   return entity;
 }
 
 export const update = (entity, model) => async (dispatch, getState) => {
+  const {tmpId} = entity;
   const state = getState();
   const index = state.multiEnvironments.selected;
   let updatedEntity;
   let isAutoSave = false;
   if (index > 0) {
     updatedEntity = DataSource.create({...entity.toJSON(), ...model});
+    updatedEntity.tmpId = tmpId;
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
@@ -36,11 +40,19 @@ export const update = (entity, model) => async (dispatch, getState) => {
     ready: false,
     error: null,
   });
+  updatedEntity.tmpId = tmpId;
+  if (!entity.loaded && model.name !== state.entities.dataSources[entity.id].name) {
+    dispatch(actions.removeDataSource(entity));
+  }
   dispatch(actions.updateDataSource(updatedEntity));
   try {
     if (isDifferent) {
+      const prevEntity = entity.recreate();
+      prevEntity.tmpId = uuid.v4();
+      prevEntity.deleting = true;
+      dispatch(actions.updateDataSource(prevEntity));
       await DataSourceService.delete(entity.workspaceId);
-      Connections.search({fromId: entity.id})
+      Connections.renameByKey('fromId', entity.id, updatedEntity.id)
         .map(conn => storeUtils.findEntity(state, 1, conn.toId))
         .filter(item => item instanceof Model)
         .forEach(async modelEntity => {
@@ -53,13 +65,14 @@ export const update = (entity, model) => async (dispatch, getState) => {
           });
         });
     }
-    await new Promise(res => setTimeout(res, 100));
+    // await new Promise(res => setTimeout(res, 100));
     const {body} = await DataSourceService.upsert(updatedEntity.toJSON());
     if (body.hasOwnProperty('wsdl')) {
       body.soapOperations = body.operations || {};
       delete body.operations;
     }
     updatedEntity = DataSource.create(body);
+    updatedEntity.tmpId = tmpId;
     dispatch(actions.updateDataSource(updatedEntity));
     if (isAutoSave) {
       await dispatch(coreActions.saveToServer());

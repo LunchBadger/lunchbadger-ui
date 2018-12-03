@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import ConditionAction from './ConditionAction';
 
 const BaseModel = LunchBadgerCore.models.BaseModel;
@@ -67,6 +68,15 @@ export default class Policy extends BaseModel {
     this._conditionAction = this._conditionAction.filter(pair =>
       !(pair.action.serviceEndpoint && pair.action.serviceEndpoint === serviceEndpoint)
     );
+  }
+
+  renameServiceEndpointInConditionAction(oldServiceEndpoint, newServiceEndpoint) {
+    this._conditionAction = this._conditionAction.map(ca => _.cloneDeep(ca));
+    this._conditionAction.forEach((ca) => {
+      if (ca.action && ca.action.serviceEndpoint && ca.action.serviceEndpoint === oldServiceEndpoint) {
+        ca.action.serviceEndpoint = newServiceEndpoint;
+      }
+    });
   }
 
   hasConditionActionWithServiceEndpoint(serviceEndpoint) {

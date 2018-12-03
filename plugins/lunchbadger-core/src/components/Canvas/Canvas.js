@@ -138,8 +138,8 @@ class Canvas extends Component {
     if (Connections.connectionExists(sourceElement, targetElement)) {
       return false;
     }
-    const source = document.querySelector(`#${sourceElement}`);
-    const target = document.querySelector(`#${targetElement}`);
+    const source = document.getElementById(sourceElement);
+    const target = document.getElementById(targetElement);
     if (!source || !target) return null;
     if (source.parentElement.classList.contains('port__disabled')) return false;
     if (target.parentElement.classList.contains('port__disabled')) return false;

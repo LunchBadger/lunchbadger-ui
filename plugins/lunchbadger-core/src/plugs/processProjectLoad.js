@@ -7,16 +7,16 @@ export default [
         [item]: true,
       }), {});
     const dataSources = responses[1][0].body
-      .filter(({lunchbadgerId}) => lunchbadgerId)
-      .reduce((map, {name, lunchbadgerId}) => ({
+      .filter(({id}) => id)
+      .reduce((map, {name, id}) => ({
         ...map,
-        [name]: lunchbadgerId,
+        [name]: id,
       }), {});
     const models = responses[1][1].body
-      .filter(({lunchbadgerId}) => lunchbadgerId)
-      .reduce((map, {name, lunchbadgerId}) => ({
+      .filter(({id}) => id)
+      .reduce((map, {name, id}) => ({
         ...map,
-        [name]: lunchbadgerId,
+        [name]: id,
       }), {});
     const loopbackConnections = responses[1][2].body
       .filter(item => item.dataSource)

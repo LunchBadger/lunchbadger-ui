@@ -25,12 +25,13 @@ import './BaseDetails.scss';
 
 export default (ComposedComponent) => {
   return class BaseDetails extends Component {
-    static propTypes = {
-      entity: PropTypes.object.isRequired
-    };
-
     static contextTypes = {
       store: PropTypes.object,
+      paper: PropTypes.object,
+    };
+
+    static propTypes = {
+      entity: PropTypes.object.isRequired
     };
 
     constructor(props) {
@@ -47,6 +48,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      this.paper = this.context.paper.getInstance();
       this.setFlatModel();
     }
 
@@ -112,7 +114,7 @@ export default (ComposedComponent) => {
       dispatch(setCurrentEditElement(null, true));
       this.closePopup(null, false);
       dispatch(setCurrentElement(entity));
-      await dispatch(entity.update(model));
+      await dispatch(entity.update(model, this.paper));
       setTimeout(this.setFlatModel);
       GAEvent('Zoom Window', 'Saved And Closed', this.props.entity.gaType);
     }

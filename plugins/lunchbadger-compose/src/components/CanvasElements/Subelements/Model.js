@@ -50,15 +50,16 @@ class SubModel extends PureComponent {
 
   renderPorts() {
     const {entity} = this.props;
-    return entity.ports.map((port) => {
+    const {id, ports, gaType} = entity;
+    return ports.map(({portType, portGroup}) => {
       return (
         <Port
-          key={`port-${port.portType}-${port.id}`}
-          way={port.portType}
+          key={`port-${portType}-${id}`}
+          way={portType}
           middle
-          elementId={port.id}
-          scope={port.portGroup}
-          gaType={`Microservice[${entity.gaType}]`}
+          elementId={id}
+          scope={portGroup}
+          gaType={`Microservice[${gaType}]`}
         />
       );
     });
@@ -97,13 +98,18 @@ class SubModel extends PureComponent {
             <EntityProperty
               name={`models[${index}][name]`}
               value={entity.name}
-              hiddenInputs={[{name: `models[${index}][lunchbadgerId]`, value: entity.id}]}
+              hiddenInputs={[
+                {name: `models[${index}][id]`, value: entity.id},
+                {name: `models[${index}][name]`, value: entity.name},
+                {name: `models[${index}][tmpId]`, value: entity.tmpId},
+              ]}
               onViewModeClick={this.toggleCollapsibleProperties}
               onClick={this.handleClick}
               selected={!!_.find(currentlySelectedSubelements, {id})}
               onChange={this.handleNameChange}
               invalid={validations.data.name || ''}
               onDelete={handleDeleteModel(entity.id)}
+              fake
             />
           }
           collapsible={

@@ -400,7 +400,7 @@ export default (ComposedComponent) => {
         locked,
       } = entity;
       const deploying = status === 'deploying';
-      const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting;
+      const processing = !ready || (!running && !allowEditWhenCrashed) || !!deleting || deploying;
       const semitransparent = !ready || !running;
       const {
         validations,

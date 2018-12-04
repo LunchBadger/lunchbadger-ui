@@ -21,6 +21,8 @@ const reduceItemByLunchbadgerId = (map, item) => {
   return map;
 };
 
+const pluralize = str => str === '' ? '' : inflection.pluralize(str);
+
 export default class Model extends BaseModel {
   static type = 'Model';
   static entities = 'models';
@@ -33,6 +35,7 @@ export default class Model extends BaseModel {
     '_ports',
     '_properties',
     '_relations',
+    'http_path',
     'contextPath',
     'base',
     'plural',
@@ -59,9 +62,9 @@ export default class Model extends BaseModel {
   _ports = [];
   _properties = [];
   _relations = [];
-  contextPath = this.pluralized(defaultEntityNames.Model);
   base = 'PersistedModel';
-  plural = '';
+  http_path = '';
+  plural = this.pluralized(defaultEntityNames.Model);;
   readonly = false;
   public = true;
   strict = false;
@@ -74,7 +77,7 @@ export default class Model extends BaseModel {
   static deserializers = {
     http: (obj, val) => {
       if (val.path) {
-        obj.contextPath = val.path;
+        obj.http_path = val.path;
       }
     }
   };
@@ -137,7 +140,7 @@ export default class Model extends BaseModel {
       facetName: 'server',
       name: this.name,
       http: {
-        path: this.contextPath
+        path: this.http_path,
       },
       properties: this.properties
         .map(property => property.toJSON())
@@ -314,9 +317,6 @@ export default class Model extends BaseModel {
       if (nameValidator !== '') {
         validations.data.name = nameValidator;
       }
-      if (model.http.path === '') {
-        validations.data.contextPath = messages.fieldCannotBeEmpty;
-      }
       validations.isValid = Object.keys(validations.data).length === 0;
       return validations;
     }
@@ -422,7 +422,13 @@ export default class Model extends BaseModel {
   }
 
   pluralized(str) {
-    return str === '' ? '' : inflection.pluralize(slug(str, {lower: true}));
+    return pluralize(str);
+  }
+
+  contextPathFallback({http_path, plural, name}) {
+    if (http_path) return http_path;
+    if (plural) return plural;
+    return pluralize(name);
   }
 
 }

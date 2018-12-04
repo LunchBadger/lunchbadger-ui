@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.341', [
+console.info('LBAPP VERSION 0.342', [
   'Feature/1090 Virtual contextPath in model #1103',
   'Feature/1098 Triton branding back on al3 #1101',
   'Bugfix/1091 Model and ds are locking after quick edit #1100',

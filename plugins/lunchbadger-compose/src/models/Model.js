@@ -64,7 +64,7 @@ export default class Model extends BaseModel {
   _relations = [];
   base = 'PersistedModel';
   http_path = '';
-  plural = this.pluralized(defaultEntityNames.Model);;
+  plural = '';
   readonly = false;
   public = true;
   strict = false;
@@ -106,6 +106,9 @@ export default class Model extends BaseModel {
     const relations = data.relations || [];
     delete data.properties;
     delete data.relations;
+    if (!data.loaded) {
+      data.plural = pluralize(data.name);
+    }
     const model = super.create(data);
     properties.forEach(property => model.addProperty(ModelProperty.create(property)));
     relations.forEach(relation => model.addRelation(ModelRelation.create(relation)));
@@ -429,6 +432,11 @@ export default class Model extends BaseModel {
     if (http_path) return http_path;
     if (plural) return plural;
     return pluralize(name);
+  }
+
+  get contextPath() {
+    const {http_path, plural, name} = this;
+    return this.contextPathFallback({http_path, plural, name});
   }
 
 }

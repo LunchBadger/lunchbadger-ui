@@ -112,6 +112,7 @@ class Entity extends PureComponent {
           <EntityHeader
             ref={(r) => {this.entityHeaderRef = r;}}
             type={type}
+            connector={connector}
             onToggleExpand={this.handleToggleExpand}
             name={name}
             onNameChange={onNameChange}

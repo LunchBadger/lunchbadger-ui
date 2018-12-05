@@ -14,6 +14,7 @@
   }
   &__icon {
     stroke: #034757;
+    fill: #034757;
     &.submenu {
       position: absolute;
       top: 6px;
@@ -26,6 +27,8 @@
       svg {
         width: 23px;
         height: 23px;
+        stroke: #636564;
+        fill: #636564;
       }
     }
     .Tool.selected & {

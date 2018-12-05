@@ -1,9 +1,9 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 24 24" xml:space="preserve">
 <g>
-	<path fill="none" stroke="#636564" stroke-miterlimit="10" d="M21.5,12.2c0.3-0.7,0.5-1.4,0.5-2.2c0-3.2-2.8-5.8-6.3-5.8
+	<path fill="none" stroke-miterlimit="10" d="M21.5,12.2c0.3-0.7,0.5-1.4,0.5-2.2c0-3.2-2.8-5.8-6.3-5.8
 		c-2.8,0-5.2,1.7-6,4.1C9.2,7.9,8.5,7.7,7.8,7.7c-1.6,0-2.9,1-2.9,2.2c0,0.3,0.1,0.6,0.2,0.8c-0.2,0-0.4,0-0.6,0
 		c-2.3,0-4.1,1.8-4.1,4.1S2.3,19,4.6,19h15c2.2,0,3.9-1.6,3.9-3.6C23.5,14,22.7,12.8,21.5,12.2z"/>
-	<text transform="matrix(1 0 0 1 5.1709 17.2909)" fill="#636564" stroke="none" font-family="'Open Sans'" font-size="8.8923" font-weight="400">API</text>
+	<text transform="matrix(1 0 0 1 5.1709 17.2909)" stroke="none" font-family="'Open Sans'" font-size="8.8923" font-weight="400">API</text>
 </g>
 </svg>

@@ -2,7 +2,13 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import Rnd from 'react-rnd';
-import {IconSVG, entityIcons, Toolbox, GAEvent} from '../';
+import {
+  IconSVG,
+  entityIcons,
+  dataSourceIcons,
+  Toolbox,
+  GAEvent,
+} from '../';
 import userStorage from '../../../lunchbadger-core/src/utils/userStorage';
 import './RnD.scss';
 
@@ -137,6 +143,7 @@ export default class RnD extends PureComponent {
       children,
       name,
       type,
+      connector,
       toolbox,
       rect,
     } = this.props;
@@ -150,6 +157,7 @@ export default class RnD extends PureComponent {
       height,
       showContent,
     } = this.state;
+    const icon = connector ? dataSourceIcons[connector] : entityIcons[type];
     return (
       <div
         ref={r => this.refWrap = r}
@@ -174,8 +182,8 @@ export default class RnD extends PureComponent {
         >
           <div className="RnD__box" style={{maxWidth, maxHeight}}>
             <div className="RnD__header">
-              <div className="RnD__header__icon">
-                <IconSVG svg={entityIcons[type]} />
+              <div className={cs('RnD__header__icon', {connector})}>
+                <IconSVG svg={icon} />
               </div>
             </div>
             <div className="RnD__toolbox">

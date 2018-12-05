@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.342', [
+console.info('LBAPP VERSION 0.343', [
+  'Feature/1099 cars model name lowercase #1105',
   'Feature/1090 Virtual contextPath in model #1103',
   'Feature/1098 Triton branding back on al3 #1101',
   'Bugfix/1091 Model and ds are locking after quick edit #1100',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.342', [
   'Feature/1070 Resurface reinstall dependencies #1071',
   'Feature/313 Make condition grouping parameters collapsible #1065',
   'Feature/1060 New ESP logo #1063',
-  'Feature/1054 Freeform GUI - shrink feature on current canvas #1062',
-  'Bugfix/1057 walkthrough blocked #1058'
+  'Feature/1054 Freeform GUI - shrink feature on current canvas #1062'
 ]);
 
 // Needed for onTouchTap

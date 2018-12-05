@@ -87,6 +87,7 @@ $joyride-close-visible: false;
       &[data-target=".Entity.Function_ .Toolbox__button--zoom"] {
         margin-top: -20px;
       }
+      &[data-target=".Entity.DataSource"],
       &[data-target=".Entity.DataSource.memory.editable .submit"],
       &[data-target=".Entity.Model.editable .EntityHeader"],
       &[data-target=".Entity.Model.editable .input__properties0name"],

@@ -104,14 +104,14 @@ C'mon, click it!
     text: `
 Here, you define the name of the Model Entity.
 <br /><br />
-Let's name it <pre>Car</pre>.
+Let's name it <pre>car</pre>.
 `,
     selector: '.Entity.Model.editable .EntityHeader',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="Car"]'),
+      api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="car"]'),
       api.blur('.Entity.Model.editable .EntityHeader input'),
     ],
     onBefore: api => [
@@ -190,7 +190,7 @@ Select <pre>Number</pre> from the dropdown list.
   '026': {
     title: 'Finish Creating the Model',
     text: `
-Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
+Click <pre>OK</pre> to create the <pre>car</pre> Model Entity.
 `,
     waitForSelector: '.Entity.Model.editable .submit',
     position: 'right',
@@ -206,7 +206,7 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
   '0270': {
     title: 'Model is creating',
     text: `
-Please wait till the <pre>Car</pre> is saved and the walkthrough will continue automatically.
+Please wait till the <pre>car</pre> is saved and the walkthrough will continue automatically.
 `,
     position: 'right',
     selector: '.Entity.Model',
@@ -278,7 +278,7 @@ Keep in mind, that almost all Entities have details that are available in full e
   },
   '0274': {
     title: 'Code Editor',
-    text: 'All Models are Node.js functions. Custom code for the <pre>Car</pre> model can be entered into the Code Editor.',
+    text: 'All Models are Node.js functions. Custom code for the <pre>car</pre> model can be entered into the Code Editor.',
     waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
     position: 'top',
     allowClicksThruHole: false,
@@ -307,7 +307,7 @@ Click <pre>Cancel</pre> to return to the Canvas view.
   '028': {
     title: 'Connect Model Connector to Model',
     text: `
-The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
+The <pre>car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
     waitForSelector: '.Entity.DataSource.memory .port__wrap__out',
     position: 'bottom-left',

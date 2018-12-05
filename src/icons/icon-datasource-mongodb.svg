@@ -1,13 +1,13 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 24 24" xml:space="preserve">
 <g>
-	<path fill="none" stroke="#656766" stroke-miterlimit="10" d="M10.6,17.5C9,16.1,8,13.8,8.2,11.4c0.2-3.3,2.6-6.4,3.3-7.1
+	<path fill="none" stroke-miterlimit="10" d="M10.6,17.5C9,16.1,8,13.8,8.2,11.4c0.2-3.3,2.6-6.4,3.3-7.1
 		c0.1,1.7,0.1,11.1,0.1,12C11.5,17,10.6,17.5,10.6,17.5z"/>
-	<path fill="none" stroke="#656766" stroke-miterlimit="10" d="M11.9,3.7c0.7,0.7,4.1,4.3,3.9,8.4c-0.1,2.8-1.4,4.5-2.3,5.5
+	<path fill="none" stroke-miterlimit="10" d="M11.9,3.7c0.7,0.7,4.1,4.3,3.9,8.4c-0.1,2.8-1.4,4.5-2.3,5.5
 		c-0.4-0.2-1.1-0.2-1-1C12.7,15.3,12.4,6.1,11.9,3.7z"/>
-	<path fill="none" stroke="#656766" stroke-miterlimit="10" d="M11.9,17.1c0.2,0,0.4,0.3,0.6,0.5c0.2,0.2,0.5,0.1,0.5,0.3
+	<path fill="none" stroke-miterlimit="10" d="M11.9,17.1c0.2,0,0.4,0.3,0.6,0.5c0.2,0.2,0.5,0.1,0.5,0.3
 		c0,0.1-0.4,0.5-0.5,0.9c-0.2,0.9,0,2-0.7,2c-0.4,0-0.3-1-0.5-1.9C11.3,18.4,11,18,11,17.9c0-0.2,0.3-0.2,0.5-0.4
 		C11.7,17.3,11.8,17.1,11.9,17.1z"/>
-	<circle fill="none" stroke="#656766" stroke-miterlimit="10" cx="12" cy="12" r="11"/>
+	<circle fill="none" stroke-miterlimit="10" cx="12" cy="12" r="11"/>
 </g>
 </svg>

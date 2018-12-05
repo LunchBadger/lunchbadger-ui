@@ -66,10 +66,17 @@
     border-top-right-radius: 3px;
     position: relative;
     &__icon {
+      &.connector svg {
+        width: 28px;
+        height: 28px;
+        top: 10px;
+        left: 14px;
+      }
       svg {
         width: 34px;
         height: 34px;
         stroke: #FFF;
+        fill: #FFF;
         position: absolute;
         top: 7px;
         left: 12px;

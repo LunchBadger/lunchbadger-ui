@@ -93,6 +93,7 @@ class DetailsPanel extends Component {
     const {tab} = zoom;
     const {name, id, gaType} = currentElement;
     const {type} = currentElement.constructor;
+    const connector = type === 'DataSource' ? currentElement.connector : undefined;
     const tabs = currentElement.tabs || [];
     const toolboxActions = currentElement.toolboxActions || [];
     const toolboxConfig = [{
@@ -130,6 +131,7 @@ class DetailsPanel extends Component {
         rect={zoom}
         name={name}
         type={type}
+        connector={connector}
         toolbox={toolboxConfig}
         entityId={id}
         gaType={gaType}

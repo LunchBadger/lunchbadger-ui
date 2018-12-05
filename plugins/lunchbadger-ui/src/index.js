@@ -88,16 +88,16 @@ const entityIcons = {
 };
 
 const dataSourceIcons = {
-  Memory: iconDataSourceMemory,
-  REST: iconDataSourceREST,
-  SOAP: iconDataSourceSOAP,
-  MongoDB: iconDataSourceMongoDB,
-  Redis: iconDataSourceRedis,
-  MySQL: iconDataSourceMySQL,
-  PostgreSQL: iconDataSourcePostgreSQL,
-  Ethereum: iconDataSourceEthereum,
-  Salesforce: iconDataSourceSalesforce,
-  TritonObjectStorage: iconDataSourceTritonObjectStorage,
+  memory: iconDataSourceMemory,
+  rest: iconDataSourceREST,
+  soap: iconDataSourceSOAP,
+  mongodb: iconDataSourceMongoDB,
+  redis: iconDataSourceRedis,
+  mysql: iconDataSourceMySQL,
+  postgresql: iconDataSourcePostgreSQL,
+  web3: iconDataSourceEthereum,
+  salesforce: iconDataSourceSalesforce,
+  manta: iconDataSourceTritonObjectStorage,
 };
 
 export {

@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.346', [
+console.info('LBAPP VERSION 0.347', [
   'Feature/1108 New walkthrough step after memory submit #1110',
   'Bugfix/1104 Deleted gateway should not affect new gateway name #1107',
   'Feature/1102 connectors need to use their own icon #1106',

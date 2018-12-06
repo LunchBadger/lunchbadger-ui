@@ -105,10 +105,11 @@ Please wait till the <pre>Memory</pre> Model Connector is saved and the walkthro
 The <pre>Memory</pre> Model Connector and DB has been deployed. We can now store data in it through Models.
 `,
     position: 'right',
-    waitForSelector: '.Entity.DataSource',
+    selector: '.Entity.DataSource',
     allowClicksThruHole: false,
     onBefore: api => [
       api.delayOverlay(500),
+      api.waitUntilPresent('.Entity.DataSource'),
     ],
   },
   '020': {

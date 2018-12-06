@@ -33,9 +33,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const isAutoSave = !entity.loaded || isNameChange;
   const state = getState();
   const index = state.multiEnvironments.selected;
+  const podName = entity.podName;
   let updatedEntity;
   if (index > 0) {
     updatedEntity = Gateway.create({...entity.toJSON(), ...model});
+    updatedEntity.podName = podName;
     dispatch(actionsCore.multiEnvironmentsUpdateEntity({index, entity: updatedEntity}));
     return updatedEntity;
   }
@@ -57,6 +59,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     entityData.pipelinesLunchbadger = true;
   }
   updatedEntity = Gateway.create(entityData);
+  updatedEntity.podName = podName;
   if (isAutoSave) {
     updatedEntity.running = null;
   }

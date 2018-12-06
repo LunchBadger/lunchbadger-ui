@@ -90,7 +90,7 @@ Please wait till the <pre>Memory</pre> Model Connector is saved and the walkthro
     allowClicksThruHole: false,
     triggerNext: api => [
       api.setWaitMethod('waitBySetTimeout'),
-      api.waitUntilNotPresent('.CanvasElement.DataSource.wip'),
+      api.waitUntilPresent('.CanvasElement.DataSource:not(.wip)'),
       api.setWaitMethod(),
     ],
     onBefore: api => [

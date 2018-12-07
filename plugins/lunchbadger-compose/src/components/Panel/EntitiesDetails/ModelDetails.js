@@ -98,12 +98,30 @@ class ModelDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name, pluralized} = props.entity;
+    const {
+      http_path,
+      plural,
+      name,
+      contextPathFallback,
+    } = props.entity;
     return {
       changed: false,
-      contextPath,
-      contextPathDirty: pluralized(name) !== contextPath,
+      name,
+      http_path,
+      plural,
+      contextPath: contextPathFallback({http_path, plural, name}),
     };
+  };
+
+  updateName = event => {
+    const name = event.target.value;
+    const {pluralized, contextPathFallback} = this.props.entity;
+    const {http_path, plural} = this.state;
+    const state = {http_path, name};
+    const pluralDirty = plural !== pluralized(this.state.name);
+    state.plural = pluralDirty ? plural : pluralized(name);
+    state.contextPath = contextPathFallback(state);
+    this.setState(state);
   };
 
   processModel = model => {
@@ -271,22 +289,37 @@ class ModelDetails extends PureComponent {
     }
   };
 
+  handleUpdateField = field => event => {
+    const {entity, parent} = this.props;
+    const {http_path, plural, name} = this.state;
+    const state = {http_path, plural, name};
+    Object.assign(state, {
+      [field]: event.target.value,
+      changed: true,
+    });
+    state.contextPath = entity.contextPathFallback(state);
+    this.setState(state, () => parent.checkPristine());
+  }
+
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
+    const {contextPath, http_path, plural} = this.state;
     const dataSourceOptions = Object.keys(dataSources)
       .map(key => dataSources[key])
       .map(({name: label, id: value}) => ({label, value}));
     const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     const fields = [
       {
-        title: 'Context Path',
+        title: 'HTTP Path',
         name: 'http[path]',
-        value: entity.contextPath,
+        value: http_path,
+        onChange: this.handleUpdateField('http_path'),
       },
       {
         title: 'Plural',
         name: 'plural',
-        value: entity.plural,
+        value: plural,
+        onChange: this.handleUpdateField('plural'),
       },
       {
         title: 'Base Model',
@@ -320,13 +353,24 @@ class ModelDetails extends PureComponent {
       },
     ];
     return (
-      <div className="panel__details">
-        {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
-        {checkboxes.map(item => (
-          <div key={item.name} className="panel__details__checkbox">
-            <Checkbox {...item} />
-          </div>
-        ))}
+      <div>
+        <div className="panel__details">
+          <EntityProperty
+            title="Context Path"
+            name="tmp[contextPath]"
+            value={contextPath}
+            fake
+            placeholder=" "
+          />
+        </div>
+        <div className="panel__details">
+          {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
+          {checkboxes.map(item => (
+            <div key={item.name} className="panel__details__checkbox">
+              <Checkbox {...item} />
+            </div>
+          ))}
+        </div>
       </div>
     );
   };

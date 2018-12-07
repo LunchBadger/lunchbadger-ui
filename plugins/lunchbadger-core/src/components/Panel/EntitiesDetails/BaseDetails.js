@@ -88,6 +88,13 @@ export default (ComposedComponent) => {
 
     getElementRef = () => this.element.wrappedInstance || this.element;
 
+    handleNameChange = event => {
+      const element = this.getElementRef();
+      if (typeof element.updateName === 'function') {
+        element.updateName(event);
+      }
+    };
+
     update = async (props = this.refs.form.getModel()) => {
       const {store: {dispatch}} = this.context;
       const {entity} = this.props;
@@ -195,6 +202,7 @@ export default (ComposedComponent) => {
                 underlineStyle={underlineStyle}
                 invalidUnderlineColor="#FFF"
                 fake={isCanvasEditDisabled}
+                onChange={this.handleNameChange}
               />
               <div className="BaseDetails__id">
                 Entity ID:

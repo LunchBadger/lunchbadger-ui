@@ -35,6 +35,18 @@
     &:hover {
       background-color: rgba(0, 0, 0, 0.2);
     }
+    &.connector svg {
+      width: 28px;
+      height: 28px;
+      top: 10px;
+      left: 14px;
+      .canvas & {
+        width: 28rem;
+        height: 28rem;
+        top: 10rem;
+        left: 14rem;
+      }
+    }
     svg {
       width: 34px;
       height: 34px;
@@ -42,6 +54,7 @@
       top: 7px;
       left: 12px;
       stroke: #FFF;
+      fill: #FFF;
       .canvas & {
         width: 34rem;
         height: 34rem;

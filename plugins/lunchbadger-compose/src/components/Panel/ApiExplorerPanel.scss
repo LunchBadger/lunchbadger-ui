@@ -1,6 +1,5 @@
 .panel__body.ApiExplorerPanel {
-  height: calc(100% - 7px);
-  margin: 2px;
+  height: calc(100% - 5px);
   iframe {
     width: 100%;
     height: 100%;
@@ -8,12 +7,15 @@
   }
   .ApiExplorerPanel__refresh {
     position: absolute;
-    top: 105px;
-    right: 29px;
+    top: 10px;
+    left: 1px;
     .IconButton {
       width: 40px;
       height: 40px;
       float: none;
+      background-color: #FFF;
+      border-radius: 50%;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
       svg {
         stroke: #023845;
         fill: #023845;

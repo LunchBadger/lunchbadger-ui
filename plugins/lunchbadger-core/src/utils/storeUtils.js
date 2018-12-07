@@ -67,6 +67,7 @@ export const findConnectedContextPathByPipelineId = (state, id) => {
 
 export const uniqueName = (name, entities) => {
   const alreadyUsedNames = Object.values(entities)
+    .filter(item => !item.deleting)
     .map(item => item.name)
     .filter(item => item.startsWith(name))
     .sort();

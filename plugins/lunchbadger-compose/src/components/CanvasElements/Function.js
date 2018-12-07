@@ -26,6 +26,7 @@ class Function_ extends Component {
 
   renderPorts = () => {
     const {entity} = this.props;
+    const disabled = !entity.running;
     return entity.ports.map((port) => (
       <Port
         key={`port-${port.portType}-${port.id}`}
@@ -33,6 +34,7 @@ class Function_ extends Component {
         elementId={port.id}
         className={`port-${entity.constructor.type} port-${port.portGroup}`}
         scope={port.portGroup}
+        disabled={disabled}
         gaType={entity.gaType}
       />
     ));

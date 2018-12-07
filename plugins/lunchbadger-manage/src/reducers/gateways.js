@@ -52,12 +52,17 @@ export default (state = {}, action) => {
         const entity = action.payload.entityData;
         const isDeploying = !!entity.pipelinesLunchbadger;
         let locked;
+        let podName = '';
         if (newState[action.payload.entityId]) {
           locked = newState[action.payload.entityId].locked;
+          podName = newState[action.payload.entityId].podName;
         }
         newState[action.payload.entityId] = Gateway.create(entity);
         if (locked !== undefined) {
           newState[action.payload.entityId].locked = locked;
+        }
+        if (podName) {
+          newState[action.payload.entityId].podName = podName;
         }
         if (isDeploying) {
           newState[action.payload.entityId].running = null;

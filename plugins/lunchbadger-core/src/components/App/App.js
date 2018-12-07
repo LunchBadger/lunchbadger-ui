@@ -76,7 +76,7 @@ class App extends Component {
 
   renderHeader = () => {
     const {isEntityEditable} = this.props;
-    const username = getUser().profile.preferred_username;
+    const {preferred_username: username, sub} = getUser().profile;
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
@@ -89,6 +89,7 @@ class App extends Component {
     return (
       <Header
         username={username}
+        login={sub}
         envId={Config.get('envId')}
       />
     );

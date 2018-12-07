@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import {
   entityIcons,
+  dataSourceIcons,
   IconSVG,
   EntityProperty,
   ContextualInformationMessage,
@@ -24,6 +25,7 @@ class EntityHeader extends Component {
   render() {
     const {
       type,
+      connector,
       name,
       onNameChange,
       onToggleExpand,
@@ -35,10 +37,14 @@ class EntityHeader extends Component {
     const underlineStyle = {
       borderColor: '#8dbde2',
     }
+    const icon = connector ? dataSourceIcons[connector] : entityIcons[type];
     return (
       <div className={cs('EntityHeader', {subtitle})}>
-        <div className="EntityHeader__icon" onClick={onToggleExpand}>
-          <IconSVG svg={entityIcons[type]}/>
+        <div
+          className={cs('EntityHeader__icon', {connector})}
+          onClick={onToggleExpand}
+        >
+          <IconSVG svg={icon}/>
         </div>
         <div className="EntityHeader__name">
           <EntityProperty

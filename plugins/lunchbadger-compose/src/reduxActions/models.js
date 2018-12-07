@@ -85,7 +85,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       await ModelService.delete(entity.workspaceId);
       const dataSource = Connections.search({toId: entity.id})
         .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
-        .find(item => item instanceof DataSource);
+        .find(item => item.constructor.type === 'DataSource');
       await ModelService.upsertModelConfig({
         name: updatedEntity.name,
         id: updatedEntity.workspaceId,
@@ -147,7 +147,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updatedEntity.ready = true;
     dispatch(actions[updateAction](updatedEntity));
     if (!wasBundled) {
-      await dispatch(coreActions.saveToServer({saveProject: false}));
+      await dispatch(coreActions.saveToServer());
     }
     return updatedEntity;
   } catch (error) {

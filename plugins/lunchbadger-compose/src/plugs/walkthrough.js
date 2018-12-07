@@ -74,43 +74,44 @@ Click <pre>OK</pre> to continue.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.DataSource.memory.editable'),
-      // api.setShowOverlay(false),
+      api.setShowOverlay(false),
     ],
     onBefore: api => [
       api.focus('.Entity.DataSource.editable .submit'),
     ],
   },
-//   '014': {
-//     title: 'Memory Model Connector is creating',
-//     text: `
-// Please wait till the <pre>Memory</pre> Model Connector is saved and the walkthrough will continue automatically.
-// `,
-//     position: 'right',
-//     selector: '.Entity.DataSource',
-//     allowClicksThruHole: false,
-//     triggerNext: api => [
-//       api.setWaitMethod('waitBySetTimeout'),
-//       api.waitUntilPresent('.CanvasElement.DataSource:not(.wip)'),
-//       api.setWaitMethod(),
-//     ],
-//     onBefore: api => [
-//       api.click('.Entity.DataSource'),
-//       api.wait(1000),
-//       api.setShowOverlay(true),
-//     ],
-//   },
-//   '015': {
-//     title: 'Memory Model Connector is created',
-//     text: `
-// The <pre>Memory</pre> Model Connector and DB has been deployed. We can now store data in it through Models.
-// `,
-//     position: 'right',
-//     waitForSelector: '.Entity.DataSource',
-//     allowClicksThruHole: false,
-//     onBefore: api => [
-//       api.delayOverlay(500),
-//     ],
-//   },
+  '014': {
+    title: 'Memory Model Connector is creating',
+    text: `
+Please wait till the <pre>Memory</pre> Model Connector is saved and the walkthrough will continue automatically.
+`,
+    position: 'right',
+    selector: '.Entity.DataSource',
+    allowClicksThruHole: false,
+    triggerNext: api => [
+      api.setWaitMethod('waitBySetTimeout'),
+      api.waitUntilPresent('.CanvasElement.DataSource:not(.wip)'),
+      api.setWaitMethod(),
+    ],
+    onBefore: api => [
+      api.click('.Entity.DataSource'),
+      api.wait(1000),
+      api.setShowOverlay(true),
+    ],
+  },
+  '015': {
+    title: 'Memory Model Connector is created',
+    text: `
+The <pre>Memory</pre> Model Connector and DB has been deployed. We can now store data in it through Models.
+`,
+    position: 'right',
+    selector: '.Entity.DataSource',
+    allowClicksThruHole: false,
+    onBefore: api => [
+      api.delayOverlay(500),
+      api.waitUntilPresent('.Entity.DataSource'),
+    ],
+  },
   '020': {
     title: 'Model Entities Overview',
     text: `

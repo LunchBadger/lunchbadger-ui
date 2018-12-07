@@ -80,25 +80,6 @@ Click <pre>OK</pre> to continue.
       api.focus('.Entity.DataSource.editable .submit'),
     ],
   },
-  '014': {
-    title: 'Memory Model Connector is creating',
-    text: `
-Please wait till the <pre>Memory</pre> Model Connector is saved and the walkthrough will continue automatically.
-`,
-    position: 'right',
-    selector: '.Entity.DataSource',
-    allowClicksThruHole: false,
-    triggerNext: api => [
-      api.setWaitMethod('waitBySetTimeout'),
-      api.waitUntilPresent('.CanvasElement.DataSource:not(.wip)'),
-      api.setWaitMethod(),
-    ],
-    onBefore: api => [
-      api.click('.Entity.DataSource'),
-      api.wait(1000),
-      api.setShowOverlay(true),
-    ],
-  },
   '015': {
     title: 'Memory Model Connector is created',
     text: `
@@ -108,8 +89,9 @@ The <pre>Memory</pre> Model Connector and DB has been deployed. We can now store
     selector: '.Entity.DataSource',
     allowClicksThruHole: false,
     onBefore: api => [
-      api.delayOverlay(500),
-      api.waitUntilPresent('.Entity.DataSource'),
+      api.click('.quadrant__title'),
+      api.wait(1000),
+      api.setShowOverlay(true),
     ],
   },
   '020': {

@@ -289,6 +289,8 @@ class CustomerManagement extends PureComponent {
           ...pendingCredentialCreate,
           password: autoGeneratePassword ? response.body[passwordKey] : password,
         }});
+      } else {
+        this.setState({pendingCredentialCreate: null});
       }
       await this.loadCredentials(consumerId);
     } catch (error) {
@@ -863,7 +865,7 @@ class CustomerManagement extends PureComponent {
           <div className={cs('CustomerManagement__pending', {
             loading: pendingCredentialCreate.password === ''
           })}>
-            <div>
+            <div className="CustomerManagement__pending__data">
               <EntityProperty
                 name="autoGeneratePassword"
                 title="AutoGeneratePassword"
@@ -894,6 +896,12 @@ class CustomerManagement extends PureComponent {
               onOk={this.createCredentials}
               submit={false}
             />
+            <div className="CustomerManagement__loader">
+              Generating password, please wait...
+              <div className="spinner__overlay">
+                <div className="spinner"></div>
+              </div>
+            </div>
           </div>
         );
       } else {

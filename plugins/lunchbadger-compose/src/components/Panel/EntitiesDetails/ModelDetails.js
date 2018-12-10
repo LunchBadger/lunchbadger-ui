@@ -706,8 +706,8 @@ class ModelDetails extends PureComponent {
     const inputSelector = `.DetailsPanel .input__methods${methods.length - 1}name input`;
     setTimeout(() => {
       const element = document.querySelector(inputSelector)
-      scrollToElement(element.closest('.CollapsibleProperties'));
-      element && setTimeout(() => element.focus(), 1000);
+      // scrollToElement(element.closest('.CollapsibleProperties'));
+      element && setTimeout(() => element.focus(), 0);
     });
   };
 
@@ -729,6 +729,8 @@ class ModelDetails extends PureComponent {
         <EntityProperty
           name={`methods[${idx}][name]`}
           value={name}
+          placeholder="Enter remote method name here..."
+          width={400}
         />
         <div className="ModelDetails__method__remove">
           <IconButton

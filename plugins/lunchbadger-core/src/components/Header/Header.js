@@ -1,24 +1,22 @@
 import React, {PureComponent} from 'react';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import HeaderMenu from './HeaderMenu';
-// import CanvasOverlay from '../Canvas/CanvasOverlay';
 import Logo from './Logo';
-import BrandingLogo from './brandingLogo.png';
-// import Config from '../../../../../src/config';
 import './Header.scss';
 
-// const {tritonLogo} = Config.get('features');
+const BRANDING_KEY = '?branding=';
+const {search} = document.location;
+const isBrandingLogo = search.startsWith(BRANDING_KEY);
+const branding = isBrandingLogo ? search.split(BRANDING_KEY)[1] : '';
 
 export default class Header extends PureComponent {
   render() {
-    const {username, login, envId, blank} = this.props;
-    const tritonLogo = login === 'al3';
+    const {username, envId, blank} = this.props;
     return (
       <header className="header" ref="headerContainer">
-        {/*!blank && <CanvasOverlay />*/}
         <Logo />
-        {tritonLogo && <span className="On">on</span>}
-        {tritonLogo && <img src={BrandingLogo} className="BrandingLogo" alt="Triton" />}
+        {isBrandingLogo && <span className="On">on <strong>{branding}</strong></span>}
+        {/*isBrandingLogo && <span className="BrandingLogo">{branding}</span>*/}
         {!blank && <Breadcrumbs username={username} envId={envId}/>}
         {!blank && <HeaderMenu />}
       </header>

@@ -12,6 +12,33 @@ const argumentDescriptions = {
   http: {
     type: 'object',
     description: 'For input arguments: an object describing mapping from HTTP request to the argument value.',
+    properties: {
+      source: {
+        type: 'string',
+        description:
+          <div>
+            Specify HTTP mapping for input parameters:
+            <ul>
+              <li><code>body</code> - The whole request body is used as the value.</li>
+              <li><code>form</code> - The value is looked up using <code>req.body</code> which searches the request body.</li>
+              <li><code>query</code> - The value is looked up using <code>req.query</code> which searches the query string.</li>
+              <li><code>path</code> - The value is looked up using <code>req.params</code> which searches the route arguments.</li>
+              <li><code>req</code> - The Express HTTP request object.</li>
+              <li><code>res</code> - The Express HTTP response object.</li>
+              <li><code>context</code> - The whole context object, which holds request and response objects.</li>
+            </ul>
+          </div>,
+        enum: [
+          'body',
+          'form',
+          'query',
+          'path',
+          'req',
+          'res',
+          'context',
+        ]
+      },
+    },
   },
   'http.target': {
     type: 'string',
@@ -38,7 +65,7 @@ const argumentDescriptions = {
   },
   type: {
     type: 'string',
-    description: 'Argument datatype; must be a Loopback type.',
+    description: 'Argument datatype.',
     enum: [
       'String',
       'Number',
@@ -65,17 +92,17 @@ const schemas = {
     properties: {
       accepts: {
         type: 'array',
+        types: ['array'],
         items: {
           type: 'object',
+          types: ['object'],
           properties: argumentDescriptions,
         },
         description: 'Defines arguments that the remote method accepts that map to the static method you define.',
-        default: [],
       },
       accessScopes: {
         type: 'array',
         description: <div>Defines access scopes. A user will be allowed to invoke this remote method only when their access token was granted at least one of the scopes defined by <code>accessScopes</code> list.</div>,
-        default: ['DEFAULT'],
         items: {
           type: 'string',
         },
@@ -124,9 +151,14 @@ const schemas = {
         description: <div>If set to <code>false</code>, this method will not be present in generated OpenAPI (formerly Swagger) documentation.</div>,
       },
       returns: {
-        type: 'object',
-        description: <div>Describes the remote method''s callback arguments. The <code>err</code> argument is assumed; do not specify.</div>,
-        default: [],
+        type: 'array',
+        types: ['array'],
+        items: {
+          type: 'object',
+          types: ['object'],
+          properties: argumentDescriptions,
+        },
+        description: <div>Describes the remote method''s callback arguments. The <code>err</code> argument is assumed; do not specify. Default if not provided is the empty array, <code>[]</code>.</div>,
         properties: argumentDescriptions,
       },
     },

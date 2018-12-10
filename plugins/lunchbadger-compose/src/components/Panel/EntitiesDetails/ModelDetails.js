@@ -21,13 +21,18 @@ import {
   FilesEditor,
   DocsLink,
   getDefaultValueByType,
+  scrollToElement,
 } from '../../../../../lunchbadger-ui/src';
+import schemas from '../../../utils/modelSchemas';
 import ModelDefaultValue from './ModelDefaultValue';
 import './ModelDetails.scss';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {Connections} = LunchBadgerCore.stores;
-const {propertyTypes} = LunchBadgerCore.utils;
+const {
+  components: {BaseDetails},
+  stores: {Connections},
+  utils: {propertyTypes},
+} = LunchBadgerCore;
+const {components: {GatewayPolicyAction}} = LunchBadgerManage;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
@@ -74,6 +79,7 @@ class ModelDetails extends PureComponent {
         properties: [],
         relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
+        methods: newProps.entity.methods.slice(),
       };
       addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
@@ -112,6 +118,11 @@ class ModelDetails extends PureComponent {
       contextPath: contextPathFallback({http_path, plural, name}),
     };
   };
+
+  changeState = (obj = {}, cb) => this.setState({...obj, changed: true}, () => {
+    this.props.parent.checkPristine();
+    cb && cb();
+  });
 
   updateName = event => {
     const name = event.target.value;
@@ -684,18 +695,100 @@ class ModelDetails extends PureComponent {
     );
   };
 
+  handleAddRemoteMethod = () => {
+    const methods = [...this.state.methods];
+    methods.push({
+      id: uuid.v4(),
+      name: '',
+      data: {},
+    });
+    this.setState({methods, changed: true}, () => this.props.parent.checkPristine());
+    const inputSelector = `.DetailsPanel .input__methods${methods.length - 1}name input`;
+    setTimeout(() => {
+      const element = document.querySelector(inputSelector)
+      scrollToElement(element.closest('.CollapsibleProperties'));
+      element && setTimeout(() => element.focus(), 1000);
+    });
+  };
+
+  handleRemoveRemoteMethod = method => () => this.onRemoveItem('methods', method);
+
+  remoteMethodAddButton = () => (
+    <IconButton
+      name="add_remoteMethod"
+      icon="iconPlus"
+      onClick={this.handleAddRemoteMethod}
+    />
+  );
+
+  renderRemoteMethod = (method, idx) => {
+    const {id, name, data} = method;
+    const {entity} = this.props;
+    const functionNameInput = (
+      <div className="ModelDetails__method">
+        <EntityProperty
+          name={`methods[${idx}][name]`}
+          value={name}
+        />
+        <div className="ModelDetails__method__remove">
+          <IconButton
+            icon="iconDelete"
+            name={`remove__method${idx}`}
+            onClick={this.handleRemoveRemoteMethod(method)}
+          />
+        </div>
+      </div>
+    );
+    return (
+      <GatewayPolicyAction
+        key={id}
+        action={data}
+        schemas={schemas.methods}
+        prefix={`methods[${idx}][data]`}
+        tmpPrefix="LunchBadger"
+        onChangeState={this.changeState}
+        horizontal
+        collapsibleTitle={functionNameInput}
+        collapsibleBarToggable={false}
+        collapsibleSpace="0"
+        entry={entity}
+      />
+    );
+  };
+
+  renderRemoteMethodsSection = () => {
+    const {methods} = this.state;
+    return (
+      <div>
+        {methods.map((method, idx) => this.renderRemoteMethod(method, idx))}
+        {methods.length === 0 && (
+          <div className="ModelDetails__blank">
+            No remote methods defined.
+          </div>
+        )}
+      </div>
+    );
+  };
+
   render() {
     const sections = [
       {title: 'Details', docs: 'MODEL_DETAILS'},
       {title: 'User-defined fields', render: 'UserDefinedFields', docs: 'MODEL_USER_DEFINED_FIELDS'},
       {title: 'Relations', docs: 'MODEL_RELATIONS'},
       {title: 'Properties', docs: 'MODEL_PROPERTIES'},
+      {
+        title: 'Remote methods',
+        render: 'RemoteMethods',
+        docs: 'MODEL_REMOTE_METHODS',
+        button: this.remoteMethodAddButton(),
+      },
       {title: 'Model.js', render: 'ModelCode', docs: 'MODEL_CODE'},
     ];
     return (
-      <div>
-        {sections.map(({title, render, docs}) => (
+      <div className="panel__details ModelDetails">
+        {sections.map(({title, render, docs, button}) => (
           <CollapsibleProperties
+            name={render || title}
             id={`${this.props.entity.id}/${docs}`}
             key={title}
             bar={
@@ -704,6 +797,7 @@ class ModelDetails extends PureComponent {
                 <DocsLink item={docs} />
               </EntityPropertyLabel>
             }
+            button={button}
             collapsible={this[`render${render || title}Section`]()}
             barToggable
             defaultOpened

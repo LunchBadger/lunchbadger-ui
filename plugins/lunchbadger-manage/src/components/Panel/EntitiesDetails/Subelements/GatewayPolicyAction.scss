@@ -1,6 +1,14 @@
 .GatewayPolicyAction {
   position: relative;
   min-width: 90px;
+  &__arrayLabel {
+    display: none;
+  }
+  .ModelDetails &__arrayLabel {
+    display: block;
+    padding: 30px 0 20px;
+    margin-top: -30px;
+  }
   .canvas & {
     min-width: 90rem;
   }
@@ -51,13 +59,19 @@
       display: none;
     }
     & > .EntityProperty > .EntityPropertyLabel,
+    & > span > .EntityProperty > .EntityPropertyLabel,
     & > .GatewayPolicyAction > .EntityProperty > .EntityPropertyLabel,
+    & > .GatewayPolicyAction > .GatewayPolicyAction__arrayLabel > .EntityPropertyLabel,
+    & > .GatewayPolicyAction > span > div > .GatewayPolicyAction__arrayItem > .EntityPropertyLabel,
     & > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {
       color: #4190CE;
     }
     &.defaultValue {
       & > .EntityProperty > .EntityPropertyLabel,
-      & > .GatewayPolicyAction > .EntityProperty:nth-child(2) > .EntityPropertyLabel,
+      & > span > .EntityProperty > .EntityPropertyLabel,
+      & > .GatewayPolicyAction > .EntityProperty:last-child > .EntityPropertyLabel,
+      & > .GatewayPolicyAction > .GatewayPolicyAction__arrayLabel > .EntityPropertyLabel,
+      & > .GatewayPolicyAction > span > div > .GatewayPolicyAction__arrayItem > .EntityPropertyLabel,
       & > .GatewayPolicyAction > span > .EntityProperty > .EntityPropertyLabel {
         color: #999;
       }
@@ -113,9 +127,21 @@
       font-size: 14rem;
     }
   }
+  &__emptyArray {
+    font-family: monospace;
+    opacity: 0.5;
+    font-size: 14px;
+    margin-left: 15px;
+    padding-bottom: 10px;
+    .canvas & {
+      font-size: 14rem;
+      margin-left: 15rem;
+      padding-bottom: 10rem;
+    }
+  }
   &__arrayItem {
     border: 1px solid #e0e0e0;
-    padding: 10px;
+    padding: 12px;
     position: relative;
     margin-bottom: 15px;
     .canvas & {

@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.352', [
+console.info('LBAPP VERSION 0.353', [
+  'Feature/920 add remote methods for gui to expose #1120',
   'Bugfix/1109 Admin api fails because of -- in url #1111',
   'Feature/1108 New walkthrough step after memory submit #1110',
   'Bugfix/1104 Deleted gateway should not affect new gateway name #1107',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.352', [
   'Feature/328 Tooltips onclick mode #1078',
   'Feature/852 Pretty up path in validation error #1077',
   'Feature/1075 Api Explorer in panel #1076',
-  'Feature/1068 resizing ports and connection lines #1074',
-  'Feature/1069 Resizing: adjust widths of entities in proportion #1072'
+  'Feature/1068 resizing ports and connection lines #1074'
 ]);
 
 // Needed for onTouchTap

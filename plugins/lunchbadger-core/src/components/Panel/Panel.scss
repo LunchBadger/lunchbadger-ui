@@ -28,7 +28,9 @@
       display: inline-block;
       vertical-align: bottom;
     }
-    .EntityProperty {
+    .EntityProperty,
+    .GatewayPolicyAction__arrayLabel,
+    .GatewayPolicyAction__arrayItem {
       .EntityPropertyLabel {
         color: #999;
         font-size: 12px;

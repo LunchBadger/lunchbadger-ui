@@ -53,4 +53,25 @@
       margin-left: 15px;
     }
   }
+  &__blank {
+    font-family: monospace;
+    opacity: 0.5;
+    font-size: 14px;
+  }
+  .CollapsibleProperties.RemoteMethods {
+    margin-right: 8px;
+  }
+  &__method {
+    &:hover {
+      .ModelDetails__method__remove {
+        display: block;
+      }
+    }
+    &__remove {
+      position: absolute;
+      top: 14px;
+      right: 45px;
+      display: none;
+    }
+  }
 }

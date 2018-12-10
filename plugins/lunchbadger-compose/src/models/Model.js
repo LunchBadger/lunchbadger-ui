@@ -21,7 +21,33 @@ const reduceItemByLunchbadgerId = (map, item) => {
   return map;
 };
 
+const reduceItemByName = (map, item) => {
+  const element = {...item};
+  delete element.id;
+  map[item.name] = element;
+  return map;
+};
+
 const pluralize = str => str === '' ? '' : inflection.pluralize(str);
+
+export const processMethods = (methods) => {
+  const data = [];
+  methods.forEach(method => {
+    const methodData = {...method};
+    delete methodData.id;
+    delete methodData.modelId;
+    delete methodData.facetName;
+    delete methodData.isStatic;
+    delete methodData.undefined;
+    delete methodData.name;
+    data.push({
+      id: uuid.v4(),
+      name: method.name,
+      data: methodData,
+    });
+  });
+  return data;
+}
 
 export default class Model extends BaseModel {
   static type = 'Model';
@@ -56,12 +82,15 @@ export default class Model extends BaseModel {
     'zoomWindow',
     'models',
     'openDetailsPanel',
-    '_locked'
+    '_locked',
+    '_methods'
   ];
 
   _ports = [];
   _properties = [];
   _relations = [];
+  _methods = [];
+
   base = 'PersistedModel';
   http_path = '';
   plural = '';
@@ -104,14 +133,17 @@ export default class Model extends BaseModel {
     const properties = (data.properties || [])
       .sort(this.sortByItemOrder);
     const relations = data.relations || [];
+    const methods = data.methods || [];
     delete data.properties;
     delete data.relations;
     if (!data.loaded) {
       data.plural = pluralize(data.name);
     }
+    delete data.methods;
     const model = super.create(data);
     properties.forEach(property => model.addProperty(ModelProperty.create(property)));
     relations.forEach(relation => model.addRelation(ModelRelation.create(relation)));
+    model.methods = processMethods(methods);
     return model;
   }
 
@@ -132,11 +164,13 @@ export default class Model extends BaseModel {
       isModelForDiff: false,
       isPropertiesForDiff: false,
       isRelationsForDiff: false,
+      isMethodsForDiff: false,
     }, opts);
     const {
       isModelForDiff,
       isPropertiesForDiff,
       isRelationsForDiff,
+      isMethodsForDiff,
     } = options;
     const json = {
       id: this.workspaceId,
@@ -157,18 +191,31 @@ export default class Model extends BaseModel {
       strict: this.strict,
       lunchbadgerId: this.id,
       wasBundled: this.wasBundled,
-      ...this.userFields
+      methods: this.methods.map(method => ({
+        name: method.name,
+        modelId: this.workspaceId,
+        ...method.data,
+      })),
+      ...this.userFields,
     };
-    if ((isModelForDiff || isPropertiesForDiff || isRelationsForDiff) && !this.loaded) return {};
+    if ((isModelForDiff
+      || isPropertiesForDiff
+      || isRelationsForDiff
+      || isMethodsForDiff
+    ) && !this.loaded) return {};
     if (isModelForDiff) {
       delete json.properties;
       delete json.relations;
+      delete json.methods;
     }
     if (isPropertiesForDiff) {
       return this.properties.reduce(reduceItemByLunchbadgerId, {});
     }
     if (isRelationsForDiff) {
       return this.relations.reduce(reduceItemByLunchbadgerId, {});
+    }
+    if (isMethodsForDiff) {
+      return this.methods.reduce(reduceItemByName, {});
     }
     return json;
   }
@@ -189,64 +236,57 @@ export default class Model extends BaseModel {
     return `server.${this.name}`;
   }
 
-  /**
-   * @param properties {Properties[]}
-   */
   set properties(properties) {
     this._properties = properties;
   }
 
-  /**
-   * @returns {Properties[]}
-   */
   get properties() {
     return this._properties;
   }
 
-  /**
-   * @param property {Property}
-   */
   addProperty(property) {
     this._properties.push(property);
     property.attach(this);
   }
 
-  /**
-   * @param property {Property}
-   */
   removeProperty(property) {
     _.remove(this._properties, function (prop) {
       return prop.id === property.id
     });
   }
 
-  /**
-   * @param relations {Relations[]}
-   */
+  set methods(methods) {
+    this._methods = methods;
+  }
+
+  get methods() {
+    return this._methods;
+  }
+
   set relations(relations) {
     this._relations = relations;
   }
 
-  /**
-   * @returns {Relations[]}
-   */
   get relations() {
     return this._relations;
   }
 
-  /**
-   * @param relation {Relation}
-   */
   addRelation(relation) {
     this._relations.push(relation);
     relation.attach(this);
   }
 
-  /**
-   * @param relation {Relation}
-   */
   removeRelation(relation) {
     _.remove(this._relations, {id: relation.id});
+  }
+
+  addMethod(method) {
+    this._methods.push(method);
+    method.attach(this);
+  }
+
+  removeMethod(method) {
+    _.remove(this._methods, {id: method.id});
   }
 
   get ports() {
@@ -354,6 +394,7 @@ export default class Model extends BaseModel {
   processModel(model, properties) {
     const data = {
       properties: [],
+      methods: [],
     };
     addPropertiesToData(model, this, data.properties, properties);
     if (model.relations) {
@@ -396,6 +437,17 @@ export default class Model extends BaseModel {
       }
     }
     delete model.files;
+    (model.methods || [])
+      .filter(item => (item.name || '').trim() !== '')
+      .forEach(item => {
+        const method = {
+          ...item.data,
+          name: item.name,
+          modelId: `server.${model.name}`,
+        };
+        data.methods.push(method);
+      });
+    delete model.methods;
     return _.merge({}, model, data);
   }
 

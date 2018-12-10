@@ -23,7 +23,7 @@ export const loadFromServer = () => async (dispatch, getState) => {
   try {
     const responses = await Promise.all([
       ...onAppLoad.map(item => item.request()),
-      new Promise(res => setTimeout(res, 300)),
+      // new Promise(res => setTimeout(res, 300)),
     ]);
     onAppLoad.map((item, idx) => dispatch(item.callback(responses[idx])));
     onAppLoad.map((item, idx) => {
@@ -86,7 +86,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
     await Promise.all([
       ...onSaves.map(item => item.onSave(state, delta, currData, prevData)),
       saveProject ? ProjectService.save(data) : undefined,
-      new Promise(res => setTimeout(res, 300)),
+      // new Promise(res => setTimeout(res, 300)),
     ]);
     prevData = currData;
   } catch (error) {
@@ -135,7 +135,7 @@ export const clearServer = () => async (dispatch, getState) => {
     type: 'success',
     message: 'All data removed from server',
   }));
-  await new Promise(res => setTimeout(res, 300));
+  // await new Promise(res => setTimeout(res, 300));
   dispatch(actions.setLoadingProject(false));
   GAEvent('Header Menu', 'Cleared Project');
 };
@@ -229,7 +229,7 @@ export const silentReload = paper => async (dispatch, getState) => {
     prevResponse.pendingEdit = pendingEdit;
     const responses = await Promise.all([
       ...onAppLoad.map(item => item.request()),
-      new Promise(res => setTimeout(res, 300)),
+      // new Promise(res => setTimeout(res, 300)),
     ]);
     const currResponse = processProjectLoad
       .reduce((map, item) => ({

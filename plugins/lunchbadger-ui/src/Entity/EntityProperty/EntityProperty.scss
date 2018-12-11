@@ -347,7 +347,7 @@
 }
 
 .ModelProperty,
-.EntityProperty:not(.EntityProperty__codeEditor) {
+.EntityProperty:not(.EntityProperty__codeEditor):not(.array) {
   .EntityProperty__field {
     line-height: 24px;
     height: 48px;

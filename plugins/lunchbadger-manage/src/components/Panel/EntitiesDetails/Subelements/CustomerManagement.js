@@ -231,13 +231,19 @@ class CustomerManagement extends PureComponent {
     }
   };
 
-  handleCreateCredentials = (consumerId, type, kind) => () => this.setState({
-    pendingCredentialCreate: {
+  handleCreateCredentials = (consumerId, type, kind) => () => {
+    const pendingCredentialCreate = {
       consumerId,
       type,
       kind,
-    },
-  });
+    };
+    if (type === 'key-auth') {
+      Object.assign(this.state, {pendingCredentialCreate});
+      this.createCredentials();
+      return;
+    }
+    this.setState({pendingCredentialCreate});
+  };
 
   createCredentials = async () => {
     const {pendingCredentialCreate} = this.state;
@@ -283,6 +289,8 @@ class CustomerManagement extends PureComponent {
         }
         body.credential[passwordKey] = password;
       }
+    } else {
+      body.credential = {type: 'key-auth'};
     }
     try {
       const response = await api.createCredentials(body);
@@ -291,9 +299,12 @@ class CustomerManagement extends PureComponent {
           ...pendingCredentialCreate,
           password: autoGeneratePassword ? response.body[passwordKey] : password,
         }});
+      } else {
+        this.setState({pendingCredentialCreate: null});
       }
       await this.loadCredentials(consumerId);
     } catch (error) {
+      this.setState({pendingCredentialCreate: null});
       this.context.store.dispatch(coreActions.addSystemDefcon1({error}));
     }
   };
@@ -865,7 +876,7 @@ class CustomerManagement extends PureComponent {
           <div className={cs('CustomerManagement__pending', {
             loading: pendingCredentialCreate.password === ''
           })}>
-            <div>
+            <div className="CustomerManagement__pending__data">
               <EntityProperty
                 name="autoGeneratePassword"
                 title="AutoGeneratePassword"
@@ -896,6 +907,12 @@ class CustomerManagement extends PureComponent {
               onOk={this.createCredentials}
               submit={false}
             />
+            <div className="CustomerManagement__loader">
+              Generating password, please wait...
+              <div className="spinner__overlay">
+                <div className="spinner"></div>
+              </div>
+            </div>
           </div>
         );
       } else {

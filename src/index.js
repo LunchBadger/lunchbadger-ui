@@ -13,7 +13,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.356', [
+console.info('LBAPP VERSION 0.357', [
   'Feature/1117 consumer management waiting screen for credential #1125',
   'Feature/1122 make logo toggable #1124',
   'Feature/1112 soap and rest icons #1123',

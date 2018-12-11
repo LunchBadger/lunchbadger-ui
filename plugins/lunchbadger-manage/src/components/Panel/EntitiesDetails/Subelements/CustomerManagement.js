@@ -287,8 +287,6 @@ class CustomerManagement extends PureComponent {
         }
         body.credential[passwordKey] = password;
       }
-    } else {
-      body.credential = {type: 'key-auth'};
     }
     try {
       const response = await api.createCredentials(body);

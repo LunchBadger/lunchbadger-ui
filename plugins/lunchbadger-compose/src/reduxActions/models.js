@@ -10,6 +10,7 @@ import {
   reload as workspaceFilesReload,
   update as workspaceFilesUpdate,
 } from './workspaceFiles';
+import {reloadApiExplorer} from '../utils';
 
 const {
   utils: {
@@ -159,13 +160,20 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (!wasBundled) {
       await dispatch(coreActions.saveToServer());
     }
+    if (deltaModel.length
+      || deltaProperties.length
+      || deltaRelations.length
+      || deltaMethods.length
+    ) {
+      reloadApiExplorer(dispatch, state);
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
-export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
+export const remove = (entity, cb, action = 'removeModel') => async (dispatch, getState) => {
   const {loaded, wasBundled} = entity;
   let updateAction = 'updateModel';
   if (wasBundled) {
@@ -188,6 +196,7 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
     if (!wasBundled) {
       await dispatch(coreActions.saveToServer({saveProject: false}));
     }
+    reloadApiExplorer(dispatch, getState());
   } catch (error) {
     updatedEntity.ready = true;
     updatedEntity.deleting = false;

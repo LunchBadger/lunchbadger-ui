@@ -4,10 +4,9 @@ import HeaderMenu from './HeaderMenu';
 import Logo from './Logo';
 import './Header.scss';
 
-const BRANDING_KEY = '?branding=';
 const {search} = document.location;
-const isBrandingLogo = search.startsWith(BRANDING_KEY);
-const branding = isBrandingLogo ? decodeURI(search.split(BRANDING_KEY)[1]) : '';
+const isBrandingLogo = search.startsWith('?[') && search.endsWith(']');
+const branding = isBrandingLogo ? decodeURI(search.substr(2, search.length - 3)) : '';
 
 export default class Header extends PureComponent {
   render() {
@@ -16,7 +15,6 @@ export default class Header extends PureComponent {
       <header className="header" ref="headerContainer">
         <Logo />
         {isBrandingLogo && <span className="On">on <strong>{branding}</strong></span>}
-        {/*isBrandingLogo && <span className="BrandingLogo">{branding}</span>*/}
         {!blank && <Breadcrumbs username={username} envId={envId}/>}
         {!blank && <HeaderMenu />}
       </header>

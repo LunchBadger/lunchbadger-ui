@@ -7,7 +7,7 @@ import './Header.scss';
 const BRANDING_KEY = '?branding=';
 const {search} = document.location;
 const isBrandingLogo = search.startsWith(BRANDING_KEY);
-const branding = isBrandingLogo ? search.split(BRANDING_KEY)[1] : '';
+const branding = isBrandingLogo ? decodeURI(search.split(BRANDING_KEY)[1]) : '';
 
 export default class Header extends PureComponent {
   render() {

@@ -6,7 +6,12 @@ class ModelService {
 
   initialize = () => this.api = new ApiClient(Config.get('workspaceApiUrl'), getUser().id_token);
 
-  load = () => this.api.get('/Facets/server/models?filter[include]=properties&filter[include]=relations');
+  load = () => this.api.get(
+    '/Facets/server/models'
+      + '?filter[include]=properties'
+      + '&filter[include]=relations'
+      + '&filter[include]=methods'
+  );
 
   upsert = body => this.api.post('/ModelDefinitions', {body});
 
@@ -23,6 +28,10 @@ class ModelService {
   upsertRelations = body => this.api.post('/ModelRelations', {body});
 
   deleteRelations = modelId => this.api.delete(`/ModelDefinitions/${modelId}/relations`);
+
+  upsertMethods = body => this.api.post('/ModelMethods', {body});
+
+  deleteMethods = modelId => this.api.delete(`/ModelDefinitions/${modelId}/methods`);
 
 }
 

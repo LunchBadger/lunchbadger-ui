@@ -2,7 +2,7 @@ import React from 'react';
 import {diff} from 'just-diff';
 import {actions} from './actions';
 import {ModelService} from '../services';
-import Model from '../models/Model';
+import Model, {processMethods} from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
 import ModelRelation from '../models/ModelRelation';
 import DataSource from '../models/DataSource';
@@ -43,6 +43,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const beforeUpdateModel = entity.toJSON({isModelForDiff: true});
   const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
   const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
+  const beforeUpdateMethods = entity.toJSON({isMethodsForDiff: true});
   const state = getState();
   const prevModelJs = (state.entities.workspaceFiles.files.server.models || {})[entity.modelJsName];
   const prevPackageJson = (state.entities.workspaceFiles.files || {})[PACKAGE_JSON];
@@ -75,9 +76,11 @@ export const update = (entity, model) => async (dispatch, getState) => {
   const afterUpdateModel = updatedEntity.toJSON({isModelForDiff: true});
   const afterUpdateProperties = updatedEntity.toJSON({isPropertiesForDiff: true});
   const afterUpdateRelations = updatedEntity.toJSON({isRelationsForDiff: true});
+  const afterUpdateMethods = updatedEntity.toJSON({isMethodsForDiff: true});
   const deltaModel = diff(beforeUpdateModel, afterUpdateModel);
   const deltaProperties = diff(beforeUpdateProperties, afterUpdateProperties);
   const deltaRelations = diff(beforeUpdateRelations, afterUpdateRelations);
+  const deltaMethods = diff(beforeUpdateMethods, afterUpdateMethods);
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
@@ -132,6 +135,13 @@ export const update = (entity, model) => async (dispatch, getState) => {
           relation.attach(updatedEntity);
           return relation;
         });
+      }
+    }
+    if (model.methods && deltaMethods.length > 0) {
+      await ModelService.deleteMethods(updatedEntity.workspaceId);
+      if (model.methods.length > 0) {
+        const {body: methods} = await ModelService.upsertMethods(model.methods);
+        updatedEntity.methods = processMethods(methods);
       }
     }
     const isModelJsDiff = modelJs && modelJs !== prevModelJs;

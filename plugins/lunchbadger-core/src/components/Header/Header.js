@@ -9,10 +9,15 @@ import './Header.scss';
 
 // const {tritonLogo} = Config.get('features');
 
+const tritonLogoUsernames = [
+  'al3',
+  'clyde',
+];
+
 export default class Header extends PureComponent {
   render() {
     const {username, login, envId, blank} = this.props;
-    const tritonLogo = login === 'al3';
+    const tritonLogo = tritonLogoUsernames.includes(login);
     return (
       <header className="header" ref="headerContainer">
         {/*!blank && <CanvasOverlay />*/}

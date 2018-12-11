@@ -906,7 +906,7 @@ class CustomerManagement extends PureComponent {
               submit={false}
             />
             <div className="CustomerManagement__loader">
-              Generating password, please wait...
+              Generating credential, please wait...
               <div className="spinner__overlay">
                 <div className="spinner"></div>
               </div>

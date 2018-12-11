@@ -24,6 +24,7 @@ export default {
   MODEL_USER_DEFINED_FIELDS: 'http://docs.lunchbadger.com/',
   MODEL_RELATIONS: 'http://docs.lunchbadger.com/',
   MODEL_PROPERTIES: 'http://docs.lunchbadger.com/',
+  MODEL_REMOTE_METHODS: 'http://docs.lunchbadger.com/',
   MODEL_CODE: 'http://docs.lunchbadger.com/',
 
   FUNCTION_DETAILS: 'http://docs.lunchbadger.com/',

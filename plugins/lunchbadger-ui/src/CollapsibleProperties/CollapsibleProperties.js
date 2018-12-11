@@ -9,6 +9,7 @@ import './CollapsibleProperties.scss';
 
 class CollapsibleProperties extends Component {
   static propTypes = {
+    name: PropTypes.string,
     bar: PropTypes.node.isRequired,
     collapsible: PropTypes.node.isRequired,
     onToggleCollapse: PropTypes.func,
@@ -56,6 +57,7 @@ class CollapsibleProperties extends Component {
 
   render() {
     const {
+      name,
       bar,
       collapsible,
       plain,
@@ -68,7 +70,7 @@ class CollapsibleProperties extends Component {
       classes,
     } = this.props;
     const {expanded} = this.state;
-    const classNames = cs('CollapsibleProperties', {
+    const classNames = cs('CollapsibleProperties', name, {
       expanded,
       plain,
       nonEditable: typeof bar === 'string',

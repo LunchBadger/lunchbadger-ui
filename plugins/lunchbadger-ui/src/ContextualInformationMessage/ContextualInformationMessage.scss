@@ -1,6 +1,9 @@
 .rc-tooltip {
   opacity: 1;
   z-index: 3000 !important;
+  ul {
+    margin-left: 20px;
+  }
   & .rc-tooltip-inner {
     min-height: 0;
     height: auto;

@@ -210,3 +210,7 @@
     transform: translateX(-50%) rotate(360deg);
   }
 }
+
+.BaseDetails.customerManagement.locked .BaseDetails__content:after {
+  display: none;
+}

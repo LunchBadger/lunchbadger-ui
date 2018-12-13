@@ -275,8 +275,8 @@ export default (ComposedComponent) => {
       const rect = {
         x: Math.round(x),
         y: Math.round(y),
-        width: Math.round(width),
-        height: Math.round(height),
+        width: Math.min(zoomWindow.width, Math.round(width)),
+        height: Math.min(zoomWindow.height, Math.round(height)),
         tab,
         zoomWindow,
         autoscrollSelector: typeof autoscrollSelector === 'string'
@@ -448,13 +448,13 @@ export default (ComposedComponent) => {
                 label,
               });
             });
-            toolboxConfig.push({
-              action: 'zoom',
-              icon: 'iconBasics',
-              onClick: this.handleZoom('general'),
-              label: 'Details',
-            });
           }
+          toolboxConfig.push({
+            action: 'zoom',
+            icon: 'iconBasics',
+            onClick: this.handleZoom('general'),
+            label: 'Details',
+          });
           tabs.forEach(({name, icon, label}) => {
             toolboxConfig.push({
               action: name,

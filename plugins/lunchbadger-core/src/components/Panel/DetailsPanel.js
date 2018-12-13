@@ -113,22 +113,22 @@ class DetailsPanel extends Component {
           label,
         });
       });
-      if (tabs.length > 0) {
-        toolboxConfig.push({
-          action: 'zoom',
-          icon: 'iconBasics',
-          onClick: this.handleTabChange('general'),
-          selected: tab === 'general',
-          label: 'Details',
-        });
-        tabs.map(({name, icon, label}) => toolboxConfig.push({
-          action: name,
-          icon,
-          onClick: this.handleTabChange(name),
-          selected: tab === name,
-          label,
-        }));
-      }
+    }
+    if (tabs.length > 0) {
+      toolboxConfig.push({
+        action: 'zoom',
+        icon: 'iconBasics',
+        onClick: this.handleTabChange('general'),
+        selected: tab === 'general',
+        label: 'Details',
+      });
+      tabs.map(({name, icon, label}) => toolboxConfig.push({
+        action: name,
+        icon,
+        onClick: this.handleTabChange(name),
+        selected: tab === name,
+        label,
+      }));
     }
     return (
       <RnD

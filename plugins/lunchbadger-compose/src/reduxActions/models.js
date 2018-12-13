@@ -68,6 +68,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
     updateAction += 'Bundled';
   }
   const isDifferent = entity.loaded && model.name !== state.entities[type][entity.id].name;
+  const isPublicDifferent = model.public !== state.entities[type][entity.id].public;
   updatedEntity = Model.create({
     ...entity.toJSON(),
     ...model,
@@ -86,6 +87,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (isDifferent) {
       await ModelService.deleteModelConfig(entity.workspaceId);
       await ModelService.delete(entity.workspaceId);
+    }
+    if (isDifferent || isPublicDifferent) {
       const dataSource = Connections.search({toId: entity.id})
         .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
         .find(item => item.constructor.type === 'DataSource');
@@ -96,6 +99,8 @@ export const update = (entity, model) => async (dispatch, getState) => {
         dataSource: dataSource ? dataSource.name : null,
         public: updatedEntity.public,
       });
+    }
+    if (isDifferent) {
       if (modelJs === undefined) {
         modelJs = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
       }

@@ -5,7 +5,7 @@ import {IconButton, ContextualInformationMessage} from '../../../../lunchbadger-
 import './ApiExplorerPanel.scss';
 
 const Panel = LunchBadgerCore.components.Panel;
-const RELOAD_DELAY = 3000;
+const RELOAD_DELAY = 5000;
 
 class ApiExplorerPanel extends Component {
   static type = 'ApiExplorerPanel';
@@ -20,11 +20,11 @@ class ApiExplorerPanel extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('WorkspaceGitChanged', this.refreshPanelWithDelay);
+    window.addEventListener('ReloadApiExplorer', this.refreshPanelWithDelay);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('WorkspaceGitChanged', this.refreshPanelWithDelay);
+    window.removeEventListener('ReloadApiExplorer', this.refreshPanelWithDelay);
   }
 
   handlePanelRefresh = () => {

@@ -136,7 +136,7 @@ export default class Model extends BaseModel {
     const methods = data.methods || [];
     delete data.properties;
     delete data.relations;
-    if (!data.loaded) {
+    if (data.loaded === false) {
       data.plural = pluralize(data.name);
     }
     delete data.methods;

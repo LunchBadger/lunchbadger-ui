@@ -1,4 +1,5 @@
 import ModelService from '../services/ModelService';
+import {reloadApiExplorer} from '../utils';
 
 const {storeUtils, coreActions, actions: actionsCore} = LunchBadgerCore.utils;
 const {Connections} = LunchBadgerCore.stores;
@@ -30,6 +31,7 @@ export const attachWithModel = info => async (dispatch, getState) => {
   };
   try {
     await ModelService.upsertModelConfig(modelConfig);
+    reloadApiExplorer(dispatch, state);
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
@@ -59,6 +61,7 @@ export const detachWithModel = info => async (dispatch, getState) => {
   };
   try {
     await ModelService.upsertModelConfig(modelConfig);
+    reloadApiExplorer(dispatch, state);
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
@@ -108,6 +111,7 @@ export const reattachWithModel = info => async (dispatch, getState) => {
     if (model.constructor.type === 'Function_' || modelPrev.constructor.type === 'Function_') {
       await dispatch(coreActions.saveToServer());
     }
+    reloadApiExplorer(dispatch, state);
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }

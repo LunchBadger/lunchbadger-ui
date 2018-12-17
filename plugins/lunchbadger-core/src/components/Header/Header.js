@@ -8,19 +8,25 @@ import {
   iconBrandingAzure,
   iconBrandingGcp,
   iconBrandingIbm,
+  iconBrandingPivotal,
   iconBrandingTriton,
+  iconBrandingVmware,
 } from '../../../../../src/icons';
 import './Header.scss';
 
 const {search} = document.location;
-const isBrandingLogo = search.startsWith('?[') && search.endsWith(']');
-const branding = isBrandingLogo ? decodeURI(search.substr(2, search.length - 3)) : '';
+const indexStart = search.indexOf('[');
+const indexEnd = search.indexOf(']');
+const isBrandingLogo = indexStart > -1 && indexEnd > -1 && indexEnd > indexStart;
+const branding = isBrandingLogo ? decodeURI(search.substring(indexStart + 1, indexEnd)) : '';
 const brandingLogos = {
   aws: iconBrandingAws,
   azure: iconBrandingAzure,
   gcp: iconBrandingGcp,
   ibm: iconBrandingIbm,
+  pivotal: iconBrandingPivotal,
   triton: iconBrandingTriton,
+  vmware: iconBrandingVmware,
 };
 const brandingLogo = brandingLogos[branding];
 

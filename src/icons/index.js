@@ -10,7 +10,9 @@ import iconBrandingAws from './icon-branding-aws.svg';
 import iconBrandingAzure from './icon-branding-azure.svg';
 import iconBrandingGcp from './icon-branding-gcp.svg';
 import iconBrandingIbm from './icon-branding-ibm.svg';
+import iconBrandingPivotal from './icon-branding-pivotal.svg';
 import iconBrandingTriton from './icon-branding-triton.svg';
+import iconBrandingVmware from './icon-branding-vmware.svg';
 import iconCheck from './icon-check.svg';
 import iconCodeEditor from './icon-code-editor.svg';
 import iconCustomerManagement from './icon-customer-management.svg';
@@ -72,7 +74,9 @@ export {
   iconBrandingAzure,
   iconBrandingGcp,
   iconBrandingIbm,
+  iconBrandingPivotal,
   iconBrandingTriton,
+  iconBrandingVmware,
   iconCheck,
   iconCodeEditor,
   iconCustomerManagement,

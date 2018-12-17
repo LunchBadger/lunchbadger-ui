@@ -5,16 +5,22 @@ import Logo from './Logo';
 import {IconSVG} from '../../../../lunchbadger-ui/src';
 import {
   iconBrandingAws,
+  iconBrandingAzure,
+  iconBrandingGcp,
+  iconBrandingIbm,
+  iconBrandingTriton,
 } from '../../../../../src/icons';
 import './Header.scss';
-
-
 
 const {search} = document.location;
 const isBrandingLogo = search.startsWith('?[') && search.endsWith(']');
 const branding = isBrandingLogo ? decodeURI(search.substr(2, search.length - 3)) : '';
 const brandingLogos = {
   aws: iconBrandingAws,
+  azure: iconBrandingAzure,
+  gcp: iconBrandingGcp,
+  ibm: iconBrandingIbm,
+  triton: iconBrandingTriton,
 };
 const brandingLogo = brandingLogos[branding];
 

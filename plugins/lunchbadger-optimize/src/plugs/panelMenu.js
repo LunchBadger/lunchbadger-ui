@@ -5,7 +5,7 @@ const {coreActions} = LunchBadgerCore.utils;
 const panelMenu = {};
 
 if (Config.get('features').forecasts) {
-  panelMenu[4] = {
+  panelMenu[5] = {
     icon: 'icon-icon-forecaster',
     panel: FORECASTS_PANEL,
     action: coreActions.togglePanel(FORECASTS_PANEL),

@@ -52,6 +52,7 @@ import iconPipelines from './icon-pipelines.svg';
 import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
+import iconProject from './icon-project.svg';
 import iconReload from './icon-reload.svg';
 import iconReorder from './icon-reorder.svg';
 import iconRevert from './icon-revert.svg';
@@ -116,6 +117,7 @@ export {
   iconPipelines,
   iconPlane,
   iconPortal,
+  iconProject,
   iconReload,
   iconReorder,
   iconRevert,

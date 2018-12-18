@@ -270,8 +270,8 @@ export default (ComposedComponent) => {
       const rect = {
         x: Math.round(x),
         y: Math.round(y),
-        width: Math.round(width),
-        height: Math.round(height),
+        width: Math.min(zoomWindow.width, Math.round(width)),
+        height: Math.min(zoomWindow.height, Math.round(height)),
         tab,
         zoomWindow,
         autoscrollSelector: typeof autoscrollSelector === 'string'

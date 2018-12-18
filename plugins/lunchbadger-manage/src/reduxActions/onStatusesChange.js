@@ -3,7 +3,11 @@ import {actions} from './actions';
 import Gateway from '../models/Gateway';
 import Pipeline from '../models/Pipeline';
 
-const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
+const {
+  coreActions,
+  actions: actionsCore,
+  userStorage,
+} = LunchBadgerCore.utils;
 
 const transformGateways = (entities) => {
   const gateways = {};
@@ -52,7 +56,8 @@ const showGatewayStatusChangeMessage = (dispatch, name, message) => {
 };
 
 export const onGatewayStatusChange = () => async (dispatch, getState) => {
-  const {entitiesStatuses, entities: {gateways: entities}} = getState();
+  const state = getState();
+  const {entitiesStatuses, entities: {gateways: entities}} = state;
   const statuses = entitiesStatuses.gateway || {};
   const gateways = transformGateways(entities);
   const entries = combineEntities(statuses, gateways);
@@ -80,8 +85,6 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
         dispatch(actions.updateGateway(updatedEntity));
       }
     } else {
-      const {running: statusRunning, deployment: {inProgress}} = status;
-      const running = statusRunning && !inProgress;
       if (entity === null) {
         /* relict since deleting functions are not rendered */
         // const storageGateway = userStorage.getObjectKey('gateway', slugId) || {};
@@ -96,9 +99,11 @@ export const onGatewayStatusChange = () => async (dispatch, getState) => {
         // });
         // dispatch(actions.updateGateway(updatedEntity));
       } else {
+        const {running: statusRunning, deployment: {inProgress}} = status;
+        const pod = Object.keys(pods).find(key => pods[key].servesRequests);
+        const running = statusRunning && !inProgress && !!pod;
         updatedEntity = entity.recreate();
         updatedEntity.pipelinesLunchbadger = entity.pipelinesLunchbadger;
-        const pod = Object.keys(pods).find(key => pods[key].servesRequests);
         if (pod) {
           const podArr = pod.split('-');
           const podName = podArr[podArr.length - 3];

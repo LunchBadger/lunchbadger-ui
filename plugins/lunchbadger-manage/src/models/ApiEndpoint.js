@@ -17,7 +17,7 @@ export default class ApiEndpoint extends BaseModel {
   scopes = [];
   zoomWindow = {
     width: 470,
-    height: 700,
+    height: 750,
   };
 
   constructor(id, name) {

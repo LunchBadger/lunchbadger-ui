@@ -105,14 +105,16 @@ class ModelDetails extends PureComponent {
 
   initState = (props = this.props) => {
     const {
+      name,
+      base,
       http_path,
       plural,
-      name,
       contextPathFallback,
     } = props.entity;
     return {
       changed: false,
       name,
+      base,
       http_path,
       plural,
       contextPath: contextPathFallback({http_path, plural, name}),
@@ -142,10 +144,19 @@ class ModelDetails extends PureComponent {
 
   postProcessModel = model => {
     const {entity} = this.props;
+    const {paper: paperRef} = this.context;
+    const paper = paperRef.getInstance();
+    if (entity.base === 'PersistedModel' && model.base === 'Model') {
+      [
+        ...Connections.search({'fromId': entity.id}),
+        ...Connections.search({'toId': entity.id}),
+      ].forEach(conn => {
+        conn.info.source.classList.add('discardAutoSave');
+        paper.detach(conn.info.connection);
+      });
+    }
     if (model.hasOwnProperty('dataSource')) {
       const dsId = model.dataSource === 'none' ? null : model.dataSource;
-      const {paper: paperRef} = this.context;
-      const paper = paperRef.getInstance();
       const currDsConn = Connections.find({toId: entity.id});
       const currDsId = currDsConn ? currDsConn.fromId : null;
       if (dsId !== currDsId) {
@@ -301,11 +312,12 @@ class ModelDetails extends PureComponent {
   };
 
   handleUpdateField = field => event => {
+    const value = event.target ? event.target.value : event;
     const {entity, parent} = this.props;
-    const {http_path, plural, name} = this.state;
-    const state = {http_path, plural, name};
+    const {http_path, plural, name, base} = this.state;
+    const state = {http_path, plural, name, base};
     Object.assign(state, {
-      [field]: event.target.value,
+      [field]: value,
       changed: true,
     });
     state.contextPath = entity.contextPathFallback(state);
@@ -314,11 +326,11 @@ class ModelDetails extends PureComponent {
 
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
-    const {contextPath, http_path, plural} = this.state;
-    const dataSourceOptions = Object.keys(dataSources)
-      .map(key => dataSources[key])
-      .map(({name: label, id: value}) => ({label, value}));
-    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    const {contextPath, http_path, plural, base} = this.state;
+    // const dataSourceOptions = Object.keys(dataSources)
+    //   .map(key => dataSources[key])
+    //   .map(({name: label, id: value}) => ({label, value}));
+    // const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     const fields = [
       {
         title: 'HTTP Path',
@@ -335,17 +347,20 @@ class ModelDetails extends PureComponent {
       {
         title: 'Base Model',
         name: 'base',
-        value: entity.base,
+        value: base,
         options: baseModelTypes,
         width: 190,
-      },
-      {
-        title: 'Model Connector',
-        name: 'dataSource',
-        value: currentDsId,
-        options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+        onChange: this.handleUpdateField('base'),
       },
     ];
+    // if (base === 'PersistedModel') {
+    //   fields.push({
+    //     title: 'Model Connector',
+    //     name: 'dataSource',
+    //     value: currentDsId,
+    //     options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+    //   });
+    // }
     const checkboxes = [
       {
         name: 'readonly',
@@ -375,12 +390,16 @@ class ModelDetails extends PureComponent {
           />
         </div>
         <div className="panel__details">
-          {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
-          {checkboxes.map(item => (
-            <div key={item.name} className="panel__details__checkbox">
-              <Checkbox {...item} />
-            </div>
-          ))}
+          <div>
+            {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
+          </div>
+          <div>
+            {checkboxes.map(item => (
+              <div key={item.name} className="panel__details__checkbox">
+                <Checkbox {...item} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

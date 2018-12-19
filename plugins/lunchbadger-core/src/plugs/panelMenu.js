@@ -1,10 +1,10 @@
 import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
-import {iconLogout} from '../../../../src/icons';
+import {iconLogout, iconProject} from '../../../../src/icons';
 import Config from '../../../../src/config';
 import {GAEvent} from '../../../lunchbadger-ui/src';
 
-export default {
+const panelMenu = {
   0: {
     name: 'projectSave',
     icon: 'fa-floppy-o',
@@ -48,3 +48,14 @@ export default {
     tooltip: 'Logout',
   },
 };
+
+if (document.location.search.includes('multiuser')) {
+  panelMenu[2] = {
+    svg: iconProject,
+    panel: 'MANAGE_PROJECT',
+    action: () => {},
+    tooltip: 'Manage projects',
+  };
+}
+
+export default panelMenu;

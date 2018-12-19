@@ -5,7 +5,7 @@ const {coreActions} = LunchBadgerCore.utils;
 const panelMenu = {};
 
 if (Config.get('features').metrics) {
-  panelMenu[3] = {
+  panelMenu[4] = {
     icon: 'icon-icon-metrics',
     panel: METRICS_PANEL,
     action: coreActions.togglePanel(METRICS_PANEL),

@@ -13,7 +13,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.173', [
+console.info('LBAPP VERSION 0.174', [
+  '1135',
   '1134',
   '1133',
   '1132',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.173', [
   '1085',
   '1076+1078+1079',
   '1074+1071',
-  '1074',
-  '1072'
+  '1074'
 ]);
 
 // Needed for onTouchTap

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import cs from 'classnames';
-import Config from '../../../../../src/config';
 import './ApiExplorerPanel.scss';
 
 const {
+  utils: {Config},
   components: {Panel},
   UI: {IconButton, ContextualInformationMessage},
 } = LunchBadgerCore;

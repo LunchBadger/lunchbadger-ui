@@ -1,6 +1,6 @@
-import Config from '../../../../src/config';
-
-const {ApiClient, getUser} = LunchBadgerCore.utils;
+const {
+  utils: {ApiClient, getUser, Config},
+} = LunchBadgerCore;
 
 class ModelService {
 

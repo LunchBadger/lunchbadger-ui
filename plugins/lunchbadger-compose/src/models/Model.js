@@ -1,19 +1,18 @@
 import _ from 'lodash';
 import uuid from 'uuid';
-import slug from 'slug';
 import inflection from 'inflection';
 import {update, remove} from '../reduxActions/models';
 import addPropertiesToData from '../components/addPropertiesToData';
 import ModelProperty from './ModelProperty';
 import ModelRelation from './ModelRelation';
-import Config from '../../../../src/config';
 import {getModelJsFilename, validModelName} from '../utils';
 
-const BaseModel = LunchBadgerCore.models.BaseModel;
-const Port = LunchBadgerCore.models.Port;
-const portGroups = LunchBadgerCore.constants.portGroups;
-const {defaultEntityNames, coreActions} = LunchBadgerCore.utils;
-const {Connections} = LunchBadgerCore.stores;
+const {
+  models: {BaseModel, Port},
+  constants: {portGroups},
+  utils: {coreActions, Config},
+  stores: {Connections},
+} = LunchBadgerCore;
 
 const reduceItemByLunchbadgerId = (map, item) => {
   const element = item.toJSON();

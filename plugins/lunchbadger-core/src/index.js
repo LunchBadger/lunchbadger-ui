@@ -56,7 +56,7 @@ import requestMethods from './utils/requestMethods';
 import userStorage from './utils/userStorage';
 import * as UI from './ui';
 import './utils/formValidators';
-
+import Config from '../../../src/config';
 import reducers from './reducers/reducers';
 import plugs from './plugs';
 
@@ -108,6 +108,7 @@ let LunchBadgerCore = {
     SshManagerService
   },
   utils: {
+    Config,
     ApiClient,
     actionsCreator,
     actions,

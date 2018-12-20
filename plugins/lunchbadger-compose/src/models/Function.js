@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import {update, remove, restart} from '../reduxActions/functions';
 import {validFunctionName, runtimeMapping} from '../utils';
-import Config from '../../../../src/config';
 
 const {
   models: {BaseModel, Port},
   stores: {Connections},
-  utils: {coreActions},
+  utils: {coreActions, Config},
   constants: {portGroups},
 } = LunchBadgerCore;
 

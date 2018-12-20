@@ -1,7 +1,5 @@
-import Config from '../../../../src/config';
-
 const {
-  utils: {coreActions},
+  utils: {coreActions, Config},
   UI: {icons: {iconApiExplorer}},
 } = LunchBadgerCore;
 

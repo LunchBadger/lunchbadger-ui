@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.359', [
+console.info('LBAPP VERSION 0.360', [
+  'Feature/352 js files size #1136',
   'Feature/1118 ApiExplorer preserved state #1126',
   'Feature/1117 consumer management waiting screen for credential #1125',
   'Feature/1122 make logo toggable #1124',
@@ -30,8 +31,7 @@ console.info('LBAPP VERSION 0.359', [
   'Use gateway name from pod name in admin api calls #1096',
   'adding local version of sls api on port 4444 #1088',
   'Feature/1082 Disable function triggers on prod to model connectors and models #1086',
-  'Feature/1083 Zoom level default #1085',
-  'Feature/535 ApiExplorer improvements #1084'
+  'Feature/1083 Zoom level default #1085'
 ]);
 
 // Google Analityca

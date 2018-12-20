@@ -12,6 +12,7 @@ import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
 import {updateEntitiesStatues} from '../../reduxActions';
+import {getUser} from '../../utils/auth';
 import './AppLoader.scss';
 
 const pingAmount = Config.get('pingAmount');
@@ -37,6 +38,8 @@ class AppLoader extends Component {
       workspaceError: false,
     };
     this.kubeWatcherStarted = false;
+    const {sub} = getUser().profile;
+    this.username = sub;
   }
 
   componentWillMount() {
@@ -88,6 +91,9 @@ class AppLoader extends Component {
     this.setState({workspaceRunning});
     if (!this.kubeWatcherStarted && workspaceRunning) {
       this.kubeWatcherStarted = true;
+    }
+    if (!document.location.search.includes('autogw')) {
+      delete data.gateway[`${this.username}dev0000`];
     }
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;

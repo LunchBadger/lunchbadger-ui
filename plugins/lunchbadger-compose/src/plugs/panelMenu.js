@@ -1,7 +1,8 @@
-import Config from '../../../../src/config';
-import {iconApiExplorer} from '../../../../src/icons';
+const {
+  utils: {coreActions, Config},
+  UI: {icons: {iconApiExplorer}},
+} = LunchBadgerCore;
 
-const {coreActions} = LunchBadgerCore.utils;
 const panelMenu = {};
 
 if (Config.get('features').apiExplorer) {

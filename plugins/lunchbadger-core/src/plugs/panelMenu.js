@@ -1,8 +1,10 @@
 import {clearServer, saveToServer, logout} from '../reduxActions/project';
 import {togglePanel} from '../reduxActions/states';
-import {iconLogout, iconProject} from '../../../../src/icons';
 import Config from '../../../../src/config';
-import {GAEvent} from '../../../lunchbadger-ui/src';
+import {GAEvent} from '../ui';
+import icons from '../ui/icons';
+
+const {iconLogout, iconProject} = icons;
 
 const panelMenu = {
   0: {

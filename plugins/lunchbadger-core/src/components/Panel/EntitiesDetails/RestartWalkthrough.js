@@ -5,10 +5,10 @@ import {clearServer} from '../../../reduxActions/project';
 import TwoOptionModal from '../../Generics/Modal/TwoOptionModal';
 import {
   EntityPropertyLabel,
-  Button,
   GAEvent,
   DocsLink,
-} from '../../../../../lunchbadger-ui/src';
+  Button,
+} from '../../../ui';
 import './RestartWalkthrough.scss';
 
 export default class RestartWalkthrough extends PureComponent {

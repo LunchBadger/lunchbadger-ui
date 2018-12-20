@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
-import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import {runtimeMapping, runtimeOptions} from '../../utils';
 import FunctionTriggers from './Subelements/FunctionTriggers';
 import './Function.scss';
 
-const Port = LunchBadgerCore.components.Port;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const {
+  components: {Port, CanvasElement},
+  UI: {EntityProperties, EntitySubElements}
+} = LunchBadgerCore;
 
 class Function_ extends Component {
   static propTypes = {

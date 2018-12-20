@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {IconSVG} from '../../../../../lunchbadger-ui/src';
-import {iconArrow} from '../../../../../../src/icons';
 import './ModelPropertyCollapsed.scss';
+
+const {
+  UI: {IconSVG, icons: {iconArrow}},
+} = LunchBadgerCore;
 
 class ModelPropertyCollapsed extends Component {
   constructor(props) {

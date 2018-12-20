@@ -2,8 +2,11 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {EntityProperty, sortStrings} from '../../../../../../lunchbadger-ui/src';
 import './GatewayProxyServiceEndpoint.scss';
+
+const {
+  UI: {EntityProperty, sortStrings},
+} = LunchBadgerCore;
 
 class GatewayProxyServiceEndpoint extends PureComponent {
   static propTypes = {

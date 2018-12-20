@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import _ from 'lodash';
 import Plan from './Subelements/Plan';
-import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ApiEndpointComponent from './Subelements/ApiEndpoint';
 import {
   bundle,
@@ -24,6 +23,7 @@ const {
   utils: {
     coreActions,
   },
+  UI: {EntitySubElements},
 } = LunchBadgerCore;
 
 class API extends Component {

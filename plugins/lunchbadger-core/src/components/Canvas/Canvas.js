@@ -7,7 +7,7 @@ import QuadrantContainer from '../Quadrant/QuadrantContainer';
 import Connections from '../../stores/Connections';
 import {clearCurrentElement} from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
-import {GAEvent} from '../../../../lunchbadger-ui/src';
+import {GAEvent} from '../../ui';
 import Config from '../../../../../src/config';
 import './Canvas.scss';
 

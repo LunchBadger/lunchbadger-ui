@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
-import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
+import {SystemDefcon1} from '../../ui';
 import paper from '../../utils/paper';
 import LoginManager from '../../utils/auth';
 import recordedMocks from '../../utils/recordedMocks';

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import {CSSTransitionGroup} from 'react-transition-group';
 import ModelProperty from './ModelProperty';
 import ModelPropertyCollapsed from './ModelPropertyCollapsed';
-import {Sortable} from '../../../../../lunchbadger-ui/src';
+
+const {
+  UI: {Sortable},
+} = LunchBadgerCore;
 
 export default class ModelNestedProperties extends Component {
   static propTypes = {

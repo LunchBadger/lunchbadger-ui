@@ -4,15 +4,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import FunctionLogs from './FunctionLogs';
 import FunctionLogsRefresher from './FunctionLogsRefresher';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  FilesEditor,
-  Input,
-  scrollToElement,
-  DocsLink,
-} from '../../../../../lunchbadger-ui/src';
 import {runtimeMapping} from '../../../utils';
 import FunctionTriggers from '../../CanvasElements/Subelements/FunctionTriggers';
 import './FunctionDetails.scss';
@@ -20,6 +11,15 @@ import './FunctionDetails.scss';
 const {
   components: {BaseDetails},
   utils: {userStorage},
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    FilesEditor,
+    Input,
+    scrollToElement,
+    DocsLink,
+  },
 } = LunchBadgerCore;
 const autorefreshDefaultPeriod = 10;
 const autorefreshPeriods = [

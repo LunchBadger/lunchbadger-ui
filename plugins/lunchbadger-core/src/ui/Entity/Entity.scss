@@ -1,0 +1,104 @@
+@import '../../config';
+
+.Entity {
+  max-width: 100%;
+  // min-width: 200px;
+  color: rgb(41, 134, 156);
+  position: relative;
+  display: block;
+  border-radius: 3px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  margin: 20px 0;
+  // transition: all .3s ease;
+  transform: translateZ(0);
+  font-weight: normal;
+  .canvas & {
+    border-radius: 3rem;
+    margin: 20rem 0;
+  }
+  .multiEnvNotDev & {
+    transform: none;
+  }
+  form {
+    background: $ui-light;
+  }
+  &.editable {
+    z-index: 15;
+    .hide-while-edit {
+      display: none;
+    }
+    .editable-only {
+      display: block;
+    }
+  }
+  &.expanded {
+    .expanded-only {
+      display: block;
+    }
+  }
+  &.wip {
+    pointer-events: none !important;
+    transform: none !important;
+    .Toolbox,
+    .canvas-element__extra {
+      // max-height: 0;
+      visibility: hidden;
+    }
+  }
+  &.semitransparent {
+    form {
+      opacity: .4 !important;
+    }
+  }
+  &.gray {
+    filter: grayscale(1);
+  }
+  &.highlighted {
+    color: rgb(65, 144, 206);
+    .multiEnvDelta & {
+      // border: 2px solid #d24a7c;
+      // border-top: none;
+      z-index: 810;
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid #d24a7c;
+        z-index: -1;
+        pointer-events: none;
+        .canvas & {
+          border-width: 2rem;
+        }
+      }
+    }
+  }
+  &__data {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+  &__extra {
+    padding-bottom: 20px;
+    .canvas & {
+      padding-bottom: 20rem;
+    }
+    .Entity.DataSource.memory:not(.editable) & {
+      padding-bottom: 0;
+    }
+  }
+  .EntityProperty {
+    margin-right: 0;
+  }
+}
+
+.editable-only {
+  display: none;
+}
+
+.expanded-only {
+  display: none;
+}

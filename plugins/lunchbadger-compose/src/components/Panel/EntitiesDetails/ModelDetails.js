@@ -9,20 +9,6 @@ import uuid from 'uuid';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  Checkbox,
-  Select,
-  Table,
-  IconButton,
-  FilesEditor,
-  DocsLink,
-  getDefaultValueByType,
-  scrollToElement,
-} from '../../../../../lunchbadger-ui/src';
 import schemas from '../../../utils/modelSchemas';
 import ModelDefaultValue from './ModelDefaultValue';
 import './ModelDetails.scss';
@@ -31,6 +17,19 @@ const {
   components: {BaseDetails},
   stores: {Connections},
   utils: {propertyTypes},
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    Checkbox,
+    Select,
+    Table,
+    IconButton,
+    FilesEditor,
+    DocsLink,
+    getDefaultValueByType,
+  },
 } = LunchBadgerCore;
 const {components: {GatewayPolicyAction}} = LunchBadgerManage;
 

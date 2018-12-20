@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
-import {Input} from '../../../../../lunchbadger-ui/src';
 import './ModelDetails.scss';
+
+const {UI: {Input}} = LunchBadgerCore;
 
 export default class ModelDefaultValue extends PureComponent {
 

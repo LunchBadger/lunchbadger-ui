@@ -4,18 +4,20 @@ import cs from 'classnames';
 import uuid from 'uuid';
 import _ from 'lodash';
 import predefinedRests, {predefinedOperation} from '../../../utils/predefinedRests';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  IconButton,
-  Input,
-  Checkbox,
-  Table,
-  DocsLink,
-} from '../../../../../lunchbadger-ui/src';
 
-const {requestMethods} = LunchBadgerCore.utils;
+const {
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    IconButton,
+    Input,
+    Checkbox,
+    Table,
+    DocsLink,
+  },
+  utils: {requestMethods},
+} = LunchBadgerCore;
 
 const transformParameters = (template, kind) => {
   if (!template[kind]) {

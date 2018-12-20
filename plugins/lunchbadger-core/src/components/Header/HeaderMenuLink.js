@@ -1,9 +1,8 @@
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import cs from 'classnames';
-import {IconSVG, ContextualInformationMessage} from '../../../../lunchbadger-ui/src/index.js';
+import {IconSVG, ContextualInformationMessage} from '../../ui';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 
 class HeaderMenuLink extends PureComponent {

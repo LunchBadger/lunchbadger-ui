@@ -12,12 +12,12 @@ import {
   EntityActionButtons,
   EntityProperty,
   EntityPropertyLabel,
-  CollapsibleProperties,
   Table,
   IconButton,
   CopyOnHover,
   DocsLink,
-} from '../../../../../lunchbadger-ui/src';
+  CollapsibleProperties,
+} from '../../../ui';
 import './SshManager.scss';
 
 const {uploadPublicKeys} = Config.get('features');

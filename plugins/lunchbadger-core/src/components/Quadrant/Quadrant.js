@@ -8,7 +8,7 @@ import FlipMove from 'react-flip-move';
 import QuadrantResizeHandle from './QuadrantResizeHandle';
 import {DropTarget} from 'react-dnd';
 import {saveOrder} from '../../reduxActions';
-import {GAEvent} from '../../../../lunchbadger-ui/src';
+import {GAEvent} from '../../ui';
 import './Quadrant.scss';
 
 const AUTOSCROLL_INCREASE = 50;

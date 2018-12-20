@@ -1,6 +1,7 @@
 import {add as addAPI} from '../reduxActions/apis';
 import {add as addPortal} from '../reduxActions/portals';
-import Config from '../../../../src/config';
+
+const {utils: {Config}} = LunchBadgerCore;
 
 const tools = {2: []};
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {SystemDefcon1} from '../../../../../lunchbadger-ui/src';
+import {SystemDefcon1} from '../../../ui';
 
 class TwoOptionModal extends Component {
   static propTypes = {

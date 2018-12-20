@@ -2,18 +2,20 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
-import {
-  EntityProperty,
-  EntityProperties,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  IconButton,
-  Input,
-  Checkbox,
-  Table,
-  DocsLink,
-} from '../../../../../../lunchbadger-ui/src';
 
+const {
+  UI: {
+    EntityProperty,
+    EntityProperties,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    IconButton,
+    Input,
+    Checkbox,
+    Table,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 const sections = [
   {label: 'Properties', render: 'Properties', docs: 'DATASOURCE_SOAP_PROPERTIES'},
   {label: 'WSDL Options', render: 'WsdlOptions', docs: 'DATASOURCE_SOAP_WSDL_OPTIONS'},

@@ -3,24 +3,29 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
 import GatewayPolicyAction from './GatewayPolicyAction';
-import {
-  Button,
-  Table,
-  IconButton,
-  Checkbox,
-  CollapsibleProperties,
-  EntityProperty,
-  EntityPropertyLabel,
-  IconSVG,
-  Select,
-  EntityActionButtons,
-  CopyOnHover,
-  PasswordStrengthMeter,
-} from '../../../../../../lunchbadger-ui/src';
-import {iconCheck} from '../../../../../../../src/icons';
-const {TwoOptionModal} = LunchBadgerCore.components;
-const {coreActions} = LunchBadgerCore.utils;
 import './CustomerManagement.scss';
+
+const {
+  components: {TwoOptionModal},
+  utils: {coreActions},
+  UI: {
+    Button,
+    IconSVG,
+    Table,
+    IconButton,
+    Checkbox,
+    CollapsibleProperties,
+    EntityProperty,
+    EntityPropertyLabel,
+    Select,
+    EntityActionButtons,
+    CopyOnHover,
+    PasswordStrengthMeter,
+    icons,
+  },
+} = LunchBadgerCore;
+
+const {iconCheck} = icons;
 
 const tabs = [
   'Users',

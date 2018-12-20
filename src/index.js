@@ -8,7 +8,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
-import {setGAUserId} from '../plugins/lunchbadger-ui/src';
 import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
@@ -34,6 +33,18 @@ console.info('LBAPP VERSION 0.359', [
   'Feature/1083 Zoom level default #1085',
   'Feature/535 ApiExplorer improvements #1084'
 ]);
+
+// Google Analityca
+class Tracker {
+  set = str => this.tracker = str;
+  fn = action => `${this.tracker}.${action}`;
+}
+const {ga} = window;
+const tracker = new Tracker();
+if (ga) {
+  ga(() => tracker.set(window.ga.getAll()[0].a.data.values[':name']));
+}
+const setGAUserId = userId => ga && ga(tracker.fn('set'), {userId});
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941

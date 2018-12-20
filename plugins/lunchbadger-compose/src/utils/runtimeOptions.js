@@ -1,4 +1,4 @@
-import Config from '../../../../src/config';
+const {utils: {Config}} = LunchBadgerCore;
 
 const {fnTypes} = Config.get('features');
 

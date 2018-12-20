@@ -1,8 +1,10 @@
 import React, {PureComponent} from 'react';
 import SLSService from '../../../services/SLSService';
-import {ResizableWrapper} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogs.scss';
 
+const {
+  UI: {ResizableWrapper},
+} = LunchBadgerCore;
 const errorMessage = 'Loading logs failed with error:';
 
 export default class FunctionLogs extends PureComponent {

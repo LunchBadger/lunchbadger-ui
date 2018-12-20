@@ -2,18 +2,19 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import _ from 'lodash';
-import {
-  EntityProperties,
-  EntitySubElements,
-  getDefaultValueByType,
-} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import addNestedProperties from '../addNestedProperties';
 import ModelProperty from '../../models/ModelProperty';
 import './Model.scss';
 
-const Port = LunchBadgerCore.components.Port;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const {
+  components: {Port, CanvasElement},
+  UI: {
+    EntityProperties,
+    EntitySubElements,
+    getDefaultValueByType,
+  },
+} = LunchBadgerCore;
 
 class Model extends Component {
   static propTypes = {

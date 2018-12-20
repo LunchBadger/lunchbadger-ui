@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import HeaderMenu from './HeaderMenu';
-import {TopBar, PanelBar} from '../../../../lunchbadger-ui/src';
+import {TopBar, PanelBar} from '../../ui';
 
 export default class HeaderMultiEnv extends Component {
   render() {

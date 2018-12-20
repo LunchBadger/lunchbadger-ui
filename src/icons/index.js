@@ -6,6 +6,13 @@ import iconArrowDown from './icon-arrow-down.svg';
 import iconArrowRight from './icon-arrow-right.svg';
 import iconArrowUp from './icon-arrow-up.svg';
 import iconBasics from './icon-basics.svg';
+import iconBrandingAws from './icon-branding-aws.svg';
+import iconBrandingAzure from './icon-branding-azure.svg';
+import iconBrandingGcp from './icon-branding-gcp.svg';
+import iconBrandingIbm from './icon-branding-ibm.svg';
+import iconBrandingPivotal from './icon-branding-pivotal.svg';
+import iconBrandingTriton from './icon-branding-triton.svg';
+import iconBrandingVmware from './icon-branding-vmware.svg';
 import iconCheck from './icon-check.svg';
 import iconCodeEditor from './icon-code-editor.svg';
 import iconCustomerManagement from './icon-customer-management.svg';
@@ -45,6 +52,7 @@ import iconPipelines from './icon-pipelines.svg';
 import iconPlane from './icon-plane.svg';
 import iconPlus from './icon-plus.svg';
 import iconPortal from './icon-portal.svg';
+import iconProject from './icon-project.svg';
 import iconReload from './icon-reload.svg';
 import iconReorder from './icon-reorder.svg';
 import iconRevert from './icon-revert.svg';
@@ -63,6 +71,13 @@ export {
   iconArrowRight,
   iconArrowUp,
   iconBasics,
+  iconBrandingAws,
+  iconBrandingAzure,
+  iconBrandingGcp,
+  iconBrandingIbm,
+  iconBrandingPivotal,
+  iconBrandingTriton,
+  iconBrandingVmware,
   iconCheck,
   iconCodeEditor,
   iconCustomerManagement,
@@ -102,6 +117,7 @@ export {
   iconPipelines,
   iconPlane,
   iconPortal,
+  iconProject,
   iconReload,
   iconReorder,
   iconRevert,

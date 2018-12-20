@@ -138,6 +138,7 @@ export const clearServer = () => async (dispatch, getState) => {
   // await new Promise(res => setTimeout(res, 300));
   dispatch(actions.setLoadingProject(false));
   GAEvent('Header Menu', 'Cleared Project');
+  window.dispatchEvent(new Event('ReloadApiExplorer'));
 };
 
 export const saveOrder = orderedIds => (dispatch, getState) => {

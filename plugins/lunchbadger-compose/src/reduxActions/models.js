@@ -5,11 +5,11 @@ import {ModelService} from '../services';
 import Model, {processMethods} from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
 import ModelRelation from '../models/ModelRelation';
-import DataSource from '../models/DataSource';
 import {
   reload as workspaceFilesReload,
   update as workspaceFilesUpdate,
 } from './workspaceFiles';
+import {reloadApiExplorer} from '../utils';
 
 const {
   utils: {
@@ -87,18 +87,29 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (isDifferent) {
       await ModelService.deleteModelConfig(entity.workspaceId);
       await ModelService.delete(entity.workspaceId);
+    } else {
+      if (model.base === 'Model') {
+        const dataSource = Connections.search({toId: updatedEntity.id})
+          .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
+          .find(item => item.constructor.type === 'DataSource');
+        if (dataSource) {
+          await ModelService.deleteModelConfig(updatedEntity.workspaceId);
+        }
+      }
     }
     if (isDifferent || isPublicDifferent) {
       const dataSource = Connections.search({toId: entity.id})
         .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
         .find(item => item.constructor.type === 'DataSource');
-      await ModelService.upsertModelConfig({
-        name: updatedEntity.name,
-        id: updatedEntity.workspaceId,
-        facetName: 'server',
-        dataSource: dataSource ? dataSource.name : null,
-        public: updatedEntity.public,
-      });
+      if (model.base === 'PersistedModel') {
+        await ModelService.upsertModelConfig({
+          name: updatedEntity.name,
+          id: updatedEntity.workspaceId,
+          facetName: 'server',
+          dataSource: dataSource ? dataSource.name : null,
+          public: updatedEntity.public,
+        });
+      }
     }
     if (isDifferent) {
       if (modelJs === undefined) {
@@ -164,13 +175,20 @@ export const update = (entity, model) => async (dispatch, getState) => {
     if (!wasBundled) {
       await dispatch(coreActions.saveToServer());
     }
+    if (deltaModel.length
+      || deltaProperties.length
+      || deltaRelations.length
+      || deltaMethods.length
+    ) {
+      reloadApiExplorer(dispatch, state);
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
-export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
+export const remove = (entity, cb, action = 'removeModel') => async (dispatch, getState) => {
   const {loaded, wasBundled} = entity;
   let updateAction = 'updateModel';
   if (wasBundled) {
@@ -193,6 +211,7 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
     if (!wasBundled) {
       await dispatch(coreActions.saveToServer({saveProject: false}));
     }
+    reloadApiExplorer(dispatch, getState());
   } catch (error) {
     updatedEntity.ready = true;
     updatedEntity.deleting = false;

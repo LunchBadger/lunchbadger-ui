@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {EntityProperties, EntitySubElements} from '../../../../lunchbadger-ui/src';
 import classNames from 'classnames';
 import {
   bundle,
@@ -24,6 +23,7 @@ const {
   utils: {
     coreActions,
   },
+  UI: {EntityProperties, EntitySubElements},
 } = LunchBadgerCore;
 
 class Portal extends Component {

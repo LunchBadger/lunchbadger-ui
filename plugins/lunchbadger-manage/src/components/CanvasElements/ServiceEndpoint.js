@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {
-  EntityProperty,
-  EntitySubElements,
-} from '../../../../lunchbadger-ui/src';
 import './ServiceEndpoint.scss';
 
-const Port = LunchBadgerCore.components.Port;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const {
+  components: {CanvasElement, Port},
+  UI: {
+    EntityProperty,
+    EntitySubElements,
+  },
+} = LunchBadgerCore;
 
 class ServiceEndpoint extends Component {
   static propTypes = {

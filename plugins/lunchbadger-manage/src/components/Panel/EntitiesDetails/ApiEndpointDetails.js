@@ -4,20 +4,22 @@ import cs from 'classnames';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {inject, observer} from 'mobx-react';
-import {
-  EntityProperties,
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  Table,
-  IconButton,
-  DocsLink,
-} from '../../../../../lunchbadger-ui/src';
 import './ApiEndpointDetails.scss';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {requestMethods, storeUtils} = LunchBadgerCore.utils;
+const {
+  components: {BaseDetails},
+  utils: {requestMethods, storeUtils},
+  UI: {
+    EntityProperties,
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    Table,
+    IconButton,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 const methodsOptions = requestMethods.map(label => ({label, value: label}));
 
 @inject('connectionsStore') @observer

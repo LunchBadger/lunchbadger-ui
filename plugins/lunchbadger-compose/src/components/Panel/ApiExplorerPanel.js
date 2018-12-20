@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import cs from 'classnames';
 import Config from '../../../../../src/config';
-import {IconButton, ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
 import './ApiExplorerPanel.scss';
 
-const Panel = LunchBadgerCore.components.Panel;
+const {
+  components: {Panel},
+  UI: {IconButton, ContextualInformationMessage},
+} = LunchBadgerCore;
 const RELOAD_DELAY = 5000;
 
 class ApiExplorerPanel extends Component {

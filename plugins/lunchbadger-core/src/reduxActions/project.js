@@ -7,7 +7,7 @@ import LoginManager from '../utils/auth';
 import userStorage from '../utils/userStorage';
 import {updateEntitiesStatues} from './';
 import Connections from '../stores/Connections';
-import {GAEvent} from '../../../lunchbadger-ui/src';
+import {GAEvent} from '../ui';
 import {
   clearCurrentEditElement,
   setCurrentZoom,

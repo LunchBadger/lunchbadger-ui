@@ -1,9 +1,10 @@
 import React from 'react';
 import {actions} from './actions';
-import Function_ from '../models/Function';
-import {openDetailsPanelWithAutoscroll} from '../../../lunchbadger-ui/src';
 
-const {coreActions, actions: actionsCore, userStorage} = LunchBadgerCore.utils;
+const {
+  utils: {coreActions, actions: actionsCore, userStorage},
+  UI: {openDetailsPanelWithAutoscroll},
+} = LunchBadgerCore;
 
 const transformFunctions = (entities) => {
   const functions = {};

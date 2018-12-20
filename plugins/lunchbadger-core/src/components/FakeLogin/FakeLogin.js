@@ -3,10 +3,10 @@ import md5 from 'md5';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Header from '../Header/Header';
-import {Form, EntityProperty, Button} from '../../../../lunchbadger-ui/src/';
 import isStorageSupported from '../../utils/isStorageSupported';
 import messages from '../../utils/messages';
 import Config from '../../../../../src/config';
+import {Form, EntityProperty, Button} from '../../ui';
 import './FakeLogin.scss';
 
 const muiTheme = getMuiTheme({

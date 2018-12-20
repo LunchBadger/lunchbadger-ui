@@ -28,7 +28,7 @@ import {
   SystemDefcon1,
   GAEvent,
   UIDefaults,
-} from '../../../../lunchbadger-ui/src';
+} from '../../ui';
 import getFlatModel from '../../utils/getFlatModel';
 
 const boxSource = {

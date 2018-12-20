@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import AppLogo from './app-logo.svg';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 import Config from '../../../../../src/config';
-import {GAEvent} from '../../../../lunchbadger-ui/src';
+import {GAEvent} from '../../ui';
 import './Header.scss';
 
 const homepageUrl = Config.get('homepageUrl');

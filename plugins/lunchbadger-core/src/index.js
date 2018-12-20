@@ -8,13 +8,6 @@ import Panel from './components/Panel/Panel';
 import CanvasElement from './components/CanvasElements/CanvasElement';
 import BaseDetails from './components/Panel/EntitiesDetails/BaseDetails';
 import CollapsableDetails from './components/Panel/EntitiesDetails/CollapsableDetails';
-import Input from './components/Generics/Form/Input';
-import Textarea from './components/Generics/Form/Textarea';
-import Checkbox from './components/Generics/Form/Checkbox';
-import Select from './components/Generics/Form/Select';
-import InputField from './components/Panel/EntitiesDetails/InputField';
-import CheckboxField from './components/Panel/EntitiesDetails/CheckboxField';
-import SelectField from './components/Panel/EntitiesDetails/SelectField';
 import CloseButton from './components/Panel/CloseButton';
 import SaveButton from './components/Panel/SaveButton';
 import Draggable from './components/Draggable/Draggable';
@@ -61,7 +54,7 @@ import storeReducers, {registerPlugin} from './utils/storeReducers';
 import diff from './diff';
 import requestMethods from './utils/requestMethods';
 import userStorage from './utils/userStorage';
-
+import * as UI from './ui';
 import './utils/formValidators';
 
 import reducers from './reducers/reducers';
@@ -70,6 +63,7 @@ import plugs from './plugs';
 registerPlugin({}, plugs, reducers);
 
 let LunchBadgerCore = {
+  UI,
   components: {
     App,
     AppLoader,
@@ -77,13 +71,6 @@ let LunchBadgerCore = {
     CanvasElement,
     BaseDetails,
     CollapsableDetails,
-    Input,
-    Textarea,
-    Checkbox,
-    Select,
-    InputField,
-    CheckboxField,
-    SelectField,
     CloseButton,
     SaveButton,
     Draggable,

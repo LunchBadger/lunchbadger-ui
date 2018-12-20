@@ -13,7 +13,7 @@ import {
   GAEvent,
   ContextualInformationMessage,
   labels,
-} from '../../../../../lunchbadger-ui/src';
+} from '../../../ui';
 import {
   changePanelStatus,
   setCurrentEditElement,

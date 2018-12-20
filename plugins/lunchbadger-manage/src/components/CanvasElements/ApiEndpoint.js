@@ -6,16 +6,17 @@ import cs from 'classnames';
 import _ from 'lodash';
 import {inject, observer} from 'mobx-react';
 import ApiEndpointPath from './Subelements/ApiEndpointPath';
-import {
-  EntityProperties,
-  EntitySubElements,
-  blockedEscapingKeys,
-} from '../../../../lunchbadger-ui/src';
 import './ApiEndpoint.scss';
 
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
-const Port = LunchBadgerCore.components.Port;
-const {storeUtils} = LunchBadgerCore.utils;
+const {
+  components: {CanvasElement, Port},
+  utils: {storeUtils},
+  UI: {
+    EntityProperties,
+    EntitySubElements,
+    blockedEscapingKeys,
+  },
+} = LunchBadgerCore;
 
 @inject('connectionsStore') @observer
 class ApiEndpoint extends Component {

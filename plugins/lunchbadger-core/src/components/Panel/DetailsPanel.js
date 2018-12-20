@@ -10,7 +10,7 @@ import {
 } from '../../reduxActions';
 import {actions} from '../../reduxActions/actions';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
-import {RnD, GAEvent} from '../../../../lunchbadger-ui/src';
+import {RnD, GAEvent} from '../../ui';
 import userStorage from '../../utils/userStorage';
 import './DetailsPanel.scss';
 

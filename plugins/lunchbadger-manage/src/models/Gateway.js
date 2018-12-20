@@ -220,13 +220,12 @@ export default class Gateway extends BaseModel {
   }
 
   get tabs() {
-    const tabs = [
-      {
-        name: 'pipelines',
-        label: 'Pipelines',
-        icon: 'iconPipelines',
-      },
-    ];
+    const tabs = [];
+    tabs.push({
+      name: 'pipelines',
+      label: 'Pipelines',
+      icon: 'iconPipelines',
+    });
     if (consumerManagement) {
       tabs.push({
         name: 'customerManagement',

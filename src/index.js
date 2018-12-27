@@ -12,8 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.363', [
-  'Feature/429 Inline code editor improvements #1138',
+console.info('LBAPP VERSION 0.364', [
+  'Feature/353 Username must be lowercase #1139',
   'Feature/429 Inline code editor improvements #1138',
   'Feature/1114 Buttons in consumer management #1137',
   'Feature/352 js files size #1136',

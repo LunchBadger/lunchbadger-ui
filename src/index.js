@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.361', [
+console.info('LBAPP VERSION 0.362', [
+  'Feature/429 Inline code editor improvements #1138',
   'Feature/1114 Buttons in consumer management #1137',
   'Feature/352 js files size #1136',
   'Feature/1118 ApiExplorer preserved state #1126',
@@ -30,8 +31,7 @@ console.info('LBAPP VERSION 0.361', [
   'Bugfix/1091 Model and ds are locking after quick edit #1100',
   'Bugfix/1093 While deploying function you can attach to gateway #1097',
   'Use gateway name from pod name in admin api calls #1096',
-  'adding local version of sls api on port 4444 #1088',
-  'Feature/1082 Disable function triggers on prod to model connectors and models #1086'
+  'adding local version of sls api on port 4444 #1088'
 ]);
 
 // Google Analityca

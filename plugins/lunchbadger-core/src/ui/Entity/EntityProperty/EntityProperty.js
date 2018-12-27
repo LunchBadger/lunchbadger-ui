@@ -74,6 +74,7 @@ class EntityProperty extends Component {
     tmpPrefix: PropTypes.string,
     classes: PropTypes.string,
     slugify: PropTypes.bool,
+    noDashes: PropTypes.bool,
     type: PropTypes.string,
     noMarginRight: PropTypes.bool,
     icon: PropTypes.string,
@@ -107,6 +108,7 @@ class EntityProperty extends Component {
     object: false,
     classes: '',
     slugify: false,
+    noDashes: false,
     icon: '',
     textarea: false,
     link: false,
@@ -216,6 +218,7 @@ class EntityProperty extends Component {
       tmpPrefix,
       invalidUnderlineColor,
       slugify,
+      noDashes,
       textarea,
       restrict,
     } = this.props;
@@ -333,6 +336,7 @@ class EntityProperty extends Component {
         alignRight={alignRight}
         invalidUnderlineColor={invalidUnderlineColor}
         slugify={slugify}
+        noDashes={noDashes}
         textarea={textarea}
       />
     );

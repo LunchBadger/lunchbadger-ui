@@ -89,6 +89,17 @@ class GatewayDetails extends PureComponent {
     return false;
   };
 
+  tabCancelled = () => {
+    if (this.props.rect.tab === 'customerManagement') {
+      const {isForm, handleEntry} = this.customerManagementRef;
+      if (isForm()) {
+        handleEntry(null)();
+        return true;
+      }
+    }
+    return false;
+  };
+
   processModel = model => this.props.entity.processModel(model);
 
   postProcessModel = model => {

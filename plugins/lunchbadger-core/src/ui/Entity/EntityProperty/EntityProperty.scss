@@ -7,7 +7,7 @@
     margin-right: 20rem;
   }
   &.hidden {
-    display: none;
+    display: none !important;
   }
   &.EntityProperty__fake {
     .EntityProperty__field {

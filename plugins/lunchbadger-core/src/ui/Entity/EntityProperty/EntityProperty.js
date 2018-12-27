@@ -269,6 +269,7 @@ class EntityProperty extends Component {
             onTab={this.handleTab}
             fullWidth
             initialHeight={200}
+            inline
           />
         </span>
       );

@@ -79,6 +79,8 @@ export default class FakeLogin extends PureComponent {
                 value=""
                 invalid={login}
                 onBlur={this.handleResetInvalid('login')}
+                slugify
+                noDashes
               />
               <EntityProperty
                 name="password"

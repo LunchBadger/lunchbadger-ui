@@ -29,6 +29,7 @@ class Input extends Component {
     alignRight: PropTypes.bool,
     invalidUnderlineColor: PropTypes.string,
     slugify: PropTypes.bool,
+    noDashes: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -36,6 +37,7 @@ class Input extends Component {
     alignRight: false,
     invalidUnderlineColor: '#f44336',
     slugify: false,
+    noDashes: false,
   }
 
   componentDidMount() {
@@ -86,13 +88,16 @@ class Input extends Component {
   }
 
   _handleChange = (event) => {
-    const {setValue, handleChange, type, slugify} = this.props;
+    const {setValue, handleChange, type, slugify, noDashes} = this.props;
     let {value} = event.target;
     if (type === 'number') {
       value = +value || 0;
     }
     if (slugify) {
       value = slug(value, {lower: true});
+      if (noDashes) {
+        value = value.replace(/\-/g, '');
+      }
     }
     setValue(value);
     if (typeof handleChange === 'function') {

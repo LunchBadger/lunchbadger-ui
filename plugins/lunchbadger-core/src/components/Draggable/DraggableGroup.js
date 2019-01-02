@@ -1,9 +1,9 @@
-import React, {Component, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
-import {entityIcons, IconSVG} from '../../../../lunchbadger-ui/src';
+import {entityIcons, IconSVG} from '../../ui';
 import './DraggableGroup.scss';
 
 const boxSource = {

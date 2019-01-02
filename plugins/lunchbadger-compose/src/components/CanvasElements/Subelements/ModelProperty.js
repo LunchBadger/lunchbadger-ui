@@ -1,17 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-const {propertyTypes} = LunchBadgerCore.utils;
-import {
-  Input,
-  Select,
-  Checkbox,
-  IconSVG,
-  blockedEscapingKeys,
-  getDefaultValueByType,
-} from '../../../../../lunchbadger-ui/src';
-import {iconDelete, iconPlus} from '../../../../../../src/icons';
 import './ModelProperty.scss';
+
+const {
+  UI: {
+    IconSVG,
+    Input,
+    Select,
+    Checkbox,
+    blockedEscapingKeys,
+    getDefaultValueByType,
+    icons,
+  },
+  utils: {propertyTypes},
+} = LunchBadgerCore;
+
+const {iconDelete, iconPlus} = icons;
 
 class ModelPropertyDetails extends Component {
   onRemove = () => {

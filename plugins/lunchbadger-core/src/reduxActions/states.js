@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {actions} from './actions';
 import {saveToServer} from './project';
-import {GAEvent} from '../../../lunchbadger-ui/src';
+import {GAEvent} from '../ui';
 
 const stringifyPendingEdit = obj => Object.keys(obj)
   .sort()

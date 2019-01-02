@@ -5,15 +5,20 @@ import {createSelector} from 'reselect';
 import _ from 'lodash';
 import {DragSource} from 'react-dnd';
 import ApiEndpoint from './SubApiEndpoint';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  entityIcons,
-  IconSVG,
-} from '../../../../../lunchbadger-ui/src';
-import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './API.scss';
+
+const {
+  UI: {
+    entityIcons,
+    IconSVG,
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+  },
+  utils: {
+    coreActions: {toggleSubelement},
+  },
+} = LunchBadgerCore;
 
 const boxSource = {
   beginDrag(props) {

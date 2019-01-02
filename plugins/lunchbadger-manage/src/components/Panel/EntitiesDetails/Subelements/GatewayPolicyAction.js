@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {
-  EntityProperty,
-  IconButton,
-  IconMenu,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  getDefaultValueByType,
-  DocsLink,
-} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
+
+const {
+  UI: {
+    EntityProperty,
+    IconButton,
+    IconMenu,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    getDefaultValueByType,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 
 const customPropertyTypes = [
   'string',

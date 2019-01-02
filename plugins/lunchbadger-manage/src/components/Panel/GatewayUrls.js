@@ -1,7 +1,10 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {EntityPropertyLabel, DocsLink} from '../../../../lunchbadger-ui/src';
+
+const {
+  UI: {EntityPropertyLabel, DocsLink},
+} = LunchBadgerCore;
 
 class GatewayUrls extends PureComponent {
   render() {

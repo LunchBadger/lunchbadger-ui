@@ -1,8 +1,11 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import {EntityPropertyLabel, CollapsibleProperties, IconButton} from '../../../../../../lunchbadger-ui/src';
 import './GatewayPolicyCAPair.scss';
+
+const {
+  UI: {EntityPropertyLabel, CollapsibleProperties, IconButton},
+} = LunchBadgerCore;
 
 export default class GatewayPolicyCAPair extends PureComponent {
   static propTypes = {

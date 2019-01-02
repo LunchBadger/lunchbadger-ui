@@ -1,7 +1,9 @@
 import React from 'react';
-import {CopyOnHover} from '../../../lunchbadger-ui/src';
 
-const {getUser} = LunchBadgerCore.utils;
+const {
+  utils: {getUser},
+  UI: {CopyOnHover},
+} = LunchBadgerCore;
 
 export default {
   //   '050': {

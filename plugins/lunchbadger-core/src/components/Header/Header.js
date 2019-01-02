@@ -2,8 +2,11 @@ import React, {PureComponent} from 'react';
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import HeaderMenu from './HeaderMenu';
 import Logo from './Logo';
-import {IconSVG} from '../../../../lunchbadger-ui/src';
-import {
+import {IconSVG} from '../../ui';
+import icons from '../../ui/icons';
+import './Header.scss';
+
+const {
   iconBrandingAws,
   iconBrandingAzure,
   iconBrandingGcp,
@@ -11,9 +14,7 @@ import {
   iconBrandingPivotal,
   iconBrandingTriton,
   iconBrandingVmware,
-} from '../../../../../src/icons';
-import './Header.scss';
-
+} = icons;
 const {search} = document.location;
 const indexStart = search.indexOf('[');
 const indexEnd = search.indexOf(']');

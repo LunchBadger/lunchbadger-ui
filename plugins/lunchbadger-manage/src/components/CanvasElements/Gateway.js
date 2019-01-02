@@ -10,19 +10,21 @@ import initialPipelinePolicies from '../../utils/initialPipelinePolicies';
 import PipelineComponent from './Subelements/Pipeline';
 import GatewayPolicyCondition from '../Panel/EntitiesDetails/Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from '../Panel/EntitiesDetails/Subelements/GatewayPolicyAction';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  EntitySubElements,
-  CollapsibleProperties,
-  IconButton,
-  Input,
-  Sortable,
-} from '../../../../lunchbadger-ui/src';
 import './Gateway.scss';
 
-const {CanvasElement, DraggableGroup, Port} = LunchBadgerCore.components;
-const {Connections} = LunchBadgerCore.stores;
+const {
+  components: {CanvasElement, DraggableGroup, Port},
+  stores: {Connections},
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    EntitySubElements,
+    CollapsibleProperties,
+    IconButton,
+    Input,
+    Sortable,
+  },
+} = LunchBadgerCore;
 
 class Gateway extends Component {
   static propTypes = {

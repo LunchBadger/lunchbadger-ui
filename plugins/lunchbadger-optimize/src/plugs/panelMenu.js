@@ -1,7 +1,6 @@
 import {FORECASTS_PANEL} from '../components/Panel/ForecastsPanel';
-import Config from '../../../../src/config';
 
-const {coreActions} = LunchBadgerCore.utils;
+const {utils: {coreActions, Config}} = LunchBadgerCore;
 const panelMenu = {};
 
 if (Config.get('features').forecasts) {

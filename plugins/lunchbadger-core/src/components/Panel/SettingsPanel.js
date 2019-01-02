@@ -9,7 +9,7 @@ import Config from '../../../../../src/config';
 import SshManager from './EntitiesDetails/SshManager';
 import RestartWalkthrough from './EntitiesDetails/RestartWalkthrough';
 import SettingsPanelSections from './EntitiesDetails/SettingsPanelSections';
-import {EntityPropertyLabel, DocsLink} from '../../../../lunchbadger-ui/src';
+import {EntityPropertyLabel, DocsLink} from '../../ui';
 import './SettingsPanel.scss';
 
 const {gitAccess, appUrls, workspaceButtons} = Config.get('features');

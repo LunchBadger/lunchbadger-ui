@@ -4,12 +4,20 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import {DragSource} from 'react-dnd';
 import _ from 'lodash';
-import {EntityProperty, CollapsibleProperties, entityIcons, IconSVG} from '../../../../../lunchbadger-ui/src';
-import {toggleSubelement} from '../../../../../lunchbadger-core/src/reduxActions';
 import './ApiEndpoint.scss';
 
-const Port = LunchBadgerCore.components.Port;
-const {ApiEndpointComponent} = LunchBadgerManage.components;
+const {
+  components: {Port, ApiEndpointComponent},
+  UI: {
+    entityIcons,
+    IconSVG,
+    EntityProperty,
+    CollapsibleProperties,
+  },
+  utils: {
+    coreActions: {toggleSubelement},
+  },
+} = LunchBadgerCore
 
 const boxSource = {
   beginDrag(props) {

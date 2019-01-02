@@ -3,11 +3,14 @@ import cs from 'classnames';
 import './ApiExplorerPanel.scss';
 
 const {
-  utils: {Config},
+  utils: {Config, getUser},
   components: {Panel},
   UI: {IconButton, ContextualInformationMessage},
 } = LunchBadgerCore;
 const RELOAD_DELAY = 5000;
+
+const setRequestHeaders = (obj, headers) =>
+  headers.forEach(([key, value]) => obj.setRequestHeader(key, value));
 
 class ApiExplorerPanel extends Component {
   static type = 'ApiExplorerPanel';
@@ -32,8 +35,37 @@ class ApiExplorerPanel extends Component {
   handlePanelRefresh = () => {
     const {apiExplorerRef} = this;
     if (!apiExplorerRef) return;
-    apiExplorerRef.src = apiExplorerRef.src;
     this.setState({loading: true});
+    if (Config.get('oauth')) {
+      const appUrl = Config.get('oauth').redirect_uri;
+      const headers = [
+        ['Authorization', 'Bearer ' + getUser().id_token],
+        ['Origin', appUrl],
+        ['Referer', appUrl],
+        ['cache-control', 'no-cache'],
+      ];
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', this.apiExplorerUrl);
+      xhr.onreadystatechange = handler;
+      xhr.responseType = 'blob';
+      setRequestHeaders(xhr, headers);
+      console.log({xhr, headers});
+      xhr.send();
+      function handler() {
+        console.log('handler', this.readyState, this.DONE, this.status);
+        if (this.readyState === this.DONE) {
+          if (this.status === 200) {
+            const dataUrl = URL.createObjectURL(this.response);
+            console.log(dataUrl, this.response);
+            apiExplorerRef.src = dataUrl;
+          } else {
+            console.error('Error accessing Api Explorer');
+          }
+        }
+      }
+    } else {
+      apiExplorerRef.src = apiExplorerRef.src;
+    }
   };
 
   handleApiExplorerLoaded = () => this.setState({loading: false});

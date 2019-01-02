@@ -57,7 +57,7 @@ export default {
     uploadPublicKeys: false,
     appUrls: false,
     apiExplorer: true,
-    workspaceButtons: false,
+    workspaceButtons: true,
     slsModelConnectorsTriggers: false,
     slsModelsTriggers: false,
     fnTypes: [

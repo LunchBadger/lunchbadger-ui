@@ -36,6 +36,7 @@ export default class CodeEditor extends PureComponent {
     mode: PropTypes.string,
     onResize: PropTypes.func,
     size: PropTypes.object,
+    inline: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -43,19 +44,21 @@ export default class CodeEditor extends PureComponent {
     fullWidth: false,
     initialHeight: 350,
     mode: 'both',
+    inline: false,
   };
 
   constructor(props) {
     super(props);
-    const {mode, initialHeight, value: code} = props;
+    const {mode, initialHeight, value: code, inline} = props;
     const multiline = isMultiline(code);
+    const editorMode = inline ? false : (multiline || mode === 'editor');
     this.state = {
-      editorMode: multiline || mode === 'editor',
+      editorMode,
       width: 9999,
       maxWidth: 0,
       height: initialHeight,
       code,
-      mode: multiline ? 'editor' : mode,
+      mode: inline ? 'both' : (multiline ? 'editor' : mode),
     };
   }
 
@@ -86,7 +89,7 @@ export default class CodeEditor extends PureComponent {
   recalculateWidth = () => {
     const {width, maxWidth} = this.state;
     const rect = this.boxRef.getBoundingClientRect();
-    const max = Math.max(0, Math.round(rect.width) - 5);
+    const max = Math.max(0, Math.round(rect.width) - 55);
     const state = {maxWidth: max};
     if (width > max || width === maxWidth) {
       state.width = max;
@@ -110,9 +113,9 @@ export default class CodeEditor extends PureComponent {
   discardChanges = () => this.setState({code: this.props.value, mode: this.props.mode});
 
   changeCode = code => {
-    const {mode, onChange} = this.props;
+    const {mode, onChange, inline} = this.props;
     const state = {code};
-    if (mode === 'both') {
+    if (!inline && mode === 'both') {
       state.mode = isMultiline(code) ? 'editor' : 'both';
     }
     this.setState(state, () => onChange && onChange(code));
@@ -138,23 +141,39 @@ export default class CodeEditor extends PureComponent {
   handleEditorChange = value => this.changeCode(value);
 
   render() {
-    const {lang, fullWidth, name, onTab} = this.props;
+    const {lang, fullWidth, name, onTab, inline} = this.props;
     const {width, maxWidth, height, editorMode, code, mode} = this.state;
     const icon = editorMode ? 'iconTextField' : 'iconCodeEditor';
+    const multiline = isMultiline(code);
+    const inlineMultiline = inline && multiline;
     return (
       <div
         ref={r => this.boxRef = r}
-        className={cs('CodeEditor', {editorMode})}
+        className={cs('CodeEditor', {editorMode, inlineMultiline})}
       >
         <div className="CodeEditor__input">
-          <EntityProperty
-            name={name}
-            value={code}
-            width="100%"
-            onBlur={this.handleInputChange}
-            onTab={onTab}
-            placeholder=" "
-          />
+          {inlineMultiline && (
+            <div onClick={this.handleModeSwitch}>
+              <EntityProperty
+                name={name}
+                value={code}
+                hidden
+              />
+              <div className="CodeEditor__trimmed" style={{width: maxWidth}}>
+                {code}
+              </div>
+            </div>
+          )}
+          {!inlineMultiline && (
+            <EntityProperty
+              name={name}
+              value={code}
+              width="100%"
+              onBlur={this.handleInputChange}
+              onTab={onTab}
+              placeholder=" "
+            />
+          )}
         </div>
         <div className="CodeEditor__editor">
           <Resizable

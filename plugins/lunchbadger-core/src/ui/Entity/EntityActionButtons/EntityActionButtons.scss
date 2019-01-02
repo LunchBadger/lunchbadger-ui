@@ -11,11 +11,15 @@
     .Button {
       float: right;
     }
-    .Button.cancel {
+    .Button.cancel,
+    .Button.close {
       margin-left: 20px;
       .canvas & {
         margin-left: 20rem;
       }
+    }
+    .Button.close {
+      display: none;
     }
   }
   &.zoom {

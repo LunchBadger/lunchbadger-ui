@@ -49,6 +49,7 @@ export default class EntityActionButtons extends PureComponent {
             {okLabel}
           </Button>
           {!skipCancel && <Button name="cancel" onClick={onCancel}>{cancelLabel}</Button>}
+          {!skipCancel && <Button name="close" onClick={onCancel}>Close</Button>}
         </div>
       </div>
     );

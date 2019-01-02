@@ -236,3 +236,15 @@
 .BaseDetails.customerManagement.locked .BaseDetails__content:after {
   display: none;
 }
+
+.BaseDetails.customerManagement.listing {
+  .EntityActionButtons .Button {
+    &.cancel,
+    &.submit {
+      display: none;
+    }
+    &.close {
+      display: inline-block;
+    }
+  }
+}

@@ -47,6 +47,7 @@ class Multiselect extends Component {
       placeholder,
       value,
     } = this.props;
+    const closeOnSelect = options.length === 0;
     return (
       <div className={cs('Multiselect', value.map(label => getPlainText(label)))}>
         <Select.Creatable
@@ -57,7 +58,7 @@ class Multiselect extends Component {
           value={value.map(label => ({label, value: label}))}
           clearable={multi}
           onChange={this.handleChange}
-          closeOnSelect={false}
+          closeOnSelect={closeOnSelect}
           placeholder={placeholder}
           onOpen={this.handleOpen}
           clearable={false}

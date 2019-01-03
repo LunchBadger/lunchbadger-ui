@@ -69,6 +69,7 @@ class ApiExplorerPanel extends Component {
   handleApiExplorerLoaded = () => {
     if (Config.get('oauth')) {
       const doc = this.apiExplorerRef.contentDocument;
+      doc.querySelector('html').classList.add('lb-app');
       doc.querySelectorAll('link').forEach((item) => {
         const href = item.getAttribute('href');
         if (!href.startsWith('css')) return;
@@ -78,6 +79,7 @@ class ApiExplorerPanel extends Component {
         const src = item.getAttribute('src');
         if (!src) return;
         item.setAttribute('src', host + src);
+        item.setAttribute('crossorigin', 'anonymous');
       });
       const tokenInput = doc.getElementById('input_accessToken');
       tokenInput.value = getUser().id_token;

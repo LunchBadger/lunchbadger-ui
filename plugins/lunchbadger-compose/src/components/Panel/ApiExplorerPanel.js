@@ -12,6 +12,8 @@ const RELOAD_DELAY = 5000;
 const setRequestHeaders = (obj, headers) =>
   headers.forEach(([key, value]) => obj.setRequestHeader(key, value));
 
+const host = 'https://app.lunchbadger.com/api_explorer/';
+
 class ApiExplorerPanel extends Component {
   static type = 'ApiExplorerPanel';
 
@@ -26,6 +28,7 @@ class ApiExplorerPanel extends Component {
 
   componentDidMount() {
     window.addEventListener('ReloadApiExplorer', this.refreshPanelWithDelay);
+    this.refreshPanelWithDelay();
   }
 
   componentWillUnmount() {
@@ -37,11 +40,8 @@ class ApiExplorerPanel extends Component {
     if (!apiExplorerRef) return;
     this.setState({loading: true});
     if (Config.get('oauth')) {
-      const appUrl = Config.get('oauth').redirect_uri;
       const headers = [
         ['Authorization', 'Bearer ' + getUser().id_token],
-        ['Origin', appUrl],
-        ['Referer', appUrl],
         ['cache-control', 'no-cache'],
       ];
       const xhr = new XMLHttpRequest();
@@ -49,14 +49,11 @@ class ApiExplorerPanel extends Component {
       xhr.onreadystatechange = handler;
       xhr.responseType = 'blob';
       setRequestHeaders(xhr, headers);
-      console.log({xhr, headers});
       xhr.send();
       function handler() {
-        console.log('handler', this.readyState, this.DONE, this.status);
         if (this.readyState === this.DONE) {
           if (this.status === 200) {
             const dataUrl = URL.createObjectURL(this.response);
-            console.log(dataUrl, this.response);
             apiExplorerRef.src = dataUrl;
           } else {
             console.error('Error accessing Api Explorer');
@@ -68,7 +65,25 @@ class ApiExplorerPanel extends Component {
     }
   };
 
-  handleApiExplorerLoaded = () => this.setState({loading: false});
+  handleApiExplorerLoaded = () => {
+    if (Config.get('oauth')) {
+      const doc = this.apiExplorerRef.contentDocument;
+      doc.querySelectorAll('link').forEach((item) => {
+        const href = item.getAttribute('href');
+        if (!href.startsWith('css')) return;
+        item.setAttribute('href', host + href);
+      });
+      doc.querySelectorAll('script').forEach((item) => {
+        const src = item.getAttribute('src');
+        item.setAttribute('src', host + src);
+      });
+      const tokenInput = doc.getElementById('input_accessToken');
+      tokenInput.value = getUser().id_token;
+      const submitBtn = doc.getElementById('explore');
+      submitBtn.click();
+    }
+    this.setState({loading: false});
+  };
 
   refreshPanelWithDelay = () => {
     this.setState({loading: true});
@@ -90,7 +105,7 @@ class ApiExplorerPanel extends Component {
         </div>
         <iframe
           ref={r => this.apiExplorerRef = r}
-          src={this.apiExplorerUrl}
+          // src={this.apiExplorerUrl}
           onLoad={this.handleApiExplorerLoaded}
         />
         <div className="ApiExplorerPanel__refresh">

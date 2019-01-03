@@ -54,8 +54,21 @@ class ApiExplorerPanel extends Component {
         if (this.readyState === this.DONE) {
           if (this.status === 200) {
             console.log(11, {a: this.response});
-            const dataUrl = URL.createObjectURL(this.response);
-            apiExplorerRef.src = dataUrl;
+            const reader = new FileReader();
+            reader.addEventListener('loadend', () => {
+              const content = reader.result
+                .replace('<html>', '<html class="lb-app">')
+                .replace(/href="images/g, `href="${host}images`)
+                .replace(/src="images/g, `src="${host}images`)
+                .replace(/href='css/g, `href='${host}css`)
+                .replace(/src='lib/g, `src='${host}lib`)
+                .replace(/src='swagger/g, `src='${host}swagger`);
+              const blob = new Blob([content], {type: 'text/html'});
+              console.log({content, blob});
+              const dataUrl = URL.createObjectURL(blob);
+              apiExplorerRef.src = dataUrl;
+            });
+            reader.readAxText(this.response);
           } else {
             console.error('Error accessing Api Explorer');
           }
@@ -69,21 +82,24 @@ class ApiExplorerPanel extends Component {
   handleApiExplorerLoaded = () => {
     if (Config.get('oauth')) {
       const doc = this.apiExplorerRef.contentDocument;
-      doc.querySelector('html').classList.add('lb-app');
-      doc.querySelectorAll('link').forEach((item) => {
-        const href = item.getAttribute('href');
-        if (!href.startsWith('css')) return;
-        item.setAttribute('href', host + href);
-      });
-      doc.querySelectorAll('script').forEach((item) => {
-        const src = item.getAttribute('src');
-        if (!src) return;
-        item.setAttribute('src', host + src);
-        item.setAttribute('crossorigin', 'anonymous');
-      });
+      if (!doc) return;
+      // doc.querySelector('html').classList.add('lb-app');
+      // doc.querySelectorAll('link').forEach((item) => {
+      //   const href = item.getAttribute('href');
+      //   if (!href.startsWith('css')) return;
+      //   item.setAttribute('href', host + href);
+      // });
+      // doc.querySelectorAll('script').forEach((item) => {
+      //   const src = item.getAttribute('src');
+      //   if (!src) return;
+      //   item.setAttribute('src', host + src);
+      //   item.setAttribute('crossorigin', 'anonymous');
+      // });
       const tokenInput = doc.getElementById('input_accessToken');
+      if (!tokenInput) return;
       tokenInput.value = getUser().id_token;
       const submitBtn = doc.getElementById('explore');
+      if (!submitBtn) return;
       submitBtn.click();
     }
     this.setState({loading: false});

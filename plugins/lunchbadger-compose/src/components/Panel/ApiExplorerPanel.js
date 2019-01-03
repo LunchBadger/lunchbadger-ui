@@ -53,6 +53,7 @@ class ApiExplorerPanel extends Component {
       function handler() {
         if (this.readyState === this.DONE) {
           if (this.status === 200) {
+            console.log(11, {a: this.response});
             const dataUrl = URL.createObjectURL(this.response);
             apiExplorerRef.src = dataUrl;
           } else {
@@ -75,6 +76,7 @@ class ApiExplorerPanel extends Component {
       });
       doc.querySelectorAll('script').forEach((item) => {
         const src = item.getAttribute('src');
+        if (!src) return;
         item.setAttribute('src', host + src);
       });
       const tokenInput = doc.getElementById('input_accessToken');

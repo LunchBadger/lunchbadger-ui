@@ -10,7 +10,7 @@ class Spinner extends Component {
   }
 
   render() {
-    if (!this.props.visible) return null;
+    if (!this.props.visible) return <div className="no__spinner" />;
     return (
       <div className="spinner__overlay">
         <div className="spinner"></div>

@@ -7,8 +7,7 @@
   "scripts": {
     "clean": "rimraf dist/",
     "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
-    "copy_api_explorer": "copyfiles ./api_explorer/** ./api_explorer/css/** ./api_explorer/images/** ./api_explorer/lib/** ./dist",
-    "dist": "npm run clean && npm run copy && npm run copy_api_explorer & webpack --env=dist --progress",
+    "dist": "npm run clean && npm run copy & webpack --env=dist --progress",
     "dist:local": "npm run clean && npm run copy && webpack --env=dev --progress",
     "dist:test": "BABEL_ENV=test npm run dist:local",
     "lint": "eslint ./src ./plugins",

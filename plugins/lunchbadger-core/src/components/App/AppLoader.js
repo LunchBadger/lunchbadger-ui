@@ -88,10 +88,10 @@ class AppLoader extends Component {
     if (data.workspace && data.workspace.default) {
       workspaceRunning = data.workspace.default.status.running;
     }
-    this.setState({workspaceRunning});
     if (!this.kubeWatcherStarted && workspaceRunning) {
       this.kubeWatcherStarted = true;
     }
+    this.setState({workspaceRunning});
     if (!document.location.search.includes('autogw')) {
       delete data.gateway[`${this.username}dev0000`];
     }

@@ -9,10 +9,10 @@ const {
 } = LunchBadgerCore;
 const RELOAD_DELAY = 5000;
 
-const setRequestHeaders = (obj, headers) =>
-  headers.forEach(([key, value]) => obj.setRequestHeader(key, value));
-
-const host = 'https://app.lunchbadger.com/api_explorer/';
+// const setRequestHeaders = (obj, headers) =>
+//   headers.forEach(([key, value]) => obj.setRequestHeader(key, value));
+//
+// const host = 'https://app.lunchbadger.com/api_explorer/';
 
 class ApiExplorerPanel extends Component {
   static type = 'ApiExplorerPanel';
@@ -36,74 +36,54 @@ class ApiExplorerPanel extends Component {
   }
 
   handlePanelRefresh = () => {
-    const {apiExplorerRef} = this;
-    if (!apiExplorerRef) return;
-    this.setState({loading: true});
-    if (Config.get('oauth')) {
-      const headers = [
-        ['Authorization', 'Bearer ' + getUser().id_token],
-        ['cache-control', 'no-cache'],
-      ];
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', this.apiExplorerUrl);
-      xhr.onreadystatechange = handler;
-      xhr.responseType = 'blob';
-      setRequestHeaders(xhr, headers);
-      xhr.send();
-      function handler() {
-        if (this.readyState === this.DONE) {
-          if (this.status === 200) {
-            console.log(11, {a: this.response});
-            const reader = new FileReader();
-            reader.addEventListener('loadend', () => {
-              const content = reader.result
-                .replace('<html>', '<html class="lb-app">')
-                .replace(/href="images/g, `href="${host}images`)
-                .replace(/src="images/g, `src="${host}images`)
-                .replace(/href='css/g, `href='${host}css`)
-                .replace(/src='lib/g, `src='${host}lib`)
-                .replace(/src='swagger/g, `src='${host}swagger`);
-              const blob = new Blob([content], {type: 'text/html'});
-              console.log({content, blob});
-              const dataUrl = URL.createObjectURL(blob);
-              apiExplorerRef.src = dataUrl;
-            });
-            reader.readAxText(this.response);
-          } else {
-            console.error('Error accessing Api Explorer');
-          }
-        }
-      }
-    } else {
-      apiExplorerRef.src = apiExplorerRef.src;
-    }
+    // const {apiExplorerRef} = this;
+    // if (!apiExplorerRef) return;
+    this.setState({loading: false});
+    // if (Config.get('oauth')) {
+    //   const headers = [
+    //     ['Authorization', 'Bearer ' + getUser().id_token],
+    //     ['cache-control', 'no-cache'],
+    //   ];
+    //   const xhr = new XMLHttpRequest();
+    //   xhr.open('GET', this.apiExplorerUrl);
+    //   xhr.onreadystatechange = handler;
+    //   xhr.responseType = 'blob';
+    //   setRequestHeaders(xhr, headers);
+    //   xhr.send();
+    //   function handler() {
+    //     if (this.readyState === this.DONE) {
+    //       if (this.status === 200) {
+    //         const dataUrl = URL.createObjectURL(this.response);
+    //         apiExplorerRef.src = dataUrl;
+    //       } else {
+    //         console.error('Error accessing Api Explorer');
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   apiExplorerRef.src = apiExplorerRef.src;
+    // }
   };
 
-  handleApiExplorerLoaded = () => {
-    if (Config.get('oauth')) {
-      const doc = this.apiExplorerRef.contentDocument;
-      if (!doc) return;
-      // doc.querySelector('html').classList.add('lb-app');
-      // doc.querySelectorAll('link').forEach((item) => {
-      //   const href = item.getAttribute('href');
-      //   if (!href.startsWith('css')) return;
-      //   item.setAttribute('href', host + href);
-      // });
-      // doc.querySelectorAll('script').forEach((item) => {
-      //   const src = item.getAttribute('src');
-      //   if (!src) return;
-      //   item.setAttribute('src', host + src);
-      //   item.setAttribute('crossorigin', 'anonymous');
-      // });
-      const tokenInput = doc.getElementById('input_accessToken');
-      if (!tokenInput) return;
-      tokenInput.value = getUser().id_token;
-      const submitBtn = doc.getElementById('explore');
-      if (!submitBtn) return;
-      submitBtn.click();
-    }
-    this.setState({loading: false});
-  };
+  // handleApiExplorerLoaded = () => {
+  //   if (Config.get('oauth')) {
+  //     const doc = this.apiExplorerRef.contentDocument;
+  //     doc.querySelectorAll('link').forEach((item) => {
+  //       const href = item.getAttribute('href');
+  //       if (!href.startsWith('css')) return;
+  //       item.setAttribute('href', host + href);
+  //     });
+  //     doc.querySelectorAll('script').forEach((item) => {
+  //       const src = item.getAttribute('src');
+  //       item.setAttribute('src', host + src);
+  //     });
+  //     const tokenInput = doc.getElementById('input_accessToken');
+  //     tokenInput.value = getUser().id_token;
+  //     const submitBtn = doc.getElementById('explore');
+  //     submitBtn.click();
+  //   }
+  //   this.setState({loading: false});
+  // };
 
   refreshPanelWithDelay = () => {
     this.setState({loading: true});
@@ -123,11 +103,11 @@ class ApiExplorerPanel extends Component {
             <div className="spinner"></div>
           </div>
         </div>
-        <iframe
+        {/*<iframe
           ref={r => this.apiExplorerRef = r}
           // src={this.apiExplorerUrl}
           onLoad={this.handleApiExplorerLoaded}
-        />
+        />*/}
         <div className="ApiExplorerPanel__refresh">
           <ContextualInformationMessage
             tooltip="Refresh Api Explorer"

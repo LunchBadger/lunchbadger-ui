@@ -57,7 +57,7 @@ export default {
     gitAccess: false,
     uploadPublicKeys: false,
     appUrls: false,
-    apiExplorer: false,
+    apiExplorer: true,
     workspaceButtons: true,
     slsModelConnectorsTriggers: false,
     slsModelsTriggers: false,

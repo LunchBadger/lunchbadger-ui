@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.184', [
+console.info('LBAPP VERSION 0.185', [
+  '1144',
   '1140 292513a',
   '1135+1128',
   '1135',
@@ -30,8 +31,7 @@ console.info('LBAPP VERSION 0.184', [
   '1097',
   '1084',
   '1086+1077',
-  '1085',
-  '1076+1078+1079'
+  '1085'
 ]);
 
 // Google Analityca

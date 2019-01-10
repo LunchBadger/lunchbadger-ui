@@ -72,7 +72,7 @@ class ApiExplorerPanel extends Component {
               name: 'Authorization',
               description: 'Bearer Token',
             },
-            value: getUser().id_token,
+            value: `Bearer ${getUser().id_token}`,
           },
         });
       }

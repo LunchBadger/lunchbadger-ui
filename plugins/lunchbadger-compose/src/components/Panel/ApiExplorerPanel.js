@@ -1,22 +1,17 @@
 import React, {Component} from 'react';
 import cs from 'classnames';
+import {ApiExplorerService} from '../../services';
 import './ApiExplorerPanel.scss';
 
 const {
   utils: {Config, getUser},
   components: {Panel},
-  UI: {IconButton, ContextualInformationMessage},
+  UI: {Button},
 } = LunchBadgerCore;
 const RELOAD_DELAY = 5000;
 
-// const setRequestHeaders = (obj, headers) =>
-//   headers.forEach(([key, value]) => obj.setRequestHeader(key, value));
-//
-// const host = 'https://app.lunchbadger.com/api_explorer/';
-
 class ApiExplorerPanel extends Component {
   static type = 'ApiExplorerPanel';
-
   constructor(props) {
     super(props);
     this.state = {
@@ -35,63 +30,62 @@ class ApiExplorerPanel extends Component {
     window.removeEventListener('ReloadApiExplorer', this.refreshPanelWithDelay);
   }
 
-  handlePanelRefresh = () => {
-    // const {apiExplorerRef} = this;
-    // if (!apiExplorerRef) return;
-    this.setState({loading: false});
-    // if (Config.get('oauth')) {
-    //   const headers = [
-    //     ['Authorization', 'Bearer ' + getUser().id_token],
-    //     ['cache-control', 'no-cache'],
-    //   ];
-    //   const xhr = new XMLHttpRequest();
-    //   xhr.open('GET', this.apiExplorerUrl);
-    //   xhr.onreadystatechange = handler;
-    //   xhr.responseType = 'blob';
-    //   setRequestHeaders(xhr, headers);
-    //   xhr.send();
-    //   function handler() {
-    //     if (this.readyState === this.DONE) {
-    //       if (this.status === 200) {
-    //         const dataUrl = URL.createObjectURL(this.response);
-    //         apiExplorerRef.src = dataUrl;
-    //       } else {
-    //         console.error('Error accessing Api Explorer');
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   apiExplorerRef.src = apiExplorerRef.src;
-    // }
+  handlePanelRefresh = async () => {
+    this.setState({loading: true});
+    try {
+      const {body: spec} = await ApiExplorerService.loadSwaggerJson();
+      const token = getUser().id_token;
+      Object.assign(spec, {
+        host: Config.get('apiExplorerHost'),
+      });
+      if (token) {
+        Object.assign(spec, {
+          schemes: ['https'],
+          securityDefinitions: {
+            Bearer: {
+              type: 'apiKey',
+              name: 'Authorization',
+              in: 'header',
+            },
+          },
+          security: [{Bearer: []}],
+        });
+      }
+      const {SwaggerUIBundle} = window;
+      const ui = SwaggerUIBundle({
+        dom_id: '#swaggerContainer',
+        spec,
+        // docExpansion: 'none',
+        // presets: [
+        //   SwaggerUIBundle.presets.apis,
+        //   SwaggerUIBundle.SwaggerUIStandalonePreset,
+        // ],
+        // layout: 'StandaloneLayout',
+      });
+      if (token) {
+        ui.authActions.authorize({
+          Bearer: {
+            name: 'Bearer',
+            schema: {
+              type: 'apiKey',
+              in: 'header',
+              name: 'Authorization',
+              description: 'Bearer Token',
+            },
+            value: getUser().id_token,
+          },
+        });
+      }
+      this.setState({loading: false});
+    } catch (e) {
+      this.refreshPanelWithDelay();
+    }
   };
-
-  // handleApiExplorerLoaded = () => {
-  //   if (Config.get('oauth')) {
-  //     const doc = this.apiExplorerRef.contentDocument;
-  //     doc.querySelectorAll('link').forEach((item) => {
-  //       const href = item.getAttribute('href');
-  //       if (!href.startsWith('css')) return;
-  //       item.setAttribute('href', host + href);
-  //     });
-  //     doc.querySelectorAll('script').forEach((item) => {
-  //       const src = item.getAttribute('src');
-  //       item.setAttribute('src', host + src);
-  //     });
-  //     const tokenInput = doc.getElementById('input_accessToken');
-  //     tokenInput.value = getUser().id_token;
-  //     const submitBtn = doc.getElementById('explore');
-  //     submitBtn.click();
-  //   }
-  //   this.setState({loading: false});
-  // };
 
   refreshPanelWithDelay = () => {
     this.setState({loading: true});
     setTimeout(this.handlePanelRefresh, RELOAD_DELAY);
   };
-
-  /* uncomment, when ApiExplorer should be auto-reloaded on each panel opening */
-  // onPanelOpen = () => this.handlePanelRefresh();
 
   render() {
     const {loading} = this.state;
@@ -103,25 +97,18 @@ class ApiExplorerPanel extends Component {
             <div className="spinner"></div>
           </div>
         </div>
-        {/*<iframe
-          ref={r => this.apiExplorerRef = r}
-          // src={this.apiExplorerUrl}
-          onLoad={this.handleApiExplorerLoaded}
-        />*/}
         <div className="ApiExplorerPanel__refresh">
-          <ContextualInformationMessage
-            tooltip="Refresh Api Explorer"
-            direction="left"
+          <Button
+            name="submit"
+            onClick={this.handlePanelRefresh}
           >
-            <div>
-              <IconButton
-                icon="iconReload"
-                name="reloadApiExplorer"
-                onClick={this.handlePanelRefresh}
-              />
-            </div>
-          </ContextualInformationMessage>
+            Reload Api Explorer
+          </Button>
         </div>
+        <div
+          id="swaggerContainer"
+          className="ApiExplorerPanel__swagger"
+        />
       </div>
     );
   }

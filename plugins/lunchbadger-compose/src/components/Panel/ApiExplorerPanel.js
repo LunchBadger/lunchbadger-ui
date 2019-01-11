@@ -37,10 +37,10 @@ class ApiExplorerPanel extends Component {
       const token = getUser().id_token;
       Object.assign(spec, {
         host: Config.get('apiExplorerHost'),
+        schemes: [token ? 'https' : 'http'],
       });
       if (token) {
         Object.assign(spec, {
-          schemes: ['https'],
           securityDefinitions: {
             Bearer: {
               type: 'apiKey',
@@ -89,10 +89,9 @@ class ApiExplorerPanel extends Component {
 
   render() {
     const {loading} = this.state;
-    let token = getUser().id_token;
-    if (token) {
-      token = `Bearer ${token}`;
-    }
+    const token = getUser().id_token;
+    const isToken = !!token;
+    const tokenTxt = isToken ? `Bearer ${token}` : '[None]';
     return (
       <div className={cs('panel__body', 'ApiExplorerPanel', {loading})}>
         <div className="ApiExplorerPanel__loader">
@@ -102,15 +101,16 @@ class ApiExplorerPanel extends Component {
           </div>
         </div>
         <div className="ApiExplorerPanel__refresh">
-          {token && (
-            <code className="ApiExplorerPanel__token">
-              <strong>Authorization token</strong>
-              <CopyOnHover copy={token}>
-                {token}
+          <code className="ApiExplorerPanel__token">
+            <strong>Authorization token</strong>
+            {isToken && (
+              <CopyOnHover copy={tokenTxt}>
+                {tokenTxt}
               </CopyOnHover>
-              <CopyOnHover copy={token} />
-            </code>
-          )}
+            )}
+            {isToken && <CopyOnHover copy={tokenTxt} />}
+            {!isToken && <pre>{tokenTxt}</pre>}
+          </code>
           <Button
             name="submit"
             onClick={this.handlePanelRefresh}

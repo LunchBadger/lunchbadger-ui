@@ -12,6 +12,7 @@
     "dist:test": "BABEL_ENV=test npm run dist:local",
     "lint": "eslint ./src ./plugins",
     "deploy": "npm run dist && aws s3 sync dist/ s3://app.lunchbadger.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers",
+    "staging": "npm run dist:local && aws s3 sync dist/ s3://staging.lunchbadger.com --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",

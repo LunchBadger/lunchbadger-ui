@@ -546,6 +546,9 @@ Let's modify request body with example year parameter:
     skipLastStep: true,
     triggerNext: api => [
       api.waitForTextareaContent('#operations-car-car\\\\\\.create.is-open .body-param__text', '{"year":2000}'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open button.execute'),
+      api.afterScroll(),
     ],
     onBefore: api => [
       api.focus('#operations-car-car\\\\\\.create.is-open .body-param__text'),
@@ -571,7 +574,6 @@ Click this button, to execute your POST call.
       api.delayOverlay(500),
     ],
     onBefore: api => [
-      api.autoscroll('#operations-car-car\\\\\\.create.is-open button.execute'),
       api.focus('#operations-car-car\\\\\\.create.is-open button.execute'),
     ],
   },
@@ -597,7 +599,7 @@ Let's uncollapse GET endpoint, so we can check, if previously added car is store
 <br />
 C'mon, click it.
 `,
-    selector: '#operations-car-car\\\\\\.find',
+    waitForSelector: '#operations-car-car\\\\\\.find',
     position: 'bottom',
     allowClicksThruHole: true,
     skipLastStep: true,
@@ -608,7 +610,10 @@ C'mon, click it.
       api.afterScroll(),
     ],
     onBefore: api => [
-      api.autoscroll('#operations-car-car\\\\\\.exists__head_cars_\\\\\\\{id\\\\\\\}')
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.find'),
+      api.afterScroll(),
+      api.focus('#operations-car-car\\\\\\.find'),
     ],
   },
   '808': {

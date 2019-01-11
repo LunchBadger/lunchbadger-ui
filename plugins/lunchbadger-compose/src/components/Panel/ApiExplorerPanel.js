@@ -6,7 +6,7 @@ import './ApiExplorerPanel.scss';
 const {
   utils: {Config, getUser},
   components: {Panel},
-  UI: {Button},
+  UI: {Button, CopyOnHover},
 } = LunchBadgerCore;
 const RELOAD_DELAY = 5000;
 
@@ -89,20 +89,30 @@ class ApiExplorerPanel extends Component {
 
   render() {
     const {loading} = this.state;
+    const token = getUser().id_token;
     return (
       <div className={cs('panel__body', 'ApiExplorerPanel', {loading})}>
         <div className="ApiExplorerPanel__loader">
-          Loading Api Explorer, please wait...
+          Loading API Explorer, please wait...
           <div className="spinner__overlay">
             <div className="spinner"></div>
           </div>
         </div>
         <div className="ApiExplorerPanel__refresh">
+          {token && (
+            <code className="ApiExplorerPanel__token">
+              <strong>Authorization token</strong>
+              <CopyOnHover copy={token}>
+                {token}
+              </CopyOnHover>
+              <CopyOnHover copy={token} />
+            </code>
+          )}
           <Button
             name="submit"
             onClick={this.handlePanelRefresh}
           >
-            Reload Api Explorer
+            Reload API Explorer
           </Button>
         </div>
         <div

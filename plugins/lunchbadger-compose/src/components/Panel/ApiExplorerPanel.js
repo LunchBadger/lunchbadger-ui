@@ -89,7 +89,10 @@ class ApiExplorerPanel extends Component {
 
   render() {
     const {loading} = this.state;
-    const token = getUser().id_token;
+    let token = getUser().id_token;
+    if (token) {
+      token = `Bearer ${token}`;
+    }
     return (
       <div className={cs('panel__body', 'ApiExplorerPanel', {loading})}>
         <div className="ApiExplorerPanel__loader">

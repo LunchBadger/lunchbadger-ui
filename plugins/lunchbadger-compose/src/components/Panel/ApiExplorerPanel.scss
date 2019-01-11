@@ -39,6 +39,38 @@
       }
     }
   }
+  .ApiExplorerPanel__token {
+    text-align: left;
+    width: calc(100% - 500px);
+    display: inline-block;
+    position: absolute;
+    right: 215px;
+    top: 130px;
+    strong {
+      font-family: sans-serif;
+      font-size: 12px;
+      color: #3b4151;
+      font-weight: 700;
+    }
+    .CopyOnHover {
+      border-radius: 0;
+      padding: 0;
+      height: 30px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 12px;
+      background-color: transparent;
+      &:last-child {
+        position: absolute;
+        top: 23px;
+        left: 100%;
+        .button {
+          background-color: transparent;
+        }
+      }
+    }
+  }
 }
 
 .header__menu__link.API_EXPLORER_PANEL svg {

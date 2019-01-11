@@ -12,7 +12,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.371', [
+console.info('LBAPP VERSION 0.372', [
   'Feature/1081 walkthrough with api explorer #1145',
   'Feature/1141 expose api explorer on prod #1144',
   'Feature/563 Multiselect cut off #1140',

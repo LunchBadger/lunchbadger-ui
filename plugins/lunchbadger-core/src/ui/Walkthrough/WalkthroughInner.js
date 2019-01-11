@@ -195,6 +195,14 @@ class WalkthroughInner extends PureComponent {
       this.api.focus('.joyride-tooltip__button--primary'),
       () => cb(),
     ]),
+    beforeScroll: () => cb => this.setState({
+      showOverlay: false,
+      showTooltip: false,
+    }, () => setTimeout(cb, 500)),
+    afterScroll: () => cb => this.setState({
+      showOverlay: true,
+      showTooltip: true,
+    }, cb),
     autoscroll: (selector) => cb => {
       scrollToElement(document.querySelector(selector));
       setTimeout(cb, 500);
@@ -240,6 +248,14 @@ class WalkthroughInner extends PureComponent {
       while (document.querySelector(selector) !== null) {
         await this[this.waitMethod](500);
       }
+      cb();
+    },
+    waitForTextareaContent: (selector, content, blockEscapingKeys = true) => async cb => {
+      blockEscapingKeys && this.blockEscapingKeys();
+      while (document.querySelector(selector).value.replace(/\s/g, '') !== content) {
+        await this[this.waitMethod](500);
+      }
+      blockEscapingKeys && this.unblockEscapingKeys();
       cb();
     },
     delayOverlay: timeout => cb => series([

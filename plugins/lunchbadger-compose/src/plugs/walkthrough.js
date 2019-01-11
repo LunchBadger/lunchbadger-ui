@@ -565,13 +565,10 @@ Click this button, to execute your POST call.
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('#operations-car-car\\\\\\.create.is-open .loading-container'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
+      api.beforeScroll(),
       api.waitUntilNotPresent('#operations-car-car\\\\\\.create.is-open .loading-container'),
-      api.autoscroll('#operations-car-car\\\\\\.create.is-open .response-col_description__inner'),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
-      api.delayOverlay(500),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open .response'),
+      api.afterScroll(),
     ],
     onBefore: api => [
       api.focus('#operations-car-car\\\\\\.create.is-open button.execute'),
@@ -582,13 +579,12 @@ Click this button, to execute your POST call.
     text: `
 As we can see, request was successful, and our example car model was added to the <pre>Memory</pre> datasource.
 `,
-    waitForSelector: '#operations-car-car\\\\\\.create.is-open .response-col_description__inner',
+    waitForSelector: '#operations-car-car\\\\\\.create.is-open .response',
     position: 'bottom',
     allowClicksThruHole: false,
     skipLastStep: true,
     onBefore: api => [
-      api.autoscroll('#operations-car-car\\\\\\.create.is-open .response-col_description__inner'),
-      api.focus('#operations-car-car\\\\\\.create.is-open .response-col_description__inner'),
+      api.focus('#operations-car-car\\\\\\.create.is-open .response'),
     ],
   },
   '807': {
@@ -640,19 +636,16 @@ As before, click this button to make a request.
     text: `
 Click this button, to execute GET request
 `,
-    selector: '#operations-car-car\\\\\\.find.is-open button.execute',
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open button.execute',
     position: 'bottom',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
       api.waitUntilPresent('#operations-car-car\\\\\\.find.is-open .loading-container'),
-      api.setShowOverlay(false),
-      api.setShowTooltip(false),
+      api.beforeScroll(),
       api.waitUntilNotPresent('#operations-car-car\\\\\\.find.is-open .loading-container'),
       api.autoscroll('#operations-car-car\\\\\\.find.is-open .response'),
-      api.setShowTooltip(true),
-      api.setShowOverlay(true),
-      api.delayOverlay(500),
+      api.afterScroll(),
     ],
     onBefore: api => [
       api.focus('#operations-car-car\\\\\\.find.is-open button.execute'),
@@ -668,7 +661,7 @@ As we can see, <pre>Memory</pre> datasource contains our car, we added earlier.
     allowClicksThruHole: false,
     skipLastStep: true,
     onBefore: api => [
-      api.autoscroll('#operations-car-car\\\\\\.find.is-open .response'),
+      api.focus('#operations-car-car\\\\\\.find.is-open .response'),
     ],
   },
   '811': {
@@ -676,12 +669,15 @@ As we can see, <pre>Memory</pre> datasource contains our car, we added earlier.
     text: `
 You can execute each endpoint via <pre>curl</pre>. Here you can find, how such command looks like for our GET example. Notice, that each command contains Authorization token for security reasons.
 `,
-    selector: '#operations-car-car\\\\\\.find.is-open .curl',
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open .curl',
     position: 'bottom',
     allowClicksThruHole: false,
     skipLastStep: true,
     onBefore: api => [
+      api.beforeScroll(),
       api.autoscroll('#operations-car-car\\\\\\.find.is-open .curl'),
+      api.afterScroll(),
+      api.focus('#operations-car-car\\\\\\.find.is-open .curl'),
     ],
   },
   '899': {

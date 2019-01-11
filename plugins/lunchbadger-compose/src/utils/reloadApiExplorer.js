@@ -6,7 +6,7 @@ export default (dispatch, state) => {
   if (currentlyOpenedPanel === 'API_EXPLORER_PANEL') {
     dispatch(actionsCore.addSystemInformationMessage({
       type: 'success',
-      message: 'Api Explorer is stale and will be refreshed',
+      message: 'API Explorer is stale and will be refreshed',
     }));
   }
 };

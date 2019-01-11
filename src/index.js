@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.369', [
+console.info('LBAPP VERSION 0.370', [
+  'Feature/1081 walkthrough with api explorer #1145',
   'Feature/1141 expose api explorer on prod #1144',
   'Feature/563 Multiselect cut off #1140',
   'Feature/353 Username must be lowercase #1139',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.369', [
   'Feature/1099 cars model name lowercase #1105',
   'Feature/1090 Virtual contextPath in model #1103',
   'Feature/1098 Triton branding back on al3 #1101',
-  'Bugfix/1091 Model and ds are locking after quick edit #1100',
-  'Bugfix/1093 While deploying function you can attach to gateway #1097'
+  'Bugfix/1091 Model and ds are locking after quick edit #1100'
 ]);
 
 // Google Analityca

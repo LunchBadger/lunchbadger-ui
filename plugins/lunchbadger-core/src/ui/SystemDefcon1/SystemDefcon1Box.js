@@ -5,7 +5,7 @@ import cs from 'classnames';
 import SystemDefcon1Error from './SystemDefcon1Error';
 import {SmoothCollapse} from '../';
 import {toggleSystemDefcon1, removeSystemDefcon1} from '../../reduxActions';
-import {LoginManager} from '../../utils/auth';
+import {logout} from '../../reduxActions/project';
 import './SystemDefcon1.scss';
 
 class SystemDefcon1Box extends Component {
@@ -49,7 +49,7 @@ class SystemDefcon1Box extends Component {
   handleClose = () => {
     const {dispatch, server, onClose} = this.props;
     if (server) {
-      LoginManager().logout();
+      logout()();
     } else if (onClose) {
       onClose();
     } else {

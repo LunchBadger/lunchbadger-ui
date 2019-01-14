@@ -473,7 +473,7 @@ Click this icon to open API Explorer.
   '801': {
     title: 'Secure access',
     text: `
-Your API Explorer is protected with authorization token.
+Your API Explorer is protected with an authorization token.
 `,
     waitForSelector: '.ApiExplorerPanel__token',
     position: 'bottom',
@@ -533,7 +533,7 @@ C'mon, click it.
   '804': {
     title: 'New car',
     text: `
-Let's modify request body with example year parameter:
+Let's modify request body with example year parameter <small>(be sure to remove the <pre>id</pre> the memory db will auto generated ids)</small>:
 <code>
 {
     "year": 2000
@@ -667,7 +667,7 @@ As we can see, <pre>Memory</pre> datasource contains our car, we added earlier.
   '811': {
     title: 'Requests via curl',
     text: `
-You can execute each endpoint via <pre>curl</pre>. Here you can find, how such command looks like for our GET example. Notice, that each command contains Authorization token for security reasons.
+You can execute each endpoint via <pre>curl</pre>. Here you can find, how such command looks like for our GET example. Notice, that each command contains an Authorization token for security reasons.
 `,
     waitForSelector: '#operations-car-car\\\\\\.find.is-open .curl',
     position: 'bottom',

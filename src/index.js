@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.374', [
+console.info('LBAPP VERSION 0.375', [
+  'Feature/1148 Use different lib for producers api call #1149',
   'Bugfix/1146 Reload button not working in producers error box #1147',
   'Feature/1081 walkthrough with api explorer #1145',
   'Feature/1141 expose api explorer on prod #1144',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.374', [
   'Bugfix/1104 Deleted gateway should not affect new gateway name #1107',
   'Feature/1102 connectors need to use their own icon #1106',
   'Feature/1099 cars model name lowercase #1105',
-  'Feature/1090 Virtual contextPath in model #1103',
-  'Feature/1098 Triton branding back on al3 #1101'
+  'Feature/1090 Virtual contextPath in model #1103'
 ]);
 
 // Google Analityca

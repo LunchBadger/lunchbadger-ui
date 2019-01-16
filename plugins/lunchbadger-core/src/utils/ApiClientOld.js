@@ -1,6 +1,6 @@
+import request from 'request';
 import EventSource from 'eventsource';
 import Bluebird from 'bluebird';
-import axios from 'axios';
 import _ from 'lodash';
 import LoginManager from './auth';
 import recordedMocks from './recordedMocks';
@@ -29,17 +29,12 @@ class ApiClient {
   }
 
   _callAPI(method, url, options) {
-    // FIXME after quarantaine, we can remove that and replace body->data in all services
-    if (options && options.hasOwnProperty('body')) {
-      Object.defineProperty(options, 'data', Object.getOwnPropertyDescriptor(options, 'body'));
-      delete options.body;
-    }
     if (mocks) return Promise.resolve({body: recordedMocks(method, this.url + url)});
     return new Bluebird((resolve, reject) => {
       const req = _.merge({
         method: method,
         url: url,
-        baseURL: this.url,
+        baseUrl: this.url,
         json: true,
         headers: _.extend(this._getHeaders(), {})
       }, options);
@@ -48,56 +43,54 @@ class ApiClient {
   }
 
   makeRequest = (req, resolve, reject, url, method, options, attempt = 0) => {
-    const endpoint = [this.url, url.replace(/\//, '')].join('/');
-    axios(req)
-      .then((response) => {
-        const {data: body, status: statusCode} = response;
-        if (statusCode >= 400) {
-          if (statusCodesToRepeat.includes(statusCode) && attempt < maxRepeatAmount) {
-            // retrying the same call up to 5 times: https://github.com/LunchBadger/general/issues/445
-            return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
-          }
-          let message = body;
-          let name;
-          if (body) {
-            if (typeof body === 'object') {
-              message = JSON.stringify(body);
-            }
-            if (body.err && typeof body.err === 'string') {
-              message = body.err;
-            }
-            if (body.message) {
-              message = body.message;
-            }
-            if (body.error) {
-              if (body.error.stack) {
-                message = body.error.stack;
-              }
-              if (typeof body.error === 'string') {
-                message = body.error;
-              }
-              if (body.error.message) {
-                message = body.error.message;
-              }
-              if (body.error.name) {
-                name = body.error.name;
-              }
-            }
-          } else {
-            message = response.statusMessage;
-          }
-          if (statusCode === 401) {
-            LoginManager().refreshLogin();
-          }
-          return reject(new ApiError(statusCode, message, endpoint, method, req, name, body));
+    request(req, (error, response, body) => {
+      const endpoint = [this.url, url.replace(/\//, '')].join('/');
+      if (error) {
+        return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
+      }
+      if (response.statusCode >= 400) {
+        if (statusCodesToRepeat.includes(response.statusCode) && attempt < maxRepeatAmount) {
+          // retrying the same call up to 5 times: https://github.com/LunchBadger/general/issues/445
+          return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
         }
-        if (statusCode === 0) {
-          return reject(new ApiError(0, 'Error communicating with API', endpoint, method, req));
+        let message = body;
+        let name;
+        if (body) {
+          if (typeof body === 'object') {
+            message = JSON.stringify(body);
+          }
+          if (body.err && typeof body.err === 'string') {
+            message = body.err;
+          }
+          if (body.message) {
+            message = body.message;
+          }
+          if (body.error) {
+            if (body.error.stack) {
+              message = body.error.stack;
+            }
+            if (typeof body.error === 'string') {
+              message = body.error;
+            }
+            if (body.error.message) {
+              message = body.error.message;
+            }
+            if (body.error.name) {
+              name = body.error.name;
+            }
+          }
+        } else {
+          message = response.statusMessage;
         }
-        return resolve({response, body});
-      })
-    .catch((error) => {
-      return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
+        if (response.status === 401 || response.statusCode === 401) {
+          LoginManager().refreshLogin();
+        }
+        return reject(new ApiError(response.statusCode, message, endpoint, method, req, name, body));
+      }
+      if (response.statusCode === 0) {
+        return reject(new ApiError(0, 'Error communicating with API', endpoint, method, req));
+      }
+      return resolve({response, body});
     });
   }
 

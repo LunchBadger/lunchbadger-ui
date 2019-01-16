@@ -1,10 +1,14 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {inject, observer} from 'mobx-react';
-import {Table} from '../../../../../lunchbadger-ui/src';
 import '../Function.scss';
 
-const {utils: {storeUtils: {findGatewayByPipelineId, findEntity}}} = LunchBadgerCore;
+const {
+  utils: {
+    storeUtils: {findGatewayByPipelineId, findEntity},
+  },
+  UI: {Table},
+} = LunchBadgerCore;
 const columns = ['Type', 'Source', 'Details'];
 const widths = [300, 300, undefined];
 const paddings = [false, false, false];

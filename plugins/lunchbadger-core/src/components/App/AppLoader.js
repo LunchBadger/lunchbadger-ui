@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import App from './App';
 import Spinner from './Spinner';
 import ProjectService from '../../services/ProjectService';
 import ConfigStoreService from '../../services/ConfigStoreService';
-import {SystemDefcon1} from '../../../../lunchbadger-ui/src';
+import {SystemDefcon1} from '../../ui';
 import paper from '../../utils/paper';
 import LoginManager from '../../utils/auth';
 import recordedMocks from '../../utils/recordedMocks';
@@ -13,6 +12,7 @@ import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
 import {updateEntitiesStatues} from '../../reduxActions';
+import {getUser} from '../../utils/auth';
 import './AppLoader.scss';
 
 const pingAmount = Config.get('pingAmount');
@@ -38,6 +38,8 @@ class AppLoader extends Component {
       workspaceError: false,
     };
     this.kubeWatcherStarted = false;
+    const {sub} = getUser().profile;
+    this.username = sub;
   }
 
   componentWillMount() {
@@ -86,9 +88,12 @@ class AppLoader extends Component {
     if (data.workspace && data.workspace.default) {
       workspaceRunning = data.workspace.default.status.running;
     }
-    this.setState({workspaceRunning});
     if (!this.kubeWatcherStarted && workspaceRunning) {
       this.kubeWatcherStarted = true;
+    }
+    this.setState({workspaceRunning});
+    if (!document.location.search.includes('autogw')) {
+      delete data.gateway[`${this.username}dev0000`];
     }
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;

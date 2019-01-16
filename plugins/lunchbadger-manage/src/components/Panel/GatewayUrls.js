@@ -1,7 +1,10 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {EntityPropertyLabel, DocsLink} from '../../../../lunchbadger-ui/src';
+
+const {
+  UI: {EntityPropertyLabel, DocsLink},
+} = LunchBadgerCore;
 
 class GatewayUrls extends PureComponent {
   render() {
@@ -9,7 +12,8 @@ class GatewayUrls extends PureComponent {
     const gatewayUrls = Object.values(gateways)
       .filter(({loaded, deleting}) => loaded && !deleting)
       .sort((a, b) => a.itemOrder - b.itemOrder)
-      .map(({rootUrl}) => rootUrl);
+      .map(({rootUrl}) => rootUrl)
+      .filter(url => !!url);
     return (
       <div className="details-panel__element">
         <div className="details-panel__fieldset">

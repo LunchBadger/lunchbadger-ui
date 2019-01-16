@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
-import {EntityProperty} from '../../../../../lunchbadger-ui/src';
+
+const {UI: {EntityProperty}} = LunchBadgerCore;
 
 export default class ApiEndpointPath extends PureComponent {
 

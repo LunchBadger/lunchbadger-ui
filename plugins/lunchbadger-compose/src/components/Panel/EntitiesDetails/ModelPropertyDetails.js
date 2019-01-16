@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-const {Input, Select, Textarea} = LunchBadgerCore.components;
-const {propertyTypes} = LunchBadgerCore.utils;
-import {Checkbox} from '../../../../../lunchbadger-ui/src';
+
+const {
+  components: {Input, Select},
+  utils: {propertyTypes},
+  UI: {Checkbox},
+} = LunchBadgerCore;
 
 class ModelPropertyDetails extends Component {
   onRemove = () => {

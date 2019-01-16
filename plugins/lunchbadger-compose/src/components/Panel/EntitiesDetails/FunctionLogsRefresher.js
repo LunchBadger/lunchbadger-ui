@@ -1,11 +1,14 @@
 import React, {PureComponent} from 'react';
 import cs from 'classnames';
-import {
-  IconButton,
-  Checkbox,
-  Select,
-} from '../../../../../lunchbadger-ui/src';
 import './FunctionLogsRefresher.scss';
+
+const {
+  UI: {
+    IconButton,
+    Checkbox,
+    Select,
+  },
+} = LunchBadgerCore;
 
 export default class FunctionLogsRefresher extends PureComponent {
   render() {

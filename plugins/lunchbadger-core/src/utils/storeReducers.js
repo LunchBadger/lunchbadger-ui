@@ -1,5 +1,4 @@
 import {combineReducers} from 'redux';
-import ui from '../../../lunchbadger-ui/src/reducers';
 
 let reducers = {};
 let entities = {};
@@ -112,7 +111,6 @@ export const registerPlugin = (_entities, plugs, _reducers = {}) => {
 };
 
 export default () => combineReducers({
-    ui,
   ...reducers,
   entities: combineReducers(entities),
   plugins: (state = plugins) => state

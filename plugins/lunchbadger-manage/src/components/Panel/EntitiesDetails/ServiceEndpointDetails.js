@@ -1,15 +1,17 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  Table,
-  IconButton,
-  DocsLink,
-} from '../../../../../lunchbadger-ui/src';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
+const {
+  components: {BaseDetails},
+  UI: {
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    Table,
+    IconButton,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 
 class ServiceEndpointDetails extends PureComponent {
   static propTypes = {

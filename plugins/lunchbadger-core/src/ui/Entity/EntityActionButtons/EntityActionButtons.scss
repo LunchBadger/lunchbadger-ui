@@ -1,0 +1,29 @@
+.EntityActionButtons {
+  padding-top: 25px;
+  border-top: 1px solid rgb(248, 248, 248);
+  margin-top: 10px;
+  .canvas & {
+    padding-top: 25rem;
+    margin-top: 10rem;
+    border-top: 1rem solid rgb(248, 248, 248);
+  }
+  &__inner {
+    .Button {
+      float: right;
+    }
+    .Button.cancel,
+    .Button.close {
+      margin-left: 20px;
+      .canvas & {
+        margin-left: 20rem;
+      }
+    }
+    .Button.close {
+      display: none;
+    }
+  }
+  &.zoom {
+    margin: 0;
+    padding-left: calc(100% - 270px);
+  }
+}

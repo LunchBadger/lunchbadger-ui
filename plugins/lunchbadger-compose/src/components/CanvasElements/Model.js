@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import slug from 'slug';
 import cs from 'classnames';
 import _ from 'lodash';
-import inflection from 'inflection';
-import {
-  EntityProperties,
-  EntitySubElements,
-  getDefaultValueByType,
-} from '../../../../lunchbadger-ui/src';
 import ModelNestedProperties from '../CanvasElements/Subelements/ModelNestedProperties';
 import addNestedProperties from '../addNestedProperties';
 import ModelProperty from '../../models/ModelProperty';
 import './Model.scss';
 
-const Port = LunchBadgerCore.components.Port;
-const CanvasElement = LunchBadgerCore.components.CanvasElement;
+const {
+  components: {Port, CanvasElement},
+  UI: {
+    EntityProperties,
+    EntitySubElements,
+    getDefaultValueByType,
+  },
+} = LunchBadgerCore;
 
 class Model extends Component {
   static propTypes = {
@@ -60,10 +59,17 @@ class Model extends Component {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name, pluralized} = props.entity;
+    const {
+      http_path,
+      plural,
+      name,
+      contextPathFallback,
+    } = props.entity;
     return {
-      contextPath,
-      contextPathDirty: pluralized(name) !== contextPath,
+      name,
+      http_path,
+      plural,
+      contextPath: contextPathFallback({http_path, plural, name}),
     };
   };
 
@@ -73,17 +79,6 @@ class Model extends Component {
 
   onRemove = () => this.props.entity.beforeRemove(this.context.paper.getInstance());
 
-  getEntityDiffProps = (model) => {
-    if (!model) return null;
-    const {name, contextPath} = this.props.entity.data;
-    if (name === model.name && contextPath === model.contextPath) return null;
-    return {
-      ...model,
-      name,
-      contextPath,
-    };
-  };
-
   handleFieldChange = field => (evt) => {
     if (typeof this.props.onFieldUpdate === 'function') {
       this.props.onFieldUpdate(field, evt.target.value);
@@ -91,9 +86,14 @@ class Model extends Component {
   };
 
   updateName = event => {
-    if (!this.state.contextPathDirty) {
-      this.setState({contextPath: this.props.entity.pluralized(event.target.value)});
-    }
+    const name = event.target.value;
+    const {pluralized, contextPathFallback} = this.props.entity;
+    const {http_path, plural} = this.state;
+    const state = {http_path, name};
+    const pluralDirty = plural !== pluralized(this.state.name);
+    state.plural = pluralDirty ? plural : pluralized(name);
+    state.contextPath = contextPathFallback(state);
+    this.setState(state);
   };
 
   onAddItem = (collection, item) => {
@@ -157,17 +157,16 @@ class Model extends Component {
     }
   };
 
-  updateContextPath = event => this.setState({contextPath: event.target.value, contextPathDirty: true});
-
   renderPorts = () => {
     const {entity} = this.props;
-    const {id, ports, gaType} = entity;
-    return ports.map(({portType, portGroup}) => (
+    const {ports, constructor: {type}, gaType, base} = entity;
+    if (base === 'Model') return null;
+    return ports.map(({portType, id, portGroup}) => (
       <Port
         key={`port-${portType}-${id}`}
         way={portType}
         elementId={id}
-        className={`port-${entity.constructor.type} port-${portGroup}`}
+        className={`port-${type} port-${portGroup}`}
         scope={portGroup}
         gaType={gaType}
       />
@@ -192,23 +191,22 @@ class Model extends Component {
   };
 
   renderMainProperties = () => {
-    const {validations, validationsForced, entity, entityDevelopment, onResetField, nested, index} = this.props;
-    const {contextPath} = this.state;
-    const name = nested ? `models[${index}][http][path]` : 'http[path]';
-    const {data} = validationsForced || validations;
+    const {nested, index} = this.props;
+    const {plural, contextPath} = this.state;
     const mainProperties = [
       {
-        name,
-        modelName: 'contextPath',
+        name: 'tmp[contextPath]',
         title: 'context path',
         value: contextPath,
-        invalid: data.contextPath,
-        onChange: this.updateContextPath,
-        onBlur: this.handleFieldChange('contextPath'),
+        fake: true,
+      },
+      {
+        name: nested ? `models[${index}][plural]` : 'plural',
+        title: 'plural',
+        value: plural,
+        hidden: true,
       }
     ];
-    mainProperties[0].isDelta = entity.contextPath !== entityDevelopment.contextPath;
-    mainProperties[0].onResetField = onResetField;
     return <EntityProperties properties={mainProperties} />;
   };
 

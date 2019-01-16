@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AddAPI from '../../actions/CanvasElements/API/add';
-import {entityIcons, Tool} from '../../../../lunchbadger-ui/src';
+
+const {
+  UI: {entityIcons, Tool},
+} = LunchBadgerCore;
 
 const API = ({editedElement}) => (
   <Tool

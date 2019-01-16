@@ -9,25 +9,29 @@ import uuid from 'uuid';
 import addNestedProperties from '../../addNestedProperties';
 import ModelProperty from '../../../models/ModelProperty';
 import ModelRelation from '../../../models/ModelRelation';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  Checkbox,
-  Select,
-  Table,
-  IconButton,
-  FilesEditor,
-  DocsLink,
-  getDefaultValueByType,
-} from '../../../../../lunchbadger-ui/src';
+import schemas from '../../../utils/modelSchemas';
 import ModelDefaultValue from './ModelDefaultValue';
 import './ModelDetails.scss';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {Connections} = LunchBadgerCore.stores;
-const {propertyTypes} = LunchBadgerCore.utils;
+const {
+  components: {BaseDetails},
+  stores: {Connections},
+  utils: {propertyTypes},
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    Checkbox,
+    Select,
+    Table,
+    IconButton,
+    FilesEditor,
+    DocsLink,
+    getDefaultValueByType,
+  },
+} = LunchBadgerCore;
+const {components: {GatewayPolicyAction}} = LunchBadgerManage;
 
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
@@ -74,6 +78,7 @@ class ModelDetails extends PureComponent {
         properties: [],
         relations: newProps.entity.relations.slice(),
         userFields: newProps.entity.userFields ? newProps.entity.extendedUserFields.slice() : [],
+        methods: newProps.entity.methods.slice(),
       };
       addNestedProperties(newProps.entity, data.properties, newProps.entity.properties.slice(), '');
       return data;
@@ -98,12 +103,37 @@ class ModelDetails extends PureComponent {
   }
 
   initState = (props = this.props) => {
-    const {contextPath, name, pluralized} = props.entity;
+    const {
+      name,
+      base,
+      http_path,
+      plural,
+      contextPathFallback,
+    } = props.entity;
     return {
       changed: false,
-      contextPath,
-      contextPathDirty: pluralized(name) !== contextPath,
+      name,
+      base,
+      http_path,
+      plural,
+      contextPath: contextPathFallback({http_path, plural, name}),
     };
+  };
+
+  changeState = (obj = {}, cb) => this.setState({...obj, changed: true}, () => {
+    this.props.parent.checkPristine();
+    cb && cb();
+  });
+
+  updateName = event => {
+    const name = event.target.value;
+    const {pluralized, contextPathFallback} = this.props.entity;
+    const {http_path, plural} = this.state;
+    const state = {http_path, name};
+    const pluralDirty = plural !== pluralized(this.state.name);
+    state.plural = pluralDirty ? plural : pluralized(name);
+    state.contextPath = contextPathFallback(state);
+    this.setState(state);
   };
 
   processModel = model => {
@@ -113,10 +143,19 @@ class ModelDetails extends PureComponent {
 
   postProcessModel = model => {
     const {entity} = this.props;
+    const {paper: paperRef} = this.context;
+    const paper = paperRef.getInstance();
+    if (entity.base === 'PersistedModel' && model.base === 'Model') {
+      [
+        ...Connections.search({'fromId': entity.id}),
+        ...Connections.search({'toId': entity.id}),
+      ].forEach(conn => {
+        conn.info.source.classList.add('discardAutoSave');
+        paper.detach(conn.info.connection);
+      });
+    }
     if (model.hasOwnProperty('dataSource')) {
       const dsId = model.dataSource === 'none' ? null : model.dataSource;
-      const {paper: paperRef} = this.context;
-      const paper = paperRef.getInstance();
       const currDsConn = Connections.find({toId: entity.id});
       const currDsId = currDsConn ? currDsConn.fromId : null;
       if (dsId !== currDsId) {
@@ -271,37 +310,56 @@ class ModelDetails extends PureComponent {
     }
   };
 
+  handleUpdateField = field => event => {
+    const value = event.target ? event.target.value : event;
+    const {entity, parent} = this.props;
+    const {http_path, plural, name, base} = this.state;
+    const state = {http_path, plural, name, base};
+    Object.assign(state, {
+      [field]: value,
+      changed: true,
+    });
+    state.contextPath = entity.contextPathFallback(state);
+    this.setState(state, () => parent.checkPristine());
+  }
+
   renderDetailsSection = () => {
     const {entity, dataSources, connectionsStore} = this.props;
-    const dataSourceOptions = Object.keys(dataSources)
-      .map(key => dataSources[key])
-      .map(({name: label, id: value}) => ({label, value}));
-    const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
+    const {contextPath, http_path, plural, base} = this.state;
+    // const dataSourceOptions = Object.keys(dataSources)
+    //   .map(key => dataSources[key])
+    //   .map(({name: label, id: value}) => ({label, value}));
+    // const currentDsId = (connectionsStore.find({toId: entity.id}) || {fromId: 'none'}).fromId;
     const fields = [
       {
-        title: 'Context Path',
+        title: 'HTTP Path',
         name: 'http[path]',
-        value: entity.contextPath,
+        value: http_path,
+        onChange: this.handleUpdateField('http_path'),
       },
       {
         title: 'Plural',
         name: 'plural',
-        value: entity.plural,
+        value: plural,
+        onChange: this.handleUpdateField('plural'),
       },
       {
         title: 'Base Model',
         name: 'base',
-        value: entity.base,
+        value: base,
         options: baseModelTypes,
         width: 190,
-      },
-      {
-        title: 'Model Connector',
-        name: 'dataSource',
-        value: currentDsId,
-        options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+        onChange: this.handleUpdateField('base'),
       },
     ];
+    // if (base === 'PersistedModel') {
+    //   fields.push({
+    //     title: 'Model Connector',
+    //     name: 'dataSource',
+    //     value: currentDsId,
+    //     options: [{label: '[None]', value: 'none'}, ...dataSourceOptions],
+    //   });
+    // }
     const checkboxes = [
       {
         name: 'readonly',
@@ -320,13 +378,28 @@ class ModelDetails extends PureComponent {
       },
     ];
     return (
-      <div className="panel__details">
-        {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
-        {checkboxes.map(item => (
-          <div key={item.name} className="panel__details__checkbox">
-            <Checkbox {...item} />
+      <div>
+        <div className="panel__details">
+          <EntityProperty
+            title="Context Path"
+            name="tmp[contextPath]"
+            value={contextPath}
+            fake
+            placeholder=" "
+          />
+        </div>
+        <div className="panel__details">
+          <div>
+            {fields.map(item => <EntityProperty key={item.name} {...item} placeholder=" " />)}
           </div>
-        ))}
+          <div>
+            {checkboxes.map(item => (
+              <div key={item.name} className="panel__details__checkbox">
+                <Checkbox {...item} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   };
@@ -640,18 +713,102 @@ class ModelDetails extends PureComponent {
     );
   };
 
+  handleAddRemoteMethod = () => {
+    const methods = [...this.state.methods];
+    methods.push({
+      id: uuid.v4(),
+      name: '',
+      data: {},
+    });
+    this.setState({methods, changed: true}, () => this.props.parent.checkPristine());
+    const inputSelector = `.DetailsPanel .input__methods${methods.length - 1}name input`;
+    setTimeout(() => {
+      const element = document.querySelector(inputSelector)
+      // scrollToElement(element.closest('.CollapsibleProperties'));
+      element && setTimeout(() => element.focus(), 0);
+    });
+  };
+
+  handleRemoveRemoteMethod = method => () => this.onRemoveItem('methods', method);
+
+  remoteMethodAddButton = () => (
+    <IconButton
+      name="add_remoteMethod"
+      icon="iconPlus"
+      onClick={this.handleAddRemoteMethod}
+    />
+  );
+
+  renderRemoteMethod = (method, idx) => {
+    const {id, name, data} = method;
+    const {entity} = this.props;
+    const functionNameInput = (
+      <div className="ModelDetails__method">
+        <EntityProperty
+          name={`methods[${idx}][name]`}
+          value={name}
+          placeholder="Enter remote method name here..."
+          width={400}
+        />
+        <div className="ModelDetails__method__remove">
+          <IconButton
+            icon="iconDelete"
+            name={`remove__method${idx}`}
+            onClick={this.handleRemoveRemoteMethod(method)}
+          />
+        </div>
+      </div>
+    );
+    return (
+      <GatewayPolicyAction
+        key={id}
+        action={data}
+        schemas={schemas.methods}
+        prefix={`methods[${idx}][data]`}
+        tmpPrefix="LunchBadger"
+        onChangeState={this.changeState}
+        horizontal
+        collapsibleTitle={functionNameInput}
+        collapsibleBarToggable={false}
+        collapsibleSpace="0"
+        entry={entity}
+      />
+    );
+  };
+
+  renderRemoteMethodsSection = () => {
+    const {methods} = this.state;
+    return (
+      <div>
+        {methods.map((method, idx) => this.renderRemoteMethod(method, idx))}
+        {methods.length === 0 && (
+          <div className="ModelDetails__blank">
+            No remote methods defined.
+          </div>
+        )}
+      </div>
+    );
+  };
+
   render() {
     const sections = [
       {title: 'Details', docs: 'MODEL_DETAILS'},
       {title: 'User-defined fields', render: 'UserDefinedFields', docs: 'MODEL_USER_DEFINED_FIELDS'},
       {title: 'Relations', docs: 'MODEL_RELATIONS'},
       {title: 'Properties', docs: 'MODEL_PROPERTIES'},
+      {
+        title: 'Remote methods',
+        render: 'RemoteMethods',
+        docs: 'MODEL_REMOTE_METHODS',
+        button: this.remoteMethodAddButton(),
+      },
       {title: 'Model.js', render: 'ModelCode', docs: 'MODEL_CODE'},
     ];
     return (
-      <div>
-        {sections.map(({title, render, docs}) => (
+      <div className="panel__details ModelDetails">
+        {sections.map(({title, render, docs, button}) => (
           <CollapsibleProperties
+            name={render || title}
             id={`${this.props.entity.id}/${docs}`}
             key={title}
             bar={
@@ -660,6 +817,7 @@ class ModelDetails extends PureComponent {
                 <DocsLink item={docs} />
               </EntityPropertyLabel>
             }
+            button={button}
             collapsible={this[`render${render || title}Section`]()}
             barToggable
             defaultOpened

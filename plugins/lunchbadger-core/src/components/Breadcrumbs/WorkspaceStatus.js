@@ -5,9 +5,8 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import classnames from 'classnames';
 import {silentReload} from '../../reduxActions';
-import LoginManager from '../../utils/auth';
-// import OneOptionModal from '../Generics/Modal/OneOptionModal';
-import {ContextualInformationMessage} from '../../../../lunchbadger-ui/src';
+import {LoginManager} from '../../utils/auth';
+import {ContextualInformationMessage} from '../../ui';
 import {addSystemDefcon1, toggleSystemDefcon1, clearSystemDefcon1} from '../../reduxActions/systemDefcon1';
 import ProjectService from '../../services/ProjectService';
 import './WorkspaceStatus.scss';
@@ -77,7 +76,6 @@ class WorkspaceStatus extends Component {
       }
       if (wsGitChanged) {
         console.log(`ws_git changed: ${this.state.ws_git} => ${ws_git}`);
-        window.dispatchEvent(new Event('WorkspaceGitChanged'));
       }
       dispatch(silentReload(this.context.paper.getInstance()));
     }

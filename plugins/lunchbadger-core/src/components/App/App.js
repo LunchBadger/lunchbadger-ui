@@ -18,12 +18,11 @@ import {
   setSilentReloadAlertVisible,
 } from '../../reduxActions';
 import {
-  Aside,
   SystemInformationMessages,
-  SystemNotifications,
   SystemDefcon1,
+  Aside,
   Walkthrough,
-} from '../../../../lunchbadger-ui/src';
+} from '../../ui';
 import {getUser} from '../../utils/auth';
 import Config from '../../../../../src/config';
 import Connections from '../../stores/Connections';
@@ -76,7 +75,7 @@ class App extends Component {
 
   renderHeader = () => {
     const {isEntityEditable} = this.props;
-    const username = getUser().profile.preferred_username;
+    const {preferred_username: username, sub} = getUser().profile;
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
@@ -89,6 +88,7 @@ class App extends Component {
     return (
       <Header
         username={username}
+        login={sub}
         envId={Config.get('envId')}
       />
     );
@@ -132,7 +132,6 @@ class App extends Component {
             />
             <div className="app__container">
               <div className="app__panel-wrapper">
-                <SystemNotifications />
                 <div style={multiEnvDeltaStyle}>
                   <PanelContainer />
                 </div>

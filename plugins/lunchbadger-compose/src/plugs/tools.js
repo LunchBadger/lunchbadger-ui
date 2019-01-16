@@ -2,7 +2,8 @@ import {add as addDataSource} from '../reduxActions/dataSources';
 import {add as addModel} from '../reduxActions/models';
 import {add as addMicroservice} from '../reduxActions/microservices';
 import {add as addFunction} from '../reduxActions/functions';
-import Config from '../../../../src/config';
+
+const {utils: {Config}} = LunchBadgerCore;
 
 const dataSources = [
   'Memory',

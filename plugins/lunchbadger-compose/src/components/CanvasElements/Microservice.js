@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import _ from 'lodash';
-import {EntitySubElements} from '../../../../lunchbadger-ui/src';
 import ModelComponent from './Subelements/Model';
 import {
   bundle,
@@ -23,6 +22,7 @@ const {
   utils: {
     coreActions,
   },
+  UI: {EntitySubElements},
 } = LunchBadgerCore;
 
 class Microservice extends Component {

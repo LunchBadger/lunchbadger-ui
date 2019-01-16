@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import _ from 'lodash';
 import cs from 'classnames';
-import {
-  EntityProperty,
-  IconButton,
-  IconMenu,
-  EntityPropertyLabel,
-  CollapsibleProperties,
-  Input,
-  getDefaultValueByType,
-  DocsLink,
-} from '../../../../../../lunchbadger-ui/src';
 import GatewayProxyServiceEndpoint from './GatewayProxyServiceEndpoint';
 import {determineType} from '../../../../utils';
 import './GatewayPolicyAction.scss';
+
+const {
+  UI: {
+    EntityProperty,
+    IconButton,
+    IconMenu,
+    EntityPropertyLabel,
+    CollapsibleProperties,
+    Input,
+    getDefaultValueByType,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 
 const customPropertyTypes = [
   'string',
@@ -51,7 +54,11 @@ export default class GatewayPolicyAction extends PureComponent {
     prefix: PropTypes.string,
     onChangeState: PropTypes.func,
     horizontal: PropTypes.bool,
-    collapsibleTitle: PropTypes.string,
+    collapsibleTitle: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+    ]),
+    collapsibleBarToggable: PropTypes.bool,
     validations: PropTypes.object,
     visibleParameters: PropTypes.array,
     tmpPrefix: PropTypes.string,
@@ -63,6 +70,7 @@ export default class GatewayPolicyAction extends PureComponent {
     onChangeState: (_, cb) => cb && cb(),
     horizontal: true,
     collapsibleTitle: '',
+    collapsibleBarToggable: true,
     validations: {data: {}},
     visibleParameters: [],
     tmpPrefix: 'pipelines',
@@ -168,9 +176,12 @@ export default class GatewayPolicyAction extends PureComponent {
       if (type === 'fake') {
         parameters[name].type = type;
       }
-      parameters[name].arrayItem = (Array.isArray(value) && value.length > 0)
-        ? determineType(value[0])
-        : customArrayTypes[0];
+      parameters[name].arrayItem = customArrayTypes[0];
+      if (Array.isArray(value) && value.length > 0) {
+        parameters[name].arrayItem = determineType(value[0]);
+      } else if (parameters[name].items && parameters[name].items.length === 1) {
+        parameters[name].arrayItem = parameters[name].items[0];
+      }
     });
     return {parameters: Object.values(parameters)};
   };
@@ -381,6 +392,20 @@ export default class GatewayPolicyAction extends PureComponent {
       const defaultType = schemas.hasOwnProperty('default') && typeof value === typeof schemas.default;
       return (
         <div key={id} className={cs('GatewayPolicyAction', {defaultType})}>
+          {!custom && (
+            <div className="GatewayPolicyAction__arrayLabel">
+              <EntityPropertyLabel
+                description={description}
+              >
+                {name}
+                {!!titleRemark && (
+                  <span className="EntityProperty__titleRemark">
+                    {titleRemark}
+                  </span>
+                )}
+              </EntityPropertyLabel>
+            </div>
+          )}
           {custom && (
             <EntityProperty
               title="Parameter Name"
@@ -392,7 +417,7 @@ export default class GatewayPolicyAction extends PureComponent {
               classes={`${this.tmpPrefix}[name][type][${type}]`}
             />
           )}
-          {!custom && (
+          {!custom && types.length > 1 && (
             <EntityProperty
               title="Type"
               name={`${this.tmpPrefix}[${id}][type]`}
@@ -523,7 +548,17 @@ export default class GatewayPolicyAction extends PureComponent {
                     onClick={this.handleParameterAddArrayItem(id)}
                   />
                 </div>
+                {value.length === 0 && (
+                  <div className="GatewayPolicyAction__emptyArray">
+                    {'Empty Array'}
+                    <Input
+                      type="hidden"
+                      name={`${inputName}[]`}
+                    />
+                  </div>
+                )}
                 {value.map((valueItem, idx) => {
+                  const itemSchemas = (item.schemas || {items: {}}).items;
                   return (
                     <div
                       key={idx + JSON.stringify(valueItem)}
@@ -540,7 +575,7 @@ export default class GatewayPolicyAction extends PureComponent {
                       </div>
                       <GatewayPolicyAction
                         action={valueItem}
-                        // schemas={item.schemas}
+                        schemas={itemSchemas}
                         prefix={`${prefix}[${name}][${idx}]`}
                         onChangeState={onChangeState}
                         horizontal={horizontal}
@@ -620,6 +655,8 @@ export default class GatewayPolicyAction extends PureComponent {
       collapsibleDocsLink,
       visibleParameters,
       entry,
+      collapsibleBarToggable,
+      collapsibleSpace,
     } = this.props;
     const {parameters} = this.state;
     const currParameters = parameters.map(({name}) => name);
@@ -679,7 +716,8 @@ export default class GatewayPolicyAction extends PureComponent {
             </EntityPropertyLabel>
           }
           collapsible={collapsible}
-          barToggable
+          barToggable={collapsibleBarToggable}
+          space={collapsibleSpace}
           defaultOpened
           button={button}
         />

@@ -12,24 +12,26 @@ import GatewayPolicyCAPair from './Subelements/GatewayPolicyCAPair';
 import GatewayPolicyCondition from './Subelements/GatewayPolicyCondition';
 import GatewayPolicyAction from './Subelements/GatewayPolicyAction';
 import CustomerManagement from './Subelements/CustomerManagement';
-import {
-  EntityProperty,
-  EntityPropertyLabel,
-  EntityProperties,
-  CollapsibleProperties,
-  Input,
-  Checkbox,
-  Table,
-  IconButton,
-  Sortable,
-  scrollToElement,
-  CopyOnHover,
-  DocsLink,
-} from '../../../../../lunchbadger-ui/src';
 import './GatewayDetails.scss';
 
-const BaseDetails = LunchBadgerCore.components.BaseDetails;
-const {Connections} = LunchBadgerCore.stores;
+const {
+  components: {BaseDetails},
+  stores: {Connections},
+  UI: {
+    EntityProperty,
+    EntityPropertyLabel,
+    EntityProperties,
+    CollapsibleProperties,
+    Input,
+    Checkbox,
+    Table,
+    IconButton,
+    Sortable,
+    scrollToElement,
+    CopyOnHover,
+    DocsLink,
+  },
+} = LunchBadgerCore;
 
 class GatewayDetails extends PureComponent {
   static propTypes = {
@@ -81,6 +83,17 @@ class GatewayDetails extends PureComponent {
       const {isForm, processModel} = this.customerManagementRef;
       if (isForm()) {
         processModel(model);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  tabCancelled = () => {
+    if (this.props.rect.tab === 'customerManagement') {
+      const {isForm, handleEntry} = this.customerManagementRef;
+      if (isForm()) {
+        handleEntry(null)();
         return true;
       }
     }

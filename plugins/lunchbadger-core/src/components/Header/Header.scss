@@ -115,16 +115,24 @@
   position: absolute;
   color: $font-light;
   top: 14px;
-  left: 235px;
+  left: 210px;
   font-size: 20px;
   font-weight: 100;
   z-index: 82;
 }
 
-.BrandingLogo {
+.brandingLogo {
   position: absolute;
-  width: auto;
-  height: 37px;
-  top: 8px;
-  left: 261px;
+  top: -2px;
+  left: 36px;
+  height: 30px;
+  svg {
+    height: 100%;
+    width: auto;
+  }
+}
+
+.header__menu__link.MANAGE_PROJECT svg {
+  width: 33px;
+  height: 33px;
 }

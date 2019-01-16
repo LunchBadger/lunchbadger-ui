@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default {
   '010': {
     title: 'Model Connectors Menu',
@@ -74,9 +76,24 @@ Click <pre>OK</pre> to continue.
     allowClicksThruHole: true,
     triggerNext: api => [
       api.waitUntilNotPresent('.Entity.DataSource.memory.editable'),
+      api.setShowOverlay(false),
     ],
     onBefore: api => [
       api.focus('.Entity.DataSource.editable .submit'),
+    ],
+  },
+  '015': {
+    title: 'Memory Model Connector is created',
+    text: `
+The <pre>Memory</pre> Model Connector and DB has been deployed. We can now store data in it through Models.
+`,
+    position: 'right',
+    selector: '.Entity.DataSource',
+    allowClicksThruHole: false,
+    onBefore: api => [
+      api.click('.quadrant__title'),
+      api.wait(1000),
+      api.setShowOverlay(true),
     ],
   },
   '020': {
@@ -104,14 +121,14 @@ C'mon, click it!
     text: `
 Here, you define the name of the Model Entity.
 <br /><br />
-Let's name it <pre>Car</pre>.
+Let's name it <pre>car</pre>.
 `,
     selector: '.Entity.Model.editable .EntityHeader',
     position: 'right',
     allowClicksThruHole: true,
     skipLastStep: true,
     triggerNext: api => [
-      api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="Car"]'),
+      api.waitUntilPresent('.Entity.Model.editable .EntityHeader input[value="car"]'),
       api.blur('.Entity.Model.editable .EntityHeader input'),
     ],
     onBefore: api => [
@@ -190,7 +207,7 @@ Select <pre>Number</pre> from the dropdown list.
   '026': {
     title: 'Finish Creating the Model',
     text: `
-Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
+Click <pre>OK</pre> to create the <pre>car</pre> Model Entity.
 `,
     waitForSelector: '.Entity.Model.editable .submit',
     position: 'right',
@@ -206,7 +223,7 @@ Click <pre>OK</pre> to create the <pre>Car</pre> Model Entity.
   '0270': {
     title: 'Model is creating',
     text: `
-Please wait till the <pre>Car</pre> is saved and the walkthrough will continue automatically.
+Please wait till the <pre>car</pre> is saved and the walkthrough will continue automatically.
 `,
     position: 'right',
     selector: '.Entity.Model',
@@ -278,7 +295,7 @@ Keep in mind, that almost all Entities have details that are available in full e
   },
   '0274': {
     title: 'Code Editor',
-    text: 'All Models are Node.js functions. Custom code for the <pre>Car</pre> model can be entered into the Code Editor.',
+    text: 'All Models are Node.js functions. Custom code for the <pre>car</pre> model can be entered into the Code Editor.',
     waitForSelector: '.DetailsPanel .BaseDetails__content > div > .CollapsibleProperties:last-child',
     position: 'top',
     allowClicksThruHole: false,
@@ -307,7 +324,7 @@ Click <pre>Cancel</pre> to return to the Canvas view.
   '028': {
     title: 'Connect Model Connector to Model',
     text: `
-The <pre>Car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
+The <pre>car</pre> model can now persist data to the built in memory database though the <pre>Memory</pre> Connector.
 `,
     waitForSelector: '.Entity.DataSource.memory .port__wrap__out',
     position: 'bottom-left',
@@ -439,4 +456,241 @@ Click <pre>Cancel</pre> to return to the Canvas view.
   //   selector: '.Tool.microservice',
   //   position: 'right',
   // },
+  '800': {
+    title: 'API Explorer',
+    text: `
+Click this icon to open API Explorer.
+`,
+    selector: '.header__menu__link.API_EXPLORER_PANEL',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilNotPresent('.ApiExplorerPanel[style="height: 0px;"]'),
+      api.delayOverlay(1500),
+    ],
+  },
+  '801': {
+    title: 'Secure access',
+    text: `
+Your API Explorer is protected with an authorization token.
+`,
+    waitForSelector: '.ApiExplorerPanel__token',
+    position: 'bottom',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.autoscroll('.ApiExplorerPanel__token'),
+    ],
+  },
+  '802': {
+    title: 'Model api endpoints',
+    text: `
+Each model, you had defined on the canvas, exposes all available endpoints. Let's make some example calls.
+<br />
+<br />
+C'mon, click it.
+`,
+    selector: '#operations-car-car\\\\\\.create',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.create.is-open button.try-out__btn'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open .parameters-col_description'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.upsert__put_cars'),
+      api.afterScroll(),
+      api.focus('#operations-car-car\\\\\\.create'),
+    ],
+  },
+  '803': {
+    title: 'POST endpoint',
+    text: `
+Let's try POST endpoint by adding a new model instance to <pre>Memory</pre> datasource.
+<br />
+<br />
+C'mon, click it.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.create.is-open button.try-out__btn',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.create.is-open .body-param__text'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open .body-param__text'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.create.is-open button.try-out__btn'),
+    ],
+  },
+  '804': {
+    title: 'New car',
+    text: `
+Let's modify request body with example year parameter <small>(be sure to remove the <pre>id</pre> the memory db will auto generated ids)</small>:
+<code>
+{
+    "year": 2000
+}
+</code>
+`,
+    selector: '#operations-car-car\\\\\\.create.is-open .body-param__text',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitForTextareaContent('#operations-car-car\\\\\\.create.is-open .body-param__text', '{"year":2000}'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open button.execute'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.create.is-open .body-param__text'),
+    ],
+  },
+  '805': {
+    title: 'Execute POST call',
+    text: `
+Click this button, to execute your POST call.
+`,
+    selector: '#operations-car-car\\\\\\.create.is-open button.execute',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.create.is-open .loading-container'),
+      api.beforeScroll(),
+      api.waitUntilNotPresent('#operations-car-car\\\\\\.create.is-open .loading-container'),
+      api.autoscroll('#operations-car-car\\\\\\.create.is-open .response'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.create.is-open button.execute'),
+    ],
+  },
+  '806': {
+    title: 'POST call response',
+    text: `
+As we can see, request was successful, and our example car model was added to the <pre>Memory</pre> datasource.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.create.is-open .response',
+    position: 'bottom',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.create.is-open .response'),
+    ],
+  },
+  '807': {
+    title: 'Other endpoints',
+    text: `
+Let's uncollapse GET endpoint, so we can check, if previously added car is stored in <pre>Memory</pre> datasource indeed.
+<br />
+<br />
+C'mon, click it.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.find',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.find.is-open button.try-out__btn'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.find.is-open .parameters-col_description'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.find'),
+      api.afterScroll(),
+      api.focus('#operations-car-car\\\\\\.find'),
+    ],
+  },
+  '808': {
+    title: 'GET endpoint',
+    text: `
+As before, click this button to make a request.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open button.try-out__btn',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.find.is-open button.execute'),
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.find.is-open button.execute'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.find.is-open button.try-out__btn'),
+    ],
+  },
+  '809': {
+    title: 'GET request execution',
+    text: `
+Click this button, to execute GET request
+`,
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open button.execute',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    skipLastStep: true,
+    triggerNext: api => [
+      api.waitUntilPresent('#operations-car-car\\\\\\.find.is-open .loading-container'),
+      api.beforeScroll(),
+      api.waitUntilNotPresent('#operations-car-car\\\\\\.find.is-open .loading-container'),
+      api.autoscroll('#operations-car-car\\\\\\.find.is-open .response'),
+      api.afterScroll(),
+    ],
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.find.is-open button.execute'),
+    ],
+  },
+  '810': {
+    title: 'GET response',
+    text: `
+As we can see, <pre>Memory</pre> datasource contains our car, we added earlier.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open .response',
+    position: 'bottom',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.focus('#operations-car-car\\\\\\.find.is-open .response'),
+    ],
+  },
+  '811': {
+    title: 'Requests via curl',
+    text: `
+You can execute each endpoint via <pre>curl</pre>. Here you can find, how such command looks like for our GET example. Notice, that each command contains an Authorization token for security reasons.
+`,
+    waitForSelector: '#operations-car-car\\\\\\.find.is-open .curl',
+    position: 'bottom',
+    allowClicksThruHole: false,
+    skipLastStep: true,
+    onBefore: api => [
+      api.beforeScroll(),
+      api.autoscroll('#operations-car-car\\\\\\.find.is-open .curl'),
+      api.afterScroll(),
+      api.focus('#operations-car-car\\\\\\.find.is-open .curl'),
+    ],
+  },
+  '899': {
+    title: 'Close API Explorer',
+    text: `
+Click this icon to close API Explorer.
+`,
+    selector: '.header__menu__link.API_EXPLORER_PANEL',
+    position: 'bottom',
+    allowClicksThruHole: true,
+    triggerNext: api => [
+      api.waitUntilPresent('.ApiExplorerPanel[style="height: 0px;"]'),
+      api.delayOverlay(1500),
+    ],
+  },
 };

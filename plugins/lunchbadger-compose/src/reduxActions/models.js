@@ -3,13 +3,14 @@ import {diff} from 'just-diff';
 import uuid from 'uuid';
 import {actions} from './actions';
 import {ModelService} from '../services';
-import Model from '../models/Model';
+import Model, {processMethods} from '../models/Model';
 import ModelProperty from '../models/ModelProperty';
 import ModelRelation from '../models/ModelRelation';
 import {
   reload as workspaceFilesReload,
   update as workspaceFilesUpdate,
 } from './workspaceFiles';
+import {reloadApiExplorer} from '../utils';
 
 const {
   utils: {
@@ -46,6 +47,7 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
   const beforeUpdateModel = entity.toJSON({isModelForDiff: true});
   const beforeUpdateProperties = entity.toJSON({isPropertiesForDiff: true});
   const beforeUpdateRelations = entity.toJSON({isRelationsForDiff: true});
+  const beforeUpdateMethods = entity.toJSON({isMethodsForDiff: true});
   const state = getState();
   const prevModelJs = (state.entities.workspaceFiles.files.server.models || {})[entity.modelJsName];
   const prevPackageJson = (state.entities.workspaceFiles.files || {})[PACKAGE_JSON];
@@ -80,6 +82,7 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
       fireEvent: false
     }));
   }
+  const isPublicDifferent = model.public !== state.entities[type][entity.id].public;
   updatedEntity = Model.create({
     ...entity.toJSON(),
     ...model,
@@ -92,9 +95,11 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
   const afterUpdateModel = updatedEntity.toJSON({isModelForDiff: true});
   const afterUpdateProperties = updatedEntity.toJSON({isPropertiesForDiff: true});
   const afterUpdateRelations = updatedEntity.toJSON({isRelationsForDiff: true});
+  const afterUpdateMethods = updatedEntity.toJSON({isMethodsForDiff: true});
   const deltaModel = diff(beforeUpdateModel, afterUpdateModel);
   const deltaProperties = diff(beforeUpdateProperties, afterUpdateProperties);
   const deltaRelations = diff(beforeUpdateRelations, afterUpdateRelations);
+  const deltaMethods = diff(beforeUpdateMethods, afterUpdateMethods);
   dispatch(actions[updateAction](updatedEntity));
   try {
     if (isDifferent) {
@@ -105,6 +110,31 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
       await ModelService.deleteModelConfig(entity.workspaceId);
       // await new Promise(res => setTimeout(res, 500));
       await ModelService.delete(entity.workspaceId);
+    } else {
+      if (model.base === 'Model') {
+        const dataSource = Connections.search({toId: updatedEntity.id})
+          .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
+          .find(item => item.constructor.type === 'DataSource');
+        if (dataSource) {
+          await ModelService.deleteModelConfig(updatedEntity.workspaceId);
+        }
+      }
+    }
+    if (isDifferent || isPublicDifferent) {
+      const dataSource = Connections.search({toId: entity.id})
+        .map(conn => storeUtils.findEntity(state, 0, conn.fromId))
+        .find(item => item.constructor.type === 'DataSource');
+      if (model.base === 'PersistedModel') {
+        await ModelService.upsertModelConfig({
+          name: updatedEntity.name,
+          id: updatedEntity.workspaceId,
+          facetName: 'server',
+          dataSource: dataSource ? dataSource.name : null,
+          public: updatedEntity.public,
+        });
+      }
+    }
+    if (isDifferent) {
       if (modelJs === undefined) {
         modelJs = state.entities.workspaceFiles.files.server.models[entity.modelJsName];
       }
@@ -158,6 +188,13 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
         });
       }
     }
+    if (model.methods && deltaMethods.length > 0) {
+      await ModelService.deleteMethods(updatedEntity.workspaceId);
+      if (model.methods.length > 0) {
+        const {body: methods} = await ModelService.upsertMethods(model.methods);
+        updatedEntity.methods = processMethods(methods);
+      }
+    }
     updatedEntity.ready = true;
     dispatch(actions[updateAction](updatedEntity));
     if (!wasBundled) {
@@ -190,13 +227,20 @@ export const update = (entity, model, paper) => async (dispatch, getState) => {
     } else if (!entity.loaded) {
       await dispatch(workspaceFilesReload());
     }
+    if (deltaModel.length
+      || deltaProperties.length
+      || deltaRelations.length
+      || deltaMethods.length
+    ) {
+      reloadApiExplorer(dispatch, state);
+    }
     return updatedEntity;
   } catch (error) {
     dispatch(coreActions.addSystemDefcon1({error}));
   }
 };
 
-export const remove = (entity, cb, action = 'removeModel') => async (dispatch) => {
+export const remove = (entity, cb, action = 'removeModel') => async (dispatch, getState) => {
   const {loaded, wasBundled} = entity;
   let updateAction = 'updateModel';
   if (wasBundled) {
@@ -219,6 +263,7 @@ export const remove = (entity, cb, action = 'removeModel') => async (dispatch) =
     if (!wasBundled) {
       await dispatch(coreActions.saveToServer({saveProject: false}));
     }
+    reloadApiExplorer(dispatch, getState());
   } catch (error) {
     updatedEntity.ready = true;
     updatedEntity.deleting = false;

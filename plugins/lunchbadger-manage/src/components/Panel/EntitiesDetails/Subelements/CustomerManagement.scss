@@ -163,17 +163,39 @@
     margin: 5px 5px 5px 0;
     padding: 25px 15px;
     position: relative;
+    .CustomerManagement__loader {
+      display: none;
+    }
     &.loading {
-      &:after {
+      .CustomerManagement__loader {
         display: block;
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.75);
+        text-align: center;
+        height: 203px;
+        font-size: 18px;
+        padding-top: 25px;
+        .spinner__overlay {
+          width: 100%;
+          height: 90px;
+          margin-top: 30px;
+          .spinner {
+            margin: 0 auto;
+          }
+        }
       }
+      .CustomerManagement__pending__data,
+      .EntityActionButtons {
+        display: none;
+      }
+      // &:after {
+      //   display: block;
+      //   content: '';
+      //   position: absolute;
+      //   top: 0;
+      //   left: 0;
+      //   right: 0;
+      //   bottom: 0;
+      //   background-color: rgba(255, 255, 255, 0.75);
+      // }
     }
     .EntityProperty {
       vertical-align: top;
@@ -208,5 +230,21 @@
   }
   100% {
     transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+.BaseDetails.customerManagement.locked .BaseDetails__content:after {
+  display: none;
+}
+
+.BaseDetails.customerManagement.listing {
+  .EntityActionButtons .Button {
+    &.cancel,
+    &.submit {
+      display: none;
+    }
+    &.close {
+      display: inline-block;
+    }
   }
 }

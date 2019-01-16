@@ -102,6 +102,7 @@ export default class Gateway extends BaseModel {
   _pipelines = [];
   _pipelinesLunchbadger = undefined;
   _policies = [];
+  _podName = '';
   system = {};
   zoomWindow = {
     width: 1150,
@@ -117,24 +118,27 @@ export default class Gateway extends BaseModel {
   }
 
   static create(data) {
-    const adminApi = new ExpressGatewayAdminService(data.name);
-    if (!data.deleting) {
-      adminApi.initialize(data.name);
-    }
     return super.create({
       ...data,
       pipelines: Object.keys(data.pipelines || {}).map(name => Pipeline.create({name, ...data.pipelines[name]})),
       http: this.deserializeHttp(data.http),
       https: this.deserializeHttps(data.https),
       admin: this.deserializeAdmin(data.admin),
-      adminApi: adminApi,
     });
   }
 
   recreate() {
-    const {lockedAdminApi} = this;
+    const {
+      lockedAdminApi,
+      adminApi,
+      podName,
+    } = this;
     const gateway = Gateway.create(this.toJSON());
-    gateway.lockedAdminApi = lockedAdminApi;
+    Object.assign(gateway, {
+      lockedAdminApi,
+      adminApi,
+      podName,
+    });
     return gateway;
   }
 
@@ -216,13 +220,12 @@ export default class Gateway extends BaseModel {
   }
 
   get tabs() {
-    const tabs = [
-      {
-        name: 'pipelines',
-        label: 'Pipelines',
-        icon: 'iconPipelines',
-      },
-    ];
+    const tabs = [];
+    tabs.push({
+      name: 'pipelines',
+      label: 'Pipelines',
+      icon: 'iconPipelines',
+    });
     if (consumerManagement) {
       tabs.push({
         name: 'customerManagement',
@@ -447,6 +450,18 @@ export default class Gateway extends BaseModel {
     return this._policies;
   }
 
+  set podName(podName) {
+    this._podName = podName;
+    if (!this.deleting) {
+      this.adminApi = new ExpressGatewayAdminService();
+      this.adminApi.initialize(podName);
+    }
+  }
+
+  get podName() {
+    return this._podName;
+  }
+
   get ports() {
     return this.pipelines
       .map(pipeline => pipeline.ports)
@@ -454,7 +469,8 @@ export default class Gateway extends BaseModel {
   }
 
   get rootUrl() {
-    return Config.get('expressGatewayAccessApiUrl').replace('{NAME}', slug(this.name, {lower: true}));
+    if (this.podName === '') return '';
+    return Config.get('expressGatewayAccessApiUrl').replace('{NAME}', this.podName);
   }
 
   get connectedApiEndpoints() {

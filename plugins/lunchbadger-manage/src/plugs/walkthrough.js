@@ -1,7 +1,9 @@
 import React from 'react';
-import {CopyOnHover} from '../../../lunchbadger-ui/src';
 
-const {getUser} = LunchBadgerCore.utils;
+const {
+  utils: {getUser},
+  UI: {CopyOnHover},
+} = LunchBadgerCore;
 
 export default {
   //   '050': {
@@ -155,9 +157,9 @@ Click <pre>OK</pre> to deploy a Gateway.
     onBefore: () => [],
   },
   '0708': {
-    title: 'Connect Car Model with CarPipeline',
+    title: 'Connect car Model with CarPipeline',
     text: `
-Connect the <pre>Car</pre> Model Entity with the <pre>CarPipeline</pre> by clicking and dragging from one circular port to the other.
+Connect the <pre>car</pre> Model Entity with the <pre>CarPipeline</pre> by clicking and dragging from one circular port to the other.
 `,
     waitForSelector: '.Entity.Model .port__wrap__out',
     position: 'left',
@@ -447,7 +449,7 @@ Add the following path: <pre>/myfunction*</pre>
   },
   '0806': {
     title: 'Flow through Private Quadrant',
-    text: 'The API request then makes its way to an Entity in the Private Quadrant (Model, Service Endpoint, or Function). In this example, the request is routed to <pre>Car</pre> Model Entity.',
+    text: 'The API request then makes its way to an Entity in the Private Quadrant (Model, Service Endpoint, or Function). In this example, the request is routed to <pre>car</pre> Model Entity.',
     waitForSelector: '.Entity.Model',
     position: 'bottom-left',
     allowClicksThruHole: false,

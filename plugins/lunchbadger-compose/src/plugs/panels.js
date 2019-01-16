@@ -1,5 +1,8 @@
 import ApiExplorerPanel from '../components/Panel/ApiExplorerPanel';
-import Config from '../../../../src/config';
+
+const {
+  utils: {Config},
+} = LunchBadgerCore;
 
 const panels = [];
 if (Config.get('features').apiExplorer) {

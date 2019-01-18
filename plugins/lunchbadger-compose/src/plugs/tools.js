@@ -15,6 +15,7 @@ const dataSources = [
   'PostgreSQL',
   'Ethereum',
   'Salesforce',
+  'Storage',
 ];
 
 if (Config.get('features').tritonObjectStorage) {

@@ -8,6 +8,7 @@ import postgresql from './Postgresql';
 import web3 from './Web3';
 import salesforce from './Salesforce';
 import manta from './Manta';
+import storage from './Storage';
 
 export default {
   memory,
@@ -20,4 +21,5 @@ export default {
   web3,
   salesforce,
   manta,
+  storage,
 };

@@ -91,6 +91,10 @@ export default class DataSource extends BaseModel {
     return [this.connector];
   }
 
+  get errorMatchKeywords() {
+    return [];
+  }
+
   get zoomWindow() {
     return {
       width: 470,

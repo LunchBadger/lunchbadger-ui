@@ -325,4 +325,33 @@ export default {
     required: ['url', 'user', 'keyId'],
     canvas: ['url', 'user', 'subuser', 'keyId'],
   },
+  storage: {
+    properties: {
+      provider: {
+        type: 'string',
+        enum: [
+          'amazon',
+          // 'rackspace',
+          // 'azure',
+          // 'openstack',
+          // 'google',
+          // 'filesystem',
+        ],
+      },
+      key: {
+        type: 'string',
+      },
+      keyId: {
+        type: 'string',
+      },
+      nameConflict: {
+        type: 'string',
+        enum: [
+          'makeUnique',
+        ],
+      },
+    },
+    required: ['provider', 'key', 'keyId'],
+    canvas: ['provider', 'key', 'keyId'],
+  },
 };

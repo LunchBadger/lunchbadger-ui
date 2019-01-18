@@ -160,7 +160,10 @@ class Model extends Component {
   renderPorts = () => {
     const {entity} = this.props;
     const {ports, constructor: {type}, gaType, base} = entity;
-    if (base === 'Model') return null;
+    const isStorageDefined = Object.values(this.context.store.getState().entities.dataSources)
+      .filter(ds => ds.loaded && ds.connector === 'storage')
+      .length > 0;
+    if (base === 'Model' && !isStorageDefined) return null;
     return ports.map(({portType, id, portGroup}) => (
       <Port
         key={`port-${portType}-${id}`}

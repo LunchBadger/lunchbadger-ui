@@ -69,6 +69,7 @@ const {
   iconDataSourceEthereum,
   iconDataSourceSalesforce,
   iconDataSourceTritonObjectStorage,
+  iconDataSourceStorage,
 } = icons;
 
 const entityIcons = {
@@ -94,6 +95,7 @@ const dataSourceIcons = {
   web3: iconDataSourceEthereum,
   salesforce: iconDataSourceSalesforce,
   manta: iconDataSourceTritonObjectStorage,
+  storage: iconDataSourceStorage,
 };
 
 export {

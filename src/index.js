@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.376', [
+console.info('LBAPP VERSION 0.377', [
+  'Feature/1152 add loopback connector storage #1153',
   'Feature/1150 Use new xhr lib for all api calls #1151',
   'Feature/1148 Use different lib for producers api call #1149',
   'Bugfix/1146 Reload button not working in producers error box #1147',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.376', [
   'Bugfix/1109 Admin api fails because of -- in url #1111',
   'Feature/1108 New walkthrough step after memory submit #1110',
   'Bugfix/1104 Deleted gateway should not affect new gateway name #1107',
-  'Feature/1102 connectors need to use their own icon #1106',
-  'Feature/1099 cars model name lowercase #1105'
+  'Feature/1102 connectors need to use their own icon #1106'
 ]);
 
 // Google Analityca

@@ -235,6 +235,16 @@ export default class Rest extends PureComponent {
     this.changeState({operations});
   };
 
+  handleToggleTemplateBody = operationIdx => ({target: {checked}}) => {
+    const operations = transformOperations(this.state.operations);
+    if (checked) {
+      operations[operationIdx].template.body = '';
+    } else {
+      delete operations[operationIdx].template.body;
+    }
+    this.changeState({operations});
+  };
+
   handleToggleOptionsHeaders = ({target: {checked}}) => {
     const options = transformOptions(this.state.options);
     if (checked) {
@@ -502,6 +512,31 @@ export default class Rest extends PureComponent {
         )}
       </div>
     );
+  };
+
+  renderTemplateBody = (body, operationIdx) => {
+    return (
+      <div className="Rest__body">
+        <span>
+          <Checkbox
+            label="Enabled"
+            name={`tmp[${operationIdx}][template][body][enabled]`}
+            value={!!body}
+            handleChange={this.handleToggleTemplateBody(operationIdx)}
+          />
+        </span>
+        {typeof body === 'string' && (
+          <span>
+            <EntityProperty
+              name={`operations[${operationIdx}][template][body]`}
+              value={body}
+              width="100%"
+              placeholder="Enter body here"
+            />
+          </span>
+        )}
+      </div>
+    );
   }
 
   renderOperation = (operation, idx) => {
@@ -509,14 +544,12 @@ export default class Rest extends PureComponent {
     const {id} = entity;
     const methodOptions = requestMethods.map(label => ({label, value: label}));
     let widthMethod;
-    let widthTemplate;
     if (!plain) {
       widthMethod = 145;
-      widthTemplate = 300;
     }
     return (
       <div className="Rest__operations__collapsible__operation">
-        <span className="Rest__method">
+        <div className="Rest__method">
           <EntityProperty
             name={`operations[${idx}][template][method]`}
             title="Method"
@@ -524,21 +557,21 @@ export default class Rest extends PureComponent {
             options={methodOptions}
             width={widthMethod}
           />
-        </span>
-        <span className="Rest__url">
+        </div>
+        <div className="Rest__url">
           <EntityProperty
             name={`operations[${idx}][template][url]`}
             title="URL"
             value={operation.template.url}
-            width={widthTemplate}
+            width="100%"
           />
-        </span>
+        </div>
         <span className="Rest__plain">
           <EntityProperty
             name={`operations[${idx}][template][responsePath]`}
             title="Response Path"
             value={operation.template.responsePath}
-            width={widthTemplate}
+            width="100%"
           />
           <CollapsibleProperties
             id={`${id}/OPERATIONS/${idx}/OPTIONS`}
@@ -558,6 +591,13 @@ export default class Rest extends PureComponent {
             id={`${id}/OPERATIONS/${idx}/QUERY`}
             bar={<EntityPropertyLabel>Query</EntityPropertyLabel>}
             collapsible={this.renderParameters('query', operation.template.query, idx)}
+            defaultOpened
+            barToggable
+          />
+          <CollapsibleProperties
+            id={`${id}/OPERATIONS/${idx}/Body`}
+            bar={<EntityPropertyLabel>Body</EntityPropertyLabel>}
+            collapsible={this.renderTemplateBody(operation.template.body, idx)}
             defaultOpened
             barToggable
           />

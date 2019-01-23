@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.377', [
+console.info('LBAPP VERSION 0.378', [
+  'Feature/1155 Add body section to rest model connector #1156',
   'Feature/1152 add loopback connector storage #1153',
   'Feature/1150 Use new xhr lib for all api calls #1151',
   'Feature/1148 Use different lib for producers api call #1149',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.377', [
   'Feature/920 add remote methods for gui to expose #1120',
   'Bugfix/1109 Admin api fails because of -- in url #1111',
   'Feature/1108 New walkthrough step after memory submit #1110',
-  'Bugfix/1104 Deleted gateway should not affect new gateway name #1107',
-  'Feature/1102 connectors need to use their own icon #1106'
+  'Bugfix/1104 Deleted gateway should not affect new gateway name #1107'
 ]);
 
 // Google Analityca

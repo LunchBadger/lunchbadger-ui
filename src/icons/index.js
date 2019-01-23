@@ -28,8 +28,9 @@ import iconDataSourcePostgreSQL from './icon-datasource-postgresql.svg';
 import iconDataSourceRedis from './icon-datasource-redis.svg';
 import iconDataSourceREST from './icon-datasource-rest.svg';
 import iconDataSourceSalesforce from './icon-datasource-salesforce.svg';
-import iconDataSourceTritonObjectStorage from './icon-datasource-tritonobjectstorage.svg';
+import iconDataSourceStorage from './icon-datasource-storage.svg';
 import iconDataSourceSOAP from './icon-datasource-soap.svg';
+import iconDataSourceTritonObjectStorage from './icon-datasource-tritonobjectstorage.svg';
 import iconDelete from './icon-delete.svg';
 import iconDetails from './icon-details.svg';
 import iconEdit from './icon-edit.svg';
@@ -93,8 +94,9 @@ export {
   iconDataSourceRedis,
   iconDataSourceREST,
   iconDataSourceSalesforce,
-  iconDataSourceTritonObjectStorage,
+  iconDataSourceStorage,
   iconDataSourceSOAP,
+  iconDataSourceTritonObjectStorage,
   iconDelete,
   iconDetails,
   iconEdit,

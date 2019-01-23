@@ -36,6 +36,7 @@ const {components: {GatewayPolicyAction}} = LunchBadgerManage;
 const baseModelTypes = [
   {label: 'Model', value: 'Model'},
   {label: 'PersistedModel', value: 'PersistedModel'},
+  {label: 'User', value: 'User'},
 ];
 
 const userFieldsTypeOptions = [

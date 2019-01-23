@@ -75,10 +75,15 @@ const catchMap = [
         return Object.keys(newState)[0];
       }
       for (let id in newState) {
-        const {nodeModules} = newState[id];
+        const {nodeModules, errorMatchKeywords} = newState[id];
         for (let i in nodeModules) {
           const nodeModule = nodeModules[i];
           const credsRegex = new RegExp(`node_modules/${nodeModule}/`, 'i');
+          if (credsRegex.test(message)) return id;
+        }
+        for (let i in errorMatchKeywords) {
+          const errorMatchKeyword = errorMatchKeywords[i];
+          const credsRegex = new RegExp(errorMatchKeyword, 'i');
           if (credsRegex.test(message)) return id;
         }
       }

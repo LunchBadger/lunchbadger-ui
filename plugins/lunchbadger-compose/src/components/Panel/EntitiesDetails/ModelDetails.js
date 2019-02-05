@@ -276,6 +276,14 @@ class ModelDetails extends PureComponent {
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   };
 
+  handlePropertyValueChange = (id, field, type = 'value') => (event) => {
+    const value = event.target[type];
+    const properties = [...this.state.properties];
+    const prop = properties.find(prop => prop.id === id);
+    prop[field] = value;
+    this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
+  };
+
   handleDefaultChange = id => ({target: {checked}}) => {
     const properties = [...this.state.properties];
     properties.find(prop => prop.id === id).withDefault = checked;
@@ -428,7 +436,7 @@ class ModelDetails extends PureComponent {
     });
   };
 
-  renderPropertyDefaultValue = ({type, default_, idx}) => {
+  renderPropertyDefaultValue = ({id, type, default_, idx}) => {
     if (type === 'boolean') return (
       <div className="ModelDetails__default--checkbox">
         <Checkbox
@@ -455,6 +463,7 @@ class ModelDetails extends PureComponent {
         type={type}
         textarea={subTypes.includes(type)}
         inputType={inputType}
+        onBlur={this.handlePropertyValueChange(id, 'default_')}
       />
     );
   }
@@ -507,6 +516,7 @@ class ModelDetails extends PureComponent {
             underlineStyle={{bottom: 0}}
             fullWidth
             hideUnderline
+            handleBlur={this.handlePropertyValueChange(property.id, 'name')}
           />
         </div>
       </div>,
@@ -539,16 +549,19 @@ class ModelDetails extends PureComponent {
           underlineStyle={{bottom: 0}}
           fullWidth
           hideUnderline
+          handleBlur={this.handlePropertyValueChange(property.id, 'description')}
         />
       </div>,
       <Checkbox
         name={`properties[${property.idx}][required]`}
         value={property.required}
+        handleBlur={this.handlePropertyValueChange(property.id, 'required', 'checked')}
       />,
       <Checkbox
         name={`properties[${property.idx}][index]`}
         value={property.index}
         handleKeyDown={this.handleTabProperties(property)}
+        handleBlur={this.handlePropertyValueChange(property.id, 'index', 'checked')}
       />,
       <div style={{marginTop: 15}}>
         <IconButton name={`remove__property${property.idx}`} icon="iconDelete" onClick={this.onRemoveProperty(property)} />

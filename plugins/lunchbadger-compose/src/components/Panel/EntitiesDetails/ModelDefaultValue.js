@@ -18,8 +18,9 @@ export default class ModelDefaultValue extends PureComponent {
     }
   }
 
-  handleBlur = ({target: {value}}) => {
-    const {type} = this.props;
+  handleBlur = (event) => {
+    const {target: {value}} = event;
+    const {type, onBlur} = this.props;
     if (['object', 'array', 'geopoint'].includes(type)) {
       let invalid = false;
       try {
@@ -43,6 +44,7 @@ export default class ModelDefaultValue extends PureComponent {
       }
       this.setState({invalid});
     }
+    onBlur(event);
   };
 
   render() {

@@ -23,8 +23,7 @@ import {
   Aside,
   Walkthrough,
 } from '../../ui';
-import {getUser} from '../../utils/auth';
-import Config from '../../../../../src/config';
+import userStorage from '../../utils/userStorage';
 import Connections from '../../stores/Connections';
 import './App.scss';
 
@@ -75,11 +74,12 @@ class App extends Component {
 
   renderHeader = () => {
     const {isEntityEditable} = this.props;
-    const {preferred_username: username, sub} = getUser().profile;
+    const activeUsername = userStorage.getActiveUsername();
+    const activeProject = userStorage.getActiveProject();
     if (LunchBadgerCore.isMultiEnv) {
       return (
         <HeaderMultiEnv
-          username={username}
+          username={activeUsername}
           disabledMultiEnvMenu={isEntityEditable || !!this.props.currentlyOpenedPanel}
           headerMenuDisabled={isEntityEditable}
         />
@@ -87,9 +87,8 @@ class App extends Component {
     }
     return (
       <Header
-        username={username}
-        login={sub}
-        envId={Config.get('envId')}
+        username={activeUsername}
+        projectName={activeProject}
       />
     );
   }
@@ -119,7 +118,7 @@ class App extends Component {
         }
         return walkthrough[key];
       });
-    const userId = getUser().profile.sub;
+    const userId = userStorage.getActiveUsername();
     return (
       <Provider connectionsStore={Connections}>
         <div className={cs('app__wrapper', {blocked})}>

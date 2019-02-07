@@ -74,6 +74,25 @@
   .fa-question {
     vertical-align: top;
   }
+  button[type="button"] {
+    border: 0 !important;
+    padding: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    .IconButton {
+      width: 40px;
+      height: 40px;
+      float: none;
+      margin-left: 0;
+      position: relative;
+      top: 3px;
+      svg {
+        fill: #023845;
+        width: 33px;
+        height: 33px;
+      }
+    }
+  }
 }
 
 .header__menu__link--hidden {

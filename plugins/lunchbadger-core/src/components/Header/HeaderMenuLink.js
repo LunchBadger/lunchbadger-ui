@@ -5,6 +5,18 @@ import cs from 'classnames';
 import {IconSVG, ContextualInformationMessage} from '../../ui';
 import TwoOptionModal from '../Generics/Modal/TwoOptionModal';
 
+const Tooltiple = ({tooltip, skipTooltip, children}) => {
+  if (skipTooltip) return <span>{children}</span>;
+  return (
+    <ContextualInformationMessage
+      tooltip={tooltip}
+      direction="bottom"
+    >
+      {children}
+    </ContextualInformationMessage>
+  );
+};
+
 class HeaderMenuLink extends PureComponent {
   constructor(props) {
     super(props);
@@ -27,6 +39,7 @@ class HeaderMenuLink extends PureComponent {
       hidden,
       icon,
       svg,
+      Component,
       pressed,
       panel,
       name,
@@ -34,6 +47,7 @@ class HeaderMenuLink extends PureComponent {
       url,
       tooltip,
       action,
+      skipTooltip,
     } = this.props;
     const linkClass = cs('header__menu__link', panel, name, {
       'header__menu__link--hidden': hidden,
@@ -43,26 +57,27 @@ class HeaderMenuLink extends PureComponent {
     return (
       <li className="header__menu__element">
         {url && (
-          <ContextualInformationMessage
+          <Tooltiple
             tooltip={tooltip}
-            direction="bottom"
+            skipTooltip={skipTooltip}
           >
             <a className={linkClass} href={url} target="_blank" onClick={action}>
               {icon && <i className={cs('fa', icon)} />}
               {!icon && url}
             </a>
-          </ContextualInformationMessage>
+          </Tooltiple>
         )}
         {!url && (
-          <ContextualInformationMessage
+          <Tooltiple
             tooltip={tooltip}
-            direction="bottom"
+            skipTooltip={skipTooltip}
           >
             <span className={linkClass} onClick={this.handleClick}>
               {icon && <i className={cs('fa', icon)} />}
               {svg && <IconSVG className="header__menu__link__svg" svg={svg} />}
+              {Component && <Component />}
             </span>
-          </ContextualInformationMessage>
+          </Tooltiple>
         )}
         {confirm && showConfirmModal && (
           <TwoOptionModal

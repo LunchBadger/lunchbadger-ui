@@ -60,7 +60,7 @@ export default class ContextualInformationMessage extends PureComponent {
           overlayStyle={overlayStyle}
           overlayClassName={cs('ContextualInformationMessage', slug(tooltip))}
           destroyTooltipOnHide
-          onVisibleChange={this.onVisibleChange}
+          // onVisibleChange={this.onVisibleChange}
         >
           {children}
         </Tooltip>

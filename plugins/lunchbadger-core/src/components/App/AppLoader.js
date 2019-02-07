@@ -11,8 +11,8 @@ import recordedMocks from '../../utils/recordedMocks';
 import KubeWatcherService from '../../services/KubeWatcherService';
 import Config from '../../../../../src/config';
 import {actions} from '../../reduxActions/actions';
-import {updateEntitiesStatues} from '../../reduxActions';
-import {getUser} from '../../utils/auth';
+import {updateEntitiesStatues, loadSharedProjects} from '../../reduxActions';
+import userStorage from '../../utils/userStorage';
 import './AppLoader.scss';
 
 const pingAmount = Config.get('pingAmount');
@@ -38,12 +38,10 @@ class AppLoader extends Component {
       workspaceError: false,
     };
     this.kubeWatcherStarted = false;
-    const {sub} = getUser().profile;
-    this.username = sub;
   }
 
   componentWillMount() {
-    setTimeout(() => this.load(), 100);
+    this.load();
   }
 
   componentDidMount() {
@@ -93,7 +91,7 @@ class AppLoader extends Component {
     }
     this.setState({workspaceRunning});
     if (!document.location.search.includes('autogw')) {
-      delete data.gateway[`${this.username}dev0000`];
+      delete data.gateway[`${userStorage.getActiveUsername()}dev0000`];
     }
     if (this.prevMessage !== message.data) {
       this.prevMessage = message.data;
@@ -118,6 +116,7 @@ class AppLoader extends Component {
         return waitForProject(pingAmount, pingIntervalMs);
       })
       .then(() => {
+        this.props.dispatch(loadSharedProjects());
         this.setState({loaded: true});
         // Setting the projectState will trigger the App render, which will
         // in turn trigger the remote call to the server. This creates some

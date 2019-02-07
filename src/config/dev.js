@@ -59,6 +59,7 @@ export default {
     apiExplorer: true,
     slsModelConnectorsTriggers: true,
     slsModelsTriggers: true,
+    multiuser: true,
     fnTypes: [
       {
         label: '.Net Core 2.0',
@@ -99,5 +100,6 @@ export default {
       }
     ]
   },
-  logins
+  logins,
+  fakeSharedProjectUsernames: ['ko', 'sk', 'al', 'al2']
 };

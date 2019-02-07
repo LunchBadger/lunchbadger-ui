@@ -25,12 +25,15 @@ import {
 import {
   updateEntitiesStatues,
 } from './entitiesStatuses';
+import {
+  loadSharedProjects,
+} from './projects';
 
 export {
   togglePanel,
   changePanelStatus,
   toggleSubelement,
-
+  loadSharedProjects,
   loadFromServer,
   saveToServer,
   saveOrder,

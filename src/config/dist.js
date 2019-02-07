@@ -61,6 +61,7 @@ export default {
     apiExplorer: true,
     slsModelConnectorsTriggers: false,
     slsModelsTriggers: false,
+    multiuser: false,
     fnTypes: [
       {
         label: 'Node 6',
@@ -80,5 +81,6 @@ export default {
         value: 'python:3.6'
       }
     ]
-  }
+  },
+  fakeSharedProjectUsernames: ['altsang', 'kristofolbinski', 'serhiikuts']
 };

@@ -1,6 +1,7 @@
 import ApiClientNew from '../utils/ApiClientNew';
 import Config from '../../../../src/config';
 import {getUser} from '../utils/auth';
+import userStorage from '../utils/userStorage';
 
 const enableConfigStoreApi = Config.get('enableConfigStoreApi');
 
@@ -13,7 +14,7 @@ class ConfigStoreService {
 
   upsertProject = () => {
     if (enableConfigStoreApi) {
-      return this.api.post('/producers', {data: {id: getUser().profile.sub}});
+      return this.api.post('/producers', {data: {id: userStorage.getActiveUsername()}});
     }
     return Promise.resolve();
   }

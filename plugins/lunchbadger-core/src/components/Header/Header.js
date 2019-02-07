@@ -33,7 +33,7 @@ const brandingLogo = brandingLogos[branding];
 
 export default class Header extends PureComponent {
   render() {
-    const {username, envId, blank} = this.props;
+    const {username, projectName, blank} = this.props;
     return (
       <header className="header" ref="headerContainer">
         <Logo />
@@ -49,7 +49,7 @@ export default class Header extends PureComponent {
             {!brandingLogo && <strong>{branding}</strong>}
           </span>
         )}
-        {!blank && <Breadcrumbs username={username} envId={envId}/>}
+        {!blank && <Breadcrumbs username={username} projectName={projectName}/>}
         {!blank && <HeaderMenu />}
       </header>
     );

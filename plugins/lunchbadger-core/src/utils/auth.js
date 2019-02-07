@@ -5,6 +5,7 @@ import {UserManager} from 'oidc-client';
 import FakeLogin from '../components/FakeLogin/FakeLogin';
 import Config from '../../../../src/config';
 import isStorageSupported from './isStorageSupported';
+import userStorage from './userStorage';
 
 export class LoginManager {
   constructor(config) {
@@ -43,7 +44,7 @@ export class LoginManager {
         console.debug('logged in:', user);
         window.location = '#';
         this.user = user;
-        Config.apiUrlsReplacements(this.user.profile.sub);
+        Config.apiUrlsReplacements(userStorage.getActiveUsername());
         window.localStorage.setItem('login_refresh_attempts', 0);
         localStorage.setItem('logoutCalled', 0);
         return true;
@@ -92,7 +93,7 @@ export class DummyLoginManager {
     }
     this.user.profile.sub = fakeLogin;
     this.user.profile.preferred_username = localStorage.getItem('preferred_username');
-    Config.apiUrlsReplacements(this.user.profile.sub);
+    Config.apiUrlsReplacements(userStorage.getActiveUsername());
     localStorage.setItem('logoutCalled', 0);
     return Promise.resolve(this.user);
   }

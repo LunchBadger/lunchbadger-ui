@@ -3,8 +3,10 @@ import {togglePanel} from '../reduxActions/states';
 import Config from '../../../../src/config';
 import {GAEvent} from '../ui';
 import icons from '../ui/icons';
+import ProjectMenu from '../components/Header/ProjectMenu';
+import ProfileMenu from '../components/Header/ProfileMenu';
 
-const {iconLogout, iconProject} = icons;
+const {iconLogout} = icons;
 
 const panelMenu = {
   0: {
@@ -39,7 +41,23 @@ const panelMenu = {
     action: () => GAEvent('Header Menu', 'Documentation'),
     tooltip: 'Documentation',
   },
-  12: {
+};
+
+if (document.location.search.includes('multiuser')) {
+  panelMenu[2] = {
+    Component: ProjectMenu,
+    tooltip: 'Manage projects',
+    action: () => {},
+    conditional: state => state.projects.sharedProjects.length > 1,
+  };
+  panelMenu[12] = {
+    Component: ProfileMenu,
+    tooltip: 'Profile',
+    action: () => {},
+    skipTooltip: true,
+  };
+} else {
+  panelMenu[12] = {
     svg: iconLogout,
     action: logout(),
     confirm: {
@@ -48,16 +66,7 @@ const panelMenu = {
       message: 'Are you sure, you want to log out from the workspace?',
     },
     tooltip: 'Logout',
-  },
-};
-
-if (document.location.search.includes('multiuser')) {
-  panelMenu[2] = {
-    svg: iconProject,
-    panel: 'MANAGE_PROJECT',
-    action: () => {},
-    tooltip: 'Manage projects',
-  };
+  }
 }
 
 export default panelMenu;

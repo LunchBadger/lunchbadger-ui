@@ -12,7 +12,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.381', [
+console.info('LBAPP VERSION 0.382', [
   'Feature/589 rest connector improve input for body section #1160',
   'Feature/1158 multiuser project switcher #1159',
   'Bugfix/1154 reorder: blank property #1157',

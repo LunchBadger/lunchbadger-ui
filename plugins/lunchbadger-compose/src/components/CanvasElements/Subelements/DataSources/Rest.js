@@ -44,6 +44,12 @@ const transformOperations = operations => _.merge([], operations)
     const item = _.merge({...operation, id: operation.id || uuid.v4()});
     transformParameters(item.template, 'headers');
     transformParameters(item.template, 'query');
+    if (typeof item.template.body === 'string') {
+      item.template.body = [];
+    }
+    if (typeof item.template.body === 'object') {
+      transformParameters(item.template, 'body');
+    }
     transformParameters(item, 'functions');
     return item;
   });
@@ -238,7 +244,7 @@ export default class Rest extends PureComponent {
   handleToggleTemplateBody = operationIdx => ({target: {checked}}) => {
     const operations = transformOperations(this.state.operations);
     if (checked) {
-      operations[operationIdx].template.body = '';
+      operations[operationIdx].template.body = [];
     } else {
       delete operations[operationIdx].template.body;
     }
@@ -514,26 +520,24 @@ export default class Rest extends PureComponent {
     );
   };
 
-  renderTemplateBody = (body, operationIdx) => {
+  renderTemplateBody = (operation, body, operationIdx) => {
     return (
       <div className="Rest__body">
-        <span>
-          <Checkbox
-            label="Enabled"
-            name={`tmp[${operationIdx}][template][body][enabled]`}
-            value={!!body}
-            handleChange={this.handleToggleTemplateBody(operationIdx)}
-          />
-        </span>
-        {typeof body === 'string' && (
-          <span>
-            <EntityProperty
-              name={`operations[${operationIdx}][template][body]`}
-              value={body}
-              width="100%"
-              placeholder="Enter body here"
+        <Checkbox
+          label="Enabled"
+          name={`tmp[${operationIdx}][template][body][enabled]`}
+          value={!!body}
+          handleChange={this.handleToggleTemplateBody(operationIdx)}
+        />
+        {!!body && (
+          <div>
+            <Input
+              name={`operations[${operationIdx}][template][body][]`}
+              value={1}
+              type="hidden"
             />
-          </span>
+            {this.renderParameters('body', operation.template.body, operationIdx)}
+          </div>
         )}
       </div>
     );
@@ -597,7 +601,7 @@ export default class Rest extends PureComponent {
           <CollapsibleProperties
             id={`${id}/OPERATIONS/${idx}/Body`}
             bar={<EntityPropertyLabel>Body</EntityPropertyLabel>}
-            collapsible={this.renderTemplateBody(operation.template.body, idx)}
+            collapsible={this.renderTemplateBody(operation, operation.template.body, idx)}
             defaultOpened
             barToggable
           />

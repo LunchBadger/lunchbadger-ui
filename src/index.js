@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.380', [
+console.info('LBAPP VERSION 0.381', [
+  'Feature/589 rest connector improve input for body section #1160',
   'Feature/1158 multiuser project switcher #1159',
   'Bugfix/1154 reorder: blank property #1157',
   'Feature/1155 Add body section to rest model connector #1156',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.380', [
   'Feature/1117 consumer management waiting screen for credential #1125',
   'Feature/1122 make logo toggable #1124',
   'Feature/1112 soap and rest icons #1123',
-  'Feature/920 add remote methods for gui to expose #1120',
-  'Bugfix/1109 Admin api fails because of -- in url #1111'
+  'Feature/920 add remote methods for gui to expose #1120'
 ]);
 
 // Google Analityca

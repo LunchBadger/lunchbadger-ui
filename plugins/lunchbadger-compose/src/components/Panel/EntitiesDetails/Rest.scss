@@ -8,5 +8,21 @@
         width: 170px;
       }
     }
+    &__body {
+      & > span {
+        display: inline-block;
+        vertical-align: top;
+        &:first-child {
+          width: 150px;
+        }
+        &:last-child {
+          width: calc(100% - 150px);
+          height: 24px;
+          .EntityProperty {
+            margin-top: -17px;
+          }
+        }
+      }
+    }
   }
 }

@@ -104,6 +104,19 @@ export default class Rest extends DataSource {
               operation.template.query[key.trim()] = value;
             }
           });
+          const body = operation.template.body;
+          delete operation.template.body;
+          if (typeof body === 'object') {
+            operation.template.body = {};
+            body.forEach(({key, value}) => {
+              if (key.trim() !== '') {
+                operation.template.body[key.trim()] = value;
+              }
+            });
+            if (Object.keys(operation.template.body).length === 0) {
+              operation.template.body = '{body:object}';
+            }
+          }
           const functions = operation.functions || [];
           operation.functions = {};
           functions.forEach(({key, value}) => {

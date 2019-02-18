@@ -7,6 +7,7 @@ import systemInformationMessages from './systemInformationMessages';
 import multiEnvironments from './multiEnvironments';
 import entitiesStatuses from './entitiesStatuses';
 import canvasHeight from './canvasHeight';
+import projects from './projects';
 
 export default {
   states,
@@ -18,4 +19,5 @@ export default {
   multiEnvironments,
   entitiesStatuses,
   canvasHeight,
+  projects,
 };

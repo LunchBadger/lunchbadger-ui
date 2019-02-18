@@ -1,11 +1,12 @@
 import ApiClient from '../utils/ApiClient';
 import Config from '../../../../src/config';
 import {getUser} from '../utils/auth';
+import userStorage from '../utils/userStorage';
 
 class ProjectService {
   initialize = () => this.api = new ApiClient(Config.get('projectApiUrl'), getUser().id_token);
 
-  getProjectId = () => `${getUser().profile.sub}-${Config.get('envId')}`;
+  getProjectId = () => `${userStorage.getActiveUsername()}-${userStorage.getActiveProject()}`;
 
   load = () => this.api.get(`/Projects/${this.getProjectId()}`);
 

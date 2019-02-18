@@ -6,11 +6,10 @@ import './Breadcrumbs.scss';
 
 class Breadcrumbs extends PureComponent {
   render() {
-    const {username, envId, loadedProject} = this.props;
+    const {username, projectName, loadedProject} = this.props;
     return (
       <div className="breadcrumbs">
-        <span className="breadcrumbs__element username">{username}</span>
-        <span className="breadcrumbs__element">{envId}</span>
+        <span className="breadcrumbs__element username">{username}-{projectName}</span>
         <span className="breadcrumbs__element">Canvas</span>
         <span className="status">
           {loadedProject && <WorkspaceStatus />}

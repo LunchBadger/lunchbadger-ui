@@ -10,7 +10,7 @@ const mocks = Config.get('mocks');
 
 const statusCodesToRepeat = {
   422: 5,
-  404: 3,
+  503: 5,
 };
 
 const getErrorName = (body) => {

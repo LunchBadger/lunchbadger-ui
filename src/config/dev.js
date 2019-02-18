@@ -13,6 +13,7 @@ const logins = ({
 
 export default {
   enableConfigStoreApi: true,
+  graphqlApiUrl: isPrefix ? 'http://staging-api.lunchbadger.com/gql' : 'http://localhost:4000',
   configStoreApiUrl: isPrefix ? `http://${prefix}api.lunchbadger.com/api` : 'http://localhost:3002/api',
   gitBaseUrl: isPrefix ? `http://${prefix}api.lunchbadger.com/git` : 'http://localhost:3002/git',
   projectApiUrl: isPrefix ? `http://internal-{USER}-{ENV}.${subdomain}lunchbadger.io/project-api/api` : 'http://localhost:4230/api',

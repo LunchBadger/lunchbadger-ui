@@ -40,6 +40,7 @@ import ProjectService from './services/ProjectService';
 import ConfigStoreService from './services/ConfigStoreService';
 import KubeWatcherService from './services/KubeWatcherService';
 import SshManagerService from './services/SshManagerService';
+import GraphqlService from './services/GraphqlService';
 
 // utils
 import ApiClient from './utils/ApiClient';
@@ -105,7 +106,8 @@ let LunchBadgerCore = {
     ProjectService,
     ConfigStoreService,
     KubeWatcherService,
-    SshManagerService
+    SshManagerService,
+    GraphqlService
   },
   utils: {
     Config,

@@ -1,24 +1,15 @@
 import {actions} from './actions';
-import Config from '../../../../src/config';
-import {getUser} from '../utils/auth';
-import {DEFAULT_PROJECT_NAME} from '../utils/userStorage';
-import {sortStrings} from '../ui/utils';
+// import {addSystemDefcon1} from './systemDefcon1';
+import GraphqlService from '../services/GraphqlService';
 
-export const loadSharedProjects = () => dispatch => {
-  const {sub} = getUser().profile;
-  const usernames = [...Config.get('fakeSharedProjectUsernames')];
-  if (!usernames.includes(sub)) {
-    usernames.push(sub);
+export const loadSharedProjects = () => async dispatch => {
+  try {
+    const data = await GraphqlService.loadSharedProjects();
+    if (data && data.loadSharedProjects && data.loadSharedProjects.sharedProjects) {
+      dispatch(actions.loadSharedProjects(data.loadSharedProjects.sharedProjects));
+    }
+  } catch (error) {
+    // dispatch(addSystemDefcon1({error}));
   }
-  const projects = usernames.map(username => ({
-    username,
-    projects: [{name: DEFAULT_PROJECT_NAME}],
-  }));
-  const sharedProjects = [
-    ...projects.filter(p => p.username === sub),
-    ...projects
-      .filter(p => p.username !== sub)
-      .sort(sortStrings('username')),
-  ];
-  dispatch(actions.loadSharedProjects(sharedProjects));
+
 }

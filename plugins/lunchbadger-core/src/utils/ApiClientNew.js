@@ -9,8 +9,8 @@ import Config from '../../../../src/config';
 const mocks = Config.get('mocks');
 
 const statusCodesToRepeat = {
-  422: 5,
-  503: 5,
+  422: [0, 0, 0, 0, 0],
+  503: [5, 10, 20, 30],
 };
 
 const getErrorName = (body) => {
@@ -19,6 +19,8 @@ const getErrorName = (body) => {
   }
   return null;
 }
+
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const getErrorMessage = (body) => {
   let message = body;
@@ -82,11 +84,12 @@ class ApiClient {
   makeRequest = (req, resolve, reject, url, method, options, attempt = 0) => {
     const endpoint = [this.url, url.replace(/\//, '')].join('/');
     axios(req)
-      .then((response) => {
+      .then(async (response) => {
         const {data: body, status: statusCode} = response;
         if (statusCode >= 400) {
-          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode]) {
+          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode].length) {
             // retrying the same call up to 5 times: https://github.com/LunchBadger/general/issues/445
+            await timeout(statusCodesToRepeat[statusCode][attempt] * 1000);
             return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
           }
           let message = body;
@@ -107,12 +110,13 @@ class ApiClient {
         }
         return resolve({response, body});
       })
-    .catch((error) => {
+    .catch(async (error) => {
       const {response} = error;
       if (response) {
         const {data: body, status: statusCode} = response;
         if (statusCode >= 400) {
-          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode]) {
+          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode].length) {
+            await timeout(statusCodesToRepeat[statusCode][attempt] * 1000);
             return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
           }
           let message = body;

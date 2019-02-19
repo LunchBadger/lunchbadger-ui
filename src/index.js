@@ -12,7 +12,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.385', [
+console.info('LBAPP VERSION 0.386', [
   'Feature/588 multiuser integrate to real projects api #1164',
   'Feature/1162 Repeat api call when 503 #1163',
   'Feature/589 rest connector improve input for body section #1160',

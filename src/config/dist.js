@@ -1,6 +1,6 @@
 export default {
   enableConfigStoreApi: false,
-  graphqlApiUrl: 'http://staging-api.lunchbadger.com/gql',
+  graphqlApiUrl: 'https://api.lunchbadger.com/gql',
   configStoreApiUrl: 'https://api.lunchbadger.com/api',
   gitBaseUrl: 'https://api.lunchbadger.com/git',
   projectApiUrl: 'https://internal-{USER}-{ENV}.lunchbadger.io/project-api/api',

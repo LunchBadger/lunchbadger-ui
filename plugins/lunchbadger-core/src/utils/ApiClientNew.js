@@ -8,10 +8,44 @@ import Config from '../../../../src/config';
 
 const mocks = Config.get('mocks');
 
-const statusCodesToRepeat = [
-  422,
-];
-const maxRepeatAmount = 5;
+const statusCodesToRepeat = {
+  422: [0, 0, 0, 0, 0],
+  503: [5, 10, 20, 30],
+};
+
+const getErrorName = (body) => {
+  if (body.error && body.error.name) {
+    return body.error.name;
+  }
+  return null;
+}
+
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const getErrorMessage = (body) => {
+  let message = body;
+  if (typeof body === 'object') {
+    message = JSON.stringify(body);
+  }
+  if (body.err && typeof body.err === 'string') {
+    message = body.err;
+  }
+  if (body.message) {
+    message = body.message;
+  }
+  if (body.error) {
+    if (body.error.stack) {
+      message = body.error.stack;
+    }
+    if (typeof body.error === 'string') {
+      message = body.error;
+    }
+    if (body.error.message) {
+      message = body.error.message;
+    }
+  }
+  return message;
+}
 
 class ApiClient {
   constructor(url, idToken) {
@@ -50,39 +84,19 @@ class ApiClient {
   makeRequest = (req, resolve, reject, url, method, options, attempt = 0) => {
     const endpoint = [this.url, url.replace(/\//, '')].join('/');
     axios(req)
-      .then((response) => {
+      .then(async (response) => {
         const {data: body, status: statusCode} = response;
         if (statusCode >= 400) {
-          if (statusCodesToRepeat.includes(statusCode) && attempt < maxRepeatAmount) {
+          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode].length) {
             // retrying the same call up to 5 times: https://github.com/LunchBadger/general/issues/445
+            await timeout(statusCodesToRepeat[statusCode][attempt] * 1000);
             return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
           }
           let message = body;
           let name;
           if (body) {
-            if (typeof body === 'object') {
-              message = JSON.stringify(body);
-            }
-            if (body.err && typeof body.err === 'string') {
-              message = body.err;
-            }
-            if (body.message) {
-              message = body.message;
-            }
-            if (body.error) {
-              if (body.error.stack) {
-                message = body.error.stack;
-              }
-              if (typeof body.error === 'string') {
-                message = body.error;
-              }
-              if (body.error.message) {
-                message = body.error.message;
-              }
-              if (body.error.name) {
-                name = body.error.name;
-              }
-            }
+            name = getErrorName(body);
+            message = getErrorMessage(body);
           } else {
             message = response.statusMessage;
           }
@@ -96,7 +110,29 @@ class ApiClient {
         }
         return resolve({response, body});
       })
-    .catch((error) => {
+    .catch(async (error) => {
+      const {response} = error;
+      if (response) {
+        const {data: body, status: statusCode} = response;
+        if (statusCode >= 400) {
+          if (statusCodesToRepeat[statusCode] && attempt < statusCodesToRepeat[statusCode].length) {
+            await timeout(statusCodesToRepeat[statusCode][attempt] * 1000);
+            return this.makeRequest(req, resolve, reject, url, method, options, attempt + 1);
+          }
+          let message = body;
+          let name;
+          if (body) {
+            name = getErrorName(body);
+            message = getErrorMessage(body);
+          } else {
+            message = response.statusMessage;
+          }
+          if (statusCode === 401) {
+            LoginManager().refreshLogin();
+          }
+          return reject(new ApiError(statusCode, message, endpoint, method, req, name, body));
+        }
+      }
       return reject(new ApiError(0, error.message, endpoint, method, req, 'Error', error));
     });
   }

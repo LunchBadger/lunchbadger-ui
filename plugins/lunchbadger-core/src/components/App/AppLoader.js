@@ -115,8 +115,8 @@ class AppLoader extends Component {
       .then(() => {
         return waitForProject(pingAmount, pingIntervalMs);
       })
-      .then(() => {
-        this.props.dispatch(loadSharedProjects());
+      .then(async () => {
+        await this.props.dispatch(loadSharedProjects());
         this.setState({loaded: true});
         // Setting the projectState will trigger the App render, which will
         // in turn trigger the remote call to the server. This creates some

@@ -95,6 +95,7 @@
     "flux": "^2.1.1",
     "font-awesome": "^4.6.1",
     "formsy-react": "^0.18.0",
+    "graphql-request": "^1.8.2",
     "inflection": "^1.12.0",
     "jsonfile": "^2.3.0",
     "jsplumb": "github:lunchbadger/jsplumb#autoscroll",

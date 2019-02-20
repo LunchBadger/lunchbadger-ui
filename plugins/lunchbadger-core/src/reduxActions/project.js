@@ -147,6 +147,8 @@ export const saveOrder = orderedIds => (dispatch, getState) => {
 
 export const logout = () => () => {
   GAEvent('Header Menu', 'Logged Out');
+  userStorage.remove('activeUsername');
+  userStorage.remove('activeProject');
   LoginManager().logout();
 };
 

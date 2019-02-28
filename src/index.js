@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.386', [
+console.info('LBAPP VERSION 0.387', [
+  'bugfix/1165 Autogateway pipelines not updated #1166',
   'Feature/588 multiuser integrate to real projects api #1164',
   'Feature/1162 Repeat api call when 503 #1163',
   'Feature/589 rest connector improve input for body section #1160',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.386', [
   'Feature/1114 Buttons in consumer management #1137',
   'Feature/352 js files size #1136',
   'Feature/1118 ApiExplorer preserved state #1126',
-  'Feature/1117 consumer management waiting screen for credential #1125',
-  'Feature/1122 make logo toggable #1124'
+  'Feature/1117 consumer management waiting screen for credential #1125'
 ]);
 
 // Google Analityca

@@ -6,13 +6,11 @@ import catchDatasourceErrors from '../utils/catchDatasourceErrors.js';
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
 const processDataSource = item => {
-  if (!item.lunchbadgerId) {
-    item.lunchbadgerId = uuid.v4();
-  }
   if (item.hasOwnProperty('wsdl')) {
     item.soapOperations = item.operations || {};
     delete item.operations;
   }
+  item.tmpId = uuid.v4();
   return item;
 };
 
@@ -22,7 +20,7 @@ export default (state = {}, action) => {
     case actionTypes.onLoadCompose:
       return action.payload[0].body.reduce((map, item) => {
         processDataSource(item);
-        map[item.lunchbadgerId] = DataSource.create(item);
+        map[item.id] = DataSource.create(item);
         return map;
       }, {});
     case actionTypes.updateDataSource:

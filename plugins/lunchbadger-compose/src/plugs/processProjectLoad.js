@@ -19,7 +19,7 @@ export default [
         });
         return {
           ...map,
-          [item.lunchbadgerId]: entity,
+          [item.id]: entity,
         }
       }, {});
     const models = responses[1][1].body

@@ -5,12 +5,16 @@ import catchDatasourceErrors from '../utils/catchDatasourceErrors.js';
 
 const {actionTypes: coreActionTypes} = LunchBadgerCore.utils;
 
-const processDataSource = item => {
+const processDataSource = (item, state) => {
   if (item.hasOwnProperty('wsdl')) {
     item.soapOperations = item.operations || {};
     delete item.operations;
   }
-  item.tmpId = uuid.v4();
+  if (state && state[item.id] && state[item.id].tmpId) {
+    item.tmpId = state[item.id].tmpId;
+  } else {
+    item.tmpId = uuid.v4();
+  }
   return item;
 };
 
@@ -19,7 +23,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.onLoadCompose:
       return action.payload[0].body.reduce((map, item) => {
-        processDataSource(item);
+        processDataSource(item, newState);
         map[item.id] = DataSource.create(item);
         return map;
       }, {});
@@ -40,7 +44,7 @@ export default (state = {}, action) => {
       return catchDatasourceErrors(state, action.payload);
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'dataSources') {
-        const entity = DataSource.create(processDataSource(action.payload.entityData));
+        const entity = DataSource.create(processDataSource(action.payload.entityData, newState));
         if (newState[action.payload.entityId]) {
           entity.locked = newState[action.payload.entityId].locked;
         }

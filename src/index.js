@@ -12,7 +12,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.388', [
+console.info('LBAPP VERSION 0.389', [
   'Feature/1168 remove lbid from datasources #1169',
   'bugfix/1165 Autogateway pipelines not updated #1166',
   'Feature/588 multiuser integrate to real projects api #1164',

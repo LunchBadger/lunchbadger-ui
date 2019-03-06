@@ -121,10 +121,10 @@ class App extends Component {
     const userId = userStorage.getActiveUsername();
     return (
       <Provider connectionsStore={Connections}>
-        <div className={cs('app__wrapper', {blocked})}>
+        <div className={cs('app__wrapper')}>
           <div className={cs('apla', {['multiEnv']: isMultiEnv, multiEnvDelta})} />
           <div className={cs('app', {['multiEnv']: isMultiEnv, multiEnvDelta, multiEnvNotDev})}>
-            <Spinner />
+            <Spinner force={blocked} />
             {this.renderHeader()}
             <Aside
               disabled={multiEnvNotDev || !!currentlyOpenedPanel || isEntityEditable}
@@ -149,17 +149,6 @@ class App extends Component {
             steps={walkthroughSteps}
             userId={userId}
           />
-          {blocked && (
-            <div className="app__wrapper__blocked">
-              <div className="app__wrapper__blocked--message">
-                {'The Canvas workspace process is temporarily not running.'}
-                <br />
-                {'Recovery attempts will be made automatically.'}
-                <br />
-                {'If the attempts are successful, this will be resolved.'}
-              </div>
-            </div>
-          )}
           {isSilentReloadAlertVisible && (
             <OneOptionModal
               confirmText="Got it"

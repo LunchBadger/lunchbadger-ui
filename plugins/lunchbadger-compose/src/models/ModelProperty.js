@@ -66,7 +66,7 @@ export default class ModelProperty extends BaseModel {
       required: this.required,
       index: this.index,
       description: this.description,
-      lunchbadgerId: this.id,
+      // lunchbadgerId: this.id,
       itemOrder: this.itemOrder,
     }
   }

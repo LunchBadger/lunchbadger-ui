@@ -70,13 +70,12 @@ class WorkspaceStatus extends Component {
     const ws_git = status.ws_git || 'none';
     const fnGitChanged = this.state.fn_git && this.state.fn_git !== fn_git;
     const wsGitChanged = this.state.ws_git && this.state.ws_git !== ws_git;
-    if (fnGitChanged || wsGitChanged) {
-      if (fnGitChanged) {
-        console.log(`fn_git changed: ${this.state.fn_git} => ${fn_git}`);
-      }
-      if (wsGitChanged) {
-        console.log(`ws_git changed: ${this.state.ws_git} => ${ws_git}`);
-      }
+    if (fnGitChanged) {
+      console.log(`fn_git changed: ${this.state.fn_git} => ${fn_git}`);
+      setTimeout(() => dispatch(silentReload(this.context.paper.getInstance())), 2000);
+    }
+    if (wsGitChanged) {
+      console.log(`ws_git changed: ${this.state.ws_git} => ${ws_git}`);
       dispatch(silentReload(this.context.paper.getInstance()));
     }
     this.setState({

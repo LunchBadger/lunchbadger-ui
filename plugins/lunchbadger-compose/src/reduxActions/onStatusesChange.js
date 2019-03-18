@@ -65,7 +65,7 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
   let updatedEntity;
   let isSave = false;
   Object.keys(entries).forEach(async (slugId) => {
-    const {status, entity, slug} = entries[slugId];
+    const {status, entity, slug, pods} = entries[slugId];
     const {
       running: functionRunning,
       deleting: functionDeleting,
@@ -82,7 +82,6 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
         dispatch(actions.updateFunction(updatedEntity));
       }
     } else {
-      const {running, failed} = status;
       if (entity === null) {
         /* relict since deleting functions are not rendered */
         // const storageFunction = userStorage.getObjectKey('function', slugId) || {};
@@ -97,6 +96,13 @@ export const onSlsStatusChange = () => async (dispatch, getState) => {
         // });
         // dispatch(actions.updateFunction(updatedEntity));
       } else {
+        const {
+          running: statusRunning,
+          // deployment: {inProgress},
+          failed,
+        } = status;
+        const pod = Object.keys(pods).find(key => pods[key].servesRequests);
+        const running = statusRunning && !!pod; // statusRunning && !inProgress && !!pod;
         updatedEntity = entity.recreate();
         let isEntityUpdate = false;
         if (running !== functionRunning) {

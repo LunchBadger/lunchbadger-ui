@@ -228,6 +228,7 @@ class ModelDetails extends PureComponent {
       parentId,
       default_: undefined,
       type: 'string',
+      format: undefined,
       description: '',
       required: false,
       index: false,
@@ -281,6 +282,12 @@ class ModelDetails extends PureComponent {
     const properties = [...this.state.properties];
     const prop = properties.find(prop => prop.id === id);
     prop[field] = value;
+    this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
+  };
+
+  handleFormatChange = id => ({target: {checked}}) => {
+    const properties = [...this.state.properties];
+    properties.find(prop => prop.id === id).withFormat = checked;
     this.setState({properties, changed: true}, () => this.props.parent.checkPristine());
   };
 
@@ -466,29 +473,30 @@ class ModelDetails extends PureComponent {
         onBlur={this.handlePropertyValueChange(id, 'default_')}
       />
     );
-  }
+  };
 
   renderPropertiesSection = (parentId = '') => {
     const isNested = parentId !== '';
     const columns = [
       <div style={{marginLeft: 10}}>Name</div>,
       'Type',
+      'Format',
       'Default Value',
       'Description',
       'Required',
       'Is Index',
       <IconButton name="add__property" icon="iconPlus" onClick={this.onAddProperty('')} />,
     ];
-    const paddings = [true, true, true, true, true, true, true];
-    const centers = [false, false, false, false, true, true, false];
+    const paddings = [true, true, true, true, true, true, true, true];
+    const centers = [false, false, false, false, false, true, true, false];
     const properties = [];
     this.getProperties(properties, '');
     const filteredProperties = properties
       .filter(prop => prop.parentId === parentId)
       .sort(this.props.entity.sortByItemOrder);
     const {level} = filteredProperties[0] || {level: 0};
-    const nameWidth = 300 - level * 20;
-    const widths = [nameWidth, 120, 200, undefined, 100, 100, 70];
+    const nameWidth = 180 - level * 20;
+    const widths = [nameWidth, 120, 130, 180, undefined, 100, 100, 70];
     const data = filteredProperties.map((property) => [
       <div>
         <div className={cs('ModelDetails__arrow', {expanded: property.expanded})}>
@@ -528,6 +536,31 @@ class ModelDetails extends PureComponent {
         hideUnderline
         handleChange={this.handleChangePropertyType(property.id)}
       />,
+      <div className="ModelDetails__default">
+        <div className="ModelDetails__default--chbx">
+          <Checkbox
+            name={`properties[${property.idx}][withFormat]`}
+            value={property.withFormat}
+            handleChange={this.handleFormatChange(property.id)}
+          />
+        </div>
+        <div className="ModelDetails__default--input">
+          {property.withFormat && (
+            <div>
+              <div className="TableInput">
+                <Input
+                  name={`properties[${property.idx}][format]`}
+                  value={property.format}
+                  underlineStyle={{bottom: 0}}
+                  fullWidth
+                  hideUnderline
+                  handleBlur={this.handlePropertyValueChange(property.id, 'format')}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>,
       property.type === 'buffer'
         ? null
         : <div className="ModelDetails__default">

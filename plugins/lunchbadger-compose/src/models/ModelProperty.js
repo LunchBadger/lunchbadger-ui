@@ -7,24 +7,30 @@ export default class ModelProperty extends BaseModel {
     'default': (obj, val) => {
       obj.default_ = val;
       obj.withDefault = val !== undefined;
-    }
+    },
+    format: (obj, val) => {
+      obj.format = val;
+      obj.withFormat = val !== undefined;
+    },
   }
 
   name = '';
   default_ = undefined;
   withDefault = false;
   type = '';
+  format = undefined;
   required = false;
   index = false;
   description = '';
   modelWorkspaceId = '<unattached>';
   itemOrder = 0;
 
-  constructor(id, name = '', default_, type = '', required = false, index = false, description = '') {
+  constructor(id, name = '', default_, type = '', format, required = false, index = false, description = '') {
     super(id);
     this.name = name;
     this.default_ = default_;
     this.type = type;
+    this.format = format;
     this.required = required;
     this.index = index;
     this.description = description;
@@ -63,6 +69,7 @@ export default class ModelProperty extends BaseModel {
       name: this.name,
       'default': this.default_,
       type,
+      format: this.format,
       required: this.required,
       index: this.index,
       description: this.description,

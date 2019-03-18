@@ -61,6 +61,8 @@ class ModelPropertyDetails extends Component {
     if (isNested || type === 'geopoint') {
       defaultValue = JSON.stringify(defaultValue);
     }
+    const nameFormat = nested ? `models[${index}][properties][${idx}][format]` : `properties[${idx}][format]`;
+    const nameWithFormat = nested ? `models[${index}][properties][${idx}][withFormat]` : `properties[${idx}][withFormat]`;
     return (
       <div className="ModelProperty">
         <Input
@@ -98,6 +100,17 @@ class ModelPropertyDetails extends Component {
           textarea={isNested}
           value={defaultValue}
           name={nameDefault}
+        />
+        <Checkbox
+          value={property.withFormat}
+          hidden
+          name={nameWithFormat}
+        />
+        <Input
+          type="hidden"
+          textarea={isNested}
+          value={property.format}
+          name={nameFormat}
         />
         <div className={cs('ModelProperty__col', 'name')}>
           <div className="EntityProperty__field">

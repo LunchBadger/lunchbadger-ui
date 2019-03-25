@@ -22,6 +22,7 @@ export default class DataSource extends BaseModel {
     'slugifyName',
     '_locked',
     'configFile',
+    'tmpId',
   ];
 
   ports = [];

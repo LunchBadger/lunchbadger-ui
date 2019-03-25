@@ -82,6 +82,7 @@ class EntityProperty extends Component {
     link: PropTypes.bool,
     restrict: PropTypes.bool,
     hidden: PropTypes.bool,
+    asLabel: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -114,6 +115,7 @@ class EntityProperty extends Component {
     link: false,
     restrict: false,
     hidden: false,
+    asLabel: false,
   };
 
   constructor(props) {
@@ -379,6 +381,7 @@ class EntityProperty extends Component {
       icon,
       link,
       hidden,
+      asLabel,
     } = this.props;
     if (name === undefined) return (
       <div>
@@ -401,6 +404,7 @@ class EntityProperty extends Component {
       noMarginRight,
       hidden,
       labelTooltipVisible,
+      asLabel,
     });
     const filler = placeholder || `Enter ${title} here`;
     let textValue = value || filler;

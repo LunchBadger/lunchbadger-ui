@@ -125,8 +125,8 @@ export default class GatewayPolicyAction extends PureComponent {
         postfix,
         schemas: properties[name],
         items: items.type ? [items.type] : items.types,
-        arrayItem: items && items[0],
       };
+      parameters[name].arrayItem = parameters[name].items && parameters[name].items[0];
       if (action[name] === undefined) {
         parameters[name].value = def || example || getDefaultValueByType(type);
       }

@@ -982,6 +982,140 @@ export default [
   {
     "type": "policy",
     "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/request-transformer.json",
+      "type": "object",
+      "properties": {
+        "headers": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "type": [
+                "object"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": {}
+            },
+            "remove": {
+              "type": [
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "required": [
+            "add",
+            "remove"
+          ]
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "type": [
+                "object"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": {}
+            },
+            "remove": {
+              "type": [
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "required": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "required": [
+        "body",
+        "headers"
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
+      "$id": "http://express-gateway.io/schemas/policies/response-transformer.json",
+      "type": "object",
+      "properties": {
+        "headers": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "type": [
+                "object"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": {}
+            },
+            "remove": {
+              "type": [
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "required": [
+            "add",
+            "remove"
+          ]
+        },
+        "body": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "type": [
+                "object"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": {}
+            },
+            "remove": {
+              "type": [
+                "array"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "required": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "required": [
+        "body",
+        "headers"
+      ]
+    }
+  },
+  {
+    "type": "policy",
+    "schema": {
       "$id": "http://express-gateway.io/schemas/policies/terminate.json",
       "type": "object",
       "properties": {

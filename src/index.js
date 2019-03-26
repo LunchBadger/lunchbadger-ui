@@ -12,7 +12,8 @@ import 'font-awesome/css/font-awesome.css';
 import 'jsplumb';
 import './fonts/lunchbadger.css';
 
-console.info('LBAPP VERSION 0.395', [
+console.info('LBAPP VERSION 0.396', [
+  'Feature/1181 sync eg schemas #1183',
   'Feature/1179 Editable names of custom properties #1180',
   'Bugfix/1177 Fn git push vs force reload entity #1178',
   'Infinite lock for model #1176',
@@ -31,8 +32,7 @@ console.info('LBAPP VERSION 0.395', [
   'Bugfix/1146 Reload button not working in producers error box #1147',
   'Feature/1081 walkthrough with api explorer #1145',
   'Feature/1141 expose api explorer on prod #1144',
-  'Feature/563 Multiselect cut off #1140',
-  'Feature/353 Username must be lowercase #1139'
+  'Feature/563 Multiselect cut off #1140'
 ]);
 
 // Google Analityca

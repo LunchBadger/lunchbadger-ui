@@ -46,15 +46,11 @@ export default [
             "algorithm",
             "saltRounds"
           ],
-          "default": {
-
-          }
+          "default": { }
         },
         "session": {
           "type": "object",
-          "default": {
-
-          }
+          "default": { }
         },
         "accessTokens": {
           "type": "object",
@@ -95,9 +91,7 @@ export default [
             "tokenType",
             "timeToExpiry"
           ],
-          "default": {
-
-          }
+          "default": { }
         },
         "refreshTokens": {
           "type": "object",
@@ -110,9 +104,7 @@ export default [
           "required": [
             "timeToExpiry"
           ],
-          "default": {
-
-          }
+          "default": { }
         },
         "authorizationCodes": {
           "type": "object",
@@ -125,9 +117,7 @@ export default [
           "required": [
             "timeToExpiry"
           ],
-          "default": {
-
-          }
+          "default": { }
         },
         "plugins": {
           "type": "object"
@@ -193,9 +183,7 @@ export default [
           "properties": {
             "action": {
               "type": "object",
-              "default": {
-
-              }
+              "default": { }
             },
             "condition": {
               "type": "object",
@@ -206,7 +194,10 @@ export default [
               },
               "required": [
                 "name"
-              ]
+              ],
+              "default": {
+                "name": "always"
+              }
             }
           }
         }
@@ -251,120 +242,130 @@ export default [
           }
         },
         "admin": {
-          "type": "object",
-          "properties": {
-            "port": {
-              "type": "number"
-            },
-            "hostname": {
-              "type": "string"
-            }
-          }
-        },
-        "apiEndpoints": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/baseApiEndpoint"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/baseApiEndpoint"
-                }
-              }
-            ]
-          }
-        },
-        "serviceEndpoints": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "url": {
-                "type": "string",
-                "format": "uri"
-              },
-              "urls": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uri"
-                }
-              }
-            },
-            "oneOf": [
-              {
-                "required": [
-                  "url"
-                ]
-              },
-              {
-                "required": [
-                  "urls"
-                ]
-              }
-            ]
-          }
-        },
-        "policies": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "pipelines": {
-          "type": [
-            "object",
-            "array",
-            "null"
-          ],
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "apiEndpoint": {
-                "type": "string"
-              },
-              "apiEndpoints": {
-                "type": "array",
-                "items": {
+          "allOf": [
+            {
+              "properties": {
+                "port": {
+                  "type": "number",
+                  "default": 9876
+                },
+                "host": {
+                  "type": "string"
+                },
+                "hostname": {
                   "type": "string"
                 }
               },
-              "policies": {
-                "type": "array",
-                "items": [
-                  {
-                    "type": "object",
-                    "maxProperties": 1,
-                    "additionalProperties": {
-                      "anyOf": [
-                        {
-                          "$ref": "#/definitions/conditionAction"
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/definitions/conditionAction"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
+              "required": [
+                "port"
+              ]
+            }
+          ]
+        }
+      },
+      "apiEndpoints": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/baseApiEndpoint"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/baseApiEndpoint"
+              }
+            }
+          ]
+        }
+      },
+      "serviceEndpoints": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "urls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "url"
+              ]
+            },
+            {
+              "required": [
+                "urls"
+              ]
+            }
+          ]
+        }
+      },
+      "policies": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "pipelines": {
+        "type": [
+          "object",
+          "array",
+          "null"
+        ],
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "apiEndpoint": {
+              "type": "string"
+            },
+            "apiEndpoints": {
+              "type": "array",
+              "items": {
+                "type": "string"
               }
             },
-            "required": [
-              "policies"
-            ]
-          }
+            "policies": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "maxProperties": 1,
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/conditionAction"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/definitions/conditionAction"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "required": [
+            "policies"
+          ]
         }
       }
     }

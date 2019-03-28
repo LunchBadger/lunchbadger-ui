@@ -131,9 +131,9 @@ Each plugin contains plugin specific settings extensions located in `src/plugs` 
 ## Read more
 
 Core and each plugin is documented with more details:
-- [core](./plugins/lunchbadger-core/src)
-- [compose](./plugins/lunchbadger-compose/src)
-- [manage](./plugins/lunchbadger-manage/src)
-- [monetize](./plugins/lunchbadger-monetize/src)
-- [monitor](./plugins/lunchbadger-monitor/src)
-- [optimize](./plugins/lunchbadger-optimize/src)
+- [core](./plugins/lunchbadger-core/src/README.md)
+- [compose](./plugins/lunchbadger-compose/src/README.md)
+- [manage](./plugins/lunchbadger-manage/src/README.md)
+- [monetize](./plugins/lunchbadger-monetize/src/README.md)
+- [monitor](./plugins/lunchbadger-monitor/src/README.md)
+- [optimize](./plugins/lunchbadger-optimize/src/README.md)

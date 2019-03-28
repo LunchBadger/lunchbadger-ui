@@ -24,4 +24,4 @@ Metric item box is rendered using composite components stored in `components/met
 
 ## Web traffic
 
-As it is now, web traffic is smoke and mirrors, with numbers being simulated by `reduxActions/metrics/simulateWebTraffic` action.
+As it is now, web traffic is smoke and mirrors, with mocked categories and numbers being simulated by `reduxActions/metrics/simulateWebTraffic` action.

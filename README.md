@@ -127,3 +127,13 @@ Each plugin contains plugin specific settings extensions located in `src/plugs` 
 - `src/plugs/tools` - defines aside tool menu items
 - `src/plugs/panelMenu` - defines header menu items
 - `src/plugs/quadrants` - defines quadrants
+
+## Read more
+
+Core and each plugin is documented with more details:
+- [core](./plugins/lunchbadger-core/src)
+- [compose](./plugins/lunchbadger-compose/src)
+- [manage](./plugins/lunchbadger-manage/src)
+- [monetize](./plugins/lunchbadger-monetize/src)
+- [monitor](./plugins/lunchbadger-monitor/src)
+- [optimize](./plugins/lunchbadger-optimize/src)

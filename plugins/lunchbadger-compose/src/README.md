@@ -69,7 +69,7 @@ Microservice is defined by:
 - `reduxActions/microservices` redux actions
 - `components/CanvasElements/Microservice` component displayed on the canvas (no zoom window mode).
 
-Microservice serves as virtual containers for models bundled to them, defined in `reducers/modelsBundled` redux.
+As it is now, microservice serves as virtual container for models bundled to them, defined in `reducers/modelsBundled` redux.
 
 ## Api Explorer
 

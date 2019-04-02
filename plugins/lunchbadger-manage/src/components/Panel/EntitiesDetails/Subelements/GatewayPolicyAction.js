@@ -382,13 +382,6 @@ export default class GatewayPolicyAction extends PureComponent {
     }
     const placeholder = withPlaceholders ? `Enter ${name} here` : ' ';
     if (types) {
-      let customFitWidth = 220;
-      if (['number', 'integer', 'array'].includes(type)) {
-        customFitWidth = 190;
-      }
-      if (type === 'object') {
-        customFitWidth = 170;
-      }
       const defaultType = schemas.hasOwnProperty('default') && typeof value === typeof schemas.default;
       return (
         <div key={id} className={cs('GatewayPolicyAction', {defaultType})}>
@@ -408,13 +401,12 @@ export default class GatewayPolicyAction extends PureComponent {
           )}
           {custom && (
             <EntityProperty
-              title="Parameter Name"
               name={`${this.tmpPrefix}[${id}][name]`}
               value={name}
               onChange={this.handleCustomParameterNameChange(id)}
-              width={150}
-              placeholder=" "
+              placeholder="Enter parameter name"
               classes={`${this.tmpPrefix}[name][type][${type}]`}
+              asLabel
             />
           )}
           {!custom && types.length > 1 && (
@@ -435,7 +427,7 @@ export default class GatewayPolicyAction extends PureComponent {
             name,
             value,
             label: custom ? 'Parameter Value' : (title || name),
-            width: `calc(100% - ${custom ? customFitWidth : 190}px)`,
+            width: custom ? undefined : 'calc(100% - 190px)',
             enum: item.enum,
             custom,
             schemas,
@@ -444,7 +436,7 @@ export default class GatewayPolicyAction extends PureComponent {
             arrayItem,
             implicit,
             postfix,
-            title,
+            title: custom ? 0 : title,
             onChange: this.handlePropertyValueChange(id, `${prefix}[${name}]`),
           })}
         </div>
@@ -462,7 +454,7 @@ export default class GatewayPolicyAction extends PureComponent {
       const inputName = `${prefix}[${name}]`;
       const props = {
         key: id,
-        title: title || name,
+        title: title === 0 ? undefined : (title || name),
         titleRemark,
         name: `${implicit ? 'implicit' : ''}${inputName}`,
         value,
@@ -601,16 +593,18 @@ export default class GatewayPolicyAction extends PureComponent {
         if (item.schemas) {
           return (
             <div className={cs('GatewayPolicyAction__object', name)}>
-              <EntityPropertyLabel
-                description={description}
-              >
-                {name}
-                {!!titleRemark && (
-                  <span className="EntityProperty__titleRemark">
-                    {titleRemark}
-                  </span>
-                )}
-              </EntityPropertyLabel>
+              {!custom && (
+                <EntityPropertyLabel
+                  description={description}
+                >
+                  {name}
+                  {!!titleRemark && (
+                    <span className="EntityProperty__titleRemark">
+                      {titleRemark}
+                    </span>
+                  )}
+                </EntityPropertyLabel>
+              )}
               <GatewayPolicyAction
                 action={value}
                 schemas={item.schemas}

@@ -344,6 +344,23 @@
   & > .EntityPropertyLabel > .EntityPropertyLabel__tooltip {
     display: none;
   }
+  &:not(.EntityProperty__codeEditor):not(.array).asLabel {
+    & > .EntityProperty__field {
+      height: 16px;
+      line-height: 1.38;
+      & > .EntityProperty__field--input {
+        color: #4190CE;
+        font-size: 12px;
+        font-weight: 600;
+        input {
+          padding: 0;
+        }
+      }
+      hr {
+        bottom: -4px;
+      }
+    }
+  }
 }
 
 .ModelProperty,

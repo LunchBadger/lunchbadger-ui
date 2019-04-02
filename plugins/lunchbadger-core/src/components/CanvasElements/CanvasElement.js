@@ -86,6 +86,10 @@ const boxTarget = {
 
 export default (ComposedComponent) => {
   class CanvasElement extends PureComponent {
+    static contextTypes = {
+      paper: PropTypes.object,
+    }
+
     static propTypes = {
       entity: PropTypes.object.isRequired,
       connectDragSource: PropTypes.func.isRequired,
@@ -129,6 +133,7 @@ export default (ComposedComponent) => {
     }
 
     componentDidMount() {
+      this.paper = this.context.paper.getInstance();
       this.setFlatModel();
       if (this.entityRef && !this.props.entity.loaded) {
         scrollToElement(findDOMNode(this.entityRef));
@@ -173,7 +178,7 @@ export default (ComposedComponent) => {
         element.postProcessModel(props);
       }
       dispatch(setCurrentEditElement(null, true));
-      const updatedEntity = await dispatch(entity.update(model));
+      const updatedEntity = await dispatch(entity.update(model, this.paper));
       const gaAction = `${entity.loaded ? 'Updated' : 'Added'} Entity`;
       GAEvent('Canvas', gaAction, updatedEntity.gaType);
       setTimeout(() => {

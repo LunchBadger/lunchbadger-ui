@@ -20,11 +20,11 @@ class DataSource extends Component {
 
   render() {
     const {entity, validations, onFieldUpdate} = this.props;
-    const {ports, connector, gaType, connector: {type}} = entity;
+    const {id, ports, connector, gaType, connector: {type}} = entity;
     const DataSourceComponent = dataSources[connector];
     return (
       <div>
-        {ports.map(({id, portType, portGroup}) => (
+        {ports.map(({portType, portGroup}) => (
           <Port
             key={`port-${portType}-${id}`}
             way={portType}

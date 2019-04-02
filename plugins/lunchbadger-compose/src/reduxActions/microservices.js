@@ -43,7 +43,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   }
   const removedModels = _.difference(
     entity.models,
-    (model.models || []).map(p => p.lunchbadgerId),
+    (model.models || []).map(p => p.id),
   );
   removedModels.forEach((id) => {
     Connections.removeConnection(id);
@@ -52,7 +52,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
       dispatch(removeServiceEndpointFromProxies(id));
     }
   });
-  const models = model.models.map(({lunchbadgerId}) => lunchbadgerId);
+  const models = model.models.map(({id}) => id);
   updatedEntity = Microservice.create({...entity.toJSON(), ...model, models, ready: false});
   dispatch(actions.updateMicroservice(updatedEntity));
   entity.models.forEach((id) => {
@@ -60,7 +60,7 @@ export const update = (entity, model) => async (dispatch, getState) => {
   });
   await Promise.all(entity.models.map((id) =>
     models.includes(id)
-    ? dispatch(updateModel(modelsBundled[id], model.models.find((item) => item.lunchbadgerId === id)))
+    ? dispatch(updateModel(modelsBundled[id], model.models.find(item => item.id === id)))
     : dispatch(removeModel(modelsBundled[id], null, 'removeModelBundled'))
   ));
   updatedEntity = updatedEntity.recreate();

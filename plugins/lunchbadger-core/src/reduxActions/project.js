@@ -1,4 +1,5 @@
 import {diff} from 'just-diff';
+import _ from 'lodash';
 import {actions} from './actions';
 import {setPendingEdit} from './states';
 import {addSystemDefcon1} from './systemDefcon1';
@@ -88,7 +89,7 @@ export const saveToServer = (opts) => async (dispatch, getState) => {
       saveProject ? ProjectService.save(data) : undefined,
       // new Promise(res => setTimeout(res, 300)),
     ]);
-    prevData = currData;
+    prevData = _.cloneDeep(currData);
   } catch (error) {
     if (error.statusCode === 401) {
       LoginManager().refreshLogin();
@@ -190,7 +191,7 @@ export const silentReload = paper => async (dispatch, getState) => {
       .reduce((map, item) => ({...map, [item]: true}), {});
     const pendingEdit = states.pendingEdit || {};
     const currentEditElement = states.currentEditElement || {};
-    const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+    const canvasEditedId = currentEditElement.id;
     const canvasEditedType = (currentEditElement.constructor || {}).type;
     const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
     const endpoints = {
@@ -224,7 +225,7 @@ export const silentReload = paper => async (dispatch, getState) => {
               });
               return {
                 ...arr,
-                [item.lunchbadgerId || item.id]: entity,
+                [item.id]: entity,
               }
             }, {}),
         }

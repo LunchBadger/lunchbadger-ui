@@ -135,6 +135,14 @@ class Connections {
     return this.search({fromId: formatId(source)});
   }
 
+  renameByKey(key, oldId, newId) {
+    this
+      .search({[key]: oldId})
+      .forEach((conn) => conn[key] = newId);
+    return this
+      .search({[key]: newId});
+  }
+
   search(filter) {
     return _.filter(this.connections, filter);
   }

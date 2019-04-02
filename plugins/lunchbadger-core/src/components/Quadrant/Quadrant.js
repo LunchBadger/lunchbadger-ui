@@ -227,7 +227,7 @@ class Quadrant extends PureComponent {
                 return (
                   <Component
                     id={id}
-                    key={entity.id}
+                    key={entity.tmpId || entity.id}
                     entity={entity}
                     hideSourceOnDrag={true}
                     itemOrder={idx}

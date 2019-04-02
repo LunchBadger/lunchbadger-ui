@@ -120,7 +120,7 @@ export const setPendingEdit = (operation, entityId, silent = true, inc = false, 
       dispatch(actions.toggleLockEntity({locked, entityId}));
       if (operation === 'replace') {
         const currentEditElement = states.currentEditElement || {};
-        const canvasEditedId = currentEditElement.lunchbadgerId || currentEditElement.id;
+        const canvasEditedId = currentEditElement.id;
         // const canvasEditedType = (currentEditElement.constructor || {}).type;
         const zoomEditedId = !!states.zoom && (states.currentElement || {}).id;
         let isCanvasEdited = !!entityId && canvasEditedId === entityId;

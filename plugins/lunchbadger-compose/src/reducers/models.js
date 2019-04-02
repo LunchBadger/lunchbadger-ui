@@ -11,10 +11,8 @@ export default (state = {}, action) => {
       return action.payload[1].body.reduce((map, item) => {
         if (item.kind === 'function') return map;
         if (item.wasBundled) return map;
-        if (!item.lunchbadgerId) {
-          item.lunchbadgerId = uuid.v4();
-        }
-        map[item.lunchbadgerId] = Model.create(item);
+        item.tmpId = uuid.v4();
+        map[item.id] = Model.create(item);
         return map;
       }, {});
     case actionTypes.updateModel:
@@ -33,8 +31,12 @@ export default (state = {}, action) => {
     case coreActionTypes.silentEntityUpdate:
       if (action.payload.entityType === 'models') {
         const entity = Model.create(action.payload.entityData);
+        entity.tmpId = uuid.v4();
         if (newState[action.payload.entityId]) {
           entity.locked = newState[action.payload.entityId].locked;
+          if (newState[action.payload.entityId].tmpId) {
+            entity.tmpId = newState[action.payload.entityId].tmpId;
+          }
         }
         newState[action.payload.entityId] = entity;
       }

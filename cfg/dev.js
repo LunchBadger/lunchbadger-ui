@@ -25,7 +25,8 @@ let config = _.merge({}, baseConfig, {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'LBSERVER_HOST': JSON.stringify(process.env.LBSERVER_HOST || 'localhost')
+        'LBSERVER_HOST': JSON.stringify(process.env.LBSERVER_HOST || 'localhost'),
+        'LB_ENV': JSON.stringify(process.env.LB_ENV || 'dev')
       }
     })
   ],

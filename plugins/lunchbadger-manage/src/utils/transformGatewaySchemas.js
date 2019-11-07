@@ -92,6 +92,22 @@ export default schema => {
       if (policy.required.includes(k) && !prop.hasOwnProperty('default')) {
         policy.allowEmptyCAPairs = false;
       }
+      if (prop.type === 'object') {
+        Object.keys(prop.properties || {}).forEach((j) => {
+          const prop_ = prop.properties[j];
+          if (Array.isArray(prop_.type)) {
+            prop_.types = [...prop_.type];
+            if (prop_.hasOwnProperty('default')) {
+              prop_.type = determineType(prop_.default);
+            } else {
+              prop_.type = prop_.types[0];
+            }
+          }
+          if (prop_.hasOwnProperty('examples') && Array.isArray(prop_.examples) && prop_.examples.length > 0) {
+            prop_.example = prop_.examples[0];
+          }
+        });
+      }
     });
   });
   Object.keys(data.condition).forEach((key) => {

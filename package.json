@@ -87,7 +87,7 @@
   "dependencies": {
     "ajv": "^6.5.2",
     "async": "https://registry.npmjs.org/async/-/async-2.1.4.tgz",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bluebird": "^3.3.5",
     "classnames": "^2.2.3",
     "core-js": "^2.0.0",

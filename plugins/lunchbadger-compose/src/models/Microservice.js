@@ -8,10 +8,7 @@ const {Connections} = LunchBadgerCore.stores;
 export default class Microservice extends BaseModel {
   static type = 'Microservice';
   static entities = 'microservices';
-  /**
-   * @type {Model.lunchbadgerId[]}
-   * @private
-   */
+
   _models = [];
   _accept = [Model.type];
 
@@ -37,36 +34,24 @@ export default class Microservice extends BaseModel {
     return true;
   }
 
-  /**
-   * @param models {Model.lunchbadgerId[]}
-   */
   set models(models) {
     this._models = models;
   }
 
-  /**
-   * @returns {Model.lunchbadgerId[]}
-   */
   get models() {
     return this._models;
   }
 
-  /**
-   * @param model {Model}
-   */
   addModel(model) {
-    this._models.push(model.lunchbadgerId || model.id);
+    this._models.push(model.id);
   }
 
   addModels(models) {
     models.forEach(model => this.addModel(model));
   }
 
-  /**
-   * @param model {Model}
-   */
   removeModel(model) {
-    _.remove(this.models, (modelId) => modelId === (model.lunchbadgerId || model.id));
+    _.remove(this.models, modelId => modelId === model.id);
   }
 
   removeModels(models) {
@@ -107,7 +92,7 @@ export default class Microservice extends BaseModel {
       const fields = ['name'];
       checkFields(fields, model, validations.data);
       const microserviceModels = model.models.map((item) => ({
-        entity: modelsBundled[item.lunchbadgerId],
+        entity: Object.values(modelsBundled).find(entity => entity.tmpId === item.tmpId),
         item,
       }));
       microserviceModels.forEach(({entity, item}) => {

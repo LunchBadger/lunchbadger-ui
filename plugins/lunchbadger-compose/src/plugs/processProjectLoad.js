@@ -19,14 +19,14 @@ export default [
         });
         return {
           ...map,
-          [item.lunchbadgerId]: entity,
+          [item.id]: entity,
         }
       }, {});
     const models = responses[1][1].body
       .filter(({wasBundled}) => !wasBundled)
       .reduce((map, item) => ({
         ...map,
-        [item.lunchbadgerId]: Model
+        [item.id]: Model
           .create(item)
           .toJSON({isForServer: true}),
       }), {});
@@ -34,7 +34,7 @@ export default [
       .filter(({wasBundled}) => wasBundled)
       .reduce((map, item) => ({
         ...map,
-        [item.lunchbadgerId]: Model
+        [item.id]: Model
           .create(item)
           .toJSON({isForServer: true}),
       }), {});

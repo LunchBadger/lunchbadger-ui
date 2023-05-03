@@ -148,7 +148,7 @@ class Port extends PureComponent {
       if (connection.info.source) {
         source = connection.info.source.classList.contains('port__anchor') ? connection.info.source : connection.info.source.querySelector('.port__anchor')
       } else {
-        source = document.querySelector(`#${connection.info.sourceId}`);
+        source = document.getElementById(connection.info.sourceId);
       }
       Connections.removeConnection(connection.fromId, connection.toId);
       this.paper.connect({
@@ -166,7 +166,7 @@ class Port extends PureComponent {
       if (connection.info.target) {
         target = connection.info.target.classList.contains('port__anchor') ? connection.info.target : connection.info.target.querySelector('.port__anchor')
       } else {
-        target = document.querySelector(`#${connection.info.targetId}`);
+        target = document.getElementById(connection.info.targetId);
       }
       Connections.removeConnection(connection.fromId, connection.toId);
       this.paper.connect({

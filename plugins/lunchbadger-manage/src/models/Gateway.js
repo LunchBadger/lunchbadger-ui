@@ -281,7 +281,7 @@ export default class Gateway extends BaseModel {
               if (
                 kind === 'serviceEndpoints'
                 ||
-                (['models', 'functions'].includes(kind) && (isAdd || isDelete || isRename))
+                (['models', 'functions'].includes(kind) && (isAdd || isDelete || isRename || isModelContextPathChanged))
               ) {
                 addOperation = true;
               }
